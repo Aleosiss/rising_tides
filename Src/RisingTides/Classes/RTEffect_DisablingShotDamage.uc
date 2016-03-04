@@ -2,16 +2,15 @@
 //  FILE:    RTEffect_DisablingShotDamage.uc
 //  AUTHOR:  Aleosiss
 //  DATE:    4 March 2016
-//  PURPOSE: Gives Disabling Shot its damage reduction
-//  NOTES: Credit to steam user guby for GetToHitModifiers function         
+//  PURPOSE: Gives Disabling Shot its damage reduction      
 //---------------------------------------------------------------------------------------
-//	Precision Shot damage effect
+//	Disabling Shot damage effect
 //---------------------------------------------------------------------------------------
 class RTEffect_DisablingShotDamage extends X2Effect_Persistent config(RTMarksman);
 
 var config float DISABLING_SHOT_REDUCTION;
 
-//Add damage for precision shot crits
+//Add damage reduction for disabling shot
 function int GetAttackingDamageModifier(XComGameState_Effect EffectState, XComGameState_Unit Attacker, Damageable TargetDamageable, XComGameState_Ability AbilityState, const out EffectAppliedData AppliedData, const int CurrentDamage)
 {
 	local float ExtraDamage;

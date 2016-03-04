@@ -57,6 +57,7 @@ class RTAbility_MarksmanAbilitySet extends RTAbility_GhostAbilitySet
 	Templates.AddItem(Aggression());
 	Templates.AddItem(KnockThemDown());
 	Templates.AddItem(DisablingShot());
+	Templates.AddItem(DisablingShotDamage());
 	//Templates.AddItem(StatisticalInevitibility());
 	//Templates.AddItem(SIShot());
 	//Templates.AddItem(TimeStandsStill());
@@ -427,6 +428,37 @@ static function X2AbilityTemplate DisablingShot()
 	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
 
 	Template.bCrossClassEligible = false;
+
+	return Template;
+}
+
+//---------------------------------------------------------------------------------------
+//---Disabling Shot Damage Effect--------------------------------------------------------
+//---------------------------------------------------------------------------------------
+static function X2AbilityTemplate DisablingShotDamage()
+{
+	local X2AbilityTemplate						Template;
+	local RTEffect_DisablingShotDamage          DamageEffect;
+
+	// Icon Properties
+	`CREATE_X2ABILITY_TEMPLATE(Template, 'PrecisionShotDamage');
+	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_momentum";
+
+	Template.AbilitySourceName = 'eAbilitySource_Perk';
+	Template.eAbilityIconBehaviorHUD = EAbilityIconBehavior_NeverShow;
+	Template.Hostility = eHostility_Neutral;
+
+	Template.AbilityToHitCalc = default.DeadEye;
+	Template.AbilityTargetStyle = default.SelfTarget;
+	Template.AbilityTriggers.AddItem(default.UnitPostBeginPlayTrigger);
+
+	DamageEffect = new class'RTEffect_DisablingShotDamage';
+	DamageEffect.BuildPersistentEffect(1, true, true, true);
+	DamageEffect.SetDisplayInfo(ePerkBuff_Passive, Template.LocFriendlyName, Template.GetMyLongDescription(), Template.IconImage, false,,Template.AbilitySourceName);
+	Template.AddTargetEffect(DamageEffect);
+
+	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
+	//  NOTE: No visualization on purpose!
 
 	return Template;
 }
