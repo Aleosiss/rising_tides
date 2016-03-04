@@ -14,8 +14,8 @@ class RTAbility_MarksmanAbilitySet extends RTAbility_GhostAbilitySet
 	var config int DAMNGOODGROUND_AIM_BONUS, DAMNGOODGROUND_DEF_BONUS;
 	var config int SIXOCLOCK_DEF_BONUS;
 	var config int SLOWISSMOOTH_AIM_BONUS, SLOWISSMOOTH_CRIT_BONUS;
-	var config int HEADSHOT_AIM_BONUS, HEADSHOT_CRIT_BONUS, HEADSHOT_COOLDOWN;
-	var config float HEADSHOT_CRITDMG_BONUS;
+	var config int HEADSHOT_CRIT_BONUS, HEADSHOT_COOLDOWN;
+	var config float HEADSHOT_AIM_MULTIPLIER;
 	var config int SNAPSHOT_AIM_BONUS;
 	var config int DISABLESHOT_AIM_BONUS, DISABLESHOT_COOLDOWN;
 	var config float KNOCKTHEMDOWN_CRITDMG_MULTIPLIER;
@@ -53,6 +53,8 @@ class RTAbility_MarksmanAbilitySet extends RTAbility_GhostAbilitySet
 	//Templates.AddItem(AddSquadSightAbility());
 	Templates.AddItem(ScopedAndDropped());
 	Templates.AddItem(PrecisionShot());
+	Templates.AddItem(PrecisionShotDamage());
+	Templates.AddItem(Aggression());
 	//Templates.AddItem(StatisticalInevitibility());
 	//Templates.AddItem(SIShot());
 	//Templates.AddItem(TimeStandsStill());
@@ -202,7 +204,8 @@ static function X2AbilityTemplate PrecisionShot()
 
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'PrecisionShot');
 
-	Template.AdditionalAbilities.AddItem('PrecisionShotBonus');
+	Template.AdditionalAbilities.AddItem('PrecisionShotDamage');
+
 	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_deadeye";
 	Template.AbilitySourceName = 'eAbilitySource_Perk';
 	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_AlwaysShow;
@@ -215,11 +218,11 @@ static function X2AbilityTemplate PrecisionShot()
 	Template.CinescriptCameraType = "StandardGunFiring";
 
 	Cooldown = new class'X2AbilityCooldown';
-	Cooldown.iNumTurns = default.DEADEYE_COOLDOWN;
+	Cooldown.iNumTurns = default.HEADSHOT_COOLDOWN;
 	Template.AbilityCooldown = Cooldown;
 
 	ToHitCalc = new class'X2AbilityToHitCalc_StandardAim';
-	ToHitCalc.FinalMultiplier = default.DEADEYE_AIM_MULTIPLIER;
+	ToHitCalc.FinalMultiplier = default.HEADSHOT_AIM_MULTIPLIER;
 	Template.AbilityToHitCalc = ToHitCalc;
 
 	AmmoCost = new class'X2AbilityCost_Ammo';
@@ -227,7 +230,7 @@ static function X2AbilityTemplate PrecisionShot()
 	Template.AbilityCosts.AddItem(AmmoCost);
 
 	ActionPointCost = new class'X2AbilityCost_ActionPoints';
-	ActionPointCost.iNumPoints = 2;
+	ActionPointCost.iNumPoints = 1;
 	ActionPointCost.bConsumeAllPoints = true;
 	Template.AbilityCosts.AddItem(ActionPointCost);
 
@@ -252,10 +255,101 @@ static function X2AbilityTemplate PrecisionShot()
 	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
 	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
 
-	Template.bCrossClassEligible = true;
+	Template.bCrossClassEligible = false;
 
 	return Template;
 }
 
+//---------------------------------------------------------------------------------------
+//---Precision Shot Damage Effect--------------------------------------------------------
+//---------------------------------------------------------------------------------------
+static function X2AbilityTemplate PrecisionShotDamage()
+{
+	local X2AbilityTemplate						Template;
+	local RTEffect_PrecisionShotDamage          DamageEffect;
 
+	// Icon Properties
+	`CREATE_X2ABILITY_TEMPLATE(Template, 'PrecisionShotDamage');
+	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_momentum";
+
+	Template.AbilitySourceName = 'eAbilitySource_Perk';
+	Template.eAbilityIconBehaviorHUD = EAbilityIconBehavior_NeverShow;
+	Template.Hostility = eHostility_Neutral;
+
+	Template.AbilityToHitCalc = default.DeadEye;
+	Template.AbilityTargetStyle = default.SelfTarget;
+	Template.AbilityTriggers.AddItem(default.UnitPostBeginPlayTrigger);
+
+	DamageEffect = new class'RTEffect_PrecisionShotDamage';
+	DamageEffect.BuildPersistentEffect(1, true, true, true);
+	DamageEffect.SetDisplayInfo(ePerkBuff_Passive, Template.LocFriendlyName, Template.GetMyLongDescription(), Template.IconImage, false,,Template.AbilitySourceName);
+	Template.AddTargetEffect(DamageEffect);
+
+	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
+	//  NOTE: No visualization on purpose!
+
+	return Template;
+}
+//---------------------------------------------------------------------------------------
+//---Aggression--------------------------------------------------------------------------
+//---------------------------------------------------------------------------------------
+static function X2AbilityTemplate Aggression()
+{
+	local X2AbilityTemplate						Template;
+	local RTEffect_Aggression					AgroEffect;
+
+	//Icon Properties
+	`CREATE_X2ABILITY_TEMPLATE(Template, 'Aggression');
+	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_aggression";
+	
+	Template.AbilitySourceName = 'eAbilitySource_Perk';
+	Template.eAbilityIconBehaviorHUD = EAbilityIconBehavior_NeverShow;
+	Template.Hostility = eHostility_Neutral;
+
+	//Apply perk at the start of the mission. 
+	Template.AbilityToHitCalc = default.DeadEye; 
+	Template.AbilityTargetStyle = default.SelfTarget;
+	Template.AbilityTriggers.AddItem(default.UnitPostBeginPlayTrigger);
+
+	AgroEffect = new class'RTEffect_Aggression';
+	AgroEffect.BuildPersistentEffect(1, true, true, true);
+	AgroEffect.SetDisplayInfo(ePerkBuff_Passive, Template.LocFriendlyName, Template.LocLongDescription, Template.IconImage, true,,Template.AbilitySourceName);
+	Template.AddTargetEffect(AgroEffect);
+
+	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
+	//  NOTE: No visualization on purpose!
+
+	return Template;
+}
+
+//---------------------------------------------------------------------------------------
+//---Knock Them Down---------------------------------------------------------------------
+//---------------------------------------------------------------------------------------
+static function X2AbilityTemplate KnockThemDown()
+{
+	local X2AbilityTemplate					Template;
+	local RTEffect_KnockThemDown			KnockEffect;
+
+	// Icon Properties
+	`CREATE_X2ABILITY_TEMPLATE(Template, 'KnockThemDown');
+	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_voidrift";
+
+	Template.AbilitySourceName = 'eAbilitySource_Perk';
+	Template.eAbilityIconBehaviorHUD = EAbilityIconBehavior_NeverShow;
+	Template.Hostility = eHostility_Neutral;
+
+	//Apply perk at the start of the mission. 
+	Template.AbilityToHitCalc = default.DeadEye; 
+	Template.AbilityTargetStyle = default.SelfTarget;
+	Template.AbilityTriggers.AddItem(default.UnitPostBeginPlayTrigger);
+
+	KnockEffect = new class'RTEffect_KnockThemDown';
+	KnockEffect.BuildPersistentEffect(1, true, true, true);
+	KnockEffect.SetDisplayInfo(ePerkBuff_Passive, Template.LocFriendlyName, Template.LocLongDescription, Template.IconImage, true,,Template.AbilitySourceName);
+	Template.AddTargetEffect(KnockEffect);
+
+	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
+	//  NOTE: No visualization on purpose!
+
+	return Template;
 }

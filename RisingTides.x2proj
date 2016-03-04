@@ -46,6 +46,12 @@
     <Content Include="Src\RisingTides\Classes\RTAbility_RiflemanAbilitySet.uc">
       <SubType>Content</SubType>
     </Content>
+    <Content Include="Src\RisingTides\Classes\RTEffect_Aggression.uc">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Src\RisingTides\Classes\RTEffect_PrecisionShotDamage.uc">
+      <SubType>Content</SubType>
+    </Content>
     <Content Include="Src\RisingTides\Classes\RTEffect_ScopedAndDropped.uc">
       <SubType>Content</SubType>
     </Content>

@@ -17,16 +17,19 @@ function GetToHitModifiers(XComGameState_Effect EffectState, XComGameState_Unit 
 	local ShotModifierInfo ModInfo;
 	local int Tiles, AimMod;
 
+	local int DebugAim;
+	DebugAim = 100;
+	
 	Tiles = Attacker.TileDistanceBetween(Target);
 	//  remove number of tiles within visible range (which is in meters, so convert to units, and divide that by tile size)
-	`log("Scoped and Dropped P1 working.");
+	//`log("Scoped and Dropped P1 working.");
 	Tiles -= Attacker.GetVisibilityRadius() * class'XComWorldData'.const.WORLD_METERS_TO_UNITS_MULTIPLIER / class'XComWorldData'.const.WORLD_StepSize;
 	if (Tiles > 0)     //  pretty much should be since a squadsight target is by definition beyond sight range. but... 
 		AimMod = ((class'X2AbilityToHitCalc_StandardAim'.default.SQUADSIGHT_DISTANCE_MOD * Tiles) * -1);
 	
 	ModInfo.ModType = eHit_Success;
 	ModInfo.Reason = RTFriendlyName;
-	ModInfo.Value = AimMod;
+	ModInfo.Value = DebugAim;
 	ShotModifiers.AddItem(ModInfo);
 	
 }
@@ -52,7 +55,7 @@ function bool PostAbilityCostPaid(XComGameState_Effect EffectState, XComGameStat
 	local XComGameState_Ability AbilityState;
 	local GameRulesCache_VisibilityInfo VisInfo;
 
-	`log("Starting ScopedAndDropped P2");
+	//`log("Starting ScopedAndDropped P2");
 	//  match the weapon associated with SnD to the attacking weapon
 	//if (kAbility.SourceWeapon == EffectState.ApplyEffectParameters.ItemStateObjectRef)
 	//{
