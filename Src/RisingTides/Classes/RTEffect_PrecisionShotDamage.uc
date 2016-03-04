@@ -14,7 +14,8 @@ var config int HEADSHOT_CRIT_BONUS;
 var config int SQUADSIGHT_CRIT_CHANCE;
 var localized string RTFriendlyName;
 
-//CREDIT: user guby on Steam (/u/munchbunny) 
+//CREDIT: user guby on Steam (/u/munchbunny)
+//Add crit chance for precision shots 
 function GetToHitModifiers(XComGameState_Effect EffectState, XComGameState_Unit Attacker, XComGameState_Unit Target, XComGameState_Ability AbilityState, class<X2AbilityToHitCalc> ToHitType, bool bMelee, bool bFlanking, bool bIndirectFire, out array<ShotModifierInfo> ShotModifiers)
 {
 	local ShotModifierInfo ModInfo;
@@ -49,6 +50,7 @@ function GetToHitModifiers(XComGameState_Effect EffectState, XComGameState_Unit 
 	}
 }
 
+//Add damage for precision shot crits
 function int GetAttackingDamageModifier(XComGameState_Effect EffectState, XComGameState_Unit Attacker, Damageable TargetDamageable, XComGameState_Ability AbilityState, const out EffectAppliedData AppliedData, const int CurrentDamage)
 {
 	local float ExtraDamage;

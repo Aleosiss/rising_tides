@@ -49,6 +49,12 @@
     <Content Include="Src\RisingTides\Classes\RTEffect_Aggression.uc">
       <SubType>Content</SubType>
     </Content>
+    <Content Include="Src\RisingTides\Classes\RTEffect_DisablingShotDamage.uc">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Src\RisingTides\Classes\RTEffect_KnockThemDown.uc">
+      <SubType>Content</SubType>
+    </Content>
     <Content Include="Src\RisingTides\Classes\RTEffect_PrecisionShotDamage.uc">
       <SubType>Content</SubType>
     </Content>

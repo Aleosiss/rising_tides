@@ -55,32 +55,24 @@ function bool PostAbilityCostPaid(XComGameState_Effect EffectState, XComGameStat
 	local XComGameState_Ability AbilityState;
 	local GameRulesCache_VisibilityInfo VisInfo;
 
-	//`log("Starting ScopedAndDropped P2");
 	//  match the weapon associated with SnD to the attacking weapon
 	//if (kAbility.SourceWeapon == EffectState.ApplyEffectParameters.ItemStateObjectRef)
 	//{
-		//`log("Starting ScopedAndDropped P2.1");
 		//  check for a direct flanking kill shot 
 		TargetUnit = XComGameState_Unit(NewGameState.GetGameStateForObjectID(AbilityContext.InputContext.PrimaryTarget.ObjectID));
 		if (TargetUnit != none && TargetUnit.IsDead())
 		{
-			//`log("Starting ScopedAndDropped P2.2");
 			if (`TACTICALRULES.VisibilityMgr.GetVisibilityInfo(Attacker.ObjectID, TargetUnit.ObjectID, VisInfo))
 				{
-					//`log("Starting ScopedAndDropped P2.3 Confirm");
-					//`log(VisInfo.TargetCover == CT_None);
-					// && TargetUnit.CanTakeCover() && VisInfo.TargetCover == CT_None
+					// Only care if there is no cover between this unit and the target
 					if (VisInfo.TargetCover == CT_None)
 					{
-						//`log("Starting ScopedAndDropped P2.4");
-						//  restore the pre cost action points to fully refund this action
+						// Negate changes to the number of action points
 						if (Attacker.ActionPoints.Length != PreCostActionPoints.Length)
 						{
-							//`log("Starting ScopedAndDropped P2.5");
 							AbilityState = XComGameState_Ability(`XCOMHISTORY.GetGameStateForObjectID(EffectState.ApplyEffectParameters.AbilityStateObjectRef.ObjectID));
 							if (AbilityState != none)
 							{
-								//`log("Starting ScopedAndDropped P2.6");
 								Attacker.ActionPoints = PreCostActionPoints;
 
 								EventMgr = `XEVENTMGR;

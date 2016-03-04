@@ -55,6 +55,8 @@ class RTAbility_MarksmanAbilitySet extends RTAbility_GhostAbilitySet
 	Templates.AddItem(PrecisionShot());
 	Templates.AddItem(PrecisionShotDamage());
 	Templates.AddItem(Aggression());
+	Templates.AddItem(KnockThemDown());
+	Templates.AddItem(DisablingShot());
 	//Templates.AddItem(StatisticalInevitibility());
 	//Templates.AddItem(SIShot());
 	//Templates.AddItem(TimeStandsStill());
@@ -230,7 +232,7 @@ static function X2AbilityTemplate PrecisionShot()
 	Template.AbilityCosts.AddItem(AmmoCost);
 
 	ActionPointCost = new class'X2AbilityCost_ActionPoints';
-	ActionPointCost.iNumPoints = 1;
+	ActionPointCost.iNumPoints = 2;
 	ActionPointCost.bConsumeAllPoints = true;
 	Template.AbilityCosts.AddItem(ActionPointCost);
 
@@ -350,6 +352,81 @@ static function X2AbilityTemplate KnockThemDown()
 
 	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
 	//  NOTE: No visualization on purpose!
+
+	return Template;
+}
+
+//---------------------------------------------------------------------------------------
+//---Disabling Shot----------------------------------------------------------------------
+//---------------------------------------------------------------------------------------
+static function X2AbilityTemplate DisablingShot()
+{
+	local X2AbilityTemplate                 Template;
+	local X2AbilityCooldown                 Cooldown;
+	local X2AbilityToHitCalc_StandardAim    ToHitCalc;
+	local X2Condition_Visibility            TargetVisibilityCondition;
+	local X2AbilityCost_Ammo                AmmoCost;
+	local X2AbilityCost_ActionPoints        ActionPointCost;
+	local X2Effect_DisableWeapon DisableWeapon;
+
+	`CREATE_X2ABILITY_TEMPLATE(Template, 'DisablingShot');
+
+	Template.AdditionalAbilities.AddItem('DisablingShotDamage');
+
+	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_disablingshot";
+	Template.AbilitySourceName = 'eAbilitySource_Perk';
+	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_AlwaysShow;
+	Template.Hostility = eHostility_Offensive;
+	Template.ShotHUDPriority = class'UIUtilities_Tactical'.const.CLASS_SERGEANT_PRIORITY;
+	Template.AbilityConfirmSound = "TacticalUI_ActivateAbility";
+
+	Template.TargetingMethod = class'X2TargetingMethod_OverTheShoulder';
+	Template.bUsesFiringCamera = true;
+	Template.CinescriptCameraType = "StandardGunFiring";
+
+	Cooldown = new class'X2AbilityCooldown';
+	Cooldown.iNumTurns = default.DISABLESHOT_COOLDOWN;
+	Template.AbilityCooldown = Cooldown;
+
+	ToHitCalc = new class'X2AbilityToHitCalc_StandardAim';
+	ToHitCalc.FinalMultiplier = default.HEADSHOT_AIM_MULTIPLIER;
+	Template.AbilityToHitCalc = ToHitCalc;
+
+	AmmoCost = new class'X2AbilityCost_Ammo';
+	AmmoCost.iAmmo = 1;
+	Template.AbilityCosts.AddItem(AmmoCost);
+
+	ActionPointCost = new class'X2AbilityCost_ActionPoints';
+	ActionPointCost.iNumPoints = 2;
+	ActionPointCost.bConsumeAllPoints = true;
+	Template.AbilityCosts.AddItem(ActionPointCost);
+
+	Template.AbilityTargetStyle = default.SimpleSingleTarget;
+	Template.AbilityTriggers.AddItem(default.PlayerInputTrigger);
+
+	Template.AbilityShooterConditions.AddItem(default.LivingShooterProperty);
+	Template.AddShooterEffectExclusions();
+
+	TargetVisibilityCondition = new class'X2Condition_Visibility';
+	TargetVisibilityCondition.bRequireGameplayVisible = true;
+	TargetVisibilityCondition.bAllowSquadsight = true;
+	Template.AbilityTargetConditions.AddItem(TargetVisibilityCondition);
+	Template.AbilityTargetConditions.AddItem(default.LivingHostileTargetProperty);
+
+	//  Put holo target effect first because if the target dies from this shot, it will be too late to notify the effect.
+	Template.AddTargetEffect(class'X2Ability_GrenadierAbilitySet'.static.HoloTargetEffect());
+	Template.AddTargetEffect(class'X2Ability_GrenadierAbilitySet'.static.ShredderDamageEffect());
+
+	DisableWeapon = new class'X2Effect_DisableWeapon';
+	DisableWeapon.TargetConditions.AddItem(default.LivingTargetUnitOnlyProperty);
+	Template.AddTargetEffect(DisableWeapon);
+
+	Template.bAllowAmmoEffects = true;
+
+	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
+	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
+
+	Template.bCrossClassEligible = false;
 
 	return Template;
 }
