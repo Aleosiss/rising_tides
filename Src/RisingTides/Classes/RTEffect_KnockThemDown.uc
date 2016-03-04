@@ -27,10 +27,6 @@ function int GetAttackingDamageModifier(XComGameState_Effect EffectState, XComGa
 	{
 		ExtraDamage = CurrentDamage * TOTAL_DMG_BONUS;
 	}
-	`log("TOTAL_DMG_BONUS = ");
-	`log(TOTAL_DMG_BONUS);
-	`log("Extra Damage =");
-	`log(ExtraDamage);
 	return int(ExtraDamage);
 }
 
