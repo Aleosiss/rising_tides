@@ -1,0 +1,89 @@
+///---------------------------------------------------------------------------------------
+//  FILE:    RTEffect_SixOClock.uc
+//  AUTHOR:  Aleosiss
+//  DATE:    5 March 2016
+//  PURPOSE: Six O'Clock overwatch counter
+//---------------------------------------------------------------------------------------
+//	Six O'Clock effect
+//---------------------------------------------------------------------------------------
+
+
+class RTEffect_SixOClock extends X2Effect_Persistent;
+
+var array<name> AllowedAbilities;
+
+function RegisterForEvents(XComGameState_Effect EffectGameState)
+{
+	local X2EventManager EventMgr;
+	local XComGameState_Unit UnitState;
+	local Object EffectObj;
+
+	EventMgr = `XEVENTMGR;
+
+	EffectObj = EffectGameState;
+	UnitState = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(EffectGameState.ApplyEffectParameters.SourceStateObjectRef.ObjectID));
+
+	EventMgr.RegisterForEvent(EffectObj, 'SixOClockTriggered', EffectGameState.TriggerAbilityFlyover, ELD_OnStateSubmitted, , UnitState);
+}
+
+function bool PostAbilityCostPaid(XComGameState_Effect EffectState, XComGameStateContext_Ability AbilityContext, XComGameState_Ability kAbility, XComGameState_Unit SourceUnit, XComGameState_Item AffectWeapon, XComGameState NewGameState, const array<name> PreCostActionPoints, const array<name> PreCostReservePoints)
+{
+	local X2EventManager EventMgr;
+	local XComGameState_Ability AbilityState;       //  used for looking up our source ability (Guardian), not the incoming one that was activated
+	local UnitValue Count;
+
+	//  if under the effect of Trance, let that handle restoring the full action cost (Trance not implemented yet)
+	//if (SourceUnit.IsUnitAffectedByEffectName(class'X2Effect_Serial'.default.EffectName))
+	//	return false;
+
+	if (SourceUnit.ReserveActionPoints.Length != PreCostReservePoints.Length && AbilityContext.IsResultContextHit() && AllowedAbilities.Find(kAbility.GetMyTemplate().DataName) != INDEX_NONE)
+	{
+		AbilityState = XComGameState_Ability(`XCOMHISTORY.GetGameStateForObjectID(EffectState.ApplyEffectParameters.AbilityStateObjectRef.ObjectID));
+		if (AbilityState != none)
+		{
+			if(!SourceUnit.GetUnitValue('SOCCounter', Count))
+			{
+				SourceUnit.SetUnitFloatValue('SOCCounter', 0);
+			}
+			SourceUnit.GetUnitValue('SOCCounter', Count);
+			if (int(Count.fValue) < 1)
+			{
+				SourceUnit.ReserveActionPoints = PreCostReservePoints;
+
+				Count.fValue = Count.fValue + 1;
+				SourceUnit.SetUnitFloatValue('SOCCounter', Count.fValue);
+				 
+				EventMgr = `XEVENTMGR;
+				EventMgr.TriggerEvent('SixOClockTriggered', AbilityState, SourceUnit, NewGameState);
+
+				return true;
+			}
+		}
+	}
+	return false;
+}
+
+simulated function bool OnEffectTicked(const out EffectAppliedData ApplyEffectParameters, XComGameState_Effect kNewEffectState, XComGameState NewGameState, bool FirstApplication)
+{
+	local bool							isTurnComplete;
+	local XComGameState_Unit			EffectTargetUnit;
+	local XComGameStateHistory			HistorySoC;
+
+	isTurnComplete = FullTurnComplete(kNewEffectState);
+	HistorySoC = `XCOMHISTORY;
+		   
+	if(isTurnComplete)
+	{
+		EffectTargetUnit = XComGameState_Unit(HistorySoC.GetGameStateForObjectID(ApplyEffectParameters.TargetStateObjectRef.ObjectID));
+		EffectTargetUnit.SetUnitFloatValue('SOCCounter', 0);	
+	}
+
+
+	super.OnEffectTicked(ApplyEffectParameters, kNewEffectState, NewGameState, FirstApplication);
+}
+
+DefaultProperties
+{
+	AllowedAbilities(0) = "RTOverwatchShot"
+	AllowedAbilities(1) = "PistolOverwatchShot"
+}
