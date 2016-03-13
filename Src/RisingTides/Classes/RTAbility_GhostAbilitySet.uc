@@ -16,3 +16,4 @@ class RTAbility_GhostAbilitySet extends X2Ability
 	var config int BURST_DAMAGE, BURST_COOLDOWN;
 	var config int OVERLOAD_CHARGES, OVERLOAD_BASE_COOLDOWN;
 	var config int OVERLOAD_PANIC_CHECK;
+

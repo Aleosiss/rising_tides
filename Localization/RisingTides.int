@@ -2,9 +2,19 @@
 
 [RTEffect_ScopedAndDropped]
 RTFriendlyName="Skill"
+RTNotFriendlyName="Pressure"
 
 [RTEffect_PrecisionShotDamage]
 RTFriendlyName="Precision Shot"
 
 [RTEffect_Aggression]
 RTFriendlyName="Aggression"
+
+[RTEffect_SnapshotEffect]
+RTFriendlyName="Snapshot"
+
+[RTEffect_SixOClockEffect]
+RTFriendlyName="Six O'Clock"
+
+[RTEffect_DamnGoodGround]
+RTFriendlyName="Damn Good Ground"
