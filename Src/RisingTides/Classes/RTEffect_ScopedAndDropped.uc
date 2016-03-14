@@ -71,15 +71,35 @@ function bool PostAbilityCostPaid(XComGameState_Effect EffectState, XComGameStat
 	if (kAbility.SourceWeapon == EffectState.ApplyEffectParameters.ItemStateObjectRef)
 	{
 		//  check for a direct flanking kill shot
-		 
+		`log("Using the right gun!"); 
 		TargetUnit = XComGameState_Unit(NewGameState.GetGameStateForObjectID(AbilityContext.InputContext.PrimaryTarget.ObjectID));
 		if (TargetUnit != none && TargetUnit.IsDead())
 		{
+			`log("Target is down!");
 			if (`TACTICALRULES.VisibilityMgr.GetVisibilityInfo(Attacker.ObjectID, TargetUnit.ObjectID, VisInfo))
 				{
+					if(Attacker.HasSoldierAbility('Sovereign'))
+					{
+						`log("ITS DEAD, LOOKING FOR UNITS TO FUCK UP");
+						class'RTTacticalVisibilityHelpers'.static.GetAllVisibleAlliesForPlayer(EffectTargetUnit.ControllingPlayer.ObjectID, VisibleUnits, -1, false);
+						for(Index = 0; Index < VisibleUnits.Length; Index++)
+						{
+							// Units within 5 tiles of the source that aren't psionic or robotic
+							PanicTargetUnit = XComGameState_Unit(NewGameState.GetGameStateForObjectID(VisibleUnits[Index].ObjectID));
+							if(/*!PanicTargetUnit.IsRobotic() && */!PanicTargetUnit.IsPsionic() && EffectTargetUnit.TileDistanceBetween(PanicTargetUnit) < 5)
+							{
+								`log("T-T-TRIGGERED");
+								`log(PanicTargetUnit.m_TemplateName.ToString());
+								`XEVENTMGR.TriggerEvent('SovereignTrigger', Attacker, PanicTargetUnit, NewGameState);
+							}
+						}
+					}
+					
+					
 					// Only care if there is no cover between this unit and the target
 					if (VisInfo.TargetCover == CT_None)
 					{
+						`log("There is no cover between us and the target, restoring action points!");
 						// Negate changes to the number of action points
 						if (Attacker.ActionPoints.Length != PreCostActionPoints.Length)
 						{

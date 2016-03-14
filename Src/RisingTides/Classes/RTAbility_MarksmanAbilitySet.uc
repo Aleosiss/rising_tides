@@ -1022,14 +1022,13 @@ static function X2AbilityTemplate Sovereign()
 	Template.AbilitySourceName = 'eAbilitySource_Perk';
 	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_NeverShow;
 	Template.Hostility = eHostility_Neutral;
-	Template.bIsPassive = true;
 
 	Template.AbilityToHitCalc = default.DeadEye;
 	Template.AbilityTargetStyle = default.SelfTarget;
 	Template.AbilityTriggers.AddItem(default.UnitPostBeginPlayTrigger);
 
 	SOVEffect = new class 'RTEffect_Sovereign';
-	SOVEffect.BuildPersistentEffect(1, true, false, false);
+	SOVEffect.BuildPersistentEffect(1, true, true, true);
 	SOVEffect.SetDisplayInfo(ePerkBuff_Passive, Template.LocFriendlyName, Template.LocLongDescription, Template.IconImage, true,, Template.AbilitySourceName);
 	Template.AddTargetEffect(SOVEffect);
 
