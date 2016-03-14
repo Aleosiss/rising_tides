@@ -72,6 +72,7 @@ static function array<X2DataTemplate> CreateTemplates()
 	Templates.AddItem(SlowIsSmooth());
 	Templates.AddItem(SlowIsSmoothEffect());
 	Templates.AddItem(Sovereign());
+	Templates.AddItem(SovereignEffect());
 	//Templates.AddItem(StatisticalInevitibility());
 	//Templates.AddItem(SIShot());
 	//Templates.AddItem(TimeStandsStill());
@@ -1013,10 +1014,10 @@ static function X2AbilityTemplate SlowIsSmoothEffect()
 static function X2AbilityTemplate Sovereign()
 {
 	local X2AbilityTemplate						Template;
-	local X2Effect_Persistent					SOVEffect;
+	local RTEffect_Sovereign					SOVEffect;
 
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'Sovereign');
-	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_damngoodground";
+	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_voidadept";
 
 	Template.AbilitySourceName = 'eAbilitySource_Perk';
 	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_NeverShow;
@@ -1027,11 +1028,12 @@ static function X2AbilityTemplate Sovereign()
 	Template.AbilityTargetStyle = default.SelfTarget;
 	Template.AbilityTriggers.AddItem(default.UnitPostBeginPlayTrigger);
 
-	SOVEffect = new class 'X2Effect_Persistent';
+	SOVEffect = new class 'RTEffect_Sovereign';
 	SOVEffect.BuildPersistentEffect(1, true, false, false);
 	SOVEffect.SetDisplayInfo(ePerkBuff_Passive, Template.LocFriendlyName, Template.LocLongDescription, Template.IconImage, true,, Template.AbilitySourceName);
 	Template.AddTargetEffect(SOVEffect);
 
+	Template.AdditionalAbilities.AddItem('SovereignEffect');
 	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
 	// Note: no visualization on purpose!
 	
@@ -1040,25 +1042,45 @@ static function X2AbilityTemplate Sovereign()
 	return Template;
 }
 
-static function RTEffect_Sovereign SovereignEffect()
+static function X2AbilityTemplate SovereignEffect()
 {
-	local RTEffect_Sovereign            Effect;
-	local X2Condition_AbilityProperty   AbilityCondition;
-	local X2AbilityTag                  AbilityTag;
+	local X2AbilityTemplate						Template;
+	local X2Condition_UnitProperty				UnitPropertyCondition;
+	local X2Effect_Panicked				        PanicEffect;
+ 	local X2AbilityTrigger_EventListener		EventListener;
 
-	Effect = new class'RTEffect_Sovereign';
-	Effect.BuildPersistentEffect(1, false, false, false, eGameRule_PlayerTurnBegin);
-	Effect.bRemoveWhenTargetDies = true;
-	Effect.bUseSourcePlayerState = true;
+	`CREATE_X2ABILITY_TEMPLATE(Template, 'SovereignEffect');
+	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_voidadept";
 
-	AbilityTag = X2AbilityTag(`XEXPANDCONTEXT.FindTag("Ability"));
-	AbilityTag.ParseObj = Effect;
+	UnitPropertyCondition = new class'X2Condition_UnitProperty';
+	UnitPropertyCondition.ExcludeDead = true;
+	UnitPropertyCondition.ExcludeFriendlyToSource = true;
+	UnitPropertyCondition.ExcludeRobotic = true;
+	UnitPropertyCondition.FailOnNonUnits = true;
+	Template.AbilityTargetConditions.AddItem(UnitPropertyCondition);
 
-	Effect.SetDisplayInfo(ePerkBuff_Penalty, default.HoloTargetEffectName, `XEXPAND.ExpandString(default.HoloTargetEffectDesc), "img:///UILibrary_PerkIcons.UIPerk_holotargeting", true);
+	EventListener = new class'X2AbilityTrigger_EventListener';
+	EventListener.ListenerData.EventID = 'SovereignTrigger';
+	EventListener.ListenerData.Deferral = ELD_OnStateSubmitted;
+	EventListener.ListenerData.Filter = eFilter_Unit;
+	EventListener.ListenerData.EventFn = class'XComGameState_Ability'.static.VoidRiftInsanityListener;
+	Template.AbilityTriggers.AddItem(EventListener);
 
-	AbilityCondition = new class'X2Condition_AbilityProperty';
-	AbilityCondition.OwnerHasSoldierAbilities.AddItem('Sovereign');
-	Effect.TargetConditions.AddItem(AbilityCondition);
+	//  Panic effect for 5+ unblocked psi hits
+	PanicEffect = class'X2StatusEffects'.static.CreatePanickedStatusEffect();
+	PanicEffect.MinStatContestResult = 1;
+	PanicEffect.MaxStatContestResult = 0;
+	PanicEffect.DamageTypes.AddItem('Psi');
+	Template.AddTargetEffect(PanicEffect);
 
-	return Effect;
+	Template.AbilityTargetStyle = default.SimpleSingleTarget;
+	Template.AbilityShooterConditions.AddItem(default.LivingShooterProperty);
+	Template.AddShooterEffectExclusions();
+
+	Template.AbilityToHitCalc = new class'X2AbilityToHitCalc_StatCheck_UnitVsUnit';
+	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
+	// Note: no visualization on purpose!
+
+
+	return Template;
 }

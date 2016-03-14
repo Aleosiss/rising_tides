@@ -88,6 +88,9 @@
     <Content Include="Src\RisingTides\Classes\RTEffect_SnapshotEffect.uc">
       <SubType>Content</SubType>
     </Content>
+    <Content Include="Src\RisingTides\Classes\RTEffect_Sovereign.uc">
+      <SubType>Content</SubType>
+    </Content>
     <Content Include="Src\RisingTides\Classes\RTEffect_Squadsight.uc">
       <SubType>Content</SubType>
     </Content>
