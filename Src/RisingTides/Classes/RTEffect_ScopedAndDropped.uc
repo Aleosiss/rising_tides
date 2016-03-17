@@ -57,53 +57,65 @@ function RegisterForEvents(XComGameState_Effect EffectGameState)
 	UnitState = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(EffectGameState.ApplyEffectParameters.SourceStateObjectRef.ObjectID));
 
 	EventMgr.RegisterForEvent(EffectObj, 'ScopedAndDropped', EffectGameState.TriggerAbilityFlyover, ELD_OnStateSubmitted, , UnitState);
+	EventMgr.RegisterForEvent(EffectObj, 'SovereignTrigger', EffectGameState.TriggerAbilityFlyover, ELD_OnStateSubmitted, , UnitState);
 }
 //Killing an exposed target refunds the full cost of the shot
 function bool PostAbilityCostPaid(XComGameState_Effect EffectState, XComGameStateContext_Ability AbilityContext, XComGameState_Ability kAbility, XComGameState_Unit Attacker, XComGameState_Item AffectWeapon, XComGameState NewGameState, const array<name> PreCostActionPoints, const array<name> PreCostReservePoints)
 {
-	local XComGameState_Unit				TargetUnit;
+	local XComGameState_Unit				TargetUnit, PanicTargetUnit;
 	local X2EventManager					EventMgr;
 	local XComGameState_Ability				AbilityState;
 	local GameRulesCache_VisibilityInfo		VisInfo;
+	local XComGameStateHistory				History;
 	local UnitValue							NumTimes;
+	local array<StateObjectReference>		VisibleUnits;
+	local int								Index, RandRoll;
 
 	//  match the weapon associated with SnD to the attacking weapon
 	if (kAbility.SourceWeapon == EffectState.ApplyEffectParameters.ItemStateObjectRef)
 	{
+		History = `XCOMHISTORY;
 		//  check for a direct flanking kill shot
-		`log("Using the right gun!"); 
 		TargetUnit = XComGameState_Unit(NewGameState.GetGameStateForObjectID(AbilityContext.InputContext.PrimaryTarget.ObjectID));
 		if (TargetUnit != none && TargetUnit.IsDead())
 		{
-			`log("Target is down!");
 			if (`TACTICALRULES.VisibilityMgr.GetVisibilityInfo(Attacker.ObjectID, TargetUnit.ObjectID, VisInfo))
 				{
+					// Sovereign check
 					if(Attacker.HasSoldierAbility('Sovereign'))
 					{
-						`log("ITS DEAD, LOOKING FOR UNITS TO FUCK UP");
-						class'RTTacticalVisibilityHelpers'.static.GetAllVisibleAlliesForPlayer(EffectTargetUnit.ControllingPlayer.ObjectID, VisibleUnits, -1, false);
+						// Getting all visible units to the dead target
+						class'RTTacticalVisibilityHelpers'.static.GetAllVisibleAlliesForUnit(TargetUnit.ObjectID, VisibleUnits/*, -1, false*/);
 						for(Index = 0; Index < VisibleUnits.Length; Index++)
 						{
-							// Units within 5 tiles of the source that aren't psionic or robotic
-							PanicTargetUnit = XComGameState_Unit(NewGameState.GetGameStateForObjectID(VisibleUnits[Index].ObjectID));
-							if(/*!PanicTargetUnit.IsRobotic() && */!PanicTargetUnit.IsPsionic() && EffectTargetUnit.TileDistanceBetween(PanicTargetUnit) < 5)
+							// Units within 5 tiles of the source that aren't psionic or robotic or the source
+							PanicTargetUnit = XComGameState_Unit(History.GetGameStateForObjectID(VisibleUnits[Index].ObjectID));
+							if(TargetUnit.TileDistanceBetween(PanicTargetUnit) < 2) 
 							{
-								`log("T-T-TRIGGERED");
-								`log(PanicTargetUnit.m_TemplateName.ToString());
-								`XEVENTMGR.TriggerEvent('SovereignTrigger', Attacker, PanicTargetUnit, NewGameState);
+								if(!PanicTargetUnit.IsRobotic() && !PanicTargetUnit.IsPsionic())
+								{
+									// 15% chance
+									RandRoll = `SYNC_RAND(100);
+									`COMBATLOG("Sovereign rolled " @ RandRoll @ "; Target is 49!");
+									if(RandRoll < 50)
+									{
+										// T-T-Triggered
+										EventMgr = `XEVENTMGR;
+										EventMgr.TriggerEvent('SovereignTrigger', PanicTargetUnit, Attacker, NewGameState);
+									}
+								}
 							}
 						}
 					}
 					
 					
 					// Only care if there is no cover between this unit and the target
-					if (VisInfo.TargetCover == CT_None)
+					if (VisInfo.TargetCover == CT_None || Attacker.HasSoldierAbility('DaybreakFlame'))
 					{
-						`log("There is no cover between us and the target, restoring action points!");
 						// Negate changes to the number of action points
 						if (Attacker.ActionPoints.Length != PreCostActionPoints.Length)
 						{
-							AbilityState = XComGameState_Ability(`XCOMHISTORY.GetGameStateForObjectID(EffectState.ApplyEffectParameters.AbilityStateObjectRef.ObjectID));
+							AbilityState = XComGameState_Ability(History.GetGameStateForObjectID(EffectState.ApplyEffectParameters.AbilityStateObjectRef.ObjectID));
 							if (AbilityState != none)
 							{
 								Attacker.ActionPoints = PreCostActionPoints;

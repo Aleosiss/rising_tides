@@ -79,7 +79,7 @@ simulated function bool OnEffectTicked(const out EffectAppliedData ApplyEffectPa
 	}
 
 
-	super.OnEffectTicked(ApplyEffectParameters, kNewEffectState, NewGameState, FirstApplication);
+	return super.OnEffectTicked(ApplyEffectParameters, kNewEffectState, NewGameState, FirstApplication);
 }
 
 DefaultProperties

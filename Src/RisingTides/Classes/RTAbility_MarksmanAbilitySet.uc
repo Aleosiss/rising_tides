@@ -34,25 +34,6 @@ class RTAbility_MarksmanAbilitySet extends RTAbility_GhostAbilitySet
 static function array<X2DataTemplate> CreateTemplates()
 {
 	local array<X2DataTemplate> Templates;
-	
-	//Templates.AddItem(AddSquadsightAbility());
-	//Templates.AddItem(PurePassive('Quickdraw', "img:///UILibrary_PerkIcons.UIPerk_quickdraw"));
-	//Templates.AddItem(PurePassive('Scoped_and_Dropped', "<insert image path here>");
-	//Templates.AddItem(PurePassive('Teek', "<insert image path here>");
-	//Templates.AddItem(PurePassive('Aggression', "<insert image path here>");
-	//Templates.AddItem(PurePassive('Vital_Point_Targeting', "<insert image path here>");
-	//Templates.AddItem(PurePassive('Damn_Good_Ground', "<insert image path here>");
-	//Templates.AddItem(PurePassive('Slow_Is_Smooth', "<insert image path here>");
-	//Templates.AddItem(PurePassive('Your_Hands, My Eyes', "<insert image path here>");
-	//Templates.Additem(PurePassive('Covering_Fire', "<insert image path here>");
-	//Templates.AddItem(PurePassive('Six_OClock', "<insert image path here>");
-	//Templates.AddItem(PurePassive('Sovereign', "<insert image path here>");
-	//Templates.AddItem(PurePassive('In_the_Zone', "<insert image path here>");
-	//Templates.AddItem(PurePassive('Knock_Them_Down', "<insert image path here>");
-	//Templates.AddItem(PurePassive('Ready_For_Anything', "<insert image path here>");
-	//Templates.AddItem(PurePassive('Harbinger', "<insert image path here>");
-	//Templates.AddItem(PurePassive('Daybreak_Flame', "<insert image path here>");
-	//Templates.AddItem(PurePassive('Statistical_Inevitibility', "<insert image path here>");
 
 	Templates.AddItem(RTStandardSniperShot());
 	Templates.AddItem(RTOverwatch());
@@ -73,6 +54,8 @@ static function array<X2DataTemplate> CreateTemplates()
 	Templates.AddItem(SlowIsSmoothEffect());
 	Templates.AddItem(Sovereign());
 	Templates.AddItem(SovereignEffect());
+	Templates.AddItem(DaybreakFlame());
+	Templates.AddItem(PurePassive('DaybreakFlameIcon', "img:///UILibrary_PerkIcons.UIPerk_snipershot"));
 	//Templates.AddItem(StatisticalInevitibility());
 	//Templates.AddItem(SIShot());
 	//Templates.AddItem(TimeStandsStill());
@@ -1051,6 +1034,10 @@ static function X2AbilityTemplate SovereignEffect()
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'SovereignEffect');
 	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_voidadept";
 
+	Template.AbilitySourceName = 'eAbilitySource_Perk';
+	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_NeverShow;
+	Template.Hostility = eHostility_Neutral;
+
 	UnitPropertyCondition = new class'X2Condition_UnitProperty';
 	UnitPropertyCondition.ExcludeDead = true;
 	UnitPropertyCondition.ExcludeFriendlyToSource = true;
@@ -1080,6 +1067,164 @@ static function X2AbilityTemplate SovereignEffect()
 	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
 	// Note: no visualization on purpose!
 
+
+	return Template;
+}
+
+//---------------------------------------------------------------------------------------
+//---Daybreak Flame--------------------------------------------------------------------
+//---------------------------------------------------------------------------------------
+ static function X2AbilityTemplate DaybreakFlame()
+{
+	local X2AbilityTemplate						Template;
+	local X2AbilityCost_ActionPoints			ActionPointCost;
+	local X2AbilityCost_Ammo					AmmoCost;
+	local X2AbilityToHitCalc_StandardAim		ToHitCalc;
+	local X2Condition_Visibility				TargetVisibilityCondition;
+	local array<name>							SkipExclusions;
+	local X2Effect_Knockback					KnockbackEffect;
+	local X2Effect_ApplyWeaponDamage			WeaponDamageEffect; //invokes the ability to add weapon damage
+	local X2Effect_ApplyFireToWorld				FireToWorldEffect;  //allows ability to set shit on fire
+	local X2Effect_ApplyDirectionalWorldDamage  WorldDamage;  //allows destruction of environment
+	local X2Effect_Burning						BurningEffect;      //Allows Burning 
+	local X2AbilityMultiTarget_Line				LineMultiTarget;
+	local X2AbilityTarget_Cursor				CursorTarget;
+	local X2AbilityTarget_Single				SingleTarget;
+	//Macro to do localisation and stuffs
+	`CREATE_X2ABILITY_TEMPLATE(Template, 'DaybreakFlame');
+
+	// Icon Properties
+	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_snipershot";
+	Template.ShotHUDPriority = class'UIUtilities_Tactical'.const.STANDARD_SHOT_PRIORITY;
+	Template.DisplayTargetHitChance = true;
+	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_ShowIfAvailableOrNoTargets;
+	// color of the icon
+	Template.AbilitySourceName = 'eAbilitySource_Standard';                                      
+	// Activated by a button press; additionally, tells the AI this is an activatable
+	Template.AbilityTriggers.AddItem(default.PlayerInputTrigger);
+	Template.bDisplayInUITooltip = false;
+	Template.bDisplayInUITacticalText = false;
+	
+	// *** VALIDITY CHECKS *** //
+	// Status condtions that do *not* prohibit this action.
+	SkipExclusions.AddItem(class'X2AbilityTemplateManager'.default.DisorientedName);
+	SkipExclusions.AddItem(class'X2StatusEffects'.default.BurningName);
+	Template.AddShooterEffectExclusions(SkipExclusions);
+
+	// *** TARGETING PARAMETERS *** //
+	// Can only shoot visible enemies
+	TargetVisibilityCondition = new class'X2Condition_Visibility';
+	TargetVisibilityCondition.bRequireGameplayVisible = true;
+	TargetVisibilityCondition.bAllowSquadsight = true;
+	TargetVisibilityCondition.bVisibleToAnyAlly = true;
+	Template.AbilityTargetConditions.AddItem(TargetVisibilityCondition);
+	// Can't target dead; Can't target friendlies
+	Template.AbilityTargetConditions.AddItem(default.LivingHostileTargetProperty);
+	// Can't shoot while dead
+	Template.AbilityShooterConditions.AddItem(default.LivingShooterProperty);
+	
+	// Single targets that are in range.
+	//SingleTarget = new class'X2AbilityTarget_Single';
+	//SingleTarget.bAllowDestructibleObjects = true;
+	//SingleTarget.bShowAOE = true;
+	//Template.AbilityTargetStyle = SingleTarget;
+
+	// Targeting Method
+	Template.TargetingMethod = class'RTTargetingMethod_AimedLineSkillshot';
+	Template.bUsesFiringCamera = true;
+	Template.CinescriptCameraType = "StandardGunFiring";
+
+	// Cursor target
+	CursorTarget = new class'X2AbilityTarget_Cursor';
+	CursorTarget.FixedAbilityRange = 200;
+	Template.AbilityTargetStyle = CursorTarget;
+
+	// Alternate targeting method
+	//Template.TargetingMethod = class'X2TargetingMethod_Line';
+	//Template.CinescriptCameraType = "Psionic_FireAtLocation";
+
+	// Line skillshot
+	LineMultiTarget = new class'X2AbilityMultiTarget_Line';
+	LineMultiTarget.bSightRangeLimited = false;
+	Template.AbilityMultiTargetStyle = LineMultiTarget;
+
+	// Action Point
+	ActionPointCost = new class'RTAbilityCost_SnapshotActionPoints';
+	ActionPointCost.iNumPoints = 2;
+	// Consume all points
+	ActionPointCost.bConsumeAllPoints = true;                                               
+	Template.AbilityCosts.AddItem(ActionPointCost);
+
+	// Ammo
+	AmmoCost = new class'X2AbilityCost_Ammo';
+	AmmoCost.iAmmo = 1;
+	Template.AbilityCosts.AddItem(AmmoCost);
+	Template.bAllowAmmoEffects = true;
+
+	// Weapon Upgrade Compatibility
+	// Flag that permits action to become 'free action' via 'Hair Trigger' or similar upgrade / effects
+	Template.bAllowFreeFireWeaponUpgrade = true;                                           
+
+	//  Put holo target effect first because if the target dies from this shot, it will be too late to notify the effect.
+	Template.AddTargetEffect(class'X2Ability_GrenadierAbilitySet'.static.HoloTargetEffect());
+	//  Various Soldier ability specific effects - effects check for the ability before applying	
+	Template.AddTargetEffect(class'X2Ability_GrenadierAbilitySet'.static.ShredderDamageEffect());
+
+	// Damage Effect
+	//Template.AddTargetEffect(default.WeaponUpgradeMissDamage);
+
+	// Hit Calculation (Different weapons now have different calculations for range)
+	ToHitCalc = new class'X2AbilityToHitCalc_StandardAim';
+	ToHitCalc.bMultiTargetOnly = true;
+	Template.AbilityToHitCalc = ToHitCalc;
+
+	Template.bOverrideAim = true;  
+	Template.bUseSourceLocationZToAim = true;
+
+	// Damage/Burning Effect
+	WeaponDamageEffect = new class'X2Effect_ApplyWeaponDamage';   //creates the framework to apply weapon damage to the ability
+	WeaponDamageEffect.bExplosiveDamage = true;					  //forces the ability to use the explosive damage type
+	WeaponDamageEffect.bApplyWorldEffectsForEachTargetLocation = true;          
+	Template.AddMultiTargetEffect(WeaponDamageEffect);           //Adds weapon damage to multiple targets
+	BurningEffect = class'X2StatusEffects'.static.CreateBurningStatusEffect(2, 0);   //Adds Burning Effect for 2 damage, 0 spread
+	BurningEffect.ApplyChance = 100;                                         //Should be a 50% chance to actually apply burning 
+	Template.AddMultiTargetEffect(BurningEffect);                                    //Adds the burning effect to the targeted area
+
+	WorldDamage = new class'X2Effect_ApplyDirectionalWorldDamage';  //creates the framework to apply damage to the world
+	WorldDamage.bUseWeaponDamageType = False;                       //overrides the normal weapon damage type
+	WorldDamage.bUseWeaponEnvironmentalDamage = false;              //replaces the weapon's environmental damage with the abilities
+	WorldDamage.EnvironmentalDamageAmount = 3000;                   //determines the amount of enviornmental damage the ability applies
+	WorldDamage.bApplyOnHit = true;                                 //obv
+	WorldDamage.bApplyOnMiss = true;                                //obv
+	WorldDamage.bApplyToWorldOnHit = true;                          //obv
+	WorldDamage.bApplyToWorldOnMiss = true;                         //obv
+	WorldDamage.bHitAdjacentDestructibles = true;                   //applies environmental damage to things adjacent to the Line
+	WorldDamage.PlusNumZTiles = 1;                                 //determines how 'high' the world damage is applied
+	WorldDamage.bHitTargetTile = true;                              //Makes sure that everthing that is targetted is hit
+	Template.AddMultiTargetEffect(WorldDamage);                     //May be redundant
+
+	FireToWorldEffect = new class'X2Effect_ApplyFireToWorld';                //This took a while to find
+	FireToWorldEffect.bUseFireChanceLevel = true;                           
+	FireToWorldEffect.bDamageFragileOnly = false;
+	FireToWorldEffect.bCheckForLOSFromTargetLocation = false;
+	FireToWorldEffect.FireChance_Level1 = 0.95f;                             //%chance of fire to catch
+	FireToWorldEffect.FireChance_Level2 = 0.95f;
+	FireToWorldEffect.FireChance_Level3 = 0.95f;
+	Template.AddMultiTargetEffect(FireToWorldEffect);                        //this is required to add the fire effect
+
+	Template.OverrideAbilities.AddItem('SniperStandardFire');
+	Template.OverrideAbilities.AddItem('RTStandardSniperShot');
+	Template.AdditionalAbilities.AddItem('DaybreakFlameIcon');
+	// MAKE IT LIVE!
+	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
+	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
+	Template.BuildInterruptGameStateFn = TypicalAbility_BuildInterruptGameState;
+
+	KnockbackEffect = new class'X2Effect_Knockback';
+	KnockbackEffect.KnockbackDistance = 2;
+	KnockbackEffect.bUseTargetLocation = true;
+	Template.AddTargetEffect(KnockbackEffect);
+	Template.AddMultiTargetEffect(KnockbackEffect);
 
 	return Template;
 }
