@@ -55,7 +55,7 @@ static function array<X2DataTemplate> CreateTemplates()
 	Templates.AddItem(Sovereign());
 	Templates.AddItem(SovereignEffect());
 	Templates.AddItem(DaybreakFlame());
-	Templates.AddItem(PurePassive('DaybreakFlameIcon', "img:///UILibrary_PerkIcons.UIPerk_snipershot"));
+	Templates.AddItem(DaybreakFlameIcon());
 	//Templates.AddItem(StatisticalInevitibility());
 	//Templates.AddItem(SIShot());
 	//Templates.AddItem(TimeStandsStill());
@@ -348,7 +348,7 @@ static function X2AbilityTemplate ScopedAndDropped()
 
 	// Icon Properties
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'ScopedAndDropped');
-	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_voidrift";
+	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_aim";
 	Template.AbilitySourceName = 'eAbilitySource_Perk';
 	Template.eAbilityIconBehaviorHUD = EAbilityIconBehavior_NeverShow;
 	Template.Hostility = eHostility_Neutral;
@@ -363,6 +363,9 @@ static function X2AbilityTemplate ScopedAndDropped()
 	ScopedEffect.BuildPersistentEffect(1, true, true, true);
 	ScopedEffect.SetDisplayInfo(ePerkBuff_Passive, Template.LocFriendlyName, Template.LocLongDescription, Template.IconImage, true,,Template.AbilitySourceName);
 	Template.AddTargetEffect(ScopedEffect);
+
+	Template.AdditionalAbilities.AddItem('RTStandardSniperShot');
+	Template.AdditionalAbilities.AddItem('RTOverwatch');
 
 	// Probably required 
 	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
@@ -573,7 +576,7 @@ static function X2AbilityTemplate KnockThemDown()
 
 	// Icon Properties
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'KnockThemDown');
-	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_voidrift";
+	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_ammo_fletchette";
 
 	Template.AbilitySourceName = 'eAbilitySource_Perk';
 	Template.eAbilityIconBehaviorHUD = EAbilityIconBehavior_NeverShow;
@@ -1023,7 +1026,9 @@ static function X2AbilityTemplate Sovereign()
 
 	return Template;
 }
-
+//---------------------------------------------------------------------------------------
+//---Sovereign Effect--------------------------------------------------------------------
+//---------------------------------------------------------------------------------------
 static function X2AbilityTemplate SovereignEffect()
 {
 	local X2AbilityTemplate						Template;
@@ -1072,7 +1077,7 @@ static function X2AbilityTemplate SovereignEffect()
 }
 
 //---------------------------------------------------------------------------------------
-//---Daybreak Flame--------------------------------------------------------------------
+//---Daybreak Flame----------------------------------------------------------------------
 //---------------------------------------------------------------------------------------
  static function X2AbilityTemplate DaybreakFlame()
 {
@@ -1124,10 +1129,10 @@ static function X2AbilityTemplate SovereignEffect()
 	Template.AbilityShooterConditions.AddItem(default.LivingShooterProperty);
 	
 	// Single targets that are in range.
-	//SingleTarget = new class'X2AbilityTarget_Single';
-	//SingleTarget.bAllowDestructibleObjects = true;
-	//SingleTarget.bShowAOE = true;
-	//Template.AbilityTargetStyle = SingleTarget;
+	SingleTarget = new class'X2AbilityTarget_Single';
+	SingleTarget.bAllowDestructibleObjects = true;
+	SingleTarget.bShowAOE = true;
+	Template.AbilityTargetStyle = SingleTarget;
 
 	// Targeting Method
 	Template.TargetingMethod = class'RTTargetingMethod_AimedLineSkillshot';
@@ -1135,9 +1140,9 @@ static function X2AbilityTemplate SovereignEffect()
 	Template.CinescriptCameraType = "StandardGunFiring";
 
 	// Cursor target
-	CursorTarget = new class'X2AbilityTarget_Cursor';
-	CursorTarget.FixedAbilityRange = 200;
-	Template.AbilityTargetStyle = CursorTarget;
+	//CursorTarget = new class'X2AbilityTarget_Cursor';
+	//CursorTarget.FixedAbilityRange = 200;
+	//Template.AbilityTargetStyle = CursorTarget;
 
 	// Alternate targeting method
 	//Template.TargetingMethod = class'X2TargetingMethod_Line';
@@ -1186,7 +1191,7 @@ static function X2AbilityTemplate SovereignEffect()
 	WeaponDamageEffect.bExplosiveDamage = true;					  //forces the ability to use the explosive damage type
 	WeaponDamageEffect.bApplyWorldEffectsForEachTargetLocation = true;          
 	Template.AddMultiTargetEffect(WeaponDamageEffect);           //Adds weapon damage to multiple targets
-	BurningEffect = class'X2StatusEffects'.static.CreateBurningStatusEffect(2, 0);   //Adds Burning Effect for 2 damage, 0 spread
+	BurningEffect = class'X2StatusEffects'.static.CreateBurningStatusEffect(3, 0);   //Adds Burning Effect for 2 damage, 0 spread
 	BurningEffect.ApplyChance = 100;                                         //Should be a 50% chance to actually apply burning 
 	Template.AddMultiTargetEffect(BurningEffect);                                    //Adds the burning effect to the targeted area
 
@@ -1201,6 +1206,7 @@ static function X2AbilityTemplate SovereignEffect()
 	WorldDamage.bHitAdjacentDestructibles = true;                   //applies environmental damage to things adjacent to the Line
 	WorldDamage.PlusNumZTiles = 1;                                 //determines how 'high' the world damage is applied
 	WorldDamage.bHitTargetTile = true;                              //Makes sure that everthing that is targetted is hit
+	WorldDamage.ApplyChance = 100;
 	Template.AddMultiTargetEffect(WorldDamage);                     //May be redundant
 
 	FireToWorldEffect = new class'X2Effect_ApplyFireToWorld';                //This took a while to find
@@ -1214,7 +1220,7 @@ static function X2AbilityTemplate SovereignEffect()
 
 	Template.OverrideAbilities.AddItem('SniperStandardFire');
 	Template.OverrideAbilities.AddItem('RTStandardSniperShot');
-	Template.AdditionalAbilities.AddItem('DaybreakFlameIcon');
+	
 	// MAKE IT LIVE!
 	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
 	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
@@ -1225,6 +1231,70 @@ static function X2AbilityTemplate SovereignEffect()
 	KnockbackEffect.bUseTargetLocation = true;
 	Template.AddTargetEffect(KnockbackEffect);
 	Template.AddMultiTargetEffect(KnockbackEffect);
+
+	return Template;
+}
+
+//---------------------------------------------------------------------------------------
+//---Daybreak Flame Icon-----------------------------------------------------------------
+//---------------------------------------------------------------------------------------
+static function X2AbilityTemplate DaybreakFlameIcon()
+{
+	local X2AbilityTemplate						Template;
+	local X2Effect_Persistent					SOVEffect;
+
+	`CREATE_X2ABILITY_TEMPLATE(Template, 'DaybreakFlameIcon');
+	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_snipershot";
+
+	Template.AbilitySourceName = 'eAbilitySource_Perk';
+	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_NeverShow;
+	Template.Hostility = eHostility_Neutral;
+
+	Template.AbilityToHitCalc = default.DeadEye;
+	Template.AbilityTargetStyle = default.SelfTarget;
+	Template.AbilityTriggers.AddItem(default.UnitPostBeginPlayTrigger);
+
+	SOVEffect = new class 'X2Effect_Persistent';
+	SOVEffect.BuildPersistentEffect(1, true, true, true);
+	SOVEffect.SetDisplayInfo(ePerkBuff_Passive, Template.LocFriendlyName, Template.LocLongDescription, Template.IconImage, true,, Template.AbilitySourceName);
+	Template.AddTargetEffect(SOVEffect);
+
+	Template.AdditionalAbilities.AddItem('DaybreakFlame');
+	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
+	// Note: no visualization on purpose!
+	
+	Template.bCrossClassEligible = false;
+
+	return Template;
+}
+//---------------------------------------------------------------------------------------
+//---Inevitibility-----------------------------------------------------------------------
+//---------------------------------------------------------------------------------------
+static function X2AbilityTemplate Inevitibility()
+{
+	local X2AbilityTemplate						Template;
+	local RTEffect_Inevitibility				RTEffect;
+
+	 `CREATE_X2ABILITY_TEMPLATE(Template, 'Inevitibility');
+	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_snipershot";
+
+	Template.AbilitySourceName = 'eAbilitySource_Perk';
+	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_NeverShow;
+	Template.Hostility = eHostility_Neutral;
+
+	Template.AbilityToHitCalc = default.DeadEye;
+	Template.AbilityTargetStyle = default.SelfTarget;
+	Template.AbilityTriggers.AddItem(default.UnitPostBeginPlayTrigger);
+
+	RTEffect = new class 'RTEffect_Inevitibility';
+	RTEffect.BuildPersistentEffect(1, true, false, false,  eGameRule_PlayerTurnEnd);
+	RTEffect.SetDisplayInfo(ePerkBuff_Passive, Template.LocFriendlyName, Template.LocLongDescription, Template.IconImage, true,, Template.AbilitySourceName);
+	Template.AddTargetEffect(RTEffect);
+
+	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
+	// Note: no visualization on purpose!
+	
+	Template.bCrossClassEligible = false;
 
 	return Template;
 }

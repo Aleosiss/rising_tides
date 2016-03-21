@@ -31,7 +31,7 @@ function GetToHitModifiers(XComGameState_Effect EffectState, XComGameState_Unit 
 	
 	ModInfoAim.ModType = eHit_Success;
 	ModInfoAim.Reason = RTFriendlyName;
-	ModInfoAim.Value = DebugAim;
+	ModInfoAim.Value = AimMod;
 	ShotModifiers.AddItem(ModInfoAim);
 
 	Attacker.GetUnitValue('NumTimesScopedAndDropped', NumTimesScopedAndDropped);
@@ -109,14 +109,14 @@ function bool PostAbilityCostPaid(XComGameState_Effect EffectState, XComGameStat
 					}
 					
 					
-					// Only care if there is no cover between this unit and the target
-					if (VisInfo.TargetCover == CT_None || Attacker.HasSoldierAbility('DaybreakFlame'))
+					// Only care if there is no cover between this unit and the target unless they were concealed or have Daybreak Flame
+					if (VisInfo.TargetCover == CT_None || Attacker.HasSoldierAbility('DaybreakFlame') || Attacker.WasConcealed(History.GetEventChainStartIndex()) || Attacker.IsConcealed() || TargetUnit.GetCurrentStat(eStat_AlertLevel) == 0)
 					{
 						// Negate changes to the number of action points
 						if (Attacker.ActionPoints.Length != PreCostActionPoints.Length)
 						{
 							AbilityState = XComGameState_Ability(History.GetGameStateForObjectID(EffectState.ApplyEffectParameters.AbilityStateObjectRef.ObjectID));
-							if (AbilityState != none)
+							if (AbilityState != none && AbilityState.GetMyTemplateName() != 'RTOverwatchShot')
 							{
 								Attacker.ActionPoints = PreCostActionPoints;
 								// If the UnitValue doesn't exist, make it, and start it at one since we just shot something

@@ -54,7 +54,7 @@ function Init(AvailableAction InAction)
 		TargetingCamera.PushCamera(LookAtMidpointCamera);
 	}
 
-	// set up the UI line
+	// set up the GUI line
 	if (!AbilityTemplate.SkipRenderOfTargetingTemplate)
 	{
 		// setup the targeting mesh
@@ -244,6 +244,7 @@ static function bool ShouldWaitForFramingCamera()
 
 function bool GetAdditionalTargets(out AvailableTarget AdditionalTargets)
 {
+	NewTargetLocation = WorldData.GetPositionFromTileCoordinates(XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(Action.AvailableTargets[LastTarget].PrimaryTarget.ObjectID)).TileLocation);
 	Ability.GatherAdditionalAbilityTargetsForLocation(NewTargetLocation, AdditionalTargets);
 	return true;
 }

@@ -43,7 +43,7 @@ function bool PostAbilityCostPaid(XComGameState_Effect EffectState, XComGameStat
 		{
 			if(!SourceUnit.GetUnitValue('SOCCounter', Count))
 			{
-				SourceUnit.SetUnitFloatValue('SOCCounter', 0);
+				SourceUnit.SetUnitFloatValue('SOCCounter', 0, eCleanup_BeginTurn);
 			}
 			SourceUnit.GetUnitValue('SOCCounter', Count);
 			if (int(Count.fValue) < 1)
@@ -51,7 +51,7 @@ function bool PostAbilityCostPaid(XComGameState_Effect EffectState, XComGameStat
 				SourceUnit.ReserveActionPoints = PreCostReservePoints;
 
 				Count.fValue = Count.fValue + 1;
-				SourceUnit.SetUnitFloatValue('SOCCounter', Count.fValue);
+				SourceUnit.SetUnitFloatValue('SOCCounter', Count.fValue, eCleanup_BeginTurn);
 				 
 				EventMgr = `XEVENTMGR;
 				EventMgr.TriggerEvent('SixOClockTriggered', AbilityState, SourceUnit, NewGameState);
@@ -61,25 +61,6 @@ function bool PostAbilityCostPaid(XComGameState_Effect EffectState, XComGameStat
 		}
 	}
 	return false;
-}
-
-simulated function bool OnEffectTicked(const out EffectAppliedData ApplyEffectParameters, XComGameState_Effect kNewEffectState, XComGameState NewGameState, bool FirstApplication)
-{
-	local bool							isTurnComplete;
-	local XComGameState_Unit			EffectTargetUnit;
-	local XComGameStateHistory			HistorySoC;
-
-	isTurnComplete = FullTurnComplete(kNewEffectState);
-	HistorySoC = `XCOMHISTORY;
-		   
-	if(isTurnComplete)
-	{
-		EffectTargetUnit = XComGameState_Unit(HistorySoC.GetGameStateForObjectID(ApplyEffectParameters.TargetStateObjectRef.ObjectID));
-		EffectTargetUnit.SetUnitFloatValue('SOCCounter', 0);	
-	}
-
-
-	return super.OnEffectTicked(ApplyEffectParameters, kNewEffectState, NewGameState, FirstApplication);
 }
 
 DefaultProperties
