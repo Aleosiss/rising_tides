@@ -1,4 +1,12 @@
-// This is an Unreal Script
+//---------------------------------------------------------------------------------------
+//  FILE:    RTTargetingMethod_AimedLineSkillshot.uc
+//  AUTHOR:  Aleosiss  
+//  DATE:    18 March 2016
+//  PURPOSE: Targeting method that aims a line at a target.
+//           
+//---------------------------------------------------------------------------------------
+// 
+//---------------------------------------------------------------------------------------
 
 class RTTargetingMethod_AimedLineSkillshot extends X2TargetingMethod;
 var protected vector NewTargetLocation, FiringLocation;

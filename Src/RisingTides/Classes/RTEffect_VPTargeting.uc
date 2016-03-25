@@ -18,5 +18,6 @@ function int GetAttackingDamageModifier(XComGameState_Effect EffectState, XComGa
 	{
 		return 0;
 	}
-	return BonusDamage;
+	if(AppliedData.AbilityResultContext.HitResult == eHit_Crit || AppliedData.AbilityResultContext.HitResult == eHit_Success)
+		return BonusDamage;
 }																			  

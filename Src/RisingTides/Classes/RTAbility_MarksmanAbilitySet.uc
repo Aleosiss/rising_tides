@@ -13,7 +13,7 @@ class RTAbility_MarksmanAbilitySet extends RTAbility_GhostAbilitySet
 
 	var config int SLOWISSMOOTH_AIM_BONUS, SLOWISSMOOTH_CRIT_BONUS;
 	var config int HEADSHOT_CRIT_BONUS, HEADSHOT_COOLDOWN;
-	var config float HEADSHOT_AIM_MULTIPLIER;
+	var config int HEADSHOT_AIM_MULTIPLIER;
 	var config int SNAPSHOT_AIM_BONUS;
 	var config int DISABLESHOT_AIM_BONUS, DISABLESHOT_COOLDOWN;
 	var config float KNOCKTHEMDOWN_CRITDMG_MULTIPLIER;
@@ -56,7 +56,7 @@ static function array<X2DataTemplate> CreateTemplates()
 	Templates.AddItem(SovereignEffect());
 	Templates.AddItem(DaybreakFlame());
 	Templates.AddItem(DaybreakFlameIcon());
-	//Templates.AddItem(StatisticalInevitibility());
+	//Templates.AddItem(Inevitibility());
 	//Templates.AddItem(SIShot());
 	//Templates.AddItem(TimeStandsStill());
 	//Templates.AddItem(Override());
@@ -168,7 +168,7 @@ static function X2AbilityTemplate RTOverwatch()
 	local X2AbilityTemplate                 Template;	
 	local X2AbilityCost_Ammo                AmmoCost;
 	local X2AbilityCost_ActionPoints        ActionPointCost;
-	local RTEffect_ReserveOverwatchPoints   ReserveActionPointsEffect;
+	local X2Effect_ReserveOverwatchPoints   ReserveActionPointsEffect;
 	local array<name>                       SkipExclusions;
 	local X2Effect_CoveringFire             CoveringFireEffect;
 	local X2Condition_AbilityProperty       CoveringFireCondition;
@@ -199,7 +199,7 @@ static function X2AbilityTemplate RTOverwatch()
 	SkipExclusions.AddItem(class'X2AbilityTemplateManager'.default.DisorientedName);
 	Template.AddShooterEffectExclusions(SkipExclusions);
 	
-	ReserveActionPointsEffect = new class'RTEffect_ReserveOverwatchPoints';
+	ReserveActionPointsEffect = new class'X2Effect_ReserveOverwatchPoints';
 	Template.AddTargetEffect(ReserveActionPointsEffect);
 
 	CoveringFireEffect = new class'X2Effect_CoveringFire';
@@ -262,8 +262,7 @@ static function X2AbilityTemplate RTOverwatchShot()
 	local X2AbilityTarget_Single            SingleTarget;
 	local X2AbilityTrigger_Event	        Trigger;
 	local array<name>                       SkipExclusions;
-	local X2Condition_Visibility			TargetVisibilityCondition, SquadsightCondition;
-	local X2Condition_AbilityProperty		SquadsightVisibilityCondition;
+	local X2Condition_Visibility			TargetVisibilityCondition;
 
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'RTOverwatchShot');
 	
@@ -285,10 +284,6 @@ static function X2AbilityTemplate RTOverwatchShot()
 	TargetVisibilityCondition = new class'X2Condition_Visibility';
 	TargetVisibilityCondition.bRequireGameplayVisible = true;
 	TargetVisibilityCondition.bDisablePeeksOnMovement = true;
-
-	//SquadsightCondition = new class'X2Condition_AbilityProperty';
-	//SquadsightCondition.OwnerHasSoldierAbilities.AddItem('Snapshot');
-
 	TargetVisibilityCondition.bAllowSquadsight = true;
 	Template.AbilityTargetConditions.AddItem(TargetVisibilityCondition);
 	Template.AbilityTargetConditions.AddItem(new class'X2Condition_EverVigilant');
@@ -466,7 +461,7 @@ static function X2AbilityTemplate PrecisionShot()
 	Template.AbilityCooldown = Cooldown;
 
 	ToHitCalc = new class'X2AbilityToHitCalc_StandardAim';
-	ToHitCalc.FinalMultiplier = default.HEADSHOT_AIM_MULTIPLIER;
+	ToHitCalc.BuiltInHitMod = -(default.HEADSHOT_AIM_MULTIPLIER);
 	Template.AbilityToHitCalc = ToHitCalc;
 
 	AmmoCost = new class'X2AbilityCost_Ammo';
@@ -631,7 +626,7 @@ static function X2AbilityTemplate DisablingShot()
 	Template.AbilityCooldown = Cooldown;
 
 	ToHitCalc = new class'X2AbilityToHitCalc_StandardAim';
-	ToHitCalc.FinalMultiplier = default.HEADSHOT_AIM_MULTIPLIER;
+	ToHitCalc.BuiltInHitMod = -(default.DISABLESHOT_AIM_BONUS);
 	Template.AbilityToHitCalc = ToHitCalc;
 
 	AmmoCost = new class'X2AbilityCost_Ammo';
@@ -923,8 +918,7 @@ static function X2AbilityTemplate DamnGoodGround()
 static function X2AbilityTemplate SlowIsSmooth()
 {
 	local X2AbilityTemplate						Template;
-	local X2Effect_ToHitModifier				Effect;
-	local X2Condition_Visibility				VisCondition;
+	local X2Effect_Persistent					Effect;
 
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'SlowIsSmooth');
 	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_deadeye";
@@ -938,16 +932,11 @@ static function X2AbilityTemplate SlowIsSmooth()
 	Template.AbilityTargetStyle = default.SelfTarget;
 	Template.AbilityTriggers.AddItem(default.UnitPostBeginPlayTrigger);
 
-	Effect = new class'X2Effect_ToHitModifier';
+	Effect = new class'X2Effect_Persistent';
 	Effect.EffectName = 'SlowIsSmooth';
 	Effect.DuplicateResponse = eDupe_Ignore;
 	Effect.BuildPersistentEffect(1, true, false);
 	Effect.SetDisplayInfo(ePerkBuff_Passive, Template.LocFriendlyName, Template.GetMyLongDescription(), Template.IconImage,,,Template.AbilitySourceName);
-	Effect.AddEffectHitModifier(eHit_Success, default.SLOWISSMOOTH_AIM_BONUS, Template.LocFriendlyName);
-	Effect.AddEffectHitModifier(eHit_Crit, default.SLOWISSMOOTH_CRIT_BONUS, Template.LocFriendlyName);
-	VisCondition = new class'X2Condition_Visibility';
-	VisCondition.bExcludeGameplayVisible = true;
-	Effect.ToHitConditions.AddItem(VisCondition);
 	Template.AddTargetEffect(Effect);
 
 	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
@@ -1092,7 +1081,7 @@ static function X2AbilityTemplate SovereignEffect()
 	local X2Effect_ApplyFireToWorld				FireToWorldEffect;  //allows ability to set shit on fire
 	local X2Effect_ApplyDirectionalWorldDamage  WorldDamage;  //allows destruction of environment
 	local X2Effect_Burning						BurningEffect;      //Allows Burning 
-	local X2AbilityMultiTarget_Line				LineMultiTarget;
+	local RTAbilityMultiTarget_TargetedLine		LineMultiTarget;
 	local X2AbilityTarget_Cursor				CursorTarget;
 	local X2AbilityTarget_Single				SingleTarget;
 	//Macro to do localisation and stuffs
@@ -1149,7 +1138,7 @@ static function X2AbilityTemplate SovereignEffect()
 	//Template.CinescriptCameraType = "Psionic_FireAtLocation";
 
 	// Line skillshot
-	LineMultiTarget = new class'X2AbilityMultiTarget_Line';
+	LineMultiTarget = new class'RTAbilityMultiTarget_TargetedLine';
 	LineMultiTarget.bSightRangeLimited = false;
 	Template.AbilityMultiTargetStyle = LineMultiTarget;
 
@@ -1180,7 +1169,6 @@ static function X2AbilityTemplate SovereignEffect()
 
 	// Hit Calculation (Different weapons now have different calculations for range)
 	ToHitCalc = new class'X2AbilityToHitCalc_StandardAim';
-	ToHitCalc.bMultiTargetOnly = true;
 	Template.AbilityToHitCalc = ToHitCalc;
 
 	Template.bOverrideAim = true;  
@@ -1191,8 +1179,9 @@ static function X2AbilityTemplate SovereignEffect()
 	WeaponDamageEffect.bExplosiveDamage = true;					  //forces the ability to use the explosive damage type
 	WeaponDamageEffect.bApplyWorldEffectsForEachTargetLocation = true;          
 	Template.AddMultiTargetEffect(WeaponDamageEffect);           //Adds weapon damage to multiple targets
-	BurningEffect = class'X2StatusEffects'.static.CreateBurningStatusEffect(3, 0);   //Adds Burning Effect for 2 damage, 0 spread
+	BurningEffect = class'X2StatusEffects'.static.CreateBurningStatusEffect(3, 0);   //Adds Burning Effect for 3 damage, 0 spread
 	BurningEffect.ApplyChance = 100;                                         //Should be a 50% chance to actually apply burning 
+	Template.AddTargetEffect(BurningEffect);
 	Template.AddMultiTargetEffect(BurningEffect);                                    //Adds the burning effect to the targeted area
 
 	WorldDamage = new class'X2Effect_ApplyDirectionalWorldDamage';  //creates the framework to apply damage to the world

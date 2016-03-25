@@ -110,7 +110,7 @@ function bool PostAbilityCostPaid(XComGameState_Effect EffectState, XComGameStat
 					
 					
 					// Only care if there is no cover between this unit and the target unless they were concealed or have Daybreak Flame
-					if (VisInfo.TargetCover == CT_None || Attacker.HasSoldierAbility('DaybreakFlame') || Attacker.WasConcealed(History.GetEventChainStartIndex()) || Attacker.IsConcealed() || TargetUnit.GetCurrentStat(eStat_AlertLevel) == 0)
+					if (VisInfo.TargetCover == CT_None || Attacker.HasSoldierAbility('DaybreakFlameIcon') || Attacker.WasConcealed(History.GetEventChainStartIndex()) || Attacker.IsConcealed() || TargetUnit.GetCurrentStat(eStat_AlertLevel) == 0)
 					{
 						// Negate changes to the number of action points
 						if (Attacker.ActionPoints.Length != PreCostActionPoints.Length)

@@ -40,6 +40,9 @@
     <Content Include="Src\RisingTides\Classes\RTAbilityCost_SnapshotActionPoints.uc">
       <SubType>Content</SubType>
     </Content>
+    <Content Include="Src\RisingTides\Classes\RTAbilityMultiTarget_TargetedLine.uc">
+      <SubType>Content</SubType>
+    </Content>
     <Content Include="Src\RisingTides\Classes\RTAbility_GhostAbilitySet.uc">
       <SubType>Content</SubType>
     </Content>
@@ -65,6 +68,9 @@
       <SubType>Content</SubType>
     </Content>
     <Content Include="Src\RisingTides\Classes\RTEffect_KnockThemDown.uc">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Src\RisingTides\Classes\RTEffect_Meld.uc">
       <SubType>Content</SubType>
     </Content>
     <Content Include="Src\RisingTides\Classes\RTEffect_PrecisionShotDamage.uc">
@@ -107,6 +113,9 @@
       <SubType>Content</SubType>
     </Content>
     <Content Include="Src\RisingTides\Classes\X2DownloadableContentInfo_RisingTides.uc" />
+    <Content Include="Src\RisingTides\Classes\XComGameState_Effect_RTMeld.uc">
+      <SubType>Content</SubType>
+    </Content>
     <Content Include="Src\XComGame\Classes\AnimNotify_ApplyPsiEffectsToTarget.uc" />
     <Content Include="Src\XComGame\Classes\AnimNotify_BlendIK.uc" />
     <Content Include="Src\XComGame\Classes\AnimNotify_BreakWindow.uc" />
