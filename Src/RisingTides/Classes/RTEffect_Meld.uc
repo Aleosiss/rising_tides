@@ -8,8 +8,10 @@
 // 
 //---------------------------------------------------------------------------------------
 
-class RTEffect_Meld extends X2Effect_Persistent config(RTGhost);
+class RTEffect_Meld extends X2Effect_PersistentStatChange config(RTGhost);
 
+var float MeldWill, MeldHacking;
+var bool bIsUpdate;
 
 // GetMeldComponent
 static function XComGameState_Effect_RTMeld GetMeldComponent(XComGameState_Effect Effect)
@@ -19,20 +21,61 @@ static function XComGameState_Effect_RTMeld GetMeldComponent(XComGameState_Effec
 	return none;
 }
 
-
-simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffectParameters, XComGameState_BaseObject kNewTargetState, XComGameState NewGameState, XComGameState_Effect NewEffectState)
+function bool IsThisEffectBetterThanExistingEffect(const out XComGameState_Effect ExistingEffect)
 {
-	local XComGameState_Effect_RTMeld		MeldEffectState;
+	return true;
+}
+
+simulated function UpdateEffect(XComGameState_Unit UpdateUnit, XComGameState_Effect_RTMeld UpdatedMeldEffect, XComGameState_Effect_RTMeld CurrentMeldEffect, XComGameState NewGameState, XComGameState_Effect RemovedEffectState)
+{
+	local RTEffect_Meld			UpdateMeldEffect;
+	local XComGameState_Effect	NewEffectState;
+	local EffectAppliedData		ApplyData;
+
+	`LOG("Updating Meld Effect " @ UpdateUnit.GetFullName); 
+	ApplyData = class'RTHelpers'.static.GetApplyDataForSelfBuff(ApplyData, UpdateUnit, RemovedEffectState, 'RTEffect_Meld');
+	NewEffectState = XComGameState_Effect(NewGameState.CreateStateObject(Class, RemovedEffectState.ObjectID));	
+	//`LOG("ApplyData generated, removing previous effect!");
+	//super.OnEffectRemoved(ApplyData, NewGameState, true, RemovedEffectState);
+
+	`LOG("Effect removed successfully, updating m_aStatChanges.");
+	MeldWill = UpdatedMeldEffect.CombinedWill;
+	MeldHacking = UpdatedMeldEffect.SharedHack;
+
+	m_aStatChanges.Length = 0;
+	AddPersistentStatChange(eStat_Will, MeldWill);
+	AddPersistentStatChange(eStat_Hacking, MeldHacking);
+	AddPersistentStatChange(eStat_PsiOffense, MeldWill);
+
+	//`LOG("Creating NewEffectState from RemovedEffectState.");
+
+	NewEffectState.StatChanges = m_aStatChanges;
+
+	`LOG("Reapplying Meld Effect.");
+	HandleApplyEffect(ApplyData, UpdateUnit, NewGameState, NewEffectState);
+
+	`LOG("Meld update @" @ UpdateUnit.GetFullName @ " was successful.");
+}
+
+
+// Attempt to OnEffectAdded using Component GameState_Effect
+simulated function ComponentMeldAttempt(const out EffectAppliedData ApplyEffectParameters, XComGameState_BaseObject kNewTargetState, XComGameState NewGameState, XComGameState_Effect NewEffectState)
+{
+   	local XComGameState_Effect_RTMeld			MeldEffectState;
 	local XComGameState_Unit				EffectTargetUnit;
 	local X2EventManager					EventMgr;
+	local XComGameStateHistory				History;
 	local Object							ListenerObj;
 
 	EventMgr = `XEVENTMGR;
+	History = `XCOMHISTORY;
 	EffectTargetUnit = XComGameState_Unit(kNewTargetState);
-	if(GetMeldComponent(NewEffectState) == none)
+
+	// only one instance of the meld
+	if(GetMeldComponent(NewEffectState) == none && History.GetSingleGameStateObjectForClass(class'XComGameState_Effect_RTMeld', true) == none)
 	{
 		MeldEffectState = XComGameState_Effect_RTMeld(NewGameState.CreateStateObject(class'XComGameState_Effect_RTMeld'));
-		MeldEffectState.InitComponent(EffectTargetUnit);
+		MeldEffectState.Initialize(EffectTargetUnit);
 		NewEffectState.AddComponentObject(MeldEffectState);
 		NewGameState.AddStateObject(MeldEffectState);
 	
@@ -45,19 +88,148 @@ simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffe
 		}
 		EventMgr.RegisterForEvent(ListenerObj, 'RTAddToMeld', MeldEffectState.AddUnitToMeld, ELD_OnStateSubmitted,,,true);
 		EventMgr.RegisterForEvent(ListenerObj, 'RTRemoveFromMeld', MeldEffectState.RemoveUnitFromMeld, ELD_OnStateSubmitted,,,true);
-		//EventMgr.RegisterForEvent(ListenerObj, 'UnitPanicked', MeldEffectState.PanicMeld,ELD_OnStateSubmitted,,,true); 
+		EventMgr.RegisterForEvent(ListenerObj, 'UnitPanicked', MeldEffectState.RemoveUnitFromMeld,ELD_OnStateSubmitted,,,true); 
+		EventMgr.RegisterForEvent(ListenerObj, 'TacticalGameEnd', MeldEffectState.OnTacticalGameEnd, ELD_OnStateSubmitted);
+
+		`LOG("Rising Tides: The Meld has finished registering for events.");
 	}
 	else
 	{
-		EventMgr.TriggerEvent('RTAddToMeld', EffectTargetUnit, EffectTargetUnit, NewGameState); 
-	}
+		if(!bIsUpdate)
+			EventMgr.TriggerEvent('RTAddToMeld', EffectTargetUnit, EffectTargetUnit, NewGameState); 
+	
 
+		MeldEffectState = XComGameState_Effect_RTMeld(History.GetSingleGameStateObjectForClass(class'XComGameState_Effect_RTMeld', true));
+		MeldWill = MeldEffectState.CombinedWill;
+		MeldHacking = MeldEffectState.SharedHack;
+
+		AddPersistentStatChange(eStat_Will, MeldWill);
+		AddPersistentStatChange(eStat_Hacking, MeldHacking);
+		AddPersistentStatChange(eStat_PsiOffense, MeldWill);
+	
+		NewEffectState.StatChanges = m_aStatChanges;
+		super.OnEffectAdded(ApplyEffectParameters, kNewTargetState, NewGameState, NewEffectState);
+	}
+	bIsUpdate = false;
+}
+
+// Attempt to OnEffectAdded using extended GameState_Effect
+simulated function ExtendedMeldAttempt(const out EffectAppliedData ApplyEffectParameters, XComGameState_BaseObject kNewTargetState, XComGameState NewGameState, XComGameState_Effect NewEffectState)
+{
+	local RTGameState_MeldEffect			MeldEffectState;
+	local XComGameState_Unit				EffectTargetUnit;
+	local X2EventManager					EventMgr;
+	local XComGameStateHistory				History;
+	local Object							ListenerObj;
+
+	EventMgr = `XEVENTMGR;
+	History = `XCOMHISTORY;
+	EffectTargetUnit = XComGameState_Unit(kNewTargetState);
+	MeldEffectState = RTGameState_MeldEffect(NewEffectState);
+
+	
+		
+	EventMgr.TriggerEvent('RTAddToMeld', EffectTargetUnit, EffectTargetUnit, NewGameState); 
+
+	ListenerObj = NewEffectState;
+	if(ListenerObj == none)
+	{
+		`Redscreen("RTMeld: Failed to find Meld component when registering listener (WE DUN FUCKED)");
+		return;
+	}
+	EventMgr.RegisterForEvent(ListenerObj, 'RTAddToMeld', MeldEffectState.AddUnitToMeld, ELD_OnStateSubmitted,,,true);
+	EventMgr.RegisterForEvent(ListenerObj, 'RTRemoveFromMeld', MeldEffectState.RemoveUnitFromMeld, ELD_OnStateSubmitted,,,true);
+	EventMgr.RegisterForEvent(ListenerObj, 'UnitPanicked', MeldEffectState.RemoveUnitFromMeld,ELD_OnStateSubmitted,,,true); 
+	EventMgr.RegisterForEvent(ListenerObj, 'TacticalGameEnd', MeldEffectState.OnTacticalGameEnd, ELD_OnStateSubmitted);
+
+	`LOG("Rising Tides: The Meld has finished registering for events.");
+
+	MeldEffectState.Initialize(EffectTargetUnit);
+
+	
+	MeldWill = MeldEffectState.CombinedWill;
+	MeldHacking = MeldEffectState.SharedHack;
+
+
+	AddPersistentStatChange(eStat_Will, MeldWill);
+	AddPersistentStatChange(eStat_Hacking, MeldHacking);
+	AddPersistentStatChange(eStat_PsiOffense, MeldWill);
+	
+	MeldEffectState.StatChanges = m_aStatChanges;
+
+	super.OnEffectAdded(ApplyEffectParameters, kNewTargetState, NewGameState, MeldEffectState);
+	
+
+}
+
+
+simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffectParameters, XComGameState_BaseObject kNewTargetState, XComGameState NewGameState, XComGameState_Effect NewEffectState)
+{
+	local RTGameState_MeldEffect			MeldEffectState;
+	local XComGameState_Unit				EffectTargetUnit;
+	local X2EventManager					EventMgr;
+	local XComGameStateHistory				History;
+	local Object							ListenerObj;
+	local float								i;
+
+	EventMgr = `XEVENTMGR;
+	History = `XCOMHISTORY;
+	EffectTargetUnit = XComGameState_Unit(kNewTargetState);
+	MeldEffectState = RTGameState_MeldEffect(NewEffectState);
+
+	
+		
+	EventMgr.TriggerEvent('RTAddToMeld', EffectTargetUnit, EffectTargetUnit, NewGameState); 
+
+	ListenerObj = NewEffectState;
+	if(ListenerObj == none)
+	{
+		`Redscreen("RTMeld: Failed to find Meld component when registering listener (WE DUN FUCKED)");
+		return;
+	}
+	EventMgr.RegisterForEvent(ListenerObj, 'RTAddToMeld', MeldEffectState.AddUnitToMeld, ELD_OnStateSubmitted,,,true);
+	EventMgr.RegisterForEvent(ListenerObj, 'RTRemoveFromMeld', MeldEffectState.RemoveUnitFromMeld, ELD_OnStateSubmitted,,,true);
+	EventMgr.RegisterForEvent(ListenerObj, 'UnitPanicked', MeldEffectState.RemoveUnitFromMeld,ELD_OnStateSubmitted,,,true); 
+	EventMgr.RegisterForEvent(ListenerObj, 'TacticalGameEnd', MeldEffectState.OnTacticalGameEnd, ELD_OnStateSubmitted);
+
+	`LOG("Rising Tides: The Meld has finished registering for events.");
+
+	MeldEffectState.Initialize(EffectTargetUnit);
+	
+	m_aStatChanges.length = 0;
+	//MeldEffectState.StatChanges.Length = 0;
+
+	MeldWill = MeldEffectState.CombinedWill;
+	MeldHacking = MeldEffectState.SharedHack - EffectTargetUnit.GetBaseStat(eStat_Hacking);;
+	`LOG("Rising Tides: YHME: Adding the following value to Hacking Stat: " @ MeldHacking);
+
+	AddPersistentStatChange(eStat_Will, MeldWill);
+	AddPersistentStatChange(eStat_Hacking, MeldHacking);
+	AddPersistentStatChange(eStat_PsiOffense, MeldWill);
+	
+	MeldEffectState.StatChanges = m_aStatChanges;
+
+
+	super.OnEffectAdded(ApplyEffectParameters, kNewTargetState, NewGameState, MeldEffectState);
 }
 
 simulated function OnEffectRemoved(const out EffectAppliedData ApplyEffectParameters, XComGameState NewGameState, bool bCleansed, XComGameState_Effect RemovedEffectState)
 {
-	local XComGameState_Unit	EffectTargetUnit;
+	local XComGameState_Unit EffectTargetUnit;
+
 	EffectTargetUnit = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(ApplyEffectParameters.TargetStateObjectRef.ObjectID));
-	`XEVENTMGR.TriggerEvent('RTRemoveFromMeld', EffectTargetUnit, EffectTargetUnit, NewGameState); 
+	if(!bIsUpdate)
+		`XEVENTMGR.TriggerEvent('RTRemoveFromMeld', EffectTargetUnit, EffectTargetUnit, NewGameState); 
+	bIsUpdate = false;
 	super.OnEffectRemoved(ApplyEffectParameters, NewGameState, bCleansed, RemovedEffectState);
+
+	
+	
+}
+
+DefaultProperties
+{
+	EffectName="RTEffect_Meld"
+	DuplicateResponse = eDupe_Refresh
+	GameStateEffectClass = class'RTGameState_MeldEffect'
 }

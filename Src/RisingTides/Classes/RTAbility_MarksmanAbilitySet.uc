@@ -56,6 +56,7 @@ static function array<X2DataTemplate> CreateTemplates()
 	Templates.AddItem(SovereignEffect());
 	Templates.AddItem(DaybreakFlame());
 	Templates.AddItem(DaybreakFlameIcon());
+	Templates.AddItem(YourHandsMyEyes());
 	//Templates.AddItem(Inevitibility());
 	//Templates.AddItem(SIShot());
 	//Templates.AddItem(TimeStandsStill());
@@ -168,15 +169,13 @@ static function X2AbilityTemplate RTOverwatch()
 	local X2AbilityTemplate                 Template;	
 	local X2AbilityCost_Ammo                AmmoCost;
 	local X2AbilityCost_ActionPoints        ActionPointCost;
-	local X2Effect_ReserveOverwatchPoints   ReserveActionPointsEffect;
+	local X2Effect_ReserveActionPoints      ReserveActionPointsEffect;
 	local array<name>                       SkipExclusions;
 	local X2Effect_CoveringFire             CoveringFireEffect;
 	local X2Condition_AbilityProperty       CoveringFireCondition;
 	local X2Condition_UnitProperty          ConcealedCondition;
 	local X2Effect_SetUnitValue             UnitValueEffect;
 	local X2Condition_UnitEffects           SuppressedCondition;
-
-	
 
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'RTOverwatch');
 	
@@ -185,7 +184,7 @@ static function X2AbilityTemplate RTOverwatch()
 	AmmoCost.bFreeCost = true;                  //  ammo is consumed by the shot, not by this, but this should verify ammo is available
 	Template.AbilityCosts.AddItem(AmmoCost);
 	
-	ActionPointCost = new class'RTAbilityCost_SnapshotActionPoints';
+	ActionPointCost = new class'X2AbilityCost_ActionPoints';
 	ActionPointCost.iNumPoints = 2;
 	ActionPointCost.bConsumeAllPoints = true;
 	ActionPointCost.bFreeCost = true;           //  ReserveActionPoints effect will take all action points away
@@ -203,7 +202,7 @@ static function X2AbilityTemplate RTOverwatch()
 	Template.AddTargetEffect(ReserveActionPointsEffect);
 
 	CoveringFireEffect = new class'X2Effect_CoveringFire';
-	CoveringFireEffect.AbilityToActivate = 'RTOverwatchShot';
+	CoveringFireEffect.AbilityToActivate = 'OverwatchShot';
 	CoveringFireEffect.BuildPersistentEffect(1, false, true, false, eGameRule_PlayerTurnBegin);
 	CoveringFireCondition = new class'X2Condition_AbilityProperty';
 	CoveringFireCondition.OwnerHasSoldierAbilities.AddItem('CoveringFire');
@@ -262,7 +261,7 @@ static function X2AbilityTemplate RTOverwatchShot()
 	local X2AbilityTarget_Single            SingleTarget;
 	local X2AbilityTrigger_Event	        Trigger;
 	local array<name>                       SkipExclusions;
-	local X2Condition_Visibility			TargetVisibilityCondition;
+	local X2Condition_Visibility            TargetVisibilityCondition;
 
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'RTOverwatchShot');
 	
@@ -325,7 +324,6 @@ static function X2AbilityTemplate RTOverwatchShot()
 	Template.AddTargetEffect(class'X2Ability_GrenadierAbilitySet'.static.ShredderDamageEffect());
 	// Damage Effect
 	//
-	
 	Template.AddTargetEffect(default.WeaponUpgradeMissDamage);
 
 	Template.OverrideAbilities.AddItem('OverwatchShot');
@@ -361,6 +359,11 @@ static function X2AbilityTemplate ScopedAndDropped()
 
 	Template.AdditionalAbilities.AddItem('RTStandardSniperShot');
 	Template.AdditionalAbilities.AddItem('RTOverwatch');
+	Template.AdditionalAbilities.AddItem('GhostPsiSuite');
+	Template.AdditionalAbilities.AddItem('JoinMeld');
+	Template.AdditionalAbilities.AddItem('LeaveMeld');
+	Template.AdditionalAbilities.AddItem('PsiOverload');
+	Template.AdditionalAbilities.AddItem('PsiOverloadPanic');
 
 	// Probably required 
 	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
@@ -853,7 +856,7 @@ static function X2AbilityTemplate VitalPointTargeting()
 	local RTEffect_VPTargeting					VPEffect;
 	
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'VitalPointTargeting');
-	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_headshot";
+	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_groundzero";
 
 	Template.AbilitySourceName = 'eAbilitySource_Perk';
 	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_NeverShow;
@@ -1046,7 +1049,7 @@ static function X2AbilityTemplate SovereignEffect()
 	EventListener.ListenerData.EventFn = class'XComGameState_Ability'.static.VoidRiftInsanityListener;
 	Template.AbilityTriggers.AddItem(EventListener);
 
-	//  Panic effect for 5+ unblocked psi hits
+	//  Panic effect for 1+ unblocked psi hits
 	PanicEffect = class'X2StatusEffects'.static.CreatePanickedStatusEffect();
 	PanicEffect.MinStatContestResult = 1;
 	PanicEffect.MaxStatContestResult = 0;
@@ -1117,7 +1120,7 @@ static function X2AbilityTemplate SovereignEffect()
 	// Can't shoot while dead
 	Template.AbilityShooterConditions.AddItem(default.LivingShooterProperty);
 	
-	// Single targets that are in range.
+	// Single targets that are in range. (This doesn't work)
 	SingleTarget = new class'X2AbilityTarget_Single';
 	SingleTarget.bAllowDestructibleObjects = true;
 	SingleTarget.bShowAOE = true;
@@ -1128,15 +1131,11 @@ static function X2AbilityTemplate SovereignEffect()
 	Template.bUsesFiringCamera = true;
 	Template.CinescriptCameraType = "StandardGunFiring";
 
-	// Cursor target
+	//// Cursor target	 (This 'works')
 	//CursorTarget = new class'X2AbilityTarget_Cursor';
 	//CursorTarget.FixedAbilityRange = 200;
 	//Template.AbilityTargetStyle = CursorTarget;
-
-	// Alternate targeting method
-	//Template.TargetingMethod = class'X2TargetingMethod_Line';
-	//Template.CinescriptCameraType = "Psionic_FireAtLocation";
-
+//
 	// Line skillshot
 	LineMultiTarget = new class'RTAbilityMultiTarget_TargetedLine';
 	LineMultiTarget.bSightRangeLimited = false;
@@ -1276,6 +1275,37 @@ static function X2AbilityTemplate Inevitibility()
 	Template.AbilityTriggers.AddItem(default.UnitPostBeginPlayTrigger);
 
 	RTEffect = new class 'RTEffect_Inevitibility';
+	RTEffect.BuildPersistentEffect(1, true, false, false,  eGameRule_PlayerTurnEnd);
+	RTEffect.SetDisplayInfo(ePerkBuff_Passive, Template.LocFriendlyName, Template.LocLongDescription, Template.IconImage, true,, Template.AbilitySourceName);
+	Template.AddTargetEffect(RTEffect);
+
+	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
+	// Note: no visualization on purpose!
+	
+	Template.bCrossClassEligible = false;
+
+	return Template;
+}
+//---------------------------------------------------------------------------------------
+//---Your Hands, My Eyes-----------------------------------------------------------------
+//---------------------------------------------------------------------------------------
+static function X2AbilityTemplate YourHandsMyEyes()
+{
+	local X2AbilityTemplate						Template;
+	local RTEffect_YourHandsMyEyes				RTEffect;
+
+	 `CREATE_X2ABILITY_TEMPLATE(Template, 'YourHandsMyEyes');
+	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_insanity";
+
+	Template.AbilitySourceName = 'eAbilitySource_Psionic';
+	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_NeverShow;
+	Template.Hostility = eHostility_Neutral;
+
+	Template.AbilityToHitCalc = default.DeadEye;
+	Template.AbilityTargetStyle = default.SelfTarget;
+	Template.AbilityTriggers.AddItem(default.UnitPostBeginPlayTrigger);
+
+	RTEffect = new class 'RTEffect_YourHandsMyEyes';
 	RTEffect.BuildPersistentEffect(1, true, false, false,  eGameRule_PlayerTurnEnd);
 	RTEffect.SetDisplayInfo(ePerkBuff_Passive, Template.LocFriendlyName, Template.LocLongDescription, Template.IconImage, true,, Template.AbilitySourceName);
 	Template.AddTargetEffect(RTEffect);

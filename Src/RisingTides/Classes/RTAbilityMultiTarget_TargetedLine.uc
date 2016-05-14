@@ -11,39 +11,22 @@ class RTAbilityMultiTarget_TargetedLine extends X2AbilityMultiTarget_Line;
 
 simulated function GetMultiTargetOptions(const XComGameState_Ability Ability, out array<AvailableTarget> Targets)
 {
-	local XComGameStateHistory				History;
 	local int								i;
-	local vector							NewTargetLocation;
-	local XComGameState_Unit				TargetUnit, AdditionalUnitState;
+	local vector							TargetUnitLocation;
+	local XComGameState_Unit				TargetUnit;
 	local AvailableTarget					Target;
-	local StateObjectReference				AdditionalTarget;
 
-	if(Targets.Length == 0)
+	// I have no idea how I would go about implementing this myself, so just hijack GetMultiTargetsForLocation
+	// Get the TargetUnitLocation from the primary target of the targets array, then save the primary target
+	// so it doesn't get overwritten 
+	for(i = 0; i < Targets.Length; i++)
 	{
-		`Redscreen("RisingTides: Empty Targets array for RTAbilityMultiTarget_Line \n" $ GetScriptTrace());
-		return;
+		TargetUnit = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(Targets[i].PrimaryTarget.ObjectID));
+		TargetUnitLocation = `XWORLD.GetPositionFromTileCoordinates(TargetUnit.TileLocation);
+		Target.PrimaryTarget = Targets[i].PrimaryTarget;
+		GetMultiTargetsForLocation(Ability, TargetUnitLocation, Target);
+		Targets[i] = Target; 
 	}
-	if(Targets.Length > 1)
-	{
-		`Redscreen("RisingTides: Multiple primary targets for RTAbilityMultiTarget_Line #shootme\n" $ GetScriptTrace());
-	}
-	`Redscreen("######################################--------------RTAbilityMultiTarget_TargetedLine--------------######################################");
-	
-
-	TargetUnit = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(Targets[0].PrimaryTarget.ObjectID));
-	NewTargetLocation = `XWORLD.GetPositionFromTileCoordinates(TargetUnit.TileLocation);
-
-	Target.PrimaryTarget = Targets[0].PrimaryTarget;
-	GetMultiTargetsForLocation(Ability, NewTargetLocation, Target);
-	for(i = Target.AdditionalTargets.Length - 1; i >= 0; --i)
-	{
-		if(TargetUnit.ObjectID != Target.AdditionalTargets[i].ObjectID)
-		{
-			AdditionalUnitState = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(Target.AdditionalTargets[i].ObjectID));
-			Targets[0].AdditionalTargets.AddItem(AdditionalUnitState.GetReference());
-		}
-	}
-
 }
 
 simulated function GetMultiTargetsForLocation(const XComGameState_Ability Ability, const vector Location, out AvailableTarget Target)
@@ -64,17 +47,4 @@ simulated function name CheckFilteredMultiTargets(const XComGameState_Ability Ab
 simulated function bool CalculateValidLocationsForLocation(const XComGameState_Ability Ability, const vector Location, AvailableTarget AvailableTargets, out array<vector> ValidLocations)
 {
 	return super.CalculateValidLocationsForLocation(Ability, Location, AvailableTargets, ValidLocations);
-}
-
-
-
-defaultProperties
-{
-	bUseWeaponRadius=false
-	bIgnoreBlockingCover=true  // unused here, but kept for reference
-	//fTargetRadius;          //  Meters! (for now) If bUseWeaponRadius is true, this value is added on.
-	//fTargetCoveragePercentage;
-	bAddPrimaryTargetAsMultiTarget=false     //unused here, but kept for reference -- GetMultiTargetOptions & GetMultiTargetsForLocation will remove the primary target and add it to the multi target array.
-	bAllowDeadMultiTargetUnits=false	//unused here, but kept for reference
-	bAllowSameTarget=false
 }

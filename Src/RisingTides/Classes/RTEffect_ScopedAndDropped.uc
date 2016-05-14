@@ -7,13 +7,13 @@
 //---------------------------------------------------------------------------------------
 //	Scoped And Dropped effect
 //---------------------------------------------------------------------------------------
-class RTEffect_ScopedAndDropped extends X2Effect_Persistent;
+class RTEffect_ScopedAndDropped extends X2Effect_PersistentStatChange;
 
 var localized string RTFriendlyName;
 var localized string RTNotFriendlyName;
 	
 
-//Negate Squadsight distance penalty
+// Negate Squadsight distance penalty
 function GetToHitModifiers(XComGameState_Effect EffectState, XComGameState_Unit Attacker, XComGameState_Unit Target, XComGameState_Ability AbilityState, class<X2AbilityToHitCalc> ToHitType, bool bMelee, bool bFlanking, bool bIndirectFire, out array<ShotModifierInfo> ShotModifiers)
 {
 	local ShotModifierInfo ModInfoAim, ModInfoCrit;
@@ -44,7 +44,12 @@ function GetToHitModifiers(XComGameState_Effect EffectState, XComGameState_Unit 
 
 	
 }
-function bool ShotsCannotGraze() { return true;}
+// Shots cannot graze
+function bool ShotsCannotGraze() 
+{
+	return true;
+}
+// Register for events
 function RegisterForEvents(XComGameState_Effect EffectGameState)
 {
 	local X2EventManager EventMgr;
@@ -59,7 +64,7 @@ function RegisterForEvents(XComGameState_Effect EffectGameState)
 	EventMgr.RegisterForEvent(EffectObj, 'ScopedAndDropped', EffectGameState.TriggerAbilityFlyover, ELD_OnStateSubmitted, , UnitState);
 	EventMgr.RegisterForEvent(EffectObj, 'SovereignTrigger', EffectGameState.TriggerAbilityFlyover, ELD_OnStateSubmitted, , UnitState);
 }
-//Killing an exposed target refunds the full cost of the shot
+// Killing an exposed target refunds the full cost of the shot
 function bool PostAbilityCostPaid(XComGameState_Effect EffectState, XComGameStateContext_Ability AbilityContext, XComGameState_Ability kAbility, XComGameState_Unit Attacker, XComGameState_Item AffectWeapon, XComGameState NewGameState, const array<name> PreCostActionPoints, const array<name> PreCostReservePoints)
 {
 	local XComGameState_Unit				TargetUnit, PanicTargetUnit;
@@ -70,9 +75,13 @@ function bool PostAbilityCostPaid(XComGameState_Effect EffectState, XComGameStat
 	local UnitValue							NumTimes;
 	local array<StateObjectReference>		VisibleUnits;
 	local int								Index, RandRoll;
+	local bool								bIsStandardFire;
 
-	//  match the weapon associated with SnD to the attacking weapon
-	if (kAbility.SourceWeapon == EffectState.ApplyEffectParameters.ItemStateObjectRef)
+	bIsStandardFire = false;
+	if(kAbility.GetMyTemplateName() == 'RTStandardSniperShot' || kAbility.GetMyTemplateName() == 'DaybreakFlame' || kAbility.GetMyTemplateName() == 'PrecisionShot' || kAbility.GetMyTemplateName() == 'DisablingShot')
+		bIsStandardFire = true;
+	//  match the weapon associated with SnD to the attacking weapon and make sure it's a standard shot
+	if (kAbility.SourceWeapon == EffectState.ApplyEffectParameters.ItemStateObjectRef && bIsStandardFire)
 	{
 		History = `XCOMHISTORY;
 		//  check for a direct flanking kill shot
@@ -88,16 +97,16 @@ function bool PostAbilityCostPaid(XComGameState_Effect EffectState, XComGameStat
 						class'RTTacticalVisibilityHelpers'.static.GetAllVisibleAlliesForUnit(TargetUnit.ObjectID, VisibleUnits/*, -1, false*/);
 						for(Index = 0; Index < VisibleUnits.Length; Index++)
 						{
-							// Units within 5 tiles of the source that aren't psionic or robotic or the source
+							// Units within 2 tiles of the source that aren't psionic or robotic or the source
 							PanicTargetUnit = XComGameState_Unit(History.GetGameStateForObjectID(VisibleUnits[Index].ObjectID));
-							if(TargetUnit.TileDistanceBetween(PanicTargetUnit) < 2) 
+							if(TargetUnit.TileDistanceBetween(PanicTargetUnit) < 4) 
 							{
 								if(!PanicTargetUnit.IsRobotic() && !PanicTargetUnit.IsPsionic())
 								{
-									// 15% chance
+									// 20% chance
 									RandRoll = `SYNC_RAND(100);
-									`COMBATLOG("Sovereign rolled " @ RandRoll @ "; Target is 49!");
-									if(RandRoll < 50)
+									`COMBATLOG("Sovereign rolled " @ RandRoll @ "; Target is 19!");
+									if(RandRoll < 20)
 									{
 										// T-T-Triggered
 										EventMgr = `XEVENTMGR;
@@ -135,7 +144,8 @@ function bool PostAbilityCostPaid(XComGameState_Effect EffectState, XComGameStat
 								
 								EventMgr = `XEVENTMGR;
 								EventMgr.TriggerEvent('ScopedAndDropped', AbilityState, Attacker, NewGameState);
-
+								`log("SND TargetUnit Location: " @ `XWORLD.GetPositionFromTileCoordinates(TargetUnit.TileLocation)); 
+								`log("SND TargetUnit ObjectID: " @ TargetUnit.ObjectID);
 								return true;
 							}
 						}
@@ -146,6 +156,11 @@ function bool PostAbilityCostPaid(XComGameState_Effect EffectState, XComGameStat
 		}
 	}											  
 	return false;
+}
+// Add Whisper's stats
+simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffectParameters, XComGameState_BaseObject kNewTargetState, XComGameState NewGameState, XComGameState_Effect NewEffectState)
+{
+	super.OnEffectAdded(ApplyEffectParameters, kNewTargetState, NewGameState, NewEffectState);
 }
 
 

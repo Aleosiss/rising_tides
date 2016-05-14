@@ -252,8 +252,13 @@ static function bool ShouldWaitForFramingCamera()
 
 function bool GetAdditionalTargets(out AvailableTarget AdditionalTargets)
 {
-	NewTargetLocation = WorldData.GetPositionFromTileCoordinates(XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(Action.AvailableTargets[LastTarget].PrimaryTarget.ObjectID)).TileLocation);
+	local int i;
+	`log("RTTargetingMethod_AimedLinedSkillshot: NewTargetLocation: "@NewTargetLocation);
 	Ability.GatherAdditionalAbilityTargetsForLocation(NewTargetLocation, AdditionalTargets);
+	for(i = 0; i < AdditionalTargets.AdditionalTargets.Length; i++)
+	{
+		`log("Additional Target "@i@" ObjectID = "@ AdditionalTargets.AdditionalTargets[i].ObjectID);
+	}
 	return true;
 }
 
