@@ -95,7 +95,7 @@ function EventListenerReturn OnTacticalGameEnd(Object EventData, Object EventSou
 	local Object ListenerObj;
     local XComGameState NewGameState;
 	
-    //`LOG("Lucubration Sniper Class: In the Zone 'TacticalGameEnd' event listener delegate invoked.");
+    //`LOG("Rising Tides: 'TacticalGameEnd' event listener delegate invoked.");
 	
 	EventManager = `XEVENTMGR;
 

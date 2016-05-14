@@ -45,13 +45,13 @@ simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffe
 					{
 						Effect.iTurnsRemaining--;
 						
-						//`LOG("Lucubration Infantry Class: Shake it Off reduced " @ string(Effect.GetX2Effect().EffectName) @ " duration from " @ string(Effect.iTurnsRemaining + 1) @ " to " @ string(Effect.iTurnsRemaining) @ ".");
+						//`LOG("Rising Tides: reduced " @ string(Effect.GetX2Effect().EffectName) @ " duration from " @ string(Effect.iTurnsRemaining + 1) @ " to " @ string(Effect.iTurnsRemaining) @ ".");
 					}
 					else
 					{
 						Effect.RemoveEffect(NewGameState, NewGameState, true);
 
-						//`LOG("Lucubration Infantry Class: Shake it Off cleansed " @ string(Effect.GetX2Effect().EffectName) @ " (end of duration).");
+						//`LOG("Rising Tides:  cleansed " @ string(Effect.GetX2Effect().EffectName) @ " (end of duration).");
 					}
 
 					EffectRemoved = true;
@@ -61,7 +61,7 @@ simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffe
 					// Infinite effects get cleansed
 					Effect.RemoveEffect(NewGameState, NewGameState, true);
 
-					//`LOG("Lucubration Infantry Class: Shake it Off cleansed " @ string(Effect.GetX2Effect().EffectName) @ " (infinite duration).");
+					//`LOG("Rising Tides: cleansed " @ string(Effect.GetX2Effect().EffectName) @ " (infinite duration).");
 
 					EffectRemoved = true;
 				}
