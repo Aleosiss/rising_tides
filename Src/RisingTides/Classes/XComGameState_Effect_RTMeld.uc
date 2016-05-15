@@ -98,7 +98,7 @@ static function UpdateMeldMembers(XComGameState_Effect_RTMeld UpdatedMeldEffect,
 				{
 					if(ActiveEffectState.ApplyEffectParameters.SourceStateObjectRef.ObjectID == UpdateUnit.ObjectID)	   
 					{
-						ActiveMeldEffect.UpdateEffect(UpdateUnit, UpdatedMeldEffect, CurrentMeldEffect, NewGameState, ActiveEffectState);
+						//ActiveMeldEffect.UpdateEffect(UpdateUnit, UpdatedMeldEffect, CurrentMeldEffect, NewGameState, ActiveEffectState);
 						NewGameState.AddStateObject(UpdateUnit);
 					}
 				}

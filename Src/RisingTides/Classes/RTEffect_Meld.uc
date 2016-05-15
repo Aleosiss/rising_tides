@@ -26,36 +26,6 @@ function bool IsThisEffectBetterThanExistingEffect(const out XComGameState_Effec
 	return true;
 }
 
-simulated function UpdateEffect(XComGameState_Unit UpdateUnit, XComGameState_Effect_RTMeld UpdatedMeldEffect, XComGameState_Effect_RTMeld CurrentMeldEffect, XComGameState NewGameState, XComGameState_Effect RemovedEffectState)
-{
-	local RTEffect_Meld			UpdateMeldEffect;
-	local XComGameState_Effect	NewEffectState;
-	local EffectAppliedData		ApplyData;
-
-	`LOG("Updating Meld Effect " @ UpdateUnit.GetFullName); 
-	ApplyData = class'RTHelpers'.static.GetApplyDataForSelfBuff(ApplyData, UpdateUnit, RemovedEffectState, 'RTEffect_Meld');
-	NewEffectState = XComGameState_Effect(NewGameState.CreateStateObject(Class, RemovedEffectState.ObjectID));	
-	//`LOG("ApplyData generated, removing previous effect!");
-	//super.OnEffectRemoved(ApplyData, NewGameState, true, RemovedEffectState);
-
-	`LOG("Effect removed successfully, updating m_aStatChanges.");
-	MeldWill = UpdatedMeldEffect.CombinedWill;
-	MeldHacking = UpdatedMeldEffect.SharedHack;
-
-	m_aStatChanges.Length = 0;
-	AddPersistentStatChange(eStat_Will, MeldWill);
-	AddPersistentStatChange(eStat_Hacking, MeldHacking);
-	AddPersistentStatChange(eStat_PsiOffense, MeldWill);
-
-	//`LOG("Creating NewEffectState from RemovedEffectState.");
-
-	NewEffectState.StatChanges = m_aStatChanges;
-
-	`LOG("Reapplying Meld Effect.");
-	HandleApplyEffect(ApplyData, UpdateUnit, NewGameState, NewEffectState);
-
-	`LOG("Meld update @" @ UpdateUnit.GetFullName @ " was successful.");
-}
 
 
 // Attempt to OnEffectAdded using Component GameState_Effect
@@ -192,7 +162,7 @@ simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffe
 	EventMgr.RegisterForEvent(ListenerObj, 'UnitPanicked', MeldEffectState.RemoveUnitFromMeld,ELD_OnStateSubmitted,,,true); 
 	EventMgr.RegisterForEvent(ListenerObj, 'TacticalGameEnd', MeldEffectState.OnTacticalGameEnd, ELD_OnStateSubmitted);
 
-	`LOG("Rising Tides: The Meld has finished registering for events.");
+	`LOG("Rising Tides: The Meld has finished registering for events, initalizing...");
 
 	MeldEffectState.Initialize(EffectTargetUnit);
 	
