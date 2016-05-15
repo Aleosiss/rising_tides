@@ -26,6 +26,16 @@ function bool IsThisEffectBetterThanExistingEffect(const out XComGameState_Effec
 	return true;
 }
 
+simulated function UnApplyEffectFromStats(RTGameState_MeldEffect MeldEffectState, XComGameState_Unit UnitState, XComGameState GameState)
+{
+	UnitState.UnApplyEffectFromStats(MeldEffectState, GameState);
+}
+
+simulated function ApplyEffectToStats(RTGameState_MeldEffect MeldEffectState, XComGameState_Unit UnitState, XComGameState GameState)
+{
+	UnitState.ApplyEffectToStats(MeldEffectState, GameState);
+}
+
 
 
 // Attempt to OnEffectAdded using Component GameState_Effect
