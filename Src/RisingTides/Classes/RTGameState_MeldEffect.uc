@@ -148,7 +148,7 @@ simulated function EventListenerReturn AddUnitToMeld(Object EventData, Object Ev
 
 	`LOG("" @ GameStateHost.GetName(eNameType_Full) @ " is attempting to add " @ EnteringMeldUnit.GetName(eNameType_Full) @ " to its MeldEffect.");
 	
-	//GameStateHost.UnApplyEffectFromStats(CurrentMeldEffect, NewGameState);
+	GameStateHost.UnApplyEffectFromStats(CurrentMeldEffect, NewGameState);
 	//NewGameState.RemoveStateObject(CurrentMeldEffect.ObjectID);
 
 	// Check to see if the old effect has YHME. If it doesn't, check the new unit for it. Otherwise, update the new MeldEffect to the new SharedHack value.
@@ -177,7 +177,7 @@ simulated function EventListenerReturn AddUnitToMeld(Object EventData, Object Ev
 
 	
 	NewGameState.AddStateObject(UpdatedMeldEffect);
-	//GameStateHost.ApplyEffectToStats(UpdatedMeldEffect, NewGameState);
+	GameStateHost.ApplyEffectToStats(UpdatedMeldEffect, NewGameState);
 
 	
 	`TACTICALRULES.SubmitGameState(NewGameState);
@@ -208,7 +208,7 @@ simulated function EventListenerReturn RemoveUnitFromMeld(Object EventData, Obje
 
 	`LOG("" @ GameStateHostUnit.GetName(eNameType_Full) @ " is attempting to remove " @ LeavingMeldUnit.GetName(eNameType_Full) @ " from its MeldEffect.");
 
-	//GameStateHostUnit.UnApplyEffectFromStats(CurrentMeldEffect, NewGameState);
+	GameStateHostUnit.UnApplyEffectFromStats(CurrentMeldEffect, NewGameState);
 	//NewGameState.RemoveStateObject(ObjectID);
 
 	if(CurrentMeldEffect.Members.Length == 1)
@@ -281,7 +281,7 @@ simulated function EventListenerReturn RemoveUnitFromMeld(Object EventData, Obje
 	UpdatedMeldEffect.CombinedWill = GetCombinedWill(UpdatedMeldEffect.Members.Length);
 
 	NewGameState.AddStateObject(UpdatedMeldEffect);
-	//GameStateHostUnit.ApplyEffectToStats(UpdatedMeldEffect, NewGameState);
+	GameStateHostUnit.ApplyEffectToStats(UpdatedMeldEffect, NewGameState);
 	
 	
 	`TACTICALRULES.SubmitGameState(NewGameState);

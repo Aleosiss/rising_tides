@@ -36,7 +36,7 @@ simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffe
 		{
 			Effect = XComGameState_Effect(History.GetGameStateForObjectID(EffectRef.ObjectID));
 
-			if (Effect.GetX2Effect().EffectName == 'RTEffect_Meld')
+			if (Effect.GetX2Effect().EffectName == 'RTEffect_Meld' && !Effect.bRemoved)
 			{
 				if (!Effect.GetX2Effect().bInfiniteDuration)
 				{
@@ -61,7 +61,7 @@ simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffe
 					// Infinite effects get cleansed
 					Effect.RemoveEffect(NewGameState, NewGameState, true);
 
-					//`LOG("Rising Tides: cleansed " @ string(Effect.GetX2Effect().EffectName) @ " (infinite duration).");
+					`LOG("Rising Tides: cleansed " @ string(Effect.GetX2Effect().EffectName) @ " (infinite duration).");
 
 					EffectRemoved = true;
 				}
