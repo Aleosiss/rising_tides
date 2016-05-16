@@ -21,3 +21,7 @@ RTFriendlyName="Damn Good Ground"
 
 [RTEffect_SlowIsSmooth]
 RTFriendlyName="Slow is Smooth"
+
+[RTEffect_TimeStop]
+StunnedText="Frozen in time!"
+RoboticStunnedText="Frozen in time!"

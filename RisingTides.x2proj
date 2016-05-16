@@ -59,6 +59,9 @@
     <Content Include="Src\RisingTides\Classes\RTEffect_Aggression.uc">
       <SubType>Content</SubType>
     </Content>
+    <Content Include="Src\RisingTides\Classes\RTEffect_Counter.uc">
+      <SubType>Content</SubType>
+    </Content>
     <Content Include="Src\RisingTides\Classes\RTEffect_DamnGoodGround.uc">
       <SubType>Content</SubType>
     </Content>
@@ -108,6 +111,12 @@
       <SubType>Content</SubType>
     </Content>
     <Content Include="Src\RisingTides\Classes\RTEffect_Squadsight.uc">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Src\RisingTides\Classes\RTEffect_TimeStop.uc">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Src\RisingTides\Classes\RTEffect_TimeStopEnd.uc">
       <SubType>Content</SubType>
     </Content>
     <Content Include="Src\RisingTides\Classes\RTEffect_VPTargeting.uc">

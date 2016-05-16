@@ -161,7 +161,7 @@ simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffe
 		
 	EventMgr.TriggerEvent('RTAddToMeld', EffectTargetUnit, EffectTargetUnit, NewGameState); 
 
-	ListenerObj = NewEffectState;
+	ListenerObj = MeldEffectState;
 	if(ListenerObj == none)
 	{
 		`Redscreen("RTMeld: Failed to find Meld component when registering listener (WE DUN FUCKED)");

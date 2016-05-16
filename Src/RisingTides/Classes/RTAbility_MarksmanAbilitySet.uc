@@ -57,6 +57,8 @@ static function array<X2DataTemplate> CreateTemplates()
 	Templates.AddItem(DaybreakFlame());
 	Templates.AddItem(DaybreakFlameIcon());
 	Templates.AddItem(YourHandsMyEyes());
+	Templates.AddItem(TimeStandsStill());
+	Templates.AddItem(TimeStandsStillCleanseListener());
 	//Templates.AddItem(Inevitibility());
 	//Templates.AddItem(SIShot());
 	//Templates.AddItem(TimeStandsStill());
@@ -1053,7 +1055,7 @@ static function X2AbilityTemplate SovereignEffect()
 	PanicEffect = class'X2StatusEffects'.static.CreatePanickedStatusEffect();
 	PanicEffect.MinStatContestResult = 1;
 	PanicEffect.MaxStatContestResult = 0;
-	PanicEffect.DamageTypes.AddItem('Psi');
+	PanicEffect.DamageTypes.AddItem('Mental');
 	Template.AddTargetEffect(PanicEffect);
 
 	Template.AbilityTargetStyle = default.SimpleSingleTarget;
@@ -1314,6 +1316,147 @@ static function X2AbilityTemplate YourHandsMyEyes()
 	// Note: no visualization on purpose!
 	
 	Template.bCrossClassEligible = false;
+	return Template;
+}
 
+//---------------------------------------------------------------------------------------
+//---Time Stands Still-------------------------------------------------------------------
+//---------------------------------------------------------------------------------------
+static function X2AbilityTemplate TimeStandsStill()
+{
+	local X2AbilityTemplate						Template;
+	local RTEffect_TimeStop						TimeStopEffect;
+	local X2Effect_SetUnitValue					SetUnitValueEffect;
+	local RTEffect_Counter						CounterEffect;
+	local X2AbilityCost_ActionPoints			ActionPointCost;
+	local X2AbilityCooldown						Cooldown;
+	local X2AbilityMultiTarget_Radius			MultiTarget;
+	local X2Condition_UnitProperty				UnitPropertyCondition;
+
+	`CREATE_X2ABILITY_TEMPLATE(Template, 'TimeStandsStill');
+	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_insanity";
+
+	Template.AbilitySourceName = 'eAbilitySource_Psionic';
+	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_AlwaysShow;
+	Template.Hostility = eHostility_Offensive;
+
+	Template.AbilityToHitCalc = default.DeadEye;
+	Template.AbilityTargetStyle = default.SelfTarget;
+	Template.AbilityTriggers.AddItem(default.PlayerInputTrigger);
+
+	SetUnitValueEffect = new class'X2Effect_SetUnitValue';
+	SetUnitValueEffect.UnitName = 'TimeStopCounter';
+	SetUnitValueEffect.NewValueToSet = 3.00f;
+	SetUnitValueEffect.CleanupType = eCleanup_Never;
+	Template.AddShooterEffect(SetUnitValueEffect);
+
+	CounterEffect = new class'RTEffect_Counter';
+	CounterEffect.BuildPersistentEffect(1, true, true, false, eGameRule_PlayerTurnEnd);
+	CounterEffect.CounterUnitValName = 'TimeStopCounter';
+	CounterEffect.WatchRule = eGameRule_PlayerTurnEnd;
+	CounterEFfect.TriggerEventName = 'TimeStopEnded';
+	CounterEffect.EffectName = 'TimeStandsStillCounterEffect';
+	Template.AddShooterEffect(CounterEffect);
+
+	MultiTarget = new class'X2AbilityMultiTarget_Radius';
+	MultiTarget.fTargetRadius = 500;
+	MultiTarget.bExcludeSelfAsTargetIfWithinRadius = true;
+	MultiTarget.bIgnoreBlockingCover = true;
+	Template.AbilityMultiTargetStyle = MultiTarget;
+
+	Template.ConcealmentRule = eConceal_Always;
+
+	UnitPropertyCondition = new class'X2Condition_UnitProperty';
+	UnitPropertyCondition.ExcludeDead = true;												  
+	UnitPropertyCondition.ExcludeFriendlyToSource = false;
+	UnitPropertyCondition.ExcludeHostileToSource = false;
+	UnitPropertyCondition.ExcludeCivilian = false;
+	UnitPropertyCondition.FailOnNonUnits = true;
+	Template.AbilityMultiTargetConditions.AddItem(UnitPropertyCondition);
+
+	ActionPointCost = new class'X2AbilityCost_ActionPoints';
+	ActionPointCost.iNumPoints = 2;
+	ActionPointCost.bConsumeAllPoints = true;
+	Template.AbilityCosts.AddItem(ActionPointCost);
+
+	Cooldown = new class'X2AbilityCooldown';
+	Cooldown.iNumTurns = 8;
+	Template.AbilityCooldown = Cooldown;
+
+	TimeStopEffect = new class'RTEffect_TimeStop';
+	TimeStopEffect.BuildPersistentEffect(1, true, true, false, eGameRule_PlayerTurnBegin);
+	TimeStopEffect.ApplyChance = 100;
+	TimeStopEffect.VisualizationFn = class'X2StatusEffects'.static.StunnedVisualization;
+	TimeStopEffect.EffectTickedVisualizationFn = class'X2StatusEffects'.static.StunnedVisualizationTicked;
+	TimeStopEffect.EffectRemovedVisualizationFn = class'X2StatusEffects'.static.StunnedVisualizationRemoved;
+	TimeStopEffect.SetDisplayInfo(ePerkBuff_Penalty, "Greyscaled", 
+		"This unit has been frozen in time. It cannot take actions and is much easier to hit.", Template.IconImage);
+	TimeStopEffect.bRemoveWhenTargetDies = true;
+	TimeStopEffect.bCanTickEveryAction = false;
+	Template.AddMultiTargetEffect(TimeStopEffect);
+
+	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
+	// Note: no visualization on purpose!
+	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
+	Template.bSkipFireAction = true;
+
+	Template.AdditionalAbilities.AddItem('TimeStandsStillCleanseListener');
+
+
+	Template.bCrossClassEligible = false;
+	return Template;
+}
+
+//---------------------------------------------------------------------------------------
+//---Time Stands Still Cleanse Listener--------------------------------------------------
+//---------------------------------------------------------------------------------------
+static function X2AbilityTemplate TimeStandsStillCleanseListener()
+{
+	local X2AbilityTemplate						Template;
+	local X2Condition_UnitProperty				UnitPropertyCondition;
+	local X2Effect_RemoveEffects				RemoveMultiEffect, RemoveSelfEffect;
+	local X2AbilityMultiTarget_AllUnits			MultiTarget;
+ 	local X2AbilityTrigger_EventListener		EventListener;
+
+	`CREATE_X2ABILITY_TEMPLATE(Template, 'TimeStandsStillCleanseListener');
+	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_voidadept";
+
+	Template.AbilitySourceName = 'eAbilitySource_Perk';
+	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_NeverShow;
+	Template.Hostility = eHostility_Neutral;
+
+	MultiTarget = new class'X2AbilityMultiTarget_AllUnits';
+	MultiTarget.bAcceptFriendlyUnits = true;
+	MultiTarget.bAcceptEnemyUnits = true;
+	MultiTarget.bDontAcceptNeutralUnits = false;
+	Template.AbilityMultiTargetStyle = MultiTarget;
+
+	EventListener = new class'X2AbilityTrigger_EventListener';
+	EventListener.ListenerData.EventID = 'TimeStopEnded';
+	EventListener.ListenerData.Deferral = ELD_OnStateSubmitted;
+	EventListener.ListenerData.Filter = eFilter_Unit;
+	EventListener.ListenerData.EventFn = class'XComGameState_Ability'.static.AbilityTriggerEventListener_SelfWithAdditionalTargets;
+	Template.AbilityTriggers.AddItem(EventListener);
+
+	Template.AbilityTargetStyle = default.SelfTarget;
+
+	RemoveSelfEffect = new class'X2Effect_RemoveEffects';
+	RemoveSelfEffect.EffectNamesToRemove.AddItem('TimeStandsStillCounterEffect');
+	RemoveSelfEffect.bCheckSource = false;
+
+	RemoveMultiEffect = new class'X2Effect_RemoveEffects';
+	RemoveMultiEffect.EffectNamesToRemove.AddItem('TimeStopEffect');
+	RemoveMultiEffect.bCheckSource = false;
+	
+	Template.AddShooterEffect(RemoveSelfEffect);
+	Template.AddMultiTargetEffect(RemoveMultiEFfect);
+	
+	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
+	// Note: no visualization on purpose!
+	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
+	Template.bSkipFireAction = true;
+
+
+	Template.bCrossClassEligible = false;
 	return Template;
 }
