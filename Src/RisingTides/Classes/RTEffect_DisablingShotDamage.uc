@@ -20,8 +20,7 @@ function int GetAttackingDamageModifier(XComGameState_Effect EffectState, XComGa
 		//Check for disabling shot
 		if (AbilityState.GetMyTemplateName() == 'DisablingShot')
 		{
-			ExtraDamage = CurrentDamage * DISABLING_SHOT_REDUCTION;
-			ExtraDamage = (ExtraDamage * -1);
+			ExtraDamage = CurrentDamage * DISABLING_SHOT_REDUCTION * -1;
 		}
 	}
 	return int(ExtraDamage);
