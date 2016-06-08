@@ -1,8 +1,8 @@
 //---------------------------------------------------------------------------------------
-//  FILE:    RTEffect_Meld.uc
+//  FILE:    RTEffect_MeldRemoved.uc
 //  AUTHOR:  Aleosiss  
 //  DATE:    18 March 2016
-//  PURPOSE: Meld effect
+//  PURPOSE: Meld remover effect
 //           
 //---------------------------------------------------------------------------------------
 // 
