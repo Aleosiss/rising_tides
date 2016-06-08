@@ -97,7 +97,7 @@ function bool PostAbilityCostPaid(XComGameState_Effect EffectState, XComGameStat
 						class'RTTacticalVisibilityHelpers'.static.GetAllVisibleAlliesForUnit(TargetUnit.ObjectID, VisibleUnits/*, -1, false*/);
 						for(Index = 0; Index < VisibleUnits.Length; Index++)
 						{
-							// Units within 2 tiles of the source that aren't psionic or robotic or the source
+							// Units within 4 tiles of the source that aren't psionic or robotic or the source
 							PanicTargetUnit = XComGameState_Unit(History.GetGameStateForObjectID(VisibleUnits[Index].ObjectID));
 							if(TargetUnit.TileDistanceBetween(PanicTargetUnit) < 4) 
 							{
