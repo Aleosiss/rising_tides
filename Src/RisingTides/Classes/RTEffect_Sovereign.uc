@@ -36,5 +36,5 @@ class RTEffect_Sovereign extends X2Effect_Persistent;
 
 DefaultProperties
 {
-
+	EffectName='RTEffect_Sovereign'
 }
