@@ -1,4 +1,4 @@
-Rising Tides Mod for XCOM2.
+# Rising Tides Mod for XCOM2.
 
 Rising Tides (henceforth "RTMod") is an XCOM 2 content addition mod that aims to provide a DLC-like experience. Currently I looking to provide the following functionality:
 
@@ -15,5 +15,6 @@ This would be a bare-bones content mod. I also have the following content in min
 - New models/animations for armor, weapons, and map assets (and possibly faces)
 - High-quality 2D artwork (Producing Icons is possible ATM, but not much more)
 
-Current TODOs:  Tidy up current code
-                Time Stop ability
+## Current TODOs:  
+              - Tidy up current code
+              -  Time Stop ability
