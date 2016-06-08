@@ -1,4 +1,9 @@
-// This is an Unreal Script
+//---------------------------------------------------------------------------------------
+//  FILE:    RTGameState_MeldEffect.uc
+//  AUTHOR:  Aleosiss  
+//  DATE:    22 March 2016
+//  PURPOSE: Extended GameState_Effect that holds custom listeners for per-unit MeldEffects.
+//---------------------------------------------------------------------------------------
 
 class RTGameState_MeldEffect extends XComGameState_Effect config(RTGhost);
 
