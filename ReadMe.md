@@ -1,6 +1,6 @@
 ## Rising Tides
 
-Rising Tides is an XCOM 2 content addition mod that aims to provide a DLC-like experience. Currently I looking to provide the following functionality:
+Rising Tides is an XCOM 2 content addition mod that aims to provide a DLC-like experience. Currently I looking to provide the following:
 
 >- Three "hero"-type units, each with unique three-branch skill trees
 >- A single Ghost "superclass" extension (as Soldier is to the Vanilla classes) which provides the following:
