@@ -1,11 +1,10 @@
 //---------------------------------------------------------------------------------------
-//  FILE:    RTEffect_PrecisionShotDamage.uc
+//  FILE:    RTEffect_VPTargeting.uc
 //  AUTHOR:  Aleosiss
 //  DATE:    3 March 2016
-//  PURPOSE: Gives Precision Shot its damage boost
-//  NOTES: Credit to steam user guby for GetToHitModifiers function         
+//  PURPOSE: general damage effect
 //---------------------------------------------------------------------------------------
-//	Precision Shot damage effect
+//	Vital Point Targeting
 //---------------------------------------------------------------------------------------
 class RTEffect_VPTargeting extends X2Effect_Persistent;
 
