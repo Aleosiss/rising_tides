@@ -15,4 +15,5 @@ This would be a bare-bones content mod. I also have the following content in min
 - New models/animations for armor, weapons, and map assets (and possibly faces)
 - High-quality 2D artwork (Producing Icons is possible ATM, but not much more)
 
-With these in place, I could then create a possibly coherent player-driven side-campaign-- The Rising Tides. Not bad.
+Current TODOs:  Tidy up current code
+                Time Stop ability
