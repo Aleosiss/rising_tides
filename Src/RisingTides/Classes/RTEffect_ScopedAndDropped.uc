@@ -23,9 +23,6 @@ function GetToHitModifiers(XComGameState_Effect EffectState, XComGameState_Unit 
 	local ShotModifierInfo ModInfoAim, ModInfoCrit;
 	local int Tiles, AimMod, CritMod; 
 	local UnitValue NumTimesScopedAndDropped;
-
-	local int DebugAim;
-	DebugAim = 100;
 	
 	Tiles = Attacker.TileDistanceBetween(Target);
 	//  remove number of tiles within visible range (which is in meters, so convert to units, and divide that by tile size)
