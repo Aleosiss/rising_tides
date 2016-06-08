@@ -103,7 +103,7 @@ static function int GetCombinedWill(int numOfMembers)
 }
 
 
-
+// RemakeSelf(RTGameState_MeldEffect OtherMeldEffect)
 simulated function RemakeSelf(RTGameState_MeldEffect OtherMeldEffect)
 {
 	StatChanges.Length = 0;
@@ -165,12 +165,8 @@ simulated function EventListenerReturn AddUnitToMeld(Object EventData, Object Ev
 	GameStateHostUnit = XComGameState_Unit(History.GetGameStateForObjectID(ApplyEffectParameters.SourceStateObjectRef.ObjectID));
 
 	if(GameStateHostUnit == none)
-	{
-		`LOG("Rising Tides: What the... there's an uninitalized RTGameState_MeldEffect out there!");
-		`LOG("Rising Tides: " @ ApplyEffectParameters.SourceStateObjectRef.ObjectID @ " just tried to AddUnitToMeld!");
 		return ELR_NoInterrupt;
-	}
-
+	
 	NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState(string(GetFuncName()));
 	UpdatedMeldEffect = RTGameState_MeldEffect(NewGameState.CreateStateObject(class'RTGameState_MeldEffect', ObjectID));
 
@@ -234,21 +230,29 @@ simulated function EventListenerReturn RemoveUnitFromMeld(Object EventData, Obje
 {
 	local RTGameState_MeldEffect			CurrentMeldEffect, UpdatedMeldEffect;
 	local XComGameState_Unit				LeavingMeldUnit, MeldIndexUnit, GameStateHostUnit, newGameStateHostUnit;
+	local RTEffect_Meld						MeldEffect;
 	local X2EventManager					EventManager;
 	local XComGameState						NewGameState;
 	local XComGameStateHistory				History;
 	local Object							ListenerObj;
 	local int								Index;
+	local float								HackModifier;
 
 	History = `XCOMHISTORY;
 	LeavingMeldUnit = XComGameState_Unit(EventSource);
 	GameStateHostUnit = XComGameState_Unit(History.GetGameStateForObjectID(ApplyEffectParameters.SourceStateObjectRef.ObjectID));
 	CurrentMeldEffect = RTGameState_MeldEffect(History.GetGameStateForObjectID(ObjectID));
+	MeldEffect = RTEffect_Meld(GetX2Effect());
 
 
 	`LOG("" @ GameStateHostUnit.GetName(eNameType_Full) @ " is attempting to remove " @ LeavingMeldUnit.GetName(eNameType_Full) @ " from its MeldEffect.");
+	if(GameStateHostUnit == none)
+		return ELR_NoInterrupt;
+	
+	NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState(string(GetFuncName()));
+	UpdatedMeldEffect = RTGameState_MeldEffect(NewGameState.CreateStateObject(class'RTGameState_MeldEffect', ObjectID));
+	MeldEffect.UnApplyEffectFromStats(self, GameStateHostUnit, NewGameState);
 
-	GameStateHostUnit.UnApplyEffectFromStats(CurrentMeldEffect, NewGameState);
 	//NewGameState.RemoveStateObject(ObjectID);
 
 	if(CurrentMeldEffect.Members.Length == 1)
@@ -264,7 +268,7 @@ simulated function EventListenerReturn RemoveUnitFromMeld(Object EventData, Obje
 		EventManager.UnRegisterFromEvent(ListenerObj, 'UnitPanicked');
 		EventManager.UnRegisterFromEvent(ListenerObj, 'TacticalGameEnd');
 		
-		NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("Meld states cleanup");
+		//NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("Meld states cleanup");
 		NewGameState.RemoveStateObject(ObjectID);
 		`TACTICALRULES.SubmitGameState(NewGameState);
 
@@ -273,9 +277,6 @@ simulated function EventListenerReturn RemoveUnitFromMeld(Object EventData, Obje
 		return ELR_NoInterrupt;
 	}
 
-	NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState(string(GetFuncName()));
-	UpdatedMeldEffect = RTGameState_MeldEffect(NewGameState.CreateStateObject(class'RTGameState_MeldEffect', ObjectID));
-	
 	if(LeavingMeldUnit.ObjectID == CurrentMeldEffect.MeldHost.ObjectID)
 	{
 		//meld host is the first member, so just make the host the second member and call it a day
@@ -317,20 +318,35 @@ simulated function EventListenerReturn RemoveUnitFromMeld(Object EventData, Obje
 	}
 	
 	 
+	// Remake member list, then recombine will
 	UpdatedMeldEffect.Members = CurrentMeldEffect.Members;
+	UpdatedMeldEffect.Members.AddItem(EnteringMeldUnit.GetReference());
 	UpdatedMeldEffect.CombinedWill = GetCombinedWill(UpdatedMeldEffect.Members.Length);
+	HackModifier = UpdatedMeldEffect.SharedHack - GameStateHostUnit.GetBaseStat(eStat_Hacking);
+
+
+	UpdatedMeldEffect.StatChanges.Length = 0;
+	AddPersistentStatChange(UpdatedMeldEffect.StatChanges, eStat_Will, UpdatedMeldEffect.CombinedWill);
+	AddPersistentStatChange(UpdatedMeldEffect.StatChanges, eStat_Hacking, HackModifier);
+	AddPersistentStatChange(UpdatedMeldEffect.StatChanges, eStat_PsiOffense, UpdatedMeldEffect.CombinedWill);
+
+
+	RemakeSelf(UpdatedMeldEffect);
+	`LOG("Rising Tides: " @ GameStateHostUnit.GetName(eNameType_Full) @ "'s meld has " @ UpdatedMeldEffect.Members.Length @ " people in it.");
+	newGameStateHostUnit = XComGameState_Unit(NewGameState.CreateStateObject(class'XComGameState_Unit', GameStateHostUnit.ObjectID));
+	//newGameStateHostUnit.ApplyEffectToStats(self, NewGameState);
+	`LOG("" @ GameStateHostUnit.GetName(eNameType_Full) @ " is attempting to add " @ UpdatedMeldEffect.CombinedWill @ " to itself.");
+	MeldEffect.ApplyEffectToStats(self, newGameStateHostUnit, NewGameState);
 
 	NewGameState.AddStateObject(UpdatedMeldEffect);
-
-	newGameStateHostUnit = XComGameState_Unit(NewGameState.CreateStateObject(class'XComGameState_Unit', GameStateHostUnit.ObjectID));
-	newGameStateHostUnit.ApplyEffectToStats(UpdatedMeldEffect, NewGameState);
 	NewGameState.AddStateObject(newGameStateHostUnit);
-	
+
 	
 	`TACTICALRULES.SubmitGameState(NewGameState);
 
 	return ELR_NoInterrupt;
 }
+
 
 
  
