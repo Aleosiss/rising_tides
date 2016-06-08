@@ -2,8 +2,9 @@
 //  FILE:    RTEffect_ScopedAndDropped.uc
 //  AUTHOR:  Aleosiss
 //  DATE:    29 February 2016
-//  PURPOSE: Defines the effect of Scoped And Dropped: Restore Action Points on kill,
-//           Negate squadsight aim penalties, and count number of kills per turn.
+//  PURPOSE: Defines the effect of Scoped And Dropped: Restore Action Points on 
+//           exposed kills, negate squadsight aim penalties, and count number of 
+//           kills per turn.
 //  TODO:    Change Sovereign's effect to proc on Crits only, but without regard to 
 //           radius. This should substantially reduce load, but the proc rate might
 //	     (MIGHT) need a buff to compensate. Also might want to take it out of 
