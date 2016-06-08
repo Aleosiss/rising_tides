@@ -1,4 +1,11 @@
-// This is an Unreal Script
+//---------------------------------------------------------------------------------------
+//  FILE:    RTEffect_Panicked.uc
+//  AUTHOR:  Aleosiss
+//  DATE:    16 May 2016
+//  PURPOSE: Modified panic effect, should be similar to Long War (units simply do nothing)
+//---------------------------------------------------------------------------------------
+//	
+//---------------------------------------------------------------------------------------
 
 class RTEffect_Panicked extends X2Effect_Panicked config(RTGhost);
 
