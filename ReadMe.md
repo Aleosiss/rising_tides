@@ -14,6 +14,7 @@ This would be a bare-bones content mod. I also have the following content in min
 >- Voicework for each individual hero unit, as well as other characters 
 >- New models/animations for armor, weapons, and map assets (and possibly faces)
 >- High-quality 2D artwork (Producing Icons is possible ATM, but not much more)
+>- New enemy units, possible returns from EW
 
 ###### Current TODOs:  
               - Tidy up current code
