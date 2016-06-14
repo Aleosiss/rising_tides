@@ -17,5 +17,8 @@ This would be a bare-bones content mod. I also have the following content in min
 >- New enemy units, possible returns from EW
 
 ###### Current TODOs:  
-              - Tidy up current code
-              - Time Stop ability
+              - Tidy up class files (remove legacy code, document, etc)
+              - Extract Sovereign code from Scopped and Dropped
+              
+###### Current Unresolved:
+              - Time Stop isn't preventing units from scampering, and interacts with units in FOW strangely 
