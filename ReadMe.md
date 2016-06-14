@@ -20,6 +20,9 @@ This would be a bare-bones content mod. I also have the following content in min
               - Tidy up class files (remove legacy code, document, etc)
               - Extract Sovereign code from Scopped and Dropped
               - Brainstorm the rest of Whisper's abilities
+                - Offense tree (Daybreak Flame), Utility tree (Time Stands Still), Defense tree (???)
+                  - Change SnD to also reset on Overwatch shots?
+                  - Change SoC to instead give crit chance on Overwatch shots?
               
 ###### Current Unresolved:
               - Time Stop isn't preventing units from scampering, and interacts with units in FOW strangely 
