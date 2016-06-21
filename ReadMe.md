@@ -21,8 +21,7 @@ This would be a bare-bones content mod. I also have the following content in min
               - Extract Sovereign code from Scopped and Dropped
               - Brainstorm the rest of Whisper's abilities
                 - Offense tree (Daybreak Flame), Utility tree (Time Stands Still), Defense tree (???)
-                  - Change SnD to also reset on Overwatch shots?
-                  - Change SoC to instead give crit chance on Overwatch shots?
+                  - 
                   
 http://hastebin.com/ipulitayis.coffee
 http://hastebin.com/wevumocitu.avrasm
