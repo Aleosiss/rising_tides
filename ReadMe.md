@@ -19,7 +19,6 @@ This would be a bare-bones content mod. I also have the following content in min
 ###### Current TODOs:  
               - Tidy up class files (remove legacy code, document, etc)
               - Finish up current features
-                - Add a UnitValue to the meld
                 - Give TimeStop a RTGameState to track the amount of damage dealt during the time stop
                 - Decrease vision radius / detection radius of greyscaled units to 0 (Enemy only?)
                 - Implement Harbinger
