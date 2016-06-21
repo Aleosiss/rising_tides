@@ -23,6 +23,9 @@ This would be a bare-bones content mod. I also have the following content in min
                 - Offense tree (Daybreak Flame), Utility tree (Time Stands Still), Defense tree (???)
                   - Change SnD to also reset on Overwatch shots?
                   - Change SoC to instead give crit chance on Overwatch shots?
+                  
+http://hastebin.com/ipulitayis.coffee
+http://hastebin.com/wevumocitu.avrasm
               
 ###### Current Unresolved:
               - Time Stop isn't preventing units from scampering, and interacts with units in FOW strangely 
