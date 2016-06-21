@@ -29,3 +29,4 @@ http://hastebin.com/wevumocitu.avrasm
               
 ###### Current Unresolved:
               - Time Stop isn't preventing units from scampering, and interacts with units in FOW strangely 
+              - PS: Force immobility by setting their ECharStat_Mobility to 0
