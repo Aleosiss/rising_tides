@@ -20,6 +20,7 @@ This would be a bare-bones content mod. I also have the following content in min
               - Tidy up class files (remove legacy code, document, etc)
               - Finish up current features
                 - Give TimeStop a RTGameState to track the amount of damage dealt during the time stop
+                - Time Stop needs extend cooldowns too
                 - Implement Harbinger
               - Extract Sovereign code from Scopped and Dropped
               - Brainstorm the rest of Whisper's abilities
