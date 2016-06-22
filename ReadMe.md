@@ -20,17 +20,12 @@ This would be a bare-bones content mod. I also have the following content in min
               - Tidy up class files (remove legacy code, document, etc)
               - Finish up current features
                 - Give TimeStop a RTGameState to track the amount of damage dealt during the time stop
-                - Decrease vision radius / detection radius of greyscaled units to 0 (Enemy only?)
                 - Implement Harbinger
               - Extract Sovereign code from Scopped and Dropped
               - Brainstorm the rest of Whisper's abilities
                 - Offense tree (Daybreak Flame), Utility tree (Time Stands Still), Defense tree (???)
-                  - 
                   
 http://hastebin.com/ipulitayis.coffee
 
-http://hastebin.com/wevumocitu.avrasm
               
 ###### Current Unresolved:
-              - Time Stop isn't preventing units from scampering, and interacts with units in FOW strangely 
-              - PS: Force immobility by setting their ECharStat_Mobility to 0
