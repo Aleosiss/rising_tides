@@ -68,6 +68,9 @@
     <Content Include="Src\RisingTides\Classes\RTEffect_DisablingShotDamage.uc">
       <SubType>Content</SubType>
     </Content>
+    <Content Include="Src\RisingTides\Classes\RTEffect_Harbinger.uc">
+      <SubType>Content</SubType>
+    </Content>
     <Content Include="Src\RisingTides\Classes\RTEffect_Inevitibility.uc">
       <SubType>Content</SubType>
     </Content>

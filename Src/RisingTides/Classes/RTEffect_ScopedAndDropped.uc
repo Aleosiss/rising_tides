@@ -92,34 +92,6 @@ function bool PostAbilityCostPaid(XComGameState_Effect EffectState, XComGameStat
 		{
 			if (`TACTICALRULES.VisibilityMgr.GetVisibilityInfo(Attacker.ObjectID, TargetUnit.ObjectID, VisInfo))
 				{
-					// Sovereign check
-					if(Attacker.HasSoldierAbility('Sovereign'))
-					{
-						// Getting all visible units to the dead target
-						class'RTTacticalVisibilityHelpers'.static.GetAllVisibleAlliesForUnit(TargetUnit.ObjectID, VisibleUnits/*, -1, false*/);
-						for(Index = 0; Index < VisibleUnits.Length; Index++)
-						{
-							// Units within 4 tiles of the source that aren't psionic or robotic or the source
-							PanicTargetUnit = XComGameState_Unit(History.GetGameStateForObjectID(VisibleUnits[Index].ObjectID));
-							if(TargetUnit.TileDistanceBetween(PanicTargetUnit) < 4) 
-							{
-								if(!PanicTargetUnit.IsRobotic() && !PanicTargetUnit.IsPsionic())
-								{
-									// 20% chance
-									RandRoll = `SYNC_RAND(100);
-									`COMBATLOG("Sovereign rolled " @ RandRoll @ "; Target is 19!");
-									if(RandRoll < 20)
-									{
-										// T-T-Triggered
-										EventMgr = `XEVENTMGR;
-										EventMgr.TriggerEvent('SovereignTrigger', PanicTargetUnit, Attacker, NewGameState);
-									}
-								}
-							}
-						}
-					}
-					
-					
 					// Only care if there is no cover between this unit and the target unless they were concealed or have Daybreak Flame
 					if (VisInfo.TargetCover == CT_None || Attacker.HasSoldierAbility('DaybreakFlameIcon') || Attacker.WasConcealed(History.GetEventChainStartIndex()) || Attacker.IsConcealed() || TargetUnit.GetCurrentStat(eStat_AlertLevel) == 0)
 					{
@@ -146,9 +118,9 @@ function bool PostAbilityCostPaid(XComGameState_Effect EffectState, XComGameStat
 								
 								EventMgr = `XEVENTMGR;
 								EventMgr.TriggerEvent('ScopedAndDropped', AbilityState, Attacker, NewGameState);
-								`log("SND TargetUnit Location: " @ `XWORLD.GetPositionFromTileCoordinates(TargetUnit.TileLocation)); 
-								`log("SND TargetUnit ObjectID: " @ TargetUnit.ObjectID);
-								return true;
+								//`log("SND TargetUnit Location: " @ `XWORLD.GetPositionFromTileCoordinates(TargetUnit.TileLocation)); 
+								//`log("SND TargetUnit ObjectID: " @ TargetUnit.ObjectID);
+								//return true;
 							}
 						}
 					}

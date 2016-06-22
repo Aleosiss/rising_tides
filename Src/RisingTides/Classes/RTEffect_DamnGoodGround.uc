@@ -37,6 +37,4 @@ function GetToHitAsTargetModifiers(XComGameState_Effect EffectState, XComGameSta
 		ModInfoAim.Value = -(DGG_DEFENSE_BONUS);
 		ShotModifiers.AddItem(ModInfoAim);
 	}
-
-
 }

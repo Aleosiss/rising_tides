@@ -22,6 +22,7 @@ simulated function bool OnEffectTicked(const out EffectAppliedData ApplyEffectPa
 		if(bShouldTriggerEvent)
 		{
 			`XEVENTMGR.TriggerEvent(TriggerEventName, CounterUnit, CounterUnit, NewGameState);
+			`RedScreenOnce("Rising Tides: " @ TriggerEventName @ " Counter triggered!");
 		}
 		return super.OnEffectTicked(ApplyEffectParameters, kNewEffectState, NewGameState, FirstApplication);
 	}

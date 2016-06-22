@@ -2,10 +2,15 @@
 
 
 
-class RTEffect_TimeStop extends X2Effect_Persistent;
+class RTEffect_TimeStop extends X2Effect_PersistentStatChange;
 
 var localized string	StunnedText;
 var localized string	RoboticStunnedText;
+var localized string	RTFriendlyNameAim;
+var localized string	RTFriendlyNameCrit;
+
+var bool bWasPreviouslyImmobilized;
+var int PreviousStunDuration;
 
 simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffectParameters, XComGameState_BaseObject kNewTargetState, XComGameState NewGameState, XComGameState_Effect NewEffectState)
 {
@@ -16,10 +21,12 @@ simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffe
 	local bool IsOurTurn;
 
 	UnitState = XComGameState_Unit(kNewTargetState);
+	bWasPreviouslyImmobilized = false;
 
 	if(UnitState != none)
 	{
 		UnitState.ReserveActionPoints.Length = 0;
+		UnitState.ActionPoints.Length = 0;
 
 		if( UnitState.IsTurret() ) // Stunned Turret.   Update turret state.
 		{
@@ -38,26 +45,48 @@ simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffe
 		}
 
 		// Immobilize to prevent scamper or panic from enabling this unit to move again.
-		// Instead of just setting it to one, we're going to check and extend any immobilizes already present (because TIME IS STOPPED)
-		if(!IsOurTurn || UnitState.ActionPoints.Length == 0) // only if they are not immediately getting back up
-		{
-			UnitState.GetUnitValue(class'X2Ability_DefaultAbilitySet'.default.ImmobilizedValueName, UnitVal);
-			//if(UnitVal.fValue != none)
-				UnitState.SetUnitFloatValue(class'X2Ability_DefaultAbilitySet'.default.ImmobilizedValueName, max(UnitVal.fValue + 1.00f, 1.00f));
-			//else
-				//UnitState.SetUnitFloatValue(class'X2Ability_DefaultAbilitySet'.default.ImmobilizedValueName, 1);
+		// Instead of just setting it to one, we're going to check and extend any immobilize already present (because TIME IS STOPPED)
+		if(UnitState.GetUnitValue(class'X2Ability_DefaultAbilitySet'.default.ImmobilizedValueName, UnitVal)) {
+			if(UnitVal.fValue > 0) {
+				bWasPreviouslyImmobilized = true;
+			}
 		}
-	}
+		else {
+			UnitState.SetUnitFloatValue(class'X2Ability_DefaultAbilitySet'.default.ImmobilizedValueName, 1);
+		}
 
+		// TODO: Catch and delay the duration/effects of other effects
+		PreviousStunDuration = UnitState.StunnedActionPoints;
+
+		
+
+	}																			
+	
+	// You can't see any changes to the world while time is stopped, and you can't move either... don't know why the immo tag isn't working
+	AddPersistentStatChange(eStat_DetectionRadius, 0, MODOP_PostMultiplication);
+	AddPersistentStatChange(eStat_Mobility, 0, MODOP_PostMultiplication);
+	super.OnEffectAdded(ApplyEffectParameters, kNewTargetState, NewGameState, NewEffectState);
 }
 
-//private function int max(float i, float j)
-//{
-	//if(i >= j)
-		//return i;
-	//else 
-		//return j;
-//}
+function GetToHitAsTargetModifiers(XComGameState_Effect EffectState, XComGameState_Unit Attacker, XComGameState_Unit Target, XComGameState_Ability AbilityState, class<X2AbilityToHitCalc> ToHitType, bool bMelee, bool bFlanking, bool bIndirectFire, out array<ShotModifierInfo> ShotModifiers)
+{
+	local ShotModifierInfo ModInfoAim, ModInfoCrit;
+
+	ModInfoAim.ModType = eHit_Success;
+	ModInfoAim.Reason = RTFriendlyNameAim;
+	ModInfoAim.Value = 100;
+	ShotModifiers.AddItem(ModInfoAim);
+
+	ModInfoCrit.ModType = eHit_Crit;
+	ModInfoCrit.Reason = RTFriendlyNameCrit;
+	ModInfoCrit.Value = 100;
+	ShotModifiers.AddItem(ModInfoCrit);							   					  
+}
+
+function ModifyTurnStartActionPoints(XComGameState_Unit UnitState, out array<name> ActionPoints, XComGameState_Effect EffectState)
+{
+	ActionPoints.Length = 0;
+}
 
 simulated function bool OnEffectTicked(const out EffectAppliedData ApplyEffectParameters, XComGameState_Effect kNewEffectState, XComGameState NewGameState, bool FirstApplication)
 {
@@ -68,28 +97,15 @@ simulated function bool OnEffectTicked(const out EffectAppliedData ApplyEffectPa
 	TimeStopperUnit = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(ApplyEffectParameters.SourceStateObjectRef.ObjectID));
 	TimeStoppedUnit = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(ApplyEffectParameters.TargetStateObjectRef.ObjectID));
 
-	TimeStopperUnit.GetUnitValue('TimeStopCounter', UnitVal);
-	//if(UnitVal.fValue == none)
-	//{
-	//	`LOG("Rising Tides: No TimeStopCounter UnitVal found!");
-	//	return false;
-	//}
-
-	if(UnitVal.fValue == 0)
-	{
-		//`XEVENTMGR.TriggerEvent('TimeStopEnded', TimeStoppedUnit, TimeStoppedUnit, NewGameState);
-	}
-	
-	while (TimeStoppedUnit.ActionPoints.Length > 0)
-		{
-			TimeStoppedUnit.ActionPoints.Remove(0, 1);
-		}  
+	TimeStoppedUnit.ActionPoints.Length = 0;
+	TimeStoppedUnit.ReserveActionPoints.Length = 0; 
 	
 	return super.OnEffectTicked(ApplyEffectParameters, kNewEffectState, NewGameState, FirstApplication);
 }
 
 simulated function OnEffectRemoved(const out EffectAppliedData ApplyEffectParameters, XComGameState NewGameState, bool bCleansed, XComGameState_Effect RemovedEffectState)
 {
+	local RTGameState_TimeStopEffect TimeStopEffectState;
 	local XComGameState_Unit UnitState;
 	local UnitValue UnitVal;
 
@@ -104,19 +120,23 @@ simulated function OnEffectRemoved(const out EffectAppliedData ApplyEffectParame
 		}
 
 		// Update immobility status
-		UnitState.GetUnitValue(class'X2Ability_DefaultAbilitySet'.default.ImmobilizedValueName, UnitVal);
-		UnitState.SetUnitFloatValue(class'X2Ability_DefaultAbilitySet'.default.ImmobilizedValueName, UnitVal.fValue - 1);
+		if(!bWasPreviouslyImmobilized) {
+			UnitState.ClearUnitValue(class'X2Ability_DefaultAbilitySet'.default.ImmobilizedValueName);
+		} 
 
 		// Reset stun timer, (if you're stunned while/before time is stopped, the duration should be unchanged)
-		//UnitState.StunnedActionPoints = 0; // testing 0 value
+		UnitState.StunnedActionPoints = PreviousStunDuration;
 		NewGameState.AddStateObject(UnitState);
 	}
+
+	TimeStopEffectState = RTGameState_TimeStopEffect(RemovedEffectState);
+	UnitState.TakeDamage(NewGameState, TimeStopEffectState.DamageTaken, 0, 0, , TimeStopEffectState, TimeStopEffectState.ApplyEffectParameters.SourceStateObjectRef, TimeStopEffectState.bTookExplosiveDamage, TimeStopEffectState.DamageTypesTaken);
+
+	super.OnEffectRemoved(ApplyEffectParameters, NewGameState, bCleansed, RemovedEffectState);
 }
 
 function bool TimeStopTicked(X2Effect_Persistent PersistentEffect, const out EffectAppliedData ApplyEffectParameters, XComGameState_Effect kNewEffectState, XComGameState NewGameState, bool FirstApplication)
 {
-	return false;
-	/*
 	local XComGameState_Unit UnitState;
 
 	UnitState = XComGameState_Unit(NewGameState.GetGameStateForObjectID(ApplyEffectParameters.TargetStateObjectRef.ObjectID));
@@ -158,7 +178,7 @@ function bool TimeStopTicked(X2Effect_Persistent PersistentEffect, const out Eff
 	}
 	return true;
 
-	*/
+	
 }
 
 simulated function AddX2ActionsForVisualization(XComGameState VisualizeGameState, out VisualizationTrack BuildTrack, name EffectApplyResult)
@@ -256,7 +276,7 @@ simulated function AddX2ActionsForVisualization_Removed(XComGameState VisualizeG
 defaultproperties
 {
 	bIsImpairing= false
-	EffectName = 'TimeStopEffect'
+	EffectName = "TimeStopEffect"
 //	DamageTypes(1) = "Mental"
 	EffectTickedFn=TimeStopTicked
 	CustomIdleOverrideAnim="HL_StunnedIdle"

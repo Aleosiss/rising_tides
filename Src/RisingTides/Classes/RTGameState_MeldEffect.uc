@@ -1,7 +1,7 @@
 //---------------------------------------------------------------------------------------
 //  FILE:    RTGameState_MeldEffect.uc
 //  AUTHOR:  Aleosiss  
-//  DATE:    22 March 2016
+//  DATE:    22 May 2016
 //  PURPOSE: Extended GameState_Effect that holds custom listeners for per-unit MeldEffects.
 //---------------------------------------------------------------------------------------
 
@@ -11,7 +11,7 @@ var array<StateObjectReference> Members;
 var StateObjectReference		MeldHost, GameStateHost;
 var float CombinedWill, SharedHack;
 var bool bHasYourHandsMyEyes;
-
+// Initialize(XComGameState_Unit MeldMaker)
 function RTGameState_MeldEffect Initialize(XComGameState_Unit MeldMaker)
 {
 	local array<StateObjectReference> IteratorArray;
@@ -107,7 +107,6 @@ static function int GetCombinedWill(int numOfMembers)
 
 }
 
-
 // RemakeSelf(RTGameState_MeldEffect OtherMeldEffect)
 simulated function RemakeSelf(RTGameState_MeldEffect OtherMeldEffect)
 {
@@ -148,7 +147,6 @@ function EventListenerReturn OnTacticalGameEnd(Object EventData, Object EventSou
 	
 	return ELR_NoInterrupt;
 }
-
 
 // Add Unit To Meld
 simulated function EventListenerReturn AddUnitToMeld(Object EventData, Object EventSource, XComGameState GameState, Name EventID)
@@ -325,7 +323,6 @@ simulated function EventListenerReturn RemoveUnitFromMeld(Object EventData, Obje
 	 
 	// Remake member list, then recombine will
 	UpdatedMeldEffect.Members = CurrentMeldEffect.Members;
-	UpdatedMeldEffect.Members.AddItem(EnteringMeldUnit.GetReference());
 	UpdatedMeldEffect.CombinedWill = GetCombinedWill(UpdatedMeldEffect.Members.Length);
 	HackModifier = UpdatedMeldEffect.SharedHack - GameStateHostUnit.GetBaseStat(eStat_Hacking);
 
