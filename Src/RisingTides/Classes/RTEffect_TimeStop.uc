@@ -100,7 +100,7 @@ simulated function ExtendCooldownTimers(XComGameState_Unit TimeStoppedUnit) {
 	local int i;
 	
 	for(i = 0; i < TimeStoppedUnit.Abilities.Length; i++) {
-		AbilityState = `XCOMHISTORY.GetGameStateForObjectID(TimeStoppedUnit.Abilities[i]);
+		AbilityState = XComGameState_Ability(`XCOMHISTORY.GetGameStateForObjectID(TimeStoppedUnit.Abilities[i].ObjectID));
 		if(AbilityState.IsCoolingDown()) {
 			AbilityState.iCooldown += 3; // need to add to config	
 		}
@@ -113,7 +113,7 @@ simulated function ExtendEffectDurations(XComGameState_Unit TimeStoppedUnit) {
 
 	foreach `XCOMHISTORY.IterateByClassType(class'XComGameState_Effect', EffectState) {
 		if(EffectState.ApplyEffectParameters.TargetStateObjectRef.ObjectID == TimeStoppedUnit.ObjectID) {
-			if(!EffectState.GetX2Effect.bInfiniteDuration) {
+			if(!EffectState.GetX2Effect().bInfiniteDuration) {
 			EffectState.iTurnsRemaining += 3;			   
 			// need to somehow prevent these effects from doing damage while active... no idea how atm.
 			}
