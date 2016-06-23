@@ -8,4 +8,7 @@
 class RTGameState_TimeStopEffect extends XComGameState_Effect config(RTGhost);
 
 var int DamageTaken;
-var bool bTookExplosiveDamage;																					 
+var bool bTookExplosiveDamage;			
+var array<name> DamageTypesTaken;			
+
+

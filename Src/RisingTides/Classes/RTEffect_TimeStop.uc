@@ -15,33 +15,24 @@ var int PreviousStunDuration;
 simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffectParameters, XComGameState_BaseObject kNewTargetState, XComGameState NewGameState, XComGameState_Effect NewEffectState)
 {
 	local XComGameState_Unit UnitState;
-	local XComGameState_Effect ChangeState;
+	local RTGameState_TimeStopEffect TimeStopEFfectState;
 	local X2EventManager EventManager;
 	local UnitValue	UnitVal;
 	local bool IsOurTurn;
 
 	UnitState = XComGameState_Unit(kNewTargetState);
+	TimeStopEffectState = RTGameState_TimeStopEffect(NewEffectState);
 	bWasPreviouslyImmobilized = false;
 
 	if(UnitState != none)
 	{
+		// remove all action points... ZA WARUDO, TOKI YO, TOMARE! 
 		UnitState.ReserveActionPoints.Length = 0;
 		UnitState.ActionPoints.Length = 0;
 
 		if( UnitState.IsTurret() ) // Stunned Turret.   Update turret state.
 		{
 			UnitState.UpdateTurretState(false);
-		}
-
-		//  If it's the unit's turn, consume action points immediately
-		IsOurTurn = UnitState.ControllingPlayer == `TACTICALRULES.GetCachedUnitActionPlayerRef();
-		if (IsOurTurn)
-		{
-			// remove all action points... ZA WARUDO, TOKI YO, TOMARE! 
-			while (UnitState.ActionPoints.Length > 0)
-			{
-				UnitState.ActionPoints.Remove(0, 1);
-			}
 		}
 
 		// Immobilize to prevent scamper or panic from enabling this unit to move again.
@@ -57,14 +48,15 @@ simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffe
 
 		// TODO: Catch and delay the duration/effects of other effects
 		PreviousStunDuration = UnitState.StunnedActionPoints;
-
+		ExtendCooldownTimers(UnitState);
 		
-
 	}																			
 	
 	// You can't see any changes to the world while time is stopped, and you can't move either... don't know why the immo tag isn't working
 	AddPersistentStatChange(eStat_DetectionRadius, 0, MODOP_PostMultiplication);
 	AddPersistentStatChange(eStat_Mobility, 0, MODOP_PostMultiplication);
+	AddPersistentStatChange(eStat_Dodge, 0, MODOP_PostMultiplication);
+
 	super.OnEffectAdded(ApplyEffectParameters, kNewTargetState, NewGameState, NewEffectState);
 }
 
@@ -103,11 +95,39 @@ simulated function bool OnEffectTicked(const out EffectAppliedData ApplyEffectPa
 	return super.OnEffectTicked(ApplyEffectParameters, kNewEffectState, NewGameState, FirstApplication);
 }
 
+simulated function ExtendCooldownTimers(XComGameState_Unit TimeStoppedUnit) {
+	local XComGameState_Ability AbilityState;
+	local int i;
+	
+	for(i = 0; i < TimeStoppedUnit.Abilities.Length; i++) {
+		AbilityState = `XCOMHISTORY.GetGameStateForObjectID(TimeStoppedUnit.Abilities[i]);
+		if(AbilityState.IsCoolingDown()) {
+			AbilityState.iCooldown += 3; // need to add to config	
+		}
+	}
+}
+
+simulated function ExtendEffectDurations(XComGameState_Unit TimeStoppedUnit) {
+	local XComGameState_Effect EffectState;
+	local int i;
+
+	foreach `XCOMHISTORY.IterateByClassType(class'XComGameState_Effect', EffectState) {
+		if(EffectState.ApplyEffectParameters.TargetStateObjectRef.ObjectID == TimeStoppedUnit.ObjectID) {
+			if(!EffectState.GetX2Effect.bInfiniteDuration) {
+			EffectState.iTurnsRemaining += 3;			   
+			// need to somehow prevent these effects from doing damage while active... no idea how atm.
+			}
+		}
+	}
+}											 						
+
 simulated function OnEffectRemoved(const out EffectAppliedData ApplyEffectParameters, XComGameState NewGameState, bool bCleansed, XComGameState_Effect RemovedEffectState)
 {
 	local RTGameState_TimeStopEffect TimeStopEffectState;
 	local XComGameState_Unit UnitState;
 	local UnitValue UnitVal;
+
+	super.OnEffectRemoved(ApplyEffectParameters, NewGameState, bCleansed, RemovedEffectState);
 
 	UnitState = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(ApplyEffectParameters.TargetStateObjectRef.ObjectID));
 	if( UnitState != none)
@@ -132,13 +152,14 @@ simulated function OnEffectRemoved(const out EffectAppliedData ApplyEffectParame
 	TimeStopEffectState = RTGameState_TimeStopEffect(RemovedEffectState);
 	UnitState.TakeDamage(NewGameState, TimeStopEffectState.DamageTaken, 0, 0, , TimeStopEffectState, TimeStopEffectState.ApplyEffectParameters.SourceStateObjectRef, TimeStopEffectState.bTookExplosiveDamage, TimeStopEffectState.DamageTypesTaken);
 
-	super.OnEffectRemoved(ApplyEffectParameters, NewGameState, bCleansed, RemovedEffectState);
+
 }
 
 function bool TimeStopTicked(X2Effect_Persistent PersistentEffect, const out EffectAppliedData ApplyEffectParameters, XComGameState_Effect kNewEffectState, XComGameState NewGameState, bool FirstApplication)
 {
+	
 	local XComGameState_Unit UnitState;
-
+	/*
 	UnitState = XComGameState_Unit(NewGameState.GetGameStateForObjectID(ApplyEffectParameters.TargetStateObjectRef.ObjectID));
 	if (UnitState == none)
 		UnitState = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(ApplyEffectParameters.TargetStateObjectRef.ObjectID));
@@ -176,7 +197,9 @@ function bool TimeStopTicked(X2Effect_Persistent PersistentEffect, const out Eff
 			return false;
 		}
 	}
-	return true;
+
+	*/
+	return false;
 
 	
 }
@@ -243,6 +266,24 @@ simulated function AddX2ActionsForVisualization_Sync(XComGameState VisualizeGame
 	//We assume 'AA_Success', because otherwise the effect wouldn't be here (on load) to get sync'd
 	AddX2ActionsForVisualization(VisualizeGameState, BuildTrack, 'AA_Success');
 }
+
+function int GetDefendingDamageModifier(XComGameState_Effect EffectState, XComGameState_Unit Attacker, Damageable TargetDamageable, XComGameState_Ability AbilityState, const out EffectAppliedData AppliedData, const int CurrentDamage, X2Effect_ApplyWeaponDamage WeaponDamageEffect) { 
+	local int DamageTaken, i;
+	local RTGameState_TimeStopEffect TimeStopEffectState;
+
+	// You can't take damage during a time-stop. Negate and store the damage for when it ends. 
+
+	TimeStopEffectState = RTGameState_TimeStopEffect(EffectState);
+
+
+	TimeStopEffectState.DamageTaken += CurrentDamage;
+	TimeStopEffectState.DamageTypesTaken.AddItem(WeaponDamageEffect.EffectDamageValue.DamageType);
+	
+
+
+	return CurrentDamage * 0; 
+}
+
 
 // if the stun is immediately removed due to not all action points being consumed, we will still need
 // to visualize the unit getting up. Handle that here so that we can use the same code for normal and
