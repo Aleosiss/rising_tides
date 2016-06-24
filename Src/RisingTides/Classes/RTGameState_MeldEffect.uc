@@ -73,8 +73,10 @@ function RTGameState_MeldEffect Initialize(XComGameState_Unit MeldMaker)
 		}
 		else
 		{
-			if(MeldMaker.HasSoldierAbility('YourHandsMyEyes'))
+			if(MeldMaker.HasSoldierAbility('YourHandsMyEyes')) {
 				SharedHack = MeldMaker.GetBaseStat(eStat_Hacking);
+				bHasYourHandsMyEyes = true;
+			}
 			else
 				SharedHack = 0.00f;
 		}
