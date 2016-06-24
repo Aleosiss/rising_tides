@@ -161,9 +161,9 @@ simulated function OnEffectRemoved(const out EffectAppliedData ApplyEffectParame
 
 function bool TimeStopTicked(X2Effect_Persistent PersistentEffect, const out EffectAppliedData ApplyEffectParameters, XComGameState_Effect kNewEffectState, XComGameState NewGameState, bool FirstApplication)
 {
-	
-	local XComGameState_Unit UnitState;
 	/*
+	local XComGameState_Unit UnitState;
+	
 	UnitState = XComGameState_Unit(NewGameState.GetGameStateForObjectID(ApplyEffectParameters.TargetStateObjectRef.ObjectID));
 	if (UnitState == none)
 		UnitState = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(ApplyEffectParameters.TargetStateObjectRef.ObjectID));
@@ -285,7 +285,7 @@ function int GetDefendingDamageModifier(XComGameState_Effect EffectState, XComGa
 	
 
 
-	return CurrentDamage * 0; 
+	return -(CurrentDamage); 
 }
 
 
