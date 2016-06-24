@@ -285,7 +285,7 @@ function int GetDefendingDamageModifier(XComGameState_Effect EffectState, XComGa
 	
 
 
-	return CurrentDamage * 0; 
+	return -(CurrentDamage); 
 }
 
 
