@@ -53,6 +53,12 @@
     <Content Include="Src\RisingTides\Classes\RTAbility_RiflemanAbilitySet.uc">
       <SubType>Content</SubType>
     </Content>
+    <Content Include="Src\RisingTides\Classes\RTAction_Greyscaled.uc">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Src\RisingTides\Classes\RTAction_GreyscaledEnd.uc">
+      <SubType>Content</SubType>
+    </Content>
     <Content Include="Src\RisingTides\Classes\RTCondition_OverwatchVisibility.uc">
       <SubType>Content</SubType>
     </Content>

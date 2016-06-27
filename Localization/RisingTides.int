@@ -23,5 +23,11 @@ RTFriendlyName="Damn Good Ground"
 RTFriendlyName="Slow is Smooth"
 
 [RTEffect_TimeStop]
-StunnedText="Frozen in time!"
-RoboticStunnedText="Frozen in time!"
+TimeStopName="Greyscaled"
+TimeStopDesc="This unit is frozen in time, unable to percieve changes to its environment."
+RulerTimeStopTickFlyover="Timelocked!"
+TimeStopEffectAddedString=""
+TimeStopEffectPersistsString="Timelocked!"
+TimeStopEffectRemovedString="Time Stop Ended!"
+TimeStopLostFlyover="Time Stop Ended!"
+LargeUnitTimeStopLostFlyover="Time Stop Ended!"

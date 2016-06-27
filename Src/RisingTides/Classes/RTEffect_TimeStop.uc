@@ -4,12 +4,12 @@
 
 class RTEffect_TimeStop extends X2Effect_PersistentStatChange;
 
-var localized string	StunnedText;
-var localized string	RoboticStunnedText;
+var localized string	TimeStopName, TimeStopDesc, RulerTimeStopTickFlyover, TimeStopEffectAddedString, TimeStopEffectPersistsString, TimeStopEffectRemovedString, TimeStopLostFlyover, LargeUnitTimeStopLostFlyover;
 var localized string	RTFriendlyNameAim;
 var localized string	RTFriendlyNameCrit;
 
 var bool bWasPreviouslyImmobilized;
+var bool bAllowReorder;
 var int PreviousStunDuration;
 
 simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffectParameters, XComGameState_BaseObject kNewTargetState, XComGameState NewGameState, XComGameState_Effect NewEffectState)
@@ -49,6 +49,7 @@ simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffe
 		// TODO: Catch and delay the duration/effects of other effects
 		PreviousStunDuration = UnitState.StunnedActionPoints;
 		ExtendCooldownTimers(UnitState);
+		ExtendEffectDurations(UnitState);
 		
 	}																			
 	
@@ -65,12 +66,12 @@ function GetToHitAsTargetModifiers(XComGameState_Effect EffectState, XComGameSta
 	local ShotModifierInfo ModInfoAim, ModInfoCrit;
 
 	ModInfoAim.ModType = eHit_Success;
-	ModInfoAim.Reason = RTFriendlyNameAim;
+	ModInfoAim.Reason = TimeStopName;
 	ModInfoAim.Value = 100;
 	ShotModifiers.AddItem(ModInfoAim);
 
 	ModInfoCrit.ModType = eHit_Crit;
-	ModInfoCrit.Reason = RTFriendlyNameCrit;
+	ModInfoCrit.Reason = TimeStopName;
 	ModInfoCrit.Value = 100;
 	ShotModifiers.AddItem(ModInfoCrit);							   					  
 }
@@ -90,7 +91,11 @@ simulated function bool OnEffectTicked(const out EffectAppliedData ApplyEffectPa
 	TimeStoppedUnit = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(ApplyEffectParameters.TargetStateObjectRef.ObjectID));
 
 	TimeStoppedUnit.ActionPoints.Length = 0;
-	TimeStoppedUnit.ReserveActionPoints.Length = 0; 
+	TimeStoppedUnit.ReserveActionPoints.Length = 0;
+	
+	// extend cooldown/effect timers
+	ExtendCooldownTimers(TimeStoppedUnit); 
+	ExtendEffectDurations(TimeStoppedUnit);
 	
 	return super.OnEffectTicked(ApplyEffectParameters, kNewEffectState, NewGameState, FirstApplication);
 }
@@ -102,7 +107,7 @@ simulated function ExtendCooldownTimers(XComGameState_Unit TimeStoppedUnit) {
 	for(i = 0; i < TimeStoppedUnit.Abilities.Length; i++) {
 		AbilityState = XComGameState_Ability(`XCOMHISTORY.GetGameStateForObjectID(TimeStoppedUnit.Abilities[i].ObjectID));
 		if(AbilityState.IsCoolingDown()) {
-			AbilityState.iCooldown += 3; // need to add to config	
+			AbilityState.iCooldown += 1; // need to add to config	
 		}
 	}
 }
@@ -114,7 +119,7 @@ simulated function ExtendEffectDurations(XComGameState_Unit TimeStoppedUnit) {
 	foreach `XCOMHISTORY.IterateByClassType(class'XComGameState_Effect', EffectState) {
 		if(EffectState.ApplyEffectParameters.TargetStateObjectRef.ObjectID == TimeStoppedUnit.ObjectID) {
 			if(!EffectState.GetX2Effect().bInfiniteDuration) {
-			EffectState.iTurnsRemaining += 3;			   
+			EffectState.iTurnsRemaining += 1;			   
 			// need to somehow prevent these effects from doing damage while active... no idea how atm.
 			}
 		}
@@ -149,8 +154,9 @@ simulated function OnEffectRemoved(const out EffectAppliedData ApplyEffectParame
 		
 		// And thus, time resumes...
 		TimeStopEffectState = RTGameState_TimeStopEffect(RemovedEffectState);
-		UnitState.TakeDamage(NewGameState, TimeStopEffectState.DamageTaken, 0, 0, , TimeStopEffectState, TimeStopEffectState.ApplyEffectParameters.SourceStateObjectRef, TimeStopEffectState.bTookExplosiveDamage, TimeStopEffectState.DamageTypesTaken);
 
+
+		UnitState.TakeDamage(NewGameState, TimeStopEffectState.DamageTaken, 0, 0, , TimeStopEffectState, TimeStopEffectState.ApplyEffectParameters.SourceStateObjectRef, TimeStopEffectState.bTookExplosiveDamage, TimeStopEffectState.DamageTypesTaken);
 		
 		NewGameState.AddStateObject(UnitState);
 	}
@@ -208,69 +214,6 @@ function bool TimeStopTicked(X2Effect_Persistent PersistentEffect, const out Eff
 	
 }
 
-simulated function AddX2ActionsForVisualization(XComGameState VisualizeGameState, out VisualizationTrack BuildTrack, name EffectApplyResult)
-{
-	local X2Action_PlayAnimation PlayAnimation;
-	local XComGameState_Unit TargetUnit;
-	local XGUnit Unit;
-	local XComUnitPawn UnitPawn;
-
-	TargetUnit = XComGameState_Unit(VisualizeGameState.GetGameStateForObjectID(BuildTrack.StateObject_NewState.ObjectID));
-	if(TargetUnit == none)
-	{
-		`assert(false);
-		TargetUnit = XComGameState_Unit(BuildTrack.StateObject_NewState);
-	}
-
-	if (EffectApplyResult == 'AA_Success' && TargetUnit != none)
-	{
-		if( TargetUnit.IsTurret() )
-		{
-			class'X2Action_UpdateTurretAnim'.static.AddToVisualizationTrack(BuildTrack, VisualizeGameState.GetContext());
-		}
-		else
-		{
-			// Not a turret
-
-			Unit = XGUnit(BuildTrack.TrackActor);
-			if( Unit != None )
-			{
-				UnitPawn = Unit.GetPawn();
-
-				// The unit may already be locked down (i.e. Viper bind), if so, do not play the stun start anim
-				if( (UnitPawn != none) && (UnitPawn.GetAnimTreeController().CanPlayAnimation('HL_StunnedStart')) )
-				{
-					// Play the start stun animation
-					PlayAnimation = X2Action_PlayAnimation(class'X2Action_PlayAnimation'.static.AddToVisualizationTrack(BuildTrack, VisualizeGameState.GetContext()));
-					PlayAnimation.Params.AnimName = 'HL_StunnedStart';
-					PlayAnimation.bResetWeaponsToDefaultSockets = true;
-				}
-			}
-		}
-
-		if(TargetUnit.ActionPoints.Length > 0)
-		{
-			// unit had enough action points to consume the stun, so show the flyovers and just stand back up
-			if (VisualizationFn != none)
-				VisualizationFn(VisualizeGameState, BuildTrack, EffectApplyResult);		
-
-			// we are just standing right back up
-			AddX2ActionsForVisualization_Removed_Internal(VisualizeGameState, BuildTrack, EffectApplyResult);
-		}
-		else
-		{
-			// only apply common persistent visualization if we aren't immediately removing the effect
-			super.AddX2ActionsForVisualization(VisualizeGameState, BuildTrack, EffectApplyResult);
-		}
-	}
-}
-
-simulated function AddX2ActionsForVisualization_Sync(XComGameState VisualizeGameState, out VisualizationTrack BuildTrack)
-{
-	//We assume 'AA_Success', because otherwise the effect wouldn't be here (on load) to get sync'd
-	AddX2ActionsForVisualization(VisualizeGameState, BuildTrack, 'AA_Success');
-}
-
 function int GetDefendingDamageModifier(XComGameState_Effect EffectState, XComGameState_Unit Attacker, Damageable TargetDamageable, XComGameState_Ability AbilityState, const out EffectAppliedData AppliedData, const int CurrentDamage, X2Effect_ApplyWeaponDamage WeaponDamageEffect) { 
 	local int DamageTaken, i;
 	local RTGameState_TimeStopEffect TimeStopEffectState;
@@ -288,42 +231,166 @@ function int GetDefendingDamageModifier(XComGameState_Effect EffectState, XComGa
 	return -(CurrentDamage); 
 }
 
-
-// if the stun is immediately removed due to not all action points being consumed, we will still need
-// to visualize the unit getting up. Handle that here so that we can use the same code for normal and
-// immediately recovery
-simulated private function AddX2ActionsForVisualization_Removed_Internal(XComGameState VisualizeGameState, out VisualizationTrack BuildTrack, const name EffectApplyResult)
+static function bool ShouldTimeStopAsLargeUnit(XComGameState_Unit TargetUnit)
 {
-	local X2Action_PlayAnimation PlayAnimation;
-	local XComGameState_Unit StunnedUnit;
+	return (TargetUnit.GetMyTemplate().UnitSize > 1 || TargetUnit.GetMyTemplateName() == 'Avatar') && !class'RTHelpers'.static.IsUnitAlienRuler(TargetUnit);
+}
 
-	StunnedUnit = XComGameState_Unit(BuildTrack.StateObject_NewState);
+simulated function AddX2ActionsForVisualization(XComGameState VisualizeGameState, out VisualizationTrack BuildTrack, name EffectApplyResult)
+{
+	local RTAction_Greyscaled TimeStopAction;
 
-	if( StunnedUnit.IsTurret() )
+	if (BuildTrack.StateObject_NewState != none)
 	{
-		class'X2Action_UpdateTurretAnim'.static.AddToVisualizationTrack(BuildTrack, VisualizeGameState.GetContext());
+		TimeStopAction = RTAction_Greyscaled(class'RTAction_Greyscaled'.static.CreateVisualizationAction(VisualizeGameState.GetContext(), BuildTrack.TrackActor));
+		TimeStopAction.PlayIdle = true;
+		BuildTrack.TrackActions.AddItem(TimeStopAction);
 	}
-	else if (StunnedUnit.IsAlive() && !StunnedUnit.IsIncapacitated()) //Don't play the animation if the unit is going straight from stunned to killed
+}
+
+
+simulated function AddX2ActionsForVisualization_Sync( XComGameState VisualizeGameState, out VisualizationTrack BuildTrack )
+{
+	local RTAction_Greyscaled TimeStopAction;
+
+	super.AddX2ActionsForVisualization_Sync(VisualizeGameState, BuildTrack);
+	if (XComGameState_Unit(BuildTrack.StateObject_NewState) != none)
 	{
-		// The unit is not a turret and is not dead/unconscious/bleeding-out
-		PlayAnimation = X2Action_PlayAnimation(class'X2Action_PlayAnimation'.static.AddToVisualizationTrack(BuildTrack, VisualizeGameState.GetContext()));
-		PlayAnimation.Params.AnimName = 'HL_StunnedStop';
+		TimeStopAction = RTAction_Greyscaled(class'RTAction_Greyscaled'.static.CreateVisualizationAction(VisualizeGameState.GetContext(), BuildTrack.TrackActor));
+		TimeStopAction.PlayIdle = true;
+		BuildTrack.TrackActions.AddItem(TimeStopAction);
+	}
+}
+
+// rulers show a different flyover from other units, so this function splits that out
+static protected function string GetFlyoverTickText(XComGameState_Unit UnitState)
+{
+	local XComGameState_Effect EffectState;
+	local X2AbilityTag AbilityTag;
+
+	EffectState = UnitState.GetUnitAffectedByEffectState(default.EffectName);
+	if(class'RTHelpers'.static.IsUnitAlienRuler(UnitState))
+	{
+		EffectState = UnitState.GetUnitAffectedByEffectState(default.EffectName);
+		AbilityTag = X2AbilityTag(XComEngine(class'Engine'.static.GetEngine()).LocalizeContext.FindTag("Ability"));
+		AbilityTag.ParseObj = EffectState;
+		return class'XComLocalizer'.static.ExpandString(default.RulerTimeStopTickFlyover);
+	}
+	else
+	{
+		return default.TimeStopName;
+	}
+}
+
+simulated function ModifyTracksVisualization(XComGameState VisualizeGameState, out VisualizationTrack ModifyTrack, const name EffectApplyResult)
+{
+	local int ActionIndex;
+	local int PlacementIndex;
+	local VisualizationTrack TimeStopTrack;
+	local XComGameState_Unit UnitState;
+
+	PlacementIndex = -1;
+
+	UnitState = XComGameState_Unit(ModifyTrack.StateObject_NewState);
+	if( UnitState != none && EffectApplyResult == 'AA_Success' )
+	{
+		//  Make the TimeStop happen immediately after the wait, rather than waiting until after the apply damage action
+		class'RTAction_Greyscaled'.static.AddToVisualizationTrack(TimeStopTrack, VisualizeGameState.GetContext());
+		class'X2StatusEffects'.static.AddEffectSoundAndFlyOverToTrack(TimeStopTrack, VisualizeGameState.GetContext(), GetFlyoverTickText(UnitState), '', eColor_Bad, default.StatusIcon);
+		class'X2StatusEffects'.static.AddEffectMessageToTrack(TimeStopTrack, default.TimeStopEffectAddedString, VisualizeGameState.GetContext());
+		class'X2StatusEffects'.static.UpdateUnitFlag(TimeStopTrack, VisualizeGameState.GetContext());
+	}
+
+	for( ActionIndex = 0; ActionIndex < ModifyTrack.TrackActions.Length; ++ActionIndex )
+	{
+		// If we have a persistent effect, make sure we add to the end.
+		if( ModifyTrack.TrackActions[ActionIndex].IsA('X2Action_PersistentEffect') )
+		{
+			PlacementIndex = ModifyTrack.TrackActions.Length;
+		}
+
+		// Otherwise if we find a wait for ability effect, immediately follow it.
+		if( bAllowReorder && PlacementIndex == -1 && ModifyTrack.TrackActions[ActionIndex].IsA('X2Action_WaitForAbilityEffect') )
+		{
+			PlacementIndex = ActionIndex + 1;
+		}
+	}
+
+	if( PlacementIndex == -1 )
+	{
+		PlacementIndex = ModifyTrack.TrackActions.Length;
+	}
+	
+	// Put the TimeStop visualization in the right spot
+	if( TimeStopTrack.TrackActions.Length != 0 )
+	{
+		ModifyTrack.TrackActions.Insert(PlacementIndex, TimeStopTrack.TrackActions.Length);
+		for( ActionIndex = 0; ActionIndex < TimeStopTrack.TrackActions.Length; ++ActionIndex )
+		{
+			ModifyTrack.TrackActions[PlacementIndex + ActionIndex] = TimeStopTrack.TrackActions[ActionIndex];
+		}
+	}
+}
+
+static function TimeStopVisualizationTicked(XComGameState VisualizeGameState, out VisualizationTrack BuildTrack, const name EffectApplyResult)
+{
+	local XComGameState_Unit UnitState;
+	local array<StateObjectReference> OutEnemyViewers;
+	local bool bVisible;
+
+	UnitState = XComGameState_Unit(BuildTrack.StateObject_NewState);
+	class'X2TacticalVisibilityHelpers'.static.GetEnemyViewersOfTarget(UnitState.ObjectID, OutEnemyViewers);
+	if (UnitState != none)
+	{
+		if(OutEnemyViewers.Length != 0) {
+			//class'X2StatusEffects'.static.AddEffectCameraPanToAffectedUnitToTrack(BuildTrack, VisualizeGameState.GetContext());
+			//class'X2StatusEffects'.static.AddEffectSoundAndFlyOverToTrack(BuildTrack, VisualizeGameState.GetContext(), GetFlyoverTickText(UnitState), '', eColor_Bad, default.StatusIcon);
+			class'X2StatusEffects'.static.AddEffectMessageToTrack(BuildTrack, default.TimeStopEffectPersistsString, VisualizeGameState.GetContext());
+		}
+		class'X2StatusEffects'.static.UpdateUnitFlag(BuildTrack, VisualizeGameState.GetContext());
 	}
 }
 
 simulated function AddX2ActionsForVisualization_Removed(XComGameState VisualizeGameState, out VisualizationTrack BuildTrack, const name EffectApplyResult, XComGameState_Effect RemovedEffect)
 {
+	local XComGameState_Unit UnitState;
+	local GameRulesCache_VisibilityInfo VisInfo;
+	local bool bVisible;
+	local string FlyoverText;
+
 	super.AddX2ActionsForVisualization_Removed(VisualizeGameState, BuildTrack, EffectApplyResult, RemovedEffect);
 
-	AddX2ActionsForVisualization_Removed_Internal(VisualizeGameState, BuildTrack, EffectApplyResult);
+	bVisible = true;
+	UnitState = XComGameState_Unit(BuildTrack.StateObject_NewState);
+	`TACTICALRULES.VisibilityMgr.GetVisibilityInfo(RemovedEffect.ApplyEffectParameters.SourceStateObjectRef.ObjectID, UnitState.ObjectID, VisInfo);
+	if (!VisInfo.bVisibleGameplay)
+		bVisible = false;
+
+
+	if (UnitState != none)
+	{
+		class'RTAction_GreyscaledEnd'.static.AddToVisualizationTrack(BuildTrack, VisualizeGameState.GetContext());
+		if (bVisible)
+		{
+			FlyoverText = ShouldTimeStopAsLargeUnit(UnitState) ? default.LargeUnitTimeStopLostFlyover : default.TimeStopLostFlyover;
+			class'X2StatusEffects'.static.AddEffectCameraPanToAffectedUnitToTrack(BuildTrack, VisualizeGameState.GetContext());
+			class'X2StatusEffects'.static.AddEffectSoundAndFlyOverToTrack(BuildTrack, VisualizeGameState.GetContext(), FlyoverText, '', eColor_Good, default.StatusIcon);
+			class'X2StatusEffects'.static.AddEffectMessageToTrack(BuildTrack, default.TimeStopEffectRemovedString, VisualizeGameState.GetContext());
+			
+			
+		}
+		class'X2StatusEffects'.static.UpdateUnitFlag(BuildTrack, VisualizeGameState.GetContext());
+	}
 }
 
 defaultproperties
 {
-	bIsImpairing= false
-	EffectName = "TimeStopEffect"
-//	DamageTypes(1) = "Mental"
+	bIsImpairing=false
+	EffectName="Freeze"
 	EffectTickedFn=TimeStopTicked
-	CustomIdleOverrideAnim="HL_StunnedIdle"
+	EffectTickedVisualizationFn=TimeStopVisualizationTicked
+	ModifyTracksFn=ModifyTracksVisualization
+	bAllowReorder=true
+
 	GameStateEffectClass = class'RTGameState_TimeStopEffect'
 }

@@ -1389,9 +1389,7 @@ static function X2AbilityTemplate TimeStandsStill()
 	TimeStopEffect = new class'RTEffect_TimeStop';
 	TimeStopEffect.BuildPersistentEffect(1, true, true, false, eGameRule_PlayerTurnBegin);
 	TimeStopEffect.ApplyChance = 100;
-	TimeStopEffect.VisualizationFn = class'X2StatusEffects'.static.StunnedVisualization;
-	TimeStopEffect.EffectTickedVisualizationFn = class'X2StatusEffects'.static.StunnedVisualizationTicked;
-	TimeStopEffect.EffectRemovedVisualizationFn = class'X2StatusEffects'.static.StunnedVisualizationRemoved;
+	TimeStopEffect.EffectTickedVisualizationFn = class'RTEffect_TimeStop'.static.TimeStopVisualizationTicked;
 	TimeStopEffect.SetDisplayInfo(ePerkBuff_Penalty, "Greyscaled", 
 		"This unit has been frozen in time. It cannot take actions and is much easier to hit.", Template.IconImage);
 	TimeStopEffect.bRemoveWhenTargetDies = true;
@@ -1417,7 +1415,8 @@ static function X2AbilityTemplate TimeStandsStillCleanseListener()
 {
 	local X2AbilityTemplate						Template;
 	local X2Condition_UnitProperty				UnitPropertyCondition;
-	local X2Effect_RemoveEffects				RemoveMultiEffect, RemoveSelfEffect;
+	local X2Effect_RemoveEffects				RemoveSelfEffect; 
+	local X2Effect_RemoveEffects				RemoveMultiEffect;
 	local X2AbilityMultiTarget_Radius			MultiTarget;
  	local X2AbilityTrigger_EventListener		EventListener;
 
@@ -1448,7 +1447,7 @@ static function X2AbilityTemplate TimeStandsStillCleanseListener()
 	RemoveSelfEffect.bCheckSource = false;
 
 	RemoveMultiEffect = new class'X2Effect_RemoveEffects';
-	RemoveMultiEffect.EffectNamesToRemove.AddItem('TimeStopEffect');
+	RemoveMultiEffect.EffectNamesToRemove.AddItem('Freeze');
 	RemoveMultiEffect.bCheckSource = false;
 	
 	Template.AddShooterEffect(RemoveSelfEffect);
