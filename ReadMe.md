@@ -19,13 +19,14 @@ This would be a bare-bones content mod. I also have the following content in min
 ###### Current TODOs:  
               - Tidy up class files (remove legacy code, document, etc)
               - Finish up current features
-                - RTGameState_TimeStopEffect damage negation/reapplication
+                - Time Stop damage pop-up (FINAL FEATURE W00t)
                 - Implement Harbinger
               - Extract Sovereign code from Scopped and Dropped
               - Brainstorm the rest of Whisper's abilities
                 - Offense tree (Daybreak Flame), Utility tree (Time Stands Still), Defense tree (???)
                   
 http://hastebin.com/ipulitayis.coffee
+http://hastebin.com/ikifehuhoj.vhdl
 
               
 ###### Current Unresolved:
