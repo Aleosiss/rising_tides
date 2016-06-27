@@ -26,6 +26,7 @@ This would be a bare-bones content mod. I also have the following content in min
                 - Offense tree (Daybreak Flame), Utility tree (Time Stands Still), Defense tree (???)
                   
 http://hastebin.com/ipulitayis.coffee
+http://hastebin.com/ikifehuhoj.vhdl
 
               
 ###### Current Unresolved:
