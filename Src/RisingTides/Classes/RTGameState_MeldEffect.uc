@@ -11,6 +11,7 @@ var array<StateObjectReference> Members;
 var StateObjectReference		MeldHost, GameStateHost;
 var float CombinedWill, SharedHack;
 var bool bHasYourHandsMyEyes;
+
 // Initialize(XComGameState_Unit MeldMaker)
 function RTGameState_MeldEffect Initialize(XComGameState_Unit MeldMaker)
 {
