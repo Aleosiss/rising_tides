@@ -1356,7 +1356,7 @@ static function X2AbilityTemplate TimeStandsStill()
 	TimeMasterEffect = new class'RTEffect_TimeStopMaster';
 	TimeMasterEffect.BuildPersistentEffect(1, true, true, false, eGameRule_PlayerTurnEnd);
 	TimeMasterEffect.EffectName = 'TimeStopMasterEffect';
-	Template.AddShooterEffect(TimeMasterEffect)
+	Template.AddShooterEffect(TimeMasterEffect);
 
 	CounterEffect = new class'RTEffect_Counter';
 	CounterEffect.BuildPersistentEffect(1, true, true, false, eGameRule_PlayerTurnEnd);
@@ -1450,7 +1450,7 @@ static function X2AbilityTemplate TimeStandsStillCleanseListener()
 
 	RemoveSelfEffect = new class'X2Effect_RemoveEffects';
 	RemoveSelfEffect.EffectNamesToRemove.AddItem('TimeStandsStillCounterEffect');
-	RemoveSelfEffect.EffectNamesToRemove.AddItem('TimeStopMasterEffect')
+	RemoveSelfEffect.EffectNamesToRemove.AddItem('TimeStopMasterEffect');
 	RemoveSelfEffect.bCheckSource = false;
 
 	RemoveMultiEffect = new class'X2Effect_RemoveEffects';

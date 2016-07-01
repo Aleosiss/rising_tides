@@ -128,6 +128,9 @@
     <Content Include="Src\RisingTides\Classes\RTEffect_TimeStopEnd.uc">
       <SubType>Content</SubType>
     </Content>
+    <Content Include="Src\RisingTides\Classes\RTEffect_TimeStopMaster.uc">
+      <SubType>Content</SubType>
+    </Content>
     <Content Include="Src\RisingTides\Classes\RTEffect_VPTargeting.uc">
       <SubType>Content</SubType>
     </Content>

@@ -129,6 +129,7 @@ simulated function ExtendEffectDurations(XComGameState_Unit TimeStoppedUnit) {
 simulated function OnEffectRemoved(const out EffectAppliedData ApplyEffectParameters, XComGameState NewGameState, bool bCleansed, XComGameState_Effect RemovedEffectState)
 {
 	local RTGameState_TimeStopEffect TimeStopEffectState;
+	local X2Effect_ApplyWeaponDamage	DamageEffect;
 	local XComGameState_Unit UnitState;
 	local UnitValue UnitVal;
 
@@ -225,6 +226,7 @@ function int GetDefendingDamageModifier(XComGameState_Effect EffectState, XComGa
 
 	TimeStopEffectState.DamageTaken += CurrentDamage;
 	TimeStopEffectState.DamageTypesTaken.AddItem(WeaponDamageEffect.EffectDamageValue.DamageType);
+	`RedScreen("Rising Tides: Time Stop has negated " @ TimeStopEffectState.DamageTaken @ " damage so far! This time, it was of type " @ WeaponDamageEffect.EffectDamageValue.DamageType @"!");
 	
 
 
@@ -354,11 +356,15 @@ static function TimeStopVisualizationTicked(XComGameState VisualizeGameState, ou
 simulated function AddX2ActionsForVisualization_Removed(XComGameState VisualizeGameState, out VisualizationTrack BuildTrack, const name EffectApplyResult, XComGameState_Effect RemovedEffect)
 {
 	local XComGameState_Unit UnitState;
+	local X2Action_ApplyWeaponDamageToUnit DamageAction;
+	local XComGameStateContext_Ability  Context;
 	local GameRulesCache_VisibilityInfo VisInfo;
 	local bool bVisible;
 	local string FlyoverText;
 
 	super.AddX2ActionsForVisualization_Removed(VisualizeGameState, BuildTrack, EffectApplyResult, RemovedEffect);
+	Context = XComGameStateContext_Ability(VisualizeGameState.GetContext());
+
 
 	bVisible = true;
 	UnitState = XComGameState_Unit(BuildTrack.StateObject_NewState);
@@ -380,6 +386,7 @@ simulated function AddX2ActionsForVisualization_Removed(XComGameState VisualizeG
 			
 		}
 		class'X2StatusEffects'.static.UpdateUnitFlag(BuildTrack, VisualizeGameState.GetContext());
+
 	}
 }
 
