@@ -21,18 +21,27 @@ This would be a bare-bones content mod. I also have the following content in min
               - Finish up current features
                 - Time Stop damage pop-up (FINAL FEATURE W00t)
                 - Implement Harbinger
-              - Extract Sovereign code from Scopped and Dropped
-              - Brainstorm the rest of Whisper's abilities
-                - Offense tree (Daybreak Flame), Utility tree (Time Stands Still), Defense tree (???)
+                - Change Meld to incorporate a boolean array so that I can extend its checks??
+                - Change special firing actions to use flat modifiers instead of %floats
                   
 http://hastebin.com/ipulitayis.coffee
+
 http://hastebin.com/ikifehuhoj.vhdl
 
-              
-###### Current Unresolved:
+http://hastebin.com/oporuyiceh.axapta
 
+// beginning of RTGameState_LinkedEffect
+http://hastebin.com/oqebuwuwib.axapta
+
+// beginning of RTEffect_LinkedIntelligence
+http://hastebin.com/itoqecezed.axapta
+
+###### Current Unresolved:
+              - // some snippets of the second to last chapter of Falling Stars
+              - http://hastebin.com/raw/arukopovex
 
 ###### Current Table
               - Twitch Reaction: If an enemy takes an offensive action against an allied enemy, take a reaction shot at them immediately at -40 aim, once per turn.
               - Triangulation: Spread Over the Shoulder to all melded allies.
+              - Linked Intelligences: When this unit takes a reaction shot, all melded allies take a reaction shot against the same target.
               

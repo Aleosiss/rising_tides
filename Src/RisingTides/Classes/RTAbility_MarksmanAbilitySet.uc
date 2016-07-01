@@ -204,7 +204,7 @@ static function X2AbilityTemplate RTOverwatch()
 	Template.AddTargetEffect(ReserveActionPointsEffect);
 
 	CoveringFireEffect = new class'X2Effect_CoveringFire';
-	CoveringFireEffect.AbilityToActivate = 'OverwatchShot';
+	CoveringFireEffect.AbilityToActivate = 'RTOverwatchShot';
 	CoveringFireEffect.BuildPersistentEffect(1, false, true, false, eGameRule_PlayerTurnBegin);
 	CoveringFireCondition = new class'X2Condition_AbilityProperty';
 	CoveringFireCondition.OwnerHasSoldierAbilities.AddItem('CoveringFire');
