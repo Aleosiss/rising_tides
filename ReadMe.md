@@ -37,4 +37,5 @@ http://hastebin.com/oporuyiceh.axapta
 ###### Current Table
               - Twitch Reaction: If an enemy takes an offensive action against an allied enemy, take a reaction shot at them immediately at -40 aim, once per turn.
               - Triangulation: Spread Over the Shoulder to all melded allies.
+              - Linked Intelligences: When this unit takes a reaction shot, all melded allies take a reaction shot against the same target.
               
