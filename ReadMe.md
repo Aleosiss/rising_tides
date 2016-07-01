@@ -30,9 +30,11 @@ http://hastebin.com/ikifehuhoj.vhdl
 
 http://hastebin.com/oporuyiceh.axapta
 
+http://hastebin.com/jolozexeza.axapta
+
               
 ###### Current Unresolved:
-
+              - http://hastebin.com/raw/arukopovex
 
 ###### Current Table
               - Twitch Reaction: If an enemy takes an offensive action against an allied enemy, take a reaction shot at them immediately at -40 aim, once per turn.
