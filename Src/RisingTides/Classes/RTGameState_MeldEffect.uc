@@ -25,6 +25,7 @@ function RTGameState_MeldEffect Initialize(XComGameState_Unit MeldMaker)
 		if(IteratorMeldEffect != none){
 			if(IteratorMeldEffect.ObjectID != ObjectID){
 				IteratorArray.AddItem(IteratorMeldEffect.GetReference());
+				break;
 
 			}
 		}
