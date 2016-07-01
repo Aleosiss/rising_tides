@@ -30,10 +30,14 @@ http://hastebin.com/ikifehuhoj.vhdl
 
 http://hastebin.com/oporuyiceh.axapta
 
-http://hastebin.com/jolozexeza.axapta
+// beginning of RTGameState_LinkedEffect
+http://hastebin.com/oqebuwuwib.axapta
 
-              
+// beginning of RTEffect_LinkedIntelligence
+http://hastebin.com/itoqecezed.axapta
+
 ###### Current Unresolved:
+              - // some snippets of the second to last chapter of Falling Stars
               - http://hastebin.com/raw/arukopovex
 
 ###### Current Table
