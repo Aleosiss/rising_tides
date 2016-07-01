@@ -21,7 +21,6 @@ This would be a bare-bones content mod. I also have the following content in min
               - Finish up current features
                 - Time Stop damage pop-up (FINAL FEATURE W00t)
                 - Implement Harbinger
-              - Extract Sovereign code from Scopped and Dropped
               - Brainstorm the rest of Whisper's abilities
                 - Offense tree (Daybreak Flame), Utility tree (Time Stands Still), Defense tree (???)
                   
