@@ -5,7 +5,6 @@ class RTEffect_TimeStopEnd extends X2Effect_RemoveEffects;
 simulated function bool ShouldRemoveEffect(XComGameState_Effect EffectState, X2Effect_Persistent PersistentEffect)
 {
 	local bool bShouldRemove;
-	local RTEffect_TimeStop ComparatorTimeStopEffect;
 
 	bShouldRemove = false;
 	if(EffectState.GetX2Effect().IsA('RTEffect_TimeStop')) {

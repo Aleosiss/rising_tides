@@ -142,6 +142,7 @@ static function array<X2DataTemplate> CreateTemplates()
 
 	// Hit Calculation (Different weapons now have different calculations for range)
 	ToHitCalc = new class'X2AbilityToHitCalc_StandardAim';
+	ToHitCalc.SQUADSIGHT_DISTANCE_MOD = 0;
 	Template.AbilityToHitCalc = ToHitCalc;
 
 	// Targeting Method
@@ -300,7 +301,7 @@ static function X2AbilityTemplate RTOverwatchShot()
 	Template.bAllowAmmoEffects = true;
 	
 	SingleTarget = new class'X2AbilityTarget_Single';
-	SingleTarget.OnlyIncludeTargetsInsideWeaponRange = true;
+	SingleTarget.OnlyIncludeTargetsInsideWeaponRange = false;
 	Template.AbilityTargetStyle = SingleTarget;
 
 	//Trigger on movement - interrupt the move
@@ -327,6 +328,8 @@ static function X2AbilityTemplate RTOverwatchShot()
 	// Damage Effect
 	//
 	Template.AddTargetEffect(default.WeaponUpgradeMissDamage);
+
+	Template.PostActivationEvents.AddItem('RTOverwatchShot');
 
 	Template.OverrideAbilities.AddItem('OverwatchShot');
 	
@@ -1403,7 +1406,6 @@ static function X2AbilityTemplate TimeStandsStill()
 	Template.AddMultiTargetEffect(TimeStopEffect);
 
 	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
-	// Note: no visualization on purpose!
 	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
 	Template.bSkipFireAction = true;
 
@@ -1461,11 +1463,137 @@ static function X2AbilityTemplate TimeStandsStillCleanseListener()
 	Template.AddMultiTargetEffect(RemoveMultiEFfect);
 	
 	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
-	// Note: no visualization on purpose!
 	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
 	Template.bSkipFireAction = true;
 
 
 	Template.bCrossClassEligible = false;
+	return Template;
+}
+//---------------------------------------------------------------------------------------
+//---Linked Intelligence-----------------------------------------------------------------
+//---------------------------------------------------------------------------------------
+static function X2AbilityTemplate LinkedIntelligence()
+{
+	local X2AbilityTemplate						Template;
+	local X2AbilityMultiTarget_Radius			MultiTarget;
+	local RTEffect_LinkedIntelligence			LinkedEffect, ChainEffect;
+
+	`CREATE_X2ABILITY_TEMPLATE(Template, 'YourHandsMyEyes');
+	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_insanity";
+
+	Template.AbilitySourceName = 'eAbilitySource_Psionic';
+	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_NeverShow;
+	Template.Hostility = eHostility_Neutral;
+
+	Template.AbilityToHitCalc = default.DeadEye;
+	Template.AbilityTargetStyle = default.SelfTarget;
+	Template.AbilityTriggers.AddItem(default.UnitPostBeginPlayTrigger);
+
+	MultiTarget = new class'X2AbilityMultiTarget_AllAllies';
+	Template.AbilityMultiTargetStyle = MultiTarget;
+
+	LinkedEffect = new class 'RTEffect_LinkedIntelligence';
+	LinkedEffect.BuildPersistentEffect(1, true, false, false,  eGameRule_PlayerTurnEnd);
+	LinkedEffect.SetDisplayInfo(ePerkBuff_Passive, Template.LocFriendlyName, Template.LocLongDescription, Template.IconImage, true,, Template.AbilitySourceName);
+	Template.AddShooterEffect(LinkedEffect);
+
+	ChainEffect = new class 'RTEffect_LinkedIntelligence';
+	ChainEffect.BuildPersistentEffect(1, true, false, false,  eGameRule_PlayerTurnEnd);
+	ChainEffect.SetDisplayInfo(ePerkBuff_Bonus, Template.LocFriendlyName, Template.LocLongDescription, Template.IconImage, true,, Template.AbilitySourceName);
+	Template.AddMultiTargetEffect(ChainEffect);
+
+	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
+	// Note: no visualization on purpose!
+	
+	Template.bCrossClassEligible = false;
+	return Template;
+	
+}
+//---------------------------------------------------------------------------------------
+//---Twitch Reaction---------------------------------------------------------------------
+//---------------------------------------------------------------------------------------
+static function X2AbilityTemplate TwitchReaction()
+{
+	local X2AbilityTemplate                 Template;
+	local X2AbilityCost_Ammo				AmmoCost;
+	local X2AbilityCost_ReserveActionPoints ReserveActionPointCost;
+	local X2AbilityToHitCalc_StandardAim    StandardAim;
+	local X2Condition_AbilityProperty       AbilityCondition;
+	local X2AbilityTarget_Single            SingleTarget;
+	local X2AbilityTrigger_Event	        Trigger;
+	local X2Effect_Persistent               TwitchReactionEffect;
+	local X2Condition_UnitEffectsWithAbilitySource  TwitchReactionCondition;
+	local X2Condition_Visibility            TargetVisibilityCondition;
+	local X2Condition_UnitProperty          ShooterCondition;
+
+	`CREATE_X2ABILITY_TEMPLATE(Template, 'TwitchReaction');
+
+	AmmoCost = new class'X2AbilityCost_Ammo';
+	AmmoCost.iAmmo = 1;
+	Template.AbilityCosts.AddItem(AmmoCost);
+
+	ReserveActionPointCost = new class'X2AbilityCost_ReserveActionPoints';
+	ReserveActionPointCost.iNumPoints = 0;
+	ReserveActionPointCost.bFreeCost = true;					
+	Template.AbilityCosts.AddItem(ReserveActionPointCost);
+
+	StandardAim = new class'X2AbilityToHitCalc_StandardAim';
+	StandardAim.bReactionFire = true;
+	StandardAim.BuiltInHitMod = -20;
+	Template.AbilityToHitCalc = StandardAim;
+
+	Template.AbilityTargetConditions.AddItem(default.LivingHostileUnitDisallowMindControlProperty);
+	TargetVisibilityCondition = new class'X2Condition_Visibility';
+	TargetVisibilityCondition.bRequireGameplayVisible = true;
+	TargetVisibilityCondition.bDisablePeeksOnMovement = true;
+	TargetVisibilityCondition.bAllowSquadsight = true;
+	Template.AbilityTargetConditions.AddItem(TargetVisibilityCondition);
+	Template.AbilityTargetConditions.AddItem(class'X2Ability_DefaultAbilitySet'.static.OverwatchTargetEffectsCondition());
+
+	//  Do not shoot targets that were already hit by this unit this turn with this ability
+	TwitchReactionCondition = new class'X2Condition_UnitEffectsWithAbilitySource';
+	TwitchReactionCondition.AddExcludeEffect('TwitchReactionTarget', 'AA_UnitIsImmune');
+	Template.AbilityTargetConditions.AddItem(TwitchReactionCondition);
+	//  Mark the target as shot by this unit so it cannot be shot again this turn
+	TwitchReactionEffect = new class'X2Effect_Persistent';
+	TwitchReactionEffect.EffectName = 'TwitchReactionTarget';
+	TwitchReactionEffect.BuildPersistentEffect(1, false, false, false, eGameRule_PlayerTurnBegin);
+	TwitchReactionEffect.SetupEffectOnShotContextResult(true, true);      //  mark them regardless of whether the shot hit or missed
+	Template.AddTargetEffect(TwitchReactionEffect);
+
+	Template.AbilityShooterConditions.AddItem(default.LivingShooterProperty);
+	ShooterCondition = new class'X2Condition_UnitProperty';
+	ShooterCondition.ExcludeConcealed = true;
+	Template.AbilityShooterConditions.AddItem(ShooterCondition);
+	Template.AddShooterEffectExclusions();
+
+	SingleTarget = new class'X2AbilityTarget_Single';
+	SingleTarget.OnlyIncludeTargetsInsideWeaponRange = true;
+	Template.AbilityTargetStyle = SingleTarget;
+
+	//  Put holo target effect first because if the target dies from this shot, it will be too late to notify the effect.
+	Template.AddTargetEffect(class'X2Ability_GrenadierAbilitySet'.static.HoloTargetEffect());
+	Template.AddTargetEffect(class'X2Ability_GrenadierAbilitySet'.static.ShredderDamageEffect());
+
+	Template.bAllowAmmoEffects = true;
+	Template.bAllowBonusWeaponEffects = true;
+
+	//Trigger on attack - interrupt the attack
+	Trigger = new class'X2AbilityTrigger_Event';
+	Trigger.EventObserverClass = class'X2TacticalGameRuleset_AttackObserver';
+	Trigger.MethodName = 'InterruptGameState';
+	Template.AbilityTriggers.AddItem(Trigger);
+
+	Template.AbilitySourceName = 'eAbilitySource_Perk';
+	Template.eAbilityIconBehaviorHUD = EAbilityIconBehavior_NeverShow;
+	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_overwatch";
+	Template.ShotHUDPriority = class'UIUtilities_Tactical'.const.CLASS_MAJOR_PRIORITY;
+	Template.bDisplayInUITooltip = false;
+	Template.bDisplayInUITacticalText = false;
+
+	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
+	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
+
 	return Template;
 }
