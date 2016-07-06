@@ -13,7 +13,7 @@ function EventListenerReturn LinkedFireCheck (Object EventData, Object EventSour
 
 	History = `XCOMHISTORY;
 	AbilityContext = XComGameStateContext_Ability(GameState.GetContext());
-	if (AbilityContext = none) {
+	if (AbilityContext == none) {
 		return ELR_NoInterrupt;	
 	}
 	// We only want to link fire when the source is actually shooting a reaction shot
