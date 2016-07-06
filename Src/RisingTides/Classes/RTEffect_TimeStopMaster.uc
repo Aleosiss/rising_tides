@@ -13,6 +13,11 @@ simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffe
 	  if(!TimerState.bStopTime) {
 		TimerState.bStopTime = true;
 	  }
+	  
+	  // Could you, Madoka? Could you see me in my stopped time?
+	  // Uh, no...
+	  // Oh.
+	  AddPersistentStatChange(eStat_DetectionModifier, 1);
 
 
 }
@@ -33,6 +38,8 @@ simulated function bool OnEffectTicked(const out EffectAppliedData ApplyEffectPa
 simulated function OnEffectRemoved(const out EffectAppliedData ApplyEffectParameters, XComGameState NewGameState, bool bCleansed, XComGameState_Effect RemovedEffectState)
 {
 	 local XComGameState_TimerData TimerState;
+	 
+	 super.OnEffectRemoved(ApplyEffectParameters, NewGameState, bCleansed, RemovedEffectState);
 
 	  TimerState = XComGameState_TimerData(`XCOMHISTORY.GetSingleGameStateObjectForClass(class'XComGameState_TimerData'));
 
