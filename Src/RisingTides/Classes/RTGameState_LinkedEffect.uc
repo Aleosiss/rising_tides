@@ -12,28 +12,26 @@ function EventListenerReturn LinkedFireCheck (Object EventData, Object EventSour
 	local RTGameState_LinkedEffect NewLinkedEffectState;
 
 	History = `XCOMHISTORY;
-    // The TargetUnit is the unit targeted by the source unit
-	TargetUnit = XComGameState_Unit(EventData);
+	AbilityContext = XComGameStateContext_Ability(GameState.GetContext());
+	if (AbilityContext = none) {
+		return ELR_NoInterrupt;	
+	}
+	// We only want to link fire when the source is actually shooting a reaction shot
+	if(AbilityContext.InputContext.AbilityTemplateName != 'RTOverwatchShot' || AbilityContext.InputContext.AbilityTemplateName != 'TwitchReactionShot' || AbilityContext.InputContext.AbilityTemplateName != 'OverwatchShot') {
+		return ELR_NoInterrupt;
+	}
 
-    // The LinkedSourceUnit should be the unit that has Linked Intelligence
-	LinkedSourceUnit = XComGameState_Unit(EventSource);
+	// The LinkedSourceUnit should be the unit that has Linked Intelligence, and the unit that is currently attacking
+	LinkedSourceUnit = class'X2TacticalGameRulesetDataStructures'.static.GetAttackingUnitState(GameState);
 
 	// The Linked Unit is the one responding to the call to arms
 	LinkedUnit = XComGameState_Unit(History.GetGameStateForObjectID(ApplyEffectParameters.TargetStateObjectRef.ObjectID));
 	
-	// The parent template of this RTGameState_LinkedEffect
-	LinkedEffect = RTEffect_LinkedIntelligence(GetX2Effect()); 
-
-	// Get the ability we're going to fire if we do so
-	// EventID should only be the exact names of the shot fired by the source unit
-	// that way the LinkedUnits fire the same type of shot (standard OW or TR)
-	AbilityRef = LinkedUnit.FindAbility(EventID);
-	AbilityState = XComGameState_Ability(History.GetGameStateForObjectID(AbilityRef.ObjectID));
-
 	// Only other units can shoot
 	if(LinkedUnit.ObjectID == LinkedSourceUnit.ObjectID) {
 		return ELR_NoInterrupt; 
 	}
+	
 	// meld check
 	if(!LinkedUnit.IsUnitAffectedByEffectName('RTEffect_Meld')|| !LinkedSourceUnit.IsUnitAffectedByEffectName('RTEffect_Meld')) {
 		return ELR_NoInterrupt;
@@ -43,6 +41,24 @@ function EventListenerReturn LinkedFireCheck (Object EventData, Object EventSour
 	if(LinkedUnit.IsConcealed()) {
 		return ELR_NoInterrupt;
 	}
+
+	// The TargetUnit is the unit targeted by the source unit
+	TargetUnit = XComGameState_Unit(History.GetGameStateForObjectID(AbilityContext.InputContext.PrimaryTarget.ObjectID);
+
+	// The parent template of this RTGameState_LinkedEffect
+	LinkedEffect = RTEffect_LinkedIntelligence(GetX2Effect()); 
+	
+	// do standard checks here
+	//STUFF
+	//STUFF
+	//STUFF
+
+	// Get the ability we're going to fire if we do so
+	// LinkedUnits fire the same type of shot (standard OW or TR)
+	AbilityRef = LinkedUnit.FindAbility(AbilityContext.InputContext.AbilityTemplateName);
+	AbilityState = XComGameState_Ability(History.GetGameStateForObjectID(AbilityRef.ObjectID));
+
+
 
     // only shoot enemy units
 	if (TargetUnit != none && TargetUnit.IsEnemyUnit(LinkedUnit)) {
