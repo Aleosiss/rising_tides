@@ -32,6 +32,11 @@ function EventListenerReturn LinkedFireCheck (Object EventData, Object EventSour
 		return ELR_NoInterrupt; 
 	}
 	
+	// make sure we're on the same team 
+	if(LinkedSourceUnit.IsEnemyUnit(LinkedUnit)) {
+		return ELR_NoInterrupt;
+	}
+	
 	// meld check
 	if(!LinkedUnit.IsUnitAffectedByEffectName('RTEffect_Meld')|| !LinkedSourceUnit.IsUnitAffectedByEffectName('RTEffect_Meld')) {
 		return ELR_NoInterrupt;
