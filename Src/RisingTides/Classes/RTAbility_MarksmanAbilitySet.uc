@@ -1492,7 +1492,8 @@ static function X2AbilityTemplate LinkedIntelligence()
 
 	MultiTarget = new class'X2AbilityMultiTarget_AllAllies';
 	Template.AbilityMultiTargetStyle = MultiTarget;
-
+	
+	// seperate self/allied effects to differentiate buff categories
 	LinkedEffect = new class 'RTEffect_LinkedIntelligence';
 	LinkedEffect.BuildPersistentEffect(1, true, false, false,  eGameRule_PlayerTurnEnd);
 	LinkedEffect.SetDisplayInfo(ePerkBuff_Passive, Template.LocFriendlyName, Template.LocLongDescription, Template.IconImage, true,, Template.AbilitySourceName);
@@ -1532,12 +1533,14 @@ static function X2AbilityTemplate TwitchReaction()
 	AmmoCost = new class'X2AbilityCost_Ammo';
 	AmmoCost.iAmmo = 1;
 	Template.AbilityCosts.AddItem(AmmoCost);
-
+	
+	// always active? should i just remove this?
 	ReserveActionPointCost = new class'X2AbilityCost_ReserveActionPoints';
 	ReserveActionPointCost.iNumPoints = 0;
 	ReserveActionPointCost.bFreeCost = true;					
 	Template.AbilityCosts.AddItem(ReserveActionPointCost);
 
+	// considering the penalty on reaction shots, -40 might be too harsh, -20 for now
 	StandardAim = new class'X2AbilityToHitCalc_StandardAim';
 	StandardAim.bReactionFire = true;
 	StandardAim.BuiltInHitMod = -20;
@@ -1565,6 +1568,10 @@ static function X2AbilityTemplate TwitchReaction()
 	Template.AbilityShooterConditions.AddItem(default.LivingShooterProperty);
 	ShooterCondition = new class'X2Condition_UnitProperty';
 	ShooterCondition.ExcludeConcealed = true;
+	// meld condition on the shooter goes here... but how do I check that the target is shooting a melded unit?
+	//MeldCondition = new class'RTCondition_MeldProperty';
+	//Template.AbilityShooterConditions.AddItem(MeldCondition);
+	
 	Template.AbilityShooterConditions.AddItem(ShooterCondition);
 	Template.AddShooterEffectExclusions();
 
