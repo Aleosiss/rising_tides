@@ -54,7 +54,7 @@ simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffe
 	}																			
 	
 	// You can't see any changes to the world while time is stopped, and you can't move either... don't know why the immo tag isn't working
-	AddPersistentStatChange(eStat_DetectionRadius, 0, MODOP_PostMultiplication);
+	AddPersistentStatChange(eStat_SightRadius, 0, MODOP_PostMultiplication);
 	AddPersistentStatChange(eStat_Mobility, 0, MODOP_PostMultiplication);
 	AddPersistentStatChange(eStat_Dodge, 0, MODOP_PostMultiplication);
 
