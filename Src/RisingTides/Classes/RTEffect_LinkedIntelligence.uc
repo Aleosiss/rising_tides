@@ -11,9 +11,7 @@ function RegisterForEvents(XComGameState_Effect EffectGameState)
   
 	EffectObj = LinkedEffectState;
 
-	EventMgr.RegisterForEvent(EffectObj, 'RTOverwatchShot', LinkedEffectState.LinkedFireCheck, ELD_OnVisualizationBlockCompleted);
-	EventMgr.RegisterForEvent(EffectObj, 'TwitchReactionShot', LinkedEffectState.LinkedFireCheck, ELD_OnVisualizationBlockCompleted);
-	EventMgr.RegisterForEvent(EffectObj, 'OverwatchShot', LinkedEffectState.LinkedFireCheck, ELD_OnVisualizationBlockCompleted);
+	EventMgr.RegisterForEvent(EffectObj, 'AbilityActivated', LinkedEffectState.LinkedFireCheck, ELD_OnVisualizationBlockCompleted);
 }
 
 DefaultProperties
