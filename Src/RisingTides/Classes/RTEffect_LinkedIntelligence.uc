@@ -18,6 +18,5 @@ DefaultProperties
 {
 	GameStateEffectClass = class'RTGameState_LinkedEffect'
 	DuplicateResponse = eDupe_Ignore
-	AbilityToActivate = "RTTwitchReactionShot"
 	GrantActionPoint = "overwatch"
 }

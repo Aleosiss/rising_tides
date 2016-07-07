@@ -59,9 +59,6 @@
     <Content Include="Src\RisingTides\Classes\RTAction_GreyscaledEnd.uc">
       <SubType>Content</SubType>
     </Content>
-    <Content Include="Src\RisingTides\Classes\RTCondition_Meld.uc">
-      <SubType>Content</SubType>
-    </Content>
     <Content Include="Src\RisingTides\Classes\RTCondition_OverwatchVisibility.uc">
       <SubType>Content</SubType>
     </Content>
@@ -137,6 +134,9 @@
     <Content Include="Src\RisingTides\Classes\RTEffect_TimeStopMaster.uc">
       <SubType>Content</SubType>
     </Content>
+    <Content Include="Src\RisingTides\Classes\RTEffect_TwitchReaction.uc">
+      <SubType>Content</SubType>
+    </Content>
     <Content Include="Src\RisingTides\Classes\RTEffect_VPTargeting.uc">
       <SubType>Content</SubType>
     </Content>
@@ -150,6 +150,9 @@
       <SubType>Content</SubType>
     </Content>
     <Content Include="Src\RisingTides\Classes\RTGameState_TimeStopEffect.uc">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Src\RisingTides\Classes\RTGameState_TwitchEffect.uc">
       <SubType>Content</SubType>
     </Content>
     <Content Include="Src\RisingTides\Classes\RTHelpers.uc">

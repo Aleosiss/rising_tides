@@ -1511,34 +1511,61 @@ static function X2AbilityTemplate LinkedIntelligence()
 	return Template;
 	
 }
+
 //---------------------------------------------------------------------------------------
-//---Twitch Reaction---------------------------------------------------------------------
+//---Twitch Reaction Shot----------------------------------------------------------------
 //---------------------------------------------------------------------------------------
 static function X2AbilityTemplate TwitchReaction()
 {
 	local X2AbilityTemplate                 Template;
+	local RTEffect_TwitchReaction			TwitchEffect;
+
+
+	`CREATE_X2ABILITY_TEMPLATE(Template, 'TwitchReactionShot');
+		Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_aim";
+	Template.AbilitySourceName = 'eAbilitySource_Perk';
+	Template.eAbilityIconBehaviorHUD = EAbilityIconBehavior_NeverShow;
+	Template.Hostility = eHostility_Neutral;
+
+	// Apply perk at the start of the mission. 
+	Template.AbilityToHitCalc = default.DeadEye; 
+	Template.AbilityTargetStyle = default.SelfTarget;
+	Template.AbilityTriggers.AddItem(default.UnitPostBeginPlayTrigger);
+
+	// Effect to apply
+	TwitchEffect = new class'RTEffect_TwitchReaction';
+	TwitchEffect.BuildPersistentEffect(1, true, true, true);
+	TwitchEffect.SetDisplayInfo(ePerkBuff_Passive, Template.LocFriendlyName, Template.LocLongDescription, Template.IconImage, true,,Template.AbilitySourceName);
+	TwitchEffect.AbilityToActivate = 'TwitchReactionShot';
+	Template.AddTargetEffect(TwitchEffect);
+
+	// Probably required 
+	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
+	//  NOTE: No visualization on purpose!
+
+	return Template;
+}
+
+//---------------------------------------------------------------------------------------
+//---Twitch Reaction Shot----------------------------------------------------------------
+//---------------------------------------------------------------------------------------
+static function X2AbilityTemplate TwitchReactionShot()
+{
+	local X2AbilityTemplate                 Template;
 	local X2AbilityCost_Ammo				AmmoCost;
-	local X2AbilityCost_ReserveActionPoints ReserveActionPointCost;
 	local X2AbilityToHitCalc_StandardAim    StandardAim;
 	local X2Condition_AbilityProperty       AbilityCondition;
 	local X2AbilityTarget_Single            SingleTarget;
-	local X2AbilityTrigger_Event	        Trigger;
-	local X2Effect_Persistent               TwitchReactionEffect;
+	local X2Effect_Persistent               TwitchReactionEffectTarget;
 	local X2Condition_UnitEffectsWithAbilitySource  TwitchReactionCondition;
 	local X2Condition_Visibility            TargetVisibilityCondition;
 	local X2Condition_UnitProperty          ShooterCondition;
 
-	`CREATE_X2ABILITY_TEMPLATE(Template, 'TwitchReaction');
+	`CREATE_X2ABILITY_TEMPLATE(Template, 'TwitchReactionShot');
 
 	AmmoCost = new class'X2AbilityCost_Ammo';
 	AmmoCost.iAmmo = 1;
 	Template.AbilityCosts.AddItem(AmmoCost);
-	
-	// always active? should i just remove this?
-	ReserveActionPointCost = new class'X2AbilityCost_ReserveActionPoints';
-	ReserveActionPointCost.iNumPoints = 0;
-	ReserveActionPointCost.bFreeCost = true;					
-	Template.AbilityCosts.AddItem(ReserveActionPointCost);
 
 	// considering the penalty on reaction shots, -40 might be too harsh, -20 for now
 	StandardAim = new class'X2AbilityToHitCalc_StandardAim';
@@ -1559,16 +1586,16 @@ static function X2AbilityTemplate TwitchReaction()
 	TwitchReactionCondition.AddExcludeEffect('TwitchReactionTarget', 'AA_UnitIsImmune');
 	Template.AbilityTargetConditions.AddItem(TwitchReactionCondition);
 	//  Mark the target as shot by this unit so it cannot be shot again this turn
-	TwitchReactionEffect = new class'X2Effect_Persistent';
-	TwitchReactionEffect.EffectName = 'TwitchReactionTarget';
-	TwitchReactionEffect.BuildPersistentEffect(1, false, false, false, eGameRule_PlayerTurnBegin);
-	TwitchReactionEffect.SetupEffectOnShotContextResult(true, true);      //  mark them regardless of whether the shot hit or missed
-	Template.AddTargetEffect(TwitchReactionEffect);
+	TwitchReactionEffectTarget = new class'X2Effect_Persistent';
+	TwitchReactionEffectTarget.EffectName = 'TwitchReactionTarget';
+	TwitchReactionEffectTarget.BuildPersistentEffect(1, false, false, false, eGameRule_PlayerTurnBegin);
+	TwitchReactionEffectTarget.SetupEffectOnShotContextResult(true, true);      //  mark them regardless of whether the shot hit or missed
+	Template.AddTargetEffect(TwitchReactionEffectTarget);
 
 	Template.AbilityShooterConditions.AddItem(default.LivingShooterProperty);
 	ShooterCondition = new class'X2Condition_UnitProperty';
 	ShooterCondition.ExcludeConcealed = true;
-	// meld condition on the shooter goes here... but how do I check that the target is shooting a melded unit?
+	// meld condition on the shooter goes here? but how do I check that the target is shooting a melded unit?
 	//MeldCondition = new class'RTCondition_MeldProperty';
 	//Template.AbilityShooterConditions.AddItem(MeldCondition);
 	
@@ -1585,12 +1612,6 @@ static function X2AbilityTemplate TwitchReaction()
 
 	Template.bAllowAmmoEffects = true;
 	Template.bAllowBonusWeaponEffects = true;
-
-	//Trigger on attack - interrupt the attack
-	Trigger = new class'X2AbilityTrigger_Event';
-	Trigger.EventObserverClass = class'X2TacticalGameRuleset_AttackObserver';
-	Trigger.MethodName = 'InterruptGameState';
-	Template.AbilityTriggers.AddItem(Trigger);
 
 	Template.AbilitySourceName = 'eAbilitySource_Perk';
 	Template.eAbilityIconBehaviorHUD = EAbilityIconBehavior_NeverShow;

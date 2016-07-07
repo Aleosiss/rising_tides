@@ -52,24 +52,20 @@ function EventListenerReturn LinkedFireCheck (Object EventData, Object EventSour
 
 	// The parent template of this RTGameState_LinkedEffect
 	LinkedEffect = RTEffect_LinkedIntelligence(GetX2Effect()); 
-	
-	// do standard checks here
-	//STUFF
-	//STUFF
-	//STUFF
 
 	// Get the ability we're going to fire if we do so
 	// LinkedUnits fire the same type of shot (standard OW or TR)
 	AbilityRef = LinkedUnit.FindAbility(AbilityContext.InputContext.AbilityTemplateName);
 	AbilityState = XComGameState_Ability(History.GetGameStateForObjectID(AbilityRef.ObjectID));
 
-
-
     // only shoot enemy units
 	if (TargetUnit != none && TargetUnit.IsEnemyUnit(LinkedUnit)) {
 		// break out if we can't shoot
 		if (AbilityState != none) {
 				// break out if we can't grant an action point to shoot with
+				// this is to tell the difference between stuff like normal Covering Fire, which uses ReserveActionPoints that have already been allocated,
+				// and stuff like Return Fire, which are free and should be allocated a point to shoot with.
+				// Linked Fire is free; this should always be valid
 				if (LinkedEffect.GrantActionPoint != '') {
 					
 					// create an new gamestate and increment the number of grants

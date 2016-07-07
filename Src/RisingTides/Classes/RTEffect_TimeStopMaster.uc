@@ -9,7 +9,7 @@ simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffe
 
 	  TimerState = XComGameState_TimerData(`XCOMHISTORY.GetSingleGameStateObjectForClass(class'XComGameState_TimerData'));
 
-	  bWasPreviouslyFalse = TimerState.bStopTime;
+	  bWasPreviouslyTrue = TimerState.bStopTime;
 	  if(!TimerState.bStopTime) {
 		TimerState.bStopTime = true;
 	  }
