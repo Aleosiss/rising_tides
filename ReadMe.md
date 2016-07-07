@@ -20,9 +20,10 @@ This would be a bare-bones content mod. I also have the following content in min
               - Tidy up class files (remove legacy code, document, etc)
               - Finish up current features
                 - Time Stop damage pop-up (FINAL FEATURE W00t)
-                - Implement Harbinger
                 - Change Meld to incorporate a boolean array so that I can extend its checks??
                 - Change special firing actions to use flat modifiers instead of %floats
+              - Change PsiOverload template name to RTMindWrack
+              - Implement Harbinger
 
 ###### Current Unresolved:
               - // some snippets of the second to last chapter of Falling Stars
