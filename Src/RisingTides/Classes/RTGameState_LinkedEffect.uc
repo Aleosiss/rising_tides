@@ -17,7 +17,7 @@ function EventListenerReturn LinkedFireCheck (Object EventData, Object EventSour
 		return ELR_NoInterrupt;	
 	}
 	// We only want to link fire when the source is actually shooting a reaction shot
-	if(AbilityContext.InputContext.AbilityTemplateName != 'RTOverwatchShot' && AbilityContext.InputContext.AbilityTemplateName != 'TwitchReactionShot' || AbilityContext.InputContext.AbilityTemplateName != 'OverwatchShot') {
+	if(AbilityContext.InputContext.AbilityTemplateName != 'RTOverwatchShot' && AbilityContext.InputContext.AbilityTemplateName != 'TwitchReactionShot' && AbilityContext.InputContext.AbilityTemplateName != 'OverwatchShot') {
 		return ELR_NoInterrupt;
 	}
 
