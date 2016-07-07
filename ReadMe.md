@@ -23,13 +23,11 @@ This would be a bare-bones content mod. I also have the following content in min
                 - Implement Harbinger
                 - Change Meld to incorporate a boolean array so that I can extend its checks??
                 - Change special firing actions to use flat modifiers instead of %floats
-                - Change Linked Intelligence to monitor AbilityActivated instead of various Reaction Shots
-                - Change Twitch Reaction to monitor AbilityActivated instead of relying on a direct Attack Observer
 
 ###### Current Unresolved:
               - // some snippets of the second to last chapter of Falling Stars
               - http://hastebin.com/raw/arukopovex
-
+              - Heat Channel beginning implementation (http://hastebin.com/ucotodegan.vhdl)
 ###### Current Table
               - Twitch Reaction: If an enemy takes an offensive action against an allied enemy, take a reaction shot at them immediately at -40 aim, once per turn.
               - Triangulation: Spread Over the Shoulder to all melded allies.
