@@ -28,6 +28,7 @@ This would be a bare-bones content mod. I also have the following content in min
 ###### Current Unresolved:
               - // some snippets of the second to last chapter of Falling Stars
               - http://hastebin.com/raw/arukopovex
+              - http://hastebin.com/ofibexiguv.avrasm
               - Heat Channel beginning implementation (http://hastebin.com/ucotodegan.vhdl, http://hastebin.com/adehowacuj.vhdl)
 ###### Current Table
               - Twitch Reaction: If an enemy takes an offensive action against an allied enemy, take a reaction shot at them immediately at -40 aim, once per turn.
