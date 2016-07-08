@@ -59,7 +59,8 @@ static function array<X2DataTemplate> CreateTemplates()
 	Templates.AddItem(YourHandsMyEyes());
 	Templates.AddItem(TimeStandsStill());
 	Templates.AddItem(TimeStandsStillCleanseListener());
-	//Templates.AddItem(Inevitibility());
+	Templates.AddItem(TwitchReaction());
+	Templates.AddItem(LinkedIntelligence());
 	//Templates.AddItem(SIShot());
 	//Templates.AddItem(TimeStandsStill());
 	//Templates.AddItem(Override());
@@ -1479,7 +1480,7 @@ static function X2AbilityTemplate LinkedIntelligence()
 	local X2AbilityMultiTarget_Radius			MultiTarget;
 	local RTEffect_LinkedIntelligence			LinkedEffect, ChainEffect;
 
-	`CREATE_X2ABILITY_TEMPLATE(Template, 'YourHandsMyEyes');
+	`CREATE_X2ABILITY_TEMPLATE(Template, 'LinkedIntelligence');
 	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_insanity";
 
 	Template.AbilitySourceName = 'eAbilitySource_Psionic';
@@ -1513,7 +1514,7 @@ static function X2AbilityTemplate LinkedIntelligence()
 }
 
 //---------------------------------------------------------------------------------------
-//---Twitch Reaction Shot----------------------------------------------------------------
+//---Twitch Reaction---------------------------------------------------------------------
 //---------------------------------------------------------------------------------------
 static function X2AbilityTemplate TwitchReaction()
 {
@@ -1538,6 +1539,8 @@ static function X2AbilityTemplate TwitchReaction()
 	TwitchEffect.SetDisplayInfo(ePerkBuff_Passive, Template.LocFriendlyName, Template.LocLongDescription, Template.IconImage, true,,Template.AbilitySourceName);
 	TwitchEffect.AbilityToActivate = 'TwitchReactionShot';
 	Template.AddTargetEffect(TwitchEffect);
+
+	Template.AdditionalAbilities.AddItem('TwitchReactionShot');
 
 	// Probably required 
 	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
@@ -1567,10 +1570,10 @@ static function X2AbilityTemplate TwitchReactionShot()
 	AmmoCost.iAmmo = 1;
 	Template.AbilityCosts.AddItem(AmmoCost);
 
-	// considering the penalty on reaction shots, -40 might be too harsh, -20 for now
+	// considering the penalty on reaction shots, -40 might be too harsh, -30 for now
 	StandardAim = new class'X2AbilityToHitCalc_StandardAim';
 	StandardAim.bReactionFire = true;
-	StandardAim.BuiltInHitMod = -20;
+	StandardAim.BuiltInHitMod = -30;
 	Template.AbilityToHitCalc = StandardAim;
 
 	Template.AbilityTargetConditions.AddItem(default.LivingHostileUnitDisallowMindControlProperty);

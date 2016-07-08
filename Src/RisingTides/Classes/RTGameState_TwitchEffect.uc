@@ -61,8 +61,8 @@ function EventListenerReturn TwitchFireCheck (Object EventData, Object EventSour
 					
 					// create an new gamestate and increment the number of grants
 					NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState(string(GetFuncName()));
-					NewTwitchEffectState = RTGameState_LinkedEffect(NewGameState.CreateStateObject(Class, ObjectID));
-					NewTwitchEffectState.GrantsThisTurn++;
+					NewTwitchEffectState = RTGameState_TwitchEffect(NewGameState.CreateStateObject(Class, ObjectID));
+					//NewTwitchEffectState.GrantsThisTurn++;
 					NewGameState.AddStateObject(NewTwitchEffectState);
 					
 					// add a action point to shoot with
@@ -79,7 +79,7 @@ function EventListenerReturn TwitchFireCheck (Object EventData, Object EventSour
 					{
 						`TACTICALRULES.SubmitGameState(NewGameState);
 
-						if (LinkedEffect.bUseMultiTargets)
+						if (TwitchEffect.bUseMultiTargets)
 						{
 							AbilityState.AbilityTriggerAgainstSingleTarget(TwitchAttackingUnit.GetReference(), true);
 						}
@@ -95,7 +95,7 @@ function EventListenerReturn TwitchFireCheck (Object EventData, Object EventSour
 				}
 				else if (AbilityState.CanActivateAbilityForObserverEvent(AttackingUnit) == 'AA_Success')
 				{
-					if (LinkedEffect.bUseMultiTargets)
+					if (TwitchEffect.bUseMultiTargets)
 					{
 						AbilityState.AbilityTriggerAgainstSingleTarget(TwitchAttackingUnit.GetReference(), true);
 					}

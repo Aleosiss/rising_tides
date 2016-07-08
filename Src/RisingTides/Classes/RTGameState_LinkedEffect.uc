@@ -48,7 +48,7 @@ function EventListenerReturn LinkedFireCheck (Object EventData, Object EventSour
 	}
 
 	// The TargetUnit is the unit targeted by the source unit
-	TargetUnit = XComGameState_Unit(History.GetGameStateForObjectID(AbilityContext.InputContext.PrimaryTarget.ObjectID);
+	TargetUnit = XComGameState_Unit(History.GetGameStateForObjectID(AbilityContext.InputContext.PrimaryTarget.ObjectID));
 
 	// The parent template of this RTGameState_LinkedEffect
 	LinkedEffect = RTEffect_LinkedIntelligence(GetX2Effect()); 
@@ -71,7 +71,7 @@ function EventListenerReturn LinkedFireCheck (Object EventData, Object EventSour
 					// create an new gamestate and increment the number of grants
 					NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState(string(GetFuncName()));
 					NewLinkedEffectState = RTGameState_LinkedEffect(NewGameState.CreateStateObject(Class, ObjectID));
-					NewLinkedEffectState.GrantsThisTurn++;
+					//NewLinkedEffectState.GrantsThisTurn++;
 					NewGameState.AddStateObject(NewLinkedEffectState);
 					
 					// add a action point to shoot with
