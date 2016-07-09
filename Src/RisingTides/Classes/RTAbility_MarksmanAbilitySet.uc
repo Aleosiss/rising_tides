@@ -60,6 +60,7 @@ static function array<X2DataTemplate> CreateTemplates()
 	Templates.AddItem(TimeStandsStill());
 	Templates.AddItem(TimeStandsStillCleanseListener());
 	Templates.AddItem(TwitchReaction());
+	Templates.AddItem(TwitchReactionShot());
 	Templates.AddItem(LinkedIntelligence());
 	//Templates.AddItem(SIShot());
 	//Templates.AddItem(TimeStandsStill());
@@ -1522,8 +1523,8 @@ static function X2AbilityTemplate TwitchReaction()
 	local RTEffect_TwitchReaction			TwitchEffect;
 
 
-	`CREATE_X2ABILITY_TEMPLATE(Template, 'TwitchReactionShot');
-		Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_aim";
+	`CREATE_X2ABILITY_TEMPLATE(Template, 'TwitchReaction');
+	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_aim";
 	Template.AbilitySourceName = 'eAbilitySource_Perk';
 	Template.eAbilityIconBehaviorHUD = EAbilityIconBehavior_NeverShow;
 	Template.Hostility = eHostility_Neutral;
@@ -1537,10 +1538,9 @@ static function X2AbilityTemplate TwitchReaction()
 	TwitchEffect = new class'RTEffect_TwitchReaction';
 	TwitchEffect.BuildPersistentEffect(1, true, true, true);
 	TwitchEffect.SetDisplayInfo(ePerkBuff_Passive, Template.LocFriendlyName, Template.LocLongDescription, Template.IconImage, true,,Template.AbilitySourceName);
-	TwitchEffect.AbilityToActivate = 'TwitchReactionShot';
 	Template.AddTargetEffect(TwitchEffect);
 
-	Template.AdditionalAbilities.AddItem('TwitchReactionShot');
+	//Template.AdditionalAbilities.AddItem('TwitchReactionShot');
 
 	// Probably required 
 	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
@@ -1556,19 +1556,25 @@ static function X2AbilityTemplate TwitchReactionShot()
 {
 	local X2AbilityTemplate                 Template;
 	local X2AbilityCost_Ammo				AmmoCost;
+	local X2AbilityCost_ReserveActionPoints ReserveActionPointCost;
 	local X2AbilityToHitCalc_StandardAim    StandardAim;
-	local X2Condition_AbilityProperty       AbilityCondition;
 	local X2AbilityTarget_Single            SingleTarget;
 	local X2Effect_Persistent               TwitchReactionEffectTarget;
 	local X2Condition_UnitEffectsWithAbilitySource  TwitchReactionCondition;
 	local X2Condition_Visibility            TargetVisibilityCondition;
 	local X2Condition_UnitProperty          ShooterCondition;
+	local X2Effect_Knockback				KnockbackEffect;
 
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'TwitchReactionShot');
-
+	Template.bHideOnClassUnlock = true;
 	AmmoCost = new class'X2AbilityCost_Ammo';
 	AmmoCost.iAmmo = 1;
 	Template.AbilityCosts.AddItem(AmmoCost);
+
+	ReserveActionPointCost = new class'X2AbilityCost_ReserveActionPoints';
+	ReserveActionPointCost.iNumPoints = 1;
+	ReserveActionPointCost.AllowedTypes.AddItem(class'X2CharacterTemplateManager'.default.OverwatchReserveActionPoint);
+	Template.AbilityCosts.AddItem(ReserveActionPointCost);
 
 	// considering the penalty on reaction shots, -40 might be too harsh, -30 for now
 	StandardAim = new class'X2AbilityToHitCalc_StandardAim';
@@ -1613,6 +1619,8 @@ static function X2AbilityTemplate TwitchReactionShot()
 	Template.AddTargetEffect(class'X2Ability_GrenadierAbilitySet'.static.HoloTargetEffect());
 	Template.AddTargetEffect(class'X2Ability_GrenadierAbilitySet'.static.ShredderDamageEffect());
 
+	Template.AddTargetEffect(default.WeaponUpgradeMissDamage);
+
 	Template.bAllowAmmoEffects = true;
 	Template.bAllowBonusWeaponEffects = true;
 
@@ -1621,7 +1629,12 @@ static function X2AbilityTemplate TwitchReactionShot()
 	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_overwatch";
 	Template.ShotHUDPriority = class'UIUtilities_Tactical'.const.CLASS_MAJOR_PRIORITY;
 	Template.bDisplayInUITooltip = false;
-	Template.bDisplayInUITacticalText = false;
+	Template.bDisplayInUITacticalText = false;	 
+
+	KnockbackEffect = new class'X2Effect_Knockback';
+	KnockbackEffect.KnockbackDistance = 2;
+	KnockbackEffect.bUseTargetLocation = true;
+	Template.AddTargetEffect(KnockbackEffect);
 
 	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
 	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;

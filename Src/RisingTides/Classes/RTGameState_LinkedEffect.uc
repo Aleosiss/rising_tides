@@ -1,5 +1,7 @@
 class RTGameState_LinkedEffect extends XComGameState_Effect;
 
+var bool bCanTrigger;
+
 function EventListenerReturn LinkedFireCheck (Object EventData, Object EventSource, XComGameState GameState, Name EventID) {
     local XComGameState_Unit TargetUnit, LinkedSourceUnit, LinkedUnit;
 	local XComGameStateHistory History;
@@ -10,17 +12,25 @@ function EventListenerReturn LinkedFireCheck (Object EventData, Object EventSour
 	local XComGameStateContext_Ability AbilityContext;
 	local XComGameState NewGameState;
 	local RTGameState_LinkedEffect NewLinkedEffectState;
-
+	local StateObjectReference	EmptyRef;
+	
+	if(!bCanTrigger) {
+		`LOG("Rising Tides: LinkedEffect is probably being called before it finishes resolving!");
+		return ELR_NoInterrupt;
+	}
+	EmptyRef.ObjectID = 0;
+	`LOG("Rising Tides: Linked Fire Check Setup!");
 	History = `XCOMHISTORY;
 	AbilityContext = XComGameStateContext_Ability(GameState.GetContext());
 	if (AbilityContext == none) {
 		return ELR_NoInterrupt;	
 	}
+	`LOG("Rising Tides: Linked Fire Check Stage 1");
 	// We only want to link fire when the source is actually shooting a reaction shot
 	if(AbilityContext.InputContext.AbilityTemplateName != 'RTOverwatchShot' && AbilityContext.InputContext.AbilityTemplateName != 'TwitchReactionShot' && AbilityContext.InputContext.AbilityTemplateName != 'OverwatchShot') {
 		return ELR_NoInterrupt;
 	}
-
+	`LOG("Rising Tides: Linked Fire Check Stage 2");
 	// The LinkedSourceUnit should be the unit that has Linked Intelligence, and the unit that is currently attacking
 	LinkedSourceUnit = class'X2TacticalGameRulesetDataStructures'.static.GetAttackingUnitState(GameState);
 
@@ -31,22 +41,22 @@ function EventListenerReturn LinkedFireCheck (Object EventData, Object EventSour
 	if(LinkedUnit.ObjectID == LinkedSourceUnit.ObjectID) {
 		return ELR_NoInterrupt; 
 	}
-	
+	`LOG("Rising Tides: Linked Fire Check Stage 3");
 	// make sure we're on the same team 
 	if(LinkedSourceUnit.IsEnemyUnit(LinkedUnit)) {
 		return ELR_NoInterrupt;
 	}
-	
+	`LOG("Rising Tides: Linked Fire Check Stage 4");
 	// meld check
 	if(!LinkedUnit.IsUnitAffectedByEffectName('RTEffect_Meld')|| !LinkedSourceUnit.IsUnitAffectedByEffectName('RTEffect_Meld')) {
 		return ELR_NoInterrupt;
 	}
-
+	`LOG("Rising Tides: Linked Fire Check Stage 5");
 	// Don't reveal ourselves
 	if(LinkedUnit.IsConcealed()) {
 		return ELR_NoInterrupt;
 	}
-
+	`LOG("Rising Tides: Linked Fire Check Stage 6");
 	// The TargetUnit is the unit targeted by the source unit
 	TargetUnit = XComGameState_Unit(History.GetGameStateForObjectID(AbilityContext.InputContext.PrimaryTarget.ObjectID));
 
@@ -55,19 +65,32 @@ function EventListenerReturn LinkedFireCheck (Object EventData, Object EventSour
 
 	// Get the ability we're going to fire if we do so
 	// LinkedUnits fire the same type of shot (standard OW or TR)
-	AbilityRef = LinkedUnit.FindAbility(AbilityContext.InputContext.AbilityTemplateName);
+	AbilityRef = LinkedUnit.FindAbility(AbilityContext.InputContext.AbilityTemplateName, EmptyRef);
 	AbilityState = XComGameState_Ability(History.GetGameStateForObjectID(AbilityRef.ObjectID));
 
+	if(AbilityContext.InputContext.AbilityTemplateName == 'OverwatchShot' && AbilityState == none) {
+		AbilityRef = LinkedUnit.FindAbility('RTOverwatch', EmptyRef);
+		AbilityState = XComGameState_Ability(History.GetGameStateForObjectID(AbilityRef.ObjectID));
+	}
+
+	if(AbilityState == none) {
+		`RedScreenOnce("Couldn't find an ability to shoot!");
+		`LOG("Rising Tides: AbilityContext.InputContext.AbilityTemplateName = " @ AbilityContext.InputContext.AbilityTemplateName);
+	}
+
+	`LOG("Rising Tides: Linked Fire Check Stage 7");
     // only shoot enemy units
 	if (TargetUnit != none && TargetUnit.IsEnemyUnit(LinkedUnit)) {
+		`LOG("Rising Tides: Linked Fire Check Stage 8");
 		// break out if we can't shoot
 		if (AbilityState != none) {
+				`LOG("Rising Tides: Linked Fire Check Stage 9");
 				// break out if we can't grant an action point to shoot with
 				// this is to tell the difference between stuff like normal Covering Fire, which uses ReserveActionPoints that have already been allocated,
 				// and stuff like Return Fire, which are free and should be allocated a point to shoot with.
 				// Linked Fire is free; this should always be valid
 				if (LinkedEffect.GrantActionPoint != '') {
-					
+					`LOG("Rising Tides: Linked Fire Check Stage 10");
 					// create an new gamestate and increment the number of grants
 					NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState(string(GetFuncName()));
 					NewLinkedEffectState = RTGameState_LinkedEffect(NewGameState.CreateStateObject(Class, ObjectID));
@@ -78,7 +101,7 @@ function EventListenerReturn LinkedFireCheck (Object EventData, Object EventSour
 					LinkedUnit = XComGameState_Unit(NewGameState.CreateStateObject(LinkedUnit.Class, LinkedUnit.ObjectID));
 					LinkedUnit.ReserveActionPoints.AddItem(LinkedEffect.GrantActionPoint);
 					NewGameState.AddStateObject(LinkedUnit);
-
+					`LOG("Rising Tides: Linked Fire Check Stage 11");
 					// check if we can shoot. if we can't, clean up the gamestate from history
 					if (AbilityState.CanActivateAbilityForObserverEvent(TargetUnit, LinkedUnit) != 'AA_Success')
 					{
@@ -86,6 +109,9 @@ function EventListenerReturn LinkedFireCheck (Object EventData, Object EventSour
 					}
 					else
 					{
+						`LOG("Rising Tides: Linked Fire Check Stage 12");
+						bCanTrigger = false;
+						XComGameStateContext_ChangeContainer(NewGameState.GetContext()).BuildVisualizationFn = TriggerAbilityFlyoverVisualizationFn;
 						`TACTICALRULES.SubmitGameState(NewGameState);
 
 						if (LinkedEffect.bUseMultiTargets)
@@ -97,9 +123,13 @@ function EventListenerReturn LinkedFireCheck (Object EventData, Object EventSour
 							AbilityContext = class'XComGameStateContext_Ability'.static.BuildContextFromAbility(AbilityState, TargetUnit.ObjectID);
 							if( AbilityContext.Validate() )
 							{
+								`LOG("Rising Tides: Linked Fire Check Stage 13");
 								`TACTICALRULES.SubmitGameStateContext(AbilityContext);
+								`LOG("Rising Tides: Linked Fire Check Stage 14");
 							}
 						}
+
+						bCanTrigger = true;
 					}
 				}
 				else if (AbilityState.CanActivateAbilityForObserverEvent(TargetUnit) == 'AA_Success')
@@ -124,4 +154,8 @@ function EventListenerReturn LinkedFireCheck (Object EventData, Object EventSour
 
 
 
+}
+defaultproperties
+{
+bCanTrigger=true
 }

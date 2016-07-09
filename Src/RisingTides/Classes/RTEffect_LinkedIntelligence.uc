@@ -11,7 +11,7 @@ function RegisterForEvents(XComGameState_Effect EffectGameState)
   
 	EffectObj = LinkedEffectState;
 
-	EventMgr.RegisterForEvent(EffectObj, 'AbilityActivated', LinkedEffectState.LinkedFireCheck, ELD_OnVisualizationBlockCompleted);
+	EventMgr.RegisterForEvent(EffectObj, 'AbilityActivated', LinkedEffectState.LinkedFireCheck, ELD_OnStateSubmitted,,,true);
 }
 
 DefaultProperties

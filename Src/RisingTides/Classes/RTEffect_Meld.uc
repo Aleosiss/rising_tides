@@ -202,8 +202,6 @@ simulated function OnEffectRemoved(const out EffectAppliedData ApplyEffectParame
 		`XEVENTMGR.TriggerEvent('RTRemoveFromMeld', EffectTargetUnit, EffectTargetUnit, NewGameState); 
 	bIsUpdate = false;
 	super.OnEffectRemoved(ApplyEffectParameters, NewGameState, bCleansed, RemovedEffectState);
-
-	
 	
 }
 
