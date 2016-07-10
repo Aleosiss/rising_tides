@@ -371,6 +371,7 @@ static function X2AbilityTemplate ScopedAndDropped()
 	Template.AdditionalAbilities.AddItem('LeaveMeld');
 	Template.AdditionalAbilities.AddItem('PsiOverload');
 	Template.AdditionalAbilities.AddItem('PsiOverloadPanic');
+	Template.AdditionalAbilities.AddItem('TwitchReactionShot');
 
 	// Probably required 
 	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
@@ -1480,6 +1481,7 @@ static function X2AbilityTemplate LinkedIntelligence()
 	local X2AbilityTemplate						Template;
 	local X2AbilityMultiTarget_Radius			MultiTarget;
 	local RTEffect_LinkedIntelligence			LinkedEffect, ChainEffect;
+	local X2Condition_UnitEffectsWithAbilityTarget	UnitCondition;
 
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'LinkedIntelligence');
 	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_insanity";
@@ -1491,6 +1493,11 @@ static function X2AbilityTemplate LinkedIntelligence()
 	Template.AbilityToHitCalc = default.DeadEye;
 	Template.AbilityTargetStyle = default.SelfTarget;
 	Template.AbilityTriggers.AddItem(default.UnitPostBeginPlayTrigger);
+
+	UnitCondition = new class'X2Condition_UnitEffectsWithAbilityTarget';
+	UnitCondition.AddRequireEffect('GhostPsiSuite', 'AA_UnitMustBeGhost');
+	//Template.AbilityTargetConditions.AddItem(UnitCondition);
+	Template.AbilityMultiTargetConditions.AddItem(UnitCondition);
 
 	MultiTarget = new class'X2AbilityMultiTarget_AllAllies';
 	Template.AbilityMultiTargetStyle = MultiTarget;

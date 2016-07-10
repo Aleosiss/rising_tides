@@ -111,6 +111,9 @@ function EventListenerReturn LinkedFireCheck (Object EventData, Object EventSour
 					{
 						`LOG("Rising Tides: Linked Fire Check Stage 12");
 						bCanTrigger = false;
+
+						AbilityState = XComGameState_Ability(NewGameState.CreateStateObject(AbilityState.Class, AbilityState.ObjectID));
+						NewGameState.AddStateObject(AbilityState);
 						XComGameStateContext_ChangeContainer(NewGameState.GetContext()).BuildVisualizationFn = TriggerAbilityFlyoverVisualizationFn;
 						`TACTICALRULES.SubmitGameState(NewGameState);
 

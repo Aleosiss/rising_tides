@@ -100,6 +100,8 @@ function EventListenerReturn TwitchFireCheck (Object EventData, Object EventSour
 					{
 						`LOG("Rising Tides: Twitch Fire Check Stage 9");
 						bCanTrigger = false;
+						AbilityState = XComGameState_Ability(NewGameState.CreateStateObject(AbilityState.Class, AbilityState.ObjectID));
+						NewGameState.AddStateObject(AbilityState);
 						XComGameStateContext_ChangeContainer(NewGameState.GetContext()).BuildVisualizationFn = TriggerAbilityFlyoverVisualizationFn;
 						`TACTICALRULES.SubmitGameState(NewGameState);
 

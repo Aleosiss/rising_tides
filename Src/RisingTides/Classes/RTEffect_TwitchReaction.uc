@@ -11,7 +11,7 @@ function RegisterForEvents(XComGameState_Effect EffectGameState)
   
 	EffectObj = TwitchEffectState;
 
-	EventMgr.RegisterForEvent(EffectObj, 'AbilityActivated', TwitchEffectState.TwitchFireCheck, ELD_OnStateSubmitted);
+	EventMgr.RegisterForEvent(EffectObj, 'AbilityActivated', TwitchEffectState.TwitchFireCheck, ELD_OnStateSubmitted,,,true);
 }
 
 DefaultProperties
