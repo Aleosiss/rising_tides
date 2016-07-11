@@ -1,7 +1,7 @@
 ﻿;Place localized text in this file
 
 [RTMarksman X2SoldierClassTemplate]
-DisplayName="GHOST-M"
+DisplayName="GHOST Marksman"
 ClassSummary="Whisper is the unit's designated marksman and tech expert."
 LeftAbilityTreeTitle="Active Targeting"
 RightAbilityTreeTitle="Passive Targeting"
@@ -179,7 +179,7 @@ LocPromotionPopupText="<Bullet/>This unit can spontaenously take covering fire r
 [TimeStandsStill X2AbilityTemplate]
 LocFriendlyName="Time Stands Still"
 LocLongDescription="Throw a wrench in the gears of the universe for a brief moment. Allies and Enemies alike become Greyscaled, losing their ability to affect or percieve the world around them."
-LocHelpText="The World! Stop time!"
+LocHelpText="Za Warudo! Toki yo, tomare!"
 LocFlyOverText="Time Stands Still"
 LocPromotionPopupText="<Bullet/>Throw a wrench in the gears of the universe for a brief moment. Allies and Enemies alike become Greyscaled, losing their ability to affect or percieve the world around them.<br/>"
 
