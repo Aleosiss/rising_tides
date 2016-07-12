@@ -265,7 +265,7 @@ simulated function EventListenerReturn RemoveUnitFromMeld(Object EventData, Obje
 
 	//NewGameState.RemoveStateObject(ObjectID);
 
-	if(CurrentMeldEffect.Members.Length == 1)
+	if(CurrentMeldEffect.Members.Length == 1 || GameStateHostUnit.ObjectID == LeavingMeldUnit.ObjectID)
 	{
 		//remove the CurrentMeldEffect
 		EventManager = `XEVENTMGR;
