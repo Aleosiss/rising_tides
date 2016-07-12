@@ -22,8 +22,11 @@ This would be a bare-bones content mod. I also have the following content in min
                 - Time Stop damage pop-up (FINAL FEATURE W00t)
                 - Change Meld to incorporate a boolean array so that I can extend its checks??
                 - Change special firing actions to use flat modifiers instead of %floats
-              - Change PsiOverload template name to RTMindWrack
               - Implement Harbinger
+              - Implement Heat Channeling
+              - Fix visualization for Linked Intelligences and Twitch Reaction
+              - Remove Twitch Reaction (I think it would lead to uninteresting gameplay vs. Large numbers of enemy units)
+              - Make Linked Intelligence fire after the overwatch shot has completed
 
 ###### Current Unresolved:
               - // some snippets of the second to last chapter of Falling Stars
@@ -31,9 +34,7 @@ This would be a bare-bones content mod. I also have the following content in min
               - http://hastebin.com/ofibexiguv.avrasm
               - Heat Channel beginning implementation (http://hastebin.com/ucotodegan.vhdl, http://hastebin.com/adehowacuj.vhdl)
 ###### Current Table
-              - Twitch Reaction: If an enemy takes an offensive action against an allied enemy, take a reaction shot at them immediately at -40 aim, once per turn.
               - Triangulation: Spread Over the Shoulder to all melded allies.
-              - Linked Intelligences: When this unit takes a reaction shot, all melded allies take a reaction shot against the same target.
               - Heat Channeling: When this unit uses strenuous psionic abilities (listed, stuff like rift, mc, mw, li, burst) use the excess heat buildup from your weapon to fuel the ability, fully reloading the unit's weapon and reducing the ability's cooldown by one for each point of ammo restored.
               
               
