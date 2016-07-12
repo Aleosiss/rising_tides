@@ -38,16 +38,3 @@ simulated function bool OnEffectTicked(const out EffectAppliedData ApplyEffectPa
 	}							
   return false;
 }
-
-simulated function OnEffectRemoved(const out EffectAppliedData ApplyEffectParameters, XComGameState NewGameState, bool bCleansed, XComGameState_Effect RemovedEffectState)
-{
-	 local XComGameState_TimerData TimerState;
-	 
-	 super.OnEffectRemoved(ApplyEffectParameters, NewGameState, bCleansed, RemovedEffectState);
-
-	  TimerState = XComGameState_TimerData(`XCOMHISTORY.GetSingleGameStateObjectForClass(class'XComGameState_TimerData'));
-
-	  if(!bWasPreviouslyTrue) {
-		TimerState.bStopTime = false;
-	  }
-}
