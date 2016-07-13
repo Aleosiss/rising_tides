@@ -20,13 +20,8 @@ This would be a bare-bones content mod. I also have the following content in min
               - Tidy up class files (remove legacy code, document, etc)
               - Finish up current features
                 - Time Stop damage pop-up (FINAL FEATURE W00t)
-                - Change special firing actions to use flat modifiers instead of %floats
               - Implement Heat Channeling
-              - Fix visualization for Linked Intelligences and Twitch Reaction
-              - Remove Twitch Reaction (I think it would lead to uninteresting gameplay vs. Large numbers of enemy units)
-              - Make Linked Intelligence fire after the overwatch shot has completed
-              - Create true stealth effect (RTStealth)
-              - Create Fade/Teek (should be simple)
+
 
 ###### Current Unresolved:
               - // some snippets of the second to last chapter of Falling Stars
