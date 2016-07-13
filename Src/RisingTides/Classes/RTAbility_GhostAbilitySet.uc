@@ -16,6 +16,7 @@ class RTAbility_GhostAbilitySet extends X2Ability
 	var config int BURST_DAMAGE, BURST_COOLDOWN;
 	var config int OVERLOAD_CHARGES, OVERLOAD_BASE_COOLDOWN;
 	var config int OVERLOAD_PANIC_CHECK;
+	var config int FADE_DURATION;
 
 //---------------------------------------------------------------------------------------
 //---CreateTemplates---------------------------------------------------------------------
@@ -118,7 +119,7 @@ static function X2AbilityTemplate JoinMeld()
 	Template.AbilityTargetStyle = default.SelfTarget;
 
 	MeldEffect = new class 'RTEffect_Meld';
-	MeldEffect.BuildPersistentEffect(1, true, false, false,  eGameRule_PlayerTurnEnd);
+	MeldEffect.BuildPersistentEffect(1, true, true, false,  eGameRule_PlayerTurnEnd);
 		MeldEffect.SetDisplayInfo(ePerkBuff_Bonus, "Mind Meld", 
 		"This unit has joined the squad's mind meld, gaining and delivering psionic support.", Template.IconImage);
 	Template.AddTargetEffect(MeldEffect);
@@ -140,7 +141,7 @@ static function X2AbilityTemplate LeaveMeld()
 {
 	local X2AbilityTemplate					Template;
 	local X2AbilityCooldown                 Cooldown;
-	local RTEffect_MeldRemoved				MeldRemovedEffect;
+	local X2Effect_RemoveEffects			MeldRemovedEffect;
 	
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'LeaveMeld');
 	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_adventpsiwitch_mindcontrol";
@@ -163,8 +164,8 @@ static function X2AbilityTemplate LeaveMeld()
 	Template.AbilityToHitCalc = default.DeadEye;
 	Template.AbilityTargetStyle = default.SelfTarget;
 
-	MeldRemovedEffect = new class 'RTEffect_MeldRemoved';
-	MeldRemovedEffect.BuildPersistentEffect(1, false, false, false,  eGameRule_PlayerTurnEnd);
+	MeldRemovedEffect = new class 'X2Effect_RemoveEffects';
+	MeldRemovedEffect.EffectNamesToRemove.AddItem('RTEffect_Meld');
 	Template.AddTargetEffect(MeldRemovedEffect);
 
 	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
@@ -316,6 +317,138 @@ static function X2AbilityTemplate PsiOverloadPanic()
 	//  NOTE: No visualization on purpose!
 
 	Template.bCrossClassEligible = false;
+
+	return Template;
+}
+
+//---------------------------------------------------------------------------------------
+//---Fade--------------------------------------------------------------------------------
+//---------------------------------------------------------------------------------------
+static function X2AbilityTemplate Fade()
+{
+	local X2AbilityTemplate					Template;
+	local X2AbilityTrigger_EventListener	Trigger;
+	local RTEffect_Stealth					StealthEffect;
+	local X2AbilityCooldown                 Cooldown;	
+	
+	`CREATE_X2ABILITY_TEMPLATE(Template, 'Fade');
+	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_phantom";
+	
+	Template.AbilitySourceName = 'eAbilitySource_Psionic';
+	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_NeverShow;
+	Template.AbilityConfirmSound = "TacticalUI_ActivateAbility";
+	Template.Hostility = eHostility_Defensive;
+
+	Template.ConcealmentRule = eConceal_Always;
+
+	Trigger = new class'X2AbilityTrigger_EventListener';
+	Trigger.ListenerData.Deferral = ELD_OnStateSubmitted;
+	Trigger.ListenerData.EventID = 'UnitTakeEffectDamage';
+	Trigger.ListenerData.Filter = eFilter_Unit;
+	Trigger.ListenerData.EventFn = class'XComGameState_Ability'.static.AbilityTriggerEventListener_Self;
+	Template.AbilityTriggers.AddItem(Trigger);
+
+	StealthEffect = new class'RTEffect_Stealth';
+	StealthEffect.BuildPersistentEffect(default.FADE_STEALTH_TURNS, false, true, false, eGameRule_PlayerTurnBegin);
+	Template.AddTargetEffect(StealthEffect);
+	
+	// Add dead eye to guarantee
+	Template.AbilityToHitCalc = default.DeadEye;
+	Template.AbilityTargetStyle = default.SelfTarget;
+
+	Template.bSkipFireAction = true;
+	Template.FrameAbilityCameraType = eCameraFraming_Never;
+
+
+	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
+	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
+
+	Template.bCrossClassEligible = false;				
+
+	return Template;
+}
+
+
+//---------------------------------------------------------------------------------------
+//---Teek--------------------------------------------------------------------------------
+//---------------------------------------------------------------------------------------
+static function X2AbilityTemplate Teek()
+{
+	local X2AbilityTemplate					Template;
+	local X2Effect_PersistentStatChange 	TeekEffect;
+	local X2AbilityCooldown                 Cooldown;	
+	
+	`CREATE_X2ABILITY_TEMPLATE(Template, 'Teek');
+	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_voidrift";
+	
+	Template.AbilitySourceName = 'eAbilitySource_Psionic';
+	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_NeverShow;
+	Template.AbilityConfirmSound = "TacticalUI_ActivateAbility";
+	Template.Hostility = eHostility_Neutral;
+
+	Template.ConcealmentRule = eConceal_Always;
+
+	TeekEffect = new class'X2Effect_PersistentStatChange';
+	TeekEffect.BuildPersistentEffect(1, true, true, false, eGameRule_PlayerTurnEnd);
+	TeekEffect.AddPersistentStatChange(eStat_Dodge, default.TEEK_DODGE_BONUS);
+	TeekEffect.AddPersistentStatChange(eStat_Defense, default.TEEK_DEFENSE_BONUS);
+	TeekEffect.SetDisplayInfo(ePerkBuff_Passive, Template.LocFriendlyName, Template.LocLongDescription, Template.IconImage, true,,Template.AbilitySourceName);
+	TeekEffect.DuplicateResponse = eDupe_Ignore;
+	TeekEffect.EffectName = "Teek";
+	Template.AddTargetEffect(TeekEffect);
+	
+	// Add dead eye to guarantee
+	Template.AbilityToHitCalc = default.DeadEye;
+	Template.AbilityTargetStyle = default.SelfTarget;
+	Template.AbilityTriggers.AddItem(default.UnitPostBeginPlayTrigger);
+
+
+	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
+	//Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
+	//  NOTE: No visualization on purpose!
+
+	Template.bCrossClassEligible = false;				
+
+	return Template;
+}
+
+//---------------------------------------------------------------------------------------
+//---FadeIcon--------------------------------------------------------------------------------
+//---------------------------------------------------------------------------------------
+static function X2AbilityTemplate FadeIcon()
+{
+	local X2AbilityTemplate					Template;
+	local X2Effect_Persistent			 	TeekEffect;
+	
+	`CREATE_X2ABILITY_TEMPLATE(Template, 'FadeIcon');
+	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_voidrift";
+	
+	Template.AbilitySourceName = 'eAbilitySource_Psionic';
+	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_NeverShow;
+	Template.AbilityConfirmSound = "TacticalUI_ActivateAbility";
+	Template.Hostility = eHostility_Neutral;
+
+	Template.ConcealmentRule = eConceal_Always;
+
+	TeekEffect = new class'X2Effect_Persistent';
+	TeekEffect.BuildPersistentEffect(1, true, true, false, eGameRule_PlayerTurnEnd);
+	TeekEffect.SetDisplayInfo(ePerkBuff_Passive, Template.LocFriendlyName, Template.LocLongDescription, Template.IconImage, true,,Template.AbilitySourceName);
+	TeekEffect.DuplicateResponse = eDupe_Ignore;
+	TeekEffect.EffectName = "FadeIcon";
+	Template.AddTargetEffect(TeekEffect);
+	
+	// Add dead eye to guarantee
+	Template.AbilityToHitCalc = default.DeadEye;
+	Template.AbilityTargetStyle = default.SelfTarget;
+	Template.AbilityTriggers.AddItem(default.UnitPostBeginPlayTrigger);
+
+	Template.AdditionalAbilities.AddItem('Fade');
+
+	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
+	//Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
+	//  NOTE: No visualization on purpose!
+
+	Template.bCrossClassEligible = false;				
 
 	return Template;
 }

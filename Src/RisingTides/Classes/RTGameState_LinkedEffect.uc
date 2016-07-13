@@ -79,6 +79,12 @@ function EventListenerReturn LinkedFireCheck (Object EventData, Object EventSour
 	}
 
 	`LOG("Rising Tides: Linked Fire Check Stage 7");
+
+	//  for non-pre emptive fire, don't process during the interrupt step
+	if (AbilityContext.InterruptionStatus == eInterruptionStatus_Interrupt)	{
+		return ELR_NoInterrupt;
+	}
+
     // only shoot enemy units
 	if (TargetUnit != none && TargetUnit.IsEnemyUnit(LinkedUnit)) {
 		`LOG("Rising Tides: Linked Fire Check Stage 8");
@@ -114,7 +120,7 @@ function EventListenerReturn LinkedFireCheck (Object EventData, Object EventSour
 
 						AbilityState = XComGameState_Ability(NewGameState.CreateStateObject(AbilityState.Class, AbilityState.ObjectID));
 						NewGameState.AddStateObject(AbilityState);
-						XComGameStateContext_ChangeContainer(NewGameState.GetContext()).BuildVisualizationFn = TriggerAbilityFlyoverVisualizationFn;
+						XComGameStateContext_ChangeContainer(NewGameState.GetContext()).BuildVisualizationFn = TriggerLinkedEffectFlyoverVisualizationFn;
 						`TACTICALRULES.SubmitGameState(NewGameState);
 
 						if (LinkedEffect.bUseMultiTargets)
@@ -158,6 +164,47 @@ function EventListenerReturn LinkedFireCheck (Object EventData, Object EventSour
 
 
 }
+
+function TriggerLinkedEffectFlyoverVisualizationFn(XComGameState VisualizeGameState, out array<VisualizationTrack> OutVisualizationTracks)
+{
+	local XComGameState_Unit UnitState;
+	local X2Action_PlaySoundAndFlyOver SoundAndFlyOver;
+	local VisualizationTrack BuildTrack;
+	local XComGameStateHistory History;
+	local X2AbilityTemplate AbilityTemplate;
+	local XComGameState_Ability AbilityState;
+
+	History = `XCOMHISTORY;
+	foreach VisualizeGameState.IterateByClassType(class'XComGameState_Unit', UnitState)
+	{
+		foreach VisualizeGameState.IterateByClassType(class'XComGameState_Ability', AbilityState)
+		{
+			break;
+		}
+		if (AbilityState == none)
+		{
+			`RedScreenOnce("Ability state missing from" @ GetFuncName() @ "-jbouscher @gameplay");
+			return;
+		}
+
+		History.GetCurrentAndPreviousGameStatesForObjectID(UnitState.ObjectID, BuildTrack.StateObject_OldState, BuildTrack.StateObject_NewState, , VisualizeGameState.HistoryIndex);
+		BuildTrack.StateObject_NewState = UnitState;
+		BuildTrack.TrackActor = UnitState.GetVisualizer();
+		`RedScreen(AbilityState.GetMyTemplateName());
+
+		AbilityTemplate = AbilityState.GetMyTemplate();
+		if (AbilityTemplate != none)
+		{
+			SoundAndFlyOver = X2Action_PlaySoundAndFlyOver(class'X2Action_PlaySoundAndFlyOver'.static.AddToVisualizationTrack(BuildTrack, VisualizeGameState.GetContext()));
+			SoundAndFlyOver.SetSoundAndFlyOverParameters(None, "Linked Minds", '', eColor_Good, "img:///UILibrary_PerkIcons.UIPerk_insanity");
+
+			OutVisualizationTracks.AddItem(BuildTrack);
+		}
+		break;
+	}
+}
+
+
 defaultproperties
 {
 bCanTrigger=true

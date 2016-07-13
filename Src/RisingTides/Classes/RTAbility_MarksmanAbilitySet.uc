@@ -371,7 +371,6 @@ static function X2AbilityTemplate ScopedAndDropped()
 	Template.AdditionalAbilities.AddItem('LeaveMeld');
 	Template.AdditionalAbilities.AddItem('PsiOverload');
 	Template.AdditionalAbilities.AddItem('PsiOverloadPanic');
-	Template.AdditionalAbilities.AddItem('TwitchReactionShot');
 
 	// Probably required 
 	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
@@ -379,67 +378,6 @@ static function X2AbilityTemplate ScopedAndDropped()
 
 	return Template;
 }
-
-//---------------------------------------------------------------------------------------
-//---Barrier-----------------------------------------------------------------------------
-//---------------------------------------------------------------------------------------
-/*
-static function X2AbilityTemplate Barrier() 
-{
-	local X2AbilityTemplate						Template;
-	local X2AbilityCost_ActionPoints			ActionPointCost;
-	local X2AbilityCooldown						Cooldown;
-
-	`CREATE_X2ABILITYTEMPLATE(Template, 'Barrier');
-
-	Template.AbilitySourceName = 'eAbilitySource_Standard';
-	Template.eAbilityIconBehaviorHUD = EAbilityIconBehavior_AlwaysShow;
-	Template.IconImage = "img://UILibrary_PerkIcons.UIPerk_adventshieldbearer_energyshield";
-	Template.bHideOnClassUnlock = false;
-	Template.Hostility = eHostility_Defensive;
-
-	ActionPointCost = new class 'X2AbilityCost_ActionPoints';
-	ActionPointCost.iNumPoints = 1;
-	ActionPointCost.bConsumeAllPoints = false;
-	Template.AbilityCosts.AddItem(ActionPointCost);
-
-
-	Template.AbilityTriggers.AddItem(default.PlayerInputTrigger);
-
-	// Add dead eye to guarantee
-	Template.AbilityToHitCalc = default.DeadEye;
-	Template.AbilityTargetStyle = default.SelfTarget;
-
-	// Multi target
-	MultiTarget = new class'X2AbilityMultiTarget_Radius';
-	MultiTarget.fTargetRadius = default.ENERGY_SHIELD_RANGE_METERS;
-	MultiTarget.bIgnoreBlockingCover = true;
-	Template.AbilityMultiTargetStyle = MultiTarget;
-
-	// The Targets must be within the AOE, LOS, and be a GHOST
-	UnitPropertyCondition = new class'X2Condition_UnitProperty';
-	UnitPropertyCondition.ExcludeDead = true;
-	UnitPropertyCondition.ExcludeFriendlyToSource = false;
-	UnitPropertyCondition.ExcludeHostileToSource = true;
-	UnitPropertyCondition.ExcludeCivilian = true;
-	UnitPropertyCondition.FailOnNonUnits = true;
-	UnitPropertyCondition.RequireSoldierClass = 'RTGhost';
-	Template.AbilityMultiTargetConditions.AddItem(UnitPropertyCondition);
-
-	// Friendlies in the radius receives a shield receives a shield
-	ShieldedEffect = CreateShieldedEffect(Template.LocFriendlyName, Template.GetMyLongDescription(), default.ENERGY_SHIELD_Mk3_HP);
-
-	Template.AddShooterEffect(ShieldedEffect);
-	Template.AddMultiTargetEffect(ShieldedEffect);
-
-	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
-	Template.BuildVisualizationFn = Shielded_BuildVisualization;
-	Template.CinescriptCameraType = "AdvShieldBearer_EnergyShieldArmor";
-	
-	return Template;
-}
-*/
-
 //---------------------------------------------------------------------------------------
 //---Precision Shot----------------------------------------------------------------------
 //---------------------------------------------------------------------------------------
