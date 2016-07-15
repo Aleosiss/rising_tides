@@ -1116,9 +1116,10 @@ static function X2AbilityTemplate SovereignEffect()
 
 	// Hit Calculation (Different weapons now have different calculations for range)
 	ToHitCalc = new class'X2AbilityToHitCalc_StandardAim';
+	ToHitCalc.SQUADSIGHT_DISTANCE_MOD = 0;
 	Template.AbilityToHitCalc = ToHitCalc;
 
-	Template.bOverrideAim = true;  
+	//Template.bOverrideAim = true;  
 	Template.bUseSourceLocationZToAim = true;
 
 	// Damage/Burning Effect
