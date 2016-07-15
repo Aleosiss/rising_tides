@@ -223,11 +223,14 @@ function int GetDefendingDamageModifier(XComGameState_Effect EffectState, XComGa
 
 	TimeStopEffectState = RTGameState_TimeStopEffect(EffectState);
 
-
-	TimeStopEffectState.DamageTaken += CurrentDamage;
-	TimeStopEffectState.DamageTypesTaken.AddItem(WeaponDamageEffect.EffectDamageValue.DamageType);
-	`RedScreen("Rising Tides: Time Stop has negated " @ TimeStopEffectState.DamageTaken @ " damage so far! This time, it was of type " @ WeaponDamageEffect.EffectDamageValue.DamageType @"!");
+	// hack implementation. if possible should detect if it's a ticking damage effect but this should do for now
+	if(WeaponDamageEffect.EffectDamageValue.DamageType == 'fire' || WeaponDamageEffect.EffectDamageValue.DamageType == 'poison' || WeaponDamageEffect.EffectDamageValue.DamageType == 'acid' || WeaponDamageEffect.EffectDamageValue.DamageType == 'gas' ||)
+		return -(CurrentDamage);
 	
+	TimeStopEffectState.PreventedDamageValues.AddItem(WeaponDamageEffect.EffectDamageValue);
+	`RedScreen("Rising Tides: Time Stop has negated " @ TimeStopEffectState.GetFinalDamageValue().Damage @ " damage so far! This time, it was of type " @ TimeStopEffectState.PreventedDamageValues[TimeStopEffectState.PreventedDamageValues.length].DamageType @"!");
+	
+	// TODO: Check for explosive damage, and crits
 
 
 	return -(CurrentDamage); 
