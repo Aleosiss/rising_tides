@@ -30,13 +30,11 @@ simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffe
 simulated function OnEffectRemoved(const out EffectAppliedData ApplyEffectParameters, XComGameState NewGameState, bool bCleansed, XComGameState_Effect RemovedEffectState)
 {
 	local XComGameState_Unit UnitState;
-	local X2EventManager EventManager;
 
 	UnitState = XComGameState_Unit(kNewTargetState);
 	if (UnitState != none)
 	{
-		EventManager = `XEVENTMGR;
-		EventManager.TriggerEvent('EffectBreakUnitConcealment', UnitState, UnitState, NewGameState);
+		`XEVENTMGR.TriggerEvent('EffectBreakUnitConcealment', UnitState, UnitState, NewGameState);
 	}
 	
 	super.OnEffectRemoved(ApplyEffectParamters, NewGameState, bCleansed, RemovedEffectState);
