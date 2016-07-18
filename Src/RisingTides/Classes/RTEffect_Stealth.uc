@@ -25,10 +25,26 @@ simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffe
 	
 	AddPersistentStatChange(eStat_DetectionModifier, fStealthModifier);
 	super.OnEffectAdded(ApplyEffectParameters, kNewTargetState, NewGameState, NewEffectState);
-}																							 
+}
+
+simulated function OnEffectRemoved(const out EffectAppliedData ApplyEffectParameters, XComGameState NewGameState, bool bCleansed, XComGameState_Effect RemovedEffectState)
+{
+	local XComGameState_Unit UnitState;
+	local X2EventManager EventManager;
+
+	UnitState = XComGameState_Unit(kNewTargetState);
+	if (UnitState != none)
+	{
+		EventManager = `XEVENTMGR;
+		EventManager.TriggerEvent('EffectBreakUnitConcealment', UnitState, UnitState, NewGameState);
+	}
+	
+	super.OnEffectRemoved(ApplyEffectParamters, NewGameState, bCleansed, RemovedEffectState);
+}
 
 DefaultProperties
 {
 	EffectName = "RTStealth"
 	fStealthModifier=0.9f
+	DuplicateResponse: eDupe_Allow
 }
