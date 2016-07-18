@@ -31,7 +31,7 @@ simulated function OnEffectRemoved(const out EffectAppliedData ApplyEffectParame
 {
 	local XComGameState_Unit UnitState;
 
-	UnitState = XComGameState_Unit(kNewTargetState);
+	UnitState = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(ApplyEffectParamters.TargetStateObjRef.ObjectID));
 	if (UnitState != none)
 	{
 		`XEVENTMGR.TriggerEvent('EffectBreakUnitConcealment', UnitState, UnitState, NewGameState);
