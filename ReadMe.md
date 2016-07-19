@@ -21,6 +21,10 @@ This would be a bare-bones content mod. I also have the following content in min
               - Finish up current features
                 - Time Stop damage pop-up (FINAL FEATURE W00t)
               - Implement Heat Channeling
+              - Implement Harbinger
+              - Implement Shock and Awe
+                  - Design Shock and Awe
+              - Fix RemoveUnitFromMeld so that it correctly removes the MeldEffect in response to a panic event (basically when the method is called other than the effect being removed) 
 
 
 ###### Current Unresolved:
