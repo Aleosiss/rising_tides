@@ -44,5 +44,5 @@ DefaultProperties
 {
 	EffectName = "RTStealth"
 	fStealthModifier=0.9f
-	DuplicateResponse: eDupe_Allow
+	DuplicateResponse: eDupe_Refresh
 }
