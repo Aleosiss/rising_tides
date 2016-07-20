@@ -16,12 +16,12 @@ LocHelpText="Killing a flanked or uncovered target with a sniper rifle does not 
 LocFlyOverText="Scoped And Dropped"
 LocPromotionPopupText="<Bullet/> Whisper is the best shooter in the world. As such, he does not suffer from squadsight penalties and needs to spend no time lining up easy shots on exposed units.<br/>"
 
-[PrecisionShot X2AbilityTemplate]
+[RTPrecisionShot X2AbilityTemplate]
 LocFriendlyName="Precision Shot"
 LocLongDescription="A carefully aimed shot, suffering decreased aim but increased critical chance and critical damage."
 LocHelpText="Shoot with decreased aim, but increased critical chance and critical damage."
 LocFlyOverText="Precision Shot"
-LocPromotionPopupText="<Bullet/> Whisper has actual military training. Thus, he is capable of shooting precision shots, suffering from decreased chance to hit, but increased critical chance and critical damage.<br/>"
+LocPromotionPopupText="<Bullet/> Shoot a precision shot, suffering from decreased chance to hit, but increased critical chance and critical damage.<br/>"
 
 [Aggression X2AbilityTemplate]
 LocFriendlyName="Aggression"
@@ -183,4 +183,24 @@ LocHelpText="Za Warudo! Toki yo, tomare!"
 LocFlyOverText="Time Stands Still"
 LocPromotionPopupText="<Bullet/>Throw a wrench in the gears of the universe for a brief moment. Allies and Enemies alike become Greyscaled, losing their ability to affect or percieve the world around them.<br/>"
 
+[PsionicSurge X2AbilityTemplate]
+LocFriendlyName="Psionic Surge"
+LocLongDescription="Empower your weapon with psionic energy, increasing its fire rate and energy throughput."
+LocHelpText="Empower your weapon with psionic energy."
+LocFlyOverText="Psionic Surge"
+LocPromotionPopupText="<Bullet/> Empower your weapon with psionic energy, increasing its fire rate and energy throughput.<br/><Bullet/> Standard shots do not end turn and cost one AP. Special shots do not have cooldowns while this effect is active.<br/>"
+
+[FadeIcon X2AbilityTemplate]
+LocFriendlyName="Fade"
+LocLongDescription="Fade from view whenever you take damage."
+LocHelpText="Fade from view whenever you take damage."
+LocFlyOverText="Fade"
+LocPromotionPopupText="<Bullet/> Fade from view whenever you take damage.<br/><Bullet/> Gain stealth until the start of your next turn whenever this unit takes damage. 5 turn cooldown.<br/>"
+
+[Teek X2AbilityTemplate]
+LocFriendlyName="Teek"
+LocLongDescription="This unit has honed its telekinetic abilities, increasing its ability to dodge, deflect, and redirection enemy fire."
+LocHelpText="This unit has honed its telekinetic abilities, increasing its ability to dodge, deflect, and redirection enemy fire."
+LocFlyOverText="Teek"
+LocPromotionPopupText="<Bullet/> This unit has honed its telekinetic abilities, increasing its ability to dodge, deflect, and redirection enemy fire.<br/><Bullet/> + 10 Dodge, + 10 Defense, + 20% Reflection chance.<br/>"
 

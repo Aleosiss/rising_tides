@@ -12,11 +12,11 @@ class RTAbility_GhostAbilitySet extends X2Ability
 	config(RTGhost);
 
 	var config int BASE_REFLECTION_CHANCE, BASE_DEFENSE_INCREASE;
-	var config int TEEK_REFLECTION_INCREASE, TEEK_DEFENSE_INCREASE;
+	var config int TEEK_REFLECTION_INCREASE, TEEK_DEFENSE_INCREASE, TEEK_DODGE_INCREASE;
 	var config int BURST_DAMAGE, BURST_COOLDOWN;
 	var config int OVERLOAD_CHARGES, OVERLOAD_BASE_COOLDOWN;
 	var config int OVERLOAD_PANIC_CHECK;
-	var config int FADE_DURATION;
+	var config int FADE_DURATION, FADE_COOLDOWN;
 
 //---------------------------------------------------------------------------------------
 //---CreateTemplates---------------------------------------------------------------------
@@ -215,7 +215,7 @@ static function X2AbilityTemplate PsiOverload()
 	Template.AbilityTargetConditions.AddItem(default.GameplayVisibilityCondition);
 	
 	Cooldown = new class'X2AbilityCooldown';
-	Cooldown.iNumTurns = 6;
+	Cooldown.iNumTurns = default.OVERLOAD_BASE_COOLDOWN;
 	Template.AbilityCooldown = Cooldown;
 
 	Template.AbilityTriggers.AddItem(default.PlayerInputTrigger);
@@ -341,6 +341,10 @@ static function X2AbilityTemplate Fade()
 
 	Template.ConcealmentRule = eConceal_Always;
 
+	Cooldown = new class'X2AbilityCooldown';
+	Cooldown.iNumTurns = default.FADE_COOLDOWN;
+	Template.AbilityCooldown = Cooldown;
+
 	Trigger = new class'X2AbilityTrigger_EventListener';
 	Trigger.ListenerData.Deferral = ELD_OnStateSubmitted;
 	Trigger.ListenerData.EventID = 'UnitTakeEffectDamage';
@@ -349,7 +353,7 @@ static function X2AbilityTemplate Fade()
 	Template.AbilityTriggers.AddItem(Trigger);
 
 	StealthEffect = new class'RTEffect_Stealth';
-	StealthEffect.BuildPersistentEffect(default.FADE_STEALTH_TURNS, false, true, false, eGameRule_PlayerTurnBegin);
+	StealthEffect.BuildPersistentEffect(default.FADE_DURATION, false, true, false, eGameRule_PlayerTurnBegin);
 	Template.AddTargetEffect(StealthEffect);
 	
 	// Add dead eye to guarantee
@@ -390,11 +394,11 @@ static function X2AbilityTemplate Teek()
 
 	TeekEffect = new class'X2Effect_PersistentStatChange';
 	TeekEffect.BuildPersistentEffect(1, true, true, false, eGameRule_PlayerTurnEnd);
-	TeekEffect.AddPersistentStatChange(eStat_Dodge, default.TEEK_DODGE_BONUS);
-	TeekEffect.AddPersistentStatChange(eStat_Defense, default.TEEK_DEFENSE_BONUS);
+	TeekEffect.AddPersistentStatChange(eStat_Dodge, default.TEEK_DODGE_INCREASE);
+	TeekEffect.AddPersistentStatChange(eStat_Defense, default.TEEK_DEFENSE_INCREASE);
 	TeekEffect.SetDisplayInfo(ePerkBuff_Passive, Template.LocFriendlyName, Template.LocLongDescription, Template.IconImage, true,,Template.AbilitySourceName);
 	TeekEffect.DuplicateResponse = eDupe_Ignore;
-	TeekEffect.EffectName = "Teek";
+	TeekEffect.EffectName = 'Teek';
 	Template.AddTargetEffect(TeekEffect);
 	
 	// Add dead eye to guarantee
@@ -434,7 +438,7 @@ static function X2AbilityTemplate FadeIcon()
 	TeekEffect.BuildPersistentEffect(1, true, true, false, eGameRule_PlayerTurnEnd);
 	TeekEffect.SetDisplayInfo(ePerkBuff_Passive, Template.LocFriendlyName, Template.LocLongDescription, Template.IconImage, true,,Template.AbilitySourceName);
 	TeekEffect.DuplicateResponse = eDupe_Ignore;
-	TeekEffect.EffectName = "FadeIcon";
+	TeekEffect.EffectName = 'FadeIcon';
 	Template.AddTargetEffect(TeekEffect);
 	
 	// Add dead eye to guarantee

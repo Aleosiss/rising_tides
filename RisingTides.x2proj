@@ -98,6 +98,9 @@
     <Content Include="Src\RisingTides\Classes\RTEffect_PrecisionShotDamage.uc">
       <SubType>Content</SubType>
     </Content>
+    <Content Include="Src\RisingTides\Classes\RTEffect_PsionicSurge.uc">
+      <SubType>Content</SubType>
+    </Content>
     <Content Include="Src\RisingTides\Classes\RTEffect_ReserveActionPoints.uc">
       <SubType>Content</SubType>
     </Content>
@@ -146,6 +149,9 @@
     <Content Include="Src\RisingTides\Classes\RTEffect_YourHandsMyEyes.uc">
       <SubType>Content</SubType>
     </Content>
+    <Content Include="Src\RisingTides\Classes\RTGameState_Ability.uc">
+      <SubType>Content</SubType>
+    </Content>
     <Content Include="Src\RisingTides\Classes\RTGameState_LinkedEffect.uc">
       <SubType>Content</SubType>
     </Content>
@@ -168,9 +174,6 @@
       <SubType>Content</SubType>
     </Content>
     <Content Include="Src\RisingTides\Classes\X2DownloadableContentInfo_RisingTides.uc" />
-    <Content Include="Src\RisingTides\Classes\XComGameState_Effect_RTMeld.uc">
-      <SubType>Content</SubType>
-    </Content>
     <Content Include="Src\XComGame\Classes\AnalyticsManager.uc">
       <SubType>Content</SubType>
     </Content>

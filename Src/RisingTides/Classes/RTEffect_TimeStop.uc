@@ -157,7 +157,7 @@ simulated function OnEffectRemoved(const out EffectAppliedData ApplyEffectParame
 		TimeStopEffectState = RTGameState_TimeStopEffect(RemovedEffectState);
 
 
-		UnitState.TakeDamage(NewGameState, TimeStopEffectState.DamageTaken, 0, 0, , TimeStopEffectState, TimeStopEffectState.ApplyEffectParameters.SourceStateObjectRef, TimeStopEffectState.bTookExplosiveDamage, TimeStopEffectState.DamageTypesTaken);
+		UnitState.TakeDamage(NewGameState, TimeStopEffectState.GetFinalDamageValue().Damage, 0, 0, , TimeStopEffectState, TimeStopEffectState.ApplyEffectParameters.SourceStateObjectRef, TimeStopEffectState.bExplosive);
 		
 		NewGameState.AddStateObject(UnitState);
 	}
@@ -224,7 +224,7 @@ function int GetDefendingDamageModifier(XComGameState_Effect EffectState, XComGa
 	TimeStopEffectState = RTGameState_TimeStopEffect(EffectState);
 
 	// hack implementation. if possible should detect if it's a ticking damage effect but this should do for now
-	if(WeaponDamageEffect.EffectDamageValue.DamageType == 'fire' || WeaponDamageEffect.EffectDamageValue.DamageType == 'poison' || WeaponDamageEffect.EffectDamageValue.DamageType == 'acid' || WeaponDamageEffect.EffectDamageValue.DamageType == 'gas' ||)
+	if(WeaponDamageEffect.EffectDamageValue.DamageType == 'fire' || WeaponDamageEffect.EffectDamageValue.DamageType == 'poison' || WeaponDamageEffect.EffectDamageValue.DamageType == 'acid' || WeaponDamageEffect.EffectDamageValue.DamageType == 'gas')
 		return -(CurrentDamage);
 	
 	TimeStopEffectState.PreventedDamageValues.AddItem(WeaponDamageEffect.EffectDamageValue);

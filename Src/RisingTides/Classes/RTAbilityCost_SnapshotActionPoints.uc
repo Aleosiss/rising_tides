@@ -19,7 +19,7 @@ simulated function int GetPointCost(XComGameState_Ability AbilityState, XComGame
 
 simulated function bool ConsumeAllPoints(XComGameState_Ability AbilityState, XComGameState_Unit AbilityOwner)
 {
-	if (AbilityOwner.IsUnitAffectedByEffectName('RTEffect_PsionicSurge')
+	if (AbilityOwner.IsUnitAffectedByEffectName('RTEffect_PsionicSurge'))
 	{
 		return false;
 	}

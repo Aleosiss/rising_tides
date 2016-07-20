@@ -12,9 +12,7 @@ class RTCondition_OverwatchVisibility extends X2Condition_Visibility;
 //TODO: This
 simulated function bool GetOverwatchRange(/*X2Condition_AbilityProperty AbilityProperty*/)
 {
-	/*`log("------------------------------------------------------------------------------------------------------------------------------------------------");
-	`log("AbilityProperty.OwnerHasSoldierAbilities[0] ==" @ AbilityProperty.OwnerHasSoldierAbilities[0]);
-	`log("------------------------------------------------------------------------------------------------------------------------------------------------");
+	/*
 	if (AbilityProperty.OwnerHasSoldierAbilities[0] == 'Snapshot')
 		return true;
 	else

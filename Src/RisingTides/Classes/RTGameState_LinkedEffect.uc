@@ -190,7 +190,7 @@ function TriggerLinkedEffectFlyoverVisualizationFn(XComGameState VisualizeGameSt
 		History.GetCurrentAndPreviousGameStatesForObjectID(UnitState.ObjectID, BuildTrack.StateObject_OldState, BuildTrack.StateObject_NewState, , VisualizeGameState.HistoryIndex);
 		BuildTrack.StateObject_NewState = UnitState;
 		BuildTrack.TrackActor = UnitState.GetVisualizer();
-		`RedScreen(AbilityState.GetMyTemplateName());
+		`RedScreen(""@AbilityState.GetMyTemplateName()@"");
 
 		AbilityTemplate = AbilityState.GetMyTemplate();
 		if (AbilityTemplate != none)

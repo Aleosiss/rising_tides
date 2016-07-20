@@ -1,17 +1,14 @@
 //---------------------------------------------------------------------------------------
-//  FILE:    RTEffect_Squadsight.uc
+//  FILE:    RTEffect_PsionicSurge.uc
 //  AUTHOR:  Aleosiss
-//  DATE:    1 March 2016
-//  PURPOSE: I made this before I realized how Squadsight works and now im too lazy to 
-//			 remove it.
+//  DATE:    15 July 2016
+//  PURPOSE: Placeholder class for RTActionCost_SnapshotActionPoints to check for.
 //           
 //---------------------------------------------------------------------------------------
 //  
 //---------------------------------------------------------------------------------------
 
-class RTEffect_Squadsight extends X2Effect_Persistent;
-
 DefaultProperties
 {
-	EffectName="Squadsight"
+	EffectName="PsionicSurge"
 }
