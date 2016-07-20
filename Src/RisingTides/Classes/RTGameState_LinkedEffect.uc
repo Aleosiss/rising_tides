@@ -27,7 +27,7 @@ function EventListenerReturn LinkedFireCheck (Object EventData, Object EventSour
 	}
 	`LOG("Rising Tides: Linked Fire Check Stage 1");
 	// We only want to link fire when the source is actually shooting a reaction shot
-	if(AbilityContext.InputContext.AbilityTemplateName != 'RTOverwatchShot' && AbilityContext.InputContext.AbilityTemplateName != 'TwitchReactionShot' && AbilityContext.InputContext.AbilityTemplateName != 'OverwatchShot') {
+	if(AbilityContext.InputContext.AbilityTemplateName != 'RTOverwatchShot' && AbilityContext.InputContext.AbilityTemplateName != 'KillZoneShot' && AbilityContext.InputContext.AbilityTemplateName != 'OverwatchShot') {
 		return ELR_NoInterrupt;
 	}
 	`LOG("Rising Tides: Linked Fire Check Stage 2");
@@ -67,9 +67,16 @@ function EventListenerReturn LinkedFireCheck (Object EventData, Object EventSour
 	// LinkedUnits fire the same type of shot (standard OW or TR)
 	AbilityRef = LinkedUnit.FindAbility(AbilityContext.InputContext.AbilityTemplateName, EmptyRef);
 	AbilityState = XComGameState_Ability(History.GetGameStateForObjectID(AbilityRef.ObjectID));
-
+	
+	// check for the case that a LinkedSourceUnit uses Overwatch and the LinkedUnit only has RTOverwatch
 	if(AbilityContext.InputContext.AbilityTemplateName == 'OverwatchShot' && AbilityState == none) {
-		AbilityRef = LinkedUnit.FindAbility('RTOverwatch', EmptyRef);
+		AbilityRef = LinkedUnit.FindAbility('RTOverwatchShot', EmptyRef);
+		AbilityState = XComGameState_Ability(History.GetGameStateForObjectID(AbilityRef.ObjectID));
+	}
+	
+	// check for the case that a LinkedSourceUnit uses Killzone and the LinkedUnit doesn't have it
+	if(AbilityContext.InputContext.AbilityTemplateName == 'KillZoneShot' && AbilityState == none) {
+		AbilityRef = LinkedUnit.FindAbility('OverwatchShot', EmptyRef);
 		AbilityState = XComGameState_Ability(History.GetGameStateForObjectID(AbilityRef.ObjectID));
 	}
 
