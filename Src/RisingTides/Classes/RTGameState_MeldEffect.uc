@@ -279,6 +279,7 @@ simulated function EventListenerReturn RemoveUnitFromMeld(Object EventData, Obje
 		EventManager.UnRegisterFromEvent(ListenerObj, 'TacticalGameEnd');
 		
 		//NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("Meld states cleanup");
+		RemoveEffect(NewGameState, NewGameState);
 		NewGameState.RemoveStateObject(ObjectID);
 		`TACTICALRULES.SubmitGameState(NewGameState);
 
