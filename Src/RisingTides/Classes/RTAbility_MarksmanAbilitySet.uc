@@ -20,15 +20,14 @@ class RTAbility_MarksmanAbilitySet extends RTAbility_GhostAbilitySet
 	var config float SIXOCLOCK_WILL_BONUS;
 	var config float SIXOCLOCK_PSI_BONUS;
 	var config float SIXOCLOCK_DEFENSE_BONUS;
-	var config int HARBINGER_WILL_CHECK;
 	var config int TIMESTANDSSTILL_COOLDOWN;
 	var config int BARRIER_STRENGTH, BARRIER_COOLDOWN;
 	var config int OVERRIDE_COOLDOWN;
 	var config int VITAL_POINT_TARGETING_DAMAGE;
 	var config int SURGE_COOLDOWN;
 	var config int HEAT_CHANNEL_COOLDOWN;
+	var config int HARBINGER_SHIELD_AMOUNT, HARBINGER_COOLDOWN, HARBINGER_DAMAGE_BONUS, HARBINGER_WILL_BONUS, HARBINGER_AIM_BONUS, HARBINGER_ARMOR_BONUS;
 
-	var bool MELDED;
 //---------------------------------------------------------------------------------------
 //---CreateTemplates---------------------------------------------------------------------
 //---------------------------------------------------------------------------------------
@@ -36,10 +35,10 @@ static function array<X2DataTemplate> CreateTemplates()
 {
 	local array<X2DataTemplate> Templates;
 
+	Templates.AddItem(ScopedAndDropped());
 	Templates.AddItem(RTStandardSniperShot());
 	Templates.AddItem(RTOverwatch());
 	Templates.AddItem(RTOverwatchShot());
-	Templates.AddItem(ScopedAndDropped());
 	Templates.AddItem(RTPrecisionShot());
 	Templates.AddItem(RTPrecisionShotDamage());
 	Templates.AddItem(Aggression());
@@ -1340,7 +1339,7 @@ static function X2AbilityTemplate TimeStandsStill()
 	Template.AbilityCosts.AddItem(ActionPointCost);
 
 	Cooldown = new class'X2AbilityCooldown';
-	Cooldown.iNumTurns = 15;
+	Cooldown.iNumTurns = TIMESTANDSSTILL_COOLDOWN;
 	Template.AbilityCooldown = Cooldown;
 
 	TimeStopEffect = new class'RTEffect_TimeStop';
@@ -1377,6 +1376,7 @@ static function X2AbilityTemplate TimeStandsStillCleanseListener()
 	local X2Effect_RemoveEffects				RemoveMultiEffect;
 	local X2AbilityMultiTarget_Radius			MultiTarget;
  	local X2AbilityTrigger_EventListener		EventListener;
+	local X2Effect_Knockback					KnockbackEffect;
 
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'TimeStandsStillCleanseListener');
 	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_voidadept";
@@ -1408,6 +1408,11 @@ static function X2AbilityTemplate TimeStandsStillCleanseListener()
 	RemoveMultiEffect = new class'X2Effect_RemoveEffects';
 	RemoveMultiEffect.EffectNamesToRemove.AddItem('Freeze');
 	RemoveMultiEffect.bCheckSource = false;
+
+	KnockbackEffect = new class'X2Effect_Knockback';
+	KnockbackEffect.KnockbackDistance = 2;
+	KnockbackEffect.bUseTargetLocation = true;
+	Template.AddMultiTargetEffect(KnockbackEffect);
 	
 	Template.AddShooterEffect(RemoveSelfEffect);
 	Template.AddMultiTargetEffect(RemoveMultiEFfect);
@@ -1596,6 +1601,9 @@ static function X2AbilityTemplate TwitchReactionShot()
 	return Template;
 }
 
+//---------------------------------------------------------------------------------------
+//---Psionic Surge-----------------------------------------------------------------------
+//---------------------------------------------------------------------------------------
 static function X2AbilityTemplate PsionicSurge()
 {
 	local X2AbilityTemplate					Template;
@@ -1798,7 +1806,72 @@ static function X2AbilityTemplate ShockAndAwe()
 
 	return Template;
 }
+//---------------------------------------------------------------------------------------
+//---Harbinger-----------------------------------------------------------------------
+//---------------------------------------------------------------------------------------
+static function X2AbilityTemplate Harbinger()
+{
+	local X2AbilityTemplate					Template;
+	local X2AbilityCooldown                 Cooldown;
+	local X2AbilityCost_ActionPoints		ActionPoint;
+	local RTEffect_Harbinger				HarbingerEffect;
+	local X2Condition_UnitEffectsWithAbilitySource	MeldCondition;
+	local X2Effect_EnergyShield ShieldedEffect;
 
+
+	
+	`CREATE_X2ABILITY_TEMPLATE(Template, 'Harbinger');
+	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_adventpsiwitch_mindcontrol";
+	
+	Template.AbilitySourceName = 'eAbilitySource_Psionic';
+	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_AlwaysShow;
+	Template.ConcealmentRule = eConceal_Always;
+
+	ShieldedEffect = new class'X2Effect_EnergyShield';
+	ShieldedEffect.BuildPersistentEffect(1, true, true, , eGameRule_PlayerTurnEnd);
+	ShieldedEffect.SetDisplayInfo(ePerkBuff_Passive, Template.LocFriendlyName, Template.GetMyLongDescription(), Template.IconImage,true,,Template.AbilitySourceName);
+	ShieldedEffect.AddPersistentStatChange(eStat_ShieldHP, HARBINGER_SHIELD_AMOUNT);
+	ShieldedEffect.EffectRemovedVisualizationFn = class'X2Ability_AdventShieldBearer'.OnShieldRemoved_BuildVisualization;
+	Template.AddTargetEffect(ShieldedEffect);
+
+	ActionPoint = new class'X2AbilityCost_ActionPoints';
+	ActionPoint.iNumPoints = 1;
+	ActionPoint.bConsumeAllPoints = false;
+	Template.AbilityCosts.AddItem(ActionPoint);
+
+	MeldCondition = new class'X2Condition_UnitEffectsWithAbilitySource';
+	MeldCondition.AddRequireEffect('RTEffect_Meld', 'Unit must be melded!');
+	Template.AbilityShooterConditions.AddItem(MeldCondition);
+	Template.AbilityTargetConditions.AddItem(MeldCondition);
+	
+	Cooldown = new class'X2AbilityCooldown';
+	Cooldown.iNumTurns = default.HARBINGER_COOLDOWN;
+	Template.AbilityCooldown = Cooldown;
+
+	Template.AbilityTriggers.AddItem(default.PlayerInputTrigger);
+
+	// Add dead eye to guarantee
+	Template.AbilityToHitCalc = default.DeadEye;
+	Template.AbilityTargetStyle = default.SelfTarget;
+
+	HarbingerEffect = new class 'RTEffect_Harbinger';
+	HarbingerEffect.BuildPersistentEffect(1, true, true, false,  eGameRule_PlayerTurnEnd);
+	HarbingerEffect.SetDisplayInfo(ePerkBuff_Bonus, Template.LocFriendlyName, Template.LocLongDescription, Template.IconImage, true,,Template.AbilitySourceName);
+	HarbingerEffect.BONUS_PSI_DAMAGE = default.HARBINGER_DAMAGE_BONUS;
+	HarbingerEffect.BONUS_AIM = default.HARBINGER_AIM_BONUS;
+	HarbingerEffect.BONUS_WILL = default.HARBINGER_WILL_BONUS;
+	HarbingerEffect.BONUS_ARMOR = default.HARBINGER_ARMOR_BONUS;
+	Template.AddTargetEffect(HarbingerEffect);
+
+	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
+	
+	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;	//TODO: VISUALIZATION
+	Template.bSkipFireAction = true;
+
+	Template.bCrossClassEligible = false;
+
+	return Template;
+}
 
 
 

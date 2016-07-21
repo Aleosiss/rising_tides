@@ -120,7 +120,7 @@ simulated function ExtendEffectDurations(XComGameState_Unit TimeStoppedUnit) {
 		if(EffectState.ApplyEffectParameters.TargetStateObjectRef.ObjectID == TimeStoppedUnit.ObjectID) {
 			if(!EffectState.GetX2Effect().bInfiniteDuration) {
 			EffectState.iTurnsRemaining += 1;			   
-			// need to somehow prevent these effects from doing damage while active... no idea how atm.
+			// need to somehow prevent these effects from doing damage/ticking while active... no idea how atm.
 			}
 		}
 	}
