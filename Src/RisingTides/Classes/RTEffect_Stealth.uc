@@ -11,6 +11,7 @@
 class RTEffect_Stealth extends X2Effect_PersistentStatChange;
 	
 var float fStealthModifier;
+var bool bWasPreviouslyConcealed;
 
 
 simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffectParameters, XComGameState_BaseObject kNewTargetState, XComGameState NewGameState, XComGameState_Effect NewEffectState)
@@ -20,7 +21,9 @@ simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffe
 	
 	
 	UnitState = XComGameState_Unit(kNewTargetState);
-	if (UnitState != none)
+	bWasPreviouslyConcealed = UnitState.IsConcealed();
+		
+	if (UnitState != none && !bWasPreviouslyConcealed)
 		`XEVENTMGR.TriggerEvent('EffectEnterUnitConcealment', UnitState, UnitState, NewGameState);
 	
 	AddPersistentStatChange(eStat_DetectionModifier, fStealthModifier);
@@ -32,7 +35,7 @@ simulated function OnEffectRemoved(const out EffectAppliedData ApplyEffectParame
 	local XComGameState_Unit UnitState;
 
 	UnitState = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(ApplyEffectParamters.TargetStateObjRef.ObjectID));
-	if (UnitState != none)
+	if (UnitState != none && !bWasPreviouslyConcealed)
 	{
 		`XEVENTMGR.TriggerEvent('EffectBreakUnitConcealment', UnitState, UnitState, NewGameState);
 	}
@@ -44,5 +47,6 @@ DefaultProperties
 {
 	EffectName = "RTStealth"
 	fStealthModifier=0.9f
+	bWasPreviouslyConcealed = false
 	DuplicateResponse: eDupe_Refresh
 }
