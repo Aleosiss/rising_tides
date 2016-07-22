@@ -27,7 +27,7 @@ simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffe
 	TargetUnitState = XComGameState_Unit(kNewTargetState);
 
 	// heal to full
-	HealAmount = TargetUnitState.GetBaseStat(eStat_Hp) - TargetUnitState.GetCurrentStat(eStat_Hp);
+	HealAmount = TargetUnitState.GetMaxStat(eStat_Hp) - TargetUnitState.GetCurrentStat(eStat_Hp);
 	TargetUnitState.ModifyCurrentStat(eStat_HP, HealAmount);
 	`TRIGGERXP('XpHealDamage', ApplyEffectParameters.SourceStateObjectRef, kNewTargetState.GetReference(), NewGameState);
 
@@ -75,7 +75,7 @@ simulated function AddX2ActionsForVisualization(XComGameState VisualizeGameState
 	
 		SoundAndFlyOver = X2Action_PlaySoundAndFlyOver(class'X2Action_PlaySoundAndFlyOver'.static.AddToVisualizationTrack(BuildTrack, VisualizeGameState.GetContext()));
 		Msg = Repl(default.HealedMessage, "<Heal/>", Healed);
-		SoundAndFlyOver.SetSoundAndFlyOverParameters(None, Msg, '', eColor_Good);
+		SoundAndFlyOver.SetSoundAndFlyOverParameters(None, "Harbinger", '', eColor_Good);
 	}
 }
 
