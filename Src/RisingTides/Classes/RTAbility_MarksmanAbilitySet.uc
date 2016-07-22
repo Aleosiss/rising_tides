@@ -1898,7 +1898,7 @@ static function X2AbilityTemplate Harbinger()
 	Template.AbilityCosts.AddItem(ActionPoint);
 
 	MeldCondition = new class'X2Condition_UnitEffectsWithAbilitySource';
-	MeldCondition.AddRequireEffect('RTEffect_Meld', 'Unit must be melded!');
+	MeldCondition.AddRequireEffect('RTEffect_Meld', 'AA_UnitNotMelded');
 	Template.AbilityShooterConditions.AddItem(MeldCondition);
 	Template.AbilityTargetConditions.AddItem(MeldCondition);
 	
