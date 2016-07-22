@@ -30,6 +30,6 @@ This would be a bare-bones content mod. I also have the following content in min
               - 
 ###### Current Table
               - Triangulation: Spread Over the Shoulder to all melded allies.
-              - Heat Channeling: When this unit uses strenuous psionic abilities (listed, stuff like rift, mc, mw, li, burst) use the excess heat buildup from your weapon to fuel the ability, fully reloading the unit's weapon and reducing the ability's cooldown by one for each point of ammo restored.
+              - 
               
               
