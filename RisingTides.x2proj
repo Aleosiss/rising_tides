@@ -110,6 +110,9 @@
     <Content Include="Src\RisingTides\Classes\RTEffect_ScopedAndDropped.uc">
       <SubType>Content</SubType>
     </Content>
+    <Content Include="Src\RisingTides\Classes\RTEffect_ShockAndAwe.uc">
+      <SubType>Content</SubType>
+    </Content>
     <Content Include="Src\RisingTides\Classes\RTEffect_SixOClock.uc">
       <SubType>Content</SubType>
     </Content>

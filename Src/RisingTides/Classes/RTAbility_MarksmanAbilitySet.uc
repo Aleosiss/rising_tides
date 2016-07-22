@@ -27,6 +27,7 @@ class RTAbility_MarksmanAbilitySet extends RTAbility_GhostAbilitySet
 	var config int SURGE_COOLDOWN;
 	var config int HEAT_CHANNEL_COOLDOWN;
 	var config int HARBINGER_SHIELD_AMOUNT, HARBINGER_COOLDOWN, HARBINGER_DAMAGE_BONUS, HARBINGER_WILL_BONUS, HARBINGER_AIM_BONUS, HARBINGER_ARMOR_BONUS;
+	var config int SHOCKANDAWE_DAMAGE_TO_ACTIVATE;
 
 //---------------------------------------------------------------------------------------
 //---CreateTemplates---------------------------------------------------------------------
@@ -1783,6 +1784,7 @@ static function X2AbilityTemplate EyeInTheSky()
 static function X2AbilityTemplate ShockAndAwe()
 {
 	local X2AbilityTemplate					Template;
+	local RTEffect_ShockAndAwe				ShockEffect;
 
 	//Icon Properties
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'ShockAndAwe');
@@ -1797,12 +1799,68 @@ static function X2AbilityTemplate ShockAndAwe()
 	Template.AbilityTargetStyle = default.SelfTarget;
 	Template.AbilityTriggers.AddItem(default.UnitPostBeginPlayTrigger);
 
-	
-
-	
+	ShockEffect = new class'RTEffect_ShockAndAwe';
+	ShockEffect.BuildPersistentEffect(1, true, true, false);
+	ShockEffect.iDamageRequiredToActivate = SHOCKANDAWE_DAMAGE_TO_ACTIVATE;
+	ShockEffect.SetDisplayInfo(ePerkBuff_Passive, Template.LocFriendlyName, Template.LocLongDescription, Template.IconImage, true,,Template.AbilitySourceName);
+	Template.AddTargetEffect(ShockEffect);
 
 	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
 	//  NOTE: No visualization on purpose!
+
+	return Template;
+}
+
+//---------------------------------------------------------------------------------------
+//---Shock And Awe Listener--------------------------------------------------------------
+//---------------------------------------------------------------------------------------
+static function X2AbilityTemplate ShockAndAweListener()
+{
+	local X2AbilityTemplate					Template;
+	local X2AbilityTrigger_EventListener	EventListener;
+	local X2AbilityMultiTarget_Radius		MultiTarget;
+	local X2Condition_UnitProperty			UnitPropertyCondition;
+
+	//Icon Properties
+	`CREATE_X2ABILITY_TEMPLATE(Template, 'ShockAndAweListener');
+	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_overwatch";
+	
+	Template.AbilitySourceName = 'eAbilitySource_Perk';
+	Template.eAbilityIconBehaviorHUD = EAbilityIconBehavior_NeverShow;
+	Template.Hostility = eHostility_Offensive;
+
+	//Apply perk at the start of the mission. 
+	Template.AbilityToHitCalc = default.DeadEye; 
+	Template.AbilityTargetStyle = default.SelfTarget;
+
+	// Copied Straight from Shieldbearer ability
+	// The Targets must be within the AOE and hostile
+	UnitPropertyCondition = new class'X2Condition_UnitProperty';
+	UnitPropertyCondition.ExcludeDead = true;												  
+	UnitPropertyCondition.ExcludeFriendlyToSource = true;
+	UnitPropertyCondition.ExcludeHostileToSource = false;
+	UnitPropertyCondition.ExcludeCivilian = true;
+	UnitPropertyCondition.FailOnNonUnits = true;
+	Template.AbilityMultiTargetConditions.AddItem(UnitPropertyCondition);
+
+	MultiTarget = new class'X2AbilityMultiTarget_Radius';
+	MultiTarget.fTargetRadius = 17;
+	MultiTarget.bIgnoreBlockingCover = false;
+	Template.AbilityMultiTargetStyle = MultiTarget;
+
+	EventListener = new class'X2AbilityTrigger_EventListener';
+	EventListener.ListenerData.EventID = 'ShockAndAweTrigger';
+	EventListener.ListenerData.Deferral = ELD_OnStateSubmitted;
+	EventListener.ListenerData.Filter = eFilter_Unit;
+	EventListener.ListenerData.EventFn = class'XComGameState_Ability'.static.VoidRiftInsanityListener;
+	Template.AbilityTriggers.AddItem(EventListener);
+
+	Template.AddMultiTargetEffect(class'X2StatusEffects'.static.CreateDisorientedStatusEffect(, , false));
+
+
+	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
+	Template.bSkipFireAction = true;
+	//  TODO: VISUALIZATION
 
 	return Template;
 }
@@ -1824,7 +1882,7 @@ static function X2AbilityTemplate Harbinger()
 	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_adventpsiwitch_mindcontrol";
 	
 	Template.AbilitySourceName = 'eAbilitySource_Psionic';
-	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_AlwaysShow;
+	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_ShowIfAvailable;
 	Template.ConcealmentRule = eConceal_Always;
 
 	ShieldedEffect = new class'X2Effect_EnergyShield';
@@ -1836,7 +1894,7 @@ static function X2AbilityTemplate Harbinger()
 
 	ActionPoint = new class'X2AbilityCost_ActionPoints';
 	ActionPoint.iNumPoints = 1;
-	ActionPoint.bConsumeAllPoints = false;
+	ActionPoint.bConsumeAllPoints = true;
 	Template.AbilityCosts.AddItem(ActionPoint);
 
 	MeldCondition = new class'X2Condition_UnitEffectsWithAbilitySource';
