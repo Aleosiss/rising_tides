@@ -48,7 +48,7 @@ function EventListenerReturn HeatChannelCheck(Object EventData, Object EventSour
   
 
   // get amount of heat channeled
-  iHeatChanneled = OldWeaponState.GetClipSize - OldWeaponState.Ammo;
+  iHeatChanneled = OldWeaponState.GetClipSize() - OldWeaponState.Ammo;
   
   // channel heat
   if(AbilityState.iCooldown < iHeatChanneled) {
