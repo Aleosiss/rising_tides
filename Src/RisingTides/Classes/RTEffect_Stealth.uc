@@ -11,18 +11,21 @@
 class RTEffect_Stealth extends X2Effect_PersistentStatChange;
 	
 var float fStealthModifier;
-var bool bWasPreviouslyConcealed;
 
 
 simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffectParameters, XComGameState_BaseObject kNewTargetState, XComGameState NewGameState, XComGameState_Effect NewEffectState)
 {
 	local XComGameState_Unit UnitState;
+	local bool bWasPreviouslyConcealed;
 
-	
-	
 	UnitState = XComGameState_Unit(kNewTargetState);
 	bWasPreviouslyConcealed = UnitState.IsConcealed();
-		
+	if(bWasPreviouslyConcealed) {
+		UnitState.SetUnitFloatValue('UnitPreviouslyConcealed', 1, eCleanUp_Never);	
+	} else {
+		UnitState.SetUnitFloatValue('UnitPreviouslyConcealed', 0, eCleanUp_Never);
+	}
+	
 	if (UnitState != none && !bWasPreviouslyConcealed)
 		`XEVENTMGR.TriggerEvent('EffectEnterUnitConcealment', UnitState, UnitState, NewGameState);
 	
@@ -33,8 +36,17 @@ simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffe
 simulated function OnEffectRemoved(const out EffectAppliedData ApplyEffectParameters, XComGameState NewGameState, bool bCleansed, XComGameState_Effect RemovedEffectState)
 {
 	local XComGameState_Unit UnitState;
+	local bool bWasPreviouslyConcealed;
+	local UnitValue PreviousValue;
 
 	UnitState = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(ApplyEffectParamters.TargetStateObjRef.ObjectID));
+	UnitState.GetUnitValue('UnitPreviouslyConcealed', PreviousValue);
+	if(PreviousValue.fValue == 1) {
+		bWasPreviouslyConcealed = true;
+	} else {
+		bWasPreviouslyConcealed = false;
+	}
+	
 	if (UnitState != none && !bWasPreviouslyConcealed)
 	{
 		`XEVENTMGR.TriggerEvent('EffectBreakUnitConcealment', UnitState, UnitState, NewGameState);
