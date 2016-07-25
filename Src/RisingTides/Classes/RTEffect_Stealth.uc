@@ -49,4 +49,5 @@ DefaultProperties
 	fStealthModifier=0.9f
 	bWasPreviouslyConcealed = false
 	DuplicateResponse: eDupe_Refresh
+	bRemoveWhenTargetConcealmentBroken = true;
 }
