@@ -46,6 +46,8 @@ simulated function OnEffectRemoved(const out EffectAppliedData ApplyEffectParame
 	} else {
 		bWasPreviouslyConcealed = false;
 	}
+	UnitState.SetUnitFloatValue('UnitPreviouslyConcealed', 0, eCleanUp_Never);
+	
 	// Stealth can wear off naturally and not break concealment
 	if (UnitState != none && !bWasPreviouslyConcealed)
 	{
