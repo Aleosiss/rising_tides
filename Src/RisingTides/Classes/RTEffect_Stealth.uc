@@ -46,7 +46,7 @@ simulated function OnEffectRemoved(const out EffectAppliedData ApplyEffectParame
 	} else {
 		bWasPreviouslyConcealed = false;
 	}
-	
+	// Stealth can wear off naturally and not break concealment
 	if (UnitState != none && !bWasPreviouslyConcealed)
 	{
 		`XEVENTMGR.TriggerEvent('EffectBreakUnitConcealment', UnitState, UnitState, NewGameState);
