@@ -280,7 +280,7 @@ simulated function EventListenerReturn RemoveUnitFromMeld(Object EventData, Obje
 		
 		//NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("Meld states cleanup");
 		RemoveEffect(NewGameState, NewGameState);
-		NewGameState.RemoveStateObject(ObjectID);
+		//NewGameState.RemoveStateObject(ObjectID);
 		`TACTICALRULES.SubmitGameState(NewGameState);
 
 		`LOG("RisingTides: Meld passive effect unregistered from events.");
