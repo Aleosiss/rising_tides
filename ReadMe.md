@@ -21,6 +21,7 @@ This would be a bare-bones content mod. I also have the following content in min
               - Finish up current features
                 - Time Stop damage pop-up (FINAL FEATURE W00t)
               - Bugfixing and testing (all initial implementations are in place)
+                - Harbinger meld listeners
 
 
 ###### Current Unresolved:
