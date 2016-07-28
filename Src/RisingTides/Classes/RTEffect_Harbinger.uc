@@ -34,14 +34,10 @@ simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffe
 	AddPersistentStatChange(eCharStat_PsiOffense, BONUS_WILL);
 	
 	TargetUnitState = XComGameState_Unit(kNewTargetState);
-
 	// heal to full
 	HealAmount = TargetUnitState.GetMaxStat(eStat_Hp) - TargetUnitState.GetCurrentStat(eStat_Hp);
 	TargetUnitState.ModifyCurrentStat(eStat_HP, HealAmount);
-	`TRIGGERXP('XpHealDamage', ApplyEffectParameters.SourceStateObjectRef, kNewTargetState.GetReference(), NewGameState);
-
-	
-
+	NewGameState.AddStateObject(TargetUnitState);
 }
 
 function ModifyTurnStartActionPoints(XComGameState_Unit UnitState, out array<name> ActionPoints, XComGameState_Effect EffectState) {
