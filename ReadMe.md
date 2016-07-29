@@ -32,6 +32,7 @@ This would be a bare-bones content mod. I also have the following content in min
               - 
 ###### Current Table
               - Triangulation: Spread Over the Shoulder to all melded allies.
-              - 
+              - Bump in the Night beginning implementation. http://hastebin.com/viqogonece.java 
+                - Still needs a custom EffectState to implement stat changes OnRefresh.
               
               
