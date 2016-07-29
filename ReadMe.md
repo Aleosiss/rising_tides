@@ -22,6 +22,7 @@ This would be a bare-bones content mod. I also have the following content in min
                 - Time Stop damage pop-up (FINAL FEATURE W00t)
               - Bugfixing and testing (all initial implementations are in place)
                 - Harbinger meld listeners
+                - Stealth/Concealment effects need X2Effect_Spotted implementation
 
 
 ###### Current Unresolved:
