@@ -25,7 +25,7 @@ simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffe
 {
 	local XComGameState_Unit SourceUnitState, TargetUnitState;
 	local XComGameStateHistory History;
-	local int HealAmount;
+	local int HealAmount, ShredAmount, RuptureAmount;
 
 	super.OnEffectAdded(ApplyEffectParameters, kNewTargetState, NewGameState, NewEffectState);
 
@@ -33,10 +33,21 @@ simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffe
 	AddPersistentStatChange(eStat_Will, BONUS_WILL);
 	AddPersistentStatChange(eStat_PsiOffense, BONUS_WILL);
 	
+	// gain bonus armor
+	AddPersistentStatChange(eStat_ArmorMitigation, BONUS_ARMOR)
+	
+	// gain bonus armor pen to simulate psi damage for now
+	AddPersistentStatChange(eStat_ArmorPiercing, BONUS_PSI_DAMAGE)
+	
 	TargetUnitState = XComGameState_Unit(kNewTargetState);
 	// heal to full
 	HealAmount = TargetUnitState.GetMaxStat(eStat_Hp) - TargetUnitState.GetCurrentStat(eStat_Hp);
 	TargetUnitState.ModifyCurrentStat(eStat_HP, HealAmount);
+	
+	// remove damage mods
+	TargetUnitState.Shredded = 0;
+	TargetUnitState.Ruptured = 0;
+	
 	NewGameState.AddStateObject(TargetUnitState);
 }
 
@@ -54,7 +65,9 @@ function GetToHitModifiers(XComGameState_Effect EffectState, XComGameState_Unit 
 }
 
 function int GetDefendingDamageModifier(XComGameState_Effect EffectState, XComGameState_Unit Attacker, Damageable TargetDamageable, XComGameState_Ability AbilityState, const out EffectAppliedData AppliedData, const int CurrentDamage, X2Effect_ApplyWeaponDamage WeaponDamageEffect) { 
-	return -(BONUS_ARMOR); 
+	//return -(BONUS_ARMOR); 
+	return 0;
+	
 }
 
 function int GetAttackingDamageModifier(XComGameState_Effect EffectState, XComGameState_Unit Attacker, Damageable TargetDamageable, XComGameState_Ability AbilityState, const out EffectAppliedData AppliedData, const int CurrentDamage, optional XComGameState NewGameState)

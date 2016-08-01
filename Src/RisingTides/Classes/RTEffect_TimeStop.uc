@@ -153,11 +153,11 @@ simulated function OnEffectRemoved(const out EffectAppliedData ApplyEffectParame
 		// Reset stun timer, (if you're stunned while/before time is stopped, the duration should be unchanged)
 		UnitState.StunnedActionPoints = PreviousStunDuration;
 		
-		// And thus, time resumes...
-		TimeStopEffectState = RTGameState_TimeStopEffect(RemovedEffectState);
+		//// And thus, time resumes...
+		//TimeStopEffectState = RTGameState_TimeStopEffect(RemovedEffectState);
 
 
-		UnitState.TakeDamage(NewGameState, TimeStopEffectState.GetFinalDamageValue().Damage, 0, 0, , TimeStopEffectState, TimeStopEffectState.ApplyEffectParameters.SourceStateObjectRef, TimeStopEffectState.bExplosive);
+		//UnitState.TakeDamage(NewGameState, TimeStopEffectState.GetFinalDamageValue().Damage, 0, 0, , TimeStopEffectState, TimeStopEffectState.ApplyEffectParameters.SourceStateObjectRef, TimeStopEffectState.bExplosive);
 		
 		NewGameState.AddStateObject(UnitState);
 	}
