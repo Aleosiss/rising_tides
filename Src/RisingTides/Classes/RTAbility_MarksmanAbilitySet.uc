@@ -67,6 +67,7 @@ static function array<X2DataTemplate> CreateTemplates()
 	Templates.AddItem(HeatChannel());
 	Templates.AddItem(HeatChannelIcon());
 	Templates.AddItem(Harbinger());
+	Templates.AddItem(HarbingerCleanseListener());
 	Templates.AddItem(ShockAndAwe());
 	Templates.AddItem(ShockAndAweListener());
 	//Templates.AddItem(SIShot());
@@ -1653,6 +1654,7 @@ static function X2AbilityTemplate PsionicSurge()
 	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
 	
 	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;	//TODO: VISUALIZATION
+	Template.bShowActivation = true;
 	Template.bSkipFireAction = true;
 
 	Template.bCrossClassEligible = false;
@@ -1956,6 +1958,63 @@ simulated function OnShieldRemoved_BuildVisualization(XComGameState VisualizeGam
 		SoundAndFlyOver.SetSoundAndFlyOverParameters(None, class'XLocalizedData'.default.ShieldRemovedMsg, '', eColor_Bad, , 0.75, true);
 	}
 }
+//---------------------------------------------------------------------------------------
+//---Harbinger Cleanse Listener--------------------------------------------------
+//---------------------------------------------------------------------------------------
+static function X2AbilityTemplate HarbingerCleanseListener()
+{
+	local X2AbilityTemplate						Template;
+	local X2Condition_UnitProperty				UnitPropertyCondition;
+	local X2Effect_RemoveEffects				RemoveSelfEffect; 
+	local X2Effect_RemoveEffects				RemoveMultiEffect;
+	local X2AbilityMultiTarget_Radius			MultiTarget;
+ 	local X2AbilityTrigger_EventListener		EventListener;
+
+	`CREATE_X2ABILITY_TEMPLATE(Template, 'HarbingerCleanseListener');
+	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_voidadept";
+
+	Template.AbilitySourceName = 'eAbilitySource_Perk';
+	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_NeverShow;
+	Template.Hostility = eHostility_Neutral;
+
+	MultiTarget = new class'X2AbilityMultiTarget_Radius';
+	MultiTarget.fTargetRadius = 500;
+	MultiTarget.bExcludeSelfAsTargetIfWithinRadius = true;
+	MultiTarget.bIgnoreBlockingCover = true;
+	Template.AbilityMultiTargetStyle = MultiTarget;
+
+	EventListener = new class'X2AbilityTrigger_EventListener';
+	EventListener.ListenerData.EventID = 'RTRemoveUnitFromMeld';
+	EventListener.ListenerData.Deferral = ELD_OnStateSubmitted;
+	EventListener.ListenerData.Filter = eFilter_Unit;
+	EventListener.ListenerData.EventFn = class'XComGameState_Ability'.static.AbilityTriggerEventListener_Self;
+	Template.AbilityTriggers.AddItem(EventListener);
+
+	Template.AbilityTargetStyle = default.SelfTarget;
+
+	RemoveSelfEffect = new class'X2Effect_RemoveEffects';
+	RemoveSelfEffect.EffectNamesToRemove.AddItem('Harbinger');
+	RemoveSelfEffect.bCheckSource = false;
+
+	RemoveMultiEffect = new class'X2Effect_RemoveEffects';
+	RemoveMultiEffect.EffectNamesToRemove.AddItem('Harbinger');
+	RemoveMultiEffect.bCheckSource = false;
+
+	Template.AddShooterEffect(RemoveSelfEffect);
+	Template.AddMultiTargetEffect(RemoveMultiEFfect);
+	
+	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
+	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
+	Template.bSkipFireAction = true;
+
+
+	Template.bCrossClassEligible = false;
+	return Template;
+}
+
+
+
+
 
 
 

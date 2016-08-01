@@ -11,6 +11,15 @@ class RTEffect_Harbinger extends X2Effect_PersistentStatChange;
 var int BONUS_PSI_DAMAGE, BONUS_AIM, BONUS_WILL, BONUS_ARMOR;
 var localized string RTFriendlyName;
 
+function RegisterForEvents(XComGameState_Effect EffectState) {
+  local EventManager EventMgr;
+  local Object ListenerObj, FilterObj;
+
+  ListenerObj = EffectState;
+  FilterObj = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(EffectState.ApplyEffectParameters.TargetSourceStateObjRef.ObjectID)); // the source unit will have its own method of removing the effect
+  EventMgr.RegisterForEvent('RTRemoveUnitFromMeld', ListenerObj, EffectState.OnShieldsExpended, ELD_OnStateSubmitted, FilterObj); // shields expended appears to just be a generic remove effect listener
+}
+
 
 simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffectParameters, XComGameState_BaseObject kNewTargetState, XComGameState NewGameState, XComGameState_Effect NewEffectState)
 {
@@ -25,13 +34,10 @@ simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffe
 	AddPersistentStatChange(eStat_PsiOffense, BONUS_WILL);
 	
 	TargetUnitState = XComGameState_Unit(kNewTargetState);
-
 	// heal to full
 	HealAmount = TargetUnitState.GetMaxStat(eStat_Hp) - TargetUnitState.GetCurrentStat(eStat_Hp);
 	TargetUnitState.ModifyCurrentStat(eStat_HP, HealAmount);
-
-	
-
+	NewGameState.AddStateObject(TargetUnitState);
 }
 
 function ModifyTurnStartActionPoints(XComGameState_Unit UnitState, out array<name> ActionPoints, XComGameState_Effect EffectState) {
