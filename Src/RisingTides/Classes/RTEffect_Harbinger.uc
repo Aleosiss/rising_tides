@@ -21,15 +21,14 @@ simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffe
 	super.OnEffectAdded(ApplyEffectParameters, kNewTargetState, NewGameState, NewEffectState);
 
 	// gain bonus will and psi offense
-	AddPersistentStatChange(eCharStat_Will, BONUS_WILL);
-	AddPersistentStatChange(eCharStat_PsiOffense, BONUS_WILL);
+	AddPersistentStatChange(eStat_Will, BONUS_WILL);
+	AddPersistentStatChange(eStat_PsiOffense, BONUS_WILL);
 	
 	TargetUnitState = XComGameState_Unit(kNewTargetState);
 
 	// heal to full
 	HealAmount = TargetUnitState.GetMaxStat(eStat_Hp) - TargetUnitState.GetCurrentStat(eStat_Hp);
 	TargetUnitState.ModifyCurrentStat(eStat_HP, HealAmount);
-	`TRIGGERXP('XpHealDamage', ApplyEffectParameters.SourceStateObjectRef, kNewTargetState.GetReference(), NewGameState);
 
 	
 
@@ -63,18 +62,14 @@ simulated function AddX2ActionsForVisualization(XComGameState VisualizeGameState
 {
 	local XComGameState_Unit OldUnit, NewUnit;
 	local X2Action_PlaySoundAndFlyOver SoundAndFlyOver;
-	local int Healed;
-	local string Msg;
 
 	OldUnit = XComGameState_Unit(BuildTrack.StateObject_OldState);
 	NewUnit = XComGameState_Unit(BuildTrack.StateObject_NewState);
 
 	if (OldUnit != none && NewUnit != None)
 	{
-		Healed = NewUnit.GetCurrentStat(eStat_HP) - OldUnit.GetCurrentStat(eStat_HP);
 	
 		SoundAndFlyOver = X2Action_PlaySoundAndFlyOver(class'X2Action_PlaySoundAndFlyOver'.static.AddToVisualizationTrack(BuildTrack, VisualizeGameState.GetContext()));
-		Msg = Repl(default.HealedMessage, "<Heal/>", Healed);
 		SoundAndFlyOver.SetSoundAndFlyOverParameters(None, "Harbinger", '', eColor_Good);
 	}
 }

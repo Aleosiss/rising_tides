@@ -15,7 +15,6 @@ function bool PostAbilityCostPaid(XComGameState_Effect EffectState, XComGameStat
 
 	bIsStandardFire = false;
 	bIsMindWrack = false;
-	bIsCriticalHit = false;
 	
 	if(kAbility.GetMyTemplateName() == 'RTStandardSniperShot' || kAbility.GetMyTemplateName() == 'DaybreakFlame' || kAbility.GetMyTemplateName() == 'PrecisionShot' || kAbility.GetMyTemplateName() == 'DisablingShot' || kAbility.GetMyTemplateName() == 'RTOverwatchShot')
 		bIsStandardFire = true;

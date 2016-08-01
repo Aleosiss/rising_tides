@@ -6,14 +6,14 @@ function EventListenerReturn HeatChannelCheck(Object EventData, Object EventSour
   local XComGameState_Unit SourceUnit, NewSourceUnit;
   local XComGameStateHistory History;
   local StateObjectReference AbilityRef;
-  local XComGameState_Ability OldAbilityState, NewAbilityState;
+  local XComGameState_Ability AbilityState, NewAbilityState;
   local XComGameStateContext_Ability AbilityContext;
   local XComGameState_Item OldWeaponState, NewWeaponState;
   local XComGameState NewGameState;
   local int iHeatChanneled;
 
   // EventData = AbilityState to Channel
-  OldAbilityState = XComGameState_Ability(EventData);
+  AbilityState = XComGameState_Ability(EventData);
   // Event Source = UnitState of AbilityState
   SourceUnit = XComGameState_Unit(EventSource);
 
@@ -35,8 +35,7 @@ function EventListenerReturn HeatChannelCheck(Object EventData, Object EventSour
     return ELR_NoInterrupt;
   }
 
-  AbilityState = XComGameState_Ability(History.GetGameStateForObjectID(AbilityContext.InputContext.AbilityRef.ObjectID));
-  if(!AbilityState.IsCoolingDown) {
+  if(!AbilityState.IsCoolingDown()) {
     `RedScreenOnce("The ability was used but isn't on cooldown!");
     return ELR_NoInterrupt;
   }

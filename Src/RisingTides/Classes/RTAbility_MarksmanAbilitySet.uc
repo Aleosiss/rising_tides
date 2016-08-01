@@ -59,13 +59,16 @@ static function array<X2DataTemplate> CreateTemplates()
 	Templates.AddItem(DaybreakFlameIcon());
 	Templates.AddItem(YourHandsMyEyes());
 	Templates.AddItem(TimeStandsStill());
-	Templates.AddItem(TimeStandsStillCleanseListener());
+	Templates.AddItem(TimeStandsStillEndListener());
 	Templates.AddItem(TwitchReaction());
 	Templates.AddItem(TwitchReactionShot());
 	Templates.AddItem(LinkedIntelligence());
 	Templates.AddItem(PsionicSurge());
 	Templates.AddItem(HeatChannel());
 	Templates.AddItem(HeatChannelIcon());
+	Templates.AddItem(Harbinger());
+	Templates.AddItem(ShockAndAwe());
+	Templates.AddItem(ShockAndAweListener());
 	//Templates.AddItem(SIShot());
 	//Templates.AddItem(TimeStandsStill());
 	//Templates.AddItem(Override());
@@ -387,7 +390,7 @@ static function X2AbilityTemplate RTOverwatchShot()
 static function X2AbilityTemplate RTPrecisionShot()
 {
 	local X2AbilityTemplate                 Template;
-	local X2AbilityCooldown                 Cooldown;
+	local RTAbilityCooldown                 Cooldown;
 	local X2AbilityToHitCalc_StandardAim    ToHitCalc;
 	local X2Condition_Visibility            TargetVisibilityCondition;
 	local X2AbilityCost_Ammo                AmmoCost;
@@ -408,7 +411,7 @@ static function X2AbilityTemplate RTPrecisionShot()
 	Template.bUsesFiringCamera = true;
 	Template.CinescriptCameraType = "StandardGunFiring";
 
-	Cooldown = new class'X2AbilityCooldown';
+	Cooldown = new class'RTAbilityCooldown';
 	Cooldown.iNumTurns = default.HEADSHOT_COOLDOWN;
 	Template.AbilityCooldown = Cooldown;
 
@@ -551,7 +554,7 @@ static function X2AbilityTemplate KnockThemDown()
 static function X2AbilityTemplate DisablingShot()
 {
 	local X2AbilityTemplate                 Template;
-	local X2AbilityCooldown                 Cooldown;
+	local RTAbilityCooldown                 Cooldown;
 	local X2AbilityToHitCalc_StandardAim    ToHitCalc;
 	local X2Condition_Visibility            TargetVisibilityCondition;
 	local X2AbilityCost_Ammo                AmmoCost;
@@ -573,7 +576,7 @@ static function X2AbilityTemplate DisablingShot()
 	Template.bUsesFiringCamera = true;
 	Template.CinescriptCameraType = "StandardGunFiring";
 
-	Cooldown = new class'X2AbilityCooldown';
+	Cooldown = new class'RTAbilityCooldown';
 	Cooldown.iNumTurns = default.DISABLESHOT_COOLDOWN;
 	Template.AbilityCooldown = Cooldown;
 
@@ -1340,7 +1343,7 @@ static function X2AbilityTemplate TimeStandsStill()
 	Template.AbilityCosts.AddItem(ActionPointCost);
 
 	Cooldown = new class'X2AbilityCooldown';
-	Cooldown.iNumTurns = TIMESTANDSSTILL_COOLDOWN;
+	Cooldown.iNumTurns = default.TIMESTANDSSTILL_COOLDOWN;
 	Template.AbilityCooldown = Cooldown;
 
 	TimeStopEffect = new class'RTEffect_TimeStop';
@@ -1355,11 +1358,13 @@ static function X2AbilityTemplate TimeStandsStill()
 
 	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
 
+	Template.PostActivationEvents.AddItem('UnitUsedPsionicAbility');
+
 	// TODO: VISUALIZATION
 	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
 	Template.bSkipFireAction = true;
 
-	Template.AdditionalAbilities.AddItem('TimeStandsStillCleanseListener');
+	Template.AdditionalAbilities.AddItem('TimeStandsStillEndListener');
 
 
 	Template.bCrossClassEligible = false;
@@ -1369,7 +1374,7 @@ static function X2AbilityTemplate TimeStandsStill()
 //---------------------------------------------------------------------------------------
 //---Time Stands Still Cleanse Listener--------------------------------------------------
 //---------------------------------------------------------------------------------------
-static function X2AbilityTemplate TimeStandsStillCleanseListener()
+static function X2AbilityTemplate TimeStandsStillEndListener()
 {
 	local X2AbilityTemplate						Template;
 	local X2Condition_UnitProperty				UnitPropertyCondition;
@@ -1378,8 +1383,9 @@ static function X2AbilityTemplate TimeStandsStillCleanseListener()
 	local X2AbilityMultiTarget_Radius			MultiTarget;
  	local X2AbilityTrigger_EventListener		EventListener;
 	local X2Effect_Knockback					KnockbackEffect;
+	local RTEffect_TimeStopDamage				TimeStopDamageEffect;
 
-	`CREATE_X2ABILITY_TEMPLATE(Template, 'TimeStandsStillCleanseListener');
+	`CREATE_X2ABILITY_TEMPLATE(Template, 'TimeStandsStillEndListener');
 	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_voidadept";
 
 	Template.AbilitySourceName = 'eAbilitySource_Perk';
@@ -1400,6 +1406,9 @@ static function X2AbilityTemplate TimeStandsStillCleanseListener()
 	Template.AbilityTriggers.AddItem(EventListener);
 
 	Template.AbilityTargetStyle = default.SelfTarget;
+
+	TimeStopDamageEffect = new class'RTEffect_TimeStopDamage';
+	Template.AddMultiTargetEffect(TimeStopDamageEffect);
 
 	RemoveSelfEffect = new class'X2Effect_RemoveEffects';
 	RemoveSelfEffect.EffectNamesToRemove.AddItem('TimeStandsStillCounterEffect');
@@ -1639,6 +1648,8 @@ static function X2AbilityTemplate PsionicSurge()
 	SurgeEffect.SetDisplayInfo(ePerkBuff_Bonus, Template.LocFriendlyName, Template.LocLongDescription, Template.IconImage, true,,Template.AbilitySourceName);
 	Template.AddTargetEffect(SurgeEffect);
 
+	Template.PostActivationEvents.AddItem('UnitUsedPsionicAbility');
+
 	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
 	
 	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;	//TODO: VISUALIZATION
@@ -1801,9 +1812,11 @@ static function X2AbilityTemplate ShockAndAwe()
 
 	ShockEffect = new class'RTEffect_ShockAndAwe';
 	ShockEffect.BuildPersistentEffect(1, true, true, false);
-	ShockEffect.iDamageRequiredToActivate = SHOCKANDAWE_DAMAGE_TO_ACTIVATE;
+	ShockEffect.iDamageRequiredToActivate = default.SHOCKANDAWE_DAMAGE_TO_ACTIVATE;
 	ShockEffect.SetDisplayInfo(ePerkBuff_Passive, Template.LocFriendlyName, Template.LocLongDescription, Template.IconImage, true,,Template.AbilitySourceName);
 	Template.AddTargetEffect(ShockEffect);
+
+	Template.AdditionalAbilities.AddItem('ShockAndAweListener');
 
 	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
 	//  NOTE: No visualization on purpose!
@@ -1831,7 +1844,7 @@ static function X2AbilityTemplate ShockAndAweListener()
 
 	//Apply perk at the start of the mission. 
 	Template.AbilityToHitCalc = default.DeadEye; 
-	Template.AbilityTargetStyle = default.SelfTarget;
+	Template.AbilityTargetStyle = default.SimpleSingleTarget;
 
 	// Copied Straight from Shieldbearer ability
 	// The Targets must be within the AOE and hostile
@@ -1844,7 +1857,7 @@ static function X2AbilityTemplate ShockAndAweListener()
 	Template.AbilityMultiTargetConditions.AddItem(UnitPropertyCondition);
 
 	MultiTarget = new class'X2AbilityMultiTarget_Radius';
-	MultiTarget.fTargetRadius = 17;
+	MultiTarget.fTargetRadius = 10;
 	MultiTarget.bIgnoreBlockingCover = false;
 	Template.AbilityMultiTargetStyle = MultiTarget;
 
@@ -1888,8 +1901,8 @@ static function X2AbilityTemplate Harbinger()
 	ShieldedEffect = new class'X2Effect_EnergyShield';
 	ShieldedEffect.BuildPersistentEffect(1, true, true, , eGameRule_PlayerTurnEnd);
 	ShieldedEffect.SetDisplayInfo(ePerkBuff_Passive, Template.LocFriendlyName, Template.GetMyLongDescription(), Template.IconImage,true,,Template.AbilitySourceName);
-	ShieldedEffect.AddPersistentStatChange(eStat_ShieldHP, HARBINGER_SHIELD_AMOUNT);
-	ShieldedEffect.EffectRemovedVisualizationFn = class'X2Ability_AdventShieldBearer'.OnShieldRemoved_BuildVisualization;
+	ShieldedEffect.AddPersistentStatChange(eStat_ShieldHP, default.HARBINGER_SHIELD_AMOUNT);
+	ShieldedEffect.EffectRemovedVisualizationFn = OnShieldRemoved_BuildVisualization;
 	Template.AddTargetEffect(ShieldedEffect);
 
 	ActionPoint = new class'X2AbilityCost_ActionPoints';
@@ -1922,6 +1935,8 @@ static function X2AbilityTemplate Harbinger()
 	Template.AddTargetEffect(HarbingerEffect);
 
 	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
+
+	Template.PostActivationEvents.AddItem('UnitUsedPsionicAbility');
 	
 	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;	//TODO: VISUALIZATION
 	Template.bSkipFireAction = true;
@@ -1929,6 +1944,17 @@ static function X2AbilityTemplate Harbinger()
 	Template.bCrossClassEligible = false;
 
 	return Template;
+}
+
+simulated function OnShieldRemoved_BuildVisualization(XComGameState VisualizeGameState, out VisualizationTrack BuildTrack, const name EffectApplyResult)
+{
+	local X2Action_PlaySoundAndFlyOver SoundAndFlyOver;
+
+	if (XGUnit(BuildTrack.TrackActor).IsAlive())
+	{
+		SoundAndFlyOver = X2Action_PlaySoundAndFlyOver(class'X2Action_PlaySoundAndFlyOver'.static.AddToVisualizationTrack(BuildTrack, VisualizeGameState.GetContext()));
+		SoundAndFlyOver.SetSoundAndFlyOverParameters(None, class'XLocalizedData'.default.ShieldRemovedMsg, '', eColor_Bad, , 0.75, true);
+	}
 }
 
 

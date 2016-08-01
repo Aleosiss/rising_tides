@@ -34,13 +34,13 @@ simulated function OnEffectRemoved(const out EffectAppliedData ApplyEffectParame
 {
 	local XComGameState_Unit UnitState;
 
-	UnitState = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(ApplyEffectParamters.TargetStateObjRef.ObjectID));
+	UnitState = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(ApplyEffectParameters.TargetStateObjectRef.ObjectID));
 	if (UnitState != none && !bWasPreviouslyConcealed)
 	{
 		`XEVENTMGR.TriggerEvent('EffectBreakUnitConcealment', UnitState, UnitState, NewGameState);
 	}
 	
-	super.OnEffectRemoved(ApplyEffectParamters, NewGameState, bCleansed, RemovedEffectState);
+	super.OnEffectRemoved(ApplyEffectParameters, NewGameState, bCleansed, RemovedEffectState);
 }
 
 DefaultProperties
@@ -48,5 +48,5 @@ DefaultProperties
 	EffectName = "RTStealth"
 	fStealthModifier=0.9f
 	bWasPreviouslyConcealed = false
-	DuplicateResponse: eDupe_Refresh
+	DuplicateResponse = eDupe_Refresh
 }

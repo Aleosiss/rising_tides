@@ -229,6 +229,7 @@ static function X2AbilityTemplate PsiOverload()
 	Template.AddTargetEffect(KillUnitEffect);
 
 	Template.PostActivationEvents.AddItem('RTPsiOverload');
+	Template.PostActivationEvents.AddItem('UnitUsedPsionicAbility');
 	//Template.AdditionalAbilities.AddItem('PsiOverloadPanic');
 
 	Template.CustomFireAnim = 'HL_Psi_MindControl';

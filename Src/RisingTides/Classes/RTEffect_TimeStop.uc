@@ -219,19 +219,27 @@ function int GetDefendingDamageModifier(XComGameState_Effect EffectState, XComGa
 	local int DamageTaken, i;
 	local RTGameState_TimeStopEffect TimeStopEffectState;
 
+
+
 	// You can't take damage during a time-stop. Negate and store the damage for when it ends. 
+	// Let the damage from the Time Stop pass through
+	if(WeaponDamageEffect.DamageTag == 'TimeStopDamageEffect')
+		return 0;
 
 	TimeStopEffectState = RTGameState_TimeStopEffect(EffectState);
 
+	// damage over time effects are totally negated
 	// hack implementation. if possible should detect if it's a ticking damage effect but this should do for now
-	if(WeaponDamageEffect.EffectDamageValue.DamageType == 'fire' || WeaponDamageEffect.EffectDamageValue.DamageType == 'poison' || WeaponDamageEffect.EffectDamageValue.DamageType == 'acid' || WeaponDamageEffect.EffectDamageValue.DamageType == 'gas')
+	if(WeaponDamageEffect.EffectDamageValue.DamageType == 'fire' || WeaponDamageEffect.EffectDamageValue.DamageType == 'poison' || WeaponDamageEffect.EffectDamageValue.DamageType == 'acid' || WeaponDamageEffect.EffectDamageValue.DamageType == class'X2Item_DefaultDamageTypes'.default.ParthenogenicPoisonType)
 		return -(CurrentDamage);
 	
+	// record WeaponDamageValue
 	TimeStopEffectState.PreventedDamageValues.AddItem(WeaponDamageEffect.EffectDamageValue);
 	`RedScreen("Rising Tides: Time Stop has negated " @ TimeStopEffectState.GetFinalDamageValue().Damage @ " damage so far! This time, it was of type " @ TimeStopEffectState.PreventedDamageValues[TimeStopEffectState.PreventedDamageValues.length].DamageType @"!");
-	
-	// TODO: Check for explosive damage, and crits
 
+	// record crit //TODO: figure out how to force crit damage popup
+	if(AppliedData.AbilityResultContext.HitResult == eHit_Crit)
+		TimeStopEffectState.bCrit = true;
 
 	return -(CurrentDamage); 
 }
