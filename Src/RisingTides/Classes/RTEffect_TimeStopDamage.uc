@@ -12,6 +12,7 @@ function WeaponDamageValue GetBonusEffectDamageValue(XComGameState_Ability Abili
 	TimeStopEffectState = RTGameState_TimeStopEffect(TargetUnitState.GetUnitAffectedByEffectState('Freeze'));
 	
 	if(TimeStopEffectState != none) {
+		// And thus, time resumes...
 		ReturnDamageValue = TimeStopEffectState.GetFinalDamageValue();
 	}
 
