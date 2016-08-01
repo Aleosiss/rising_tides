@@ -12,5 +12,5 @@ class RTEffect_PsionicSurge extends X2Effect_Persistent;
 
 DefaultProperties
 {
-	EffectName="PsionicSurge"
+	EffectName="RTEffect_PsionicSurge"
 }
