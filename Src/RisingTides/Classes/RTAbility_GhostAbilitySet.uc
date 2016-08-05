@@ -357,6 +357,8 @@ static function X2AbilityTemplate Fade()
 	StealthEffect.BuildPersistentEffect(default.FADE_DURATION, false, true, false, eGameRule_PlayerTurnBegin);
 	Template.AddTargetEffect(StealthEffect);
 	
+	Template.AddTargetEffect(class'X2Effect_Spotted'.static.CreateUnspottedEffect());
+	
 	// Add dead eye to guarantee
 	Template.AbilityToHitCalc = default.DeadEye;
 	Template.AbilityTargetStyle = default.SelfTarget;
