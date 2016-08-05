@@ -891,7 +891,7 @@ static function X2AbilityTemplate SlowIsSmooth()
 	Template.AbilityTriggers.AddItem(default.UnitPostBeginPlayTrigger);
 
 	Effect = new class'X2Effect_Persistent';
-	Effect.EffectName = 'SlowIsSmooth';
+	Effect.EffectName = 'RTEffect_SlowIsSmooth';
 	Effect.DuplicateResponse = eDupe_Ignore;
 	Effect.BuildPersistentEffect(1, true, false);
 	Effect.SetDisplayInfo(ePerkBuff_Passive, Template.LocFriendlyName, Template.GetMyLongDescription(), Template.IconImage,,,Template.AbilitySourceName);
