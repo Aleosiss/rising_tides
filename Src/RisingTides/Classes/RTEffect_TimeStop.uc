@@ -234,13 +234,15 @@ function int GetDefendingDamageModifier(XComGameState_Effect EffectState, XComGa
 		return -(CurrentDamage);
 	
 	// record WeaponDamageValue
+	if(WeaponDamageEffect.EffectDamageValue.DamageType != none){
 	TimeStopEffectState.PreventedDamageValues.AddItem(WeaponDamageEffect.EffectDamageValue);
+	 
 	`RedScreen("Rising Tides: Time Stop has negated " @ TimeStopEffectState.GetFinalDamageValue().Damage @ " damage so far! This time, it was of type " @ TimeStopEffectState.PreventedDamageValues[TimeStopEffectState.PreventedDamageValues.length].DamageType @"!");
-
+	
 	// record crit //TODO: figure out how to force crit damage popup
 	if(AppliedData.AbilityResultContext.HitResult == eHit_Crit)
 		TimeStopEffectState.bCrit = true;
-
+	}
 	return -(CurrentDamage); 
 }
 
