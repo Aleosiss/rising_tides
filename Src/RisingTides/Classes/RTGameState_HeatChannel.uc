@@ -24,7 +24,7 @@ function EventListenerReturn HeatChannelCheck(Object EventData, Object EventSour
   }
 
   // immediately return if the event did not originate from ourselves
-  if(OwnerStateObject.ObjectID != OldSourceUnit.ObjectID) {
+  if(ApplyEffectParameters.SourceStateObjectRef.ObjectID != OldSourceUnit.ObjectID) {
 	`RedScreenOnce("EventSource was not unit with Heat Channel!");
     return ELR_NoInterrupt;
   }
