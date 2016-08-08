@@ -80,6 +80,9 @@
     <Content Include="Src\RisingTides\Classes\RTEffect_Harbinger.uc">
       <SubType>Content</SubType>
     </Content>
+    <Content Include="Src\RisingTides\Classes\RTEffect_HeatChannel.uc">
+      <SubType>Content</SubType>
+    </Content>
     <Content Include="Src\RisingTides\Classes\RTEffect_Inevitibility.uc">
       <SubType>Content</SubType>
     </Content>
@@ -159,6 +162,9 @@
       <SubType>Content</SubType>
     </Content>
     <Content Include="Src\RisingTides\Classes\RTGameState_Ability.uc">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Src\RisingTides\Classes\RTGameState_HeatChannel.uc">
       <SubType>Content</SubType>
     </Content>
     <Content Include="Src\RisingTides\Classes\RTGameState_LinkedEffect.uc">

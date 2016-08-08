@@ -197,6 +197,14 @@ LocHelpText="Fade from view whenever you take damage."
 LocFlyOverText="Fade"
 LocPromotionPopupText="<Bullet/> Fade from view whenever you take damage.<br/><Bullet/> Gain stealth until the start of your next turn whenever this unit takes damage. 5 turn cooldown.<br/>"
 
+[Fade X2AbilityTemplate]
+LocFriendlyName="Fade"
+LocLongDescription="Fade from view whenever you take damage."
+LocHelpText="Fade from view whenever you take damage."
+LocFlyOverText="Fade"
+LocPromotionPopupText="<Bullet/> Fade from view whenever you take damage.<br/><Bullet/> Gain stealth until the start of your next turn whenever this unit takes damage. 5 turn cooldown.<br/>"
+
+
 [Teek X2AbilityTemplate]
 LocFriendlyName="Teek"
 LocLongDescription="This unit has honed its telekinetic abilities, increasing its ability to dodge, deflect, and redirection enemy fire."

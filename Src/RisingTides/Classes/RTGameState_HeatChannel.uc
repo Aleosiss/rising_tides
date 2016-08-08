@@ -1,6 +1,6 @@
 // This is an Unreal Script
 
-class RTGameState_Ability extends XComGameState_Ability;
+class RTGameState_HeatChannel extends XComGameState_Effect;
 
 function EventListenerReturn HeatChannelCheck(Object EventData, Object EventSource, XComGameState GameState, Name EventID) {
   local XComGameState_Unit OldSourceUnit, NewSourceUnit;
@@ -18,8 +18,14 @@ function EventListenerReturn HeatChannelCheck(Object EventData, Object EventSour
   // Event Source = UnitState of AbilityState
   OldSourceUnit = XComGameState_Unit(EventSource);
 
+  if(OldAbilityState == none) {
+	`RedScreenOnce("EventData was not an XComGameState_Ability!");
+	return ELR_NoInterrupt;
+  }
+
   // immediately return if the event did not originate from ourselves
   if(OwnerStateObject.ObjectID != OldSourceUnit.ObjectID) {
+	`RedScreenOnce("EventSource was not unit with Heat Channel!");
     return ELR_NoInterrupt;
   }
 

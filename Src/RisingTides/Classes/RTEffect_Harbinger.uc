@@ -12,12 +12,14 @@ var int BONUS_PSI_DAMAGE, BONUS_AIM, BONUS_WILL, BONUS_ARMOR;
 var localized string RTFriendlyName;
 
 function RegisterForEvents(XComGameState_Effect EffectState) {
-  local EventManager EventMgr;
+  local X2EventManager EventMgr;
   local Object ListenerObj, FilterObj;
 
+  EventMgr = `XEVENTMGR;
+
   ListenerObj = EffectState;
-  FilterObj = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(EffectState.ApplyEffectParameters.TargetSourceStateObjRef.ObjectID)); // the source unit will have its own method of removing the effect
-  EventMgr.RegisterForEvent('RTRemoveUnitFromMeld', ListenerObj, EffectState.OnShieldsExpended, ELD_OnStateSubmitted, FilterObj); // shields expended appears to just be a generic remove effect listener
+  FilterObj = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(EffectState.ApplyEffectParameters.TargetStateObjectRef.ObjectID)); // the source unit will have its own method of removing the effect
+  EventMgr.RegisterForEvent(ListenerObj, 'RTRemoveUnitFromMeld', EffectState.OnShieldsExpended, ELD_OnStateSubmitted, , FilterObj); // shields expended appears to just be a generic remove effect listener
 }
 
 
@@ -33,11 +35,9 @@ simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffe
 	AddPersistentStatChange(eStat_Will, BONUS_WILL);
 	AddPersistentStatChange(eStat_PsiOffense, BONUS_WILL);
 	
-	// gain bonus armor
-	AddPersistentStatChange(eStat_ArmorMitigation, BONUS_ARMOR)
 	
 	// gain bonus armor pen to simulate psi damage for now
-	AddPersistentStatChange(eStat_ArmorPiercing, BONUS_PSI_DAMAGE)
+	AddPersistentStatChange(eStat_ArmorPiercing, BONUS_PSI_DAMAGE);
 	
 	TargetUnitState = XComGameState_Unit(kNewTargetState);
 	// heal to full
@@ -54,6 +54,10 @@ simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffe
 function ModifyTurnStartActionPoints(XComGameState_Unit UnitState, out array<name> ActionPoints, XComGameState_Effect EffectState) {
 	ActionPoints.AddItem(class'X2CharacterTemplateManager'.default.StandardActionPoint);
 }
+
+
+function int GetArmorMitigation(XComGameState_Effect EffectState, XComGameState_Unit UnitState) { return BONUS_ARMOR; }
+function string GetArmorName(XComGameState_Effect EffectState, XComGameState_Unit UnitState) { return FriendlyName; }
 
 function GetToHitModifiers(XComGameState_Effect EffectState, XComGameState_Unit Attacker, XComGameState_Unit Target, XComGameState_Ability AbilityState, class<X2AbilityToHitCalc> ToHitType, bool bMelee, bool bFlanking, bool bIndirectFire, out array<ShotModifierInfo> ShotModifiers) {
 	local ShotModifierInfo ModInfoAim;

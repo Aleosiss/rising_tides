@@ -30,7 +30,7 @@ function GetToHitModifiers(XComGameState_Effect EffectState, XComGameState_Unit 
 		bSquadsight = true;
 	AbilityState.SourceWeapon = EffectState.ApplyEffectParameters.ItemStateObjectRef;
 	//Add bonus crit chance if we're shooting a precision shot.	
-	if (AbilityState.GetMyTemplateName() == 'PrecisionShot')
+	if (AbilityState.GetMyTemplateName() == 'RTPrecisionShot')
 	{
 		ModInfo.ModType = eHit_Crit;
 		ModInfo.Reason = RTFriendlyName;
@@ -57,7 +57,7 @@ function int GetAttackingDamageModifier(XComGameState_Effect EffectState, XComGa
 	if (AppliedData.AbilityResultContext.HitResult == eHit_Crit)
 	{
 		//Check for precision shot
-		if (AbilityState.GetMyTemplateName() == 'PrecisionShot')
+		if (AbilityState.GetMyTemplateName() == 'RTPrecisionShot')
 		{
 			ExtraDamage = CurrentDamage * HEADSHOT_CRITDMG_BONUS;
 		}

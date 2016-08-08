@@ -18,19 +18,20 @@ function EventListenerReturn LinkedFireCheck (Object EventData, Object EventSour
 		`LOG("Rising Tides: LinkedEffect is probably being called before it finishes resolving!");
 		return ELR_NoInterrupt;
 	}
+
 	EmptyRef.ObjectID = 0;
-	`LOG("Rising Tides: Linked Fire Check Setup!");
+	//`LOG("Rising Tides: Linked Fire Check Setup!");
 	History = `XCOMHISTORY;
 	AbilityContext = XComGameStateContext_Ability(GameState.GetContext());
 	if (AbilityContext == none) {
 		return ELR_NoInterrupt;	
 	}
-	`LOG("Rising Tides: Linked Fire Check Stage 1");
+	//`LOG("Rising Tides: Linked Fire Check Stage 1");
 	// We only want to link fire when the source is actually shooting a reaction shot
 	if(AbilityContext.InputContext.AbilityTemplateName != 'RTOverwatchShot' && AbilityContext.InputContext.AbilityTemplateName != 'KillZoneShot' && AbilityContext.InputContext.AbilityTemplateName != 'OverwatchShot') {
 		return ELR_NoInterrupt;
 	}
-	`LOG("Rising Tides: Linked Fire Check Stage 2");
+	//`LOG("Rising Tides: Linked Fire Check Stage 2");
 	// The LinkedSourceUnit should be the unit that has Linked Intelligence, and the unit that is currently attacking
 	LinkedSourceUnit = class'X2TacticalGameRulesetDataStructures'.static.GetAttackingUnitState(GameState);
 
@@ -63,22 +64,32 @@ function EventListenerReturn LinkedFireCheck (Object EventData, Object EventSour
 	// The parent template of this RTGameState_LinkedEffect
 	LinkedEffect = RTEffect_LinkedIntelligence(GetX2Effect()); 
 
-	// Get the ability we're going to fire if we do so
-	// LinkedUnits fire the same type of shot (standard OW or TR)
-	AbilityRef = LinkedUnit.FindAbility(AbilityContext.InputContext.AbilityTemplateName, EmptyRef);
+
+	//
+	//// Get the ability we're going to fire if we do so
+	//// LinkedUnits fire the same type of shot (standard OW or TR)
+	//AbilityRef = LinkedUnit.FindAbility(AbilityContext.InputContext.AbilityTemplateName, EmptyRef);
+	//AbilityState = XComGameState_Ability(History.GetGameStateForObjectID(AbilityRef.ObjectID));
+	//
+	//
+	//// check for the case that a LinkedSourceUnit uses Overwatch and the LinkedUnit only has RTOverwatch
+	//if(AbilityContext.InputContext.AbilityTemplateName == 'OverwatchShot' && AbilityState == none) {
+		//AbilityRef = LinkedUnit.FindAbility('RTOverwatchShot', EmptyRef);
+		//AbilityState = XComGameState_Ability(History.GetGameStateForObjectID(AbilityRef.ObjectID));
+	//}
+	//
+	//// check for the case that a LinkedSourceUnit uses Killzone and the LinkedUnit doesn't have it
+	//if(AbilityContext.InputContext.AbilityTemplateName == 'KillZoneShot' && AbilityState == none) {
+		//AbilityRef = LinkedUnit.FindAbility('OverwatchShot', EmptyRef);
+		//AbilityState = XComGameState_Ability(History.GetGameStateForObjectID(AbilityRef.ObjectID));
+	//}
+//
+//
+	// We only shoot Linked shots to not make infinite overwatch chains
+	AbilityRef = LinkedUnit.FindAbility(LinkedEffect.AbilityToActivate);
 	AbilityState = XComGameState_Ability(History.GetGameStateForObjectID(AbilityRef.ObjectID));
-	
-	// check for the case that a LinkedSourceUnit uses Overwatch and the LinkedUnit only has RTOverwatch
-	if(AbilityContext.InputContext.AbilityTemplateName == 'OverwatchShot' && AbilityState == none) {
-		AbilityRef = LinkedUnit.FindAbility('RTOverwatchShot', EmptyRef);
-		AbilityState = XComGameState_Ability(History.GetGameStateForObjectID(AbilityRef.ObjectID));
-	}
-	
-	// check for the case that a LinkedSourceUnit uses Killzone and the LinkedUnit doesn't have it
-	if(AbilityContext.InputContext.AbilityTemplateName == 'KillZoneShot' && AbilityState == none) {
-		AbilityRef = LinkedUnit.FindAbility('OverwatchShot', EmptyRef);
-		AbilityState = XComGameState_Ability(History.GetGameStateForObjectID(AbilityRef.ObjectID));
-	}
+
+
 
 	if(AbilityState == none) {
 		`RedScreenOnce("Couldn't find an ability to shoot!");
@@ -112,7 +123,9 @@ function EventListenerReturn LinkedFireCheck (Object EventData, Object EventSour
 					
 					// add a action point to shoot with
 					LinkedUnit = XComGameState_Unit(NewGameState.CreateStateObject(LinkedUnit.Class, LinkedUnit.ObjectID));
-					LinkedUnit.ReserveActionPoints.AddItem(LinkedEffect.GrantActionPoint);
+					if(LinkedUnit.ReserveActionPoints.Length < 1) {
+						LinkedUnit.ReserveActionPoints.AddItem(LinkedEffect.GrantActionPoint);
+					}
 					NewGameState.AddStateObject(LinkedUnit);
 					`LOG("Rising Tides: Linked Fire Check Stage 11");
 					// check if we can shoot. if we can't, clean up the gamestate from history
@@ -145,7 +158,7 @@ function EventListenerReturn LinkedFireCheck (Object EventData, Object EventSour
 							}
 						}
 
-						bCanTrigger = true;
+						
 					}
 				}
 				else if (AbilityState.CanActivateAbilityForObserverEvent(TargetUnit) == 'AA_Success')
@@ -165,7 +178,7 @@ function EventListenerReturn LinkedFireCheck (Object EventData, Object EventSour
 				}
 		}
 	}
-
+	bCanTrigger = true;
 	return ELR_NoInterrupt;
 
 

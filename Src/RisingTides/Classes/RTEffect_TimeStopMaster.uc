@@ -20,6 +20,8 @@ simulated function bool OnEffectTicked(const out EffectAppliedData ApplyEffectPa
 	local XComGameState_UITimer UiTimer, OldUiTimer;
   	
 	OldUiTimer = XComGameState_UITimer(`XCOMHISTORY.GetSingleGameStateObjectForClass(class 'XComGameState_UITimer', true));
+	if(OldUiTimer != none) {
+
 	UiTimer = XComGameState_UITimer(NewGameState.CreateStateObject(class 'XComGameState_UITimer', OldUiTimer.ObjectID));
 
 	UiTimer.UiState = OldUiTimer.UIState;
@@ -29,12 +31,12 @@ simulated function bool OnEffectTicked(const out EffectAppliedData ApplyEffectPa
 	UiTimer.TimerValue = OldUiTimer.TimerValue + 1;
 	
 	NewGameState.AddStateObject(UiTimer);
-
+	}
 
 	foreach `XCOMHISTORY.IterateByClassType(class'XComGameState_AIReinforcementSpawner', OldSpawnerState) {
 		NewSpawnerState = XComGameState_AIReinforcementSpawner(NewGameState.CreateStateObject(class'XComGameState_AIReinforcementSpawner', OldSpawnerState.ObjectID));
 		NewSpawnerState.Countdown = OldSpawnerState.Countdown + 1;
 		NewGameState.AddStateObject(NewSpawnerState);
 	}							
-  return false;
-}
+	return false;
+}		   

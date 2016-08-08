@@ -64,12 +64,13 @@ static function array<X2DataTemplate> CreateTemplates()
 	Templates.AddItem(TwitchReactionShot());
 	Templates.AddItem(LinkedIntelligence());
 	Templates.AddItem(PsionicSurge());
+	Templates.AddItem(EyeInTheSky());
 	Templates.AddItem(HeatChannel());
 	Templates.AddItem(HeatChannelIcon());
 	Templates.AddItem(Harbinger());
 	Templates.AddItem(HarbingerCleanseListener());
-	Templates.AddItem(ShockAndAwe());
-	Templates.AddItem(ShockAndAweListener());
+	//Templates.AddItem(ShockAndAwe());
+	//Templates.AddItem(ShockAndAweListener());
 	//Templates.AddItem(SIShot());
 	//Templates.AddItem(TimeStandsStill());
 	//Templates.AddItem(Override());
@@ -111,6 +112,7 @@ static function X2AbilityTemplate ScopedAndDropped()
 	Template.AdditionalAbilities.AddItem('LeaveMeld');
 	Template.AdditionalAbilities.AddItem('PsiOverload');
 	Template.AdditionalAbilities.AddItem('PsiOverloadPanic');
+	Template.AdditionalAbilities.AddItem('LIOverwatchShot');
 
 	// Probably required 
 	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
@@ -237,7 +239,7 @@ static function X2AbilityTemplate RTOverwatch()
 	AmmoCost.bFreeCost = true;                  //  ammo is consumed by the shot, not by this, but this should verify ammo is available
 	Template.AbilityCosts.AddItem(AmmoCost);
 	
-	ActionPointCost = new class'X2AbilityCost_ActionPoints';
+	ActionPointCost = new class'RTAbilityCost_SnapshotActionPoints';
 	ActionPointCost.iNumPoints = 2;
 	ActionPointCost.bConsumeAllPoints = true;
 	ActionPointCost.bFreeCost = true;           //  ReserveActionPoints effect will take all action points away
@@ -329,6 +331,7 @@ static function X2AbilityTemplate RTOverwatchShot()
 	
 	StandardAim = new class'X2AbilityToHitCalc_StandardAim';
 	StandardAim.bReactionFire = true;
+	StandardAim.SQUADSIGHT_DISTANCE_MOD = 0;
 	Template.AbilityToHitCalc = StandardAim;
 	Template.AbilityToHitOwnerOnMissCalc = StandardAim;
 
@@ -417,16 +420,17 @@ static function X2AbilityTemplate RTPrecisionShot()
 	Template.AbilityCooldown = Cooldown;
 
 	ToHitCalc = new class'X2AbilityToHitCalc_StandardAim';
+	ToHitCalc.SQUADSIGHT_DISTANCE_MOD = 0;
 	ToHitCalc.BuiltInHitMod = -(default.HEADSHOT_AIM_MULTIPLIER);
 	Template.AbilityToHitCalc = ToHitCalc;
 
 	AmmoCost = new class'X2AbilityCost_Ammo';
 	AmmoCost.iAmmo = 1;
 	Template.AbilityCosts.AddItem(AmmoCost);
-
+																																					   
+	ActionPointCost.bConsumeAllPoints = true;
 	ActionPointCost = new class'RTAbilityCost_SnapshotActionPoints';
 	ActionPointCost.iNumPoints = 2;
-	ActionPointCost.bConsumeAllPoints = true;
 	Template.AbilityCosts.AddItem(ActionPointCost);
 
 	Template.AbilityTargetStyle = default.SimpleSingleTarget;
@@ -582,6 +586,7 @@ static function X2AbilityTemplate DisablingShot()
 	Template.AbilityCooldown = Cooldown;
 
 	ToHitCalc = new class'X2AbilityToHitCalc_StandardAim';
+	ToHitCalc.SQUADSIGHT_DISTANCE_MOD = 0;
 	ToHitCalc.BuiltInHitMod = -(default.DISABLESHOT_AIM_BONUS);
 	Template.AbilityToHitCalc = ToHitCalc;
 
@@ -1015,7 +1020,7 @@ static function X2AbilityTemplate SovereignEffect()
 	Template.AbilityShooterConditions.AddItem(default.LivingShooterProperty);
 	Template.AddShooterEffectExclusions();
 
-	Template.AbilityToHitCalc = new class'X2AbilityToHitCalc_StatCheck_UnitVsUnit';
+	Template.AbilityToHitCalc = default.DeadEye;
 	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
 	// Note: no visualization on purpose!
 
@@ -1135,7 +1140,7 @@ static function X2AbilityTemplate SovereignEffect()
 	WeaponDamageEffect.bApplyWorldEffectsForEachTargetLocation = true;          
 	Template.AddMultiTargetEffect(WeaponDamageEffect);           //Adds weapon damage to multiple targets
 	BurningEffect = class'X2StatusEffects'.static.CreateBurningStatusEffect(3, 0);   //Adds Burning Effect for 3 damage, 0 spread
-	BurningEffect.ApplyChance = 100;                                         //Should be a 50% chance to actually apply burning 
+	BurningEffect.ApplyChance = 100;                                         //Should be a 100% chance to actually apply burning 
 	Template.AddTargetEffect(BurningEffect);
 	Template.AddMultiTargetEffect(BurningEffect);                                    //Adds the burning effect to the targeted area
 
@@ -1468,6 +1473,7 @@ static function X2AbilityTemplate LinkedIntelligence()
 	// seperate self/allied effects to differentiate buff categories
 	LinkedEffect = new class 'RTEffect_LinkedIntelligence';
 	LinkedEffect.BuildPersistentEffect(1, true, false, false,  eGameRule_PlayerTurnEnd);
+	LinkedEffect.AbilityToActivate = 'LIOverwatchShot';
 	LinkedEffect.SetDisplayInfo(ePerkBuff_Passive, Template.LocFriendlyName, Template.LocLongDescription, Template.IconImage, true,, Template.AbilitySourceName);
 	Template.AddShooterEffect(LinkedEffect);
 
@@ -1621,6 +1627,7 @@ static function X2AbilityTemplate PsionicSurge()
 	local X2AbilityCooldown                 Cooldown;
 	local X2AbilityCost_ActionPoints		ActionPoint;
 	local RTEffect_PsionicSurge				SurgeEffect;
+	local X2Effect_GrantActionPoints		ActionPointEffect;
 	
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'PsionicSurge');
 	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_adventpsiwitch_mindcontrol";
@@ -1631,6 +1638,7 @@ static function X2AbilityTemplate PsionicSurge()
 
 	ActionPoint = new class'X2AbilityCost_ActionPoints';
 	ActionPoint.iNumPoints = 1;
+	ActionPoint.bFreeCost = true;
 	ActionPoint.bConsumeAllPoints = false;
 	Template.AbilityCosts.AddItem(ActionPoint);
 	
@@ -1648,6 +1656,11 @@ static function X2AbilityTemplate PsionicSurge()
 	SurgeEffect.BuildPersistentEffect(1, true, true, false,  eGameRule_PlayerTurnEnd);
 	SurgeEffect.SetDisplayInfo(ePerkBuff_Bonus, Template.LocFriendlyName, Template.LocLongDescription, Template.IconImage, true,,Template.AbilitySourceName);
 	Template.AddTargetEffect(SurgeEffect);
+
+	ActionPointEffect = new class'X2Effect_GrantActionPoints';
+	ActionPointEffect.NumActionPoints = 1;
+	ActionPointEffect.PointType = class'X2CharacterTemplateManager'.default.StandardActionPoint;
+	Template.AddTargetEffect(ActionPointEffect);
 
 	Template.PostActivationEvents.AddItem('UnitUsedPsionicAbility');
 
@@ -1668,6 +1681,7 @@ static function X2AbilityTemplate PsionicSurge()
 static function X2AbilityTemplate HeatChannel()
 {
 	local X2AbilityTemplate					Template;
+	local X2AbilityCost_ActionPoints		ActionPoints;
 	local X2AbilityTrigger_EventListener	Trigger;
 	local X2AbilityCooldown                 Cooldown;	
 	local X2Condition_UnitProperty			ShooterPropertyCondition;
@@ -1680,6 +1694,12 @@ static function X2AbilityTemplate HeatChannel()
 	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_NeverShow;
 	Template.AbilityConfirmSound = "TacticalUI_ActivateAbility";
 	Template.Hostility = eHostility_Neutral;
+
+	ActionPoints = new class 'X2AbilityCost_ActionPoints';
+	ActionPoints.bConsumeAllPoints = false;
+	ActionPoints.iNumPoints = 0;
+	ActionPoints.bFreeCost = true;
+	Template.AbilityCosts.AddItem(ActionPoints);
 
 	Template.ConcealmentRule = eConceal_Always;
 
@@ -1720,6 +1740,8 @@ static function X2AbilityTemplate HeatChannel()
 
 	return Template;
 }
+
+
 
 //---------------------------------------------------------------------------------------
 //---Heat Channel Icon-------------------------------------------------------------------
@@ -1925,7 +1947,7 @@ static function X2AbilityTemplate Harbinger()
 
 	// Add dead eye to guarantee
 	Template.AbilityToHitCalc = default.DeadEye;
-	Template.AbilityTargetStyle = default.SelfTarget;
+	Template.AbilityTargetStyle = default.SimpleSingleTarget;
 
 	HarbingerEffect = new class 'RTEffect_Harbinger';
 	HarbingerEffect.BuildPersistentEffect(1, true, true, false,  eGameRule_PlayerTurnEnd);
