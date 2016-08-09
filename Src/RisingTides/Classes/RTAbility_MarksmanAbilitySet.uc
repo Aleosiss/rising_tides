@@ -1415,6 +1415,7 @@ static function X2AbilityTemplate TimeStandsStillEndListener()
 
 	TimeStopDamageEffect = new class'RTEffect_TimeStopDamage';
 	TimeStopDamageEffect.DamageTag = 'TimeStopDamageEffect';
+	TimeStopDamageEffect.bIgnoreBaseDamage = true;
 	Template.AddMultiTargetEffect(TimeStopDamageEffect);
 
 	RemoveSelfEffect = new class'X2Effect_RemoveEffects';
