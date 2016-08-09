@@ -272,7 +272,7 @@ function int GetDefendingDamageModifier(XComGameState_Effect EffectState, XComGa
 	return -(CurrentDamage); 
 }
 
-simulated function void SetTotalWeaponDamageValue(int CurrentDamage, WeaponDamageValue WeaponDamageValue) {
+simulated function SetTotalWeaponDamageValue(int CurrentDamage, WeaponDamageValue WeaponDamageValue) {
 	local WeaponDamageValue TotalWeaponDamageValue;
 
 	TotalWeaponDamageValue.Damage = CurrentDamage + WeaponDamageValue.Damage;

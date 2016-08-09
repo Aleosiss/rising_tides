@@ -43,7 +43,7 @@ simulated function WeaponDamageValue GetNextDamageValue() {
 	return NextPreventedDamageValue;
 }
 
-simulated function void SetNextDamageValue(WeaponDamageValue _NextPreventedDamageValue) {
+simulated function SetNextDamageValue(WeaponDamageValue _NextPreventedDamageValue) {
 	NextPreventedDamageValue = _NextPreventedDamageValue;
 }
 
