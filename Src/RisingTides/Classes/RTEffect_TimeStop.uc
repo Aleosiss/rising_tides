@@ -255,7 +255,7 @@ function int GetDefendingDamageModifier(XComGameState_Effect EffectState, XComGa
 	// record WeaponDamageValues
 	`LOG("Recording Weapon Damage Value");
 
-	TotalWeaponDamageValue = SetTotalWeaponDamageValue(CurrentDamage, WeaponDamageValue);
+	TotalWeaponDamageValue = SetTotalWeaponDamageValue(CurrentDamage, WeaponDamageEffect.EffectDamageValue);
 	TimeStopEffectState.PreventedDamageValues.AddItem(TotalWeaponDamageValue);
 
 	`LOG("Logging,"); 
@@ -272,7 +272,7 @@ function int GetDefendingDamageModifier(XComGameState_Effect EffectState, XComGa
 	return -(CurrentDamage); 
 }
 
-simulated function SetTotalWeaponDamageValue(int CurrentDamage, WeaponDamageValue WeaponDamageValue) {
+simulated function WeaponDamageValue SetTotalWeaponDamageValue(int CurrentDamage, WeaponDamageValue WeaponDamageValue) {
 	local WeaponDamageValue TotalWeaponDamageValue;
 
 	TotalWeaponDamageValue.Damage = CurrentDamage + WeaponDamageValue.Damage;
