@@ -245,10 +245,7 @@ function int GetDefendingDamageModifier(XComGameState_Effect EffectState, XComGa
 		`LOG("Rising Tides: TimeStopEffectState not found?!!?!?!");
 		return 0;
 	}
-	if(WeaponDamageEffect.EffectDamageValue.Damage < 1) {
-		 `LOG("Rising Tides: WeaponDamageEffect.EffectDamageValue.Damage < 1 ?!!?!?!");
-		return 0;
-	}
+	
 
 	// damage over time effects are totally negated
 	// hack 
@@ -257,8 +254,9 @@ function int GetDefendingDamageModifier(XComGameState_Effect EffectState, XComGa
 	
 	// record WeaponDamageValues
 	`LOG("Recording Weapon Damage Value");
-	
-	TimeStopEffectState.PreventedDamageValues.AddItem(WeaponDamageEffect.EffectDamageValue);
+
+	TotalWeaponDamageValue = SetTotalWeaponDamageValue(CurrentDamage, WeaponDamageValue);
+	TimeStopEffectState.PreventedDamageValues.AddItem(TotalWeaponDamageValue);
 
 	`LOG("Logging,"); 
 	`LOG("PreventedDamageValues.Length = " @ TimeStopEffectState.PreventedDamageValues.Length);
@@ -272,6 +270,23 @@ function int GetDefendingDamageModifier(XComGameState_Effect EffectState, XComGa
 		TimeStopEffectState.bCrit = true;
 	
 	return -(CurrentDamage); 
+}
+
+simulated function void SetTotalWeaponDamageValue(int CurrentDamage, WeaponDamageValue WeaponDamageValue) {
+	local WeaponDamageValue TotalWeaponDamageValue;
+
+	TotalWeaponDamageValue.Damage = CurrentDamage + WeaponDamageValue.Damage;
+	TotalWeaponDamageValue.Spread = 0;
+	TotalWeaponDamageValue.PlusOne = 0;
+	TotalWeaponDamageValue.Crit = 0;
+	TotalWeaponDamageValue.Pierce =  WeaponDamageValue.Pierce;
+	TotalWeaponDamageValue.Rupture = WeaponDamageValue.Rupture;
+	TotalWeaponDamageValue.Shred = WeaponDamageValue.Shred;
+	TotalWeaponDamageValue.Tag = WeaponDamageValue.Tag;
+	TotalWeaponDamageValue.DamageType = WeaponDamageValue.DamageType;
+
+	return TotalWeaponDamageValue;
+
 }
 
 static function bool ShouldTimeStopAsLargeUnit(XComGameState_Unit TargetUnit)

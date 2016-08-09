@@ -1912,8 +1912,12 @@ static function X2AbilityTemplate Harbinger()
 	local X2AbilityCooldown                 Cooldown;
 	local X2AbilityCost_ActionPoints		ActionPoint;
 	local RTEffect_Harbinger				HarbingerEffect;
+	local X2Effect_Persistent				TagEffect;
 	local X2Condition_UnitEffectsWithAbilitySource	MeldCondition;
+	local X2Condition_UnitEffects			TagCondition;
+	local X2AbilityTarget_Single				SingleTarget;
 	local X2Effect_EnergyShield ShieldedEffect;
+	local X2Condition_UnitProperty	TargetCondition;
 
 
 	
@@ -1940,6 +1944,10 @@ static function X2AbilityTemplate Harbinger()
 	MeldCondition.AddRequireEffect('RTEffect_Meld', 'AA_UnitNotMelded');
 	Template.AbilityShooterConditions.AddItem(MeldCondition);
 	Template.AbilityTargetConditions.AddItem(MeldCondition);
+
+	TagCondition = new class'X2Condition_UnitEffects';
+	TagCondition.AddExcludeEffect('HarbingerTagEffect', 'AA_UnitAlreadyUsedAbility');
+	Template.AbilityShooterConditions.AddItem(TagCondition);
 	
 	Cooldown = new class'X2AbilityCooldown';
 	Cooldown.iNumTurns = default.HARBINGER_COOLDOWN;
@@ -1947,9 +1955,21 @@ static function X2AbilityTemplate Harbinger()
 
 	Template.AbilityTriggers.AddItem(default.PlayerInputTrigger);
 
+	TargetCondition = new class'X2Condition_UnitProperty';
+	TargetCondition.ExcludeHostileToSource = true;
+	TargetCondition.ExcludeFriendlyToSource = false;
+	TargetCondition.RequireSquadmates = true;
+	TargetCondition.FailOnNonUnits = true;
+	TargetCondition.ExcludeDead = true;
+	TargetCondition.ExcludeRobotic = true;
+	Template.AbilityTargetConditions.AddItem(TargetCondition);
+
 	// Add dead eye to guarantee
 	Template.AbilityToHitCalc = default.DeadEye;
-	Template.AbilityTargetStyle = default.SimpleSingleTarget;
+	SingleTarget = new class 'X2AbilityTarget_Single';
+	SingleTarget.bIncludeSelf = false;
+	SingleTarget.bAllowDestructibleObjects = false;
+	Template.AbilityTargetStyle = SingleTarget;
 
 	HarbingerEffect = new class 'RTEffect_Harbinger';
 	HarbingerEffect.BuildPersistentEffect(1, true, true, false,  eGameRule_PlayerTurnEnd);
@@ -1959,6 +1979,10 @@ static function X2AbilityTemplate Harbinger()
 	HarbingerEffect.BONUS_WILL = default.HARBINGER_WILL_BONUS;
 	HarbingerEffect.BONUS_ARMOR = default.HARBINGER_ARMOR_BONUS;
 	Template.AddTargetEffect(HarbingerEffect);
+
+	TagEffect = new class'X2Effect_Persistent';
+	TagEffect.EffectName = 'HarbingerTagEffect';
+	Template.AddShooterEffect(TagEffect);
 
 	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
 
@@ -2017,7 +2041,7 @@ static function X2AbilityTemplate HarbingerCleanseListener()
 	Template.AbilityTargetStyle = default.SelfTarget;
 
 	RemoveSelfEffect = new class'X2Effect_RemoveEffects';
-	RemoveSelfEffect.EffectNamesToRemove.AddItem('Harbinger');
+	RemoveSelfEffect.EffectNamesToRemove.AddItem('HarbingerTagEffect');
 	RemoveSelfEffect.bCheckSource = false;
 
 	RemoveMultiEffect = new class'X2Effect_RemoveEffects';
