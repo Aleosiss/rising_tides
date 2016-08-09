@@ -15,6 +15,14 @@ simulated function WeaponDamageValue GetFinalDamageValue() {
 
   local WeaponDamageValue FinalDamageValue, IteratorDamageValue;
 
+  if(PreventedDamageValues.Length == 0) {
+	return FinalDamageValue;
+  }
+  if(PreventedDamageValues.Length == 1) {
+	PreventedDamageValues[0].Tag = 'TimeStopDamageEffect';
+	return PreventedDamageValues[0];
+  }
+
   foreach PreventedDamageValues(IteratorDamageValue) {
     
     FinalDamageValue.Damage += IteratorDamageValue.Damage;

@@ -15,13 +15,14 @@ var int PreviousStunDuration;
 simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffectParameters, XComGameState_BaseObject kNewTargetState, XComGameState NewGameState, XComGameState_Effect NewEffectState)
 {
 	local XComGameState_Unit UnitState;
-	local RTGameState_TimeStopEffect TimeStopEFfectState;
+	local RTGameState_TimeStopEffect TimeStopEffectState;
 	local X2EventManager EventManager;
 	local UnitValue	UnitVal;
 	local bool IsOurTurn;
 
 	UnitState = XComGameState_Unit(kNewTargetState);
 	TimeStopEffectState = RTGameState_TimeStopEffect(NewEffectState);
+	TimeStopEffectState.PreventedDamageValues.Length = 0;
 	bWasPreviouslyImmobilized = false;
 
 	if(UnitState != none)
@@ -218,31 +219,58 @@ function bool TimeStopTicked(X2Effect_Persistent PersistentEffect, const out Eff
 function int GetDefendingDamageModifier(XComGameState_Effect EffectState, XComGameState_Unit Attacker, Damageable TargetDamageable, XComGameState_Ability AbilityState, const out EffectAppliedData AppliedData, const int CurrentDamage, X2Effect_ApplyWeaponDamage WeaponDamageEffect) { 
 	local int DamageTaken, i;
 	local RTGameState_TimeStopEffect TimeStopEffectState;
+	local WeaponDamageValue TotalWeaponDamageValue, IteratorDamageValue;
+	local RTEffect_TimeStopDamage TimeStopDamageEffect;
 
-
-
+	if(CurrentDamage < 1)
+		return 0;
+	`LOG("Rising Tides: Current Damage greater than 0, proceeding...");
 	// You can't take damage during a time-stop. Negate and store the damage for when it ends. 
 	// Let the damage from the Time Stop pass through
-	if(WeaponDamageEffect.DamageTag == 'TimeStopDamageEffect')
+	if(WeaponDamageEffect.DamageTag == 'TimeStopDamageEffect' || WeaponDamageEffect.IsA('RTEffect_TimeStopDamage')){
+		`LOG("Rising Tides: allowing TimeStopDamageEffect!");
 		return 0;
+		
+	}
+	// first check wasn't working...?
+	TimeStopDamageEffect = RTEffect_TimeStopDamage(WeaponDamageEffect);
+	if(TimeStopDamageEffect != none) {
+		`LOG("Rising Tides: TimeStopDamageEffect found, allowing");
+		return 0;
+	}
+	
 
 	TimeStopEffectState = RTGameState_TimeStopEffect(EffectState);
+	if(TimeStopEffectState == none) {
+		`LOG("Rising Tides: TimeStopEffectState not found?!!?!?!");
+		return 0;
+	}
+	if(WeaponDamageEffect.EffectDamageValue.Damage < 1) {
+		 `LOG("Rising Tides: WeaponDamageEffect.EffectDamageValue.Damage < 1 ?!!?!?!");
+		return 0;
+	}
 
 	// damage over time effects are totally negated
-	// hack implementation. if possible should detect if it's a ticking damage effect but this should do for now
+	// hack 
 	if(WeaponDamageEffect.EffectDamageValue.DamageType == 'fire' || WeaponDamageEffect.EffectDamageValue.DamageType == 'poison' || WeaponDamageEffect.EffectDamageValue.DamageType == 'acid' || WeaponDamageEffect.EffectDamageValue.DamageType == class'X2Item_DefaultDamageTypes'.default.ParthenogenicPoisonType)
 		return -(CurrentDamage);
 	
-	// record WeaponDamageValue
-	if(WeaponDamageEffect.EffectDamageValue.DamageType != none){
+	// record WeaponDamageValues
+	`LOG("Recording Weapon Damage Value");
+	
 	TimeStopEffectState.PreventedDamageValues.AddItem(WeaponDamageEffect.EffectDamageValue);
-	 
-	`RedScreen("Rising Tides: Time Stop has negated " @ TimeStopEffectState.GetFinalDamageValue().Damage @ " damage so far! This time, it was of type " @ TimeStopEffectState.PreventedDamageValues[TimeStopEffectState.PreventedDamageValues.length].DamageType @"!");
+
+	`LOG("Logging,"); 
+	`LOG("PreventedDamageValues.Length = " @ TimeStopEffectState.PreventedDamageValues.Length);
+	for(i = 0; i < TimeStopEffectState.PreventedDamageValues.Length; i++) {
+		`LOG("TimeStopEffectState.PreventedDamageValues["@i@"].DamageType = " @ TimeStopEffectState.PreventedDamageValues[i].DamageType);
+	}
+	`LOG("Rising Tides: Time Stop has negated " @ TimeStopEffectState.GetFinalDamageValue().Damage @ " damage so far! This time, it was of type " @ TimeStopEffectState.PreventedDamageValues[TimeStopEffectState.PreventedDamageValues.length-1].DamageType @"!");
 	
 	// record crit //TODO: figure out how to force crit damage popup
 	if(AppliedData.AbilityResultContext.HitResult == eHit_Crit)
 		TimeStopEffectState.bCrit = true;
-	}
+	
 	return -(CurrentDamage); 
 }
 

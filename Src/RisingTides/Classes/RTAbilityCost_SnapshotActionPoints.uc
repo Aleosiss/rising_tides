@@ -14,7 +14,7 @@ simulated function int GetPointCost(XComGameState_Ability AbilityState, XComGame
 	if (AbilityOwner.HasSoldierAbility('Snapshot') || AbilityOwner.IsUnitAffectedByEffectName('RTEffect_PsionicSurge'))
 		return 1;
 	else
-		return 2;
+		return iNumPoints;
 }
 
 simulated function bool ConsumeAllPoints(XComGameState_Ability AbilityState, XComGameState_Unit AbilityOwner)
@@ -24,4 +24,10 @@ simulated function bool ConsumeAllPoints(XComGameState_Ability AbilityState, XCo
 		return false;
 	}
 	return super.ConsumeAllPoints(AbilityState, AbilityOwner);
+}
+
+DefaultProperties
+{
+	bConsumeAllPoints = true
+	iNumPoints = 2
 }

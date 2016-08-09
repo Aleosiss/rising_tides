@@ -1389,7 +1389,7 @@ static function X2AbilityTemplate TimeStandsStillEndListener()
 	local X2AbilityMultiTarget_Radius			MultiTarget;
  	local X2AbilityTrigger_EventListener		EventListener;
 	local X2Effect_Knockback					KnockbackEffect;
-	local RTEffect_TimeStopDamage				TimeStopDamageEffect;
+	local RTEffect_TimeStopDamage				TimeStopDamageEffect;									
 
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'TimeStandsStillEndListener');
 	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_voidadept";
@@ -1654,7 +1654,7 @@ static function X2AbilityTemplate PsionicSurge()
 	Template.AbilityTargetStyle = default.SelfTarget;
 
 	SurgeEffect = new class 'RTEffect_PsionicSurge';
-	SurgeEffect.BuildPersistentEffect(1, true, true, false,  eGameRule_PlayerTurnEnd);
+	SurgeEffect.BuildPersistentEffect(1, false, true, false,  eGameRule_PlayerTurnEnd);
 	SurgeEffect.SetDisplayInfo(ePerkBuff_Bonus, Template.LocFriendlyName, Template.LocLongDescription, Template.IconImage, true,,Template.AbilitySourceName);
 	Template.AddTargetEffect(SurgeEffect);
 
