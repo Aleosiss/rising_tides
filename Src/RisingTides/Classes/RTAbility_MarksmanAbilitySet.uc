@@ -25,7 +25,7 @@ class RTAbility_MarksmanAbilitySet extends RTAbility_GhostAbilitySet
 	var config int OVERRIDE_COOLDOWN;
 	var config int VITAL_POINT_TARGETING_DAMAGE;
 	var config int SURGE_COOLDOWN;
-	var config int HEAT_CHANNEL_COOLDOWN;
+	var config int HEATCHANNEL_COOLDOWN;
 	var config int HARBINGER_SHIELD_AMOUNT, HARBINGER_COOLDOWN, HARBINGER_DAMAGE_BONUS, HARBINGER_WILL_BONUS, HARBINGER_AIM_BONUS, HARBINGER_ARMOR_BONUS;
 	var config int SHOCKANDAWE_DAMAGE_TO_ACTIVATE;
 
@@ -1683,45 +1683,38 @@ static function X2AbilityTemplate PsionicSurge()
 static function X2AbilityTemplate HeatChannel()
 {
 	local X2AbilityTemplate					Template;
-	local X2AbilityCost_ActionPoints		ActionPoints;
-	local X2AbilityTrigger_EventListener	Trigger;
-	local X2AbilityCooldown                 Cooldown;	
-	local X2Condition_UnitProperty			ShooterPropertyCondition;
-	local X2Condition_AbilitySourceWeapon	WeaponCondition;
+	local RTEffect_HeatChannel				HeatEffect;
+	local RTEffect_Counter					CounterEffect;
+	local X2Effect_SetUnitValue				UnitValEffect;
 	
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'HeatChannel');
 	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_phantom";
 	
 	Template.AbilitySourceName = 'eAbilitySource_Psionic';
 	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_NeverShow;
-	Template.AbilityConfirmSound = "TacticalUI_ActivateAbility";
 	Template.Hostility = eHostility_Neutral;
 
-	ActionPoints = new class 'X2AbilityCost_ActionPoints';
-	ActionPoints.bConsumeAllPoints = false;
-	ActionPoints.iNumPoints = 0;
-	ActionPoints.bFreeCost = true;
-	Template.AbilityCosts.AddItem(ActionPoints);
-
+	UnitValEffect = new class'X2Effect_SetUnitValue';
+	UnitValEffect.UnitName = 'RTEffect_HeatChannel_Cooldown';
+	UnitValEffect.NewValueToSet = default.HEATCHANNEL_COOLDOWN;
+	UnitValEffect.CleanupType = eCleanup_BeginTactical;
+	Template.AddShooterEffect(UnitValEffect);
+	
+	CounterEffect = new class'RTEffect_Counter';
+	CounterEffect.BuildPersistentEffect(1, true, true, false, eGameRule_PlayerTurnEnd);
+	CounterEffect.CounterUnitValName = 'RTEffect_HeatChannel_Cooldown';
+	CounterEffect.WatchRule = eGameRule_PlayerTurnEnd;
+	CounterEffect.bShouldTriggerEvent = false;
+	CounterEffect.EffectName = 'HeatChannelCounterEffect';
+	Template.AddShooterEffect(CounterEffect);
+	
+	HeatEffect = new class'RTEffect_HeatChannel';
+	HeatEffect.BuildPersistentEffect(1, true, false, false, eGameRule_PlayerTurnEnd);
+	Template.AddShooterEffect(HeatEffect);
+	
 	Template.ConcealmentRule = eConceal_Always;
 
-	ShooterPropertyCondition = new class'X2Condition_UnitProperty';	
-	ShooterPropertyCondition.ExcludeDead = true;                    //Can't reload while dead
-	Template.AbilityShooterConditions.AddItem(ShooterPropertyCondition);
-	WeaponCondition = new class'X2Condition_AbilitySourceWeapon';
-	WeaponCondition.WantsReload = true;
-	Template.AbilityShooterConditions.AddItem(WeaponCondition);
-
-	Cooldown = new class'X2AbilityCooldown';
-	Cooldown.iNumTurns = default.HEAT_CHANNEL_COOLDOWN;
-	Template.AbilityCooldown = Cooldown;
-
-	Trigger = new class'X2AbilityTrigger_EventListener';
-	Trigger.ListenerData.Deferral = ELD_OnStateSubmitted;
-	Trigger.ListenerData.EventID = 'UnitUsedPsionicAbility';
-	Trigger.ListenerData.Filter = eFilter_Unit;
-	Trigger.ListenerData.EventFn = class'RTGameState_Ability'.static.HeatChannelCheck;
-	Template.AbilityTriggers.AddItem(Trigger);
+	Template.AbilityTriggers.AddItem(default.UnitPostBeginPlayTrigger);
 	
 	// Add dead eye to guarantee
 	Template.AbilityToHitCalc = default.DeadEye;
