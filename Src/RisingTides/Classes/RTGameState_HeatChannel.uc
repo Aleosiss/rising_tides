@@ -10,6 +10,7 @@ function EventListenerReturn HeatChannelCheck(Object EventData, Object EventSour
   local XComGameStateContext_Ability AbilityContext;
   local XComGameState_Item OldWeaponState, NewWeaponState;
   local XComGameState NewGameState;
+  local UnitValue HeatChannelValue;
   local int iHeatChanneled;
 
   `LOG("Rising Tides: Starting HeatChannel");
@@ -19,14 +20,26 @@ function EventListenerReturn HeatChannelCheck(Object EventData, Object EventSour
   OldSourceUnit = XComGameState_Unit(EventSource);
 
   if(OldAbilityState == none) {
-	`RedScreenOnce("EventData was not an XComGameState_Ability!");
+	`RedScreenOnce("Rising Tides: EventData was not an XComGameState_Ability!");
 	return ELR_NoInterrupt;
   }
 
   // immediately return if the event did not originate from ourselves
   if(ApplyEffectParameters.SourceStateObjectRef.ObjectID != OldSourceUnit.ObjectID) {
-	`RedScreenOnce("EventSource was not unit with Heat Channel!");
+	`RedScreenOnce("Rising Tides: EventSource was not unit with Heat Channel!");
     return ELR_NoInterrupt;
+  }
+  
+  // check the cooldown on HeatChannel
+  if(!OldSourceUnit.GetUnitFloatValue('RTEffect_HeatChannel_Cooldown', HeatChannelValue) {
+  	`RedScreenOnce("Rising Tides: No HeatChannel Cooldown found!");
+  	return ELR_NoInterrupt;
+  }
+  OldSourceUnit.GetUnitFloatValue('RTEffect_HeatChannel_Cooldown', HeatChannelValue);
+  if(HeatChannelValue.fValue > 0) {
+  	// still on cooldown
+  	`LOG("Rising Tides: Heat Channel was on cooldown! @" @ HeatChannelValue.fValue);
+  	return ELR_NoInterrupt;
   }
 
   History = `XCOMHISTORY;
@@ -43,7 +56,7 @@ function EventListenerReturn HeatChannelCheck(Object EventData, Object EventSour
   }
 
   if(!OldAbilityState.IsCoolingDown()) {
-    `RedScreenOnce("The ability was used but isn't on cooldown!");
+    `RedScreenOnce("Rising Tides: The ability was used but isn't on cooldown!");
     return ELR_NoInterrupt;
   }
 
