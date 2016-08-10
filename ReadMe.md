@@ -19,6 +19,7 @@ This would be a bare-bones content mod. I also have the following content in min
 ###### Current TODOs: 
               - Harbinger meld listeners (affected unit still doesn't cleanse tag unit of tag effect atm)
               - Brainstorm Shock And Awe new effect or fix current one
+              - Heat Channel still doesn't work
 
 ###### Current Unresolved:
 
