@@ -112,7 +112,7 @@ static function X2AbilityTemplate JoinMeld()
 	Template.AbilityCooldown = Cooldown;
 
 	Condition = new class'X2Condition_UnitEffects';
-	Condition.AddExcludeEffect('RTMeld', 'MeldEffect_Active');
+	Condition.AddExcludeEffect('RTEffect_Meld', 'MeldEffect_Active');
 	Template.AbilityShooterConditions.AddItem(Condition);
 
 	Template.AbilityTriggers.AddItem(default.PlayerInputTrigger);
