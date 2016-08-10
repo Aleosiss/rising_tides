@@ -79,6 +79,9 @@ function EventListenerReturn HeatChannelCheck(Object EventData, Object EventSour
   //  refill the weapon's ammo	
   NewWeaponState.Ammo = NewWeaponState.GetClipSize();
   
+  // put the ability on cooldown
+  NewSourceUnit.SetUnitFloatValue('RTEffect_HeatChannel_Cooldown', class'RTAbility_MarksmanAbilitySet'.default.HEATCHANNEL_COOLDOWN, eCleanUp_BeginTactical);
+  
   `LOG("Rising Tides: Finishing HeatChannel");
 
   // submit gamestate
