@@ -16,20 +16,12 @@ This would be a bare-bones content mod. I also have the following content in min
 >- High-quality 2D artwork (Producing Icons is possible ATM, but not much more)
 >- New enemy units, possible returns from EW
 
-###### Current TODOs:  
-              - Tidy up class files (remove legacy code, document, etc)
-              - Finish up current features
-                - Time Stop damage pop-up (FINAL FEATURE W00t)
-              - Bugfixing and testing (all initial implementations are in place)
-                - Harbinger meld listeners
-                - Stealth/Concealment effects need X2Effect_Spotted implementation
-
+###### Current TODOs: 
+              - Harbinger meld listeners (affected unit still doesn't cleanse tag unit of tag effect atm)
+              - Brainstorm Shock And Awe new effect or fix current one
 
 ###### Current Unresolved:
-              - // some snippets of the second to last chapter of Falling Stars
-              - http://hastebin.com/raw/arukopovex
-              - http://hastebin.com/ofibexiguv.avrasm
-              - 
+
 ###### Current Table
               - Triangulation: Spread Over the Shoulder to all melded allies.
               - Bump in the Night beginning implementation. http://hastebin.com/viqogonece.java 
