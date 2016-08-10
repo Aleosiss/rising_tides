@@ -107,6 +107,7 @@ static function X2AbilityTemplate ScopedAndDropped()
 
 	Template.AdditionalAbilities.AddItem('RTStandardSniperShot');
 	Template.AdditionalAbilities.AddItem('RTOverwatch');
+	Template.AdditionalAbilities.AddItem('RTOverwatchShot');
 	Template.AdditionalAbilities.AddItem('GhostPsiSuite');
 	Template.AdditionalAbilities.AddItem('JoinMeld');
 	Template.AdditionalAbilities.AddItem('LeaveMeld');
