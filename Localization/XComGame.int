@@ -14,7 +14,7 @@ LocFriendlyName="Scoped And Dropped"
 LocLongDescription="Enhanced Squadsight. Killing a flanked or uncovered target with a sniper rifle does not cost an action."
 LocHelpText="Killing a flanked or uncovered target with a sniper rifle does not cost an action."
 LocFlyOverText="Scoped And Dropped"
-LocPromotionPopupText="<Bullet/> Whisper is the best shooter in the world. As such, he does not suffer from squadsight penalties and needs to spend no time lining up easy shots on exposed units.<br/>"
+LocPromotionPopupText="<Bullet/> Whisper does not suffer from squadsight penalties and wastes no time lining up easy shots on exposed units.<br/>"
 
 [RTPrecisionShot X2AbilityTemplate]
 LocFriendlyName="Precision Shot"
@@ -113,7 +113,7 @@ LocFriendlyName="Sovereign"
 LocLongDescription="Kill shots have a chance to inflict panic on nearby foes."
 LocHelpText="Kill shots have a chance to inflict panic on nearby foes."
 LocFlyOverText="Sovereign"
-LocPromotionPopupText="<Bullet/>Kill shots have a chance to inflict 50% chance to panic foes within a radius of two tiles. Ineffective versus psionic or robotic enemies.<br/>"
+LocPromotionPopupText="<Bullet/>Kill shots have a small chance to inflict panic on nearby foes. Ineffective versus psionic or robotic enemies.<br/>"
 
 [DaybreakFlame X2AbilityTemplate]
 LocFriendlyName="Fire Sniper Rifle"
@@ -185,30 +185,29 @@ LocPromotionPopupText="<Bullet/>Throw a wrench in the gears of the universe for 
 
 [PsionicSurge X2AbilityTemplate]
 LocFriendlyName="Psionic Surge"
-LocLongDescription="Empower your weapon with psionic energy, increasing its fire rate and energy throughput."
-LocHelpText="Empower your weapon with psionic energy."
+LocLongDescription="Empower this unit's weapon with psionic energy, increasing its fire rate and energy throughput."
+LocHelpText="Empower this unit's weapon with psionic energy."
 LocFlyOverText="Psionic Surge"
-LocPromotionPopupText="<Bullet/> Empower your weapon with psionic energy, increasing its fire rate and energy throughput.<br/><Bullet/> Standard shots do not end turn and cost one AP. Special shots do not have cooldowns while this effect is active.<br/>"
+LocPromotionPopupText="<Bullet/> Empower  this unit's weapon with psionic energy, increasing its fire rate and energy throughput.<br/><Bullet/> Standard shots do not end turn and cost one AP. Special shots do not have cooldowns while this effect is active.<br/>"
 
 [FadeIcon X2AbilityTemplate]
 LocFriendlyName="Fade"
-LocLongDescription="Fade from view whenever you take damage."
-LocHelpText="Fade from view whenever you take damage."
+LocLongDescription="Fade from view whenever this unit takes damage."
+LocHelpText="Fade from view whenever this unit takes damage."
 LocFlyOverText="Fade"
-LocPromotionPopupText="<Bullet/> Fade from view whenever you take damage.<br/><Bullet/> Gain stealth until the start of your next turn whenever this unit takes damage. 5 turn cooldown.<br/>"
+LocPromotionPopupText="<Bullet/> Gain stealth until the start of the next turn whenever this unit takes damage. 5 turn cooldown.<br/>"
 
 [Fade X2AbilityTemplate]
 LocFriendlyName="Fade"
-LocLongDescription="Fade from view whenever you take damage."
-LocHelpText="Fade from view whenever you take damage."
+LocLongDescription="Fade from view whenever this unit takes damage."
+LocHelpText="Fade from view whenever this unit takes damage."
 LocFlyOverText="Fade"
-LocPromotionPopupText="<Bullet/> Fade from view whenever you take damage.<br/><Bullet/> Gain stealth until the start of your next turn whenever this unit takes damage. 5 turn cooldown.<br/>"
-
+LocPromotionPopupText="<Bullet/> Gain stealth until the start of the next turn whenever this unit takes damage. 5 turn cooldown.<br/>"
 
 [Teek X2AbilityTemplate]
 LocFriendlyName="Teek"
-LocLongDescription="This unit has honed its telekinetic abilities, increasing its ability to dodge, deflect, and redirection enemy fire."
-LocHelpText="This unit has honed its telekinetic abilities, increasing its ability to dodge, deflect, and redirection enemy fire."
+LocLongDescription="This unit has honed its telekinetic abilities, increasing its ability to dodge, deflect, and redirect enemy fire."
+LocHelpText="This unit has honed its telekinetic abilities, increasing its ability to dodge, deflect, and redirect enemy fire."
 LocFlyOverText="Teek"
-LocPromotionPopupText="<Bullet/> This unit has honed its telekinetic abilities, increasing its ability to dodge, deflect, and redirection enemy fire.<br/><Bullet/> + 10 Dodge, + 10 Defense, + 20% Reflection chance.<br/>"
+LocPromotionPopupText="<Bullet/> This unit has honed its telekinetic abilities, increasing its ability to dodge, deflect, and redirect enemy fire.<br/><Bullet/> + 10 Dodge, + 10 Defense, + 20% Reflection chance.<br/>"
 
