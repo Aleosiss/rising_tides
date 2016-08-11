@@ -25,7 +25,7 @@ function int GetAttackingDamageModifier(XComGameState_Effect EffectState, XComGa
 				TempEffectState = XComGameState_Effect(`XCOMHISTORY.GetGameStateForObjectID(EffectRef.ObjectID));
 				if(TempEffectState != none){
 					TimeStopEffectState	= RTGameState_TimeStopEffect(TempEffectState);
-					if(TimeStopEffectState != none) {
+					if(TimeStopEffectState != none && TimeStopEffectState.ApplyEffectParameters.TargetStateObjectRef.ObjectID == TargetUnit.ObjectID) {
 						`LOG("Rising Tides: TimeStopEffectState Found, proceeding...");
 						break;
 					}
@@ -39,7 +39,7 @@ function int GetAttackingDamageModifier(XComGameState_Effect EffectState, XComGa
 		TimeStopEffectState.iShouldRecordCounter = TimeStopEffectState.iShouldRecordCounter + 1; // 1 after the first pass, 2 after the second
 	}
 
-	return 700; 
+	return 0; 
 }
 
 function int GetExtraArmorPiercing(XComGameState_Effect EffectState, XComGameState_Unit Attacker, Damageable TargetDamageable, XComGameState_Ability AbilityState, const out EffectAppliedData AppliedData) { 
@@ -56,7 +56,7 @@ function int GetExtraArmorPiercing(XComGameState_Effect EffectState, XComGameSta
 			TempEffectState = XComGameState_Effect(`XCOMHISTORY.GetGameStateForObjectID(EffectRef.ObjectID));
 			if(TempEffectState != none){
 				TimeStopEffectState	= RTGameState_TimeStopEffect(TempEffectState);
-				if(TimeStopEffectState != none) {
+				if(TimeStopEffectState != none && TimeStopEffectState.ApplyEffectParameters.TargetStateObjectRef.ObjectID == TargetUnit.ObjectID) {
 					`LOG("Rising Tides: TimeStopEffectState Found, proceeding...");
 					break;
 				}

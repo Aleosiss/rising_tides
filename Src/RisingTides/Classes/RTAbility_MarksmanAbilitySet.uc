@@ -1328,7 +1328,6 @@ static function X2AbilityTemplate TimeStandsStill()
 	CounterEffect = new class'RTEffect_Counter';
 	CounterEffect.BuildPersistentEffect(1, true, true, false, eGameRule_PlayerTurnEnd);
 	CounterEffect.CounterUnitValName = 'TimeStopCounter';
-	CounterEffect.WatchRule = eGameRule_PlayerTurnEnd;
 	CounterEFfect.TriggerEventName = 'TimeStopEnded';
 	CounterEffect.bShouldTriggerEvent = true;
 	CounterEffect.EffectName = 'TimeStandsStillCounterEffect';
@@ -1404,6 +1403,7 @@ static function X2AbilityTemplate TimeStandsStillEndListener()
 	Template.AbilitySourceName = 'eAbilitySource_Perk';
 	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_NeverShow;
 	Template.Hostility = eHostility_Neutral;
+	Template.ConcealmentRule = eConceal_Always;
 
 	MultiTarget = new class'X2AbilityMultiTarget_Radius';
 	MultiTarget.fTargetRadius = 500;
