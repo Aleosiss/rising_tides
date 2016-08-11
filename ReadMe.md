@@ -18,8 +18,11 @@ This would be a bare-bones content mod. I also have the following content in min
 
 ###### Current TODOs: 
               - Harbinger meld listeners (affected unit still doesn't cleanse tag unit of tag effect atm)
+              - Harbinger icon issues
               - Brainstorm Shock And Awe new effect or fix current one
-              - Heat Channel still doesn't work
+              - Change all instances of large X2MultiTarget_Radiuses to X2MultiTarget_AllAllies or X2MultiTarget_AllUnits
+              - verify that Fade and Teek actually work
+              
 
 ###### Current Unresolved:
 
