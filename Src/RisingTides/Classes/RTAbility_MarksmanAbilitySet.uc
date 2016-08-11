@@ -1869,7 +1869,7 @@ static function X2AbilityTemplate ShockAndAweListener()
 	Template.eAbilityIconBehaviorHUD = EAbilityIconBehavior_NeverShow;
 	Template.Hostility = eHostility_Offensive;
 
-	//Apply perk at the start of the mission. 
+	// Deadeye to ensure
 	Template.AbilityToHitCalc = default.DeadEye; 
 	Template.AbilityTargetStyle = default.SimpleSingleTarget;
 
@@ -1899,6 +1899,7 @@ static function X2AbilityTemplate ShockAndAweListener()
 
 
 	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
+	Template.bShowActivation = true;
 	Template.bSkipFireAction = true;
 	//  TODO: VISUALIZATION
 
