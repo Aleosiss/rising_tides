@@ -1326,7 +1326,7 @@ static function X2AbilityTemplate TimeStandsStill()
 	Template.AddShooterEffect(TagEffect);
 
 	CounterEffect = new class'RTEffect_Counter';
-	CounterEffect.BuildPersistentEffect(1, true, true, false, eGamefRule_PlayerTurnEnd);
+	CounterEffect.BuildPersistentEffect(1, true, true, false, eGameRule_PlayerTurnEnd);
 	CounterEffect.CounterUnitValName = 'TimeStopCounter';
 	CounterEffect.WatchRule = eGameRule_PlayerTurnEnd;
 	CounterEFfect.TriggerEventName = 'TimeStopEnded';
