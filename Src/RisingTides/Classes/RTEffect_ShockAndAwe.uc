@@ -16,7 +16,7 @@ function bool PostAbilityCostPaid(XComGameState_Effect EffectState, XComGameStat
 	bIsStandardFire = false;
 	bIsMindWrack = false;
 	
-	if(kAbility.GetMyTemplateName() == 'RTStandardSniperShot' || kAbility.GetMyTemplateName() == 'DaybreakFlame' || kAbility.GetMyTemplateName() == 'PrecisionShot' || kAbility.GetMyTemplateName() == 'DisablingShot' || kAbility.GetMyTemplateName() == 'RTOverwatchShot')
+	if(kAbility.GetMyTemplateName() == 'RTStandardSniperShot' || kAbility.GetMyTemplateName() == 'DaybreakFlame' || kAbility.GetMyTemplateName() == 'RTPrecisionShot' || kAbility.GetMyTemplateName() == 'RTDisablingShot' || kAbility.GetMyTemplateName() == 'RTOverwatchShot')
 		bIsStandardFire = true;
 	if(AbilityContext.ResultContext.HitResult == eHit_Crit || AbilityContext.ResultContext.HitResult == eHit_Graze || AbilityContext.ResultContext.HitResult == eHit_Success)
 		bDealtDamage = true;
