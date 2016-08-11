@@ -1296,6 +1296,7 @@ static function X2AbilityTemplate TimeStandsStill()
 	local X2AbilityCooldown						Cooldown;
 	local X2AbilityMultiTarget_Radius			MultiTarget;
 	local X2Condition_UnitProperty				UnitPropertyCondition;
+	local RTEffect_TimeStopTag					TagEffect;
 
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'TimeStandsStill');
 	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_insanity";
@@ -1319,8 +1320,13 @@ static function X2AbilityTemplate TimeStandsStill()
 	TimeMasterEffect.EffectName = 'TimeStopMasterEffect';
 	Template.AddShooterEffect(TimeMasterEffect);
 
+	TagEffect = new class'RTEffect_TimeStopTag';
+	TagEffect.BuildPersistentEffect(1, true, true, true);
+	TagEffect.EffectName = 'TimeStopTagEffect';
+	Template.AddShooterEffect(TagEffect);
+
 	CounterEffect = new class'RTEffect_Counter';
-	CounterEffect.BuildPersistentEffect(1, true, true, false, eGameRule_PlayerTurnEnd);
+	CounterEffect.BuildPersistentEffect(1, true, true, false, eGamefRule_PlayerTurnEnd);
 	CounterEffect.CounterUnitValName = 'TimeStopCounter';
 	CounterEffect.WatchRule = eGameRule_PlayerTurnEnd;
 	CounterEFfect.TriggerEventName = 'TimeStopEnded';
@@ -1422,6 +1428,7 @@ static function X2AbilityTemplate TimeStandsStillEndListener()
 	RemoveSelfEffect = new class'X2Effect_RemoveEffects';
 	RemoveSelfEffect.EffectNamesToRemove.AddItem('TimeStandsStillCounterEffect');
 	RemoveSelfEffect.EffectNamesToRemove.AddItem('TimeStopMasterEffect');
+	RemoveSelfEffect.EffectNamesToRemove.AddItem('TimeStopTagEffect');
 	RemoveSelfEffect.bCheckSource = false;
 
 	RemoveMultiEffect = new class'X2Effect_RemoveEffects';
@@ -1697,7 +1704,7 @@ static function X2AbilityTemplate HeatChannel()
 
 	UnitValEffect = new class'X2Effect_SetUnitValue';
 	UnitValEffect.UnitName = 'RTEffect_HeatChannel_Cooldown';
-	UnitValEffect.NewValueToSet = default.HEATCHANNEL_COOLDOWN;
+	UnitValEffect.NewValueToSet = 0;
 	UnitValEffect.CleanupType = eCleanup_BeginTactical;
 	Template.AddShooterEffect(UnitValEffect);
 	

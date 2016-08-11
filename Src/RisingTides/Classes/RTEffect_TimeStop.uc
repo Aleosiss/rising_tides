@@ -23,6 +23,7 @@ simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffe
 	UnitState = XComGameState_Unit(kNewTargetState);
 	TimeStopEffectState = RTGameState_TimeStopEffect(NewEffectState);
 	TimeStopEffectState.PreventedDamageValues.Length = 0;
+	TimeStopEffectState.iShouldRecordCounter = 0;
 	bWasPreviouslyImmobilized = false;
 
 	if(UnitState != none)
@@ -216,6 +217,8 @@ function bool TimeStopTicked(X2Effect_Persistent PersistentEffect, const out Eff
 	
 }
 
+
+
 function int GetDefendingDamageModifier(XComGameState_Effect EffectState, XComGameState_Unit Attacker, Damageable TargetDamageable, XComGameState_Ability AbilityState, const out EffectAppliedData AppliedData, const int CurrentDamage, X2Effect_ApplyWeaponDamage WeaponDamageEffect) { 
 	local int DamageTaken, i;
 	local RTGameState_TimeStopEffect TimeStopEffectState;
@@ -242,7 +245,7 @@ function int GetDefendingDamageModifier(XComGameState_Effect EffectState, XComGa
 
 	TimeStopEffectState = RTGameState_TimeStopEffect(EffectState);
 	if(TimeStopEffectState == none) {
-		`LOG("Rising Tides: TimeStopEffectState not found?!!?!?!");
+		`LOG("Rising Tides: TimeStopEffectState not found!");
 		return 0;
 	}
 	
@@ -253,22 +256,27 @@ function int GetDefendingDamageModifier(XComGameState_Effect EffectState, XComGa
 		return -(CurrentDamage);
 	
 	// record WeaponDamageValues
-	`LOG("Recording Weapon Damage Value");
+	if(TimeStopEffectState.bShouldRecordDamageValue){
+		`LOG("Rising Tides: Recording Weapon Damage Value");
 
-	TotalWeaponDamageValue = SetTotalWeaponDamageValue(CurrentDamage, WeaponDamageEffect.EffectDamageValue);
-	TimeStopEffectState.PreventedDamageValues.AddItem(TotalWeaponDamageValue);
+		TotalWeaponDamageValue = SetTotalWeaponDamageValue(CurrentDamage, WeaponDamageEffect.EffectDamageValue);
+		TimeStopEffectState.PreventedDamageValues.AddItem(TotalWeaponDamageValue);
 
-	`LOG("Logging,"); 
-	`LOG("PreventedDamageValues.Length = " @ TimeStopEffectState.PreventedDamageValues.Length);
-	for(i = 0; i < TimeStopEffectState.PreventedDamageValues.Length; i++) {
-		`LOG("TimeStopEffectState.PreventedDamageValues["@i@"].DamageType = " @ TimeStopEffectState.PreventedDamageValues[i].DamageType);
+		`LOG("Rising Tides: Logging,"); 
+		`LOG("PreventedDamageValues.Length = " @ TimeStopEffectState.PreventedDamageValues.Length);
+		for(i = 0; i < TimeStopEffectState.PreventedDamageValues.Length; i++) {
+			`LOG("TimeStopEffectState.PreventedDamageValues["@i@"].DamageType = " @ TimeStopEffectState.PreventedDamageValues[i].DamageType);
+		}
+		`LOG("Rising Tides: Time Stop has negated " @ TimeStopEffectState.GetFinalDamageValue().Damage @ " damage so far! This time, it was of type " @ TimeStopEffectState.PreventedDamageValues[TimeStopEffectState.PreventedDamageValues.length-1].DamageType @"!");
+		
+		// record crit //TODO: figure out how to force crit damage popup
+		if(AppliedData.AbilityResultContext.HitResult == eHit_Crit)
+			TimeStopEffectState.bCrit = true;
+		TimeStopEffectState.bShouldRecordDamageValue = false;
+	} else {
+		`LOG("Rising Tides: TimeStopEffectState.GetDefendingDamageModifier was told not to record a damage value.");
+		return 0;
 	}
-	`LOG("Rising Tides: Time Stop has negated " @ TimeStopEffectState.GetFinalDamageValue().Damage @ " damage so far! This time, it was of type " @ TimeStopEffectState.PreventedDamageValues[TimeStopEffectState.PreventedDamageValues.length-1].DamageType @"!");
-	
-	// record crit //TODO: figure out how to force crit damage popup
-	if(AppliedData.AbilityResultContext.HitResult == eHit_Crit)
-		TimeStopEffectState.bCrit = true;
-	
 	return -(CurrentDamage); 
 }
 

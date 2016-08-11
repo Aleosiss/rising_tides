@@ -152,6 +152,9 @@
     <Content Include="Src\RisingTides\Classes\RTEffect_TimeStopMaster.uc">
       <SubType>Content</SubType>
     </Content>
+    <Content Include="Src\RisingTides\Classes\RTEffect_TimeStopTag.uc">
+      <SubType>Content</SubType>
+    </Content>
     <Content Include="Src\RisingTides\Classes\RTEffect_TwitchReaction.uc">
       <SubType>Content</SubType>
     </Content>

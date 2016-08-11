@@ -54,6 +54,7 @@ function int GetAttackingDamageModifier(XComGameState_Effect EffectState, XComGa
 {
 	local float ExtraDamage;
 	//Check for crit
+	`LOG("Rising Tides: Precision Shot Damage."); 
 	if (AppliedData.AbilityResultContext.HitResult == eHit_Crit)
 	{
 		//Check for precision shot

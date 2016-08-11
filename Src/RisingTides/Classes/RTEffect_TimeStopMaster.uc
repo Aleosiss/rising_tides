@@ -5,14 +5,20 @@ var bool bWasPreviouslyTrue;
 
 simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffectParameters, XComGameState_BaseObject kNewTargetState, XComGameState NewGameState, XComGameState_Effect NewEffectState)
 {
+	  local XComGameState_Unit TargetUnit;
 	  
+	  TargetUnit = XComGameState_Unit(kNewTargetState);
+	  `LOG("Rising Tides: TimeStopMasterEffect added to " @ TargetUnit.GetName(eNameType_Full));  
 	  // Could you, Madoka? Could you see me in my stopped time?
 	  // Uh, no...
 	  // Oh.
-	  AddPersistentStatChange(eStat_DetectionModifier, 1);
 
+	  AddPersistentStatChange(eStat_DetectionModifier, 1);
+	  super.OnEffectAdded(ApplyEffectParameters, kNewTargetState, NewGameState, NewEffectState);
 
 }
+
+
 
 simulated function bool OnEffectTicked(const out EffectAppliedData ApplyEffectParameters, XComGameState_Effect kNewEffectState, XComGameState NewGameState, bool FirstApplication)
 {

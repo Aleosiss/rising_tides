@@ -189,8 +189,9 @@ function DirectSetTarget(int TargetIndex)
 	TacticalHud.TargetEnemy(LastTarget);
 
 	// have the camera look at the new target
-	FiringUnit.TargetingCamera.SetTarget(NewTargetActor);
-
+	if(FiringUnit.TargetingCamera != none) {
+		FiringUnit.TargetingCamera.SetTarget(NewTargetActor);
+	}
 	FiringUnit.IdleStateMachine.bTargeting = true;
 	FiringUnit.IdleStateMachine.CheckForStanceUpdate();
 
@@ -239,7 +240,9 @@ private function NotifyTargetTargeted(bool Targeted)
 
 function bool GetCurrentTargetFocus(out Vector Focus)
 {
-	Focus = FiringUnit.TargetingCamera.GetTargetLocation();
+	if(FiringUnit.TargetingCamera != none){
+		Focus = FiringUnit.TargetingCamera.GetTargetLocation();
+	}
 	return true;
 }
 

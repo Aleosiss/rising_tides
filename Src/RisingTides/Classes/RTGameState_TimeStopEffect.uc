@@ -8,8 +8,8 @@
 class RTGameState_TimeStopEffect extends XComGameState_Effect config(RTGhost);
 
 var array<WeaponDamageValue> PreventedDamageValues;		
-var WeaponDamageValue NextPreventedDamageValue;
-var bool bExplosive, bCrit;
+var int iShouldRecordCounter;
+var bool bExplosive, bCrit, bShouldRecordDamageValue;
 
 
 simulated function WeaponDamageValue GetFinalDamageValue() {
@@ -39,12 +39,8 @@ simulated function WeaponDamageValue GetFinalDamageValue() {
   return FinalDamageValue;
 }
 
-simulated function WeaponDamageValue GetNextDamageValue() {
-	return NextPreventedDamageValue;
+DefaultProperties
+{
+	iShouldRecordCounter = 0
 }
-
-simulated function SetNextDamageValue(WeaponDamageValue _NextPreventedDamageValue) {
-	NextPreventedDamageValue = _NextPreventedDamageValue;
-}
-
 
