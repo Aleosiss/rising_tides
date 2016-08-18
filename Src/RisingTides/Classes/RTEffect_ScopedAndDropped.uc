@@ -137,5 +137,5 @@ simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffe
 DefaultProperties
 {
 	DuplicateResponse = eDupe_Ignore
-	EffectName = "Squadsight"
+	EffectName = "RTEffect_ScopedAndDropped"
 }
