@@ -86,6 +86,7 @@ static function X2AbilityTemplate ScopedAndDropped()
 {
 	local X2AbilityTemplate						Template;
 	local RTEffect_ScopedAndDropped				ScopedEffect;
+	local RTEffect_Squadsight				SSEffect;
 
 	// Icon Properties
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'ScopedAndDropped');
@@ -104,6 +105,10 @@ static function X2AbilityTemplate ScopedAndDropped()
 	ScopedEffect.BuildPersistentEffect(1, true, true, true);
 	ScopedEffect.SetDisplayInfo(ePerkBuff_Passive, Template.LocFriendlyName, Template.LocLongDescription, Template.IconImage, true,,Template.AbilitySourceName);
 	Template.AddTargetEffect(ScopedEffect);
+	
+	SSEffect = new class'RTEffect_Squadsight';
+	SSEffect.BuildPersistentEffect(1, true, true, true);
+	Template.AddTargetEffect(SSEffect);
 
 	Template.AdditionalAbilities.AddItem('RTStandardSniperShot');
 	Template.AdditionalAbilities.AddItem('RTOverwatch');
