@@ -1921,7 +1921,7 @@ static function X2AbilityTemplate Harbinger()
 	local X2AbilityCost_ActionPoints		ActionPoint;
 	local RTEffect_Harbinger				HarbingerEffect;
 	local X2Effect_Persistent				TagEffect;
-	local X2Condition_UnitEffectsWithAbilitySource	MeldCondition;
+	local X2Condition_UnitEffects	MeldCondition;
 	local X2Condition_UnitEffects			TagCondition;
 	local X2AbilityTarget_Single				SingleTarget;
 	local X2Effect_EnergyShield ShieldedEffect;
@@ -1948,7 +1948,7 @@ static function X2AbilityTemplate Harbinger()
 	ActionPoint.bConsumeAllPoints = true;
 	Template.AbilityCosts.AddItem(ActionPoint);
 
-	MeldCondition = new class'X2Condition_UnitEffectsWithAbilitySource';
+	MeldCondition = new class'X2Condition_UnitEffects';
 	MeldCondition.AddRequireEffect('RTEffect_Meld', 'AA_UnitNotMelded');
 	Template.AbilityShooterConditions.AddItem(MeldCondition);
 	Template.AbilityTargetConditions.AddItem(MeldCondition);
@@ -1989,6 +1989,7 @@ static function X2AbilityTemplate Harbinger()
 	Template.AddTargetEffect(HarbingerEffect);
 
 	TagEffect = new class'X2Effect_Persistent';
+	TagEffect.BuildPersistentEffect(1, true, true, false, eGameRule_PlayerTurnEnd);
 	TagEffect.EffectName = 'HarbingerTagEffect';
 	Template.AddShooterEffect(TagEffect);
 

@@ -13,13 +13,16 @@ var localized string RTFriendlyName;
 
 function RegisterForEvents(XComGameState_Effect EffectState) {
   local X2EventManager EventMgr;
+  local RTGameState_Harbinger HarbyEffectState;
   local Object ListenerObj, FilterObj;
 
-  EventMgr = `XEVENTMGR;
+  EventMgr = `XEVENTMGR;	 
 
-  ListenerObj = EffectState;
-  FilterObj = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(EffectState.ApplyEffectParameters.TargetStateObjectRef.ObjectID)); // the source unit will have its own method of removing the effect
-  EventMgr.RegisterForEvent(ListenerObj, 'RTRemoveUnitFromMeld', EffectState.OnShieldsExpended, ELD_OnStateSubmitted, , FilterObj); // shields expended appears to just be a generic remove effect listener
+  HarbyEffectState = RTGameState_Harbinger(EffectState);
+
+  ListenerObj = HarbyEffectState;
+  FilterObj = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(EffectState.ApplyEffectParameters.TargetStateObjectRef.ObjectID)); 
+  EventMgr.RegisterForEvent(ListenerObj, 'RTRemoveUnitFromMeld', HarbyEffectState.RemoveHarbingerEffect, ELD_OnStateSubmitted, , FilterObj); // shields expended appears to just be a generic remove effect listener
 }
 
 
@@ -29,8 +32,7 @@ simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffe
 	local XComGameStateHistory History;
 	local int HealAmount, ShredAmount, RuptureAmount;
 
-	super.OnEffectAdded(ApplyEffectParameters, kNewTargetState, NewGameState, NewEffectState);
-
+	
 	// gain bonus will and psi offense
 	AddPersistentStatChange(eStat_Will, BONUS_WILL);
 	AddPersistentStatChange(eStat_PsiOffense, BONUS_WILL);
@@ -47,8 +49,8 @@ simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffe
 	// remove damage mods
 	TargetUnitState.Shredded = 0;
 	TargetUnitState.Ruptured = 0;
-	
-	NewGameState.AddStateObject(TargetUnitState);
+
+	super.OnEffectAdded(ApplyEffectParameters, kNewTargetState, NewGameState, NewEffectState);
 }
 
 function ModifyTurnStartActionPoints(XComGameState_Unit UnitState, out array<name> ActionPoints, XComGameState_Effect EffectState) {
