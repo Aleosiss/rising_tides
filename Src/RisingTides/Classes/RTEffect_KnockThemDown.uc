@@ -16,15 +16,16 @@ function int GetAttackingDamageModifier(XComGameState_Effect EffectState, XComGa
 	local array<StateObjectReference> VisibleUnits, SSVisibleUnits;
 	local int numUnits;
 	
-	//Get total number of enemy units visible to the UI
-	class'X2TacticalVisibilityHelpers'.static.GetAllVisibleEnemyUnitsForUnit(Attacker.ObjectID, VisibleUnits);
-	class'X2TacticalVisibilityHelpers'.static.GetAllSquadsightEnemiesForUnit(Attacker.ObjectID, SSVisibleUnits);
-	numUnits = VisibleUnits.length + SSVisibleUnits.length;
-	
-	TOTAL_DMG_BONUS = numUnits * CRIT_DAMAGE_MODIFIER;
+
 	//Check for crit
 	if (AppliedData.AbilityResultContext.HitResult == eHit_Crit)
 	{
+		//Get total number of enemy units visible to the UI
+		class'X2TacticalVisibilityHelpers'.static.GetAllVisibleEnemyUnitsForUnit(Attacker.ObjectID, VisibleUnits);
+		class'X2TacticalVisibilityHelpers'.static.GetAllSquadsightEnemiesForUnit(Attacker.ObjectID, SSVisibleUnits);
+		numUnits = VisibleUnits.length + SSVisibleUnits.length;
+	
+		TOTAL_DMG_BONUS = numUnits * CRIT_DAMAGE_MODIFIER;
 		ExtraDamage = CurrentDamage * TOTAL_DMG_BONUS;
 	}
 	return int(ExtraDamage);
