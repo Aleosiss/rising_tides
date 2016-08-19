@@ -20,7 +20,8 @@ simulated function bool OnEffectTicked(const out EffectAppliedData ApplyEffectPa
 		`RedScreenOnce("Rising Tides: " @ EffectName @ " unable to find the CounterValue, aborting countdown...");
 		return super.OnEffectTicked(ApplyEffectParameters, kNewEffectState, NewGameState, FirstApplication);
 	}
-	CounterUnit.GetUnitValue(CounterUnitValName, UnitVal); 	// I still don't know if the above method actually populates the out param so this is a fallback
+	CounterUnit.GetUnitValue(CounterUnitValName, UnitVal); 	// I still don't know if the above method actually populates the out param 
+								// in the if statement so this a fallback
 								// I blame my CS2 teacher
 
 	if(UnitVal.fValue < 1)

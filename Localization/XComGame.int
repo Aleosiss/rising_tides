@@ -211,3 +211,37 @@ LocHelpText="This unit has honed its telekinetic abilities, increasing its abili
 LocFlyOverText="Teek"
 LocPromotionPopupText="<Bullet/> This unit has honed its telekinetic abilities, increasing its ability to dodge, deflect, and redirect enemy fire.<br/><Bullet/> + 10 Dodge, + 10 Defense, + 20% Reflection chance.<br/>"
 
+[EyeInTheSky X2AbilityTemplate]
+LocFriendlyName="Eye In the Sky"
+LocLongDescription="This unit does not suffer penalties to reaction fire and is capable of reacting to enemy attacks."
+LocHelpText="This unit does not suffer penalties to reaction fire and is capable of reacting to enemy attacks."
+LocFlyOverText="Eye In the Sky"
+LocPromotionPopupText="<Bullet/> This unit does not suffer penalties to reaction fire and is capable of reacting to enemy attacks.<br/><Bullet/> +30 Aim during Reaction Fire + Covering Fire<br/>"
+
+[HeatChannel X2AbilityTemplate]
+LocFriendlyName="Heat Channel"
+LocLongDescription="When using Psionic abilities, this unit can channel heat from its weapon to fuel the ability, reloading the weapon and reducing the cooldown of the ability by one per ammo reloaded."
+LocHelpText="When using Psionic abilities, this unit can channel heat from its weapon to fuel the ability, reloading the weapon and reducing the cooldown of the ability by one per ammo reloaded."
+LocFlyOverText="Eye In the Sky"
+LocPromotionPopupText="<Bullet/> When using Psionic abilities, this unit can channel heat from its weapon to fuel the ability, reloading the weapon and reducing the cooldown of the ability by one per ammo reloaded.<br/><Bullet/> 8 turn cooldown.<br/>"
+
+[HeatChannelIcon X2AbilityTemplate]
+LocFriendlyName="Heat Channel"
+LocLongDescription="When using Psionic abilities, this unit can channel heat from its weapon to fuel the ability, reloading the weapon and reducing the cooldown of the ability by one per ammo reloaded."
+LocHelpText="When using Psionic abilities, this unit can channel heat from its weapon to fuel the ability, reloading the weapon and reducing the cooldown of the ability by one per ammo reloaded."
+LocFlyOverText="Eye In the Sky"
+LocPromotionPopupText="<Bullet/> When using Psionic abilities, this unit can channel heat from its weapon to fuel the ability, reloading the weapon and reducing the cooldown of the ability by one per ammo reloaded.<br/><Bullet/> 8 turn cooldown.<br/>"
+
+[Harbinger X2AbilityTemplate]
+LocFriendlyName="Harbinger"
+LocLongDescription="Empower a friendly melded unit, healing it fully and granting it significant combat bonuses."
+LocHelpText="Empower a friendly melded unit, healing it fully and granting it significant combat bonuses."
+LocFlyOverText="Harbinger"
+LocPromotionPopupText="<Bullet/> Empower a friendly melded unit, healing it fully and granting it significant combat bonuses.<br/><Bullet/> 8 turn cooldown.<br/><Bullet/> +4 armor, +5 shield hp, + 10 aim, + 10 will, + 2 damage.<br/><Bullet/> Effect is broken on meld loss.<br/>"
+
+[ShockAndAwe X2AbilityTemplate]
+LocFriendlyName="Shock And Awe"
+LocLongDescription="When this unit deals more than 25 damage in a single turn, it disorients all nearby enemies."
+LocHelpText="When this unit deals more than 25 damage in a single turn, it disorients all nearby enemies"
+LocFlyOverText="Shock And Awe"
+LocPromotionPopupText="<Bullet/> When this unit deals more than 25 damage in a single turn, it disorients all nearby enemies<br/>"

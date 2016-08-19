@@ -21,9 +21,9 @@ simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffe
 	UnitState = XComGameState_Unit(kNewTargetState);
 	bWasPreviouslyConcealed = UnitState.IsConcealed();
 	if(bWasPreviouslyConcealed) {
-		UnitState.SetUnitFloatValue('UnitPreviouslyConcealed', 1, eCleanUp_Never);	
+		UnitState.SetUnitFloatValue('UnitPreviouslyConcealed', 1, eCleanUp_BeginTactical);	
 	} else {
-		UnitState.SetUnitFloatValue('UnitPreviouslyConcealed', 0, eCleanUp_Never);
+		UnitState.SetUnitFloatValue('UnitPreviouslyConcealed', 0, eCleanUp_BeginTactical);
 	}
 	
 	if (UnitState != none && !bWasPreviouslyConcealed)
@@ -46,10 +46,10 @@ simulated function OnEffectRemoved(const out EffectAppliedData ApplyEffectParame
 	} else {
 		bWasPreviouslyConcealed = false;
 	}
-	UnitState.SetUnitFloatValue('UnitPreviouslyConcealed', 0, eCleanUp_Never);
+	UnitState.SetUnitFloatValue('UnitPreviouslyConcealed', 0, eCleanUp_BeginTactical);
 	
 	// Stealth can wear off naturally and not break concealment
-	if (UnitState != none && !bWasPreviouslyConcealed)
+	if (UnitState != none && !bWasPreviouslyConcealed && UnitState.IsConcealed())
 	{
 		`XEVENTMGR.TriggerEvent('EffectBreakUnitConcealment', UnitState, UnitState, NewGameState);
 	}

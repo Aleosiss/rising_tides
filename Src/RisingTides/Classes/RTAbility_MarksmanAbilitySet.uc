@@ -22,7 +22,6 @@ class RTAbility_MarksmanAbilitySet extends RTAbility_GhostAbilitySet
 	var config float SIXOCLOCK_DEFENSE_BONUS;
 	var config int TIMESTANDSSTILL_COOLDOWN;
 	var config int BARRIER_STRENGTH, BARRIER_COOLDOWN;
-	var config int OVERRIDE_COOLDOWN;
 	var config int VITAL_POINT_TARGETING_DAMAGE;
 	var config int SURGE_COOLDOWN;
 	var config int HEATCHANNEL_COOLDOWN;
@@ -69,8 +68,8 @@ static function array<X2DataTemplate> CreateTemplates()
 	Templates.AddItem(HeatChannelIcon());
 	Templates.AddItem(Harbinger());
 	Templates.AddItem(HarbingerCleanseListener());
-	//Templates.AddItem(ShockAndAwe());
-	//Templates.AddItem(ShockAndAweListener());
+	Templates.AddItem(ShockAndAwe());
+	Templates.AddItem(ShockAndAweListener());
 	//Templates.AddItem(SIShot());
 	//Templates.AddItem(TimeStandsStill());
 	//Templates.AddItem(Override());
@@ -86,6 +85,7 @@ static function X2AbilityTemplate ScopedAndDropped()
 {
 	local X2AbilityTemplate						Template;
 	local RTEffect_ScopedAndDropped				ScopedEffect;
+	local RTEffect_Squadsight				SSEffect;
 
 	// Icon Properties
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'ScopedAndDropped');
@@ -104,6 +104,10 @@ static function X2AbilityTemplate ScopedAndDropped()
 	ScopedEffect.BuildPersistentEffect(1, true, true, true);
 	ScopedEffect.SetDisplayInfo(ePerkBuff_Passive, Template.LocFriendlyName, Template.LocLongDescription, Template.IconImage, true,,Template.AbilitySourceName);
 	Template.AddTargetEffect(ScopedEffect);
+	
+	SSEffect = new class'RTEffect_Squadsight';
+	SSEffect.BuildPersistentEffect(1, true, true, true);
+	Template.AddTargetEffect(SSEffect);
 
 	Template.AdditionalAbilities.AddItem('RTStandardSniperShot');
 	Template.AdditionalAbilities.AddItem('RTOverwatch');
@@ -1101,6 +1105,7 @@ static function X2AbilityTemplate SovereignEffect()
 	LineMultiTarget = new class'RTAbilityMultiTarget_TargetedLine';
 	LineMultiTarget.bSightRangeLimited = false;
 	Template.AbilityMultiTargetStyle = LineMultiTarget;
+	Template.bRecordValidTiles = true;
 
 	// Action Point
 	ActionPointCost = new class'RTAbilityCost_SnapshotActionPoints';
@@ -1156,6 +1161,7 @@ static function X2AbilityTemplate SovereignEffect()
 	WorldDamage.bHitAdjacentDestructibles = false;                   //applies environmental damage to things adjacent to the Line
 	WorldDamage.PlusNumZTiles = 1;                                 //determines how 'high' the world damage is applied
 	WorldDamage.bHitTargetTile = true;                              //Makes sure that everthing that is targetted is hit
+	WorldDamage.bHitSourceTile = false;
 	WorldDamage.ApplyChance = 100;
 	Template.AddMultiTargetEffect(WorldDamage);                     //May be redundant
 
