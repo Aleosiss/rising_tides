@@ -1106,6 +1106,7 @@ static function X2AbilityTemplate SovereignEffect()
 	LineMultiTarget = new class'RTAbilityMultiTarget_TargetedLine';
 	LineMultiTarget.bSightRangeLimited = false;
 	Template.AbilityMultiTargetStyle = LineMultiTarget;
+	Template.bRecordValidTiles = true;
 
 	// Action Point
 	ActionPointCost = new class'RTAbilityCost_SnapshotActionPoints';
