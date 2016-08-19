@@ -22,7 +22,6 @@ class RTAbility_MarksmanAbilitySet extends RTAbility_GhostAbilitySet
 	var config float SIXOCLOCK_DEFENSE_BONUS;
 	var config int TIMESTANDSSTILL_COOLDOWN;
 	var config int BARRIER_STRENGTH, BARRIER_COOLDOWN;
-	var config int OVERRIDE_COOLDOWN;
 	var config int VITAL_POINT_TARGETING_DAMAGE;
 	var config int SURGE_COOLDOWN;
 	var config int HEATCHANNEL_COOLDOWN;
