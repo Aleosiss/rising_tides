@@ -742,7 +742,7 @@ static function X2AbilityTemplate SixOClockEffect()
 	local RTEffect_SixOClockEffect				ClockEffect;
 	local X2AbilityTrigger_EventListener		Trigger;
 	local X2Condition_UnitProperty				UnitPropertyCondition;
-	local X2AbilityMultiTarget_Radius			MultiTarget;
+	local X2AbilityMultiTarget_AllAllies			MultiTarget;
 
 	// Icon Properties
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'SixOClockEffect');
@@ -771,13 +771,13 @@ static function X2AbilityTemplate SixOClockEffect()
 
 	// Copied Straight from Shieldbearer ability
 	// Multi target
-	MultiTarget = new class'X2AbilityMultiTarget_Radius';
-	MultiTarget.fTargetRadius = 200;
+	MultiTarget = new class'X2AbilityMultiTarget_AllAllies';
+	//MultiTarget.fTargetRadius = 200;
 
 	// This should really be false, because it makes no sense that 
 	// Whisper can somehow see units behind cover, but it murders FPS
 	// whenever it recalculates, so true for now
-	MultiTarget.bIgnoreBlockingCover = true;
+	//MultiTarget.bIgnoreBlockingCover = true;
 	Template.AbilityMultiTargetStyle = MultiTarget;
 
 	// Copied Straight from Shieldbearer ability
@@ -1300,7 +1300,7 @@ static function X2AbilityTemplate TimeStandsStill()
 	local RTEffect_Counter						CounterEffect;
 	local X2AbilityCost_ActionPoints			ActionPointCost;
 	local X2AbilityCooldown						Cooldown;
-	local X2AbilityMultiTarget_Radius			MultiTarget;
+	local X2AbilityMultiTarget_AllUnits			MultiTarget;
 	local X2Condition_UnitProperty				UnitPropertyCondition;
 	local RTEffect_TimeStopTag					TagEffect;
 
@@ -1340,9 +1340,10 @@ static function X2AbilityTemplate TimeStandsStill()
 	Template.AddShooterEffect(CounterEffect);
 
 	MultiTarget = new class'X2AbilityMultiTarget_Radius';
-	MultiTarget.fTargetRadius = 500;
+	MultiTarget.bAcceptFriendlyUnits = true;
+	MultiTarget.bAcceptEnemyUnits = true;
+	MultiTarget.bDontAcceptNeutralUnits = false;
 	MultiTarget.bExcludeSelfAsTargetIfWithinRadius = true;
-	MultiTarget.bIgnoreBlockingCover = true;
 	Template.AbilityMultiTargetStyle = MultiTarget;
 
 	Template.ConcealmentRule = eConceal_Always;
@@ -1398,7 +1399,7 @@ static function X2AbilityTemplate TimeStandsStillEndListener()
 	local X2Condition_UnitProperty				UnitPropertyCondition;
 	local X2Effect_RemoveEffects				RemoveSelfEffect; 
 	local X2Effect_RemoveEffects				RemoveMultiEffect;
-	local X2AbilityMultiTarget_Radius			MultiTarget;
+	local X2AbilityMultiTarget_AllUnits			MultiTarget;
  	local X2AbilityTrigger_EventListener		EventListener;
 	local X2Effect_Knockback					KnockbackEffect;
 	local RTEffect_TimeStopDamage				TimeStopDamageEffect;									
@@ -1411,10 +1412,11 @@ static function X2AbilityTemplate TimeStandsStillEndListener()
 	Template.Hostility = eHostility_Neutral;
 	Template.ConcealmentRule = eConceal_Always;
 
-	MultiTarget = new class'X2AbilityMultiTarget_Radius';
-	MultiTarget.fTargetRadius = 500;
+	MultiTarget = new class'X2AbilityMultiTarget_AllUnits';
+	MultiTarget.bAcceptFriendlyUnits = true;
+	MultiTarget.bAcceptEnemyUnits = true;
+	MultiTarget.bDontAcceptNeutralUnits = false;
 	MultiTarget.bExcludeSelfAsTargetIfWithinRadius = true;
-	MultiTarget.bIgnoreBlockingCover = true;
 	Template.AbilityMultiTargetStyle = MultiTarget;
 
 	EventListener = new class'X2AbilityTrigger_EventListener';			
@@ -1463,7 +1465,7 @@ static function X2AbilityTemplate TimeStandsStillEndListener()
 static function X2AbilityTemplate LinkedIntelligence()
 {
 	local X2AbilityTemplate						Template;
-	local X2AbilityMultiTarget_Radius			MultiTarget;
+	local X2AbilityMultiTarget_AllAllies			MultiTarget;
 	local RTEffect_LinkedIntelligence			LinkedEffect, ChainEffect;
 	local X2Condition_UnitEffectsWithAbilityTarget	UnitCondition;
 
@@ -2024,7 +2026,7 @@ static function X2AbilityTemplate HarbingerCleanseListener()
 	local X2Condition_UnitProperty				UnitPropertyCondition;
 	local X2Effect_RemoveEffects				RemoveSelfEffect; 
 	local X2Effect_RemoveEffects				RemoveMultiEffect;
-	local X2AbilityMultiTarget_Radius			MultiTarget;
+	local X2AbilityMultiTarget_AllAllies			MultiTarget;
  	local X2AbilityTrigger_EventListener		EventListener;
 
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'HarbingerCleanseListener');
@@ -2034,10 +2036,11 @@ static function X2AbilityTemplate HarbingerCleanseListener()
 	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_NeverShow;
 	Template.Hostility = eHostility_Neutral;
 
-	MultiTarget = new class'X2AbilityMultiTarget_Radius';
-	MultiTarget.fTargetRadius = 500;
+	MultiTarget = new class'X2AbilityMultiTarget_Allies';
+	MultiTarget.bAcceptFriendlyUnits = true;
+	MultiTarget.bAcceptEnemyUnits = true;
+	MultiTarget.bDontAcceptNeutralUnits = false;
 	MultiTarget.bExcludeSelfAsTargetIfWithinRadius = true;
-	MultiTarget.bIgnoreBlockingCover = true;
 	Template.AbilityMultiTargetStyle = MultiTarget;
 
 	EventListener = new class'X2AbilityTrigger_EventListener';

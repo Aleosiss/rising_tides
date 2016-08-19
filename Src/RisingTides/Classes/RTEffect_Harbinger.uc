@@ -104,3 +104,8 @@ simulated function AddX2ActionsForVisualization_Tick(XComGameState VisualizeGame
 	AddX2ActionsForVisualization(VisualizeGameState, BuildTrack, 'AA_Success');
 }
 
+
+defaultproperties
+{
+	GameStateEffectClass = class'RTGameState_Harbinger'
+}
