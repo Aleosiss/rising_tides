@@ -1411,7 +1411,7 @@ static function X2AbilityTemplate TimeStandsStillEndListener()
 	MultiTarget.bIgnoreBlockingCover = true;
 	Template.AbilityMultiTargetStyle = MultiTarget;
 
-	EventListener = new class'X2AbilityTrigger_EventListener';
+	EventListener = new class'X2AbilityTrigger_EventListener';			
 	EventListener.ListenerData.EventID = 'TimeStopEnded';
 	EventListener.ListenerData.Deferral = ELD_OnStateSubmitted;
 	EventListener.ListenerData.Filter = eFilter_Unit;
