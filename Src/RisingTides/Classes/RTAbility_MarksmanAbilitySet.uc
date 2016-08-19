@@ -68,8 +68,8 @@ static function array<X2DataTemplate> CreateTemplates()
 	Templates.AddItem(HeatChannelIcon());
 	Templates.AddItem(Harbinger());
 	Templates.AddItem(HarbingerCleanseListener());
-	//Templates.AddItem(ShockAndAwe());
-	//Templates.AddItem(ShockAndAweListener());
+	Templates.AddItem(ShockAndAwe());
+	Templates.AddItem(ShockAndAweListener());
 	//Templates.AddItem(SIShot());
 	//Templates.AddItem(TimeStandsStill());
 	//Templates.AddItem(Override());
