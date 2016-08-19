@@ -1162,6 +1162,7 @@ static function X2AbilityTemplate SovereignEffect()
 	WorldDamage.bHitAdjacentDestructibles = false;                   //applies environmental damage to things adjacent to the Line
 	WorldDamage.PlusNumZTiles = 1;                                 //determines how 'high' the world damage is applied
 	WorldDamage.bHitTargetTile = true;                              //Makes sure that everthing that is targetted is hit
+	WorldDamage.bHitSourceTile = false;
 	WorldDamage.ApplyChance = 100;
 	Template.AddMultiTargetEffect(WorldDamage);                     //May be redundant
 
