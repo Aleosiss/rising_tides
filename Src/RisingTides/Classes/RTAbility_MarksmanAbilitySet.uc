@@ -1339,7 +1339,7 @@ static function X2AbilityTemplate TimeStandsStill()
 	CounterEffect.EffectName = 'TimeStandsStillCounterEffect';
 	Template.AddShooterEffect(CounterEffect);
 
-	MultiTarget = new class'X2AbilityMultiTarget_Radius';
+	MultiTarget = new class'X2AbilityMultiTarget_AllUnits';
 	MultiTarget.bAcceptFriendlyUnits = true;
 	MultiTarget.bAcceptEnemyUnits = true;
 	MultiTarget.bDontAcceptNeutralUnits = false;
@@ -2036,7 +2036,7 @@ static function X2AbilityTemplate HarbingerCleanseListener()
 	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_NeverShow;
 	Template.Hostility = eHostility_Neutral;
 
-	MultiTarget = new class'X2AbilityMultiTarget_Allies';
+	MultiTarget = new class'X2AbilityMultiTarget_AllAllies';
 	MultiTarget.bAcceptFriendlyUnits = true;
 	MultiTarget.bAcceptEnemyUnits = true;
 	MultiTarget.bDontAcceptNeutralUnits = false;
