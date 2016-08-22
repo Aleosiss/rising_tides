@@ -260,7 +260,7 @@ static function X2AbilityTemplate Burst() {
 	Template.AbilityCosts.AddItem(ActionPointCost);
 
    	Cooldown = new class'X2AbilityCooldown';
-	Cooldown.iNumTurns = default.OVERLOAD_BASE_COOLDOWN;
+	Cooldown.iNumTurns = default.BURST_COOLDOWN;
 	Template.AbilityCooldown = Cooldown;
 
 	Template.AbilityTriggers.AddItem(default.PlayerInputTrigger);
@@ -351,7 +351,7 @@ static function X2AbilityTemplate Purge() {
 	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_snapshot";
 	
 	Template.AbilitySourceName = 'eAbilitySource_Psionic';
-	Template.eAbilityIconBehaviorHUD = EAbilityIconBehavior_NeverShow;
+	Template.eAbilityIconBehaviorHUD = EAbilityIconBehavior_ShowIfAvailable;
 	Template.Hostility = eHostility_Neutral;
 	
 	// Deadeye to ensure
@@ -381,5 +381,20 @@ static function X2AbilityTemplate Purge() {
 	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
 	// TODO: Visualization
 
+	return Template;
+}
+//---------------------------------------------------------------------------------------
+//---Mentor------------------------------------------------------------------------------
+//---------------------------------------------------------------------------------------
+static function X2AbilityTemplate Mentor() {
+	local X2AbilityTemplate 		Template;
+	local X2Condition_UnitEffects		SelfMeldCondition, TargetMeldCondition;
+	local X2Effect_PersistentStatChange	MentorEffect;
+	local X2AbilityCost_ActionPoints	ActionPointCost;
+	local X2AbilityCooldown			Cooldown;
+	
+	`CREATE_X2ABILITY_TEMPLATE(Template, 'RTMentor');
+	
+	
 	return Template;
 }
