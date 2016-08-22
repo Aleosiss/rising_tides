@@ -440,7 +440,7 @@ static function X2AbilityTemplate RTMentor() {
 	Template.AbilityTargetConditions.AddItem(MeldCondition);
 
         BloodlustCondition = new class'RTCondition_EffectStackCount';
-	BloodlustCondition.iMinimumStacks = default.MENTOR_STACK_MAXIMUM;
+	BloodlustCondition.iMaximumStacks = default.MENTOR_STACK_MAXIMUM;
 	BloodlustCondition.StackingEffect = class'RTEffect_Bloodlust'.default.EffectName;
         Template.AbilityShooterConditions.AddItem(BloodlustCondition);
 
