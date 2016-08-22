@@ -11,7 +11,7 @@ class RTAbilityCost_SnapshotActionPoints extends X2AbilityCost_ActionPoints;
 
 simulated function int GetPointCost(XComGameState_Ability AbilityState, XComGameState_Unit AbilityOwner)
 {
-	if (AbilityOwner.HasSoldierAbility('Snapshot') || AbilityOwner.IsUnitAffectedByEffectName('RTEffect_PsionicSurge'))
+	if (AbilityOwner.HasSoldierAbility('RTSnapshot') || AbilityOwner.IsUnitAffectedByEffectName('RTEffect_PsionicSurge'))
 		return 1;
 	else
 		return iNumPoints;

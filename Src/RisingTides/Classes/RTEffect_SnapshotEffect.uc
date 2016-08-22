@@ -31,6 +31,6 @@ function GetToHitModifiers(XComGameState_Effect EffectState, XComGameState_Unit 
 }
 DefaultProperties
 {
-	EffectName="Snapshot"
+	EffectName="RTSnapshot"
 }
 

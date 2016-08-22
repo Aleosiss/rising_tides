@@ -45,7 +45,7 @@ static function array<X2DataTemplate> CreateTemplates()
 	Templates.AddItem(KnockThemDown());
 	Templates.AddItem(DisablingShot());
 	Templates.AddItem(DisablingShotDamage());
-	Templates.AddItem(Snapshot());
+	Templates.AddItem(RTSnapshot());
 	Templates.AddItem(SixOClock());
 	Templates.AddItem(SixOClockEffect());
 	Templates.AddItem(VitalPointTargeting());
@@ -666,15 +666,15 @@ static function X2AbilityTemplate DisablingShotDamage()
 }
 
 //---------------------------------------------------------------------------------------
-//---Snapshot----------------------------------------------------------------------------
+//---RTSnapshot----------------------------------------------------------------------------
 //---------------------------------------------------------------------------------------
-static function X2AbilityTemplate Snapshot()
+static function X2AbilityTemplate RTSnapshot()
 {
 	local X2AbilityTemplate						Template;
 	local RTEffect_SnapshotEffect		  SnapshotEffect;
 
 	// Icon Properties
-	`CREATE_X2ABILITY_TEMPLATE(Template, 'Snapshot');
+	`CREATE_X2ABILITY_TEMPLATE(Template, 'RTSnapshot');
 	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_snapshot";
 
 	Template.AbilitySourceName = 'eAbilitySource_Perk';
@@ -1907,7 +1907,6 @@ static function X2AbilityTemplate ShockAndAweListener()
 
 	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
 	Template.bShowActivation = true;
-	Template.bSkipFireAction = true;
 	//  TODO: VISUALIZATION
 
 	return Template;

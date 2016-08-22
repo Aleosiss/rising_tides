@@ -105,6 +105,6 @@ simulated function AddX2ActionsForVisualization_Tick(XComGameState VisualizeGame
 }
 
 defaultproperties
-{
+{																   git 
 	GameStateEffectClass = class'RTGameState_Harbinger'
 }
