@@ -1127,10 +1127,10 @@ static function X2AbilityTemplate SovereignEffect()
 	//  Put holo target effect first because if the target dies from this shot, it will be too late to notify the effect.
 	Template.AddTargetEffect(class'X2Ability_GrenadierAbilitySet'.static.HoloTargetEffect());
 	//  Various Soldier ability specific effects - effects check for the ability before applying	
-	Template.AddTargetEffect(class'X2Ability_GrenadierAbilitySet'.static.ShredderDamageEffect());
+	//Template.AddTargetEffect(class'X2Ability_GrenadierAbilitySet'.static.ShredderDamageEffect());
 
 	// Damage Effect
-	//Template.AddTargetEffect(default.WeaponUpgradeMissDamage);
+	Template.AddTargetEffect(default.WeaponUpgradeMissDamage);
 
 	// Hit Calculation (Different weapons now have different calculations for range)
 	ToHitCalc = new class'X2AbilityToHitCalc_StandardAim';
@@ -1141,10 +1141,13 @@ static function X2AbilityTemplate SovereignEffect()
 	Template.bUseSourceLocationZToAim = true;
 
 	// Damage/Burning Effect
-	WeaponDamageEffect = new class'X2Effect_ApplyWeaponDamage';   //creates the framework to apply weapon damage to the ability
-	WeaponDamageEffect.bExplosiveDamage = true;					  //forces the ability to use the explosive damage type
-	WeaponDamageEffect.bApplyWorldEffectsForEachTargetLocation = true;          
-	Template.AddMultiTargetEffect(WeaponDamageEffect);           //Adds weapon damage to multiple targets
+	WeaponDamageEffect = new class'X2Effect_ApplyWeaponDamage';
+	WeaponDamageEffect.EffectDamageValue.Pierce = 9999;
+	WeaponDamageEffect.EffectDamageValue.Shred = 4;			 
+	WeaponDamageEffect.bApplyWorldEffectsForEachTargetLocation = true;     
+	Template.AddTargetEffect(WeaponDamageEffect);     
+	Template.AddMultiTargetEffect(WeaponDamageEffect);   
+	
 	BurningEffect = class'X2StatusEffects'.static.CreateBurningStatusEffect(3, 0);   //Adds Burning Effect for 3 damage, 0 spread
 	BurningEffect.ApplyChance = 100;                                         //Should be a 100% chance to actually apply burning 
 	Template.AddTargetEffect(BurningEffect);
