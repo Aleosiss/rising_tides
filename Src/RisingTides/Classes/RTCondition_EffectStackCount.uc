@@ -19,13 +19,13 @@ event name CallMeetsCondition(XComGameState_BaseObject kTarget) {
     foreach TargetUnitState.AffectedByEffects(EffectRef) {
         EffectState = History.GetGameStateForObjectID(EffectRef.ObjectID);
         if(!EffectState.GetX2Effect().EffectName != StackingEffect)
-            continue;
-		if(EffectState.DuplicateResponse != eDupe_Refresh || !EffectState.bStackOnRefresh)
-			return 'AA_NotStackableEffect';
+            	continue;
+	if(EffectState.DuplicateResponse != eDupe_Refresh || !EffectState.bStackOnRefresh)
+		return 'AA_NotStackableEffect';
         if(iMinimumStacks > 0 && EffectState.iStacks < iMinimumStacks)
-            return 'AA_NotEnoughStacks';
+            	return 'AA_NotEnoughStacks';
         if(iMaximumStacks > 0 && EffectState.iStacks > iMaximumStacks)
-            return 'AA_TooManyStacks';
+        	return 'AA_TooManyStacks';
     }
 
     return 'AA_Success';

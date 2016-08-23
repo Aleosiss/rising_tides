@@ -27,9 +27,12 @@ static function array<X2DataTemplate> CreateTemplates()
 	Templates.AddItem(PurePassive('RTAcidicBlade', "img:///UILibrary_PerkIcons.UIPerk_salvo", true));
 	Templates.AddItem(PurePassive('RTPsionicBlade', "img:///UILibrary_PerkIcons.UIPerk_salvo", true));
 	Templates.AddItem(PurePassive('RTHiddenBlade', "img:///UILibrary_PerkIcons.UIPerk_salvo", true));
+	Templates.AddItem(PurePassive('RTSiphon', "img:///UILibrary_PerkIcons.UIPerk_salvo", true));
 
-	Templates.AddItem(Burst());
-	Templates.AddItem(Blur());
+	Templates.AddItem(RTBurst());
+	Templates.AddItem(RTBlur());
+	Templates.AddItem(RTPurge());
+	Templates.AddItem(RTMentor());
 
 	return Templates;
 }
@@ -237,7 +240,7 @@ static function X2AbilityTemplate RTBerserkerKnifeAttack()
 //---------------------------------------------------------------------------------------
 //---Burst-------------------------------------------------------------------------------
 //---------------------------------------------------------------------------------------
-static function X2AbilityTemplate Burst() {
+static function X2AbilityTemplate RTBurst() {
     local X2AbilityTemplate Template;
     local X2AbilityMultiTarget_Radius MultiTarget;
     local X2Effect_ApplyDirectionalWorldDamage WorldDamage;
@@ -246,7 +249,7 @@ static function X2AbilityTemplate Burst() {
     local X2AbilityCost_ActionPoints  ActionPointCost;
     local X2Effect_Knockback  KnockbackEffect;
 
-    `CREATE_X2ABILITY_TEMPLATE(Template, 'Burst');
+    `CREATE_X2ABILITY_TEMPLATE(Template, 'RTBurst');
     Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_snipershot"; //TODO: Change this
     Template.AbilitySourceName = 'eAbilitySource_Psionic';  
 	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_AlwaysShow;
@@ -260,7 +263,7 @@ static function X2AbilityTemplate Burst() {
 	Template.AbilityCosts.AddItem(ActionPointCost);
 
    	Cooldown = new class'X2AbilityCooldown';
-	Cooldown.iNumTurns = default.OVERLOAD_BASE_COOLDOWN;
+	Cooldown.iNumTurns = default.BURST_COOLDOWN;
 	Template.AbilityCooldown = Cooldown;
 
 	Template.AbilityTriggers.AddItem(default.PlayerInputTrigger);
@@ -308,11 +311,11 @@ static function X2AbilityTemplate Burst() {
 //---------------------------------------------------------------------------------------
 //---Blur--------------------------------------------------------------------------------
 //---------------------------------------------------------------------------------------
-static function X2AbilityTemplate Blur() {
+static function X2AbilityTemplate RTBlur() {
 	local X2AbilityTemplate Template;
 	local X2Effect_PersistentStatChange BlurEffect;
 	
-	`CREATE_X2ABILITY_TEMPLATE(Template, 'Blur');
+	`CREATE_X2ABILITY_TEMPLATE(Template, 'RTBlur');
 	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_snapshot";
 	
 	Template.AbilitySourceName = 'eAbilitySource_Perk';
@@ -341,17 +344,17 @@ static function X2AbilityTemplate Blur() {
 //---------------------------------------------------------------------------------------
 //---Purge-------------------------------------------------------------------------------
 //---------------------------------------------------------------------------------------
-static function X2AbilityTemplate Purge() {
+static function X2AbilityTemplate RTPurge() {
 	local X2AbilityTemplate Template;
 	local X2Effect_RangerStealth StealthEffect;
 	local RTEffect_RemoveStacks	PurgeEffect;
 	local RTCondition_EffectStackCount	BloodlustCondition;
 	
-	`CREATE_X2ABILITY_TEMPLATE(Template, 'Purge');
+	`CREATE_X2ABILITY_TEMPLATE(Template, 'RTPurge');
 	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_snapshot";
 	
 	Template.AbilitySourceName = 'eAbilitySource_Psionic';
-	Template.eAbilityIconBehaviorHUD = EAbilityIconBehavior_NeverShow;
+	Template.eAbilityIconBehaviorHUD = EAbilityIconBehavior_ShowIfAvailable;
 	Template.Hostility = eHostility_Neutral;
 	
 	// Deadeye to ensure
@@ -383,3 +386,70 @@ static function X2AbilityTemplate Purge() {
 
 	return Template;
 }
+//---------------------------------------------------------------------------------------
+//---Mentor------------------------------------------------------------------------------
+//---------------------------------------------------------------------------------------
+static function X2AbilityTemplate RTMentor() {
+	local X2AbilityTemplate 		Template;
+	local X2Condition_UnitEffects		MeldCondition, MeldCondition;
+        local X2Condition_UnitProperty          TargetUnitPropertyCondition;
+	local X2Effect_PersistentStatChange	MentorEffect;
+	local X2AbilityCost_ActionPoints	ActionPointCost;
+        local RTCondition_EffectStackCount      BloodlustCondition;
+	local X2AbilityCooldown			Cooldown;
+	
+	`CREATE_X2ABILITY_TEMPLATE(Template, 'RTMentor');
+        Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_snipershot"; //TODO: Change this
+        Template.AbilitySourceName = 'eAbilitySource_Psionic';  
+	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_AlwaysShow;
+	Template.AbilityConfirmSound = "TacticalUI_ActivateAbility";
+	Template.Hostility = eHostility_Offensive;
+        
+	ActionPointCost = new class'X2AbilityCost_ActionPoints';
+	ActionPointCost.iNumPoints = 1;
+	ActionPointCost.bConsumeAllPoints = false;
+	Template.AbilityCosts.AddItem(ActionPointCost);
+
+   	Cooldown = new class'X2AbilityCooldown';
+	Cooldown.iNumTurns = default.MENTOR_COOLDOWN;
+	Template.AbilityCooldown = Cooldown;
+
+	Template.AbilityTriggers.AddItem(default.PlayerInputTrigger);
+	Template.AbilityToHitCalc = default.DeadEye;
+	Template.AbilityTargetStyle = default.SimpleSingleTarget;
+
+	TargetUnitPropertyCondition = new class'X2Condition_UnitProperty';
+	TargetUnitPropertyCondition.ExcludeDead = true;
+	TargetUnitPropertyCondition.ExcludeRobotic = true;
+	TargetUnitPropertyCondition.ExcludeFriendlyToSource = false;
+	TargetUnitPropertyCondition.ExcludeHostileToSource = true;
+	TargetUnitPropertyCondition.FailOnNonUnits = true;
+        Template.AbilityTargetConditions.AddItem(TargetUnitPropertyCondition);
+
+        MentorEffect = new class'X2Effect_PersistentStatChange';
+        MentorEffect.BuildPersistentEffect(1, false, false, false, eGameRule_PlayerTurnEnd);
+        MentorEffect.SetDisplayInfo(ePerkBuff_Bonus, Template.LocFriendlyName, Template.GetMyHelpText(), Template.IconImage, true, , Template.AbilitySourceName);
+        MentorEffect.AddPersistentStatChange(eStat_Will, default.MENTOR_BONUS);
+        MentorEffect.AddPersistentStatChange(eStat_PsiOffense, default.MENTOR_BONUS);
+        Template.AddTargetEffect(MentorEffect);        
+      
+        MeldCondition = new class'X2Condition_UnitEffects';
+        MeldCondition = new class'X2Condition_UnitEffects';
+	MeldCondition.AddRequireEffect('RTEffect_Meld', 'AA_UnitNotMelded');
+	Template.AbilityShooterConditions.AddItem(MeldCondition);
+	Template.AbilityTargetConditions.AddItem(MeldCondition);
+
+        BloodlustCondition = new class'RTCondition_EffectStackCount';
+	BloodlustCondition.iMaximumStacks = default.MENTOR_STACK_MAXIMUM;
+	BloodlustCondition.StackingEffect = class'RTEffect_Bloodlust'.default.EffectName;
+        Template.AbilityShooterConditions.AddItem(BloodlustCondition);
+
+        Template.PostActivationEvents.AddItem('UnitUsedPsionicAbility');
+
+	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
+	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
+        
+	
+	return Template;
+}
+
