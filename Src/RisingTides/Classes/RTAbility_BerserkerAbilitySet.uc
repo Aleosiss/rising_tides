@@ -12,6 +12,24 @@ class RTAbility_BerserkerAbilitySet extends RTAbility_GhostAbilitySet config(Ris
 
 	var config int ACID_BLADE_DOT_DAMAGE;
 	var config int ACID_BLADE_DOT_SHRED;
+	var config int BURST_DAMAGE;
+	var config int BURST_COOLDOWN;
+	var config float SIPHON_AMOUNT_MULTIPLIER;
+	var config int SIPHON_MIN_VAL;
+	var config int SIPHON_MAX_VAL;
+	var config int SIPHON_RANGE;
+	var config int BLUR_DEFENSE_BONUS;
+	var config int BLUR_DODGE_BONUS;
+	var config int BLUR_MOBILITIY_BONUS;	 
+	var config int BLADE_DAMAGE;
+	var config int BLADE_CRIT_DAMAGE;
+	var config int BLADE_DAMAGE_SPREAD;
+	var config int ACID_BLADE_SHRED;
+	var config float HIDDEN_BLADE_CRIT_MODIFIER;
+	var config int PURGE_STACK_REQUIREMENT;
+	var config int MENTOR_COOLDOWN;
+	var config int MENTOR_BONUS;
+	var config int MENTOR_STACK_MAXIMUM;
 
 //---------------------------------------------------------------------------------------
 //---CreateTemplates---------------------------------------------------------------------
@@ -70,6 +88,7 @@ static function X2AbilityTemplate BumpInTheNight()
 	Template.AdditionalAbilities.AddItem('PsiOverloadPanic');
 	Template.AdditionalAbilities.AddItem('LIOverwatchShot');
 	Template.AdditionalAbilities.AddItem('BumpInTheNightListener');
+	Template.AdditionalAbilities.AddItem('StandardGhostShot');
 
 	// Probably required 
 	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
@@ -135,7 +154,7 @@ static function X2AbilityTemplate RTBerserkerKnifeAttack()
 	local X2AbilityCost_ActionPoints        ActionPointCost;
 	local X2AbilityToHitCalc_StandardMelee  StandardMelee;
 	local RTEffect_BerserkerMeleeDamage     WeaponDamageEffect;
-	local RTEffect_Acid						AcidEffect;
+	//local RTEffect_Acid						AcidEffect;
 	local array<name>                       SkipExclusions;
 	local X2Condition_AbilityProperty  		AcidCondition, SiphonCondition;
 	local X2Condition_UnitProperty			TargetUnitPropertyCondition;
@@ -179,23 +198,28 @@ static function X2AbilityTemplate RTBerserkerKnifeAttack()
 	Template.AddShooterEffectExclusions(SkipExclusions);
 
 	// Damage Effect
-	//
-	WeaponDamageEffect = new class'RTEffect_BerserkerMeleeDamage';
+	//		var int iBaseBladeDamage, iBaseBladeCritDamage, iBaseBladeDamageSpread, iAcidicBladeShred;var float fHiddenBladeCritModifier;
+	WeaponDamageEffect = new class'RTEffect_BerserkerMeleeDamage';	 
+	WeaponDamageEffect.iBaseBladeDamage = default.BLADE_DAMAGE;
+	WeaponDamageEffect.iBaseBladeCritDamage = default.BLADE_CRIT_DAMAGE;
+	WeaponDamageEffect.iBaseBladeDamageSpread = default.BLADE_DAMAGE_SPREAD;
+	WeaponDamageEffect.iAcidicBladeShred = default.ACID_BLADE_SHRED;
+	WeaponDamageEffect.fHiddenBladeCritModifier = default.HIDDEN_BLADE_CRIT_MODIFIER;
 	WeaponDamageEffect.bIgnoreBaseDamage = true;
 	Template.AddTargetEffect(WeaponDamageEffect);
 
-	// Acid Effect
-	AcidEffect = new class'RTEffect_Acid';
-	AcidEffect.BuildPersistentEffect(default.Acid_DURATION, true, false, false, eGameRule_PlayerTurnEnd);
-	AcidEffect.SetDisplayInfo(ePerkBuff_Penalty, default.AcidFriendlyName, default.AcidFriendlyDesc, Template.IconImage, true);
-	AcidEffect.DuplicateResponse = eDupe_Refresh;
-	AcidEffect.bStackOnRefresh = true;
-	AcidEffect.SetAcidDamage(default.ACID_BLADE_DOT_DAMAGE, default.ACID_BLADE_DOT_SHRED);
-
-	AcidCondition = new class'X2Condition_AbilityProperty';
-	AcidCondition.OwnerHasSoldierAbilities.AddItem('RTAcidicBlade');
-	AcidEffect.TargetConditions.AddItem(AcidCondition);
-	Template.AddTargetEffect(AcidEffect);
+	//// Acid Effect
+	//AcidEffect = new class'RTEffect_Acid';
+	//AcidEffect.BuildPersistentEffect(default.Acid_DURATION, true, false, false, eGameRule_PlayerTurnEnd);
+	//AcidEffect.SetDisplayInfo(ePerkBuff_Penalty, default.AcidFriendlyName, default.AcidFriendlyDesc, Template.IconImage, true);
+	//AcidEffect.DuplicateResponse = eDupe_Refresh;	 
+	//AcidEffect.bStackOnRefresh = true;
+	//AcidEffect.SetAcidDamage(default.ACID_BLADE_DOT_DAMAGE, default.ACID_BLADE_DOT_SHRED);
+//
+	//AcidCondition = new class'X2Condition_AbilityProperty';
+	//AcidCondition.OwnerHasSoldierAbilities.AddItem('RTAcidicBlade');
+	//AcidEffect.TargetConditions.AddItem(AcidCondition);
+	//Template.AddTargetEffect(AcidEffect);
 
 	// Siphon Effect
 	SiphonEffect = new class'RTEffect_Siphon';
@@ -244,7 +268,7 @@ static function X2AbilityTemplate RTBurst() {
     local X2AbilityTemplate Template;
     local X2AbilityMultiTarget_Radius MultiTarget;
     local X2Effect_ApplyDirectionalWorldDamage WorldDamage;
-    local X2Effect_ApplyWeaponDamage DamageEffect;
+    local X2Effect_ApplyWeaponDamage WeaponDamageEffect;
     local X2AbilityCooldown Cooldown;
     local X2AbilityCost_ActionPoints  ActionPointCost;
     local X2Effect_Knockback  KnockbackEffect;
@@ -291,7 +315,8 @@ static function X2AbilityTemplate RTBurst() {
 	Template.AddMultiTargetEffect(WorldDamage);                    
 
 	WeaponDamageEffect = new class'X2Effect_ApplyWeaponDamage';   
-	WeaponDamageEffect.bIgnoreBaseWeaponDamage = true;					 
+	WeaponDamageEffect.bIgnoreBaseDamage = true;	
+	WeaponDamageEffect.EffectDamageValue.Damage = default.BURST_DAMAGE;			 
 	WeaponDamageEffect.bApplyWorldEffectsForEachTargetLocation = true;          
 	Template.AddMultiTargetEffect(WeaponDamageEffect);          
 
@@ -329,7 +354,7 @@ static function X2AbilityTemplate RTBlur() {
 
 	BlurEffect = new class'X2Effect_PersistentStatChange';
 	BlurEffect.BuildPersistentEffect(1, true, true, true);
-	BlurEffect.AddPersistentStatChange(eStat_Mobility, default.BLUR_MOBILTIY_BONUS);
+	BlurEffect.AddPersistentStatChange(eStat_Mobility, default.BLUR_MOBILITIY_BONUS);
 	BlurEffect.AddPersistentStatChange(eStat_Defense, default.BLUR_DEFENSE_BONUS);
 	BlurEffect.AddPersistentStatChange(eStat_Dodge, default.BLUR_DODGE_BONUS);
 	BlurEffect.SetDisplayInfo(ePerkBuff_Passive, Template.LocFriendlyName, Template.LocLongDescription, Template.IconImage, true,,Template.AbilitySourceName);
@@ -376,7 +401,7 @@ static function X2AbilityTemplate RTPurge() {
 
 	PurgeEffect = new class'RTEffect_RemoveStacks';;
 	PurgeEffect.EffectNameToPurge = class'RTEffect_Bloodlust'.default.EffectName;
-	PurgeEffect.iNumStacksToRemove = default.PURGE_STACK_REQUIREMENT;
+	PurgeEffect.iStacksToRemove = default.PURGE_STACK_REQUIREMENT;
 	Template.AddTargetEffect(PurgeEffect);
 
 	Template.AddTargetEffect(class'X2Effect_Spotted'.static.CreateUnspottedEffect());
@@ -390,17 +415,17 @@ static function X2AbilityTemplate RTPurge() {
 //---Mentor------------------------------------------------------------------------------
 //---------------------------------------------------------------------------------------
 static function X2AbilityTemplate RTMentor() {
-	local X2AbilityTemplate 		Template;
-	local X2Condition_UnitEffects		MeldCondition, MeldCondition;
-        local X2Condition_UnitProperty          TargetUnitPropertyCondition;
-	local X2Effect_PersistentStatChange	MentorEffect;
-	local X2AbilityCost_ActionPoints	ActionPointCost;
-        local RTCondition_EffectStackCount      BloodlustCondition;
-	local X2AbilityCooldown			Cooldown;
+	local X2AbilityTemplate 				Template;
+	local X2Condition_UnitEffects			MeldCondition;
+    local X2Condition_UnitProperty          TargetUnitPropertyCondition;
+	local X2Effect_PersistentStatChange		MentorEffect;
+	local X2AbilityCost_ActionPoints		ActionPointCost;
+    local RTCondition_EffectStackCount      BloodlustCondition;
+	local X2AbilityCooldown					Cooldown;
 	
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'RTMentor');
-        Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_snipershot"; //TODO: Change this
-        Template.AbilitySourceName = 'eAbilitySource_Psionic';  
+    Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_snipershot"; //TODO: Change this
+    Template.AbilitySourceName = 'eAbilitySource_Psionic';  
 	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_AlwaysShow;
 	Template.AbilityConfirmSound = "TacticalUI_ActivateAbility";
 	Template.Hostility = eHostility_Offensive;
@@ -424,27 +449,29 @@ static function X2AbilityTemplate RTMentor() {
 	TargetUnitPropertyCondition.ExcludeFriendlyToSource = false;
 	TargetUnitPropertyCondition.ExcludeHostileToSource = true;
 	TargetUnitPropertyCondition.FailOnNonUnits = true;
-        Template.AbilityTargetConditions.AddItem(TargetUnitPropertyCondition);
+	Template.AbilityTargetConditions.AddItem(TargetUnitPropertyCondition);
 
-        MentorEffect = new class'X2Effect_PersistentStatChange';
-        MentorEffect.BuildPersistentEffect(1, false, false, false, eGameRule_PlayerTurnEnd);
-        MentorEffect.SetDisplayInfo(ePerkBuff_Bonus, Template.LocFriendlyName, Template.GetMyHelpText(), Template.IconImage, true, , Template.AbilitySourceName);
-        MentorEffect.AddPersistentStatChange(eStat_Will, default.MENTOR_BONUS);
-        MentorEffect.AddPersistentStatChange(eStat_PsiOffense, default.MENTOR_BONUS);
-        Template.AddTargetEffect(MentorEffect);        
-      
-        MeldCondition = new class'X2Condition_UnitEffects';
-        MeldCondition = new class'X2Condition_UnitEffects';
+    MentorEffect = new class'X2Effect_PersistentStatChange';
+    MentorEffect.BuildPersistentEffect(1, false, false, false, eGameRule_PlayerTurnEnd);
+    MentorEffect.SetDisplayInfo(ePerkBuff_Bonus, Template.LocFriendlyName, Template.GetMyHelpText(), Template.IconImage, true, , Template.AbilitySourceName);
+    MentorEffect.AddPersistentStatChange(eStat_Will, default.MENTOR_BONUS);
+    MentorEffect.AddPersistentStatChange(eStat_PsiOffense, default.MENTOR_BONUS);
+    Template.AddTargetEffect(MentorEffect);        
+    
+	// melded  
+    MeldCondition = new class'X2Condition_UnitEffects';
+    MeldCondition = new class'X2Condition_UnitEffects';
 	MeldCondition.AddRequireEffect('RTEffect_Meld', 'AA_UnitNotMelded');
 	Template.AbilityShooterConditions.AddItem(MeldCondition);
 	Template.AbilityTargetConditions.AddItem(MeldCondition);
 
-        BloodlustCondition = new class'RTCondition_EffectStackCount';
+	// You probably can't be a good mentor if you're filled with bloodlust
+    BloodlustCondition = new class'RTCondition_EffectStackCount';
 	BloodlustCondition.iMaximumStacks = default.MENTOR_STACK_MAXIMUM;
 	BloodlustCondition.StackingEffect = class'RTEffect_Bloodlust'.default.EffectName;
-        Template.AbilityShooterConditions.AddItem(BloodlustCondition);
+    Template.AbilityShooterConditions.AddItem(BloodlustCondition);
 
-        Template.PostActivationEvents.AddItem('UnitUsedPsionicAbility');
+    Template.PostActivationEvents.AddItem('UnitUsedPsionicAbility');
 
 	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
 	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;

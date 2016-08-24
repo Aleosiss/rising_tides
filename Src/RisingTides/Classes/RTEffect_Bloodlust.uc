@@ -1,7 +1,7 @@
 class RTEffect_Bloodlust extends X2Effect_PersistentStatChange config (RisingTides);
 
 var localized string RTFriendlyName;
-var float iMeleeHitChanceMod, iCritDamageMod;
+var float fMeleeHitChanceMod, fCritDamageMod;
 var int iMobilityMod;
 
 function RegisterForEvents(XComGameState_Effect EffectGameState)
@@ -19,8 +19,8 @@ function RegisterForEvents(XComGameState_Effect EffectGameState)
 	UnitState = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(BloodEffectState.ApplyEffectParameters.SourceStateObjectRef.ObjectID));
 	FilterObj = UnitState;
 
-	EventMgr.RegisterForEvent(EffectObj, 'RTBloodlust_Proc', BloodEffectState.BumpInTheNightStatCheck, ELD_OnStateSubmitted, FilterObj);
-	EventMgr.RegisterForEvent(EffectObj, 'RTPurge_Proc', BloodEffectState.BumpInTheNightStatCheck, ELD_OnStateSubmitted, FilterObj);
+	EventMgr.RegisterForEvent(EffectObj, 'RTBloodlust_Proc', BloodEffectState.BumpInTheNightStatCheck, ELD_OnStateSubmitted, ,FilterObj);
+	EventMgr.RegisterForEvent(EffectObj, 'RTPurge_Proc', BloodEffectState.BumpInTheNightStatCheck, ELD_OnStateSubmitted, ,FilterObj);
 }
 
 
@@ -50,8 +50,8 @@ function GetToHitModifiers(XComGameState_Effect EffectState, XComGameState_Unit 
 	BumpEffect = RTGameState_BloodlustEffect(EffectState);
   
 	HitMod.ModType = eHit_Crit;
-	HitMod.ModAmount = BumpEffect.iStacks * fMeleeHitChanceMod;
-	HitMod.Reason = RTFriendlyName
+	HitMod.Value = BumpEffect.iStacks * fMeleeHitChanceMod;
+	HitMod.Reason = AbilityState.GetMyTemplate().LocFriendlyName; //TODO: FIX
 	ShotModifiers.AddItem(HitMod);
   
 }

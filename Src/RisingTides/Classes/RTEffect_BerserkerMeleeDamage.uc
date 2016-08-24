@@ -26,15 +26,15 @@ function WeaponDamageValue GetBonusEffectDamageValue(XComGameState_Ability Abili
 }
 
 
-simulated WeaponDamageValue CreateAcidicBladeDamageEffect(WeaponDamageValue ReturnDamageValue, StateObjectReference TargetRef) {
+simulated function WeaponDamageValue CreateAcidicBladeDamageEffect(WeaponDamageValue ReturnDamageValue, StateObjectReference TargetRef) {
 
     ReturnDamageValue = CreateNormalBladeDamageEffect(ReturnDamageValue, TargetRef);
-    ReturnDamageValue.Shred = iAcidBladeOnHitShred;
+    ReturnDamageValue.Shred = iAcidicBladeShred;
 
     return ReturnDamageValue;
 }
 
-simulated WeaponDamageValue CreatePsionicBladeDamageEffect(WeaponDamageValue ReturnDamageValue, StateObjectReference TargetRef) {
+simulated function WeaponDamageValue CreatePsionicBladeDamageEffect(WeaponDamageValue ReturnDamageValue, StateObjectReference TargetRef) {
 
     ReturnDamageValue = CreateNormalBladeDamageEffect(ReturnDamageValue, TargetRef);
     ReturnDamageValue.Pierce = 999; // i have no idea how psionic damage interacts with the armor system, this should work
@@ -42,7 +42,7 @@ simulated WeaponDamageValue CreatePsionicBladeDamageEffect(WeaponDamageValue Ret
     return ReturnDamageValue;
 }
 
-simulated WeaponDamageValue CreateHiddenBladeDamageEffect(WeaponDamageValue ReturnDamageValue, StateObjectReference TargetRef) {
+simulated function WeaponDamageValue CreateHiddenBladeDamageEffect(WeaponDamageValue ReturnDamageValue, StateObjectReference TargetRef) {
 
     ReturnDamageValue = CreateNormalBladeDamageEffect(ReturnDamageValue, TargetRef);
     ReturnDamageValue.Crit += (ReturnDamageValue.Crit / fHiddenBladeCritModifier);    
@@ -50,11 +50,11 @@ simulated WeaponDamageValue CreateHiddenBladeDamageEffect(WeaponDamageValue Retu
     return ReturnDamageValue;
 }
 
-simulated WeaponDamageValue CreateNormalBladeDamageEffect(WeaponDamageValue ReturnDamageValue, StateObjectReference TargetRef) {
+simulated function WeaponDamageValue CreateNormalBladeDamageEffect(WeaponDamageValue ReturnDamageValue, StateObjectReference TargetRef) {
     
     ReturnDamageValue.Damage = iBaseBladeDamage;
     ReturnDamageValue.Crit = iBaseBladeCritDamage;
-    ReturnDamageValue.Spread = iBaseBladeSpread;
+    ReturnDamageValue.Spread = iBaseBladeDamageSpread;
 
     return ReturnDamageValue;
 }

@@ -7,6 +7,7 @@ local XComGameStateContext_Ability AbilityContext;
 	local X2AbilityTemplate AbilityTemplate;
 	local XComGameState NewGameState;
 	local UnitValue BloodlustStackCount;
+	local RTGameState_BloodlustEffect TempEffect;
 
 	
 			UnitState = XComGameState_Unit(GameState.GetGameStateForObjectID(ApplyEffectParameters.SourceStateObjectRef.ObjectID));
@@ -14,22 +15,27 @@ local XComGameStateContext_Ability AbilityContext;
 				UnitState = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(ApplyEffectParameters.SourceStateObjectRef.ObjectID));
 			`assert(UnitState != None);
                         
-                        NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState(string(GetFuncName()));
-			
-                        UnitState.UnApplyEffectFromStats(self, NewGameState);
-                        
-                        StatChanges.Length = 0;
-                        if(UnitState.HasSoldierAbility('QueenOfBlades')) {
-                            AddPersistentStatChange(StatChanges, eStat_Mobility, (RTEffect_Bloodlust(GetX2Effect()).iMobilityMod) * iStacks);
-                        } else {
-                            AddPersistentStatChange(StatChanges, eStat_Mobility, -(RTEffect_Bloodlust(GetX2Effect()).iMobilityMod) * iStacks);
-                        }
-
-
-			XComGameStateContext_ChangeContainer(NewGameState.GetContext()).BuildVisualizationFn = BloodlustStackVisualizationFn;
+            NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState(string(GetFuncName()));
 			NewUnitState = XComGameState_Unit(NewGameState.CreateStateObject(UnitState.Class, UnitState.ObjectID));
 
-                        NewUnitState.ApplyEffectToStats(self, NewGameState);
+			TempEffect = self;
+            NewUnitState.UnApplyEffectFromStats(TempEffect, NewGameState);
+                        
+            StatChanges.Length = 0;
+			TempEffect.StatChanges.Length = 0;
+
+            if(UnitState.HasSoldierAbility('QueenOfBlades')) {
+				AddPersistentStatChange(StatChanges, eStat_Mobility, (RTEffect_Bloodlust(GetX2Effect()).iMobilityMod) * iStacks);
+				TempEffect.AddPersistentStatChange(StatChanges, eStat_Mobility, (RTEffect_Bloodlust(GetX2Effect()).iMobilityMod) * iStacks);
+            } else {
+				AddPersistentStatChange(StatChanges, eStat_Mobility, -(RTEffect_Bloodlust(GetX2Effect()).iMobilityMod) * iStacks);
+				TempEffect.AddPersistentStatChange(StatChanges, eStat_Mobility, -(RTEffect_Bloodlust(GetX2Effect()).iMobilityMod) * iStacks);
+            }
+
+
+			//XComGameStateContext_ChangeContainer(NewGameState.GetContext()).BuildVisualizationFn = BloodlustStackVisualizationFn;		  //TODO: this
+
+            NewUnitState.ApplyEffectToStats(TempEffect, NewGameState);
                         
 			NewGameState.AddStateObject(NewUnitState);
 			`TACTICALRULES.SubmitGameState(NewGameState);

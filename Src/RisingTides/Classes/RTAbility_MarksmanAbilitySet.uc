@@ -1049,7 +1049,7 @@ static function X2AbilityTemplate SovereignEffect()
 	local X2Effect_ApplyFireToWorld				FireToWorldEffect;  //allows ability to set shit on fire
 	local X2Effect_ApplyDirectionalWorldDamage  WorldDamage;  //allows destruction of environment
 	local X2Effect_Burning						BurningEffect;      //Allows Burning 
-	local RTAbilityMultiTarget_TargetedLine		LineMultiTarget;
+	local RTAbilityMultiTarget_TargetedLine		LineMultiTarget, LineSingleTarget;
 	local X2AbilityTarget_Cursor				CursorTarget;
 	local X2AbilityTarget_Single				SingleTarget;
 	//Macro to do localisation and stuffs

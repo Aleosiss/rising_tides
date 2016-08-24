@@ -1,5 +1,6 @@
 class RTEffect_BumpInTheNight extends X2Effect_Persistent config(RisingTides);
 
+var int iTileDistanceToActivate;
 // Register for events
 function RegisterForEvents(XComGameState_Effect EffectGameState)
 {
@@ -26,7 +27,9 @@ function bool PostAbilityCostPaid(XComGameState_Effect EffectState, XComGameStat
 	local int								Index, RandRoll;
 	local bool	bShouldTriggerMelee, bShouldTriggerStandard;
         
-        bShouldTriggerEvent = false;
+        bShouldTriggerStandard = false;
+		bShouldTriggerMelee = false;
+
         if(kAbility.GetMyTemplateName() == 'OverwatchShot' ||  kAbility.GetMyTemplateName() == 'StandardShot')
             bShouldTriggerStandard = true;
 		if(kAbility.GetMyTemplateName() == 'RTBerserkerKnifeAttack')
@@ -35,7 +38,7 @@ function bool PostAbilityCostPaid(XComGameState_Effect EffectState, XComGameStat
             History = `XCOMHISTORY;
             TargetUnit = XComGameState_Unit(NewGameState.GetGameStateForObjectID(AbilityContext.InputContext.PrimaryTarget.ObjectID));
             if(TargetUnit != none && TargetUnit.IsDead()) {
-                if(Attacker.GetTileDistanceBetween(TargetUnit) < iTileDistanceToActivate) {
+                if(Attacker.TileDistanceBetween(TargetUnit) < iTileDistanceToActivate) {
                     `XEVENTMGR.TriggerEvent('RTBloodlust_Proc', kAbility, Attacker, NewGameState);
 				}
             }

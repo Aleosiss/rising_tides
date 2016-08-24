@@ -21,7 +21,7 @@ simulated function GetMultiTargetOptions(const XComGameState_Ability Ability, ou
 	local vector							TargetUnitLocation;
 	local XComGameState_Unit				TargetUnit;
 	local AvailableTarget					Target;
-	local XComWorldData						XWorld;
+	local XComWorldData						World;
 	local XComGameStateHistory				History;
 
 	World = `XWORLD;
@@ -39,6 +39,13 @@ simulated function GetMultiTargetOptions(const XComGameState_Ability Ability, ou
 		GetMultiTargetsForLocation(Ability, TargetUnitLocation, Target);
 		Targets[i] = Target; 
 	}
+}
+
+
+// August Update: If adding this fucking works I'm going to be so mad 
+function AddAbilityBonusWidth(name AbilityName, int BonusWidth)
+{
+	super.AddAbilityBonusWidth(AbilityName, BonusWidth);
 }
 
 simulated function GetMultiTargetsForLocation(const XComGameState_Ability Ability, const vector Location, out AvailableTarget Target)

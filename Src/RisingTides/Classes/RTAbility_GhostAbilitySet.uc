@@ -13,7 +13,6 @@ class RTAbility_GhostAbilitySet extends X2Ability
 
 	var config int BASE_REFLECTION_CHANCE, BASE_DEFENSE_INCREASE;
 	var config int TEEK_REFLECTION_INCREASE, TEEK_DEFENSE_INCREASE, TEEK_DODGE_INCREASE;
-	var config int BURST_DAMAGE, BURST_COOLDOWN;
 	var config int OVERLOAD_CHARGES, OVERLOAD_BASE_COOLDOWN;
 	var config int OVERLOAD_PANIC_CHECK;
 	var config int FADE_DURATION, FADE_COOLDOWN;
@@ -88,6 +87,7 @@ static function X2AbilityTemplate StandardGhostShot()
 	local X2Condition_Visibility            VisibilityCondition;
 	local X2Condition_AbilityProperty		SiphonCondition;
 	local X2Condition_UnitProperty			TargetUnitPropertyCondition;
+	local RTEffect_Siphon					SiphonEffect;
 
 	// Macro to do localisation and stuffs
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'StandardGhostShot');
@@ -145,9 +145,9 @@ static function X2AbilityTemplate StandardGhostShot()
 
 	// Siphon Effect
 	SiphonEffect = new class'RTEffect_Siphon';
-	SiphonEffect.SiphonAmountMultiplier = default.SIPHON_AMOUNT_MULTIPLIER;
-	SiphonEffect.SiphonMinVal = default.SIPHON_MIN_VAL;
-	SiphonEffect.SiphonMaxVal = default.SIPHON_MAX_VAL;
+	SiphonEffect.SiphonAmountMultiplier = class'RTAbility_BerserkerAbilitySet'.default.SIPHON_AMOUNT_MULTIPLIER;
+	SiphonEffect.SiphonMinVal = class'RTAbility_BerserkerAbilitySet'.default.SIPHON_MIN_VAL;						
+	SiphonEffect.SiphonMaxVal = class'RTAbility_BerserkerAbilitySet'.default.SIPHON_MAX_VAL;
 	SiphonEffect.DamageTypes.AddItem('Psi');
 
 	TargetUnitPropertyCondition = new class'X2Condition_UnitProperty';
@@ -157,7 +157,7 @@ static function X2AbilityTemplate StandardGhostShot()
 	TargetUnitPropertyCondition.ExcludeHostileToSource = false;
 	TargetUnitPropertyCondition.FailOnNonUnits = true;
 	TargetUnitPropertyCondition.RequireWithinRange = true;
-	TargetUnitPropertyCondition.WithinRange = default.SIPHON_RANGE;
+	TargetUnitPropertyCondition.WithinRange = class'RTAbility_BerserkerAbilitySet'.default.SIPHON_RANGE;
 
 	SiphonCondition = new class'X2Condition_AbilityProperty';
 	SiphonCondition.OwnerHasSoldierAbilities.AddItem('RTSiphon');

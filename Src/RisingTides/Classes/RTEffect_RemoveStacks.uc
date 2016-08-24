@@ -10,27 +10,32 @@ simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffe
     local StateObjectReference  EffectRef;
     local X2Effect_Persistent  PersistentEffectTemplate;
     local XComGameState_Unit  TargetUnitState;
+	local XComGameStateHistory	History;
 
-    TargetUnitState = XComGameState_Unit(XComGameState_BaseUnit);
-    if(TargetUnitState == none)
-      return super.OnEffectAdded(ApplyEffectParameters, kNewTargetState, NewGameState, NewEffectState);
+    TargetUnitState = XComGameState_Unit(kNewTargetState);
+    if(TargetUnitState == none){
+      super.OnEffectAdded(ApplyEffectParameters, kNewTargetState, NewGameState, NewEffectState);
+	  return;
+	}
+	History = `XCOMHISTORY;
     foreach TargetUnitState.AffectedByEffects(EffectRef) {
-        EffectState = History.GetGameStateForObjectID(EffectRef);
+        EffectState = XComGameState_Effect(History.GetGameStateForObjectID(EffectRef.ObjectID));
         if(EffectState.GetMyTemplateName() != EffectNameToPurge)
             continue;
         if(EffectState.iStacks < 1) {
             `RedScreenOnce("Rising Tides: " @ EffectState.GetMyTemplateName() @ " already has no stacks!");
-            return super.OnEffectAdded(ApplyEffectParameters, kNewTargetState, NewGameState, NewEffectState);
+            super.OnEffectAdded(ApplyEffectParameters, kNewTargetState, NewGameState, NewEffectState);
+			return;
         }
         if((EffectState.iStacks - iStacksToRemove) < 1) {
           EffectState.RemoveEffect(NewGameState, NewGameState, bCleanse);
         } else {
-          PurgedState = NewGameState.CreateStateObject(EffectState.class, EffectState.ObjectID);
+          PurgedState = XComGameState_Effect(NewGameState.CreateStateObject(EffectState.class, EffectState.ObjectID));
           PurgedState.iStacks -= iStacksToRemove;
           NewGameState.AddStateObject(PurgedState);
           //EffectState.iStacks -= iStacksToRemove;
         }
         break;
     }
-    return super.OnEffectAdded(ApplyEffectParameters, kNewTargetState, NewGameState, NewEffectState);
+    super.OnEffectAdded(ApplyEffectParameters, kNewTargetState, NewGameState, NewEffectState);
 }

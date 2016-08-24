@@ -8,7 +8,7 @@ event name CallMeetsCondition(XComGameState_BaseObject kTarget) {
     local StateObjectReference EffectRef;
     local XComGameState_Unit    TargetUnitState;
     local XComGameState_Effect  EffectState;
-    local XComHistory           History;
+    local XComGameStateHistory           History;
 
     TargetUnitState = XComGameState_Unit(kTarget);
     if(TargetUnitState == none) {
@@ -17,10 +17,10 @@ event name CallMeetsCondition(XComGameState_BaseObject kTarget) {
 
     History = `XCOMHISTORY;
     foreach TargetUnitState.AffectedByEffects(EffectRef) {
-        EffectState = History.GetGameStateForObjectID(EffectRef.ObjectID);
-        if(!EffectState.GetX2Effect().EffectName != StackingEffect)
+        EffectState = XComGameState_Effect(History.GetGameStateForObjectID(EffectRef.ObjectID));
+        if(EffectState.GetX2Effect().EffectName != StackingEffect)
             	continue;
-	if(EffectState.DuplicateResponse != eDupe_Refresh || !EffectState.bStackOnRefresh)
+	if(EffectState.GetX2Effect().DuplicateResponse != eDupe_Refresh || !EffectState.GetX2Effect().bStackOnRefresh)
 		return 'AA_NotStackableEffect';
         if(iMinimumStacks > 0 && EffectState.iStacks < iMinimumStacks)
             	return 'AA_NotEnoughStacks';
