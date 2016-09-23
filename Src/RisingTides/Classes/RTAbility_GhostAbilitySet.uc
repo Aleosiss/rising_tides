@@ -9,7 +9,7 @@
 //---------------------------------------------------------------------------------------
 
 class RTAbility_GhostAbilitySet extends X2Ability
-	config(RTGhost);
+	config(RisingTides);
 
 	var config int BASE_REFLECTION_CHANCE, BASE_DEFENSE_INCREASE;
 	var config int TEEK_REFLECTION_INCREASE, TEEK_DEFENSE_INCREASE, TEEK_DODGE_INCREASE;

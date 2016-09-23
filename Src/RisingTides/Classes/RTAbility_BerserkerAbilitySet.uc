@@ -30,6 +30,8 @@ class RTAbility_BerserkerAbilitySet extends RTAbility_GhostAbilitySet config(Ris
 	var config int MENTOR_COOLDOWN;
 	var config int MENTOR_BONUS;
 	var config int MENTOR_STACK_MAXIMUM;
+	var config float REPROBATE_WALTZ_BLOODLUST_STACK_CHANCE;
+	var config float REPROBATE_WALTZ_BASE_CHANCE;
 
 //---------------------------------------------------------------------------------------
 //---CreateTemplates---------------------------------------------------------------------

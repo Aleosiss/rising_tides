@@ -7,7 +7,7 @@
 //	Damn Good Ground
 //---------------------------------------------------------------------------------------
 
-class RTEffect_DamnGoodGround extends X2Effect_Persistent config (RTMarksman);
+class RTEffect_DamnGoodGround extends X2Effect_Persistent config (RisingTides);
 
 var localized string RTFriendlyName;
 var config int DGG_DEFENSE_BONUS, DGG_AIM_BONUS; 

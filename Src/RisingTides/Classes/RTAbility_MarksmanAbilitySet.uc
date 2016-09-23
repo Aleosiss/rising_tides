@@ -9,7 +9,7 @@
 //---------------------------------------------------------------------------------------
 
 class RTAbility_MarksmanAbilitySet extends RTAbility_GhostAbilitySet
-	config(RTMarksman);
+	config(RisingTides);
 
 	var config int SLOWISSMOOTH_AIM_BONUS, SLOWISSMOOTH_CRIT_BONUS;
 	var config int HEADSHOT_CRIT_BONUS, HEADSHOT_COOLDOWN;

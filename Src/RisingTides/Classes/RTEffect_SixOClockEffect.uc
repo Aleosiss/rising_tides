@@ -7,7 +7,7 @@
 //---------------------------------------------------------------------------------------
 //	Six O'Clock effect
 //---------------------------------------------------------------------------------------
-class RTEffect_SixOClockEffect extends X2Effect_PersistentStatChange config(RTMarksman);
+class RTEffect_SixOClockEffect extends X2Effect_PersistentStatChange config(RisingTides);
 
 var config int DEFENSE_BONUS, PSI_BONUS, WILL_BONUS;
 var localized string RTFriendlyName;

@@ -6,7 +6,7 @@
 //---------------------------------------------------------------------------------------
 //	Knock Them Down Effect
 //---------------------------------------------------------------------------------------
-class RTEffect_KnockThemDown extends X2Effect_Persistent config(RTMarksman);
+class RTEffect_KnockThemDown extends X2Effect_Persistent config(RisingTides);
 
 	var config float CRIT_DAMAGE_MODIFIER;
 

@@ -7,7 +7,7 @@
 //---------------------------------------------------------------------------------------
 //	Precision Shot damage effect
 //---------------------------------------------------------------------------------------
-class RTEffect_PrecisionShotDamage extends X2Effect_Persistent config(RTMarksman);
+class RTEffect_PrecisionShotDamage extends X2Effect_Persistent config(RisingTides);
 
 var config float HEADSHOT_CRITDMG_BONUS;
 var config int HEADSHOT_CRIT_BONUS;

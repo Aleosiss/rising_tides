@@ -6,7 +6,7 @@
 //---------------------------------------------------------------------------------------
 //	Disabling Shot damage effect
 //---------------------------------------------------------------------------------------
-class RTEffect_DisablingShotDamage extends X2Effect_Persistent config(RTMarksman);
+class RTEffect_DisablingShotDamage extends X2Effect_Persistent config(RisingTides);
 
 var config float DISABLING_SHOT_REDUCTION;
 

@@ -7,7 +7,7 @@
 //---------------------------------------------------------------------------------------
 //	Slow Is Smooth effect
 //---------------------------------------------------------------------------------------
-class RTEffect_SlowIsSmooth extends X2Effect_Persistent config(RTMarksman);
+class RTEffect_SlowIsSmooth extends X2Effect_Persistent config(RisingTides);
 
 var localized string RTFriendlyName;
 var config int AIM_BONUS, CRIT_BONUS;
@@ -28,19 +28,6 @@ function GetToHitModifiers(XComGameState_Effect EffectState, XComGameState_Unit 
 		ShotModifiers.AddItem(ModInfoCrit);
 	}
 }
-
-// Copied straight from RangerStealth
-//simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffectParameters, XComGameState_BaseObject kNewTargetState, XComGameState NewGameState, XComGameState_Effect NewEffectState)
-//{
-	//local XComGameState_Unit UnitState;
-//
-	//super.OnEffectAdded(ApplyEffectParameters, kNewTargetState, NewGameState, NewEffectState);
-	//
-	//UnitState = XComGameState_Unit(kNewTargetState);
-	//UnitState.SetUnitFloatValue('SISCounter', 0, eCleanup_Never);
-	//if (UnitState != none)
-		//`XEVENTMGR.TriggerEvent('EffectEnterUnitConcealment', UnitState, UnitState, NewGameState);
-//}
 
 simulated function bool OnEffectTicked(const out EffectAppliedData ApplyEffectParameters, XComGameState_Effect kNewEffectState, XComGameState NewGameState, bool FirstApplication)
 {
