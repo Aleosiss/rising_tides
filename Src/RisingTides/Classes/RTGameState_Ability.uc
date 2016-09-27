@@ -70,19 +70,31 @@ function EventListenerReturn HeatChannelCheck(Object EventData, Object EventSour
 
   return ELR_NoInterrupt;
 }
-
-
+	
 function EventListenerReturn ReprobateWaltzListener( Object EventData, Object EventSource, XComGameState GameState, Name EventID) {
 	local XComGameStateContext_Ability AbilityContext;
 	local XComGameState_Unit WaltzUnit;
-	local RTGameState_BloodlustEffect BloodlustEffectState;
-	local StateObjectReference IteratorObjRef;
 	local int iStackCount;
 	local float fStackModifier, fFinalPercentChance;
 
 	AbilityContext = XComGameStateContext_Ability(GameState.GetContext());
-	WaltzUnit = XComGameState_Unit(AbilityContext.InputContext.SourceObject);
-	if (AbilityContext != none && WaltzUnit != none) {
+	WaltzUnit = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(AbilityContext.InputContext.SourceObject.ObjectID));
+
+	iStackCount = getBloodlustStackCount(WaltzUnit, AbilityContext);
+	fFinalPercentChance = 100 -  ( class'RTAbility_BerserkerAbilitySet'.default.REPROBATE_WALTZ_BASE_CHANCE + ( class'RTAbility_BerserkerAbilitySet'.default.REPROBATE_WALTZ_BLOODLUST_STACK_CHANCE * iStackCount ));
+		
+	if(`SYNC_RAND(100) <= int(fFinalPercentChance)) {
+		AbilityTriggerAgainstSingleTarget(AbilityContext.InputContext.PrimaryTarget, false);
+	}		
+	return ELR_NoInterrupt;
+}
+   
+private function int getBloodlustStackCount(XComGameState_Unit WaltzUnit,  XComGameStateContext_Ability AbilityContext) {
+   local int iStackCount;
+   local StateObjectReference IteratorObjRef;
+   local RTGameState_BloodlustEffect BloodlustEffectState;
+
+   if (AbilityContext != none && WaltzUnit != none) {
 		// get our stacking effect
 		foreach WaltzUnit.AffectedByEffects(IteratorObjRef) {
 			BloodlustEffectState = RTGameState_BloodlustEffect(`XCOMHISTORY.GetGameStateForObjectID(IteratorObjRef.ObjectID));
@@ -91,19 +103,12 @@ function EventListenerReturn ReprobateWaltzListener( Object EventData, Object Ev
 			}
 		}
 		if(BloodlustEffectState != none) {
-			StackCount = BloodlustEffectState.iStacks;
-
+			iStackCount = BloodlustEffectState.iStacks;
 		} else {
-			StackCount = 0;
+			iStackCount = 0;
 		}
-
-		fFinalPercent = 100 -  ( class'RTAbility_BerserkerAbilitySet'.REPROBATE_WALTZ_BASE_CHANCE + ( class'RTAbility_BerserkerAbilitySet'.REPROBATE_WALTZ_BLOODLUST_STACK_CHANCE * StackCount ));
-		
-		if(`SYNC_RAND(100) < int(fFinalPercentChance)) {
-			AbilityTriggerAgainstSingleTarget(AbilityContext.InputContext.PrimaryTarget, false);
-		}
+	} else  {
+		`LOG("Rising Tides: No AbilityContext or SourceUnit found for getBloodlustStackCount!");
 	}
-	
-
-	return ELR_NoInterrupt;
+	return iStackCount;
 }

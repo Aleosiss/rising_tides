@@ -54,6 +54,8 @@ static function array<X2DataTemplate> CreateTemplates()
 	Templates.AddItem(RTPurge());
 	Templates.AddItem(RTMentor());
 	Templates.AddItem(RTReprobateWaltz());
+	Templates.AddItem(RTPyroclasticFlow());
+	Templates.AddItem(RTPyroclasticSlash());
 
 	return Templates;
 }
@@ -492,13 +494,13 @@ static function X2AbilityTemplate RTMentor() {
 static function X2AbilityTemplate RTReprobateWaltz()
 {
 	local X2AbilityTemplate					Template;
-        local X2AbilityToHitCalc_StandardMelee                  StandardMelee;
-        local RTEffect_BerserkerMeleeDamage                     WeaponDamageEffect;
-        // local RTEffect_Acid                                     AcidEffect;
-        // local X2Condition_AbilityProperty                       AcidCondition;
-        local RTEffect_Siphon                                   SiphonEffect;
-        local X2Condition_AbilityProperty                       SiphonCondition;
-        local X2Condition_UnitProperty                          TargetUnitPropertyCondition;
+    local X2AbilityToHitCalc_StandardMelee  StandardMelee;
+    local RTEffect_BerserkerMeleeDamage     WeaponDamageEffect;
+    // local RTEffect_Acid                     AcidEffect;
+    // local X2Condition_AbilityProperty       AcidCondition;
+    local RTEffect_Siphon                   SiphonEffect;
+    local X2Condition_AbilityProperty       SiphonCondition;
+    local X2Condition_UnitProperty          TargetUnitPropertyCondition;
 	local X2AbilityTrigger_EventListener    Trigger;
 
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'RTReprobateWaltz');
@@ -518,7 +520,7 @@ static function X2AbilityTemplate RTReprobateWaltz()
 
 	Template.AbilityTargetConditions.AddItem(default.MeleeVisibilityCondition);
 
-		// Damage Effect
+	// Damage Effect
 	//		var int iBaseBladeDamage, iBaseBladeCritDamage, iBaseBladeDamageSpread, iAcidicBladeShred;var float fHiddenBladeCritModifier;
 	WeaponDamageEffect = new class'RTEffect_BerserkerMeleeDamage';	 
 	WeaponDamageEffect.iBaseBladeDamage = default.BLADE_DAMAGE;
@@ -573,7 +575,7 @@ static function X2AbilityTemplate RTReprobateWaltz()
 
 	Trigger = new class'X2AbilityTrigger_EventListener';
 	Trigger.ListenerData.Deferral = ELD_OnStateSubmitted;
-	Trigger.ListenerData.EventID = 'BerserkerKnifeAttack';
+	Trigger.ListenerData.EventID = 'RTBerserkerKnifeAttack';
 	Trigger.ListenerData.Filter = eFilter_Unit;
 	Trigger.ListenerData.EventFn = class'RTGameState_Ability'.static.ReprobateWaltzListener;
 	Template.AbilityTriggers.AddItem(Trigger);
@@ -587,6 +589,156 @@ static function X2AbilityTemplate RTReprobateWaltz()
 	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
 	
 	Template.bShowActivation = true;
+
+	return Template;
+}
+
+//---------------------------------------------------------------------------------------
+//---Pyroclastic Flow--------------------------------------------------------------------
+//---------------------------------------------------------------------------------------
+static function X2AbilityTemplate RTPyroclasticFlow()
+{
+	local X2AbilityTemplate						Template;
+	local X2Effect_Persistent					SOVEffect;
+
+	`CREATE_X2ABILITY_TEMPLATE(Template, 'RTPyroclasticFlow');
+	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_snipershot";
+
+	Template.AbilitySourceName = 'eAbilitySource_Perk';
+	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_NeverShow;
+	Template.Hostility = eHostility_Neutral;
+
+	Template.AbilityToHitCalc = default.DeadEye;
+	Template.AbilityTargetStyle = default.SelfTarget;
+	Template.AbilityTriggers.AddItem(default.UnitPostBeginPlayTrigger);
+
+	SOVEffect = new class 'X2Effect_Persistent';
+	SOVEffect.BuildPersistentEffect(1, true, true, true);
+	SOVEffect.SetDisplayInfo(ePerkBuff_Passive, Template.LocFriendlyName, Template.LocLongDescription, Template.IconImage, true,, Template.AbilitySourceName);
+	Template.AddTargetEffect(SOVEffect);
+
+	Template.AdditionalAbilities.AddItem('RTPyroclasticSlash');
+	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
+	// Note: no visualization on purpose!
+	
+	Template.bCrossClassEligible = false;
+
+	return Template;
+}
+
+//---------------------------------------------------------------------------------------
+//---Pyroclastic Slash-------------------------------------------------------------------
+//---------------------------------------------------------------------------------------
+static function X2AbilityTemplate RTPyroclasticSlash()
+{
+	local X2AbilityTemplate                 Template;
+	local X2AbilityCost_ActionPoints        ActionPointCost;
+	local X2AbilityToHitCalc_StandardMelee  StandardMelee;
+	local RTEffect_BerserkerMeleeDamage     WeaponDamageEffect;
+	//local RTEffect_Acid						AcidEffect;
+	local array<name>                       SkipExclusions;
+	local X2Condition_AbilityProperty  		AcidCondition, SiphonCondition;
+	local X2Condition_UnitProperty			TargetUnitPropertyCondition;
+	local RTEffect_Siphon					SiphonEffect;
+
+	`CREATE_X2ABILITY_TEMPLATE(Template, 'RTPyroclasticSlash');
+
+	Template.AbilitySourceName = 'eAbilitySource_Standard';
+	Template.eAbilityIconBehaviorHUD = EAbilityIconBehavior_AlwaysShow;
+	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
+	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
+	Template.CinescriptCameraType = "Ranger_Reaper";
+	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_swordSlash";
+	Template.bHideOnClassUnlock = false;
+	Template.ShotHUDPriority = class'UIUtilities_Tactical'.const.CLASS_SQUADDIE_PRIORITY;
+	Template.AbilityConfirmSound = "TacticalUI_SwordConfirm";
+
+	ActionPointCost = new class'X2AbilityCost_ActionPoints';
+	ActionPointCost.iNumPoints = 1;
+	ActionPointCost.bConsumeAllPoints = true;
+	Template.AbilityCosts.AddItem(ActionPointCost);
+	
+	StandardMelee = new class'X2AbilityToHitCalc_StandardMelee';
+	Template.AbilityToHitCalc = StandardMelee;
+
+	Template.AbilityTargetStyle = new class'X2AbilityTarget_MovingMelee';
+	Template.TargetingMethod = class'X2TargetingMethod_MeleePath';
+
+	Template.AbilityTriggers.AddItem(default.PlayerInputTrigger);
+	Template.AbilityTriggers.AddItem(new class'X2AbilityTrigger_EndOfMove');
+
+	// Target Conditions
+	//
+	Template.AbilityTargetConditions.AddItem(default.LivingHostileTargetProperty);
+	Template.AbilityTargetConditions.AddItem(default.MeleeVisibilityCondition);
+
+	// Shooter Conditions
+	//
+	Template.AbilityShooterConditions.AddItem(default.LivingShooterProperty);
+
+	// Damage Effect
+	//		var int iBaseBladeDamage, iBaseBladeCritDamage, iBaseBladeDamageSpread, iAcidicBladeShred;var float fHiddenBladeCritModifier;
+	WeaponDamageEffect = new class'RTEffect_BerserkerMeleeDamage';	 
+	WeaponDamageEffect.iBaseBladeDamage = default.BLADE_DAMAGE;
+	WeaponDamageEffect.iBaseBladeCritDamage = default.BLADE_CRIT_DAMAGE;
+	WeaponDamageEffect.iBaseBladeDamageSpread = default.BLADE_DAMAGE_SPREAD;
+	WeaponDamageEffect.iAcidicBladeShred = default.ACID_BLADE_SHRED;
+	WeaponDamageEffect.fHiddenBladeCritModifier = default.HIDDEN_BLADE_CRIT_MODIFIER;
+	WeaponDamageEffect.bIgnoreBaseDamage = true;
+	Template.AddTargetEffect(WeaponDamageEffect);
+
+	//// Acid Effect
+	//AcidEffect = new class'RTEffect_Acid';
+	//AcidEffect.BuildPersistentEffect(default.Acid_DURATION, true, false, false, eGameRule_PlayerTurnEnd);
+	//AcidEffect.SetDisplayInfo(ePerkBuff_Penalty, default.AcidFriendlyName, default.AcidFriendlyDesc, Template.IconImage, true);
+	//AcidEffect.DuplicateResponse = eDupe_Refresh;	 
+	//AcidEffect.bStackOnRefresh = true;
+	//AcidEffect.SetAcidDamage(default.ACID_BLADE_DOT_DAMAGE, default.ACID_BLADE_DOT_SHRED);
+//
+	//AcidCondition = new class'X2Condition_AbilityProperty';
+	//AcidCondition.OwnerHasSoldierAbilities.AddItem('RTAcidicBlade');
+	//AcidEffect.TargetConditions.AddItem(AcidCondition);
+	//Template.AddTargetEffect(AcidEffect);
+
+	// Siphon Effect
+	SiphonEffect = new class'RTEffect_Siphon';
+	SiphonEffect.SiphonAmountMultiplier = default.SIPHON_AMOUNT_MULTIPLIER;
+	SiphonEffect.SiphonMinVal = default.SIPHON_MIN_VAL;
+	SiphonEffect.SiphonMaxVal = default.SIPHON_MAX_VAL;
+	SiphonEffect.DamageTypes.AddItem('Psi');
+
+	TargetUnitPropertyCondition = new class'X2Condition_UnitProperty';
+	TargetUnitPropertyCondition.ExcludeDead = true;
+	TargetUnitPropertyCondition.ExcludeRobotic = true;
+	TargetUnitPropertyCondition.ExcludeFriendlyToSource = false;
+	TargetUnitPropertyCondition.ExcludeHostileToSource = false;
+	TargetUnitPropertyCondition.FailOnNonUnits = true;
+
+	SiphonCondition = new class'X2Condition_AbilityProperty';
+	SiphonCondition.OwnerHasSoldierAbilities.AddItem('RTSiphon');
+
+	SiphonEffect.TargetConditions.AddItem(SiphonCondition);
+	SiphonEffect.TargetConditions.AddItem(TargetUnitPropertyCondition);
+	Template.AddTargetEffect(SiphonEffect);
+
+	Template.bAllowBonusWeaponEffects = true;
+	Template.bSkipMoveStop = true;
+	
+	Template.AssociatedPassives.AddItem('RTAcidicBlade');
+	Template.AssociatedPassives.AddItem('RTPsionicBlade');
+	Template.AssociatedPassives.AddItem('RTHiddenBlade');
+	Template.AssociatedPassives.AddItem('RTSiphon');
+	
+	Template.OverrideAbilities.AddItem('RTBerserkerKnifeAttack');
+	Template.PostActivationEvents.AddItem('RTBerserkerKnifeAttack');
+
+
+	// Voice events
+	//
+	Template.SourceMissSpeech = 'SwordMiss';
+
+	Template.BuildNewGameStateFn = TypicalMoveEndAbility_BuildGameState;
+	Template.BuildInterruptGameStateFn = TypicalMoveEndAbility_BuildInterruptGameState;
 
 	return Template;
 }

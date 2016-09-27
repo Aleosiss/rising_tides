@@ -74,6 +74,6 @@ DefaultProperties
 {
 	bStackOnRefresh = true;
 	DuplicateResponse = eDupe_Refresh
-	GameStateEffectClass = class'RTGameState_Bloodlust'
+	GameStateEffectClass = class'RTGameState_BloodlustEffect'
 	EffectName = "RTEffect_Bloodlust"
 }

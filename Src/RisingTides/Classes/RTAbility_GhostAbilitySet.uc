@@ -16,6 +16,7 @@ class RTAbility_GhostAbilitySet extends X2Ability
 	var config int OVERLOAD_CHARGES, OVERLOAD_BASE_COOLDOWN;
 	var config int OVERLOAD_PANIC_CHECK;
 	var config int FADE_DURATION, FADE_COOLDOWN;
+	var config int MAX_BLOODLUST_MELDJOIN;
 
 //---------------------------------------------------------------------------------------
 //---CreateTemplates---------------------------------------------------------------------
@@ -165,6 +166,7 @@ static function X2AbilityTemplate StandardGhostShot()
 	SiphonEffect.TargetConditions.AddItem(SiphonCondition);
 	SiphonEffect.TargetConditions.AddItem(TargetUnitPropertyCondition);
 	Template.AddTargetEffect(SiphonEffect);
+	Template.AssociatedPassives.AddItem('RTSiphon');
 
 	// Hit Calculation (Different weapons now have different calculations for range)
 	Template.AbilityToHitCalc = default.SimpleStandardAim;
@@ -212,6 +214,7 @@ static function X2AbilityTemplate JoinMeld()
 	local X2AbilityTemplate					Template;
 	local X2AbilityCooldown                 Cooldown;
 	local X2Condition_UnitEffects			Condition;
+	local RTCondition_EffectStackCount		StackCondition;
 	local RTEffect_Meld						MeldEffect;
 	
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'JoinMeld');
@@ -221,7 +224,7 @@ static function X2AbilityTemplate JoinMeld()
 	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_HideSpecificErrors;
 	Template.ShotHUDPriority = class'UIUtilities_Tactical'.const.CLASS_CORPORAL_PRIORITY;
 	Template.HideErrors.AddItem('AA_AbilityUnavailable');
-	Template.HideErrors.AddItem('MeldEffect_Active');
+	Template.HideErrors.AddItem('AA_MeldEffect_Active');
 	Template.HideErrors.AddItem('AA_NoTargets');
 
 	Template.ConcealmentRule = eConceal_Always;
@@ -235,6 +238,11 @@ static function X2AbilityTemplate JoinMeld()
 	Condition = new class'X2Condition_UnitEffects';
 	Condition.AddExcludeEffect('RTEffect_Meld', 'MeldEffect_Active');
 	Template.AbilityShooterConditions.AddItem(Condition);
+
+	StackCondition = new class'RTCondition_EffectStackCount';
+	StackCondition.StackingEffect = class'RTEffect_Bloodlust'.default.EffectName;
+	StackCondition.iMaximumStacks = default.MAX_BLOODLUST_MELDJOIN;
+	Template.AbilityShooterConditions.AddItem(StackCondition);
 
 	Template.AbilityTriggers.AddItem(default.PlayerInputTrigger);
 

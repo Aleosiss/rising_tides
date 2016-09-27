@@ -55,7 +55,7 @@ function EventListenerReturn HeatChannelCheck(Object EventData, Object EventSour
   }
 
   if(!OldAbilityState.IsCoolingDown()) {
-    `RedScreenOnce("Rising Tides: The ability was used but isn't on cooldown!");
+    `RedScreenOnce("Rising Tides: The ability was used but isn't on cooldown?");
     return ELR_NoInterrupt;
   }
 

@@ -32,14 +32,14 @@ function bool PostAbilityCostPaid(XComGameState_Effect EffectState, XComGameStat
 
         if(kAbility.GetMyTemplateName() == 'OverwatchShot' ||  kAbility.GetMyTemplateName() == 'StandardShot')
             bShouldTriggerStandard = true;
-		if(kAbility.GetMyTemplateName() == 'RTBerserkerKnifeAttack')
+		if(kAbility.GetMyTemplateName() == 'RTBerserkerKnifeAttack' || kAbility.GetMyTemplateName() == 'RTPyroclasticSlash' || kAbility.GetMyTemplateName() == 'RTReprobateWaltz')
 			bShouldTriggerMelee = true;
         if(bShouldTriggerStandard || bShouldTriggerMelee) {
             History = `XCOMHISTORY;
             TargetUnit = XComGameState_Unit(NewGameState.GetGameStateForObjectID(AbilityContext.InputContext.PrimaryTarget.ObjectID));
             if(TargetUnit != none && TargetUnit.IsDead()) {
                 if(Attacker.TileDistanceBetween(TargetUnit) < iTileDistanceToActivate) {
-                    `XEVENTMGR.TriggerEvent('RTBloodlust_Proc', kAbility, Attacker, NewGameState);
+					`XEVENTMGR.TriggerEvent('RTBloodlust_Proc', kAbility, Attacker, NewGameState);
 				}
             }
         }
