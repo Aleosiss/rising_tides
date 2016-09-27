@@ -14,7 +14,7 @@ function RegisterForEvents(XComGameState_Effect EffectGameState)
 	UnitState = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(EffectGameState.ApplyEffectParameters.SourceStateObjectRef.ObjectID));
 }
 
-// Killing target triggers stealth
+// Killing target triggers stealth and potentially adds a bloodlust stack
 function bool PostAbilityCostPaid(XComGameState_Effect EffectState, XComGameStateContext_Ability AbilityContext, XComGameState_Ability kAbility, XComGameState_Unit Attacker, XComGameState_Item AffectWeapon, XComGameState NewGameState, const array<name> PreCostActionPoints, const array<name> PreCostReservePoints)
 {
 	local XComGameState_Unit				TargetUnit, PanicTargetUnit;
@@ -25,7 +25,7 @@ function bool PostAbilityCostPaid(XComGameState_Effect EffectState, XComGameStat
 	local UnitValue							NumTimes;
 	local array<StateObjectReference>		VisibleUnits;
 	local int								Index, RandRoll;
-	local bool	bShouldTriggerMelee, bShouldTriggerStandard;
+	local bool								bShouldTriggerMelee, bShouldTriggerStandard;
         
         bShouldTriggerStandard = false;
 		bShouldTriggerMelee = false;
@@ -39,11 +39,19 @@ function bool PostAbilityCostPaid(XComGameState_Effect EffectState, XComGameStat
             TargetUnit = XComGameState_Unit(NewGameState.GetGameStateForObjectID(AbilityContext.InputContext.PrimaryTarget.ObjectID));
             if(TargetUnit != none && TargetUnit.IsDead()) {
                 if(Attacker.TileDistanceBetween(TargetUnit) < iTileDistanceToActivate) {
+					// t-t-t-t-triggered
 					`XEVENTMGR.TriggerEvent('RTBloodlust_Proc', kAbility, Attacker, NewGameState);
+
+					// since we've added a bloodlust stack, we need to check if we should leave the meld
+					if(!Attacker.HasSoldierAbility('RTContainedFury', false) && Attacker.IsUnitAffectedByEffectName('RTEffect_Meld')) {
+						if(class'RTGameState_Ability'.static.getBloodlustStackCount(Attacker) > class'RTAbility_BerserkerAbilitySet'.default.MAX_BLOODLUST_MELDJOIN) {
+							`XEVENTMGR.TriggerEvent('RTRemoveFromMeld', Attacker, Attacker, NewGameState);	
+						}
+					}
 				}
             }
         }
-		// trigger psionic activation for unstable conduit
+		// trigger psionic activation for unstable conduit if condition is met
 		if(Attacker.HasSoldierAbility('RTPsionicBlades') && bShouldTriggerMelee) {
 			`XEVENTMGR.TriggerEvent('UnitActivatedPsionicAbility', kAbility, Attacker, NewGameState);
 		}

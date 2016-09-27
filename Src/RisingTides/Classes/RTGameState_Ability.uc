@@ -89,7 +89,7 @@ function EventListenerReturn ReprobateWaltzListener( Object EventData, Object Ev
 	return ELR_NoInterrupt;
 }
    
-private function int getBloodlustStackCount(XComGameState_Unit WaltzUnit,  XComGameStateContext_Ability AbilityContext) {
+public static function int getBloodlustStackCount(XComGameState_Unit WaltzUnit,  XComGameStateContext_Ability AbilityContext) {
    local int iStackCount;
    local StateObjectReference IteratorObjRef;
    local RTGameState_BloodlustEffect BloodlustEffectState;
