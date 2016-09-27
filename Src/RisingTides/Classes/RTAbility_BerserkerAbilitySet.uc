@@ -32,6 +32,9 @@ class RTAbility_BerserkerAbilitySet extends RTAbility_GhostAbilitySet config(Ris
 	var config int MENTOR_STACK_MAXIMUM;
 	var config float REPROBATE_WALTZ_BLOODLUST_STACK_CHANCE;
 	var config float REPROBATE_WALTZ_BASE_CHANCE;
+	var config int PYROCLASTICFLOW_MOBILITY_BONUS;
+	var config bool PYROCLASTICFLOW_SHOULDUSECURRENTDAMAGETICK;
+	var config int PYROCLASTICFLOW_DAMAGE;
 
 //---------------------------------------------------------------------------------------
 //---CreateTemplates---------------------------------------------------------------------
@@ -616,6 +619,8 @@ static function X2AbilityTemplate RTPyroclasticFlow()
 	SOVEffect.BuildPersistentEffect(1, true, true, true);
 	SOVEffect.SetDisplayInfo(ePerkBuff_Passive, Template.LocFriendlyName, Template.LocLongDescription, Template.IconImage, true,, Template.AbilitySourceName);
 	Template.AddTargetEffect(SOVEffect);
+
+
 
 	Template.AdditionalAbilities.AddItem('RTPyroclasticSlash');
 	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
