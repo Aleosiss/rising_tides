@@ -747,3 +747,91 @@ static function X2AbilityTemplate RTPyroclasticSlash()
 
 	return Template;
 }
+
+//---------------------------------------------------------------------------------------
+//---RTContainedFury---------------------------------------------------------------------
+//---------------------------------------------------------------------------------------
+static function X2AbilityTemplate RTContainedFury {
+        local X2AbilityTemplate 	Template;
+        local X2Effect_Persistent Effect;
+    
+        `CREATE_X2ABILITY_TEMPLATE(Template, 'RTContainedFury');
+        Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_aim";
+        Template.AbilitySourceName = 'eAbilitySource_Perk';
+        Template.eAbilityIconBehaviorHUD = EAbilityIconBehavior_NeverShow;
+        Template.Hostility = eHostility_Neutral;
+
+        // Apply perk at the start of the mission. 
+        Template.AbilityToHitCalc = default.DeadEye; 
+        Template.AbilityTargetStyle = default.SelfTarget;
+        Template.AbilityTriggers.AddItem(default.UnitPostBeginPlayTrigger);
+
+        // Effect to apply
+        Effect = new class'X2Effect_Persistent';
+        Effect.BuildPersistentEffect(1, true, true, true);
+        Effect.SetDisplayInfo(ePerkBuff_Passive, Template.LocFriendlyName, Template.LocLongDescription, Template.IconImage, true,,Template.AbilitySourceName);
+        Template.AddTargetEffect(Effect);
+	
+        // Probably required 
+        Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
+        //  NOTE: No visualization on purpose!
+
+        Template.AdditionalAbilities.AddItem('RTContainedFuryMeldJoin');
+
+        return Template;
+}
+
+//---------------------------------------------------------------------------------------
+//---RTContainedFury Meld Join-----------------------------------------------------------
+//---------------------------------------------------------------------------------------
+static function X2AbilityTemplate RTContainedFuryMeldJoin()
+{
+	local X2AbilityTemplate					Template;
+	local X2AbilityCooldown                 		Cooldown;
+	local X2Condition_UnitEffects				Condition;
+	local RTEffect_Meld					MeldEffect;
+	
+	`CREATE_X2ABILITY_TEMPLATE(Template, 'RTContainedFuryMeldJoin');
+	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_adventpsiwitch_mindcontrol";
+	
+	Template.AbilitySourceName = 'eAbilitySource_Psionic';
+	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_HideSpecificErrors;
+	Template.ShotHUDPriority = class'UIUtilities_Tactical'.const.CLASS_CORPORAL_PRIORITY;
+	Template.HideErrors.AddItem('AA_AbilityUnavailable');
+	Template.HideErrors.AddItem('AA_MeldEffect_Active');
+	Template.HideErrors.AddItem('AA_NoTargets');
+
+	Template.ConcealmentRule = eConceal_Always;
+
+	Template.AbilityCosts.AddItem(default.FreeActionCost);
+	
+	Cooldown = new class'X2AbilityCooldown';
+	Cooldown.iNumTurns = 1;
+	Template.AbilityCooldown = Cooldown;
+
+	Condition = new class'X2Condition_UnitEffects';
+	Condition.AddExcludeEffect('RTEffect_Meld', 'AA_MeldEffect_Active');
+	Template.AbilityShooterConditions.AddItem(Condition);
+
+	Template.AbilityTriggers.AddItem(default.PlayerInputTrigger);
+
+	// Add dead eye to guarantee
+	Template.AbilityToHitCalc = default.DeadEye;
+	Template.AbilityTargetStyle = default.SelfTarget;
+
+	MeldEffect = new class 'RTEffect_Meld';
+	MeldEffect.BuildPersistentEffect(1, true, true, false,  eGameRule_PlayerTurnEnd);
+		MeldEffect.SetDisplayInfo(ePerkBuff_Bonus, "Mind Meld", 
+		"This unit has joined the squad's mind meld, gaining and delivering psionic support.", Template.IconImage);
+	Template.AddTargetEffect(MeldEffect);
+
+	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
+	// Note: no visualization on purpose!
+	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
+	Template.bSkipFireAction = true;
+
+	Template.bCrossClassEligible = false;
+        Template.OverrideAbilities.AddItem('JoinMeld');
+
+	return Template;
+}
