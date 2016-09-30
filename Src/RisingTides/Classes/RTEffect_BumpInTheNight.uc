@@ -55,11 +55,11 @@ function bool PostAbilityCostPaid(XComGameState_Effect EffectState, XComGameStat
 						if(Attacker.HasSoldierAbility('RTQueenOfBlades', false) && Attacker.ActionPoints.Length != PreCostActionPoints.Length) {
 							Attacker.ActionPoints = PreCostActionPoints;
 						}
-					} 
+					} else {
 					
-					// all of the kills give stealth...
-					`XEVENTMGR.TriggerEvent('RTBumpInTheNight_StealthProc', kAbility, Attacker, NewGameState);
-					
+						// all of the kills give stealth...
+						`XEVENTMGR.TriggerEvent('RTBumpInTheNight_StealthProc', kAbility, Attacker, NewGameState);
+					}
 				}
             }
         }

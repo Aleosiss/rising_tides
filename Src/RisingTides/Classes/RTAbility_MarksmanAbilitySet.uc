@@ -118,6 +118,7 @@ static function X2AbilityTemplate ScopedAndDropped()
 	Template.AdditionalAbilities.AddItem('PsiOverload');
 	Template.AdditionalAbilities.AddItem('PsiOverloadPanic');
 	Template.AdditionalAbilities.AddItem('LIOverwatchShot');
+	Template.AdditionalAbilities.AddItem('RTUnstableConduitBurst');
 
 	// Probably required 
 	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
@@ -1753,8 +1754,6 @@ static function X2AbilityTemplate HeatChannel()
 
 	return Template;
 }
-
-
 
 //---------------------------------------------------------------------------------------
 //---Heat Channel Icon-------------------------------------------------------------------

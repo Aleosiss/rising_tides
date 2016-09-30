@@ -61,6 +61,9 @@ static function array<X2DataTemplate> CreateTemplates()
 	Templates.AddItem(RTPyroclasticSlash());
 	Templates.AddItem(RTContainedFuryMeldJoin());
 	Templates.AddItem(RTContainedFury());
+	Templates.AddItem(RTUnstableConduit());
+	Templates.AddItem(RTUnstableConduitIcon());
+	Templates.AddItem(RTUnstableConduitBurst());
 
 	return Templates;
 }
@@ -97,8 +100,10 @@ static function X2AbilityTemplate BumpInTheNight()
 	Template.AdditionalAbilities.AddItem('PsiOverload');
 	Template.AdditionalAbilities.AddItem('PsiOverloadPanic');
 	Template.AdditionalAbilities.AddItem('LIOverwatchShot');
-	Template.AdditionalAbilities.AddItem('BumpInTheNightListener');
+	Template.AdditionalAbilities.AddItem('BumpInTheNightBloodlustListener');
+	Template.AdditionalAbilities.AddItem('BumpInTheNightStealthListener');
 	Template.AdditionalAbilities.AddItem('StandardGhostShot');
+	Template.AdditionalAbilities.AddItem('RTUnstableConduitBurst');
 
 	// Probably required 
 	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
@@ -108,16 +113,16 @@ static function X2AbilityTemplate BumpInTheNight()
 
 }
 //---------------------------------------------------------------------------------------
-//---BumpInTheNightListener--------------------------------------------------------------
+//---BumpInTheNightBloodlustListener-----------------------------------------------------
 //---------------------------------------------------------------------------------------
-static function X2AbilityTemplate BumpInTheNightListener()
+static function X2AbilityTemplate BumpInTheNightBloodlustListener()
 {
 	local X2AbilityTemplate                 Template;
 	local RTEffect_Bloodlust				BloodlustEffect;
 	local RTEffect_Stealth					StealthEffect;
 	local X2AbilityTrigger_EventListener	Trigger;
 
-	`CREATE_X2ABILITY_TEMPLATE(Template, 'BumpInTheNightListener');
+	`CREATE_X2ABILITY_TEMPLATE(Template, 'BumpInTheNightBloodlustListener');
 	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_swordSlash"; // TODO: Change this
 	Template.AbilitySourceName = 'eAbilitySource_Perk';
 	Template.eAbilityIconBehaviorHUD = EAbilityIconBehavior_NeverShow;
@@ -137,11 +142,51 @@ static function X2AbilityTemplate BumpInTheNightListener()
 	Template.AddTargetEffect(StealthEffect);
 
 	Template.AddTargetEffect(class'X2Effect_Spotted'.static.CreateUnspottedEffect());
-	
 
 	Trigger = new class'X2AbilityTrigger_EventListener';
 	Trigger.ListenerData.Deferral = ELD_OnStateSubmitted;
 	Trigger.ListenerData.EventID = 'RTBloodlust_Proc';
+	Trigger.ListenerData.Filter = eFilter_Unit;
+	Trigger.ListenerData.EventFn = class'XComGameState_Ability'.static.AbilityTriggerEventListener_Self;
+	Template.AbilityTriggers.AddItem(Trigger);
+
+	Template.bShowActivation = true;
+
+	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
+	// TODO: Visualization!
+
+	return Template;
+}
+
+//---------------------------------------------------------------------------------------
+//---BumpInTheNightStealthListener-----------------------------------------------------
+//---------------------------------------------------------------------------------------
+static function X2AbilityTemplate BumpInTheNightStealthListener()
+{
+	local X2AbilityTemplate                 Template;
+	local RTEffect_Bloodlust				BloodlustEffect;
+	local RTEffect_Stealth					StealthEffect;
+	local X2AbilityTrigger_EventListener	Trigger;
+
+	`CREATE_X2ABILITY_TEMPLATE(Template, 'BumpInTheNightBloodlustListener');
+	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_swordSlash"; // TODO: Change this
+	Template.AbilitySourceName = 'eAbilitySource_Perk';
+	Template.eAbilityIconBehaviorHUD = EAbilityIconBehavior_NeverShow;
+	Template.Hostility = eHostility_Neutral;
+
+	Template.AbilityToHitCalc = default.DeadEye; 
+	Template.AbilityTargetStyle = default.SelfTarget;
+
+	StealthEffect = new class'RTEffect_Stealth';
+	StealthEffect.fStealthModifier = 1;
+	StealthEffect.BuildPersistentEffect(2, false, false, false, eGameRule_PlayerTurnEnd);
+	Template.AddTargetEffect(StealthEffect);
+
+	Template.AddTargetEffect(class'X2Effect_Spotted'.static.CreateUnspottedEffect());
+
+	Trigger = new class'X2AbilityTrigger_EventListener';
+	Trigger.ListenerData.Deferral = ELD_OnStateSubmitted;
+	Trigger.ListenerData.EventID = 'RTBumpInTheNight_StealthProc';
 	Trigger.ListenerData.Filter = eFilter_Unit;
 	Trigger.ListenerData.EventFn = class'XComGameState_Ability'.static.AbilityTriggerEventListener_Self;
 	Template.AbilityTriggers.AddItem(Trigger);
@@ -490,7 +535,6 @@ static function X2AbilityTemplate RTMentor() {
 //---------------------------------------------------------------------------------------
 //---Reprobate Waltz---------------------------------------------------------------------
 //---------------------------------------------------------------------------------------
-
 static function X2AbilityTemplate RTReprobateWaltz()
 {
 	local X2AbilityTemplate					Template;
@@ -738,7 +782,7 @@ static function X2AbilityTemplate RTPyroclasticSlash()
 }
 
 //---------------------------------------------------------------------------------------
-//---RTContainedFury---------------------------------------------------------------------
+//---ContainedFury---------------------------------------------------------------------
 //---------------------------------------------------------------------------------------
 static function X2AbilityTemplate RTContainedFury() {
 	local X2AbilityTemplate 	Template;
@@ -771,7 +815,7 @@ static function X2AbilityTemplate RTContainedFury() {
 }
 
 //---------------------------------------------------------------------------------------
-//---RTContainedFury Meld Join-----------------------------------------------------------
+//---ContainedFury Meld Join-----------------------------------------------------------
 //---------------------------------------------------------------------------------------
 static function X2AbilityTemplate RTContainedFuryMeldJoin()
 {
@@ -789,7 +833,7 @@ static function X2AbilityTemplate RTContainedFuryMeldJoin()
 	Template.HideErrors.AddItem('AA_AbilityUnavailable');
 	Template.HideErrors.AddItem('AA_MeldEffect_Active');
 	Template.HideErrors.AddItem('AA_NoTargets');
-
+	Template.Hostility = eHostility_Neutral;
 	Template.ConcealmentRule = eConceal_Always;
 
 	Template.AbilityCosts.AddItem(default.FreeActionCost);
@@ -823,4 +867,156 @@ static function X2AbilityTemplate RTContainedFuryMeldJoin()
     Template.OverrideAbilities.AddItem('JoinMeld');
 
 	return Template;
+}
+
+//---------------------------------------------------------------------------------------
+//---UnstableConduit-------------------------------------------------------------------
+//---------------------------------------------------------------------------------------
+static function X2AbilityTemplate RTUnstableConduit()
+{
+	local X2AbilityTemplate					Template;
+	local X2Condition_UnitEffects			Condition;
+	local X2AbilityMultiTarget_AllAllies	MultiTarget;
+	local X2AbilityTrigger_EventListener	Trigger;
+	local X2Effect_ImmediateAbilityActivation ActivateAbilityEffect;
+	
+	`CREATE_X2ABILITY_TEMPLATE(Template, 'RTUnstableConduit');
+	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_adventpsiwitch_mindcontrol";
+	
+	Template.AbilitySourceName = 'eAbilitySource_Psionic';
+	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_NeverShow;
+	Template.Hostility = eHostility_Offensive;
+
+	Template.ConcealmentRule = eConceal_Miss;		// unsure
+
+	Template.AbilityCosts.AddItem(default.FreeActionCost);
+	
+	Condition = new class'X2Condition_UnitEffects';
+	Condition.AddRequireEffect('RTEffect_Meld', 'AA_MeldEffectRequired');
+	Template.AbilityShooterConditions.AddItem(Condition);
+	Template.AbilityMultiTargetConditions.AddItem(Condition);
+
+	Trigger = new class'X2AbilityTrigger_EventListener';
+	Trigger.ListenerData.Deferral = ELD_OnStateSubmitted;
+	Trigger.ListenerData.EventID = 'UnitUsedPsionicAbility';
+	Trigger.ListenerData.Filter = eFilter_Unit;
+	Trigger.ListenerData.EventFn = class'XComGameState_Ability'.static.AbilityTriggerEventListener_Self;
+	Template.AbilityTriggers.AddItem(Trigger);
+
+	// Add dead eye to guarantee
+	Template.AbilityToHitCalc = default.DeadEye;
+	Template.AbilityTargetStyle = default.SelfTarget;
+
+	MultiTarget = new class'X2AbilityMultiTarget_AllAllies';
+	Template.AbilityMultiTargetStyle = MultiTarget;
+
+	ActivateAbilityEffect = new class'X2Effect_ImmediateAbilityActivation';
+	ActivateAbilityEffect.AbilityName = 'UnstableConduitBurst';
+	Template.AddTargetEffect(ActivateAbilityEffect);
+	Template.AddMultiTargetEffect(ActivateAbilityEffect);
+
+	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
+	// Note: no visualization on purpose!
+	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
+	Template.bSkipFireAction = true;
+
+	Template.AdditionalAbilities.AddItem('RTUnstableConduitIcon');
+
+	Template.bCrossClassEligible = false;
+
+	return Template;
+}
+
+//---------------------------------------------------------------------------------------
+//---UnstableConduitIcon---------------------------------------------------------------
+//---------------------------------------------------------------------------------------
+static function X2AbilityTemplate RTUnstableConduitIcon() {
+	local X2AbilityTemplate 	Template;
+    local X2Effect_Persistent	Effect;
+    
+    `CREATE_X2ABILITY_TEMPLATE(Template, 'RTUnstableConduitIcon');
+    Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_aim";
+    Template.AbilitySourceName = 'eAbilitySource_Psionic';
+    Template.eAbilityIconBehaviorHUD = EAbilityIconBehavior_NeverShow;
+    Template.Hostility = eHostility_Neutral;
+	
+	// Apply perk at the start of the mission. 
+    Template.AbilityToHitCalc = default.DeadEye; 
+    Template.AbilityTargetStyle = default.SelfTarget;
+    Template.AbilityTriggers.AddItem(default.UnitPostBeginPlayTrigger);
+
+    // Effect to apply
+    Effect = new class'X2Effect_Persistent';
+    Effect.BuildPersistentEffect(1, true, true, true);
+    Effect.SetDisplayInfo(ePerkBuff_Passive, Template.LocFriendlyName, Template.LocLongDescription, Template.IconImage, true,,Template.AbilitySourceName);
+    Template.AddTargetEffect(Effect);
+	
+    // Probably required 
+    Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
+    //  NOTE: No visualization on purpose!
+	
+
+    return Template;
+}
+
+//---------------------------------------------------------------------------------------
+//---UnstableConduitBurst----------------------------------------------------------------
+//---------------------------------------------------------------------------------------
+static function X2AbilityTemplate RTUnstableConduitBurst() {
+    local X2AbilityTemplate Template;
+    local X2AbilityMultiTarget_Radius MultiTarget;
+    local X2Effect_ApplyDirectionalWorldDamage WorldDamage;
+    local X2Effect_ApplyWeaponDamage WeaponDamageEffect;
+    local X2Effect_Knockback  KnockbackEffect;
+
+    `CREATE_X2ABILITY_TEMPLATE(Template, 'RTUnstableConduitBurst');
+    Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_snipershot"; //TODO: Change this
+    Template.AbilitySourceName = 'eAbilitySource_Psionic';  
+	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_AlwaysShow;
+	Template.AbilityConfirmSound = "TacticalUI_ActivateAbility";
+	Template.Hostility = eHostility_Neutral;
+
+	Template.AbilityCosts.AddItem(default.FreeActionCost);
+
+	Template.AbilityTriggers.AddItem(default.PlayerInputTrigger);
+	Template.AbilityToHitCalc = default.DeadEye;
+	Template.AbilityTargetStyle = default.SelfTarget;
+
+	MultiTarget = new class'X2AbilityMultiTarget_Radius';
+	MultiTarget.fTargetRadius = 2.5;
+	MultiTarget.bExcludeSelfAsTargetIfWithinRadius = true;
+	MultiTarget.bIgnoreBlockingCover = true;
+	Template.AbilityMultiTargetStyle = MultiTarget;
+
+    WorldDamage = new class'X2Effect_ApplyDirectionalWorldDamage';  //creates the framework to apply damage to the world
+	WorldDamage.bUseWeaponDamageType = False;                       //overrides the normal weapon damage type
+	WorldDamage.bUseWeaponEnvironmentalDamage = false;              //replaces the weapon's environmental damage with the abilities
+	WorldDamage.EnvironmentalDamageAmount = 3000;                   //determines the amount of enviornmental damage the ability applies
+	WorldDamage.bApplyOnHit = true;                                 //obv
+	WorldDamage.bApplyOnMiss = true;                                //obv
+	WorldDamage.bApplyToWorldOnHit = true;                          //obv
+	WorldDamage.bApplyToWorldOnMiss = true;                         //obv
+	WorldDamage.bHitAdjacentDestructibles = true;                   
+	WorldDamage.PlusNumZTiles = 2;                                 //determines how 'high' the world damage is applied
+	WorldDamage.bHitTargetTile = false;                              
+	WorldDamage.ApplyChance = 100;
+	Template.AddMultiTargetEffect(WorldDamage);                    
+
+	WeaponDamageEffect = new class'X2Effect_ApplyWeaponDamage';   
+	WeaponDamageEffect.bIgnoreBaseDamage = true;	
+	WeaponDamageEffect.EffectDamageValue.Damage = default.BURST_DAMAGE;			 
+	WeaponDamageEffect.bApplyWorldEffectsForEachTargetLocation = true;          
+	Template.AddMultiTargetEffect(WeaponDamageEffect);          
+
+	Template.CustomFireAnim = 'HL_Psi_MindControl';
+	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
+	Template.BuildInterruptGameStateFn = TypicalAbility_BuildInterruptGameState;
+	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
+	Template.CinescriptCameraType = "Psionic_FireAtUnit";
+
+	Template.bShowPostActivation = true;
+
+	Template.bCrossClassEligible = false;
+
+    return Template;
 }

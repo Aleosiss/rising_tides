@@ -222,6 +222,7 @@ static function X2AbilityTemplate JoinMeld()
 	
 	Template.AbilitySourceName = 'eAbilitySource_Psionic';
 	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_HideSpecificErrors;
+	Template.Hostility = eHostility_Neutral;
 	Template.ShotHUDPriority = class'UIUtilities_Tactical'.const.CLASS_CORPORAL_PRIORITY;
 	Template.HideErrors.AddItem('AA_AbilityUnavailable');
 	Template.HideErrors.AddItem('AA_MeldEffect_Active');
@@ -282,6 +283,7 @@ static function X2AbilityTemplate LeaveMeld()
 	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_HideIfOtherAvailable;
 	Template.ShotHUDPriority = class'UIUtilities_Tactical'.const.CLASS_CORPORAL_PRIORITY;
 	Template.HideIfAvailable.AddItem('JoinMeld');
+	Template.Hostility = eHostility_Neutral;
 
 	Template.AbilityCosts.AddItem(default.FreeActionCost);
 	Template.ConcealmentRule = eConceal_Always;
