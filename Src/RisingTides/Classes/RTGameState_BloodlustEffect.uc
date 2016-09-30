@@ -24,7 +24,7 @@ local XComGameStateContext_Ability AbilityContext;
             StatChanges.Length = 0;
 			TempEffect.StatChanges.Length = 0;
 
-            if(UnitState.HasSoldierAbility('QueenOfBlades')) {
+            if(UnitState.HasSoldierAbility('RTQueenOfBlades')) {
 				AddPersistentStatChange(StatChanges, eStat_Mobility, (RTEffect_Bloodlust(GetX2Effect()).iMobilityMod) * iStacks);
 				TempEffect.AddPersistentStatChange(StatChanges, eStat_Mobility, (RTEffect_Bloodlust(GetX2Effect()).iMobilityMod) * iStacks);
             } else {

@@ -74,6 +74,9 @@
     <Content Include="Src\RisingTides\Classes\RTCondition_OverwatchVisibility.uc">
       <SubType>Content</SubType>
     </Content>
+    <Content Include="Src\RisingTides\Classes\RTEffect_Acid.uc">
+      <SubType>Content</SubType>
+    </Content>
     <Content Include="Src\RisingTides\Classes\RTEffect_Aggression.uc">
       <SubType>Content</SubType>
     </Content>

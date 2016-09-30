@@ -216,7 +216,7 @@ function TriggerLinkedEffectFlyoverVisualizationFn(XComGameState VisualizeGameSt
 		if (AbilityTemplate != none)
 		{
 			SoundAndFlyOver = X2Action_PlaySoundAndFlyOver(class'X2Action_PlaySoundAndFlyOver'.static.AddToVisualizationTrack(BuildTrack, VisualizeGameState.GetContext()));
-			SoundAndFlyOver.SetSoundAndFlyOverParameters(None, "Linked Minds", '', eColor_Good, "img:///UILibrary_PerkIcons.UIPerk_insanity");
+			SoundAndFlyOver.SetSoundAndFlyOverParameters(None, "Networked OI", '', eColor_Good, "img:///UILibrary_PerkIcons.UIPerk_insanity");
 
 			OutVisualizationTracks.AddItem(BuildTrack);
 		}

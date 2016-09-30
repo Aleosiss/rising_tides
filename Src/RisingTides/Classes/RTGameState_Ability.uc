@@ -80,21 +80,23 @@ function EventListenerReturn ReprobateWaltzListener( Object EventData, Object Ev
 	AbilityContext = XComGameStateContext_Ability(GameState.GetContext());
 	WaltzUnit = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(AbilityContext.InputContext.SourceObject.ObjectID));
 
-	iStackCount = getBloodlustStackCount(WaltzUnit, AbilityContext);
-	fFinalPercentChance = 100 -  ( class'RTAbility_BerserkerAbilitySet'.default.REPROBATE_WALTZ_BASE_CHANCE + ( class'RTAbility_BerserkerAbilitySet'.default.REPROBATE_WALTZ_BLOODLUST_STACK_CHANCE * iStackCount ));
+	if(AbilityContext != none) {
+		iStackCount = getBloodlustStackCount(WaltzUnit);
+		fFinalPercentChance = 100 -  ( class'RTAbility_BerserkerAbilitySet'.default.REPROBATE_WALTZ_BASE_CHANCE + ( class'RTAbility_BerserkerAbilitySet'.default.REPROBATE_WALTZ_BLOODLUST_STACK_CHANCE * iStackCount ));
 		
-	if(`SYNC_RAND(100) <= int(fFinalPercentChance)) {
-		AbilityTriggerAgainstSingleTarget(AbilityContext.InputContext.PrimaryTarget, false);
-	}		
+		if(`SYNC_RAND(100) <= int(fFinalPercentChance)) {
+			AbilityTriggerAgainstSingleTarget(AbilityContext.InputContext.PrimaryTarget, false);
+		}	
+	}	
 	return ELR_NoInterrupt;
 }
    
-public static function int getBloodlustStackCount(XComGameState_Unit WaltzUnit,  XComGameStateContext_Ability AbilityContext) {
+public static function int getBloodlustStackCount(XComGameState_Unit WaltzUnit) {
    local int iStackCount;
    local StateObjectReference IteratorObjRef;
    local RTGameState_BloodlustEffect BloodlustEffectState;
 
-   if (AbilityContext != none && WaltzUnit != none) {
+   if (WaltzUnit != none) {
 		// get our stacking effect
 		foreach WaltzUnit.AffectedByEffects(IteratorObjRef) {
 			BloodlustEffectState = RTGameState_BloodlustEffect(`XCOMHISTORY.GetGameStateForObjectID(IteratorObjRef.ObjectID));
@@ -108,7 +110,7 @@ public static function int getBloodlustStackCount(XComGameState_Unit WaltzUnit, 
 			iStackCount = 0;
 		}
 	} else  {
-		`LOG("Rising Tides: No AbilityContext or SourceUnit found for getBloodlustStackCount!");
+		`LOG("Rising Tides: No SourceUnit found for getBloodlustStackCount!");
 	}
 	return iStackCount;
 }

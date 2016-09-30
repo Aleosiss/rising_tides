@@ -37,7 +37,7 @@ function RTGameState_MeldEffect Initialize(XComGameState_Unit MeldMaker)
 	//ParentMeldEffect = RTGameState_MeldEffect(`XCOMHISTORY.GetSingleGameStateObjectForClass(class, true));
 	ParentMeldEffect = RTGameState_MeldEffect(`XCOMHISTORY.GetGameStateForObjectID(IteratorArray[0].ObjectID));
 
-
+	// if there is no prexisting Meld, we're going to have to make it ourselves
 	if(ParentMeldEffect == none || ParentMeldEffect.ObjectID == ObjectID)
 	{
 		`LOG("Rising Tides: No parent Meld found, setting this unit as the host.");
@@ -56,7 +56,7 @@ function RTGameState_MeldEffect Initialize(XComGameState_Unit MeldMaker)
 			SharedHack = 0.00f;
 		}
 	}
-	else
+	else 
 	{
 		`LOG("Rising Tides: Meld Parent GameState found:");
 		`LOG(IteratorArray[0].ObjectID @ " is the parent StateObjectReference.");
@@ -278,9 +278,9 @@ simulated function EventListenerReturn RemoveUnitFromMeld(Object EventData, Obje
 		EventManager.UnRegisterFromEvent(ListenerObj, 'UnitPanicked');
 		EventManager.UnRegisterFromEvent(ListenerObj, 'TacticalGameEnd');
 		
-		//NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("Meld states cleanup");
 		RemoveEffect(NewGameState, NewGameState);
-		//NewGameState.RemoveStateObject(ObjectID);
+		XComGameStateContext_ChangeContainer(NewGameState.GetContext()).BuildVisualizationFn = TriggerLeaveMeldFlyoverVisualizationFn;
+		
 		`TACTICALRULES.SubmitGameState(NewGameState);
 
 		`LOG("RisingTides: Meld passive effect unregistered from events.");
@@ -357,6 +357,53 @@ simulated function EventListenerReturn RemoveUnitFromMeld(Object EventData, Obje
 	return ELR_NoInterrupt;
 }
 
+// Join Visualization
+function TriggerJoinMeldFlyoverVisualizationFn(XComGameState VisualizeGameState, out array<VisualizationTrack> OutVisualizationTracks)
+{
+	local XComGameState_Unit UnitState;
+	local X2Action_PlaySoundAndFlyOver SoundAndFlyOver;
+	local VisualizationTrack BuildTrack;
+	local XComGameStateHistory History;
+	local X2AbilityTemplate AbilityTemplate;
+	local XComGameState_Ability AbilityState;
 
+	History = `XCOMHISTORY;
+	
+	UnitState = XComGameState_Unit(History.GetGameStateForObjectID(GameStateHost.ObjectID));
+	
 
- 
+	History.GetCurrentAndPreviousGameStatesForObjectID(UnitState.ObjectID, BuildTrack.StateObject_OldState, BuildTrack.StateObject_NewState, , VisualizeGameState.HistoryIndex);
+	BuildTrack.StateObject_NewState = UnitState;
+	BuildTrack.TrackActor = UnitState.GetVisualizer();
+	
+	SoundAndFlyOver = X2Action_PlaySoundAndFlyOver(class'X2Action_PlaySoundAndFlyOver'.static.AddToVisualizationTrack(BuildTrack, VisualizeGameState.GetContext()));
+	SoundAndFlyOver.SetSoundAndFlyOverParameters(None, "Joined the meld!", '', eColor_Attention, "img:///UILibrary_PerkIcons.UIPerk_reload");
+	OutVisualizationTracks.AddItem(BuildTrack);
+}
+
+// Leave Visualization
+function TriggerLeaveMeldFlyoverVisualizationFn(XComGameState VisualizeGameState, out array<VisualizationTrack> OutVisualizationTracks)
+{
+	local XComGameState_Unit UnitState;
+	local X2Action_PlaySoundAndFlyOver SoundAndFlyOver;
+	local VisualizationTrack BuildTrack;
+	local XComGameStateHistory History;
+	local X2AbilityTemplate AbilityTemplate;
+	local XComGameState_Ability AbilityState;
+
+	History = `XCOMHISTORY;
+
+	UnitState = XComGameState_Unit(History.GetGameStateForObjectID(GameStateHost.ObjectID));
+	
+
+	History.GetCurrentAndPreviousGameStatesForObjectID(UnitState.ObjectID, BuildTrack.StateObject_OldState, BuildTrack.StateObject_NewState, , VisualizeGameState.HistoryIndex);
+	BuildTrack.StateObject_NewState = UnitState;
+	BuildTrack.TrackActor = UnitState.GetVisualizer();
+	
+	SoundAndFlyOver = X2Action_PlaySoundAndFlyOver(class'X2Action_PlaySoundAndFlyOver'.static.AddToVisualizationTrack(BuildTrack, VisualizeGameState.GetContext()));
+	SoundAndFlyOver.SetSoundAndFlyOverParameters(None, "Left the meld!", '', eColor_Attention, "img:///UILibrary_PerkIcons.UIPerk_reload");
+	OutVisualizationTracks.AddItem(BuildTrack);
+	
+	
+}
+																									   																									   																									    																									   

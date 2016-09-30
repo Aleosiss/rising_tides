@@ -59,6 +59,8 @@ static function array<X2DataTemplate> CreateTemplates()
 	Templates.AddItem(RTReprobateWaltz());
 	Templates.AddItem(RTPyroclasticFlow());
 	Templates.AddItem(RTPyroclasticSlash());
+	Templates.AddItem(RTContainedFuryMeldJoin());
+	Templates.AddItem(RTContainedFury());
 
 	return Templates;
 }
@@ -152,7 +154,6 @@ static function X2AbilityTemplate BumpInTheNightListener()
 	return Template;
 }
 
-
 //---------------------------------------------------------------------------------------
 //---RTBerserker Knife Attack------------------------------------------------------------
 //---------------------------------------------------------------------------------------
@@ -162,7 +163,7 @@ static function X2AbilityTemplate RTBerserkerKnifeAttack()
 	local X2AbilityCost_ActionPoints        ActionPointCost;
 	local X2AbilityToHitCalc_StandardMelee  StandardMelee;
 	local RTEffect_BerserkerMeleeDamage     WeaponDamageEffect;
-	//local RTEffect_Acid						AcidEffect;
+	local RTEffect_Acid						AcidEffect;
 	local array<name>                       SkipExclusions;
 	local X2Condition_AbilityProperty  		AcidCondition, SiphonCondition;
 	local X2Condition_UnitProperty			TargetUnitPropertyCondition;
@@ -216,18 +217,14 @@ static function X2AbilityTemplate RTBerserkerKnifeAttack()
 	WeaponDamageEffect.bIgnoreBaseDamage = true;
 	Template.AddTargetEffect(WeaponDamageEffect);
 
-	//// Acid Effect
-	//AcidEffect = new class'RTEffect_Acid';
-	//AcidEffect.BuildPersistentEffect(default.Acid_DURATION, true, false, false, eGameRule_PlayerTurnEnd);
-	//AcidEffect.SetDisplayInfo(ePerkBuff_Penalty, default.AcidFriendlyName, default.AcidFriendlyDesc, Template.IconImage, true);
-	//AcidEffect.DuplicateResponse = eDupe_Refresh;	 
-	//AcidEffect.bStackOnRefresh = true;
-	//AcidEffect.SetAcidDamage(default.ACID_BLADE_DOT_DAMAGE, default.ACID_BLADE_DOT_SHRED);
-//
-	//AcidCondition = new class'X2Condition_AbilityProperty';
-	//AcidCondition.OwnerHasSoldierAbilities.AddItem('RTAcidicBlade');
-	//AcidEffect.TargetConditions.AddItem(AcidCondition);
-	//Template.AddTargetEffect(AcidEffect);
+	// Acid Effect
+	AcidEffect = class'RTEffect_Acid'.static.CreateAcidBurningStatusEffect('RTAcid', 4);
+	AcidEffect.SetAcidDamage(default.ACID_BLADE_DOT_DAMAGE, 0, default.ACID_BLADE_DOT_SHRED, 'RTAcid');
+
+	AcidCondition = new class'X2Condition_AbilityProperty';
+	AcidCondition.OwnerHasSoldierAbilities.AddItem('RTAcidicBlade');
+	AcidEffect.TargetConditions.AddItem(AcidCondition);
+	Template.AddTargetEffect(AcidEffect);
 
 	// Siphon Effect
 	SiphonEffect = new class'RTEffect_Siphon';
@@ -499,8 +496,8 @@ static function X2AbilityTemplate RTReprobateWaltz()
 	local X2AbilityTemplate					Template;
     local X2AbilityToHitCalc_StandardMelee  StandardMelee;
     local RTEffect_BerserkerMeleeDamage     WeaponDamageEffect;
-    // local RTEffect_Acid                     AcidEffect;
-    // local X2Condition_AbilityProperty       AcidCondition;
+    local RTEffect_Acid                     AcidEffect;
+    local X2Condition_AbilityProperty       AcidCondition;
     local RTEffect_Siphon                   SiphonEffect;
     local X2Condition_AbilityProperty       SiphonCondition;
     local X2Condition_UnitProperty          TargetUnitPropertyCondition;
@@ -534,18 +531,14 @@ static function X2AbilityTemplate RTReprobateWaltz()
 	WeaponDamageEffect.bIgnoreBaseDamage = true;
 	Template.AddTargetEffect(WeaponDamageEffect);
 
-	//// Acid Effect
-	//AcidEffect = new class'RTEffect_Acid';
-	//AcidEffect.BuildPersistentEffect(default.Acid_DURATION, true, false, false, eGameRule_PlayerTurnEnd);
-	//AcidEffect.SetDisplayInfo(ePerkBuff_Penalty, default.AcidFriendlyName, default.AcidFriendlyDesc, Template.IconImage, true);
-	//AcidEffect.DuplicateResponse = eDupe_Refresh;	 
-	//AcidEffect.bStackOnRefresh = true;
-	//AcidEffect.SetAcidDamage(default.ACID_BLADE_DOT_DAMAGE, default.ACID_BLADE_DOT_SHRED);
-//
-	//AcidCondition = new class'X2Condition_AbilityProperty';
-	//AcidCondition.OwnerHasSoldierAbilities.AddItem('RTAcidicBlade');
-	//AcidEffect.TargetConditions.AddItem(AcidCondition);
-	//Template.AddTargetEffect(AcidEffect);
+	// Acid Effect
+	AcidEffect = class'RTEffect_Acid'.static.CreateAcidBurningStatusEffect('RTAcid', 4);
+	AcidEffect.SetAcidDamage(default.ACID_BLADE_DOT_DAMAGE, 0, default.ACID_BLADE_DOT_SHRED, 'RTAcid');
+
+	AcidCondition = new class'X2Condition_AbilityProperty';
+	AcidCondition.OwnerHasSoldierAbilities.AddItem('RTAcidicBlade');
+	AcidEffect.TargetConditions.AddItem(AcidCondition);
+	Template.AddTargetEffect(AcidEffect);
 
 	// Siphon Effect
 	SiphonEffect = new class'RTEffect_Siphon';
@@ -640,7 +633,7 @@ static function X2AbilityTemplate RTPyroclasticSlash()
 	local X2AbilityCost_ActionPoints        ActionPointCost;
 	local X2AbilityToHitCalc_StandardMelee  StandardMelee;
 	local RTEffect_BerserkerMeleeDamage     WeaponDamageEffect;
-	//local RTEffect_Acid						AcidEffect;
+	local RTEffect_Acid						AcidEffect;
 	local array<name>                       SkipExclusions;
 	local X2Condition_AbilityProperty  		AcidCondition, SiphonCondition;
 	local X2Condition_UnitProperty			TargetUnitPropertyCondition;
@@ -692,18 +685,14 @@ static function X2AbilityTemplate RTPyroclasticSlash()
 	WeaponDamageEffect.bIgnoreBaseDamage = true;
 	Template.AddTargetEffect(WeaponDamageEffect);
 
-	//// Acid Effect
-	//AcidEffect = new class'RTEffect_Acid';
-	//AcidEffect.BuildPersistentEffect(default.Acid_DURATION, true, false, false, eGameRule_PlayerTurnEnd);
-	//AcidEffect.SetDisplayInfo(ePerkBuff_Penalty, default.AcidFriendlyName, default.AcidFriendlyDesc, Template.IconImage, true);
-	//AcidEffect.DuplicateResponse = eDupe_Refresh;	 
-	//AcidEffect.bStackOnRefresh = true;
-	//AcidEffect.SetAcidDamage(default.ACID_BLADE_DOT_DAMAGE, default.ACID_BLADE_DOT_SHRED);
-//
-	//AcidCondition = new class'X2Condition_AbilityProperty';
-	//AcidCondition.OwnerHasSoldierAbilities.AddItem('RTAcidicBlade');
-	//AcidEffect.TargetConditions.AddItem(AcidCondition);
-	//Template.AddTargetEffect(AcidEffect);
+	// Acid Effect
+	AcidEffect = class'RTEffect_Acid'.static.CreateAcidBurningStatusEffect('RTAcid', 4);
+	AcidEffect.SetAcidDamage(default.ACID_BLADE_DOT_DAMAGE, 0, default.ACID_BLADE_DOT_SHRED, 'RTAcid');
+
+	AcidCondition = new class'X2Condition_AbilityProperty';
+	AcidCondition.OwnerHasSoldierAbilities.AddItem('RTAcidicBlade');
+	AcidEffect.TargetConditions.AddItem(AcidCondition);
+	Template.AddTargetEffect(AcidEffect);
 
 	// Siphon Effect
 	SiphonEffect = new class'RTEffect_Siphon';
@@ -751,34 +740,34 @@ static function X2AbilityTemplate RTPyroclasticSlash()
 //---------------------------------------------------------------------------------------
 //---RTContainedFury---------------------------------------------------------------------
 //---------------------------------------------------------------------------------------
-static function X2AbilityTemplate RTContainedFury {
-        local X2AbilityTemplate 	Template;
-        local X2Effect_Persistent Effect;
+static function X2AbilityTemplate RTContainedFury() {
+	local X2AbilityTemplate 	Template;
+    local X2Effect_Persistent	Effect;
     
-        `CREATE_X2ABILITY_TEMPLATE(Template, 'RTContainedFury');
-        Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_aim";
-        Template.AbilitySourceName = 'eAbilitySource_Perk';
-        Template.eAbilityIconBehaviorHUD = EAbilityIconBehavior_NeverShow;
-        Template.Hostility = eHostility_Neutral;
-
-        // Apply perk at the start of the mission. 
-        Template.AbilityToHitCalc = default.DeadEye; 
-        Template.AbilityTargetStyle = default.SelfTarget;
-        Template.AbilityTriggers.AddItem(default.UnitPostBeginPlayTrigger);
-
-        // Effect to apply
-        Effect = new class'X2Effect_Persistent';
-        Effect.BuildPersistentEffect(1, true, true, true);
-        Effect.SetDisplayInfo(ePerkBuff_Passive, Template.LocFriendlyName, Template.LocLongDescription, Template.IconImage, true,,Template.AbilitySourceName);
-        Template.AddTargetEffect(Effect);
+    `CREATE_X2ABILITY_TEMPLATE(Template, 'RTContainedFury');
+    Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_aim";
+    Template.AbilitySourceName = 'eAbilitySource_Perk';
+    Template.eAbilityIconBehaviorHUD = EAbilityIconBehavior_NeverShow;
+    Template.Hostility = eHostility_Neutral;
 	
-        // Probably required 
-        Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
-        //  NOTE: No visualization on purpose!
+	// Apply perk at the start of the mission. 
+    Template.AbilityToHitCalc = default.DeadEye; 
+    Template.AbilityTargetStyle = default.SelfTarget;
+    Template.AbilityTriggers.AddItem(default.UnitPostBeginPlayTrigger);
 
-        Template.AdditionalAbilities.AddItem('RTContainedFuryMeldJoin');
+    // Effect to apply
+    Effect = new class'X2Effect_Persistent';
+    Effect.BuildPersistentEffect(1, true, true, true);
+    Effect.SetDisplayInfo(ePerkBuff_Passive, Template.LocFriendlyName, Template.LocLongDescription, Template.IconImage, true,,Template.AbilitySourceName);
+    Template.AddTargetEffect(Effect);
+	
+    // Probably required 
+    Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
+    //  NOTE: No visualization on purpose!
+	
+	Template.AdditionalAbilities.AddItem('RTContainedFuryMeldJoin');
 
-        return Template;
+    return Template;
 }
 
 //---------------------------------------------------------------------------------------
@@ -821,7 +810,7 @@ static function X2AbilityTemplate RTContainedFuryMeldJoin()
 
 	MeldEffect = new class 'RTEffect_Meld';
 	MeldEffect.BuildPersistentEffect(1, true, true, false,  eGameRule_PlayerTurnEnd);
-		MeldEffect.SetDisplayInfo(ePerkBuff_Bonus, "Mind Meld", 
+	MeldEffect.SetDisplayInfo(ePerkBuff_Bonus, "Mind Meld", 
 		"This unit has joined the squad's mind meld, gaining and delivering psionic support.", Template.IconImage);
 	Template.AddTargetEffect(MeldEffect);
 
@@ -831,7 +820,7 @@ static function X2AbilityTemplate RTContainedFuryMeldJoin()
 	Template.bSkipFireAction = true;
 
 	Template.bCrossClassEligible = false;
-        Template.OverrideAbilities.AddItem('JoinMeld');
+    Template.OverrideAbilities.AddItem('JoinMeld');
 
 	return Template;
 }
