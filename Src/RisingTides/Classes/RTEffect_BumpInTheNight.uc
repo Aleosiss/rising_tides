@@ -31,7 +31,7 @@ function bool PostAbilityCostPaid(XComGameState_Effect EffectState, XComGameStat
 	bShouldTriggerMelee = false;
 
 	// melee kills give bloodlust and extra AP w/ QoB, but standard kills still give stealth
-	if(kAbility.GetMyTemplateName() == 'OverwatchShot' ||  kAbility.GetMyTemplateName() == 'StandardShot')
+	if(kAbility.GetMyTemplateName() == 'OverwatchShot' ||  kAbility.GetMyTemplateName() == 'StandardShot' kAbility.GetMyTemplateName() == 'StandardGhostShot')
             bShouldTriggerStandard = true;
 	if(kAbility.GetMyTemplateName() == 'RTBerserkerKnifeAttack' || kAbility.GetMyTemplateName() == 'RTPyroclasticSlash' || kAbility.GetMyTemplateName() == 'RTReprobateWaltz')
 			bShouldTriggerMelee = true;
