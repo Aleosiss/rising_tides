@@ -44,7 +44,8 @@ static function array<X2DataTemplate> CreateTemplates()
 	local array<X2DataTemplate> Templates;
 
 	Templates.AddItem(BumpInTheNight());
-	Templates.AddItem(BumpInTheNightListener());
+	Templates.AddItem(BumpInTheNightBloodlustListener());
+	Templates.AddItem(BumpInTheNightStealthListener());
 	Templates.AddItem(RTBerserkerKnifeAttack());
 	// TODO: Icons
 	Templates.AddItem(PurePassive('RTAcidicBlade', "img:///UILibrary_PerkIcons.UIPerk_salvo", true));
