@@ -28,30 +28,42 @@ function bool PostAbilityCostPaid(XComGameState_Effect EffectState, XComGameStat
 	local bool								bShouldTriggerMelee, bShouldTriggerStandard;
         
         bShouldTriggerStandard = false;
-		bShouldTriggerMelee = false;
+	bShouldTriggerMelee = false;
 
+	// melee kills give bloodlust and extra AP w/ QoB, but standard kills still give stealth
         if(kAbility.GetMyTemplateName() == 'OverwatchShot' ||  kAbility.GetMyTemplateName() == 'StandardShot')
             bShouldTriggerStandard = true;
-		if(kAbility.GetMyTemplateName() == 'RTBerserkerKnifeAttack' || kAbility.GetMyTemplateName() == 'RTPyroclasticSlash' || kAbility.GetMyTemplateName() == 'RTReprobateWaltz')
+	if(kAbility.GetMyTemplateName() == 'RTBerserkerKnifeAttack' || kAbility.GetMyTemplateName() == 'RTPyroclasticSlash' || kAbility.GetMyTemplateName() == 'RTReprobateWaltz')
 			bShouldTriggerMelee = true;
         if(bShouldTriggerStandard || bShouldTriggerMelee) {
             History = `XCOMHISTORY;
             TargetUnit = XComGameState_Unit(NewGameState.GetGameStateForObjectID(AbilityContext.InputContext.PrimaryTarget.ObjectID));
             if(TargetUnit != none && TargetUnit.IsDead()) {
                 if(Attacker.TileDistanceBetween(TargetUnit) < iTileDistanceToActivate) {
-					// t-t-t-t-triggered
-					`XEVENTMGR.TriggerEvent('RTBloodlust_Proc', kAbility, Attacker, NewGameState);
+					// melee kills additionally give bloodlust stacks and proc queen of blades
+					if(bShouldTriggerMelee) {
+						// t-t-t-t-triggered
+						`XEVENTMGR.TriggerEvent('RTBloodlust_Proc', kAbility, Attacker, NewGameState);
 
-					// since we've added a bloodlust stack, we need to check if we should leave the meld
-					if(!Attacker.HasSoldierAbility('RTContainedFury', false) && Attacker.IsUnitAffectedByEffectName('RTEffect_Meld')) {
-						if(class'RTGameState_Ability'.static.getBloodlustStackCount(Attacker) > class'RTAbility_BerserkerAbilitySet'.default.MAX_BLOODLUST_MELDJOIN) {
-							`XEVENTMGR.TriggerEvent('RTRemoveFromMeld', Attacker, Attacker, NewGameState);	
+						// since we've added a bloodlust stack, we need to check if we should leave the meld
+						if(!Attacker.HasSoldierAbility('RTContainedFury', false) && Attacker.IsUnitAffectedByEffectName('RTEffect_Meld')) {
+							if(class'RTGameState_Ability'.static.getBloodlustStackCount(Attacker) > class'RTAbility_BerserkerAbilitySet'.default.MAX_BLOODLUST_MELDJOIN) {
+								`XEVENTMGR.TriggerEvent('RTRemoveFromMeld', Attacker, Attacker, NewGameState);	
+							}
 						}
-					}
+					
+						if(Attacker.HasSoldierAbility('RTQueenOfBlades', false) && Attacker.ActionPoints.Length != PreCostActionPoints.Length) {
+							Attacker.ActionPoints = PreCostActionPoints;
+						}
+					} 
+					
+					// all of the kills give stealth...
+					`XEVENTMGR.TriggerEvent('RTBumpInTheNight_StealthProc', kAbility, Attacker, NewGameState);
+					
 				}
             }
         }
-		// trigger psionic activation for unstable conduit if condition is met
+		// trigger psionic activation for unstable conduit if psionic blades were present and used
 		if(Attacker.HasSoldierAbility('RTPsionicBlades') && bShouldTriggerMelee) {
 			`XEVENTMGR.TriggerEvent('UnitActivatedPsionicAbility', kAbility, Attacker, NewGameState);
 		}
