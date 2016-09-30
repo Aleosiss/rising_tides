@@ -38,8 +38,8 @@ function bool PostAbilityCostPaid(XComGameState_Effect EffectState, XComGameStat
         if(bShouldTriggerStandard || bShouldTriggerMelee) {
             History = `XCOMHISTORY;
             TargetUnit = XComGameState_Unit(NewGameState.GetGameStateForObjectID(AbilityContext.InputContext.PrimaryTarget.ObjectID));
-            if(TargetUnit != none && TargetUnit.IsDead()) {
-                if(Attacker.TileDistanceBetween(TargetUnit) < iTileDistanceToActivate) {
+	if(TargetUnit != none && TargetUnit.IsDead()) {
+		if(Attacker.TileDistanceBetween(TargetUnit) < iTileDistanceToActivate) {
 					// melee kills additionally give bloodlust stacks and proc queen of blades
 					if(bShouldTriggerMelee) {
 						// t-t-t-t-triggered
@@ -63,13 +63,9 @@ function bool PostAbilityCostPaid(XComGameState_Effect EffectState, XComGameStat
 				}
             }
         }
-		// trigger psionic activation for unstable conduit if psionic blades were present and used
-		if(Attacker.HasSoldierAbility('RTPsionicBlades') && bShouldTriggerMelee) {
-			`XEVENTMGR.TriggerEvent('UnitActivatedPsionicAbility', kAbility, Attacker, NewGameState);
-		}
-
-
-
-
+	// trigger psionic activation for unstable conduit if psionic blades were present and used
+	if(Attacker.HasSoldierAbility('RTPsionicBlades') && bShouldTriggerMelee) {
+		`XEVENTMGR.TriggerEvent('UnitActivatedPsionicAbility', kAbility, Attacker, NewGameState);
+	}
         return false;
 }
