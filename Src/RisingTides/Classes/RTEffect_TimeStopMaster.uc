@@ -15,12 +15,22 @@ simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffe
 	// Uh, no...
 	// Oh.
 	AddPersistentStatChange(eStat_DetectionModifier, 1);
-
+	/*
 	History = `XCOMHISTORY;
 	foreach History.IterateByClassType(class'XComGameState_TimerData', OldTimerData) {
 		TimerData = new class'XComGameState_TimerData'(OldTimerData);
 		if(TimerData.TimerType == EGSTT_TurnCount) {
 			TimerData.bStopTime = true;
+		} 
+	}
+	*/
+	History = `XCOMHISTORY;
+	foreach History.IterateByClassType(class'XComGameState_TimerData', OldTimerData) {
+		TimerData = NewGameState.CreateStateObject(OldTimerData.ObjectID);
+		if(TimerData.TimerType == EGSTT_TurnCount) {
+			TimerData.SetTimerData(EGSTDT_None, TimerData.TimerDirection, TimerData.ResetType);
+			NewGameState.AddStateObject(TimerData);
+			break;	
 		} 
 	}
 
@@ -33,7 +43,7 @@ simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffe
 simulated function bool OnEffectTicked(const out EffectAppliedData ApplyEffectParameters, XComGameState_Effect kNewEffectState, XComGameState NewGameState, bool FirstApplication)
 {
 	local XComGameState_AIReinforcementSpawner OldSpawnerState, NewSpawnerState;
-	local XComGameState_UITimer UiTimer;
+	local XComGameState_UITimer UiTimer, NewUiTimer;
 	local XComTacticalController TacticalController;
 	local XComGameState_TimerData TimerData, OldTimerData;
 	local XComGameStateHistory		History;
@@ -58,14 +68,16 @@ simulated function bool OnEffectTicked(const out EffectAppliedData ApplyEffectPa
 	foreach History.IterateByClassType(class'XComGameState_UITimer', UiTimer)
 		break;
 	if (UiTimer != none) {
-		UiTimer.TimerValue++;
+		NewUiTimer = XComGameState_UITimer(NewGameState.CreateStateObject(UiTimer.ObjectID));
+		NewUiTimer.TimerValue++;
 		TacticalController = XComTacticalController(class'WorldInfo'.static.GetWorldInfo().GetALocalPlayerController());
 		if (TacticalController != none)
-			XComPresentationLayer(TacticalController.Pres).UITimerMessage(UiTimer.DisplayMsgTitle, UiTimer.DisplayMsgSubtitle, string(UiTimer.TimerValue), UiTimer.UiState, UiTimer.ShouldShow);
+			XComPresentationLayer(TacticalController.Pres).UITimerMessage(NewUiTimer.DisplayMsgTitle, NewUiTimer.DisplayMsgSubtitle, string(NewUiTimer.TimerValue), NewUiTimer.UiState, NewUiTimer.ShouldShow);
+		NewGameState.AddStateObject(NewUiTimer);
 	}
 
 	
-	
+
 	foreach History.IterateByClassType(class'XComGameState_AIReinforcementSpawner', OldSpawnerState) {
 		NewSpawnerState = XComGameState_AIReinforcementSpawner(NewGameState.CreateStateObject(class'XComGameState_AIReinforcementSpawner', OldSpawnerState.ObjectID));
 		NewSpawnerState.Countdown = OldSpawnerState.Countdown + 1;
