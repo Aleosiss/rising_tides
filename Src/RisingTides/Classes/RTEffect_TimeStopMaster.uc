@@ -1,6 +1,7 @@
 class RTEffect_TimeStopMaster extends X2Effect_PersistentStatChange;
 
 var bool bWasPreviouslyTrue;
+var EDirectionType CachedTimerDirection;
 
 
 simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffectParameters, XComGameState_BaseObject kNewTargetState, XComGameState NewGameState, XComGameState_Effect NewEffectState)
@@ -28,7 +29,8 @@ simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffe
 	foreach History.IterateByClassType(class'XComGameState_TimerData', OldTimerData) {
 		TimerData = NewGameState.CreateStateObject(OldTimerData.ObjectID);
 		if(TimerData.TimerType == EGSTT_TurnCount) {
-			TimerData.SetTimerData(EGSTDT_None, TimerData.TimerDirection, TimerData.ResetType);
+			CachedTimerDirection = TimerData.TimerDirection;
+			TimerData.SetTimerData(TimerData.TimerType, EGSTDT_None, TimerData.ResetType);
 			NewGameState.AddStateObject(TimerData);
 			break;	
 		} 
@@ -90,14 +92,15 @@ simulated function OnEffectRemoved(const out EffectAppliedData ApplyEffectParame
 {
 	local XComGameState_TimerData TimerData, OldTimerData;
 	local XComGameStateHistory		History;
-	/*
+	
 	History = `XCOMHISTORY;
 	foreach History.IterateByClassType(class'XComGameState_TimerData', OldTimerData) {
-		TimerData = new class'XComGameState_TimerData'(OldTimerData);
+		TimerData = NewGameState.CreateStateObject(OldTimerData.ObjectID);
 		if(TimerData.TimerType == EGSTT_TurnCount) {
-			TimerData.bStopTime = false;
+			TimerData.SetTimerData(TimerData.TimerType, CachedTimerDirection, TimerData.ResetType);
 			NewGameState.AddStateObject(TimerData);
+			break;	
 		} 
 	}  
-	*/
+	
 }	   
