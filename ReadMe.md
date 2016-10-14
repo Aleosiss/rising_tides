@@ -18,15 +18,18 @@ This would be a bare-bones content mod. I also have the following content in min
 
 ###### Current TODOs: 
       - Harbinger meld listeners (affected unit still doesn't cleanse tag unit of tag effect atm)
-      - BerserkerAbilitySet
+      - Verify that Sovereign actually does anything (revert implementation if not the case) 
+      - Implement Supporting Fire
+      - Implement Ghost in the Shell (look into kismet/umap)
+      - Implement Time Stop timer changes (look into kismet/umap)
+      - Implement Shadow Strike (look into Musashi's Katanas)
+      - Implement Dashing Strike
               
 
 ###### Current Unresolved:
       - Visuals
 ###### Current Table
       - Triangulation: Spread Over the Shoulder to all melded allies.
-      - Bump in the Night beginning implementation. http://hastebin.com/viqogonece.java 
-        - Still needs a custom EffectState to implement stat changes OnRefresh.
 ###### Current Bugs
       - Time Stop damage calculation isn't visualized properly
       - Shock And Awe readout not displayed
