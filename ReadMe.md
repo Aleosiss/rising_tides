@@ -24,6 +24,7 @@ This would be a bare-bones content mod. I also have the following content in min
       - Implement Time Stop timer changes (look into kismet/umap)
       - Implement Shadow Strike (look into Musashi's Katanas)
       - Implement Dashing Strike
+      - Add a condition for Siphon anywhere it's been added because it looks like I forgot
               
 
 ###### Current Unresolved:
