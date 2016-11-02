@@ -1,4 +1,4 @@
-// This is an Unreal Script
+// Remove the effect from the unit and remove the tag effect from the source
 
 class RTGameState_Harbinger extends XComGameState_Effect;
 
@@ -15,8 +15,10 @@ function EventListenerReturn RemoveHarbingerEffect(Object EventData, Object Even
 	{
 		RemoveContext = class'XComGameStateContext_EffectRemoved'.static.CreateEffectRemovedContext(self);
 		NewGameState = `XCOMHISTORY.CreateNewGameState(true, RemoveContext);
+		// remove effect
 		RemoveEffect(NewGameState, GameState);
 
+		// remove tag effect from source
 		History = `XCOMHISTORY;
 		SourceUnitState = XComGameState_Unit(History.GetGameStateForObjectID(ApplyEffectParameters.SourceStateObjectRef.ObjectID));
 		foreach SourceUnitState.AffectedByEffects(EffectRef) {
