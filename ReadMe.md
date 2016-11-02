@@ -24,6 +24,7 @@ This would be a bare-bones content mod. I also have the following content in min
       - Implement Time Stop timer changes (look into kismet/umap)
       - Implement Shadow Strike (look into Musashi's Katanas)
       - Implement Dashing Strike
+      - Verify FilterObjs for all EventListeners!
       - Finish Pyroclastic Flow:
             - pyroclastic flow does not grant additional movement speed while target unit is burning.
             - pyroclastic flow does not grant additional burning effect on hit while target unit is burning.
