@@ -17,14 +17,10 @@ This would be a bare-bones content mod. I also have the following content in min
 >- New enemy units, possible returns from EW
 
 ###### Current TODOs: 
-      - Harbinger meld listeners (affected unit still doesn't cleanse tag unit of tag effect atm)
       - Verify that Sovereign actually does anything (revert implementation if not the case) 
-      - Implement Persisting Images (look into Musashi's Spec Ops)
-      - Implement Ghost in the Shell (look into kismet/umap)
-      - Implement Time Stop timer changes (look into kismet/umap)
+      - Implement Ghost in the Shell (look into kismet/umap) 50%
       - Implement Shadow Strike (look into Musashi's Katanas)
       - Implement Dashing Strike
-      - Verify FilterObjs for all EventListeners!
       - Finish Pyroclastic Flow:
             - pyroclastic flow does not grant additional movement speed while target unit is burning.
             - pyroclastic flow does not grant additional burning effect on hit while target unit is burning.
