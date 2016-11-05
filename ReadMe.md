@@ -17,16 +17,23 @@ This would be a bare-bones content mod. I also have the following content in min
 >- New enemy units, possible returns from EW
 
 ###### Current TODOs: 
-      - Harbinger meld listeners (affected unit still doesn't cleanse tag unit of tag effect atm)
-      - BerserkerAbilitySet
+      - Verify that Sovereign actually does anything (revert implementation if not the case) 
+      - Change how the Meld affects will (override will/psioffense completely to meld strength)
+      - Change how the Meld calculates its strength (highest unit + 1/10 each additional unit)
+      - Implement Ghost in the Shell (look into kismet/umap) 50%
+      - Implement Shadow Strike (look into Musashi's Katanas)
+      - Implement Dashing Strike
+      - Finish Pyroclastic Flow:
+            - pyroclastic flow does not grant additional movement speed while target unit is burning.
+            - pyroclastic flow does not grant additional burning effect on hit while target unit is burning.
+            - pyroclastic flow targeting style may be incorrect.
               
 
 ###### Current Unresolved:
       - Visuals
 ###### Current Table
       - Triangulation: Spread Over the Shoulder to all melded allies.
-      - Bump in the Night beginning implementation. http://hastebin.com/viqogonece.java 
-        - Still needs a custom EffectState to implement stat changes OnRefresh.
+      - Shatter The Line: If this unit kills an enemy within X tiles, it triggers a flush effect on other enemies within X tiles. 2/3 turn cooldown. credits to /u/PostOfficeBuddy
 ###### Current Bugs
       - Time Stop damage calculation isn't visualized properly
       - Shock And Awe readout not displayed
