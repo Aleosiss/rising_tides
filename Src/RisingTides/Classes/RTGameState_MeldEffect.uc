@@ -9,7 +9,7 @@ class RTGameState_MeldEffect extends XComGameState_Effect config(RTGhost);
 
 var array<StateObjectReference> Members;
 var StateObjectReference		MeldHost, GameStateHost;
-var float CombinedWill, SharedHack;
+var float CombinedWill, SharedHack, MeldStrength;
 var bool bHasYourHandsMyEyes;
 
 // Initialize(XComGameState_Unit MeldMaker)
@@ -64,7 +64,8 @@ function RTGameState_MeldEffect Initialize(XComGameState_Unit MeldMaker)
 		Members = ParentMeldEffect.Members;
 		Members.AddItem(MeldMaker.GetReference());
 
-		CombinedWill = GetCombinedWill(Members.Length);
+		//CombinedWill = GetCombinedWill(Members.Length);
+		MeldStrength = GetMeldStrength();
 
 		bHasYourHandsMyEyes = ParentMeldEffect.bHasYourHandsMyEyes;
 		if(bHasYourHandsMyEyes)
@@ -111,6 +112,28 @@ static function int GetCombinedWill(int numOfMembers)
 
 }
 
+// GetMeldStrength()
+simulated function int GetMeldStrength() {
+	local float LocalMeldStrength;
+	local XComGameStateHistory History;
+	local StateObjectReference UnitRef;
+
+	History = `XCOMHISTORY;
+
+	foreach Members (UnitRef) {
+		LocalMeldStrength = max(XComGameState_Unit(History.GetGameStateForObjectID(UnitRef.ObjectID)).GetBaseStat(eStat_Will), LocalMeldStrength);
+	}
+	foreach Members (UnitRef) {
+		if(UnitRef.ObjectID == GameStateHost.ObjectID)
+			continue;
+		LocalMeldStrength += int(XComGameState_Unit(History.GetGameStateForObjectID(UnitRef.ObjectID)).GetBaseStat(eStat_Will) / 10);
+	}
+	MeldStrength = LocalMeldStrength;
+	return LocalMeldStrength;
+
+}
+
+
 // RemakeSelf(RTGameState_MeldEffect OtherMeldEffect)
 simulated function RemakeSelf(RTGameState_MeldEffect OtherMeldEffect)
 {
@@ -122,6 +145,7 @@ simulated function RemakeSelf(RTGameState_MeldEffect OtherMeldEffect)
 	SharedHack = OtherMeldEffect.SharedHack;
 	StatChanges = OtherMeldEffect.StatChanges;
 	CombinedWill = OtherMeldEffect.CombinedWill;
+	MeldStrength = OtherMeldEffect.MeldStrength;
 }
 
 // Tactical Game Cleanup
@@ -161,7 +185,7 @@ simulated function EventListenerReturn AddUnitToMeld(Object EventData, Object Ev
 	local X2EventManager					EventManager;
 	local XComGameState						NewGameState;
 	local XComGameStateHistory				History;
-	local float								HackModifier;
+	local float								HackModifier, MeldWillModifier, MeldPsiOffModifier;
 		
 		
 	History = `XCOMHISTORY;
@@ -209,13 +233,16 @@ simulated function EventListenerReturn AddUnitToMeld(Object EventData, Object Ev
 	UpdatedMeldEffect.Members = CurrentMeldEffect.Members;
 	UpdatedMeldEffect.Members.AddItem(EnteringMeldUnit.GetReference());
 	UpdatedMeldEffect.CombinedWill = GetCombinedWill(UpdatedMeldEffect.Members.Length);
-	HackModifier = UpdatedMeldEffect.SharedHack - GameStateHostUnit.GetBaseStat(eStat_Hacking);
+	UpdatedMeldEffect.MeldStrength = UpdatedMeldEffect.GetMeldStrength();
 
+	HackModifier = UpdatedMeldEffect.SharedHack - GameStateHostUnit.GetBaseStat(eStat_Hacking);
+	MeldWillModifier = UpdatedMeldEffect.MeldStrength - GameStateHostUnit.GetBaseStat(eStat_Will);
+	MeldPsiOffModifier = UpdatedMeldEffect.MeldStrength - GameStateHostUnit.GetBaseStat(eStat_PsiOffense);
 
 	UpdatedMeldEffect.StatChanges.Length = 0;
-	AddPersistentStatChange(UpdatedMeldEffect.StatChanges, eStat_Will, UpdatedMeldEffect.CombinedWill);
+	AddPersistentStatChange(UpdatedMeldEffect.StatChanges, eStat_Will, MeldWillModifier);
 	AddPersistentStatChange(UpdatedMeldEffect.StatChanges, eStat_Hacking, HackModifier);
-	AddPersistentStatChange(UpdatedMeldEffect.StatChanges, eStat_PsiOffense, UpdatedMeldEffect.CombinedWill);
+	AddPersistentStatChange(UpdatedMeldEffect.StatChanges, eStat_PsiOffense, MeldPsiOffModifier);
 
 
 	RemakeSelf(UpdatedMeldEffect);
@@ -245,7 +272,7 @@ simulated function EventListenerReturn RemoveUnitFromMeld(Object EventData, Obje
 	local XComGameStateHistory				History;
 	local Object							ListenerObj;
 	local int								Index;
-	local float								HackModifier;
+	local float								HackModifier, MeldWillModifier, MeldPsiOffModifier;
 
 	`LOG("Rising Tides: RemoveUnitToMeld called by " @ EventID);
 	History = `XCOMHISTORY;
@@ -323,22 +350,32 @@ simulated function EventListenerReturn RemoveUnitFromMeld(Object EventData, Obje
 				if(MeldIndexUnit.GetBaseStat(eStat_Hacking) > UpdatedMeldEffect.SharedHack)
 				{
 					UpdatedMeldEffect.SharedHack = MeldIndexUnit.GetBaseStat(eStat_Hacking);
+					
 				}
-			}
+			} 
 		}
+		// reset hack modifier
+		if(UpdatedMeldEffect.bHasYourHandsMyEyes) {
+			HackModifier = UpdatedMeldEffect.SharedHack - GameStateHostUnit.GetBaseStat(eStat_Hacking);
+		} else {
+			HackModifier = 0;
+		}
+
+	} else {
+			HackModifier = 0;
 	}
-	
-	 
 	// Remake member list, then recombine will
 	UpdatedMeldEffect.Members = CurrentMeldEffect.Members;
 	UpdatedMeldEffect.CombinedWill = GetCombinedWill(UpdatedMeldEffect.Members.Length);
-	HackModifier = UpdatedMeldEffect.SharedHack - GameStateHostUnit.GetBaseStat(eStat_Hacking);
+	UpdatedMeldEffect.MeldStrength = UpdatedMeldEffect.GetMeldStrength();
 
+	MeldWillModifier = UpdatedMeldEffect.MeldStrength - GameStateHostUnit.GetBaseStat(eStat_Will);
+	MeldPsiOffModifier = UpdatedMeldEffect.MeldStrength - GameStateHostUnit.GetBaseStat(eStat_PsiOffense);
 
 	UpdatedMeldEffect.StatChanges.Length = 0;
-	AddPersistentStatChange(UpdatedMeldEffect.StatChanges, eStat_Will, UpdatedMeldEffect.CombinedWill);
+	AddPersistentStatChange(UpdatedMeldEffect.StatChanges, eStat_Will, MeldWillModifier);
 	AddPersistentStatChange(UpdatedMeldEffect.StatChanges, eStat_Hacking, HackModifier);
-	AddPersistentStatChange(UpdatedMeldEffect.StatChanges, eStat_PsiOffense, UpdatedMeldEffect.CombinedWill);
+	AddPersistentStatChange(UpdatedMeldEffect.StatChanges, eStat_PsiOffense, MeldPsiOffModifier);
 
 
 	RemakeSelf(UpdatedMeldEffect);

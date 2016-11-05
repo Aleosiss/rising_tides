@@ -1,13 +1,19 @@
 ﻿;Place localized text in this file
 
-[RTMarksman X2SoldierClassTemplate]
+; [ X2AbilityTemplate]
+; LocFriendlyName=""
+; LocLongDescription=""
+; LocHelpText=""
+; LocFlyOverText=""
+; LocPromotionPopupText="<Bullet/> <br/><Bullet/> <br/><Bullet/> <br/><Bullet/> <br/>"
+
+
+[RT_Marksman X2SoldierClassTemplate]
 DisplayName="GHOST Marksman"
 ClassSummary="Whisper is the unit's designated marksman and tech expert."
-LeftAbilityTreeTitle="Active Targeting"
-RightAbilityTreeTitle="Passive Targeting"
-;ALPHABETICAL ORDER
+LeftAbilityTreeTitle="Peeker"
+RightAbilityTreeTitle="Watcher"
 RandomNickNames[0]="Whisper"
-;ALPHABETICAL ORDER
 
 [ScopedAndDropped X2AbilityTemplate]
 LocFriendlyName="Scoped And Dropped"
@@ -116,7 +122,7 @@ LocFlyOverText="Sovereign"
 LocPromotionPopupText="<Bullet/>Kill shots have a small chance to inflict panic on nearby foes. Ineffective versus psionic or robotic enemies.<br/>"
 
 [DaybreakFlame X2AbilityTemplate]
-LocFriendlyName="Fire Sniper Rifle"
+LocFriendlyName="Fire Sniper Rifle (Daybreak Flame)"
 LocHelpText="Fire your sniper rifle at a target."
 LocLongDescription="<Bullet/> The sniper rifle is powerful and accurate at long range, but usually requires two actions to fire<br><Bullet/>Firing the primary weapon always ends a soldier's turn<br>"
 
@@ -125,7 +131,7 @@ LocFriendlyName="Daybreak Flame"
 LocLongDescription="Pyrokinetically-enhanced rounds punch through cover, shredding armor, and ignoring line of sight."
 LocHelpText="Pyrokinetically-enhanced rounds punch through cover, shredding armor, and ignoring line of sight."
 LocFlyOverText="Daybreak Flame"
-LocPromotionPopupText="<Bullet/>Pyrokinetically-enhanced rounds punch through cover, shredding armor, and ignoring line of sight.<br/>"
+LocPromotionPopupText="<Bullet/>Pyrokinetically-enhanced rounds punch through cover, shredding armor, and ignoring line of sight.<br/><Bullet/>This ability only replaces standard sniper shots and does not add additional effects to other shots.<br/>"
 
 [YourHandsMyEyes X2AbilityTemplate]
 LocFriendlyName="Your Hands, My Eyes"
@@ -139,7 +145,7 @@ LocFriendlyName="GHOST Ability Suite"
 LocLongDescription="A Ghost's standard set of abilities."
 LocHelpText="Standard Ghost ability set."
 LocFlyOverText="Ghost Ability Suite"
-LocPromotionPopupText="<Bullet/>Ghosts are trained in mind control, telepathy, telekinesis, and the meld.<br/>"
+LocPromotionPopupText="<Bullet/>Ghosts are trained in mind control, telepathy, telekinesis, and usage of the meld.<br/>"
 
 [JoinMeld X2AbilityTemplate]
 LocFriendlyName="Enter Meld"
@@ -179,7 +185,7 @@ LocPromotionPopupText="<Bullet/>This unit can spontaenously take covering fire r
 [TimeStandsStill X2AbilityTemplate]
 LocFriendlyName="Time Stands Still"
 LocLongDescription="Throw a wrench in the gears of the universe for a brief moment. Allies and Enemies alike become Greyscaled, losing their ability to affect or percieve the world around them."
-LocHelpText="Za Warudo! Toki yo, tomare!"
+LocHelpText="The World! Stop Time!"
 LocFlyOverText="Time Stands Still"
 LocPromotionPopupText="<Bullet/>Throw a wrench in the gears of the universe for a brief moment. Allies and Enemies alike become Greyscaled, losing their ability to affect or percieve the world around them.<br/>"
 
@@ -245,3 +251,127 @@ LocLongDescription="When this unit deals more than 25 damage in a single turn, i
 LocHelpText="When this unit deals more than 25 damage in a single turn, it disorients all nearby enemies"
 LocFlyOverText="Shock And Awe"
 LocPromotionPopupText="<Bullet/> When this unit deals more than 25 damage in a single turn, it disorients all nearby enemies<br/>"
+
+[RT_Berserker X2SoldierClassTemplate]
+DisplayName="GHOST Berserker"
+ClassSummary="Queen is the unit's leader and close-combat specialist."
+LeftAbilityTreeTitle="Rampager"
+RightAbilityTreeTitle="Operator"
+RandomNickNames[0]="Queen"
+
+[BumpInTheNight X2AbilityTemplate]
+LocFriendlyName="Bump In The Night"
+LocLongDescription="This unit gains Stealth after killing a unit within 3 tiles. If it was a melee kill, additionally gain a stack of Bloodlust."
+LocHelpText="Gain Stealth after killing a unit within 3 tiles. Melee kills additionally grant a stack of Bloodlust."
+LocFlyOverText="Bump In The Night"
+LocPromotionPopupText="<Bullet/>This unit gains Stealth after killing a unit within 3 tiles. <br/><Bullet/>If it was a melee kill, additionally gain a stack of Bloodlust. <br/><Bullet/> <br/><Bullet/> <br/>"
+
+[RTBerserkerKnifeAttack X2AbilityTemplate]
+LocFriendlyName="Slash"
+LocLongDescription="Attack any enemy within movement range with your <Ability:SecondaryWeaponName/>."
+LocHelpText="Attack an enemy within movement range with your <Ability:SecondaryWeaponName/>."
+LocPromotionPopupText="<Bullet/> You can trigger the Slash ability by placing the movement cursor over an enemy.<br/><Bullet/> A Berserker can perform a \"Dash\" move, using both actions to move, and still trigger a Slash against an adjacent enemy.<br/>"
+
+[RTBurst X2AbilityTemplate]
+LocFriendlyName="Burst"
+LocLongDescription="Unleash a burst of psionic energy, damaging surrounding enemies and tiles."
+LocHelpText="Unleash a burst of psionic energy, damaging surrounding enemies and tiles."
+LocFlyOverText="Burst"
+LocPromotionPopupText="<Bullet/>Unleash a burst of psionic energy, damaging surrounding enemies and tiles.<br/>"
+
+[RTBlur X2AbilityTemplate]
+LocFriendlyName="Blur"
+LocLongDescription="Gain additional dodge, movement, and defense."
+LocHelpText="Gain additional dodge, movement, and defense."
+LocFlyOverText=""
+LocPromotionPopupText="<Bullet/>Gain additional dodge, movement, and defense.<br/>"
+
+[RTPurge X2AbilityTemplate]
+LocFriendlyName="Purge"
+LocLongDescription="Purge your bloodlust and regain concealment."
+LocHelpText="Lose five stacks of bloodlust. Gain concealment."
+LocFlyOverText="Purge"
+LocPromotionPopupText="<Bullet/>Lose five stacks of bloodlust. Gain concealment.<br/>"
+
+[RTMentor X2AbilityTemplate]
+LocFriendlyName="Mentor"
+LocLongDescription="Lend a friendly melded unit psionic support though the meld."
+LocHelpText="Lend a friendly melded unit psionic support though the meld."
+LocFlyOverText="Mentor"
+LocPromotionPopupText="<Bullet/>Lend a friendly melded unit psionic support though the meld.<br/><Bullet/>Grants +60 Will and Psi Offense to targeted unit.<br/>"
+
+[RTReprobateWaltz X2AbilityTemplate]
+LocFriendlyName="Reprobate Waltz"
+LocLongDescription="Whenever this unit uses a melee attack, there is a chance to attack again, increasing with Bloodlust stacks."
+LocHelpText="Whenever this unit uses a melee attack, there is a chance to attack again, increasing with Bloodlust stacks."
+LocFlyOverText="Reprobate Waltz"
+LocPromotionPopupText="<Bullet/>Whenever this unit uses a melee attack, there is a chance to attack again, increasing with Bloodlust stacks.<br/>"
+
+[RTPyroclasticFlow X2AbilityTemplate]
+LocFriendlyName="Pyroclastic Flow"
+LocLongDescription="When this unit is affected by burning, it gains additional movement speed, and its melee attacks gain additional fire damage."
+LocHelpText="When this unit is affected by burning, it gains additional movement speed, and its melee attacks gain additional fire damage."
+LocFlyOverText="Pyroclastic Flow"
+LocPromotionPopupText="<Bullet/>When this unit is affected by burning, it gains additional movement speed, and its melee attacks gain additional fire damage.<br/>"
+
+[RTPyroclasticSlash X2AbilityTemplate]
+LocFriendlyName="Slash"
+LocLongDescription="Attack any enemy within movement range with your <Ability:SecondaryWeaponName/>."
+LocHelpText="Attack an enemy within movement range with your <Ability:SecondaryWeaponName/>."
+LocPromotionPopupText="<Bullet/> You can trigger the Slash ability by placing the movement cursor over an enemy.<br/><Bullet/> A Berserker can perform a \"Dash\" move, using both actions to move, and still trigger a Slash against an adjacent enemy.<br/>"
+
+[RTContainedFury X2AbilityTemplate]
+LocFriendlyName="Contained Fury"
+LocLongDescription="This unit's meld status is no longer affected by Bloodlust stacks."
+LocHelpText="This unit's meld status is no longer affected by Bloodlust stacks."
+LocFlyOverText="Contained Fury"
+LocPromotionPopupText="<Bullet/This unit's meld status is no longer affected by Bloodlust stacks.<br/>"
+
+[RTContainedFuryMeldJoin X2AbilityTemplate]
+LocFriendlyName="Enter Meld"
+LocLongDescription="Enter the meld, gaining increased will and sharing certain abilities."
+LocHelpText="Enter the meld, gaining increased will and sharing certain abilities."
+LocFlyOverText="Enter Meld"
+LocPromotionPopupText="<Bullet/>Enter the meld, gaining increased will and sharing certain abilities.<br/>"
+
+[RTUnstableConduit X2AbilityTemplate]
+LocFriendlyName="Unstable Tempest"
+LocLongDescription="Whenever this unit uses a psionic ability, it triggers a Burst around it and all melded allies."
+LocHelpText="Whenever this unit uses a psionic ability, it triggers a Burst around it and all melded allies."
+LocFlyOverText="Unstable Tempest"
+LocPromotionPopupText="<Bullet/>Whenever this unit uses a psionic ability, it triggers a Burst around it and all melded allies.<br/><Bullet/>Certain abilities are not considered to be Psionic for the purposes of this ability, like Join Meld and Leave Meld.<br/>"
+
+[RTPersistingImages X2AbilityTemplate]
+LocFriendlyName="Persisting Images"
+LocLongDescription="Whenever this unit gains Stealth, it creates a afterimage of itself nearby."
+LocHelpText="Whenever this unit gains Stealth, it creates a afterimage of itself nearby."
+LocFlyOverText="Persisting Images"
+LocPromotionPopupText="<Bullet/>Whenever this unit gains Stealth, it creates a afterimage of itself nearby.<br/>"
+
+[RTUnstableConduitIcon X2AbilityTemplate]
+LocFriendlyName="Unstable Tempest"
+LocLongDescription="Whenever this unit uses a psionic ability, it triggers a Burst around it and all melded allies."
+LocHelpText="Whenever this unit uses a psionic ability, it triggers a Burst around it and all melded allies."
+LocFlyOverText="Unstable Tempest"
+LocPromotionPopupText="<Bullet/>Whenever this unit uses a psionic ability, it triggers a Burst around it and all melded allies.<br/><Bullet/>Certain abilities are not considered to be Psionic for the purposes of this ability, like Join Meld and Leave Meld.<br/>"
+
+[RTPersistingImagesIcon X2AbilityTemplate]
+LocFriendlyName="Persisting Images"
+LocLongDescription="Whenever this unit gains Stealth, it creates a afterimage of itself nearby."
+LocHelpText="Whenever this unit gains Stealth, it creates a afterimage of itself nearby."
+LocFlyOverText="Persisting Images"
+LocPromotionPopupText="<Bullet/>Whenever this unit gains Stealth, it creates a afterimage of itself nearby.<br/>"
+
+[RTGhostInTheShell X2AbilityTemplate]
+LocFriendlyName="Ghost In The Shell"
+LocLongDescription="When this unit interacts with objectives, it is not unconcealed."
+LocHelpText="When this unit interacts with objectives, it is not unconcealed."
+LocFlyOverText="Ghost In The Shell"
+LocPromotionPopupText="<Bullet/>When this unit interacts with objectives, it is not unconcealed.<br/>"
+
+[RTQueenOfBlades X2AbilityTemplate]
+LocFriendlyName="The Queen of Blades"
+LocLongDescription="If a melee attack kills a unit, the action points for the attack are refunded."
+LocHelpText="If a melee attack kills a unit, the action points for the attack are refunded."
+LocFlyOverText="The Queen of Blades"
+LocPromotionPopupText="<Bullet/>If a melee attack kills a unit, the action points for the attack are refunded.<br/>"

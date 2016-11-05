@@ -3,16 +3,17 @@
 class RTEffect_ShockAndAwe extends X2Effect_Persistent;
 
 var int iDamageRequiredToActivate;
-
+/*
 function bool PostAbilityCostPaid(XComGameState_Effect EffectState, XComGameStateContext_Ability AbilityContext, XComGameState_Ability kAbility, XComGameState_Unit Attacker, XComGameState_Item AffectWeapon, XComGameState NewGameState, const array<name> PreCostActionPoints, const array<name> PreCostReservePoints)
 {
-		local XComGameState_Unit			EffectTargetUnit, PanicTargetUnit;
+	local XComGameState_Unit			EffectTargetUnit, PanicTargetUnit;
 	local X2EventManager					EventMgr;
 	local XComGameState_Ability				AbilityState;
 	local UnitValue							DamageDealt, ShockCounter;
 	local int								iTotalDamageDealt;
 	local bool								bIsStandardFire, bIsMindWrack, bDealtDamage;
 
+	`LOG("Shock N' Awe called!");
 	bIsStandardFire = false;
 	bIsMindWrack = false;
 	
@@ -43,7 +44,7 @@ function bool PostAbilityCostPaid(XComGameState_Effect EffectState, XComGameStat
 				Attacker.SetUnitFloatValue('ShockAndAweCounter', iTotalDamageDealt, eCleanup_BeginTurn);
 			}												 
 		}
-	}																		
+	} 																		
 	return false;
-}
+} */
 

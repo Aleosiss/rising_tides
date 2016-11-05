@@ -26,8 +26,12 @@ simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffe
 		UnitState.SetUnitFloatValue('UnitPreviouslyConcealed', 0, eCleanUp_BeginTactical);
 	}
 	
-	if (UnitState != none && !bWasPreviouslyConcealed)
+	if (UnitState != none && !bWasPreviouslyConcealed) {
 		`XEVENTMGR.TriggerEvent('EffectEnterUnitConcealment', UnitState, UnitState, NewGameState);
+		// special stealth-only notification for abilities that trigger on stealth gain.
+		// in this block so that we don't have Persisting Images procing when ghosting
+		`XEVENTMGR.TriggerEvent('UnitEnteredRTSTealth', UnitState, UnitState, NewGameState);
+	}
 	
 	AddPersistentStatChange(eStat_DetectionModifier, fStealthModifier);
 	super.OnEffectAdded(ApplyEffectParameters, kNewTargetState, NewGameState, NewEffectState);
@@ -61,7 +65,6 @@ DefaultProperties
 {
 	EffectName = "RTStealth"
 	fStealthModifier=0.9f
-	bWasPreviouslyConcealed = false
 	DuplicateResponse = eDupe_Refresh
 	bStackOnRefresh = true
 	bRemoveWhenTargetConcealmentBroken = true

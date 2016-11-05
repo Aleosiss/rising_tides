@@ -283,6 +283,7 @@ static function X2AbilityTemplate LeaveMeld()
 	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_HideIfOtherAvailable;
 	Template.ShotHUDPriority = class'UIUtilities_Tactical'.const.CLASS_CORPORAL_PRIORITY;
 	Template.HideIfAvailable.AddItem('JoinMeld');
+	Template.HideIfAvailable.AddItem('RTContainedFuryMeldJoin');
 	Template.Hostility = eHostility_Neutral;
 
 	Template.AbilityCosts.AddItem(default.FreeActionCost);

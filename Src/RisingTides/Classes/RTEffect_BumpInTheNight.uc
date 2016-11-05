@@ -52,7 +52,7 @@ function bool PostAbilityCostPaid(XComGameState_Effect EffectState, XComGameStat
 							}
 						}
 					
-						if(Attacker.HasSoldierAbility('RTQueenOfBlades', false) && Attacker.ActionPoints.Length != PreCostActionPoints.Length) {
+						if(Attacker.HasSoldierAbility('RTQueenOfBlades', true) && Attacker.ActionPoints.Length != PreCostActionPoints.Length) {
 							Attacker.ActionPoints = PreCostActionPoints;
 						}
 					} else {

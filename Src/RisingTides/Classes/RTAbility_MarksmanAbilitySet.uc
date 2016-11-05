@@ -27,6 +27,7 @@ class RTAbility_MarksmanAbilitySet extends RTAbility_GhostAbilitySet
 	var config int HEATCHANNEL_COOLDOWN;
 	var config int HARBINGER_SHIELD_AMOUNT, HARBINGER_COOLDOWN, HARBINGER_DAMAGE_BONUS, HARBINGER_WILL_BONUS, HARBINGER_AIM_BONUS, HARBINGER_ARMOR_BONUS;
 	var config int SHOCKANDAWE_DAMAGE_TO_ACTIVATE;
+	var config int SOVEREIGN_PANIC_CHANCE;
 
 //---------------------------------------------------------------------------------------
 //---CreateTemplates---------------------------------------------------------------------
@@ -103,6 +104,8 @@ static function X2AbilityTemplate ScopedAndDropped()
 	ScopedEffect = new class'RTEffect_ScopedAndDropped';
 	ScopedEffect.BuildPersistentEffect(1, true, true, true);
 	ScopedEffect.SetDisplayInfo(ePerkBuff_Passive, Template.LocFriendlyName, Template.LocLongDescription, Template.IconImage, true,,Template.AbilitySourceName);
+	ScopedEffect.iPanicChance = default.SOVEREIGN_PANIC_CHANCE;
+	ScopedEffect.iDamageRequiredToActivate = default.SHOCKANDAWE_DAMAGE_TO_ACTIVATE;
 	Template.AddTargetEffect(ScopedEffect);
 	
 	SSEffect = new class'RTEffect_Squadsight';
@@ -775,9 +778,6 @@ static function X2AbilityTemplate SixOClockEffect()
 	MultiTarget = new class'X2AbilityMultiTarget_Radius';
 	MultiTarget.fTargetRadius = 500;
 
-	// This should really be false, because it makes no sense that 
-	// Whisper can somehow see units behind cover, but it murders FPS
-	// whenever it recalculates, so true for now
 	MultiTarget.bIgnoreBlockingCover = true;
 	Template.AbilityMultiTargetStyle = MultiTarget;
 
@@ -990,9 +990,10 @@ static function X2AbilityTemplate Sovereign()
 static function X2AbilityTemplate SovereignEffect()
 {
 	local X2AbilityTemplate						Template;
-	local X2Condition_UnitProperty				UnitPropertyCondition;
+	local X2Condition_UnitProperty				MultiUnitPropertyCondition, UnitPropertyCondition;
 	local X2Effect_Panicked				        PanicEffect;
  	local X2AbilityTrigger_EventListener		EventListener;
+	local X2AbilityMultiTarget_Radius			MultiTarget;
 
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'SovereignEffect');
 	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_voidadept";
@@ -1001,12 +1002,15 @@ static function X2AbilityTemplate SovereignEffect()
 	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_NeverShow;
 	Template.Hostility = eHostility_Neutral;
 
-	UnitPropertyCondition = new class'X2Condition_UnitProperty';
-	UnitPropertyCondition.ExcludeDead = true;
-	UnitPropertyCondition.ExcludeFriendlyToSource = true;
-	UnitPropertyCondition.ExcludeRobotic = true;
-	UnitPropertyCondition.FailOnNonUnits = true;
-	Template.AbilityTargetConditions.AddItem(UnitPropertyCondition);
+	//UnitPropertyCondition = new class'X2Condition_UnitProperty';
+	//UnitPropertyCondition.ExcludeAlive = true;
+	//Template.AbilityTargetConditions.AddItem(UnitPropertyCondition);
+
+	MultiUnitPropertyCondition = new class'X2Condition_UnitProperty';
+	MultiUnitPropertyCondition.ExcludeFriendlyToSource = true;
+	MultiUnitPropertyCondition.ExcludeRobotic = true;
+	MultiUnitPropertyCondition.FailOnNonUnits = true;
+	Template.AbilityMultiTargetConditions.AddItem(MultiUnitPropertyCondition);
 
 	EventListener = new class'X2AbilityTrigger_EventListener';
 	EventListener.ListenerData.EventID = 'SovereignTrigger';
@@ -1015,15 +1019,17 @@ static function X2AbilityTemplate SovereignEffect()
 	EventListener.ListenerData.EventFn = class'XComGameState_Ability'.static.VoidRiftInsanityListener;
 	Template.AbilityTriggers.AddItem(EventListener);
 
-	//  Panic effect for 1+ unblocked psi hits
 	PanicEffect = class'X2StatusEffects'.static.CreatePanickedStatusEffect();
-	PanicEffect.MinStatContestResult = 1;
-	PanicEffect.MaxStatContestResult = 0;
-	PanicEffect.DamageTypes.AddItem('Mental');
-	Template.AddTargetEffect(PanicEffect);
+	Template.AddMultiTargetEffect(PanicEffect);
+
+	MultiTarget = new class'X2AbilityMultiTarget_Radius';
+	MultiTarget.bIgnoreBlockingCover = true;
+	MultiTarget.fTargetRadius = 5;
 
 	Template.AbilityTargetStyle = default.SimpleSingleTarget;
 	Template.AbilityShooterConditions.AddItem(default.LivingShooterProperty);
+	Template.AbilityMultiTargetStyle = MultiTarget;
+	Template.AbilityCosts.AddItem(default.FreeActionCost);
 	Template.AddShooterEffectExclusions();
 
 	Template.AbilityToHitCalc = default.DeadEye;
@@ -1299,7 +1305,7 @@ static function X2AbilityTemplate TimeStandsStill()
 {
 	local X2AbilityTemplate						Template;
 	local RTEffect_TimeStop						TimeStopEffect;
-	local RTEffect_TimeStopMaster					TimeMasterEffect;
+	local RTEffect_TimeStopMaster				TimeMasterEffect;
 	local X2Effect_SetUnitValue					SetUnitValueEffect;
 	local RTEffect_Counter						CounterEffect;
 	local X2AbilityCost_ActionPoints			ActionPointCost;
@@ -1395,7 +1401,7 @@ static function X2AbilityTemplate TimeStandsStill()
 }
 
 //---------------------------------------------------------------------------------------
-//---Time Stands Still Cleanse Listener--------------------------------------------------
+//---Time Stands Still End Listener------------------------------------------------------
 //---------------------------------------------------------------------------------------
 static function X2AbilityTemplate TimeStandsStillEndListener()
 {
@@ -1869,6 +1875,7 @@ static function X2AbilityTemplate ShockAndAweListener()
 	local X2AbilityTrigger_EventListener	EventListener;
 	local X2AbilityMultiTarget_Radius		MultiTarget;
 	local X2Condition_UnitProperty			UnitPropertyCondition;
+	local X2AbilityCost_ActionPoints		ActionPoint;
 
 	//Icon Properties
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'ShockAndAweListener');
@@ -1882,6 +1889,10 @@ static function X2AbilityTemplate ShockAndAweListener()
 	Template.AbilityToHitCalc = default.DeadEye; 
 	Template.AbilityTargetStyle = default.SimpleSingleTarget;
 
+	ActionPoint = new class'X2AbilityCost_ActionPoints';
+	ActionPoint.bFreeCost = true;
+	Template.AbilityCosts.AddItem(ActionPoint);
+
 	// Copied Straight from Shieldbearer ability
 	// The Targets must be within the AOE and hostile
 	UnitPropertyCondition = new class'X2Condition_UnitProperty';
@@ -1894,7 +1905,7 @@ static function X2AbilityTemplate ShockAndAweListener()
 
 	MultiTarget = new class'X2AbilityMultiTarget_Radius';
 	MultiTarget.fTargetRadius = 10;
-	MultiTarget.bIgnoreBlockingCover = false;
+	MultiTarget.bIgnoreBlockingCover = true;
 	Template.AbilityMultiTargetStyle = MultiTarget;
 
 	EventListener = new class'X2AbilityTrigger_EventListener';
@@ -1928,8 +1939,6 @@ static function X2AbilityTemplate Harbinger()
 	local X2AbilityTarget_Single				SingleTarget;
 	local X2Effect_EnergyShield ShieldedEffect;
 	local X2Condition_UnitProperty	TargetCondition;
-
-
 	
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'Harbinger');
 	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_adventpsiwitch_mindcontrol";
@@ -2014,7 +2023,7 @@ simulated function OnShieldRemoved_BuildVisualization(XComGameState VisualizeGam
 	if (XGUnit(BuildTrack.TrackActor).IsAlive())
 	{
 		SoundAndFlyOver = X2Action_PlaySoundAndFlyOver(class'X2Action_PlaySoundAndFlyOver'.static.AddToVisualizationTrack(BuildTrack, VisualizeGameState.GetContext()));
-		SoundAndFlyOver.SetSoundAndFlyOverParameters(None, class'XLocalizedData'.default.ShieldRemovedMsg, '', eColor_Bad, , 0.75, true);
+		SoundAndFlyOver.SetSoundAndFlyOverParameters(None, "Harbinger Shield Broken", '', eColor_Bad, , 0.75, true);
 	}
 }
 //---------------------------------------------------------------------------------------

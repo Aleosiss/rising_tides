@@ -59,7 +59,7 @@ function ModifyTurnStartActionPoints(XComGameState_Unit UnitState, out array<nam
 
 
 function int GetArmorMitigation(XComGameState_Effect EffectState, XComGameState_Unit UnitState) { return BONUS_ARMOR; }
-function string GetArmorName(XComGameState_Effect EffectState, XComGameState_Unit UnitState) { return FriendlyName; }
+function string GetArmorName(XComGameState_Effect EffectState, XComGameState_Unit UnitState) { return "Harbinger"; }
 
 function GetToHitModifiers(XComGameState_Effect EffectState, XComGameState_Unit Attacker, XComGameState_Unit Target, XComGameState_Ability AbilityState, class<X2AbilityToHitCalc> ToHitType, bool bMelee, bool bFlanking, bool bIndirectFire, out array<ShotModifierInfo> ShotModifiers) {
 	local ShotModifierInfo ModInfoAim;
@@ -95,7 +95,7 @@ simulated function AddX2ActionsForVisualization(XComGameState VisualizeGameState
 	{
 	
 		SoundAndFlyOver = X2Action_PlaySoundAndFlyOver(class'X2Action_PlaySoundAndFlyOver'.static.AddToVisualizationTrack(BuildTrack, VisualizeGameState.GetContext()));
-		SoundAndFlyOver.SetSoundAndFlyOverParameters(None, "Harbinger", '', eColor_Good);
+		SoundAndFlyOver.SetSoundAndFlyOverParameters(None, "Harbinger Intervention", '', eColor_Good);
 	}
 }
 
@@ -105,6 +105,6 @@ simulated function AddX2ActionsForVisualization_Tick(XComGameState VisualizeGame
 }
 
 defaultproperties
-{																   git 
+{																   
 	GameStateEffectClass = class'RTGameState_Harbinger'
 }

@@ -12,6 +12,8 @@ class RTEffect_ScopedAndDropped extends X2Effect_PersistentStatChange;
 
 var localized string RTFriendlyName;
 var localized string RTNotFriendlyName;
+var int iPanicChance;
+var int iDamageRequiredToActivate;
 	
 
 // Negate Squadsight distance penalty
@@ -60,9 +62,8 @@ function RegisterForEvents(XComGameState_Effect EffectGameState)
 	UnitState = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(EffectGameState.ApplyEffectParameters.SourceStateObjectRef.ObjectID));
 
 	EventMgr.RegisterForEvent(EffectObj, 'ScopedAndDropped', EffectGameState.TriggerAbilityFlyover, ELD_OnStateSubmitted, , UnitState);
-	EventMgr.RegisterForEvent(EffectObj, 'SovereignTrigger', EffectGameState.TriggerAbilityFlyover, ELD_OnStateSubmitted, , UnitState);
 }
-// Killing an exposed target refunds the full cost of the shot
+// PostAbilityCostPaid handles SND, Sovereign, and SNA
 function bool PostAbilityCostPaid(XComGameState_Effect EffectState, XComGameStateContext_Ability AbilityContext, XComGameState_Ability kAbility, XComGameState_Unit Attacker, XComGameState_Item AffectWeapon, XComGameState NewGameState, const array<name> PreCostActionPoints, const array<name> PreCostReservePoints)
 {
 	local XComGameState_Unit				TargetUnit, PanicTargetUnit;
@@ -70,53 +71,102 @@ function bool PostAbilityCostPaid(XComGameState_Effect EffectState, XComGameStat
 	local XComGameState_Ability				AbilityState;
 	local GameRulesCache_VisibilityInfo		VisInfo;
 	local XComGameStateHistory				History;
-	local UnitValue							NumTimes;
+	local UnitValue							NumTimes, DamageDealt, ShockCounter;
 	local array<StateObjectReference>		VisibleUnits;
-	local int								Index, RandRoll;
-	local bool								bIsStandardFire;
+	local int								Index, RandRoll, iTotalDamageDealt;
+	local bool								bIsStandardFire, bTesting, bHitTarget;
 
+
+	`LOG("Scoped And Dropped Called!");
 	bIsStandardFire = false;
-	if(kAbility.GetMyTemplateName() == 'RTStandardSniperShot' || kAbility.GetMyTemplateName() == 'DaybreakFlame' || kAbility.GetMyTemplateName() == 'PrecisionShot' || kAbility.GetMyTemplateName() == 'DisablingShot')
+	bTesting = true;
+	if(kAbility.GetMyTemplateName() == 'RTStandardSniperShot' || kAbility.GetMyTemplateName() == 'DaybreakFlame' || kAbility.GetMyTemplateName() == 'RTPrecisionShot' || kAbility.GetMyTemplateName() == 'DisablingShot')
 		bIsStandardFire = true;
-	//  match the weapon associated with SnD to the attacking weapon and make sure it's a standard shot
-	if (kAbility.SourceWeapon == EffectState.ApplyEffectParameters.ItemStateObjectRef && bIsStandardFire)
-	{
+	if(AbilityContext.ResultContext.HitResult == eHit_Crit || AbilityContext.ResultContext.HitResult == eHit_Graze || AbilityContext.ResultContext.HitResult == eHit_Success)
+		bHitTarget = true;
+	//  make sure it's a standard shot
+	if (bIsStandardFire) {
 		History = `XCOMHISTORY;
+		EventMgr = `XEVENTMGR;
 		//  check for a direct flanking kill shot
 		TargetUnit = XComGameState_Unit(NewGameState.GetGameStateForObjectID(AbilityContext.InputContext.PrimaryTarget.ObjectID));
-		if (TargetUnit != none && TargetUnit.IsDead())
-		{
-			if (`TACTICALRULES.VisibilityMgr.GetVisibilityInfo(Attacker.ObjectID, TargetUnit.ObjectID, VisInfo))
-				{
-					// Only care if there is no cover between this unit and the target unless they were concealed or have Daybreak Flame
-					if (VisInfo.TargetCover == CT_None || Attacker.HasSoldierAbility('DaybreakFlameIcon') || Attacker.WasConcealed(History.GetEventChainStartIndex()) || Attacker.IsConcealed() || TargetUnit.GetCurrentStat(eStat_AlertLevel) == 0)
-					{
-						// Negate changes to the number of action points
-						if (Attacker.ActionPoints.Length != PreCostActionPoints.Length)
+		if (TargetUnit != none) {
+			// Shock 'n Awe check
+			if(bHitTarget) {
+				`LOG("Hit a target, Shock and Awe called!");
+				// this should be the attack that proced this PostAbilityCostPaid
+				TargetUnit.GetUnitValue('LastEffectDamage', DamageDealt);
+				// Running total of damage dealt this turn
+				Attacker.GetUnitValue('ShockAndAweCounter', ShockCounter);
+
+				iTotalDamageDealt = int(DamageDealt.fValue) + int(ShockCounter.fValue);
+				
+				if(iTotalDamageDealt < iDamageRequiredToActivate) {
+					Attacker.SetUnitFloatValue('ShockAndAweCounter', iTotalDamageDealt, eCleanup_BeginTurn);
+				} else {
+					// t-t-t-t-triggered
+					`LOG("We've done more than 25 damage this turn, Shock and Awe triggered!");
+					EventMgr.TriggerEvent('ShockAndAweTrigger', TargetUnit, Attacker, NewGameState);	
+					while(iTotalDamageDealt > iDamageRequiredToActivate) {
+						iTotalDamageDealt -= iDamageRequiredToActivate;
+					}
+					Attacker.SetUnitFloatValue('ShockAndAweCounter', iTotalDamageDealt, eCleanup_BeginTurn);
+				}
+			}
+			
+			if(TargetUnit.IsDead()) {
+				// Sovereign check 
+				`LOG("Checking for a one shot...");
+				if(Attacker.HasSoldierAbility('Sovereign')) {
+					TargetUnit.GetUnitValue('LastEffectDamage', DamageDealt);
+					`LOG("DamageDealt = "@DamageDealt.fValue);
+					`LOG("TargetUnit MaxHP = "@TargetUnit.GetMaxStat(eStat_HP));
+					if((int(DamageDealt.fValue) + 1) >= TargetUnit.GetMaxStat(eStat_HP)) {
+						`LOG("Got a one shot! Sovereign Called!");
+						// Panic
+						RandRoll = `SYNC_RAND(100);
+						if(RandRoll < iPanicChance || bTesting)
 						{
-							AbilityState = XComGameState_Ability(History.GetGameStateForObjectID(EffectState.ApplyEffectParameters.AbilityStateObjectRef.ObjectID));
-							if (AbilityState != none && AbilityState.GetMyTemplateName() != 'RTOverwatchShot')
+							// t-t-t-t-triggered
+							`LOG("We've made it past rng! Sovereign triggered!");
+							EventMgr.TriggerEvent('SovereignTrigger', TargetUnit, Attacker, NewGameState);
+						}
+					}
+				}
+				`LOG("Checking visibility...");
+				// Scoped and Dropped check
+				if (`TACTICALRULES.VisibilityMgr.GetVisibilityInfo(Attacker.ObjectID, TargetUnit.ObjectID, VisInfo))
+					{
+						// Only care if there is no cover between this unit and the target unless they were concealed or have Daybreak Flame
+						if (VisInfo.TargetCover == CT_None || Attacker.HasSoldierAbility('DaybreakFlameIcon') || Attacker.WasConcealed(History.GetEventChainStartIndex()) || Attacker.IsConcealed() || TargetUnit.GetCurrentStat(eStat_AlertLevel) == 0)
+						{
+							// Negate changes to the number of action points
+							if (Attacker.ActionPoints.Length != PreCostActionPoints.Length)
 							{
-								Attacker.ActionPoints = PreCostActionPoints;
-								// If the UnitValue doesn't exist, make it, and start it at one since we just shot something
-								if(!Attacker.GetUnitValue('NumTimesScopedAndDropped', NumTimes)) 
+								AbilityState = XComGameState_Ability(History.GetGameStateForObjectID(EffectState.ApplyEffectParameters.AbilityStateObjectRef.ObjectID));
+								if (AbilityState != none && AbilityState.GetMyTemplateName() != 'RTOverwatchShot')
 								{
-									Attacker.SetUnitFloatValue('NumTimesScopedAndDropped', 1, eCleanup_BeginTurn);
-								}
-								// Else, get the value and increment it by one
-								else
-								{
-									Attacker.GetUnitValue('NumTimesScopedAndDropped', NumTimes);
-									NumTimes.fValue = NumTimes.fValue + 1;
-									Attacker.SetUnitFloatValue('NumTimesScopedAndDropped', NumTimes.fValue, eCleanup_BeginTurn);
-								}
+									Attacker.ActionPoints = PreCostActionPoints;
+									// If the UnitValue doesn't exist, make it, and start it at one since we just shot something
+									if(!Attacker.GetUnitValue('NumTimesScopedAndDropped', NumTimes)) 
+									{
+										Attacker.SetUnitFloatValue('NumTimesScopedAndDropped', 1, eCleanup_BeginTurn);
+									}
+									// Else, get the value and increment it by one
+									else
+									{
+										Attacker.GetUnitValue('NumTimesScopedAndDropped', NumTimes);
+										NumTimes.fValue = NumTimes.fValue + 1;
+										Attacker.SetUnitFloatValue('NumTimesScopedAndDropped', NumTimes.fValue, eCleanup_BeginTurn);
+									}
 								
 								
-								EventMgr = `XEVENTMGR;
-								EventMgr.TriggerEvent('ScopedAndDropped', AbilityState, Attacker, NewGameState);
-								//`log("SND TargetUnit Location: " @ `XWORLD.GetPositionFromTileCoordinates(TargetUnit.TileLocation)); 
-								//`log("SND TargetUnit ObjectID: " @ TargetUnit.ObjectID);
-								//return true;
+									// t-t-t-t-triggered
+									EventMgr.TriggerEvent('ScopedAndDropped', AbilityState, Attacker, NewGameState);
+									//`log("SND TargetUnit Location: " @ `XWORLD.GetPositionFromTileCoordinates(TargetUnit.TileLocation)); 
+									//`log("SND TargetUnit ObjectID: " @ TargetUnit.ObjectID);
+							
+								}
 							}
 						}
 					}
@@ -131,11 +181,13 @@ function bool PostAbilityCostPaid(XComGameState_Effect EffectState, XComGameStat
 simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffectParameters, XComGameState_BaseObject kNewTargetState, XComGameState NewGameState, XComGameState_Effect NewEffectState)
 {
 	super.OnEffectAdded(ApplyEffectParameters, kNewTargetState, NewGameState, NewEffectState);
-}
+} 
 
 
 DefaultProperties
 {
 	DuplicateResponse = eDupe_Ignore
 	EffectName = "RTEffect_ScopedAndDropped"
+	iPanicChance=20
+	iDamageRequiredToActivate=25
 }

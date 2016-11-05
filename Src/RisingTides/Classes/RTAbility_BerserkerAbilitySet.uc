@@ -10,6 +10,7 @@
 
 class RTAbility_BerserkerAbilitySet extends RTAbility_GhostAbilitySet config(RisingTides);
 
+	var config int BITN_TILEDISTANCE;
 	var config int ACID_BLADE_DOT_DAMAGE;
 	var config int ACID_BLADE_DOT_SHRED;
 	var config int BURST_DAMAGE;
@@ -65,6 +66,10 @@ static function array<X2DataTemplate> CreateTemplates()
 	Templates.AddItem(RTUnstableConduit());
 	Templates.AddItem(RTUnstableConduitIcon());
 	Templates.AddItem(RTUnstableConduitBurst());
+	Templates.AddItem(RTPersistingImages());
+	Templates.AddItem(RTPersistingImagesIcon());
+	Templates.AddItem(RTGhostInTheShell());
+	Templates.AddItem(RTQueenOfBlades());
 
 	return Templates;
 }
@@ -93,6 +98,7 @@ static function X2AbilityTemplate BumpInTheNight()
 	BumpEffect = new class'RTEffect_BumpInTheNight';
 	BumpEffect.BuildPersistentEffect(1, true, true, true);
 	BumpEffect.SetDisplayInfo(ePerkBuff_Passive, Template.LocFriendlyName, Template.LocLongDescription, Template.IconImage, true,,Template.AbilitySourceName);
+	BumpEffect.iTileDistanceToActivate = default.BITN_TILEDISTANCE;
 	Template.AddTargetEffect(BumpEffect);
 
 	Template.AdditionalAbilities.AddItem('GhostPsiSuite');
@@ -783,7 +789,7 @@ static function X2AbilityTemplate RTPyroclasticSlash()
 }
 
 //---------------------------------------------------------------------------------------
-//---ContainedFury---------------------------------------------------------------------
+//---Contained Fury---------------------------------------------------------------------
 //---------------------------------------------------------------------------------------
 static function X2AbilityTemplate RTContainedFury() {
 	local X2AbilityTemplate 	Template;
@@ -816,7 +822,7 @@ static function X2AbilityTemplate RTContainedFury() {
 }
 
 //---------------------------------------------------------------------------------------
-//---ContainedFury Meld Join-----------------------------------------------------------
+//---Contained Fury Meld Join------------------------------------------------------------
 //---------------------------------------------------------------------------------------
 static function X2AbilityTemplate RTContainedFuryMeldJoin()
 {
@@ -871,7 +877,7 @@ static function X2AbilityTemplate RTContainedFuryMeldJoin()
 }
 
 //---------------------------------------------------------------------------------------
-//---UnstableConduit-------------------------------------------------------------------
+//---Unstable Conduit--------------------------------------------------------------------
 //---------------------------------------------------------------------------------------
 static function X2AbilityTemplate RTUnstableConduit()
 {
@@ -891,9 +897,12 @@ static function X2AbilityTemplate RTUnstableConduit()
 	Template.ConcealmentRule = eConceal_Miss;		// unsure
 
 	Template.AbilityCosts.AddItem(default.FreeActionCost);
+
+	Template.AbilityShooterConditions.AddItem(default.LivingShooterProperty);
+	Template.AddShooterEffectExclusions();
 	
 	Condition = new class'X2Condition_UnitEffects';
-	Condition.AddRequireEffect('RTEffect_Meld', 'AA_MeldEffectRequired');
+	Condition.AddRequireEffect('RTEffect_Meld', 'AA_UnitNotMelded');
 	Template.AbilityShooterConditions.AddItem(Condition);
 	Template.AbilityMultiTargetConditions.AddItem(Condition);
 
@@ -929,7 +938,7 @@ static function X2AbilityTemplate RTUnstableConduit()
 }
 
 //---------------------------------------------------------------------------------------
-//---UnstableConduitIcon---------------------------------------------------------------
+//---Unstable Conduit Icon---------------------------------------------------------------
 //---------------------------------------------------------------------------------------
 static function X2AbilityTemplate RTUnstableConduitIcon() {
 	local X2AbilityTemplate 	Template;
@@ -946,6 +955,7 @@ static function X2AbilityTemplate RTUnstableConduitIcon() {
     Template.AbilityTargetStyle = default.SelfTarget;
     Template.AbilityTriggers.AddItem(default.UnitPostBeginPlayTrigger);
 
+
     // Effect to apply
     Effect = new class'X2Effect_Persistent';
     Effect.BuildPersistentEffect(1, true, true, true);
@@ -956,12 +966,11 @@ static function X2AbilityTemplate RTUnstableConduitIcon() {
     Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
     //  NOTE: No visualization on purpose!
 	
-
     return Template;
 }
 
 //---------------------------------------------------------------------------------------
-//---UnstableConduitBurst----------------------------------------------------------------
+//---Unstable Conduit Burst--------------------------------------------------------------
 //---------------------------------------------------------------------------------------
 static function X2AbilityTemplate RTUnstableConduitBurst() {
     local X2AbilityTemplate Template;
@@ -973,11 +982,14 @@ static function X2AbilityTemplate RTUnstableConduitBurst() {
     `CREATE_X2ABILITY_TEMPLATE(Template, 'RTUnstableConduitBurst');
     Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_snipershot"; //TODO: Change this
     Template.AbilitySourceName = 'eAbilitySource_Psionic';  
-	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_AlwaysShow;
+	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_NeverShow;
 	Template.AbilityConfirmSound = "TacticalUI_ActivateAbility";
 	Template.Hostility = eHostility_Neutral;
 
 	Template.AbilityCosts.AddItem(default.FreeActionCost);
+
+	Template.AbilityShooterConditions.AddItem(default.LivingShooterProperty);
+	Template.AddShooterEffectExclusions();
 
 	Template.AbilityTriggers.AddItem(default.PlayerInputTrigger);
 	Template.AbilityToHitCalc = default.DeadEye;
@@ -1020,4 +1032,210 @@ static function X2AbilityTemplate RTUnstableConduitBurst() {
 	Template.bCrossClassEligible = false;
 
     return Template;
+}
+
+//---------------------------------------------------------------------------------------
+//---Persisting Images-------------------------------------------------------------------
+//---------------------------------------------------------------------------------------
+static function X2AbilityTemplate RTPersistingImages()
+{
+	local X2AbilityTemplate Template;
+	local X2AbilityTrigger_EventListener Trigger;
+	local RTEffect_GenerateAfterimage AfterEffect;
+
+	`CREATE_X2ABILITY_TEMPLATE(Template, 'RTPersistingImages');
+	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_aim";
+	Template.AbilitySourceName = 'eAbilitySource_Psionic';
+	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_AlwaysShow;
+	Template.Hostility = eHostility_Neutral;
+
+	Template.AbilityShooterConditions.AddItem(default.LivingShooterProperty);
+	Template.AddShooterEffectExclusions();
+
+	Template.AbilityToHitCalc = default.DeadEye; 
+    Template.AbilityTargetStyle = default.SelfTarget;
+
+	Trigger = new class'X2AbilityTrigger_EventListener';
+	Trigger.ListenerData.Deferral = ELD_OnStateSubmitted;
+	Trigger.ListenerData.EventID = 'UnitEnteredRTSTealth';
+	Trigger.ListenerData.EventFn = class'XComGameState_Ability'.static.AbilityTriggerEventListener_Self_VisualizeInGameState;
+	Trigger.ListenerData.Filter = eFilter_Unit;
+	Template.AbilityTriggers.AddItem(Trigger);
+
+	Template.TargetingMethod = class'X2TargetingMethod_MimicBeacon';
+	Template.SkipRenderOfTargetingTemplate = true;
+
+	AfterEffect = new class'RTEffect_GenerateAfterimage';
+	AfterEffect.BuildPersistentEffect(1, false, true, false, eGameRule_PlayerTurnBegin);
+	Template.AddTargetEffect(AfterEffect);
+
+	Template.bSkipFireAction = true;
+	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
+	Template.BuildVisualizationFn = Afterimage_BuildVisualization;
+
+	Template.AdditionalAbilities.AddItem('RTPersistingImagesIcon');
+
+	return Template;
+
+}
+
+simulated function Afterimage_BuildVisualization(XComGameState VisualizeGameState, out array<VisualizationTrack> OutVisualizationTracks)
+{
+	local XComGameStateHistory History;
+	local XComGameStateContext_Ability Context;
+	local StateObjectReference InteractingUnitRef;
+	local VisualizationTrack EmptyTrack;
+	local VisualizationTrack SourceTrack, MimicBeaconTrack;
+	local XComGameState_Unit MimicSourceUnit, SpawnedUnit;
+	local UnitValue SpawnedUnitValue;
+	local X2Action_PlayAnimation AnimationAction;
+	local RTEffect_GenerateAfterimage AfterEffect;
+
+	History = `XCOMHISTORY;
+
+	Context = XComGameStateContext_Ability(VisualizeGameState.GetContext());
+	InteractingUnitRef = Context.InputContext.SourceObject;
+
+	//Configure the visualization track for the shooter
+	//****************************************************************************************
+	SourceTrack = EmptyTrack;
+	SourceTrack.StateObject_OldState = History.GetGameStateForObjectID(InteractingUnitRef.ObjectID, eReturnType_Reference, VisualizeGameState.HistoryIndex - 1);
+	SourceTrack.StateObject_NewState = VisualizeGameState.GetGameStateForObjectID(InteractingUnitRef.ObjectID);
+	SourceTrack.TrackActor = History.GetVisualizer(InteractingUnitRef.ObjectID);
+
+	class'X2Action_ExitCover'.static.AddToVisualizationTrack(SourceTrack, Context);
+	class'X2Action_EnterCover'.static.AddToVisualizationTrack(SourceTrack, Context);
+
+	// Configure the visualization track for the mimic beacon
+	//******************************************************************************************
+	MimicSourceUnit = XComGameState_Unit(VisualizeGameState.GetGameStateForObjectID(InteractingUnitRef.ObjectID));
+	`assert(MimicSourceUnit != none);
+	MimicSourceUnit.GetUnitValue(class'X2Effect_SpawnUnit'.default.SpawnedUnitValueName, SpawnedUnitValue);
+
+	MimicBeaconTrack = EmptyTrack;
+	MimicBeaconTrack.StateObject_OldState = History.GetGameStateForObjectID(SpawnedUnitValue.fValue, eReturnType_Reference, VisualizeGameState.HistoryIndex);
+	MimicBeaconTrack.StateObject_NewState = MimicBeaconTrack.StateObject_OldState;
+	SpawnedUnit = XComGameState_Unit(MimicBeaconTrack.StateObject_NewState);
+	`assert(SpawnedUnit != none);
+	MimicBeaconTrack.TrackActor = History.GetVisualizer(SpawnedUnit.ObjectID);
+
+	// Only one target effect and it is X2Effect_SpawnMimicBeacon
+	AfterEffect = RTEffect_GenerateAfterimage(Context.ResultContext.ShooterEffectResults.Effects[0]);
+	
+	if( AfterEffect == none )
+	{
+		`RedScreenOnce("Afterimage_BuildVisualization: Missing RTEffect_GenerateAfterimage -dslonneger @gameplay");
+		return;
+	}
+
+	AfterEffect.AddSpawnVisualizationsToTracks(Context, SpawnedUnit, MimicBeaconTrack, MimicSourceUnit, SourceTrack);
+
+	class'X2Action_SyncVisualizer'.static.AddToVisualizationTrack(MimicBeaconTrack, Context);
+
+	AnimationAction = X2Action_PlayAnimation(class'X2Action_PlayAnimation'.static.AddToVisualizationTrack(MimicBeaconTrack, Context));
+	AnimationAction.Params.AnimName = 'LL_MimicStart';
+	AnimationAction.Params.BlendTime = 0.0f;
+
+	OutVisualizationTracks.AddItem(SourceTrack);
+	OutVisualizationTracks.AddItem(MimicBeaconTrack);
+}
+
+static function X2AbilityTemplate RTPersistingImagesIcon() {
+	local X2AbilityTemplate 	Template;
+    local X2Effect_Persistent	Effect;
+    
+    `CREATE_X2ABILITY_TEMPLATE(Template, 'RTPersistingImagesIcon');
+    Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_aim";	   // TODO: THIS
+    Template.AbilitySourceName = 'eAbilitySource_Psionic';
+    Template.eAbilityIconBehaviorHUD = EAbilityIconBehavior_NeverShow;
+    Template.Hostility = eHostility_Neutral;
+	
+	// Apply perk at the start of the mission. 
+    Template.AbilityToHitCalc = default.DeadEye; 
+    Template.AbilityTargetStyle = default.SelfTarget;
+    Template.AbilityTriggers.AddItem(default.UnitPostBeginPlayTrigger);
+
+    // Effect to apply
+    Effect = new class'X2Effect_Persistent';
+    Effect.BuildPersistentEffect(1, true, true, true);
+    Effect.SetDisplayInfo(ePerkBuff_Passive, Template.LocFriendlyName, Template.LocLongDescription, Template.IconImage, true,,Template.AbilitySourceName);
+    Template.AddTargetEffect(Effect);
+	
+    // Probably required 
+    Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
+    //  NOTE: No visualization on purpose!
+	
+    return Template;
+}
+
+//---------------------------------------------------------------------------------------
+//---Ghost In The Shell------------------------------------------------------------------
+//---------------------------------------------------------------------------------------
+static function X2AbilityTemplate RTGhostInTheShell()
+{
+	local X2AbilityTemplate		Template;
+	local X2Effect_Persistent	Effect;
+	local X2Effect_StayConcealed PhantomEffect;
+	
+	`CREATE_X2ABILITY_TEMPLATE(Template, 'RTGhostInTheShell');
+    Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_aim";	   // TODO: THIS
+    Template.AbilitySourceName = 'eAbilitySource_Psionic';
+    Template.eAbilityIconBehaviorHUD = EAbilityIconBehavior_NeverShow;
+    Template.Hostility = eHostility_Neutral;
+	
+	// Apply perk at the start of the mission. 
+    Template.AbilityToHitCalc = default.DeadEye; 
+    Template.AbilityTargetStyle = default.SelfTarget;
+    Template.AbilityTriggers.AddItem(default.UnitPostBeginPlayTrigger);
+
+    // Effect to apply
+    Effect = new class'X2Effect_Persistent';
+    Effect.BuildPersistentEffect(1, true, true, true);
+	Effect.EffectName = 'RTGhostInTheShell';
+    Effect.SetDisplayInfo(ePerkBuff_Passive, Template.LocFriendlyName, Template.LocLongDescription, Template.IconImage, true,,Template.AbilitySourceName);
+    Template.AddTargetEffect(Effect);
+
+	PhantomEffect = new class'X2Effect_StayConcealed';
+	PhantomEffect.BuildPersistentEffect(1, true, false);
+	Template.AddTargetEffect(PhantomEffect);
+	
+    // Probably required 
+    Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
+    //  NOTE: No visualization on purpose!
+
+	return Template;
+}
+
+//---------------------------------------------------------------------------------------
+//---Queen of Blades---------------------------------------------------------------------
+//---------------------------------------------------------------------------------------
+static function X2AbilityTemplate RTQueenOfBlades()
+{
+	local X2AbilityTemplate		Template;
+	local X2Effect_Persistent	Effect;
+	local X2Effect_StayConcealed PhantomEffect;
+	
+	`CREATE_X2ABILITY_TEMPLATE(Template, 'RTQueenOfBlades');
+    Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_aim";	   // TODO: THIS
+    Template.AbilitySourceName = 'eAbilitySource_Psionic';
+    Template.eAbilityIconBehaviorHUD = EAbilityIconBehavior_NeverShow;
+    Template.Hostility = eHostility_Neutral;
+	
+	// Apply perk at the start of the mission. 
+    Template.AbilityToHitCalc = default.DeadEye; 
+    Template.AbilityTargetStyle = default.SelfTarget;
+    Template.AbilityTriggers.AddItem(default.UnitPostBeginPlayTrigger);
+
+    // Effect to apply
+    Effect = new class'X2Effect_Persistent';
+    Effect.BuildPersistentEffect(1, true, true, true);
+	Effect.EffectName = 'RTQueenOfBlades';
+    Effect.SetDisplayInfo(ePerkBuff_Passive, Template.LocFriendlyName, Template.LocLongDescription, Template.IconImage, true,,Template.AbilitySourceName);
+    Template.AddTargetEffect(Effect);
+	
+    // Probably required 
+    Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
+    //  NOTE: No visualization on purpose!
+
+	return Template;
 }

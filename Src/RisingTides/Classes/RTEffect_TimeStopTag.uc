@@ -2,7 +2,7 @@
 //  FILE:    RTEffect_TimeStopTag.uc
 //  AUTHOR:  Aleosiss
 //  DATE:    8 August 2016
-//  PURPOSE: Tracks damage preview/calcualtion for TiemSTop
+//  PURPOSE: Tracks damage preview/calcualtion for TimeStop
 //  NOTES: There is abosolutely no reason this shouldn't just be a part of TimeStopMaster... except for no discernable reason, the effect will not work when attached there.        
 //---------------------------------------------------------------------------------------
 //	Time Stop tag effect
