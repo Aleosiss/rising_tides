@@ -29,5 +29,5 @@ event name CallMeetsCondition(XComGameState_BaseObject kTarget) {
 	    return 'AA_Success';
     }
 
-    return 'AA_UnknownError';
+    return 'AA_EffectNotFound';
 }
