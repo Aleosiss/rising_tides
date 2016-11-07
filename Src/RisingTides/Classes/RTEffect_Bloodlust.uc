@@ -66,8 +66,12 @@ function int GetAttackingDamageModifier(XComGameState_Effect EffectState, XComGa
 
 	BumpEffect = RTGameState_BloodlustEffect(EffectState);
 	ExtraCritDamage = CurrentDamage * BumpEffect.iStacks * fCritDamageMod;
+	// only on crits...
+	if(AppliedData.AbilityResultContext.HitResult == eHit_Crit) {
+		return int(ExtraCritDamage);	
+	}
 
-	return ExtraCritDamage;
+	return 0;
 }
 
 DefaultProperties
