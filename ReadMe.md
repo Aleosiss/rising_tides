@@ -17,9 +17,8 @@ This would be a bare-bones content mod. I also have the following content in min
 >- New enemy units, possible returns from EW
 
 ###### Current TODOs: 
-      - Verify that Sovereign actually does anything (revert implementation if not the case) 
-      - Change how the Meld affects will (override will/psioffense completely to meld strength)
-      - Change how the Meld calculates its strength (highest unit + 1/10 each additional unit)
+      - RTCondition_EffectStackCount doesn't work
+      - Persisting Images doesn't work
       - Implement Ghost in the Shell (look into kismet/umap) 50%
       - Implement Shadow Strike (look into Musashi's Katanas)
       - Implement Dashing Strike
