@@ -50,7 +50,7 @@ simulated function vector GetRandomSpawnLocation(const out EffectAppliedData App
 	
 	    //since findclosestvalidlocation prefers locations at the same Z levels, soldiers sometimes spawn farther away than intended
 	    //this check prevents this 
-	    IF(DesiredSpawnLocation.X > TileLocation.X+RBMaxOffset || DesiredSpawnLocation.X < TileLocation.X-RBMaxOffset || DesiredSpawnLocation.Y > TileLocation.Y+RBMaxOffset || DesiredSpawnLocation.Y < TileLocation.Y-RBMaxOffset)
+	    if(DesiredSpawnLocation.X > TileLocation.X+RBMaxOffset || DesiredSpawnLocation.X < TileLocation.X-RBMaxOffset || DesiredSpawnLocation.Y > TileLocation.Y+RBMaxOffset || DesiredSpawnLocation.Y < TileLocation.Y-RBMaxOffset)
 	    {
 	        continue;
 	    }
@@ -73,8 +73,7 @@ function OnSpawnComplete(const out EffectAppliedData ApplyEffectParameters, Stat
 
 	MimicBeaconGameState = XComGameState_Unit(NewGameState.GetGameStateForObjectID(NewUnitRef.ObjectID));
 	`assert(MimicBeaconGameState != none);
-	MimicBeaconGameState.SetCurrentStat(eStat_HP, 1);
-	MimicBeaconGameState.SetBaseMaxStat(eStat_HP, 1);
+	
 
 	SourceUnitGameState = XComGameState_Unit(NewGameState.GetGameStateForObjectID(ApplyEffectParameters.TargetStateObjectRef.ObjectID));
 	if( SourceUnitGameState == none)
@@ -90,10 +89,10 @@ function OnSpawnComplete(const out EffectAppliedData ApplyEffectParameters, Stat
 	{
 		AbilityContext.InputContext.PrimaryTarget.ObjectID = NewUnitRef.ObjectID;
 	}
-
-
-
 	super.OnSpawnComplete(ApplyEffectParameters, NewUnitRef, NewGameState);
+
+	MimicBeaconGameState.SetCurrentStat(eStat_HP, 1);
+	MimicBeaconGameState.SetBaseMaxStat(eStat_HP, 1, ECSMAR_None);
 }
 
 defaultproperties

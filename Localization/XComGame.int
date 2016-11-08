@@ -228,14 +228,14 @@ LocPromotionPopupText="<Bullet/> This unit does not suffer penalties to reaction
 LocFriendlyName="Heat Channel"
 LocLongDescription="When using Psionic abilities, this unit can channel heat from its weapon to fuel the ability, reloading the weapon and reducing the cooldown of the ability by one per ammo reloaded."
 LocHelpText="When using Psionic abilities, this unit can channel heat from its weapon to fuel the ability, reloading the weapon and reducing the cooldown of the ability by one per ammo reloaded."
-LocFlyOverText="Eye In the Sky"
+LocFlyOverText="Heat Channel"
 LocPromotionPopupText="<Bullet/> When using Psionic abilities, this unit can channel heat from its weapon to fuel the ability, reloading the weapon and reducing the cooldown of the ability by one per ammo reloaded.<br/><Bullet/> 8 turn cooldown.<br/>"
 
 [HeatChannelIcon X2AbilityTemplate]
 LocFriendlyName="Heat Channel"
 LocLongDescription="When using Psionic abilities, this unit can channel heat from its weapon to fuel the ability, reloading the weapon and reducing the cooldown of the ability by one per ammo reloaded."
 LocHelpText="When using Psionic abilities, this unit can channel heat from its weapon to fuel the ability, reloading the weapon and reducing the cooldown of the ability by one per ammo reloaded."
-LocFlyOverText="Eye In the Sky"
+LocFlyOverText="Heat Channel"
 LocPromotionPopupText="<Bullet/> When using Psionic abilities, this unit can channel heat from its weapon to fuel the ability, reloading the weapon and reducing the cooldown of the ability by one per ammo reloaded.<br/><Bullet/> 8 turn cooldown.<br/>"
 
 [Harbinger X2AbilityTemplate]
@@ -267,7 +267,7 @@ LocFlyOverText="Bump In The Night"
 LocPromotionPopupText="<Bullet/>This unit gains Stealth after killing a unit within 3 tiles. <br/><Bullet/>If it was a melee kill, additionally gain a stack of Bloodlust. <br/><Bullet/> <br/><Bullet/> <br/>"
 
 [RTBerserkerKnifeAttack X2AbilityTemplate]
-LocFriendlyName="Slash"
+LocFriendlyName="Slash (Berserker)"
 LocLongDescription="Attack any enemy within movement range with your <Ability:SecondaryWeaponName/>."
 LocHelpText="Attack an enemy within movement range with your <Ability:SecondaryWeaponName/>."
 LocPromotionPopupText="<Bullet/> You can trigger the Slash ability by placing the movement cursor over an enemy.<br/><Bullet/> A Berserker can perform a \"Dash\" move, using both actions to move, and still trigger a Slash against an adjacent enemy.<br/>"
@@ -315,7 +315,7 @@ LocFlyOverText="Pyroclastic Flow"
 LocPromotionPopupText="<Bullet/>When this unit is affected by burning, it gains additional movement speed, and its melee attacks gain additional fire damage.<br/>"
 
 [RTPyroclasticSlash X2AbilityTemplate]
-LocFriendlyName="Slash"
+LocFriendlyName="Slash (Pyroclastic)"
 LocLongDescription="Attack any enemy within movement range with your <Ability:SecondaryWeaponName/>."
 LocHelpText="Attack an enemy within movement range with your <Ability:SecondaryWeaponName/>."
 LocPromotionPopupText="<Bullet/> You can trigger the Slash ability by placing the movement cursor over an enemy.<br/><Bullet/> A Berserker can perform a \"Dash\" move, using both actions to move, and still trigger a Slash against an adjacent enemy.<br/>"
@@ -375,3 +375,32 @@ LocLongDescription="If a melee attack kills a unit, the action points for the at
 LocHelpText="If a melee attack kills a unit, the action points for the attack are refunded."
 LocFlyOverText="The Queen of Blades"
 LocPromotionPopupText="<Bullet/>If a melee attack kills a unit, the action points for the attack are refunded.<br/>"
+
+
+;----------------------------------------------------------------------------------------------------------------------------
+
+; +AbilityAvailabilityCodes="AA_UnitNotMelded"
+AbilityAvailabilityStrings[89]="The Unit is not in the meld."
+
+; +AbilityAvailabilityCodes="AA_MeldEffect_Active"
+AbilityAvailabilityStrings[90]="The Unit is already melded."
+
+; +AbilityAvailabilityCodes="AA_UnitMustBeGhost"
+AbilityAvailabilityStrings[91]="The Unit is not a Ghost."
+
+; +AbilityAvailabilityCodes="AA_UnitAlreadyUsedAbility"
+AbilityAvailabilityStrings[92]="The Unit has already used that ability."
+
+; +AbilityAvailabilityCodes="AA_NotStackableEffect"
+AbilityAvailabilityStrings[93]="The effect is not stackable, see Mod Author"
+
+; +AbilityAvailabilityCodes="AA_NotEnoughStacks"
+AbilityAvailabilityStrings[94]="The ability needs more stacks to function."
+
+; +AbilityAvailabilityCodes="AA_TooManyStacks"
+AbilityAvailabilityStrings[95]="There are too many stacks for the ability to function."
+
+; +AbilityAvailabilityCodes="AA_EffectNotFound"
+AbilityAvailabilityStrings[96]="The effect was not found."
+
+;----------------------------------------------------------------------------------------------------------------------------

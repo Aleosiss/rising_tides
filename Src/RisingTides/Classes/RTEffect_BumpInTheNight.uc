@@ -35,15 +35,16 @@ function bool PostAbilityCostPaid(XComGameState_Effect EffectState, XComGameStat
             bShouldTriggerStandard = true;
 	if(kAbility.GetMyTemplateName() == 'RTBerserkerKnifeAttack' || kAbility.GetMyTemplateName() == 'RTPyroclasticSlash' || kAbility.GetMyTemplateName() == 'RTReprobateWaltz')
 			bShouldTriggerMelee = true;
-        if(bShouldTriggerStandard || bShouldTriggerMelee) {
-            History = `XCOMHISTORY;
-            TargetUnit = XComGameState_Unit(NewGameState.GetGameStateForObjectID(AbilityContext.InputContext.PrimaryTarget.ObjectID));
+        
+    History = `XCOMHISTORY;
+    TargetUnit = XComGameState_Unit(NewGameState.GetGameStateForObjectID(AbilityContext.InputContext.PrimaryTarget.ObjectID));
+	`LOG("Rising Tides: Bump In The Night is activating post " @ kAbility.GetMyTemplateName()); 
 	if(TargetUnit != none && TargetUnit.IsDead()) {
 		if(Attacker.TileDistanceBetween(TargetUnit) < iTileDistanceToActivate) {
 					// melee kills additionally give bloodlust stacks and proc queen of blades
 					if(bShouldTriggerMelee) {
 						// t-t-t-t-triggered
-						`XEVENTMGR.TriggerEvent('RTBloodlust_Proc', kAbility, Attacker, NewGameState);
+						`XEVENTMGR.TriggerEvent('RTBumpInTheNight_BloodlustProc', kAbility, Attacker, NewGameState);
 
 						// since we've added a bloodlust stack, we need to check if we should leave the meld
 						if(!Attacker.HasSoldierAbility('RTContainedFury', false) && Attacker.IsUnitAffectedByEffectName('RTEffect_Meld')) {
@@ -56,13 +57,12 @@ function bool PostAbilityCostPaid(XComGameState_Effect EffectState, XComGameStat
 							Attacker.ActionPoints = PreCostActionPoints;
 						}
 					} else {
-					
 						// all of the kills give stealth...
 						`XEVENTMGR.TriggerEvent('RTBumpInTheNight_StealthProc', kAbility, Attacker, NewGameState);
 					}
 				}
             }
-        }
+        
 	// trigger psionic activation for unstable conduit if psionic blades were present and used
 	if(Attacker.HasSoldierAbility('RTPsionicBlades') && bShouldTriggerMelee) {
 		`XEVENTMGR.TriggerEvent('UnitActivatedPsionicAbility', kAbility, Attacker, NewGameState);

@@ -18,6 +18,9 @@ simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffe
 	local XComGameState_Unit UnitState;
 	local bool bWasPreviouslyConcealed;
 
+	AddPersistentStatChange(eStat_DetectionModifier, fStealthModifier);
+	super.OnEffectAdded(ApplyEffectParameters, kNewTargetState, NewGameState, NewEffectState);
+
 	UnitState = XComGameState_Unit(kNewTargetState);
 	bWasPreviouslyConcealed = UnitState.IsConcealed();
 	if(bWasPreviouslyConcealed) {
@@ -27,14 +30,14 @@ simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffe
 	}
 	
 	if (UnitState != none && !bWasPreviouslyConcealed) {
-		`XEVENTMGR.TriggerEvent('EffectEnterUnitConcealment', UnitState, UnitState, NewGameState);
 		// special stealth-only notification for abilities that trigger on stealth gain.
 		// in this block so that we don't have Persisting Images procing when ghosting
 		`XEVENTMGR.TriggerEvent('UnitEnteredRTSTealth', UnitState, UnitState, NewGameState);
+		`XEVENTMGR.TriggerEvent('EffectEnterUnitConcealment', UnitState, UnitState, NewGameState);
+		
+		
 	}
 	
-	AddPersistentStatChange(eStat_DetectionModifier, fStealthModifier);
-	super.OnEffectAdded(ApplyEffectParameters, kNewTargetState, NewGameState, NewEffectState);
 }
 
 simulated function OnEffectRemoved(const out EffectAppliedData ApplyEffectParameters, XComGameState NewGameState, bool bCleansed, XComGameState_Effect RemovedEffectState)

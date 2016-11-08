@@ -77,6 +77,7 @@ function EventListenerReturn ReprobateWaltzListener( Object EventData, Object Ev
 	local int iStackCount;
 	local float fStackModifier, fFinalPercentChance;
 
+	`LOG("Attempting a Reprobate Waltz");
 	AbilityContext = XComGameStateContext_Ability(GameState.GetContext());
 	WaltzUnit = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(AbilityContext.InputContext.SourceObject.ObjectID));
 

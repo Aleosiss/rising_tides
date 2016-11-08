@@ -125,7 +125,7 @@ function bool PostAbilityCostPaid(XComGameState_Effect EffectState, XComGameStat
 						`LOG("Got a one shot! Sovereign Called!");
 						// Panic
 						RandRoll = `SYNC_RAND(100);
-						if(RandRoll < iPanicChance || bTesting)
+						if(RandRoll < iPanicChance)
 						{
 							// t-t-t-t-triggered
 							`LOG("We've made it past rng! Sovereign triggered!");
@@ -143,6 +143,7 @@ function bool PostAbilityCostPaid(XComGameState_Effect EffectState, XComGameStat
 							// Negate changes to the number of action points
 							if (Attacker.ActionPoints.Length != PreCostActionPoints.Length)
 							{
+								// this is old amd probably redundant
 								AbilityState = XComGameState_Ability(History.GetGameStateForObjectID(EffectState.ApplyEffectParameters.AbilityStateObjectRef.ObjectID));
 								if (AbilityState != none && AbilityState.GetMyTemplateName() != 'RTOverwatchShot')
 								{

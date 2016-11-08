@@ -243,6 +243,7 @@ static function X2AbilityTemplate JoinMeld()
 	StackCondition = new class'RTCondition_EffectStackCount';
 	StackCondition.StackingEffect = class'RTEffect_Bloodlust'.default.EffectName;
 	StackCondition.iMaximumStacks = default.MAX_BLOODLUST_MELDJOIN;
+	StackCondition.bRequireEffect = false;
 	Template.AbilityShooterConditions.AddItem(StackCondition);
 
 	Template.AbilityTriggers.AddItem(default.PlayerInputTrigger);
@@ -616,6 +617,8 @@ static function X2AbilityTemplate LIOverwatchShot()
 	AmmoCost = new class'X2AbilityCost_Ammo';	
 	AmmoCost.iAmmo = 1;	
 	Template.AbilityCosts.AddItem(AmmoCost);
+
+	Template.AbilityTriggers.AddItem(default.PlayerInputTrigger);
 	
 	ReserveActionPointCost = new class'X2AbilityCost_ReserveActionPoints';
 	ReserveActionPointCost.iNumPoints = 1;

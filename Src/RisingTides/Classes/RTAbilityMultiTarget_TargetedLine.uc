@@ -30,7 +30,7 @@ simulated function GetMultiTargetOptions(const XComGameState_Ability Ability, ou
 	// I have no idea how I would go about implementing this myself, so just hijack GetMultiTargetsForLocation
 	// Get the TargetUnitLocation from the primary target of the targets array, then save the primary target
 	// so it doesn't get overwritten 	 
-	`LOG("Rising Tides: RTAbilityMultiTarget_TargetedLine is getting MultiTargetOptions!");
+	`LOG("Rising Tides: RTAbilityMultiTarget_TargetedLine is getting MultiTargetOptions!",, 'RisingTides');
 	for(i = 0; i < Targets.Length; i++)
 	{
 		TargetUnit = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(Targets[i].PrimaryTarget.ObjectID));
@@ -41,21 +41,22 @@ simulated function GetMultiTargetOptions(const XComGameState_Ability Ability, ou
 	}
 }
 
-
-// August Update: If adding this fucking works I'm going to be so mad 
 function AddAbilityBonusWidth(name AbilityName, int BonusWidth)
 {
 	super.AddAbilityBonusWidth(AbilityName, BonusWidth);
+	return;
 }
 
 simulated function GetMultiTargetsForLocation(const XComGameState_Ability Ability, const vector Location, out AvailableTarget Target)
 {
 	super.GetMultiTargetsForLocation(Ability, Location, Target);
+	return;
 }
 
 simulated function GetValidTilesForLocation(const XComGameState_Ability Ability, const vector Location, out array<TTile> ValidTiles)
 {
 	super.GetValidTilesForLocation(Ability, Location, ValidTiles);
+	return;
 }
 
 /**

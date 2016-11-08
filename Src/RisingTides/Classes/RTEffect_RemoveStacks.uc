@@ -17,13 +17,17 @@ simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffe
       super.OnEffectAdded(ApplyEffectParameters, kNewTargetState, NewGameState, NewEffectState);
 	  return;
 	}
+	`LOG("Rising Tides: Purging " @ iStacksToRemove @ " stacks from " @ EffectNameToPurge);
 	History = `XCOMHISTORY;
     foreach TargetUnitState.AffectedByEffects(EffectRef) {
         EffectState = XComGameState_Effect(History.GetGameStateForObjectID(EffectRef.ObjectID));
-        if(EffectState.GetMyTemplateName() != EffectNameToPurge)
+		`LOG("Rising Tides: found effect " @ EffectState.GetX2Effect().EffectName);
+        if(EffectState.GetX2Effect().EffectName != EffectNameToPurge) {
             continue;
+		}
+		`LOG ("Rising Tides: Found effect with " @ EffectState.iStacks @" stacks.");
         if(EffectState.iStacks < 1) {
-            `RedScreenOnce("Rising Tides: " @ EffectState.GetMyTemplateName() @ " already has no stacks!");
+            `RedScreenOnce("Rising Tides: " @ EffectState.GetX2Effect().EffectName @ " already has no stacks!");
             super.OnEffectAdded(ApplyEffectParameters, kNewTargetState, NewGameState, NewEffectState);
 			return;
         }

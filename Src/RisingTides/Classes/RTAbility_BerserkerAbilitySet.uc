@@ -137,29 +137,35 @@ static function X2AbilityTemplate BumpInTheNightBloodlustListener()
 
 	Template.AbilityToHitCalc = default.DeadEye; 
 	Template.AbilityTargetStyle = default.SelfTarget;
+	Template.AbilityCosts.AddItem(default.FreeActionCost);
 
 	BloodlustEffect = new class'RTEffect_Bloodlust';
-	BloodlustEffect.BuildPersistentEffect(2, false, false, false, eGameRule_PlayerTurnEnd);
-	BloodlustEffect.SetDisplayInfo(ePerkBuff_Bonus, Template.LocFriendlyName, Template.LocLongDescription, Template.IconImage, true,,Template.AbilitySourceName);
+	BloodlustEffect.iMobilityMod = 1;
+	BloodlustEffect.iMeleeHitChanceMod = 5;
+	BloodlustEffect.fCritDamageMod = 0.1f;
+	BloodlustEffect.BuildPersistentEffect(2, false, true, false, eGameRule_PlayerTurnEnd);
+	BloodlustEffect.SetDisplayInfo(ePerkBuff_Bonus, "Bloodlust", "Gain bonus melee crit chance and crit damage, but lose movement speed.", Template.IconImage, true,,Template.AbilitySourceName);
 	Template.AddTargetEffect(BloodlustEffect);
 
 	StealthEffect = new class'RTEffect_Stealth';
 	StealthEffect.fStealthModifier = 1;
-	StealthEffect.BuildPersistentEffect(2, false, false, false, eGameRule_PlayerTurnEnd);
+	StealthEffect.BuildPersistentEffect(1, false, true, false, eGameRule_PlayerTurnBegin);
+	StealthEffect.SetDisplayInfo(ePerkBuff_Bonus, "Stealth", "Become invisible, and extremely difficult to detect.", Template.IconImage, true,,Template.AbilitySourceName);
 	Template.AddTargetEffect(StealthEffect);
 
 	Template.AddTargetEffect(class'X2Effect_Spotted'.static.CreateUnspottedEffect());
 
 	Trigger = new class'X2AbilityTrigger_EventListener';
 	Trigger.ListenerData.Deferral = ELD_OnStateSubmitted;
-	Trigger.ListenerData.EventID = 'RTBloodlust_Proc';
+	Trigger.ListenerData.EventID = 'RTBumpInTheNight_BloodlustProc';
 	Trigger.ListenerData.Filter = eFilter_Unit;
 	Trigger.ListenerData.EventFn = class'XComGameState_Ability'.static.AbilityTriggerEventListener_Self;
 	Template.AbilityTriggers.AddItem(Trigger);
 
-	Template.bShowActivation = true;
-
+	//Template.bShowActivation = true;
+	Template.bSkipFireAction = true;
 	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
+	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
 	// TODO: Visualization!
 
 	return Template;
@@ -175,7 +181,7 @@ static function X2AbilityTemplate BumpInTheNightStealthListener()
 	local RTEffect_Stealth					StealthEffect;
 	local X2AbilityTrigger_EventListener	Trigger;
 
-	`CREATE_X2ABILITY_TEMPLATE(Template, 'BumpInTheNightBloodlustListener');
+	`CREATE_X2ABILITY_TEMPLATE(Template, 'BumpInTheNightStealthListener');
 	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_swordSlash"; // TODO: Change this
 	Template.AbilitySourceName = 'eAbilitySource_Perk';
 	Template.eAbilityIconBehaviorHUD = EAbilityIconBehavior_NeverShow;
@@ -183,10 +189,12 @@ static function X2AbilityTemplate BumpInTheNightStealthListener()
 
 	Template.AbilityToHitCalc = default.DeadEye; 
 	Template.AbilityTargetStyle = default.SelfTarget;
+	Template.AbilityCosts.AddItem(default.FreeActionCost);
 
 	StealthEffect = new class'RTEffect_Stealth';
 	StealthEffect.fStealthModifier = 1;
-	StealthEffect.BuildPersistentEffect(2, false, false, false, eGameRule_PlayerTurnEnd);
+	StealthEffect.BuildPersistentEffect(1, false, true, false, eGameRule_PlayerTurnBegin);
+	StealthEffect.SetDisplayInfo(ePerkBuff_Bonus, "Stealth", "Become invisible, and extremely difficult to detect.", Template.IconImage, true,,Template.AbilitySourceName);
 	Template.AddTargetEffect(StealthEffect);
 
 	Template.AddTargetEffect(class'X2Effect_Spotted'.static.CreateUnspottedEffect());
@@ -198,9 +206,11 @@ static function X2AbilityTemplate BumpInTheNightStealthListener()
 	Trigger.ListenerData.EventFn = class'XComGameState_Ability'.static.AbilityTriggerEventListener_Self;
 	Template.AbilityTriggers.AddItem(Trigger);
 
-	Template.bShowActivation = true;
+	//Template.bShowActivation = true;
+	Template.bSkipFireAction = true;
 
 	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
+	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
 	// TODO: Visualization!
 
 	return Template;
@@ -240,6 +250,7 @@ static function X2AbilityTemplate RTBerserkerKnifeAttack()
 	
 	StandardMelee = new class'X2AbilityToHitCalc_StandardMelee';
 	Template.AbilityToHitCalc = StandardMelee;
+	Template.ConcealmentRule = eConceal_Always;
 
 	Template.AbilityTargetStyle = new class'X2AbilityTarget_MovingMelee';
 	Template.TargetingMethod = class'X2TargetingMethod_MeleePath';
@@ -438,7 +449,7 @@ static function X2AbilityTemplate RTPurge() {
 	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_snapshot";
 	
 	Template.AbilitySourceName = 'eAbilitySource_Psionic';
-	Template.eAbilityIconBehaviorHUD = EAbilityIconBehavior_ShowIfAvailable;
+	Template.eAbilityIconBehaviorHUD = EAbilityIconBehavior_AlwaysShow;
 	Template.Hostility = eHostility_Neutral;
 	
 	// Deadeye to ensure
@@ -454,7 +465,6 @@ static function X2AbilityTemplate RTPurge() {
 
 	StealthEffect = new class'X2Effect_RangerStealth';
 	StealthEffect.BuildPersistentEffect(1, true, true, false, eGameRule_PlayerTurnEnd);
-	StealthEffect.SetDisplayInfo(ePerkBuff_Bonus, Template.LocFriendlyName, Template.GetMyHelpText(), Template.IconImage, true);
 	StealthEffect.bRemoveWhenTargetConcealmentBroken = true;
 	Template.AddTargetEffect(StealthEffect);
 
@@ -466,7 +476,7 @@ static function X2AbilityTemplate RTPurge() {
 	Template.AddTargetEffect(class'X2Effect_Spotted'.static.CreateUnspottedEffect());
 	
 	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
-	// TODO: Visualization
+	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
 
 	return Template;
 }
@@ -567,6 +577,7 @@ static function X2AbilityTemplate RTReprobateWaltz()
 
 	Template.AbilityTargetStyle = new class'X2AbilityTarget_MovingMelee';
 	Template.TargetingMethod = class'X2TargetingMethod_MeleePath';
+	Template.ConcealmentRule = eConceal_Always;
 
 
 	Template.AbilityTargetConditions.AddItem(default.MeleeVisibilityCondition);
@@ -709,6 +720,8 @@ static function X2AbilityTemplate RTPyroclasticSlash()
 	
 	StandardMelee = new class'X2AbilityToHitCalc_StandardMelee';
 	Template.AbilityToHitCalc = StandardMelee;
+
+	Template.ConcealmentRule = eConceal_Always;
 
 	Template.AbilityTargetStyle = new class'X2AbilityTarget_MovingMelee';
 	Template.TargetingMethod = class'X2TargetingMethod_MeleePath';
@@ -1046,7 +1059,7 @@ static function X2AbilityTemplate RTPersistingImages()
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'RTPersistingImages');
 	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_aim";
 	Template.AbilitySourceName = 'eAbilitySource_Psionic';
-	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_AlwaysShow;
+	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_NeverShow;
 	Template.Hostility = eHostility_Neutral;
 
 	Template.AbilityShooterConditions.AddItem(default.LivingShooterProperty);
@@ -1067,7 +1080,7 @@ static function X2AbilityTemplate RTPersistingImages()
 
 	AfterEffect = new class'RTEffect_GenerateAfterimage';
 	AfterEffect.BuildPersistentEffect(1, false, true, false, eGameRule_PlayerTurnBegin);
-	Template.AddTargetEffect(AfterEffect);
+	Template.AddShooterEffect(AfterEffect);
 
 	Template.bSkipFireAction = true;
 	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
@@ -1124,7 +1137,7 @@ simulated function Afterimage_BuildVisualization(XComGameState VisualizeGameStat
 	
 	if( AfterEffect == none )
 	{
-		`RedScreenOnce("Afterimage_BuildVisualization: Missing RTEffect_GenerateAfterimage -dslonneger @gameplay");
+		`RedScreenOnce("Afterimage_BuildVisualization: Missing RTEffect_GenerateAfterimage -bp1 @gameplay");
 		return;
 	}
 

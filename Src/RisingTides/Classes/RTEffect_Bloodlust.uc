@@ -1,8 +1,8 @@
 class RTEffect_Bloodlust extends X2Effect_PersistentStatChange config (RisingTides);
 
 var localized string RTFriendlyName;
-var float fMeleeHitChanceMod, fCritDamageMod;
-var int iMobilityMod;
+var float fCritDamageMod;
+var int iMobilityMod, iMeleeHitChanceMod;
 
 function RegisterForEvents(XComGameState_Effect EffectGameState)
 {
@@ -43,24 +43,24 @@ function GetToHitModifiers(XComGameState_Effect EffectState, XComGameState_Unit 
 	local ShotModifierInfo HitMod, CritMod;
 	local RTGameState_BloodlustEffect BumpEffect;
 
-	if(!bMelee) {
+	if(!bMelee && AbilityState.GetMyTemplateName() != 'RTBerserkerKnifeAttack' && AbilityState.GetMyTemplateName() != 'RTPyroclasticSlash' && AbilityState.GetMyTemplateName() != 'RTReprobateWaltz') {
 		return;
 	}
 
 	BumpEffect = RTGameState_BloodlustEffect(EffectState);
   
 	HitMod.ModType = eHit_Crit;
-	HitMod.Value = BumpEffect.iStacks * fMeleeHitChanceMod;
-	HitMod.Reason = AbilityState.GetMyTemplate().LocFriendlyName; //TODO: FIX
+	HitMod.Value = BumpEffect.iStacks * iMeleeHitChanceMod;
+	HitMod.Reason = "Bloodlust"; //TODO: FIX
 	ShotModifiers.AddItem(HitMod);
   
 }
 
 function int GetAttackingDamageModifier(XComGameState_Effect EffectState, XComGameState_Unit Attacker, Damageable TargetDamageable, XComGameState_Ability AbilityState, const out EffectAppliedData AppliedData, const int CurrentDamage, optional XComGameState NewGameState) {
-	local int ExtraCritDamage;
+	local float ExtraCritDamage;
 	local RTGameState_BloodlustEffect BumpEffect;
 
-	if(!AbilityState.IsMeleeAbility()) {
+	if(!AbilityState.IsMeleeAbility() && AbilityState.GetMyTemplateName() != 'RTBerserkerKnifeAttack' && AbilityState.GetMyTemplateName() != 'RTPyroclasticSlash' && AbilityState.GetMyTemplateName() != 'RTReprobateWaltz') {
 		return 0;
 	}
 

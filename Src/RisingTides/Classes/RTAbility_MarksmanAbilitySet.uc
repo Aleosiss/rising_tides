@@ -1182,6 +1182,7 @@ static function X2AbilityTemplate SovereignEffect()
 	FireToWorldEffect.FireChance_Level1 = 0.95f;                             //%chance of fire to catch
 	FireToWorldEffect.FireChance_Level2 = 0.95f;
 	FireToWorldEffect.FireChance_Level3 = 0.95f;
+	Template.AddTargetEffect(FireToWorldEffect);
 	Template.AddMultiTargetEffect(FireToWorldEffect);                        //this is required to add the fire effect
 
 	Template.OverrideAbilities.AddItem('SniperStandardFire');
@@ -1363,7 +1364,7 @@ static function X2AbilityTemplate TimeStandsStill()
 	UnitPropertyCondition.ExcludeFriendlyToSource = false;
 	UnitPropertyCondition.ExcludeHostileToSource = false;
 	UnitPropertyCondition.ExcludeCivilian = false;
-	UnitPropertyCondition.FailOnNonUnits = true;
+	UnitPropertyCondition.FailOnNonUnits = false;
 	Template.AbilityMultiTargetConditions.AddItem(UnitPropertyCondition);
 
 	ActionPointCost = new class'X2AbilityCost_ActionPoints';
@@ -1376,7 +1377,7 @@ static function X2AbilityTemplate TimeStandsStill()
 	Template.AbilityCooldown = Cooldown;
 
 	TimeStopEffect = new class'RTEffect_TimeStop';
-	TimeStopEffect.BuildPersistentEffect(1, true, true, false, eGameRule_PlayerTurnBegin);
+	TimeStopEffect.BuildPersistentEffect(1, true, true, false, eGameRule_PlayerTurnEnd);
 	TimeStopEffect.ApplyChance = 100;
 	TimeStopEffect.EffectTickedVisualizationFn = class'RTEffect_TimeStop'.static.TimeStopVisualizationTicked;
 	TimeStopEffect.SetDisplayInfo(ePerkBuff_Penalty, "Greyscaled", 
@@ -1573,6 +1574,8 @@ static function X2AbilityTemplate TwitchReactionShot()
 	AmmoCost = new class'X2AbilityCost_Ammo';
 	AmmoCost.iAmmo = 1;
 	Template.AbilityCosts.AddItem(AmmoCost);
+
+	Template.AbilityTriggers.AddItem(default.PlayerInputTrigger);
 
 	ReserveActionPointCost = new class'X2AbilityCost_ReserveActionPoints';
 	ReserveActionPointCost.iNumPoints = 1;

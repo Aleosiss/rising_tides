@@ -80,7 +80,7 @@ static function RTEffect_Acid CreateAcidBurningStatusEffect(name AcidName, int D
 
 DefaultProperties
 {
-	DamageTypes(0)="RTAcid"
+	DamageTypes(0)="Acid"
 	DuplicateResponse=eDupe_Refresh
 	bCanTickEveryAction= false // would probably be op
     iStackCount = 1
