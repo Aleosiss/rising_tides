@@ -30,6 +30,7 @@ This would be a bare-bones content mod. I also have the following content in min
       - Finalize Daybreak Flame details
   - Gatherer: 
       - Everything
+
 ###### Current Unresolved:
       - Visuals
 ###### Current Table
