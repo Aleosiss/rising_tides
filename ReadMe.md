@@ -17,8 +17,8 @@ This would be a bare-bones content mod. I also have the following content in min
 >- New enemy units, possible returns from EW
 
 ###### Current TODOs: 
-      - RTCondition_EffectStackCount doesn't work
-      - Persisting Images doesn't work
+  - Berserker:
+      - Implement Stealth visual overlay
       - Implement Ghost in the Shell (look into kismet/umap) 50%
       - Implement Shadow Strike (look into Musashi's Katanas)
       - Implement Dashing Strike
@@ -26,7 +26,10 @@ This would be a bare-bones content mod. I also have the following content in min
             - pyroclastic flow does not grant additional movement speed while target unit is burning.
             - pyroclastic flow does not grant additional burning effect on hit while target unit is burning.
             - pyroclastic flow targeting style may be incorrect.
-              
+  - Marksman: 
+      - Finalize Daybreak Flame details
+  - Gatherer: 
+      - Everything
 
 ###### Current Unresolved:
       - Visuals
