@@ -62,6 +62,9 @@
     <Content Include="Content\Obj_SecureUFO.umap">
       <SubType>Content</SubType>
     </Content>
+    <Content Include="Content\RisingTidesContentPackage.upk">
+      <SubType>Content</SubType>
+    </Content>
     <Content Include="Localization\RisingTides.int">
       <SubType>Content</SubType>
     </Content>
@@ -228,6 +231,9 @@
       <SubType>Content</SubType>
     </Content>
     <Content Include="Src\RisingTides\Classes\RTGameState_BloodlustEffect.uc">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Src\RisingTides\Classes\RTGameState_BumpInTheNightEffect.uc">
       <SubType>Content</SubType>
     </Content>
     <Content Include="Src\RisingTides\Classes\RTGameState_Harbinger.uc">

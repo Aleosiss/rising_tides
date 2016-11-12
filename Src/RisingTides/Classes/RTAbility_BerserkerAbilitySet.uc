@@ -111,6 +111,7 @@ static function X2AbilityTemplate BumpInTheNight()
 	Template.AdditionalAbilities.AddItem('BumpInTheNightStealthListener');
 	Template.AdditionalAbilities.AddItem('StandardGhostShot');
 	Template.AdditionalAbilities.AddItem('RTUnstableConduitBurst');
+	Template.AdditionalAbilities.AddItem('PsionicActivate');
 
 	// Probably required 
 	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
@@ -148,7 +149,7 @@ static function X2AbilityTemplate BumpInTheNightBloodlustListener()
 	Template.AddTargetEffect(BloodlustEffect);
 
 	StealthEffect = new class'RTEffect_Stealth';
-	StealthEffect.fStealthModifier = 1;
+	StealthEffect.fStealthModifier = 1.0f;
 	StealthEffect.BuildPersistentEffect(1, false, true, false, eGameRule_PlayerTurnBegin);
 	StealthEffect.SetDisplayInfo(ePerkBuff_Bonus, "Stealth", "Become invisible, and extremely difficult to detect.", Template.IconImage, true,,Template.AbilitySourceName);
 	Template.AddTargetEffect(StealthEffect);
@@ -156,7 +157,7 @@ static function X2AbilityTemplate BumpInTheNightBloodlustListener()
 	Template.AddTargetEffect(class'X2Effect_Spotted'.static.CreateUnspottedEffect());
 
 	Trigger = new class'X2AbilityTrigger_EventListener';
-	Trigger.ListenerData.Deferral = ELD_OnStateSubmitted;
+	Trigger.ListenerData.Deferral = ELD_Immediate;
 	Trigger.ListenerData.EventID = 'RTBumpInTheNight_BloodlustProc';
 	Trigger.ListenerData.Filter = eFilter_Unit;
 	Trigger.ListenerData.EventFn = class'XComGameState_Ability'.static.AbilityTriggerEventListener_Self;
@@ -177,7 +178,6 @@ static function X2AbilityTemplate BumpInTheNightBloodlustListener()
 static function X2AbilityTemplate BumpInTheNightStealthListener()
 {
 	local X2AbilityTemplate                 Template;
-	local RTEffect_Bloodlust				BloodlustEffect;
 	local RTEffect_Stealth					StealthEffect;
 	local X2AbilityTrigger_EventListener	Trigger;
 
@@ -192,7 +192,7 @@ static function X2AbilityTemplate BumpInTheNightStealthListener()
 	Template.AbilityCosts.AddItem(default.FreeActionCost);
 
 	StealthEffect = new class'RTEffect_Stealth';
-	StealthEffect.fStealthModifier = 1;
+	StealthEffect.fStealthModifier = 1.0f;
 	StealthEffect.BuildPersistentEffect(1, false, true, false, eGameRule_PlayerTurnBegin);
 	StealthEffect.SetDisplayInfo(ePerkBuff_Bonus, "Stealth", "Become invisible, and extremely difficult to detect.", Template.IconImage, true,,Template.AbilitySourceName);
 	Template.AddTargetEffect(StealthEffect);
@@ -200,20 +200,43 @@ static function X2AbilityTemplate BumpInTheNightStealthListener()
 	Template.AddTargetEffect(class'X2Effect_Spotted'.static.CreateUnspottedEffect());
 
 	Trigger = new class'X2AbilityTrigger_EventListener';
-	Trigger.ListenerData.Deferral = ELD_OnStateSubmitted;
-	Trigger.ListenerData.EventID = 'RTBumpInTheNight_StealthProc';
+	Trigger.ListenerData.Deferral = ELD_Immediate;
+	Trigger.ListenerData.EventID = 'RTBumpInTheNight_BloodlustProc';
 	Trigger.ListenerData.Filter = eFilter_Unit;
 	Trigger.ListenerData.EventFn = class'XComGameState_Ability'.static.AbilityTriggerEventListener_Self;
 	Template.AbilityTriggers.AddItem(Trigger);
 
 	//Template.bShowActivation = true;
 	Template.bSkipFireAction = true;
-
 	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
 	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
 	// TODO: Visualization!
 
 	return Template;
+}
+
+simulated function Ghosting_BuildVisualization(XComGameState VisualizeGameState, out array<VisualizationTrack> OutVisualizationTracks)
+{
+	local XComGameStateHistory			History;
+	local XComGameStateContext_Ability	Context;
+	local StateObjectReference			InteractingUnitRef;
+	local XComGameState_Unit			UnitState;
+	local XGUnit						UnitActor;
+	local XComUnitPawn					UnitPawn;
+	local MaterialInstanceTimeVarying	MITV;
+
+	History = `XCOMHISTORY;
+
+	Context = XComGameStateContext_Ability(VisualizeGameState.GetContext());
+	InteractingUnitRef = Context.InputContext.SourceObject;
+
+	MITV = MaterialInstanceTimeVarying(DynamicLoadObject("FX_Wraith_Armor.M_Wraith_Armor_Overlay_INST", class'MaterialInstanceTimeVarying'));
+	//MITV.SetScalarParameterValue('Ghost',1);
+
+	UnitState = XComGameState_Unit(History.GetGameStateForObjectID(InteractingUnitRef.ObjectID));
+	UnitActor = XGUnit(UnitState.GetVisualizer());
+	UnitPawn = UnitActor.GetPawn();	
+	UnitPawn.ApplyMITV(MITV);
 }
 
 //---------------------------------------------------------------------------------------
@@ -250,7 +273,6 @@ static function X2AbilityTemplate RTBerserkerKnifeAttack()
 	
 	StandardMelee = new class'X2AbilityToHitCalc_StandardMelee';
 	Template.AbilityToHitCalc = StandardMelee;
-	Template.ConcealmentRule = eConceal_Always;
 
 	Template.AbilityTargetStyle = new class'X2AbilityTarget_MovingMelee';
 	Template.TargetingMethod = class'X2TargetingMethod_MeleePath';
@@ -442,6 +464,7 @@ static function X2AbilityTemplate RTBlur() {
 static function X2AbilityTemplate RTPurge() {
 	local X2AbilityTemplate Template;
 	local X2Effect_RangerStealth StealthEffect;
+	local RTEffect_Stealth		CloakEffect;
 	local RTEffect_RemoveStacks	PurgeEffect;
 	local RTCondition_EffectStackCount	BloodlustCondition;
 	
@@ -577,7 +600,6 @@ static function X2AbilityTemplate RTReprobateWaltz()
 
 	Template.AbilityTargetStyle = new class'X2AbilityTarget_MovingMelee';
 	Template.TargetingMethod = class'X2TargetingMethod_MeleePath';
-	Template.ConcealmentRule = eConceal_Always;
 
 
 	Template.AbilityTargetConditions.AddItem(default.MeleeVisibilityCondition);
@@ -721,7 +743,6 @@ static function X2AbilityTemplate RTPyroclasticSlash()
 	StandardMelee = new class'X2AbilityToHitCalc_StandardMelee';
 	Template.AbilityToHitCalc = StandardMelee;
 
-	Template.ConcealmentRule = eConceal_Always;
 
 	Template.AbilityTargetStyle = new class'X2AbilityTarget_MovingMelee';
 	Template.TargetingMethod = class'X2TargetingMethod_MeleePath';

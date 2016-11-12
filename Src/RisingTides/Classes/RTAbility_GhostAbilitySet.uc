@@ -35,6 +35,7 @@ static function array<X2DataTemplate> CreateTemplates()
 	Templates.AddItem(Teek());
 	Templates.AddItem(Fade());
 	Templates.AddItem(LIOverwatchShot());
+	Templates.AddItem(PsionicActivate());
 	
 
 	return Templates;
@@ -106,6 +107,7 @@ static function X2AbilityTemplate StandardGhostShot()
 	SkipExclusions.AddItem(class'X2AbilityTemplateManager'.default.DisorientedName);
 	SkipExclusions.AddItem(class'X2StatusEffects'.default.BurningName);
 	Template.AddShooterEffectExclusions(SkipExclusions);
+
 
 	// Targeting Details
 	// Can only shoot visible enemies
@@ -670,5 +672,37 @@ static function X2AbilityTemplate LIOverwatchShot()
 	//
 	Template.AddTargetEffect(default.WeaponUpgradeMissDamage);
 	
+	return Template;
+}
+
+//---------------------------------------------------------------------------------------
+//---Psionic Activation------------------------------------------------------------------
+//---------------------------------------------------------------------------------------
+static function X2AbilityTemplate PsionicActivate()
+{
+	local X2AbilityTemplate	Template;
+	
+	`CREATE_X2ABILITY_TEMPLATE(Template, 'PsionicActivate');
+	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_voidrift";
+	
+	Template.AbilitySourceName = 'eAbilitySource_Psionic';
+	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_NeverShow;
+	Template.AbilityConfirmSound = "TacticalUI_ActivateAbility";
+	Template.Hostility = eHostility_Neutral;
+
+	Template.ConcealmentRule = eConceal_Always;
+
+	// Add dead eye to guarantee
+	Template.AbilityToHitCalc = default.DeadEye;
+	Template.AbilityTargetStyle = default.SelfTarget;
+	Template.AbilityTriggers.AddItem(default.PlayerInputTrigger);
+
+	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
+	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
+	//  NOTE: No visualization on purpose!
+	Template.PostActivationEvents.AddItem('UnitUsedPsionicAbility');
+
+	Template.bCrossClassEligible = false;				
+
 	return Template;
 }

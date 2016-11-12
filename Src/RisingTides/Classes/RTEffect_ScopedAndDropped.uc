@@ -77,7 +77,7 @@ function bool PostAbilityCostPaid(XComGameState_Effect EffectState, XComGameStat
 	local bool								bIsStandardFire, bTesting, bHitTarget;
 
 
-	`LOG("Scoped And Dropped Called!");
+	
 	bIsStandardFire = false;
 	bTesting = true;
 	if(kAbility.GetMyTemplateName() == 'RTStandardSniperShot' || kAbility.GetMyTemplateName() == 'DaybreakFlame' || kAbility.GetMyTemplateName() == 'RTPrecisionShot' || kAbility.GetMyTemplateName() == 'DisablingShot')
@@ -93,7 +93,6 @@ function bool PostAbilityCostPaid(XComGameState_Effect EffectState, XComGameStat
 		if (TargetUnit != none) {
 			// Shock 'n Awe check
 			if(bHitTarget) {
-				`LOG("Hit a target, Shock and Awe called!");
 				// this should be the attack that proced this PostAbilityCostPaid
 				TargetUnit.GetUnitValue('LastEffectDamage', DamageDealt);
 				// Running total of damage dealt this turn
@@ -105,7 +104,6 @@ function bool PostAbilityCostPaid(XComGameState_Effect EffectState, XComGameStat
 					Attacker.SetUnitFloatValue('ShockAndAweCounter', iTotalDamageDealt, eCleanup_BeginTurn);
 				} else {
 					// t-t-t-t-triggered
-					`LOG("We've done more than 25 damage this turn, Shock and Awe triggered!");
 					EventMgr.TriggerEvent('ShockAndAweTrigger', TargetUnit, Attacker, NewGameState);	
 					while(iTotalDamageDealt > iDamageRequiredToActivate) {
 						iTotalDamageDealt -= iDamageRequiredToActivate;
@@ -116,24 +114,18 @@ function bool PostAbilityCostPaid(XComGameState_Effect EffectState, XComGameStat
 			
 			if(TargetUnit.IsDead()) {
 				// Sovereign check 
-				`LOG("Checking for a one shot...");
 				if(Attacker.HasSoldierAbility('Sovereign')) {
 					TargetUnit.GetUnitValue('LastEffectDamage', DamageDealt);
-					`LOG("DamageDealt = "@DamageDealt.fValue);
-					`LOG("TargetUnit MaxHP = "@TargetUnit.GetMaxStat(eStat_HP));
 					if((int(DamageDealt.fValue) + 1) >= TargetUnit.GetMaxStat(eStat_HP)) {
-						`LOG("Got a one shot! Sovereign Called!");
 						// Panic
 						RandRoll = `SYNC_RAND(100);
 						if(RandRoll < iPanicChance)
 						{
 							// t-t-t-t-triggered
-							`LOG("We've made it past rng! Sovereign triggered!");
 							EventMgr.TriggerEvent('SovereignTrigger', TargetUnit, Attacker, NewGameState);
 						}
 					}
 				}
-				`LOG("Checking visibility...");
 				// Scoped and Dropped check
 				if (`TACTICALRULES.VisibilityMgr.GetVisibilityInfo(Attacker.ObjectID, TargetUnit.ObjectID, VisInfo))
 					{

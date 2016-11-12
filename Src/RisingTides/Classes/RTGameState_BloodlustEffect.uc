@@ -8,6 +8,7 @@ local XComGameStateContext_Ability AbilityContext;
 	local XComGameState NewGameState;
 	local UnitValue BloodlustStackCount;
 	local RTGameState_BloodlustEffect TempEffect;
+	local RTEffect_Bloodlust		BloodlustEffect;
 
 	
 			UnitState = XComGameState_Unit(GameState.GetGameStateForObjectID(ApplyEffectParameters.SourceStateObjectRef.ObjectID));

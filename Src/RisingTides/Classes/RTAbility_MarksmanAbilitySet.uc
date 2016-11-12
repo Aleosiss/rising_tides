@@ -1507,6 +1507,7 @@ static function X2AbilityTemplate LinkedIntelligence()
 
 	ChainEffect = new class 'RTEffect_LinkedIntelligence';
 	ChainEffect.BuildPersistentEffect(1, true, false, false,  eGameRule_PlayerTurnEnd);
+	ChainEffect.AbilityToActivate = 'LIOverwatchShot';
 	//ChainEffect.SetDisplayInfo(ePerkBuff_Bonus, Template.LocFriendlyName, Template.LocLongDescription, Template.IconImage, true,, Template.AbilitySourceName);
 	Template.AddMultiTargetEffect(ChainEffect);
 
