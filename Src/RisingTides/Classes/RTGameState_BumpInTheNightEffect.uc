@@ -79,6 +79,7 @@ function EventListenerReturn RTBumpInTheNight(Object EventData, Object EventSour
 		if (Attacker != none)
 		{
 			NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState(string(GetFuncName()));
+			//TODO: Visualization
 			NewAttacker = XComGameState_Unit(NewGameState.CreateStateObject(Attacker.Class, Attacker.ObjectID));
 			NewGameState.AddStateObject(NewAttacker);
 
@@ -91,26 +92,19 @@ function EventListenerReturn RTBumpInTheNight(Object EventData, Object EventSour
 
 			`TACTICALRULES.SubmitGameState(NewGameState);
 
-			`LOG("Rising Tides: AbilityState.GetMyTemplateName() = " @ AbilityState.GetMyTemplateName());
-			`LOG("Rising Tides: Attacker.TileDistanceBetween(TargetUnit) = " @ Attacker.TileDistanceBetween(TargetUnit));
-			`LOG("Rising Tides: BITNEffect.iTileDistanceToActivate = " @ BITNEffect.iTileDistanceToActivate); 
-
+			
 			if(Attacker.TileDistanceBetween(TargetUnit) < BITNEffect.iTileDistanceToActivate) {
 				
 				// melee kills additionally give bloodlust stacks and proc queen of blades
 				if(bShouldTriggerMelee) { 
-					`LOG("Rising Tides: Activating Bloodlust Listener...");
 					// t-t-t-t-triggered
 					
 					`LOG("Rising Tides: DetectionModifier = " @ NewAttacker.GetCurrentStat(eStat_DetectionModifier) @ ", target is 1");
 					InitializeAbilityForActivation(BloodlustAbilityState, NewAttacker, 'BumpInTheNightBloodlustListener', History);
 					ActivateAbility(BloodlustAbilityState, NewAttacker.GetReference());
 
-					`LOG("Rising Tides: Finished Activation...");
-					`LOG("Rising Tides: DetectionModifier = " @ NewAttacker.GetCurrentStat(eStat_DetectionModifier) @ ", target is 1");
 					NewAttacker = XComGameState_Unit(History.GetGameStateForObjectID(NewAttacker.ObjectID));
-					`LOG("Rising Tides: Checking History  = " @ NewAttacker.GetCurrentStat(eStat_DetectionModifier) @ ", target is 1");
-
+					
 					// since we've added a bloodlust stack, we need to check if we should leave the meld
 					if(!Attacker.HasSoldierAbility('RTContainedFury', false) && Attacker.IsUnitAffectedByEffectName('RTEffect_Meld')) {
 						if(class'RTGameState_Ability'.static.getBloodlustStackCount(NewAttacker) > class'RTAbility_BerserkerAbilitySet'.default.MAX_BLOODLUST_MELDJOIN) {
@@ -120,7 +114,6 @@ function EventListenerReturn RTBumpInTheNight(Object EventData, Object EventSour
 						}
 					}
 				} else {
-					`LOG("Rising Tides: Activating Stealth Listener...");
 					// all of the kills give stealth...
 					InitializeAbilityForActivation(StealthAbilityState, NewAttacker, 'BumpInTheNightStealthListener', History);
 					ActivateAbility(StealthAbilityState, NewAttacker.GetReference());
@@ -145,15 +138,15 @@ private function ActivateAbility(XComGameState_Ability AbilityState, StateObject
 	local XComGameStateContext_Ability AbilityContext;
 	
 	AbilityContext = class'XComGameStateContext_Ability'.static.BuildContextFromAbility(AbilityState, TargetRef.ObjectID);
-	`LOG("Rising Tides: Checking AbilityContext Validation...");
 	
 	if( AbilityContext.Validate() ) {
-		`LOG("Rising Tides: AbilityContext validated, activating " @ AbilityState.GetMyTemplateName());	
 		`TACTICALRULES.SubmitGameStateContext(AbilityContext);
 	} else {
 		`LOG("Rising Tides: Couldn't validate AbilityContext, " @ AbilityState.GetMyTemplateName() @ " not activated.");
 	}
 }
+
+
 
 private function InitializeAbilityForActivation(out XComGameState_Ability AbilityState, XComGameState_Unit AbilityOwnerUnit, Name AbilityName, XComGameStateHistory History) {
 	local StateObjectReference AbilityRef;

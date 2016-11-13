@@ -138,7 +138,6 @@ static function X2AbilityTemplate BumpInTheNightBloodlustListener()
 
 	Template.AbilityToHitCalc = default.DeadEye; 
 	Template.AbilityTargetStyle = default.SelfTarget;
-	Template.AbilityCosts.AddItem(default.FreeActionCost);
 
 	BloodlustEffect = new class'RTEffect_Bloodlust';
 	BloodlustEffect.iMobilityMod = 1;
@@ -189,7 +188,6 @@ static function X2AbilityTemplate BumpInTheNightStealthListener()
 
 	Template.AbilityToHitCalc = default.DeadEye; 
 	Template.AbilityTargetStyle = default.SelfTarget;
-	Template.AbilityCosts.AddItem(default.FreeActionCost);
 
 	StealthEffect = new class'RTEffect_Stealth';
 	StealthEffect.fStealthModifier = 1.0f;
