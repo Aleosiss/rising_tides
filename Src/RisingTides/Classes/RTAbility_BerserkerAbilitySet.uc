@@ -72,7 +72,7 @@ static function array<X2DataTemplate> CreateTemplates()
 	Templates.AddItem(RTGhostInTheShell());
 	Templates.AddItem(RTQueenOfBlades());
 
-	Templates.AddItem(RTApplyBurning());
+	
 
 	return Templates;
 }
@@ -470,7 +470,6 @@ static function X2AbilityTemplate RTBlur() {
 static function X2AbilityTemplate RTPurge() {
 	local X2AbilityTemplate Template;
 	local X2Effect_RangerStealth StealthEffect;
-	local RTEffect_Stealth		CloakEffect;
 	local RTEffect_RemoveStacks	PurgeEffect;
 	local RTCondition_EffectStackCount	BloodlustCondition;
 	
@@ -706,7 +705,7 @@ static function X2AbilityTemplate RTPyroclasticFlow()
 
 	Template.AdditionalAbilities.AddItem('RTPyroclasticSlash');
 	Template.AdditionalAbilities.AddItem('RTCreateFireTrailAbility');
-	Template.AdditionalAbilities.AddItem('RTApplyBurning');
+	//Template.AdditionalAbilities.AddItem('RTApplyBurning');
 	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
 	// Note: no visualization on purpose!
 	
@@ -769,14 +768,10 @@ static function X2AbilityTemplate RTCreateFireTrailAbility()
 
 	return Template;
 }
-
 function XComGameState Empty_BuildGameState( XComGameStateContext Context )
 {
 	return none;
 }
-
-//Responds when the Andromedon robot has finished moving and creates a Acid trail along its path
-//Must be static, because the event listener source will be an XComGameState_Ability, not the X2Ability_AndromedonRobot.
 static function EventListenerReturn BuildFireTrail_Self(Object EventData, Object EventSource, XComGameState GameState, Name EventID)
 {
 	local XComGameStateContext_Ability MoveContext;
@@ -1426,4 +1421,246 @@ static function X2AbilityTemplate RTQueenOfBlades()
     //  NOTE: No visualization on purpose!
 
 	return Template;
+}
+
+
+//---------------------------------------------------------------------------------------
+//---Shadow Strike-----------------------------------------------------------------------
+//---------------------------------------------------------------------------------------
+static function X2DataTemplate RTShadowStrike()
+{
+	local X2AbilityTemplate Template;
+	local X2AbilityCost_ActionPoints ActionPointCost;
+	local X2AbilityCooldown_LocalAndGlobal Cooldown;
+	local X2AbilityTarget_Cursor CursorTarget;
+	local X2AbilityMultiTarget_Radius RadiusMultiTarget;
+	local X2AbilityTrigger_PlayerInput InputTrigger;
+	local X2AbilityToHitCalc_StandardMelee StandardMelee;
+
+	`CREATE_X2ABILITY_TEMPLATE(Template, 'RTShadowStrike');
+
+	Template.AbilitySourceName = 'eAbilitySource_Standard';
+	Template.eAbilityIconBehaviorHUD = EAbilityIconBehavior_AlwaysShow;
+	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_codex_teleport";
+
+	ActionPointCost = new class'X2AbilityCost_ActionPoints';
+	ActionPointCost.iNumPoints = 1;
+	ActionPointCost.bConsumeAllPoints = true;
+	Template.AbilityCosts.AddItem(ActionPointCost);
+
+	Cooldown = new class'X2AbilityCooldown_LocalAndGlobal';
+	Cooldown.iNumTurns = 5;
+	Template.AbilityCooldown = Cooldown;
+
+	
+
+	InputTrigger = new class'X2AbilityTrigger_PlayerInput';
+	Template.AbilityTriggers.AddItem(InputTrigger);
+
+	StandardMelee = new class'X2AbilityToHitCalc_StandardMelee';
+	Template.AbilityToHitCalc = StandardMelee;
+
+	Template.TargetingMethod = class'X2TargetingMethod_Teleport';
+	CursorTarget = new class'X2AbilityTarget_Cursor';
+	CursorTarget.bRestrictToSquadsightRange = true;
+	Template.AbilityTargetStyle = CursorTarget;
+
+	RadiusMultiTarget = new class'X2AbilityMultiTarget_Radius';
+	RadiusMultiTarget.fTargetRadius = 0.25; // small amount so it just grabs one tile
+	Template.AbilityMultiTargetStyle = RadiusMultiTarget;
+
+	// Shooter Conditions
+	Template.AbilityShooterConditions.AddItem(default.LivingShooterProperty);
+	Template.AddShooterEffectExclusions();
+
+	//// Damage Effect
+	Template.AbilityMultiTargetConditions.AddItem(default.LivingTargetUnitOnlyProperty);
+	//TeleportDamageEffect = new class'X2Effect_ApplyWeaponDamage';
+	//TeleportDamageEffect.EffectDamageValue = class'X2Item_DefaultWeapons'.default.CYBERUS_TELEPORT_BASEDAMAGE;
+	//TeleportDamageEffect.EnvironmentalDamageAmount = default.TELEPORT_ENVIRONMENT_DAMAGE_AMOUNT;
+	//TeleportDamageEffect.EffectDamageValue.DamageType = 'Melee';
+	//Template.AddMultiTargetEffect(TeleportDamageEffect);
+
+	Template.ModifyNewContextFn = Teleport_ModifyActivatedAbilityContext;
+	Template.BuildNewGameStateFn = Teleport_BuildGameState;
+	Template.BuildVisualizationFn = Teleport_BuildVisualization;
+	Template.CinescriptCameraType = "Cyberus_Teleport";
+
+	return Template;
+}
+
+static simulated function Teleport_ModifyActivatedAbilityContext(XComGameStateContext Context)
+{
+	local XComGameState_Unit UnitState;
+	local XComGameStateContext_Ability AbilityContext;
+	local XComGameStateHistory History;
+	local PathPoint NextPoint, EmptyPoint;
+	local PathingInputData InputData;
+	local XComWorldData World;
+	local vector NewLocation;
+	local TTile NewTileLocation;
+
+	History = `XCOMHISTORY;
+	World = `XWORLD;
+
+	AbilityContext = XComGameStateContext_Ability(Context);
+	`assert(AbilityContext.InputContext.TargetLocations.Length > 0);
+	
+	UnitState = XComGameState_Unit(History.GetGameStateForObjectID(AbilityContext.InputContext.SourceObject.ObjectID));
+
+	// Build the MovementData for the path
+	// First posiiton is the current location
+	InputData.MovementTiles.AddItem(UnitState.TileLocation);
+
+	NextPoint.Position = World.GetPositionFromTileCoordinates(UnitState.TileLocation);
+	NextPoint.Traversal = eTraversal_Teleport;
+	NextPoint.PathTileIndex = 0;
+	InputData.MovementData.AddItem(NextPoint);
+
+	// Second posiiton is the cursor position
+	`assert(AbilityContext.InputContext.TargetLocations.Length == 1);
+
+	NewLocation = AbilityContext.InputContext.TargetLocations[0];
+	NewTileLocation = World.GetTileCoordinatesFromPosition(NewLocation);
+	NewLocation = World.GetPositionFromTileCoordinates(NewTileLocation);
+
+	NextPoint = EmptyPoint;
+	NextPoint.Position = NewLocation;
+	NextPoint.Traversal = eTraversal_Landing;
+	NextPoint.PathTileIndex = 1;
+	InputData.MovementData.AddItem(NextPoint);
+	InputData.MovementTiles.AddItem(NewTileLocation);
+
+    //Now add the path to the input context
+	InputData.MovingUnitRef = UnitState.GetReference();
+	AbilityContext.InputContext.MovementPaths.AddItem(InputData);
+}
+
+static simulated function XComGameState Teleport_BuildGameState(XComGameStateContext Context)
+{
+	local XComGameState NewGameState;
+	local XComGameState_Unit UnitState;
+	local XComGameStateContext_Ability AbilityContext;
+	local vector NewLocation;
+	local TTile NewTileLocation;
+	local XComWorldData World;
+	local X2EventManager EventManager;
+	local int LastElementIndex;
+
+	World = `XWORLD;
+	EventManager = `XEVENTMGR;
+
+	//Build the new game state frame
+	NewGameState = TypicalAbility_BuildGameState(Context);
+
+	AbilityContext = XComGameStateContext_Ability(NewGameState.GetContext());	
+	UnitState = XComGameState_Unit(NewGameState.CreateStateObject(class'XComGameState_Unit', AbilityContext.InputContext.SourceObject.ObjectID));
+
+	LastElementIndex = AbilityContext.InputContext.MovementPaths[0].MovementData.Length - 1;
+
+	// Set the unit's new location
+	// The last position in MovementData will be the end location
+	`assert(LastElementIndex > 0);
+	NewLocation = AbilityContext.InputContext.MovementPaths[0].MovementData[LastElementIndex].Position;
+	NewTileLocation = World.GetTileCoordinatesFromPosition(NewLocation);
+	UnitState.SetVisibilityLocation(NewTileLocation);
+
+	NewGameState.AddStateObject(UnitState);
+
+	AbilityContext.ResultContext.bPathCausesDestruction = MoveAbility_StepCausesDestruction(UnitState, AbilityContext.InputContext, 0, AbilityContext.InputContext.MovementPaths[0].MovementTiles.Length - 1);
+	MoveAbility_AddTileStateObjects(NewGameState, UnitState, AbilityContext.InputContext, 0, AbilityContext.InputContext.MovementPaths[0].MovementTiles.Length - 1);
+
+	EventManager.TriggerEvent('ObjectMoved', UnitState, UnitState, NewGameState);
+	EventManager.TriggerEvent('UnitMoveFinished', UnitState, UnitState, NewGameState);
+
+	//Return the game state we have created
+	return NewGameState;
+}
+
+simulated function Teleport_BuildVisualization(XComGameState VisualizeGameState, out array<VisualizationTrack> OutVisualizationTracks)
+{
+	local XComGameStateHistory History;
+	local XComGameStateContext_Ability  AbilityContext;
+	local StateObjectReference InteractingUnitRef;
+	local X2AbilityTemplate AbilityTemplate;
+	local VisualizationTrack EmptyTrack, BuildTrack;
+	local X2Action_PlaySoundAndFlyOver SoundAndFlyover;
+	local int i, j;
+	local XComGameState_WorldEffectTileData WorldDataUpdate;
+	local X2Action_MoveTurn MoveTurnAction;
+	local X2VisualizerInterface TargetVisualizerInterface;
+	
+	History = `XCOMHISTORY;
+
+	AbilityContext = XComGameStateContext_Ability(VisualizeGameState.GetContext());
+	InteractingUnitRef = AbilityContext.InputContext.SourceObject;
+
+	AbilityTemplate = class'XComGameState_Ability'.static.GetMyTemplateManager().FindAbilityTemplate(AbilityContext.InputContext.AbilityTemplateName);
+
+	//****************************************************************************************
+	//Configure the visualization track for the source
+	//****************************************************************************************
+	BuildTrack = EmptyTrack;
+	BuildTrack.StateObject_OldState = History.GetGameStateForObjectID(InteractingUnitRef.ObjectID, eReturnType_Reference, VisualizeGameState.HistoryIndex - 1);
+	BuildTrack.StateObject_NewState = VisualizeGameState.GetGameStateForObjectID(InteractingUnitRef.ObjectID);
+	BuildTrack.TrackActor = History.GetVisualizer(InteractingUnitRef.ObjectID);
+
+	SoundAndFlyOver = X2Action_PlaySoundAndFlyOver(class'X2Action_PlaySoundAndFlyover'.static.AddToVisualizationTrack(BuildTrack, AbilityContext));
+	SoundAndFlyOver.SetSoundAndFlyOverParameters(None, AbilityTemplate.LocFlyOverText, '', eColor_Good);
+
+	// Turn to face the target action. The target location is the center of the ability's radius, stored in the 0 index of the TargetLocations
+	MoveTurnAction = X2Action_MoveTurn(class'X2Action_MoveTurn'.static.AddToVisualizationTrack(BuildTrack, AbilityContext));
+	MoveTurnAction.m_vFacePoint = AbilityContext.InputContext.TargetLocations[0];
+
+	// move action
+	class'X2VisualizerHelpers'.static.ParsePath(AbilityContext, BuildTrack, OutVisualizationTracks);
+
+	OutVisualizationTracks.AddItem(BuildTrack);
+	
+	//****************************************************************************************
+
+	foreach VisualizeGameState.IterateByClassType(class'XComGameState_WorldEffectTileData', WorldDataUpdate)
+	{
+		BuildTrack = EmptyTrack;
+		BuildTrack.TrackActor = none;
+		BuildTrack.StateObject_NewState = WorldDataUpdate;
+		BuildTrack.StateObject_OldState = WorldDataUpdate;
+
+		for (i = 0; i < AbilityTemplate.AbilityTargetEffects.Length; ++i)
+		{
+			AbilityTemplate.AbilityTargetEffects[i].AddX2ActionsForVisualization(VisualizeGameState, BuildTrack, AbilityContext.FindTargetEffectApplyResult(AbilityTemplate.AbilityTargetEffects[i]));
+		}
+
+		OutVisualizationTracks.AddItem(BuildTrack);
+	}
+
+	//****************************************************************************************
+	//Configure the visualization track for the targets
+	//****************************************************************************************
+	for( i = 0; i < AbilityContext.InputContext.MultiTargets.Length; ++i )
+	{
+		InteractingUnitRef = AbilityContext.InputContext.MultiTargets[i];
+		BuildTrack = EmptyTrack;
+		BuildTrack.StateObject_OldState = History.GetGameStateForObjectID(InteractingUnitRef.ObjectID, eReturnType_Reference, VisualizeGameState.HistoryIndex - 1);
+		BuildTrack.StateObject_NewState = VisualizeGameState.GetGameStateForObjectID(InteractingUnitRef.ObjectID);
+		BuildTrack.TrackActor = History.GetVisualizer(InteractingUnitRef.ObjectID);
+
+		class'X2Action_WaitForAbilityEffect'.static.AddToVisualizationTrack(BuildTrack, AbilityContext);
+		for( j = 0; j < AbilityContext.ResultContext.MultiTargetEffectResults[i].Effects.Length; ++j )
+		{
+			AbilityContext.ResultContext.MultiTargetEffectResults[i].Effects[j].AddX2ActionsForVisualization(VisualizeGameState, BuildTrack, AbilityContext.ResultContext.MultiTargetEffectResults[i].ApplyResults[j]);
+		}
+
+		TargetVisualizerInterface = X2VisualizerInterface(BuildTrack.TrackActor);
+		if( TargetVisualizerInterface != none )
+		{
+			//Allow the visualizer to do any custom processing based on the new game state. For example, units will create a death action when they reach 0 HP.
+			TargetVisualizerInterface.BuildAbilityEffectsVisualization(VisualizeGameState, BuildTrack);
+		}
+
+		if (BuildTrack.TrackActions.Length > 0)
+		{
+			OutVisualizationTracks.AddItem(BuildTrack);
+		}
+	}
 }
