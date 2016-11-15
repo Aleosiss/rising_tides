@@ -81,6 +81,7 @@ function EventListenerReturn RTBumpInTheNight(Object EventData, Object EventSour
 			NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState(string(GetFuncName()));
 			//TODO: Visualization
 			NewAttacker = XComGameState_Unit(NewGameState.CreateStateObject(Attacker.Class, Attacker.ObjectID));
+			XComGameStateContext_ChangeContainer(NewGameState.GetContext()).BuildVisualizationFn = TriggerBumpInTheNightFlyoverVisualizationFn;
 			NewGameState.AddStateObject(NewAttacker);
 
 			if(Attacker.HasSoldierAbility('RTQueenOfBlades', true) && bShouldTriggerMelee) {	
@@ -153,6 +154,44 @@ private function InitializeAbilityForActivation(out XComGameState_Ability Abilit
 		`LOG("Rising Tides: Couldn't Initialize Ability for Activation!");
 	}
 
+}
+
+function TriggerBumpInTheNightFlyoverVisualizationFn(XComGameState VisualizeGameState, out array<VisualizationTrack> OutVisualizationTracks)
+{
+	local XComGameState_Unit UnitState;
+	local X2Action_PlaySoundAndFlyOver SoundAndFlyOver;
+	local VisualizationTrack BuildTrack;
+	local XComGameStateHistory History;
+	local X2AbilityTemplate AbilityTemplate;
+	local XComGameState_Ability AbilityState;
+
+	History = `XCOMHISTORY;
+	foreach VisualizeGameState.IterateByClassType(class'XComGameState_Unit', UnitState)
+	{
+		foreach VisualizeGameState.IterateByClassType(class'XComGameState_Ability', AbilityState)
+		{
+			break;
+		}
+		if (AbilityState == none)
+		{
+			`RedScreenOnce("Ability state missing from" @ GetFuncName() @ "-jbouscher @gameplay");
+			return;
+		}
+
+		History.GetCurrentAndPreviousGameStatesForObjectID(UnitState.ObjectID, BuildTrack.StateObject_OldState, BuildTrack.StateObject_NewState, , VisualizeGameState.HistoryIndex);
+		BuildTrack.StateObject_NewState = UnitState;
+		BuildTrack.TrackActor = UnitState.GetVisualizer();
+
+		AbilityTemplate = AbilityState.GetMyTemplate();
+		if (AbilityTemplate != none)
+		{
+			SoundAndFlyOver = X2Action_PlaySoundAndFlyOver(class'X2Action_PlaySoundAndFlyOver'.static.AddToVisualizationTrack(BuildTrack, VisualizeGameState.GetContext()));
+			SoundAndFlyOver.SetSoundAndFlyOverParameters(None, AbilityTemplate.LocFriendlyName, '', eColor_Good, AbilityTemplate.IconImage);
+
+			OutVisualizationTracks.AddItem(BuildTrack);
+		}
+		break;
+	}
 }
 
 
