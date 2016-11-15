@@ -2,7 +2,7 @@
 //  FILE:    RTAbility_BerserkerAbilitySet.uc
 //  AUTHOR:  Aleosiss
 //  DATE:    8 August 2016
-//  PURPOSE: Defines abilities used by the GHOST Berserker class.
+//  PURPOSE: Defines abilities used by Queen.
 //           
 //---------------------------------------------------------------------------------------
 //	Queen's perks.

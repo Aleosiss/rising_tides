@@ -2,7 +2,7 @@
 //  FILE:    RTAbility_MarksmanAbilitySet.uc
 //  AUTHOR:  Aleosiss
 //  DATE:    8 February 2016
-//  PURPOSE: Defines abilities used by the GHOST Marksman class.
+//  PURPOSE: Defines abilities used by Whisper.
 //           
 //---------------------------------------------------------------------------------------
 //	Whisper's perks.
@@ -71,10 +71,6 @@ static function array<X2DataTemplate> CreateTemplates()
 	Templates.AddItem(HarbingerCleanseListener());
 	Templates.AddItem(ShockAndAwe());
 	Templates.AddItem(ShockAndAweListener());
-	//Templates.AddItem(SIShot());
-	//Templates.AddItem(TimeStandsStill());
-	//Templates.AddItem(Override());
-	//Templates.AddItem(Barrier());
 
 	return Templates;
 }
@@ -86,7 +82,7 @@ static function X2AbilityTemplate ScopedAndDropped()
 {
 	local X2AbilityTemplate						Template;
 	local RTEffect_ScopedAndDropped				ScopedEffect;
-	local RTEffect_Squadsight				SSEffect;
+	local RTEffect_Squadsight					SSEffect;
 
 	// Icon Properties
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'ScopedAndDropped');

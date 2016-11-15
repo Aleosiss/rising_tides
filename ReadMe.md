@@ -25,7 +25,6 @@ This would be a bare-bones content mod. I also have the following content in min
       - Finish Pyroclastic Flow:
             - pyroclastic flow does not grant additional movement speed while target unit is burning.
             - pyroclastic flow does not grant additional burning effect on hit while target unit is burning.
-            - pyroclastic flow targeting style may be incorrect.
   - Marksman: 
       - Finalize Daybreak Flame details
   - Gatherer: 

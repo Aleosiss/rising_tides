@@ -98,11 +98,8 @@ function EventListenerReturn RTBumpInTheNight(Object EventData, Object EventSour
 				// melee kills additionally give bloodlust stacks and proc queen of blades
 				if(bShouldTriggerMelee) { 
 					// t-t-t-t-triggered
-					
-					`LOG("Rising Tides: DetectionModifier = " @ NewAttacker.GetCurrentStat(eStat_DetectionModifier) @ ", target is 1");
 					InitializeAbilityForActivation(BloodlustAbilityState, NewAttacker, 'BumpInTheNightBloodlustListener', History);
 					ActivateAbility(BloodlustAbilityState, NewAttacker.GetReference());
-
 					NewAttacker = XComGameState_Unit(History.GetGameStateForObjectID(NewAttacker.ObjectID));
 					
 					// since we've added a bloodlust stack, we need to check if we should leave the meld
@@ -116,8 +113,7 @@ function EventListenerReturn RTBumpInTheNight(Object EventData, Object EventSour
 				} else {
 					// all of the kills give stealth...
 					InitializeAbilityForActivation(StealthAbilityState, NewAttacker, 'BumpInTheNightStealthListener', History);
-					ActivateAbility(StealthAbilityState, NewAttacker.GetReference());
-																					
+					ActivateAbility(StealthAbilityState, NewAttacker.GetReference());																
 					NewAttacker = XComGameState_Unit(History.GetGameStateForObjectID(NewAttacker.ObjectID));
 				} 
 			}
