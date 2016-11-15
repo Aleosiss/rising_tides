@@ -108,16 +108,22 @@ static function X2AbilityTemplate ScopedAndDropped()
 	SSEffect.BuildPersistentEffect(1, true, true, true);
 	Template.AddTargetEffect(SSEffect);
 
-	Template.AdditionalAbilities.AddItem('RTStandardSniperShot');
-	Template.AdditionalAbilities.AddItem('RTOverwatch');
-	Template.AdditionalAbilities.AddItem('RTOverwatchShot');
+	// standard ghost abilities
 	Template.AdditionalAbilities.AddItem('GhostPsiSuite');
 	Template.AdditionalAbilities.AddItem('JoinMeld');
 	Template.AdditionalAbilities.AddItem('LeaveMeld');
 	Template.AdditionalAbilities.AddItem('PsiOverload');
 	Template.AdditionalAbilities.AddItem('PsiOverloadPanic');
+
+	// unique abilities for Scoped and Dropped
+	Template.AdditionalAbilities.AddItem('RTStandardSniperShot');
+	Template.AdditionalAbilities.AddItem('RTOverwatch');
+	Template.AdditionalAbilities.AddItem('RTOverwatchShot');
+
+	// special meld abilities
 	Template.AdditionalAbilities.AddItem('LIOverwatchShot');
 	Template.AdditionalAbilities.AddItem('RTUnstableConduitBurst');
+	Template.AdditionalAbilities.AddItem('PsionicActivate');
 
 	// Probably required 
 	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;

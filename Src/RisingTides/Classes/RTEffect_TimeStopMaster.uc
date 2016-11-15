@@ -23,10 +23,16 @@ simulated function bool OnEffectTicked(const out EffectAppliedData ApplyEffectPa
 {
 	local XComGameState_AIReinforcementSpawner OldSpawnerState, NewSpawnerState;
 	local XComGameStateHistory		History;
+	local int SpawnedUnitID;
   	
 	History = `XCOMHISTORY;
 	foreach History.IterateByClassType(class'XComGameState_AIReinforcementSpawner', OldSpawnerState) {
 		NewSpawnerState = XComGameState_AIReinforcementSpawner(NewGameState.CreateStateObject(class'XComGameState_AIReinforcementSpawner', OldSpawnerState.ObjectID));
+		`LOG("Spawner is spawning:");
+		foreach NewSpawnerState.SpawnedUnitIDs(SpawnedUnitID) {
+			`LOG(XComGameState_Unit(History.GetGameStateForObjectID(SpawnedUnitID)).GetMyTemplateName());
+		}
+		
 		NewSpawnerState.Countdown = OldSpawnerState.Countdown + 1;
 		NewGameState.AddStateObject(NewSpawnerState);
 	}							
@@ -41,7 +47,7 @@ simulated function OnEffectRemoved(const out EffectAppliedData ApplyEffectParame
 }
 
 // Modify Timer, ripped from wghost's configure timers mod
-// not using this atm...  directly interacting with kismet is more powerful, but less compatible.
+// not using this atm...  
 simulated function ModifyTimer(bool bEnabled) {
 	local WorldInfo wInfo;
 	local Sequence mainSequence;

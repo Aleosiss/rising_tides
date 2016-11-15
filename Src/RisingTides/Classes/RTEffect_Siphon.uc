@@ -64,6 +64,6 @@ simulated function AddX2ActionsForVisualizationSource(XComGameState VisualizeGam
 	if( Healed > 0 )
 	{
 		SoundAndFlyOver = X2Action_PlaySoundAndFlyOver(class'X2Action_PlaySoundAndFlyOver'.static.AddToVisualizationTrack(BuildTrack, VisualizeGameState.GetContext()));
-		SoundAndFlyOver.SetSoundAndFlyOverParameters(None, "+" $ Healed, '', eColor_Good);
+		SoundAndFlyOver.SetSoundAndFlyOverParameters(None, "Siphon: +" $ Healed, '', eColor_Good);
 	}
 }

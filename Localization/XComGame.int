@@ -266,6 +266,20 @@ LocHelpText="Gain Stealth after killing a unit within 3 tiles. Melee kills addit
 LocFlyOverText="Bump In The Night"
 LocPromotionPopupText="<Bullet/>This unit gains Stealth after killing a unit within 3 tiles. <br/><Bullet/>If it was a melee kill, additionally gain a stack of Bloodlust. <br/><Bullet/> <br/><Bullet/> <br/>"
 
+[BumpInTheNightBloodlustListener X2AbilityTemplate]
+LocFriendlyName="Bump In The Night"
+LocLongDescription="This unit gains Stealth after killing a unit within 3 tiles. If it was a melee kill, additionally gain a stack of Bloodlust."
+LocHelpText="Gain Stealth after killing a unit within 3 tiles. Melee kills additionally grant a stack of Bloodlust."
+LocFlyOverText="Bump In The Night"
+LocPromotionPopupText="<Bullet/>This unit gains Stealth after killing a unit within 3 tiles. <br/><Bullet/>If it was a melee kill, additionally gain a stack of Bloodlust. <br/><Bullet/> <br/><Bullet/> <br/>"
+
+[BumpInTheNightStealthListener X2AbilityTemplate]
+LocFriendlyName="Bump In The Night"
+LocLongDescription="This unit gains Stealth after killing a unit within 3 tiles. If it was a melee kill, additionally gain a stack of Bloodlust."
+LocHelpText="Gain Stealth after killing a unit within 3 tiles. Melee kills additionally grant a stack of Bloodlust."
+LocFlyOverText="Bump In The Night"
+LocPromotionPopupText="<Bullet/>This unit gains Stealth after killing a unit within 3 tiles. <br/><Bullet/>If it was a melee kill, additionally gain a stack of Bloodlust. <br/><Bullet/> <br/><Bullet/> <br/>"
+
 [RTBerserkerKnifeAttack X2AbilityTemplate]
 LocFriendlyName="Slash (Berserker)"
 LocLongDescription="Attack any enemy within movement range with your <Ability:SecondaryWeaponName/>."

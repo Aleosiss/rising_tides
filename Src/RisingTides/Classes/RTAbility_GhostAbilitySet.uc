@@ -681,6 +681,7 @@ static function X2AbilityTemplate LIOverwatchShot()
 static function X2AbilityTemplate PsionicActivate()
 {
 	local X2AbilityTemplate	Template;
+	local X2AbilityTrigger_EventListener Trigger;
 	
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'PsionicActivate');
 	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_voidrift";
@@ -695,7 +696,13 @@ static function X2AbilityTemplate PsionicActivate()
 	// Add dead eye to guarantee
 	Template.AbilityToHitCalc = default.DeadEye;
 	Template.AbilityTargetStyle = default.SelfTarget;
-	Template.AbilityTriggers.AddItem(default.PlayerInputTrigger);
+	
+	Trigger = new class'X2AbilityTrigger_EventListener';
+	Trigger.ListenerData.Deferral = ELD_OnStateSubmitted;
+	Trigger.ListenerData.EventID = 'RTForcePsionicActivation';
+	Trigger.ListenerData.Filter = eFilter_Unit;
+	Trigger.ListenerData.EventFn = class'XComGameState_Ability'.static.AbilityTriggerEventListener_Self;
+	Template.AbilityTriggers.AddItem(Trigger);
 
 	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
 	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;

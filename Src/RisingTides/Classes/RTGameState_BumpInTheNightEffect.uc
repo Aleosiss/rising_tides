@@ -81,7 +81,7 @@ function EventListenerReturn RTBumpInTheNight(Object EventData, Object EventSour
 			NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState(string(GetFuncName()));
 			//TODO: Visualization
 			NewAttacker = XComGameState_Unit(NewGameState.CreateStateObject(Attacker.Class, Attacker.ObjectID));
-			XComGameStateContext_ChangeContainer(NewGameState.GetContext()).BuildVisualizationFn = TriggerBumpInTheNightFlyoverVisualizationFn;
+			//XComGameStateContext_ChangeContainer(NewGameState.GetContext()).BuildVisualizationFn = TriggerBumpInTheNightFlyoverVisualizationFn;
 			NewGameState.AddStateObject(NewAttacker);
 
 			if(Attacker.HasSoldierAbility('RTQueenOfBlades', true) && bShouldTriggerMelee) {	
@@ -175,6 +175,7 @@ function TriggerBumpInTheNightFlyoverVisualizationFn(XComGameState VisualizeGame
 		if (AbilityState == none)
 		{
 			`RedScreenOnce("Ability state missing from" @ GetFuncName() @ "-jbouscher @gameplay");
+			`LOG("Rising Tides: ITS BROKEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEN");
 			return;
 		}
 
@@ -186,7 +187,7 @@ function TriggerBumpInTheNightFlyoverVisualizationFn(XComGameState VisualizeGame
 		if (AbilityTemplate != none)
 		{
 			SoundAndFlyOver = X2Action_PlaySoundAndFlyOver(class'X2Action_PlaySoundAndFlyOver'.static.AddToVisualizationTrack(BuildTrack, VisualizeGameState.GetContext()));
-			SoundAndFlyOver.SetSoundAndFlyOverParameters(None, AbilityTemplate.LocFriendlyName, '', eColor_Good, AbilityTemplate.IconImage);
+			SoundAndFlyOver.SetSoundAndFlyOverParameters(None,"Bump in the Night", '', eColor_Good, AbilityTemplate.IconImage);
 
 			OutVisualizationTracks.AddItem(BuildTrack);
 		}
