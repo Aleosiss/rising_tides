@@ -20,11 +20,10 @@ This would be a bare-bones content mod. I also have the following content in min
   - Berserker:
       - Implement Stealth visual overlay
       - Implement Ghost in the Shell (look into kismet/umap) 50%
-      - Implement Shadow Strike (look into Musashi's Katanas)
       - Implement Dashing Strike
 
   - Marksman: 
-      - Finalize Daybreak Flame details
+      - Nothing
   - Gatherer: 
       - Everything
 
