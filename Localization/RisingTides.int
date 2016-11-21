@@ -31,3 +31,8 @@ TimeStopEffectPersistsString="Timelocked!"
 TimeStopEffectRemovedString="Time Stop Ended!"
 TimeStopLostFlyover="Time Stop Ended!"
 LargeUnitTimeStopLostFlyover="Time Stop Ended!"
+
+[DaybreakFlame RTAbilityTemplate]
+LocFriendlyName="Fire Sniper Rifle (Daybreak Flame)"
+LocHelpText="Fire your sniper rifle at a target."
+LocLongDescription="<Bullet/> The sniper rifle is powerful and accurate at long range, but usually requires two actions to fire<br><Bullet/>Firing the primary weapon always ends a soldier's turn<br>"

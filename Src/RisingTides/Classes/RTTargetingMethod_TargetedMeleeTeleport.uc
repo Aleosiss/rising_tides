@@ -1,5 +1,6 @@
 class RTTargetingMethod_TargetedMeleeTeleport extends X2TargetingMethod;
 
+var private RTMeleePathingPawn			PathingPawn;
 var private XComActionIconManager		IconManager;
 var private XComLevelBorderManager		LevelBorderManager;
 var private XCom3DCursor				Cursor;
@@ -7,16 +8,23 @@ var private X2Camera_Midpoint			TargetingCamera; // deprecated
 var private XGUnit						TargetUnit;
 var private X2Camera_LookAtActorTimed	LookAtCamera; // deprecated
 
+// the index of the last available target we were targeting
 var private int LastTarget;
 
-function Init(AvailableAction InAction) {
-        local XComPresentationLayer Pres;
+function Init(AvailableAction InAction)
+{
+	local XComPresentationLayer Pres;
 
-        super.Init(InAction);
+	super.Init(InAction);
 
-        Pres = `PRES;
-        Cursor = `CURSOR;
-      
+	Pres = `PRES;
+
+	Cursor = `CURSOR;
+	PathingPawn = Cursor.Spawn(class'RTMeleePathingPawn', Cursor);
+	PathingPawn.HideRenderablePath(true);
+	PathingPawn.SetVisible(true);
+	PathingPawn.HideRenderablePath(true);
+	PathingPawn.Init(UnitState, Ability);
 	IconManager = Pres.GetActionIconMgr();
 	LevelBorderManager = Pres.GetLevelBorderMgr();
 
@@ -27,7 +35,6 @@ function Init(AvailableAction InAction) {
 	LevelBorderManager.UpdateCursorLocation(Cursor.Location, true);
 
 	DirectSelectNearestTarget();
-
 }
 
 private function DirectSelectNearestTarget()
@@ -80,6 +87,7 @@ private function DirectSelectNearestTarget()
 
 function Canceled()
 {
+	PathingPawn.Destroy();
 	IconManager.ShowIcons(false);
 	LevelBorderManager.ShowBorder(false);
 
@@ -103,6 +111,7 @@ function Update(float DeltaTime)
 {
 	IconManager.UpdateCursorLocation();
 	LevelBorderManager.UpdateCursorLocation(Cursor.Location);
+	PathingPawn.HideRenderablePath(true);
 }
 
 function NextTarget()
@@ -139,7 +148,13 @@ function DirectSetTarget(int TargetIndex)
 	// have the idle state machine look at the new target
 	FiringUnit.IdleStateMachine.CheckForStanceUpdate();
 
-	
+	// have the pathing pawn draw a path to the target
+	History = `XCOMHISTORY;
+	Target = History.GetGameStateForObjectID(Action.AvailableTargets[LastTarget].PrimaryTarget.ObjectID);
+	PathingPawn.HideRenderablePath(true);
+	PathingPawn.UpdateMeleeTarget(Target);
+	PathingPawn.HideRenderablePath(true);
+
 	TargetUnit = XGUnit(Target.GetVisualizer());
 
 	if(LookAtCamera != none)
@@ -158,6 +173,12 @@ function int GetTargetIndex()
 	return LastTarget;
 }
 
+function bool GetPreAbilityPath(out array<TTile> PathTiles)
+{
+	PathingPawn.GetTargetMeleePath(PathTiles);
+	return PathTiles.Length > 1;
+}
+
 function bool GetCurrentTargetFocus(out Vector Focus)
 {
 	local StateObjectReference Shooter;
@@ -172,4 +193,7 @@ function bool GetCurrentTargetFocus(out Vector Focus)
 	return false;
 }
 
-
+defaultproperties
+{
+	ProvidesPath=false
+}

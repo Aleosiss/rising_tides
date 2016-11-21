@@ -22,9 +22,7 @@ This would be a bare-bones content mod. I also have the following content in min
       - Implement Ghost in the Shell (look into kismet/umap) 50%
       - Implement Shadow Strike (look into Musashi's Katanas)
       - Implement Dashing Strike
-      - Finish Pyroclastic Flow:
-            - pyroclastic flow does not grant additional movement speed while target unit is burning.
-            - pyroclastic flow does not grant additional burning effect on hit while target unit is burning.
+
   - Marksman: 
       - Finalize Daybreak Flame details
   - Gatherer: 

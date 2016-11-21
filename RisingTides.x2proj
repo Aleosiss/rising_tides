@@ -9,6 +9,12 @@
     <RootNamespace>RisingTides</RootNamespace>
     <ProjectGuid>{2658fcde-2aec-4764-ac25-080dec17732f}</ProjectGuid>
   </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Standard' ">
+    <OutputPath>bin\Standard\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'aasdf' ">
+    <OutputPath>bin\aasdf\</OutputPath>
+  </PropertyGroup>
   <ItemGroup>
     <Folder Include="Config\" />
     <Folder Include="Content\" />
@@ -74,6 +80,12 @@
     <Content Include="Config\XComEngine.ini" />
     <Content Include="Config\XComGame.ini" />
     <Content Include="Localization\XComGame.int" />
+    <Content Include="Src\RisingTides\Classes\Musashi_Action_ApplyMITV.uc">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Src\RisingTides\Classes\Musashi_Action_RemoveMITV.uc">
+      <SubType>Content</SubType>
+    </Content>
     <Content Include="Src\RisingTides\Classes\RTAbilityCooldown.uc">
       <SubType>Content</SubType>
     </Content>
@@ -81,6 +93,9 @@
       <SubType>Content</SubType>
     </Content>
     <Content Include="Src\RisingTides\Classes\RTAbilityMultiTarget_TargetedLine.uc">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Src\RisingTides\Classes\RTAbilityTemplate.uc">
       <SubType>Content</SubType>
     </Content>
     <Content Include="Src\RisingTides\Classes\RTAbility_BerserkerAbilitySet.uc">
@@ -230,6 +245,9 @@
     <Content Include="Src\RisingTides\Classes\RTGameState_Ability.uc">
       <SubType>Content</SubType>
     </Content>
+    <Content Include="Src\RisingTides\Classes\RTGameState_AbilityMultiTarget.uc">
+      <SubType>Content</SubType>
+    </Content>
     <Content Include="Src\RisingTides\Classes\RTGameState_BloodlustEffect.uc">
       <SubType>Content</SubType>
     </Content>
@@ -257,10 +275,16 @@
     <Content Include="Src\RisingTides\Classes\RTHelpers.uc">
       <SubType>Content</SubType>
     </Content>
+    <Content Include="Src\RisingTides\Classes\RTMeleePathingPawn.uc">
+      <SubType>Content</SubType>
+    </Content>
     <Content Include="Src\RisingTides\Classes\RTTacticalVisibilityHelpers.uc">
       <SubType>Content</SubType>
     </Content>
     <Content Include="Src\RisingTides\Classes\RTTargetingMethod_AimedLineSkillshot.uc">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Src\RisingTides\Classes\RTTargetingMethod_TargetedMeleeTeleport.uc">
       <SubType>Content</SubType>
     </Content>
     <Content Include="Src\RisingTides\Classes\SeqAct_RTModifyConcealment.uc">

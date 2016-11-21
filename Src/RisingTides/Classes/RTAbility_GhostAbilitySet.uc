@@ -36,6 +36,7 @@ static function array<X2DataTemplate> CreateTemplates()
 	Templates.AddItem(Fade());
 	Templates.AddItem(LIOverwatchShot());
 	Templates.AddItem(PsionicActivate());
+	Templates.AddItem(RTRemoveAdditionalAnimSets());
 	
 
 	return Templates;
@@ -708,6 +709,45 @@ static function X2AbilityTemplate PsionicActivate()
 	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
 	//  NOTE: No visualization on purpose!
 	Template.PostActivationEvents.AddItem('UnitUsedPsionicAbility');
+
+	Template.bCrossClassEligible = false;				
+
+	return Template;
+}
+
+static function X2AbilityTemplate RTRemoveAdditionalAnimSets()
+{
+	local X2AbilityTemplate Template;
+	local X2AbilityTrigger_EventListener Trigger;
+	local X2Effect_RemoveEffects RemoveEffectsEffect;
+
+	`CREATE_X2ABILITY_TEMPLATE(Template, 'RTRemoveAdditionalAnimSets');
+	Template.AbilitySourceName = 'eAbilitySource_Psionic';
+	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_NeverShow;
+	Template.AbilityConfirmSound = "TacticalUI_ActivateAbility";
+	Template.Hostility = eHostility_Neutral;
+
+	Template.ConcealmentRule = eConceal_Always;
+
+	// Add dead eye to guarantee
+	Template.AbilityToHitCalc = default.DeadEye;
+	Template.AbilityTargetStyle = default.SelfTarget;
+	
+	RemoveEffectsEffect	= new class'X2Effect_RemoveEffects';
+	RemoveEffectsEffect.EffectNamesToRemove.AddItem('RTAdventAnimSet');
+	Template.AddTargetEffect(RemoveEffectsEffect);
+
+	
+	Trigger = new class'X2AbilityTrigger_EventListener';
+	Trigger.ListenerData.Deferral = ELD_OnStateSubmitted;
+	Trigger.ListenerData.EventID = 'RTRemoveAnimSets';
+	Trigger.ListenerData.Filter = eFilter_Unit;
+	Trigger.ListenerData.EventFn = class'XComGameState_Ability'.static.AbilityTriggerEventListener_Self;
+	Template.AbilityTriggers.AddItem(Trigger);
+
+	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
+	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
+	//  NOTE: No visualization on purpose!
 
 	Template.bCrossClassEligible = false;				
 

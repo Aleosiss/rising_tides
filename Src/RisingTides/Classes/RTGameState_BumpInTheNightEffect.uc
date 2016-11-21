@@ -55,6 +55,8 @@ function EventListenerReturn RTBumpInTheNight(Object EventData, Object EventSour
             bShouldTriggerStandard = true;
 	if(AbilityState.GetMyTemplateName() == 'RTBerserkerKnifeAttack' || AbilityState.GetMyTemplateName() == 'RTPyroclasticSlash' || AbilityState.GetMyTemplateName() == 'RTReprobateWaltz')
 			bShouldTriggerMelee = true;
+	if(AbilityState.GetMyTemplateName() == 'RTShadowStrike')
+			bShouldTriggerMelee = true;
 	
 	// We only want to trigger BITN when the source is actually using the right ability
 	if(!bShouldTriggerStandard && !bShouldTriggerMelee) {

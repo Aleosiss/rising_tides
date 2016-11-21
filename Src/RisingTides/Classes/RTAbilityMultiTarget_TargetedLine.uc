@@ -33,10 +33,14 @@ simulated function GetMultiTargetOptions(const XComGameState_Ability Ability, ou
 	`LOG("Rising Tides: RTAbilityMultiTarget_TargetedLine is getting MultiTargetOptions!",, 'RisingTides');
 	for(i = 0; i < Targets.Length; i++)
 	{
-		TargetUnit = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(Targets[i].PrimaryTarget.ObjectID));
+		Target.AdditionalTargets.Length = 0;
+		
+		TargetUnit = XComGameState_Unit(History.GetGameStateForObjectID(Targets[i].PrimaryTarget.ObjectID));
 		TargetUnitLocation = World.GetPositionFromTileCoordinates(TargetUnit.TileLocation);
+		
 		Target.PrimaryTarget = Targets[i].PrimaryTarget;
 		GetMultiTargetsForLocation(Ability, TargetUnitLocation, Target);
+
 		Targets[i] = Target; 
 	}
 }

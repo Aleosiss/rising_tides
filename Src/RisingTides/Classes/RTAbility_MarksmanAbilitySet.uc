@@ -438,9 +438,9 @@ static function X2AbilityTemplate RTPrecisionShot()
 	AmmoCost = new class'X2AbilityCost_Ammo';
 	AmmoCost.iAmmo = 1;
 	Template.AbilityCosts.AddItem(AmmoCost);
-																																					   
+	
+	ActionPointCost = new class'RTAbilityCost_SnapshotActionPoints';																																				   
 	ActionPointCost.bConsumeAllPoints = true;
-	ActionPointCost = new class'RTAbilityCost_SnapshotActionPoints';
 	ActionPointCost.iNumPoints = 2;
 	Template.AbilityCosts.AddItem(ActionPointCost);
 
@@ -1061,9 +1061,11 @@ static function X2AbilityTemplate SovereignEffect()
 	local RTAbilityMultiTarget_TargetedLine		LineMultiTarget, LineSingleTarget;
 	local X2AbilityTarget_Cursor				CursorTarget;
 	local X2AbilityTarget_Single				SingleTarget;
-	//Macro to do localisation and stuffs
-	`CREATE_X2ABILITY_TEMPLATE(Template, 'DaybreakFlame');
 
+	
+	//Macro to do localisation and stuffs
+	`CREATE_X2TEMPLATE(class'RTAbilityTemplate', Template, 'DaybreakFlame');
+	//`CREATE_X2ABILITY_TEMPLATE(Template, 'DaybreakFlame');
 	// Icon Properties
 	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_snipershot";
 	Template.ShotHUDPriority = class'UIUtilities_Tactical'.const.STANDARD_SHOT_PRIORITY;
