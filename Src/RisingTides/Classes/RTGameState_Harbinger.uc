@@ -1,6 +1,6 @@
 // Remove the effect from the unit and remove the tag effect from the source
 
-class RTGameState_Harbinger extends XComGameState_Effect;
+class RTGameState_Harbinger extends RTGameState_Effect;
 
 function EventListenerReturn RemoveHarbingerEffect(Object EventData, Object EventSource, XComGameState GameState, Name EventID)
 {

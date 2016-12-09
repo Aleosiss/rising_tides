@@ -1,4 +1,4 @@
-class RTGameState_BloodlustEffect extends XComGameState_Effect;
+class RTGameState_BloodlustEffect extends RTGameState_Effect;
 
 // this check grants the mobility change described in for the "Bump In The Night" ability
 function EventListenerReturn BumpInTheNightStatCheck(Object EventData, Object EventSource, XComGameState GameState, Name EventID) {

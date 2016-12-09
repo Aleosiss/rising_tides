@@ -5,7 +5,7 @@
 //  PURPOSE: Extended GameState_Effect that holds custom listeners for per-unit MeldEffects.
 //---------------------------------------------------------------------------------------
 
-class RTGameState_MeldEffect extends XComGameState_Effect config(RTGhost);
+class RTGameState_MeldEffect extends RTGameState_Effect config(RTGhost);
 
 var array<StateObjectReference> Members;
 var StateObjectReference		MeldHost, GameStateHost;

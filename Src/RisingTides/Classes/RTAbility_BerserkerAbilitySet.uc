@@ -59,6 +59,7 @@ static function array<X2DataTemplate> CreateTemplates()
 	Templates.AddItem(RTPurge());
 	Templates.AddItem(RTMentor());
 	Templates.AddItem(RTReprobateWaltz());
+	Templates.AddItem(RTReprobateWaltzIcon());
 	Templates.AddItem(RTPyroclasticFlow());
 	Templates.AddItem(RTCreateFireTrailAbility());
 	Templates.AddItem(RTPyroclasticSlash());
@@ -70,7 +71,7 @@ static function array<X2DataTemplate> CreateTemplates()
 	Templates.AddItem(RTPersistingImages());
 	Templates.AddItem(RTPersistingImagesIcon());
 	Templates.AddItem(RTGhostInTheShell());
-	Templates.AddItem(RTGhostInTheShellListener());
+	Templates.AddItem(RTGhostInTheShellEffect());
 	Templates.AddItem(RTQueenOfBlades());
 
 	Templates.AddItem(RTShadowStrike());
@@ -665,14 +666,13 @@ static function X2AbilityTemplate RTReprobateWaltz()
 	Template.AssociatedPassives.AddItem('RTHiddenBlade');
 	Template.AssociatedPassives.AddItem('RTSiphon');
 
-	Trigger = new class'X2AbilityTrigger_EventListener';
-	Trigger.ListenerData.Deferral = ELD_OnStateSubmitted;
-	Trigger.ListenerData.EventID = 'RTBerserkerKnifeAttack';
-	Trigger.ListenerData.Filter = eFilter_Unit;
-	Trigger.ListenerData.EventFn = class'RTGameState_Ability'.static.ReprobateWaltzListener;
-	Template.AbilityTriggers.AddItem(Trigger);
+	// ability will be activated by an event listener
+	Template.AbilityTriggers.AddItem(new class'X2AbilityTrigger_Placeholder');
 
-	Template.bShowPostActivation = true;
+	Template.bShowActivation = true;
+
+	Template.AdditionalAbilities.AddItem('RTReprobateWaltzIcon');
+
 
 	Template.ShotHUDPriority = class'UIUtilities_Tactical'.const.CLASS_COLONEL_PRIORITY;
 	Template.AbilitySourceName = 'eAbilitySource_Perk';
@@ -682,6 +682,40 @@ static function X2AbilityTemplate RTReprobateWaltz()
 	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
 	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
 	
+
+	return Template;
+}
+
+//---------------------------------------------------------------------------------------
+//---Reprobate Waltz Icon----------------------------------------------------------------
+//---------------------------------------------------------------------------------------
+static function X2AbilityTemplate RTReprobateWaltzIcon()
+{
+	local X2AbilityTemplate		Template;
+	local RTEffect_ReprobateWaltz	Effect;
+	
+	`CREATE_X2ABILITY_TEMPLATE(Template, 'RTReprobateWaltzIcon');
+    Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_aim";	   // TODO: THIS
+    Template.AbilitySourceName = 'eAbilitySource_Psionic';
+    Template.eAbilityIconBehaviorHUD = EAbilityIconBehavior_NeverShow;
+    Template.Hostility = eHostility_Neutral;
+	
+	// Apply perk at the start of the mission. 
+    Template.AbilityToHitCalc = default.DeadEye; 
+    Template.AbilityTargetStyle = default.SelfTarget;
+    Template.AbilityTriggers.AddItem(default.UnitPostBeginPlayTrigger);
+
+    // Effect to apply
+    Effect = new class'RTEffect_ReprobateWaltz';
+    Effect.BuildPersistentEffect(1, true, true, true);
+	Effect.EffectName = 'RTReprobateWaltz';
+    Effect.SetDisplayInfo(ePerkBuff_Passive, Template.LocFriendlyName, Template.LocLongDescription, Template.IconImage, true,,Template.AbilitySourceName);
+    Template.AddTargetEffect(Effect);
+	
+    // Probably required 
+    Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
+    //  NOTE: No visualization on purpose!
+
 
 	return Template;
 }
@@ -712,7 +746,6 @@ static function X2AbilityTemplate RTPyroclasticFlow()
 
 	Template.AdditionalAbilities.AddItem('RTPyroclasticSlash');
 	Template.AdditionalAbilities.AddItem('RTCreateFireTrailAbility');
-	//Template.AdditionalAbilities.AddItem('RTApplyBurning');
 	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
 	// Note: no visualization on purpose!
 	
@@ -720,31 +753,7 @@ static function X2AbilityTemplate RTPyroclasticFlow()
 
 	return Template;
 }
-// debug...
-static function X2AbilityTemplate RTApplyBurning()
-{
-	local X2AbilityTemplate Template;	
 
-	`CREATE_X2ABILITY_TEMPLATE(Template, 'RTApplyBurning');
-
-	Template.AbilitySourceName = 'eAbilitySource_Standard';
-	Template.eAbilityIconBehaviorHUD = EAbilityIconBehavior_AlwaysShow;
-	Template.bUseAmmoAsChargesForHUD = false;
-
-	Template.AbilityToHitCalc = default.DeadEye;
-	Template.AbilityTargetStyle = default.SelfTarget;
-	Template.AddTargetEffect(class'X2StatusEffects'.static.CreateBurningStatusEffect(1, 0));
-
-	Template.AbilityTriggers.AddItem(default.PlayerInputTrigger);
-
-	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
-	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
-
-	// This action is considered 'offensive'
-	Template.Hostility = eHostility_Offensive;
- 
-	return Template;
-}
 // copied from X2Ability_AndromedonRobot.uc
 static function X2AbilityTemplate RTCreateFireTrailAbility()
 {
@@ -1400,7 +1409,7 @@ static function X2AbilityTemplate RTGhostInTheShell()
     Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
     //  NOTE: No visualization on purpose!
 
-	Template.AdditionalAbilities.AddItem('RTGhostInTheShellListener');
+	Template.AdditionalAbilities.AddItem('RTGhostInTheShellEffect');
 
 	return Template;
 }
@@ -1408,14 +1417,14 @@ static function X2AbilityTemplate RTGhostInTheShell()
 //---------------------------------------------------------------------------------------
 //---Ghost In The Shell Listener---------------------------------------------------------
 //---------------------------------------------------------------------------------------
-static function X2AbilityTemplate RTGhostInTheShellListener()
+static function X2AbilityTemplate RTGhostInTheShellEffect()
 {
 	local X2AbilityTemplate		Template;
 	local X2Effect_Persistent	Effect;
 	local RTEffect_Stealth StealthEffect;
 	local X2Effect_RangerStealth ConcealEffect;
 	
-	`CREATE_X2ABILITY_TEMPLATE(Template, 'RTGhostInTheShellListener');
+	`CREATE_X2ABILITY_TEMPLATE(Template, 'RTGhostInTheShellEffect');
     Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_aim";	   // TODO: THIS
     Template.AbilitySourceName = 'eAbilitySource_Psionic';
     Template.eAbilityIconBehaviorHUD = EAbilityIconBehavior_NeverShow;

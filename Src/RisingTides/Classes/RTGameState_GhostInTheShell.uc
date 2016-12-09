@@ -1,5 +1,5 @@
 // This is an Unreal Script
-class RTGameState_GhostInTheShell extends XComGameState_Effect;
+class RTGameState_GhostInTheShell extends RTGameState_Effect;
 
 function EventListenerReturn OnTacticalGameEnd(Object EventData, Object EventSource, XComGameState GameState, Name EventID)
 {
@@ -32,8 +32,6 @@ function EventListenerReturn GhostInTheShellCheck(Object EventData, Object Event
 	local XComGameState_Unit NewAttacker, Attacker;
 	local XComGameState NewGameState;
 	local bool	bShouldTrigger;
-
-	`LOG("Rising Tides: Ghost in the Shell -----------------------------------------------------------------------------------------------------------------------------------------------");
 	
 	History = `XCOMHISTORY;
 	AbilityContext = XComGameStateContext_Ability(GameState.GetContext());
@@ -72,7 +70,7 @@ function EventListenerReturn GhostInTheShellCheck(Object EventData, Object Event
 		NewAttacker.ModifyCurrentStat(eStat_DetectionModifier, 0);
 		`TACTICALRULES.SubmitGameState(NewGameState);
 
-		InitializeAbilityForActivation(GhostAbilityState, NewAttacker, 'RTGhostInTheShellListener', History);
+		InitializeAbilityForActivation(GhostAbilityState, NewAttacker, 'RTGhostInTheShellEffect', History);
 		ActivateAbility(GhostAbilityState, NewAttacker.GetReference());
 		NewAttacker = XComGameState_Unit(History.GetGameStateForObjectID(NewAttacker.ObjectID));
 
@@ -81,30 +79,6 @@ function EventListenerReturn GhostInTheShellCheck(Object EventData, Object Event
 	return ELR_NoInterrupt;
 }
 
-private function ActivateAbility(XComGameState_Ability AbilityState, StateObjectReference TargetRef) {
-	local XComGameStateContext_Ability AbilityContext;
-	
-	AbilityContext = class'XComGameStateContext_Ability'.static.BuildContextFromAbility(AbilityState, TargetRef.ObjectID);
-	
-	if( AbilityContext.Validate() ) {
-		`TACTICALRULES.SubmitGameStateContext(AbilityContext);
-	} else {
-		`LOG("Rising Tides: Couldn't validate AbilityContext, " @ AbilityState.GetMyTemplateName() @ " not activated.");
-	}
-}
-
-
-
-private function InitializeAbilityForActivation(out XComGameState_Ability AbilityState, XComGameState_Unit AbilityOwnerUnit, Name AbilityName, XComGameStateHistory History) {
-	local StateObjectReference AbilityRef;
-
-	AbilityRef = AbilityOwnerUnit.FindAbility(AbilityName);
-	AbilityState = XComGameState_Ability(History.GetGameStateForObjectID(AbilityRef.ObjectID));
-	if(AbilityState == none) {
-		`LOG("Rising Tides: Couldn't initialize ability for activation!");
-	}
-
-}
 
 function TriggerGhostInTheShellFlyoverVisualizationFn(XComGameState VisualizeGameState, out array<VisualizationTrack> OutVisualizationTracks)
 {

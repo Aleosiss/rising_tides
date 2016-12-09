@@ -1,4 +1,4 @@
-class RTGameState_LinkedEffect extends XComGameState_Effect;
+class RTGameState_LinkedEffect extends RTGameState_Effect;
 
 var bool bCanTrigger;
 

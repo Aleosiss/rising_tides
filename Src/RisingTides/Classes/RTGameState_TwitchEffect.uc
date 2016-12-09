@@ -1,4 +1,4 @@
-class RTGameState_TwitchEffect extends XComGameState_Effect;
+class RTGameState_TwitchEffect extends RTGameState_Effect;
 
 var bool bCanTrigger;
 

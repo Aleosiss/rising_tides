@@ -1,4 +1,4 @@
-class RTGameState_BumpInTheNightEffect extends XComGameState_Effect;
+class RTGameState_BumpInTheNightEffect extends RTGameState_Effect;
 
 function EventListenerReturn OnTacticalGameEnd(Object EventData, Object EventSource, XComGameState GameState, Name EventID)
 {
@@ -30,9 +30,12 @@ function EventListenerReturn RTBumpInTheNight(Object EventData, Object EventSour
 	local XComGameState_Unit TargetUnit, OldTargetUnitState, NewAttacker, Attacker;
 	local XComGameState NewGameState;
 	local RTEffect_BumpInTheNight BITNEffect;
-	local bool	bShouldTriggerMelee, bShouldTriggerStandard, bTargetIsDead;
-	local int i, iNumPreviousActionPoints;
-	local XComGameState_Unit AttackerStatePrevious;
+	local bool	bShouldTriggerMelee, bShouldTriggerStandard, bTargetIsDead, bShouldTriggerWaltz;
+	local int i, j, iNumPreviousActionPoints, iNumWaltzActionPoints;
+
+	local XComGameState_BaseObject PreviousObject, CurrentObject;
+	local XComGameState_Unit AttackerStatePrevious, AttackerStateCurrent;
+
 
 	History = `XCOMHISTORY;
 	AbilityContext = XComGameStateContext_Ability(GameState.GetContext());
@@ -54,6 +57,8 @@ function EventListenerReturn RTBumpInTheNight(Object EventData, Object EventSour
 			bShouldTriggerMelee = true;
 	if(AbilityState.GetMyTemplateName() == 'RTShadowStrike')
 			bShouldTriggerMelee = true;
+	if(AbilityState.GetMyTemplateName() == 'RTReprobateWaltz')
+			bShouldTriggerWaltz = true;
 	
 	// We only want to trigger BITN when the source is actually using the right ability
 	if(!bShouldTriggerStandard && !bShouldTriggerMelee) {
@@ -71,10 +76,24 @@ function EventListenerReturn RTBumpInTheNight(Object EventData, Object EventSour
 	if (bTargetIsDead)
 	{
 		Attacker = XComGameState_Unit(EventSource);
-																																	 
-		AttackerStatePrevious = XComGameState_Unit(History.GetGameStateForObjectID(ApplyEffectParameters.TargetStateObjectRef.ObjectID,, GameState.HistoryIndex - 1));
-		iNumPreviousActionPoints = AttackerStatePrevious.ActionPoints.Length;
+		if(bShouldTriggerWaltz) {
+			iNumWaltzActionPoints = 0;
+			j = 1;
+			// the first gamestate we find where we find action points on the unit
+			// or 20 times at maximum
+			while(iNumWaltzActionPoints == 0 || j == 20) {
+				j++;																													 
+				History.GetCurrentAndPreviousGameStatesForObjectID(ApplyEffectParameters.TargetStateObjectRef.ObjectID, PreviousObject, CurrentObject,, GameState.HistoryIndex - j);
+				AttackerStatePrevious = XComGameState_Unit(PreviousObject);
+				iNumWaltzActionPoints = AttackerStatePrevious.ActionPoints.Length;
+			}
 
+		}
+		else {
+			AttackerStatePrevious = XComGameState_Unit(History.GetGameStateForObjectID(ApplyEffectParameters.TargetStateObjectRef.ObjectID,, GameState.HistoryIndex - 1));
+		}
+
+		iNumPreviousActionPoints = AttackerStatePrevious.ActionPoints.Length;
 		if (Attacker != none)
 		{
 			NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState(string(GetFuncName()));
@@ -91,10 +110,8 @@ function EventListenerReturn RTBumpInTheNight(Object EventData, Object EventSour
 
 			// reset the detection modifier to 0
 			NewAttacker.ModifyCurrentStat(eStat_DetectionModifier, 0);
-
 			`TACTICALRULES.SubmitGameState(NewGameState);
 
-			
 			if(Attacker.TileDistanceBetween(TargetUnit) < BITNEffect.iTileDistanceToActivate) {
 				
 				// melee kills additionally give bloodlust stacks and proc queen of blades
@@ -132,30 +149,6 @@ function EventListenerReturn RTBumpInTheNight(Object EventData, Object EventSour
 	return ELR_NoInterrupt;
 }
 
-private function ActivateAbility(XComGameState_Ability AbilityState, StateObjectReference TargetRef) {
-	local XComGameStateContext_Ability AbilityContext;
-	
-	AbilityContext = class'XComGameStateContext_Ability'.static.BuildContextFromAbility(AbilityState, TargetRef.ObjectID);
-	
-	if( AbilityContext.Validate() ) {
-		`TACTICALRULES.SubmitGameStateContext(AbilityContext);
-	} else {
-		`LOG("Rising Tides: Couldn't validate AbilityContext, " @ AbilityState.GetMyTemplateName() @ " not activated.");
-	}
-}
-
-
-
-private function InitializeAbilityForActivation(out XComGameState_Ability AbilityState, XComGameState_Unit AbilityOwnerUnit, Name AbilityName, XComGameStateHistory History) {
-	local StateObjectReference AbilityRef;
-
-	AbilityRef = AbilityOwnerUnit.FindAbility(AbilityName);
-	AbilityState = XComGameState_Ability(History.GetGameStateForObjectID(AbilityRef.ObjectID));
-	if(AbilityState == none) {
-		`LOG("Rising Tides: Couldn't initialize ability for activation!");
-	}
-
-}
 
 function TriggerBumpInTheNightFlyoverVisualizationFn(XComGameState VisualizeGameState, out array<VisualizationTrack> OutVisualizationTracks)
 {

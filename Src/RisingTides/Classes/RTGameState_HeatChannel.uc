@@ -1,6 +1,6 @@
 // This is an Unreal Script
 
-class RTGameState_HeatChannel extends XComGameState_Effect;
+class RTGameState_HeatChannel extends RTGameState_Effect;
 
 function EventListenerReturn HeatChannelCheck(Object EventData, Object EventSource, XComGameState GameState, Name EventID) {
   local XComGameState_Unit OldSourceUnit, NewSourceUnit;

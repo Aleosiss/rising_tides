@@ -5,7 +5,7 @@
 //  PURPOSE: Extended GameState_Effect that holds damage taken value for the time stop
 //---------------------------------------------------------------------------------------
 
-class RTGameState_TimeStopEffect extends XComGameState_Effect config(RTGhost);
+class RTGameState_TimeStopEffect extends RTGameState_Effect;
 
 var array<WeaponDamageValue> PreventedDamageValues;		
 var int iShouldRecordCounter;

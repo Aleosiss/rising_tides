@@ -321,6 +321,13 @@ LocHelpText="Whenever this unit uses a melee attack, there is a chance to attack
 LocFlyOverText="Reprobate Waltz"
 LocPromotionPopupText="<Bullet/>Whenever this unit uses a melee attack, there is a chance to attack again, increasing with Bloodlust stacks.<br/>"
 
+[RTReprobateWaltzIcon X2AbilityTemplate]
+LocFriendlyName="Reprobate Waltz"
+LocLongDescription="Whenever this unit uses a melee attack, there is a chance to attack again, increasing with Bloodlust stacks."
+LocHelpText="Whenever this unit uses a melee attack, there is a chance to attack again, increasing with Bloodlust stacks."
+LocFlyOverText="Reprobate Waltz"
+LocPromotionPopupText="<Bullet/>Whenever this unit uses a melee attack, there is a chance to attack again, increasing with Bloodlust stacks.<br/>"
+
 [RTPyroclasticFlow X2AbilityTemplate]
 LocFriendlyName="Pyroclastic Flow"
 LocLongDescription="When this unit is affected by burning, it gains additional movement speed, and its melee attacks gain additional fire damage."

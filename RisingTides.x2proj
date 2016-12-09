@@ -179,6 +179,9 @@
     <Content Include="Src\RisingTides\Classes\RTEffect_RemoveStacks.uc">
       <SubType>Content</SubType>
     </Content>
+    <Content Include="Src\RisingTides\Classes\RTEffect_ReprobateWaltz.uc">
+      <SubType>Content</SubType>
+    </Content>
     <Content Include="Src\RisingTides\Classes\RTEffect_ReserveActionPoints.uc">
       <SubType>Content</SubType>
     </Content>
@@ -251,6 +254,9 @@
     <Content Include="Src\RisingTides\Classes\RTGameState_BumpInTheNightEffect.uc">
       <SubType>Content</SubType>
     </Content>
+    <Content Include="Src\RisingTides\Classes\RTGameState_Effect.uc">
+      <SubType>Content</SubType>
+    </Content>
     <Content Include="Src\RisingTides\Classes\RTGameState_GhostInTheShell.uc">
       <SubType>Content</SubType>
     </Content>
@@ -264,6 +270,9 @@
       <SubType>Content</SubType>
     </Content>
     <Content Include="Src\RisingTides\Classes\RTGameState_MeldEffect.uc">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Src\RisingTides\Classes\RTGameState_ReprobateWaltz.uc">
       <SubType>Content</SubType>
     </Content>
     <Content Include="Src\RisingTides\Classes\RTGameState_TimeStopEffect.uc">
