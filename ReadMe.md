@@ -19,9 +19,7 @@ This would be a bare-bones content mod. I also have the following content in min
 ###### Current TODOs: 
   - Berserker:
       - Implement Stealth visual overlay
-      - Implement Ghost in the Shell (look into kismet/umap) 50%
-      - Implement Dashing Strike
-
+      - Implement Dashing Strike (I don't know if I still want this)
   - Marksman: 
       - Nothing
   - Gatherer: 
