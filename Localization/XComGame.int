@@ -355,6 +355,14 @@ LocHelpText="Whenever this unit uses a psionic ability, it triggers a Burst arou
 LocFlyOverText="Unstable Tempest"
 LocPromotionPopupText="<Bullet/>Whenever this unit uses a psionic ability, it triggers a Burst around it and all melded allies.<br/><Bullet/>Certain abilities are not considered to be Psionic for the purposes of this ability, like Join Meld and Leave Meld.<br/>"
 
+[RTUnstableConduitBurst X2AbilityTemplate]
+LocFriendlyName="Unstable Tempest Burst"
+LocLongDescription="Whenever this unit uses a psionic ability, it triggers a Burst around it and all melded allies."
+LocHelpText="Whenever this unit uses a psionic ability, it triggers a Burst around it and all melded allies."
+LocFlyOverText="Unstable Tempest"
+LocPromotionPopupText="<Bullet/>Whenever this unit uses a psionic ability, it triggers a Burst around it and all melded allies.<br/><Bullet/>Certain abilities are not considered to be Psionic for the purposes of this ability, like Join Meld and Leave Meld.<br/>"
+
+
 [RTPersistingImages X2AbilityTemplate]
 LocFriendlyName="Persisting Images"
 LocLongDescription="Whenever this unit gains Stealth, it creates a afterimage of itself nearby."
@@ -383,12 +391,33 @@ LocHelpText="When this unit interacts with objectives, it is not unconcealed."
 LocFlyOverText="Ghost In The Shell"
 LocPromotionPopupText="<Bullet/>When this unit interacts with objectives, it is not unconcealed.<br/>"
 
+[RTGhostInTheShellListener X2AbilityTemplate]
+LocFriendlyName="Ghost In The Shell"
+LocLongDescription="When this unit interacts with objectives, it is not unconcealed."
+LocHelpText="When this unit interacts with objectives, it is not unconcealed."
+LocFlyOverText="Ghost In The Shell"
+LocPromotionPopupText="<Bullet/>When this unit interacts with objectives, it is not unconcealed.<br/>"
+
 [RTQueenOfBlades X2AbilityTemplate]
 LocFriendlyName="The Queen of Blades"
 LocLongDescription="If a melee attack kills a unit, the action points for the attack are refunded."
 LocHelpText="If a melee attack kills a unit, the action points for the attack are refunded."
 LocFlyOverText="The Queen of Blades"
 LocPromotionPopupText="<Bullet/>If a melee attack kills a unit, the action points for the attack are refunded.<br/>"
+
+[RTShadowStrike X2AbilityTemplate]
+LocFriendlyName="Shadow Strike"
+LocLongDescription="Leap through shadows to strike at a target."
+LocHelpText="Leap through shadows to strike at a target."
+LocFlyOverText="Shadow Strike"
+LocPromotionPopupText="<Bullet/>Leap through shadows to strike at a target.<br/><Bullet/>Squadsight range, direct path to target not required.<br/>"
+
+[RTDashingStrike X2AbilityTemplate]
+LocFriendlyName="Dashing Strike"
+LocLongDescription="Lunge forward, dealing damage to all enemies in the path of the strike."
+LocHelpText="Lunge forward, dealing damage to all enemies in the path of the strike."
+LocFlyOverText="Dashing Strike"
+LocPromotionPopupText="<Bullet/>Lunge forward, dealing damage to all enemies in the path of the strike.<br/>"
 
 
 ;----------------------------------------------------------------------------------------------------------------------------

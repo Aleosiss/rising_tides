@@ -32,12 +32,9 @@ function EventListenerReturn RTBumpInTheNight(Object EventData, Object EventSour
 	local RTEffect_BumpInTheNight BITNEffect;
 	local bool	bShouldTriggerMelee, bShouldTriggerStandard, bTargetIsDead;
 	local int i, iNumPreviousActionPoints;
-
 	local XComGameState_Unit AttackerStatePrevious;
-	
-	History = `XCOMHISTORY;
-		
 
+	History = `XCOMHISTORY;
 	AbilityContext = XComGameStateContext_Ability(GameState.GetContext());
 	if (AbilityContext == none)
 		return ELR_NoInterrupt;
@@ -91,6 +88,8 @@ function EventListenerReturn RTBumpInTheNight(Object EventData, Object EventSour
 					NewAttacker.ActionPoints.AddItem(class'X2CharacterTemplateManager'.default.StandardActionPoint);
 				}
 			}
+
+			// reset the detection modifier to 0
 			NewAttacker.ModifyCurrentStat(eStat_DetectionModifier, 0);
 
 			`TACTICALRULES.SubmitGameState(NewGameState);
@@ -153,7 +152,7 @@ private function InitializeAbilityForActivation(out XComGameState_Ability Abilit
 	AbilityRef = AbilityOwnerUnit.FindAbility(AbilityName);
 	AbilityState = XComGameState_Ability(History.GetGameStateForObjectID(AbilityRef.ObjectID));
 	if(AbilityState == none) {
-		`LOG("Rising Tides: Couldn't Initialize Ability for Activation!");
+		`LOG("Rising Tides: Couldn't initialize ability for activation!");
 	}
 
 }
@@ -177,7 +176,7 @@ function TriggerBumpInTheNightFlyoverVisualizationFn(XComGameState VisualizeGame
 		if (AbilityState == none)
 		{
 			`RedScreenOnce("Ability state missing from" @ GetFuncName() @ "-jbouscher @gameplay");
-			`LOG("Rising Tides: ITS BROKEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEN");
+			`LOG("Rising Tides: ITS BROKEN");
 			return;
 		}
 

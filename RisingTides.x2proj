@@ -80,12 +80,6 @@
     <Content Include="Config\XComEngine.ini" />
     <Content Include="Config\XComGame.ini" />
     <Content Include="Localization\XComGame.int" />
-    <Content Include="Src\RisingTides\Classes\Musashi_Action_ApplyMITV.uc">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Src\RisingTides\Classes\Musashi_Action_RemoveMITV.uc">
-      <SubType>Content</SubType>
-    </Content>
     <Content Include="Src\RisingTides\Classes\RTAbilityCooldown.uc">
       <SubType>Content</SubType>
     </Content>
@@ -147,6 +141,9 @@
       <SubType>Content</SubType>
     </Content>
     <Content Include="Src\RisingTides\Classes\RTEffect_GenerateAfterimage.uc">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Src\RisingTides\Classes\RTEffect_GhostInTheShell.uc">
       <SubType>Content</SubType>
     </Content>
     <Content Include="Src\RisingTides\Classes\RTEffect_Harbinger.uc">
@@ -254,6 +251,9 @@
     <Content Include="Src\RisingTides\Classes\RTGameState_BumpInTheNightEffect.uc">
       <SubType>Content</SubType>
     </Content>
+    <Content Include="Src\RisingTides\Classes\RTGameState_GhostInTheShell.uc">
+      <SubType>Content</SubType>
+    </Content>
     <Content Include="Src\RisingTides\Classes\RTGameState_Harbinger.uc">
       <SubType>Content</SubType>
     </Content>
@@ -279,6 +279,9 @@
       <SubType>Content</SubType>
     </Content>
     <Content Include="Src\RisingTides\Classes\RTTacticalVisibilityHelpers.uc">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Src\RisingTides\Classes\RTTargetingMethod_AdjustibleLine.uc">
       <SubType>Content</SubType>
     </Content>
     <Content Include="Src\RisingTides\Classes\RTTargetingMethod_AimedLineSkillshot.uc">

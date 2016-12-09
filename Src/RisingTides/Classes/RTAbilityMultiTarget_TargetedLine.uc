@@ -30,9 +30,10 @@ simulated function GetMultiTargetOptions(const XComGameState_Ability Ability, ou
 	// I have no idea how I would go about implementing this myself, so just hijack GetMultiTargetsForLocation
 	// Get the TargetUnitLocation from the primary target of the targets array, then save the primary target
 	// so it doesn't get overwritten 	 
-	`LOG("Rising Tides: RTAbilityMultiTarget_TargetedLine is getting MultiTargetOptions!",, 'RisingTides');
+	
 	for(i = 0; i < Targets.Length; i++)
 	{
+		// reset this array for each target, otherwise each shot hits every enemy that can be aimed at at once
 		Target.AdditionalTargets.Length = 0;
 		
 		TargetUnit = XComGameState_Unit(History.GetGameStateForObjectID(Targets[i].PrimaryTarget.ObjectID));

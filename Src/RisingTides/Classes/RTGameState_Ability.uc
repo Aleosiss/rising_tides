@@ -2,6 +2,8 @@
 
 class RTGameState_Ability extends XComGameState_Ability;
 
+var bool bTesting;
+
 // Get Bloodlust Stack Count  
 public static function int getBloodlustStackCount(XComGameState_Unit WaltzUnit) {
    local int iStackCount;
@@ -42,9 +44,14 @@ function EventListenerReturn ReprobateWaltzListener( Object EventData, Object Ev
 		iStackCount = getBloodlustStackCount(WaltzUnit);
 		fFinalPercentChance = 100 -  ( class'RTAbility_BerserkerAbilitySet'.default.REPROBATE_WALTZ_BASE_CHANCE + ( class'RTAbility_BerserkerAbilitySet'.default.REPROBATE_WALTZ_BLOODLUST_STACK_CHANCE * iStackCount ));
 		
-		if(`SYNC_RAND(100) <= int(fFinalPercentChance)) {
+		if(`SYNC_RAND(100) <= int(fFinalPercentChance) || bTesting) {
 			AbilityTriggerAgainstSingleTarget(AbilityContext.InputContext.PrimaryTarget, false);
 		}	
 	}	
 	return ELR_NoInterrupt;
+}
+
+defaultproperties
+{
+	bTesting = true;
 }
