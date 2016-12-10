@@ -19,14 +19,15 @@ This would be a bare-bones content mod. I also have the following content in min
 ###### Current TODOs: 
   - Berserker:
       - Implement Stealth visual overlay
-      - Implement Dashing Strike (I don't know if I still want this)
+      - Troubleshoot why Pyroclastic Flow gives burning effect on hit
   - Marksman: 
-      - Nothing
+      - Shock n' Awe replacer or Sovereign replacer
   - Gatherer: 
       - Everything
 
 ###### Current Unresolved:
       - Visuals
+      - Dashing Strike
 ###### Current Table
       - Triangulation: Spread Over the Shoulder to all melded allies.
       - Shatter The Line: If this unit kills an enemy within X tiles, it triggers a flush effect on other enemies within X tiles. 2/3 turn cooldown. credits to /u/PostOfficeBuddy
