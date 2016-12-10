@@ -1647,8 +1647,10 @@ static simulated function Teleport_ModifyActivatedAbilityContext(XComGameStateCo
 	`assert(AbilityContext.InputContext.TargetLocations.Length == 1);
   	`PRES.GetTacticalHUD().GetTargetingMethod().GetPreAbilityPath(PathTiles);
 	NewTileLocation = PathTiles[PathTiles.Length - 1];
-	NewLocation = World.GetPositionFromTileCoordinates(NewTileLocation);
 	
+	NewLocation = World.FindClosestValidLocation(World.GetPositionFromTileCoordinates(NewTileLocation), false, true, false);
+
+
 	NextPoint = EmptyPoint;
 	NextPoint.Position = NewLocation;
 	NextPoint.Traversal = eTraversal_Landing;
@@ -2151,9 +2153,12 @@ static function X2DataTemplate RTDashingStrike()
 	local X2AbilityTemplate Template;
 	local X2AbilityCost_ActionPoints ActionPointCost;
 	local X2AbilityCooldown Cooldown;
+
 	local X2AbilityTarget_Cursor CursorTarget;
-	local X2AbilityMultiTarget_Radius RadiusMultiTarget;
+	local X2AbilityMultiTarget_Cone ConeMultiTarget;
 	local X2AbilityTrigger_PlayerInput InputTrigger;
+
+
 	local X2AbilityToHitCalc_StandardMelee StandardMelee;
 	local RTEffect_BerserkerMeleeDamage     WeaponDamageEffect;
 	local RTEffect_Acid						AcidEffect;
@@ -2161,12 +2166,11 @@ static function X2DataTemplate RTDashingStrike()
 	local X2Condition_AbilityProperty  		AcidCondition, SiphonCondition;
 	local X2Condition_UnitProperty			TargetUnitPropertyCondition;
 	local RTEffect_Siphon					SiphonEffect;
-	local X2AbilityTarget_Cursor TargetStyle;
+
 	local X2Condition_Visibility TargetVisibilityCondition;
 	local X2Effect_AdditionalAnimSets AnimSets;
 
-	`CREATE_X2ABILITY_TEMPLATE(Template, 'RTDashingStrike');
-
+	`CREATE_X2TEMPLATE(class'RTAbilityTemplate', Template, 'RTDashingStrike');
 	Template.AbilitySourceName = 'eAbilitySource_Standard';
 	Template.eAbilityIconBehaviorHUD = EAbilityIconBehavior_AlwaysShow;
 	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_codex_teleport";
@@ -2177,7 +2181,7 @@ static function X2DataTemplate RTDashingStrike()
 	Template.AbilityCosts.AddItem(ActionPointCost);
 
 	Cooldown = new class'X2AbilityCooldown';
-	Cooldown.iNumTurns = 5;
+	Cooldown.iNumTurns = 0;
 	Template.AbilityCooldown = Cooldown;
 
 	InputTrigger = new class'X2AbilityTrigger_PlayerInput';
@@ -2186,15 +2190,26 @@ static function X2DataTemplate RTDashingStrike()
 	StandardMelee = new class'X2AbilityToHitCalc_StandardMelee';
 	Template.AbilityToHitCalc = StandardMelee;
 
-	TargetStyle = new class'X2AbilityTarget_Cursor';
-	Template.AbilityTargetStyle = TargetStyle;
-	Template.TargetingMethod =  class'RTTargetingMethod_AdjustibleLine';
+	CursorTarget = new class'X2AbilityTarget_Cursor';
+	CursorTarget.FixedAbilityRange = 5 * class'XComWorldData'.const.WORLD_StepSize;
+	Template.AbilityTargetStyle = CursorTarget;
+
+	ConeMultiTarget = new class'X2AbilityMultiTarget_Cone';
+	ConeMultiTarget.ConeEndDiameter = 1 * class'XComWorldData'.const.WORLD_StepSize;
+	ConeMultiTarget.ConeLength = 5 * class'XComWorldData'.const.WORLD_StepSize;
+	ConeMultiTarget.bUseWeaponRangeForLength = false;
+	ConeMultiTarget.bExcludeSelfAsTargetIfWithinRadius = true;
+	ConeMultiTarget.fTargetRadius = 99;
+	Template.AbilityMultiTargetStyle = ConeMultiTarget;
+
+	Template.TargetingMethod = class'RTTargetingMethod_Cone';
+	// Template.bUseSourceLocationZToAim = true;
 
 	AnimSets = new class'X2Effect_AdditionalAnimSets';
 	AnimSets.AddAnimSetWithPath("Advent_ANIM.Anims.AS_Advent");	   // temp
 	AnimSets.BuildPersistentEffect(1, false, false, false);
 	AnimSets.EffectName = 'RTAdventAnimSet';
-	Template.AddShooterEffect(AnimSets);
+	// Template.AddShooterEffect(AnimSets);
 
 	Template.AbilityTargetConditions.AddItem(default.LivingHostileTargetProperty);
 
@@ -2211,7 +2226,7 @@ static function X2DataTemplate RTDashingStrike()
 	WeaponDamageEffect.iAcidicBladeShred = default.ACID_BLADE_SHRED;
 	WeaponDamageEffect.fHiddenBladeCritModifier = default.HIDDEN_BLADE_CRIT_MODIFIER;
 	WeaponDamageEffect.bIgnoreBaseDamage = true;
-	Template.AddTargetEffect(WeaponDamageEffect);
+	Template.AddMultiTargetEffect(WeaponDamageEffect);
 
 	// Acid Effect
 	AcidEffect = class'RTEffect_Acid'.static.CreateAcidBurningStatusEffect('RTAcid', 4);
@@ -2220,7 +2235,7 @@ static function X2DataTemplate RTDashingStrike()
 	AcidCondition = new class'X2Condition_AbilityProperty';
 	AcidCondition.OwnerHasSoldierAbilities.AddItem('RTAcidicBlade');
 	AcidEffect.TargetConditions.AddItem(AcidCondition);
-	Template.AddTargetEffect(AcidEffect);
+	Template.AddMultiTargetEffect(AcidEffect);
 
 	// Siphon Effect
 	SiphonEffect = new class'RTEffect_Siphon';
@@ -2241,18 +2256,18 @@ static function X2DataTemplate RTDashingStrike()
 
 	SiphonEffect.TargetConditions.AddItem(SiphonCondition);
 	SiphonEffect.TargetConditions.AddItem(TargetUnitPropertyCondition);
-	Template.AddTargetEffect(SiphonEffect);
+	Template.AddMultiTargetEffect(SiphonEffect);
 
 	Template.bAllowBonusWeaponEffects = true;
 	//// Damage Effect
 	Template.AbilityMultiTargetConditions.AddItem(default.LivingTargetUnitOnlyProperty);
 
-	//Template.ModifyNewContextFn = Teleport_ModifyActivatedAbilityContext;
-	//Template.BuildNewGameStateFn = Teleport_BuildGameState;
+	Template.ModifyNewContextFn = Teleport_ModifyActivatedAbilityContext;
+	Template.BuildNewGameStateFn = Teleport_BuildGameState;
 	//Template.BuildVisualizationFn = Teleport_BuildVisualization;
 
-	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
+	//Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
 	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
-
+			  
 	return Template;
 }

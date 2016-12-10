@@ -296,6 +296,9 @@
     <Content Include="Src\RisingTides\Classes\RTTargetingMethod_AimedLineSkillshot.uc">
       <SubType>Content</SubType>
     </Content>
+    <Content Include="Src\RisingTides\Classes\RTTargetingMethod_Cone.uc">
+      <SubType>Content</SubType>
+    </Content>
     <Content Include="Src\RisingTides\Classes\RTTargetingMethod_TargetedMeleeTeleport.uc">
       <SubType>Content</SubType>
     </Content>

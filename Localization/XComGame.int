@@ -7,6 +7,10 @@
 ; LocFlyOverText=""
 ; LocPromotionPopupText="<Bullet/> <br/><Bullet/> <br/><Bullet/> <br/><Bullet/> <br/>"
 
+[ StandardGhostShot X2AbilityTemplate]
+LocFriendlyName="Fire Weapon"
+LocHelpText="Fire a shot at a target. <Ability:CANNOTBEDODGED/>"
+LocLongDescription="<Bullet/>Firing the primary weapon always ends a unit's turn."
 
 [RT_Marksman X2SoldierClassTemplate]
 DisplayName="GHOST Marksman"
@@ -251,6 +255,14 @@ LocLongDescription="When this unit deals more than 25 damage in a single turn, i
 LocHelpText="When this unit deals more than 25 damage in a single turn, it disorients all nearby enemies"
 LocFlyOverText="Shock And Awe"
 LocPromotionPopupText="<Bullet/> When this unit deals more than 25 damage in a single turn, it disorients all nearby enemies<br/>"
+
+[RTKillzone X2AbilityTemplate]
+LocFriendlyName="Psionic KillZone"
+LocLongDescription="Take a reaction shot against any enemy that moves or attacks within a cone of fire."
+LocHelpText="Enhanced overwatch in a cone of fire."
+LocFlyOverText="Psionic Killzone"
+LocPromotionPopupText="<Bullet/> There is no limit to the amount of Kill Zone shots a soldier can take outside of ammo counts.<br/><Bullet/> Kill Zone utilizes Squadsight, even if the soldier does not have the Long Watch ability.<br/><Bullet/> Kill Zone has a <Ability:SelfCooldown/> turn cooldown.<br/>"
+LocFriendlyNameWhenConcealed="Psionic KillZone (Concealed)"
 
 [RT_Berserker X2SoldierClassTemplate]
 DisplayName="GHOST Berserker"

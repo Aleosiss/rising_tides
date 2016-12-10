@@ -28,6 +28,9 @@ class RTAbility_MarksmanAbilitySet extends RTAbility_GhostAbilitySet
 	var config int HARBINGER_SHIELD_AMOUNT, HARBINGER_COOLDOWN, HARBINGER_DAMAGE_BONUS, HARBINGER_WILL_BONUS, HARBINGER_AIM_BONUS, HARBINGER_ARMOR_BONUS;
 	var config int SHOCKANDAWE_DAMAGE_TO_ACTIVATE;
 	var config int SOVEREIGN_PANIC_CHANCE;
+	var config int PSIONICKILLZONE_COOLDOWN;
+
+	var Name KillZoneReserveType;
 
 //---------------------------------------------------------------------------------------
 //---CreateTemplates---------------------------------------------------------------------
@@ -71,6 +74,7 @@ static function array<X2DataTemplate> CreateTemplates()
 	Templates.AddItem(HarbingerCleanseListener());
 	Templates.AddItem(ShockAndAwe());
 	Templates.AddItem(ShockAndAweListener());
+	Templates.AddItem(RTKillzone());
 
 	return Templates;
 }
@@ -994,6 +998,7 @@ static function X2AbilityTemplate SovereignEffect()
 	local X2AbilityTemplate						Template;
 	local X2Condition_UnitProperty				MultiUnitPropertyCondition, UnitPropertyCondition;
 	local X2Effect_Panicked				        PanicEffect;
+	local X2AbilityCooldown						Cooldown;
  	local X2AbilityTrigger_EventListener		EventListener;
 	local X2AbilityMultiTarget_Radius			MultiTarget;
 
@@ -1014,6 +1019,10 @@ static function X2AbilityTemplate SovereignEffect()
 	MultiUnitPropertyCondition.FailOnNonUnits = true;
 	Template.AbilityMultiTargetConditions.AddItem(MultiUnitPropertyCondition);
 
+	Cooldown = new class'X2AbilityCooldown';
+	Cooldown.iNumTurns = 5;
+	Template.AbilityCooldown = Cooldown;
+
 	EventListener = new class'X2AbilityTrigger_EventListener';
 	EventListener.ListenerData.EventID = 'SovereignTrigger';
 	EventListener.ListenerData.Deferral = ELD_OnStateSubmitted;
@@ -1026,16 +1035,21 @@ static function X2AbilityTemplate SovereignEffect()
 
 	MultiTarget = new class'X2AbilityMultiTarget_Radius';
 	MultiTarget.bIgnoreBlockingCover = true;
-	MultiTarget.fTargetRadius = 5;
+	MultiTarget.fTargetRadius = 10;
 
 	Template.AbilityTargetStyle = default.SimpleSingleTarget;
 	Template.AbilityShooterConditions.AddItem(default.LivingShooterProperty);
 	Template.AbilityMultiTargetStyle = MultiTarget;
-	Template.AbilityCosts.AddItem(default.FreeActionCost);
 	Template.AddShooterEffectExclusions();
 
 	Template.AbilityToHitCalc = default.DeadEye;
 	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
+	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
+
+	Template.bSkipFireAction = true;
+	Template.bShowActivation = true;
+	
+	Template.bCrossClassEligible = false;
 	// Note: no visualization on purpose!
 
 
@@ -1096,7 +1110,7 @@ static function X2AbilityTemplate SovereignEffect()
 	// Can't shoot while dead
 	Template.AbilityShooterConditions.AddItem(default.LivingShooterProperty);
 	
-	// Single targets that are in range. (This doesn't work)
+	// Single targets that are in range. 
 	SingleTarget = new class'X2AbilityTarget_Single';
 	SingleTarget.bAllowDestructibleObjects = true;
 	SingleTarget.bShowAOE = true;
@@ -1107,11 +1121,6 @@ static function X2AbilityTemplate SovereignEffect()
 	Template.bUsesFiringCamera = true;
 	Template.CinescriptCameraType = "StandardGunFiring";
 
-	//// Cursor target	 (This 'works')
-	//CursorTarget = new class'X2AbilityTarget_Cursor';
-	//CursorTarget.FixedAbilityRange = 200;
-	//Template.AbilityTargetStyle = CursorTarget;
-//
 	// Line skillshot
 	LineMultiTarget = new class'RTAbilityMultiTarget_TargetedLine';
 	LineMultiTarget.bSightRangeLimited = false;
@@ -2035,7 +2044,7 @@ simulated function OnShieldRemoved_BuildVisualization(XComGameState VisualizeGam
 	}
 }
 //---------------------------------------------------------------------------------------
-//---Harbinger Cleanse Listener--------------------------------------------------
+//---Harbinger Cleanse Listener----------------------------------------------------------
 //---------------------------------------------------------------------------------------
 static function X2AbilityTemplate HarbingerCleanseListener()
 {
@@ -2088,11 +2097,91 @@ static function X2AbilityTemplate HarbingerCleanseListener()
 	return Template;
 }
 
+//---------------------------------------------------------------------------------------
+//---Psionic Killzone--------------------------------------------------------------------
+//---------------------------------------------------------------------------------------
+static function X2AbilityTemplate RTKillZone()
+{
+	local X2AbilityTemplate             Template;
+	local X2AbilityCooldown             Cooldown;
+	local X2AbilityCost_Ammo            AmmoCost;
+	local X2AbilityCost_ActionPoints    ActionPointCost;
+	local X2AbilityTarget_Cursor        CursorTarget;
+	local X2AbilityMultiTarget_Cone     ConeMultiTarget;
+	local X2Effect_ReserveActionPoints  ReservePointsEffect;
+	local X2Effect_MarkValidActivationTiles MarkTilesEffect;
+	local X2Condition_UnitEffects           SuppressedCondition;
 
+	`CREATE_X2ABILITY_TEMPLATE(Template, 'RTKillZone');
 
+	ActionPointCost = new class'X2AbilityCost_ActionPoints';
+	ActionPointCost.iNumPoints = 2;
+	ActionPointCost.bConsumeAllPoints = true;   //  this will guarantee the unit has at least 1 action point
+	ActionPointCost.bFreeCost = true;           //  ReserveActionPoints effect will take all action points away
+	ActionPointCost.DoNotConsumeAllEffects.Length = 0;
+	ActionPointCost.DoNotConsumeAllSoldierAbilities.Length = 0;
+	Template.AbilityCosts.AddItem(ActionPointCost);
 
+	Template.AbilityToHitCalc = default.DeadEye;
 
+	Template.AbilityShooterConditions.AddItem(default.LivingShooterProperty);
+	Template.AddShooterEffectExclusions();
+	SuppressedCondition = new class'X2Condition_UnitEffects';
+	SuppressedCondition.AddExcludeEffect(class'X2Effect_Suppression'.default.EffectName, 'AA_UnitIsSuppressed');
+	Template.AbilityShooterConditions.AddItem(SuppressedCondition);
 
+	Cooldown = new class'X2AbilityCooldown';
+	Cooldown.iNumTurns = default.PSIONICKILLZONE_COOLDOWN;
+	Template.AbilityCooldown = Cooldown;
 
+	CursorTarget = new class'X2AbilityTarget_Cursor';
+	CursorTarget.bRestrictToWeaponRange = true;
+	Template.AbilityTargetStyle = CursorTarget;
 
+	ConeMultiTarget = new class'X2AbilityMultiTarget_Cone';
+	ConeMultiTarget.bUseWeaponRadius = true;
+	ConeMultiTarget.ConeEndDiameter = 32 * class'XComWorldData'.const.WORLD_StepSize;
+	ConeMultiTarget.ConeLength = 60 * class'XComWorldData'.const.WORLD_StepSize;
+	Template.AbilityMultiTargetStyle = ConeMultiTarget;
 
+	Template.AbilityTriggers.AddItem(default.PlayerInputTrigger);
+
+	ReservePointsEffect = new class'X2Effect_ReserveActionPoints';
+	ReservePointsEffect.ReserveType = default.KillZoneReserveType;
+	Template.AddShooterEffect(ReservePointsEffect);
+
+	MarkTilesEffect = new class'X2Effect_MarkValidActivationTiles';
+	MarkTilesEffect.AbilityToMark = 'KillZoneShot';
+	Template.AddShooterEffect(MarkTilesEffect);
+
+	Template.AdditionalAbilities.AddItem('KillZoneShot');
+	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
+	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
+	Template.bSkipFireAction = true;
+	Template.bShowActivation = true;
+
+	Template.AbilitySourceName = 'eAbilitySource_Psionic';
+	Template.eAbilityIconBehaviorHUD = EAbilityIconBehavior_AlwaysShow;
+	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_killzone";
+	Template.ShotHUDPriority = class'UIUtilities_Tactical'.const.CLASS_MAJOR_PRIORITY;
+	Template.bDisplayInUITooltip = false;
+	Template.bDisplayInUITacticalText = false;
+	Template.Hostility = eHostility_Defensive;
+	Template.AbilityConfirmSound = "Unreal2DSounds_OverWatch";
+
+	Template.ActivationSpeech = 'KillZone';
+
+	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
+	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
+	Template.TargetingMethod = class'X2TargetingMethod_Cone';
+
+	Template.bCrossClassEligible = false;
+	Template.PostActivationEvents.AddItem('UnitUsedPsionicAbility');
+
+	return Template;
+}
+
+defaultproperties
+{
+	KillZoneReserveType = "KillZone";
+}
