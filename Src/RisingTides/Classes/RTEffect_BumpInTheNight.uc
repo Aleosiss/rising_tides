@@ -1,4 +1,4 @@
-class RTEffect_BumpInTheNight extends X2Effect_Persistent config(RisingTides);
+class RTEffect_BumpInTheNight extends RTEffect_GhostPerkBase config(RisingTides);
 
 var int iTileDistanceToActivate;
 // Register for events

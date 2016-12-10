@@ -8,7 +8,7 @@
 //---------------------------------------------------------------------------------------
 //	Scoped And Dropped effect
 //---------------------------------------------------------------------------------------
-class RTEffect_ScopedAndDropped extends X2Effect_PersistentStatChange;
+class RTEffect_ScopedAndDropped extends RTEffect_GhostPerkBase;
 
 var localized string RTFriendlyName;
 var localized string RTNotFriendlyName;
@@ -170,12 +170,6 @@ function bool PostAbilityCostPaid(XComGameState_Effect EffectState, XComGameStat
 	}											  
 	return false;
 }
-// Add Whisper's stats
-simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffectParameters, XComGameState_BaseObject kNewTargetState, XComGameState NewGameState, XComGameState_Effect NewEffectState)
-{
-	super.OnEffectAdded(ApplyEffectParameters, kNewTargetState, NewGameState, NewEffectState);
-} 
-
 
 DefaultProperties
 {

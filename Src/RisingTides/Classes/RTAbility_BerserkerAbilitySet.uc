@@ -21,7 +21,7 @@ class RTAbility_BerserkerAbilitySet extends RTAbility_GhostAbilitySet config(Ris
 	var config int SIPHON_RANGE;
 	var config int BLUR_DEFENSE_BONUS;
 	var config int BLUR_DODGE_BONUS;
-	var config int BLUR_MOBILITIY_BONUS;	 
+	var config int BLUR_MOBILITY_BONUS;	 
 	var config int BLADE_DAMAGE;
 	var config int BLADE_CRIT_DAMAGE;
 	var config int BLADE_DAMAGE_SPREAD;
@@ -36,6 +36,7 @@ class RTAbility_BerserkerAbilitySet extends RTAbility_GhostAbilitySet config(Ris
 	var config int PYROCLASTICFLOW_MOBILITY_BONUS;
 	var config bool PYROCLASTICFLOW_SHOULDUSECURRENTDAMAGETICK;
 	var config int PYROCLASTICFLOW_DAMAGE;
+	var config int BITN_DEFENSE_BONUS;
 
 //---------------------------------------------------------------------------------------
 //---CreateTemplates---------------------------------------------------------------------
@@ -106,6 +107,7 @@ static function X2AbilityTemplate BumpInTheNight()
 	BumpEffect.BuildPersistentEffect(1, true, true, true);
 	BumpEffect.SetDisplayInfo(ePerkBuff_Passive, Template.LocFriendlyName, Template.LocLongDescription, Template.IconImage, true,,Template.AbilitySourceName);
 	BumpEffect.iTileDistanceToActivate = default.BITN_TILEDISTANCE;
+	BumpEffect.DEFENSE_BONUS = default.BITN_DEFENSE_BONUS;
 	Template.AddTargetEffect(BumpEffect);
 
 	// standard ghost abilities
@@ -458,7 +460,7 @@ static function X2AbilityTemplate RTBlur() {
 
 	BlurEffect = new class'X2Effect_PersistentStatChange';
 	BlurEffect.BuildPersistentEffect(1, true, true, true);
-	BlurEffect.AddPersistentStatChange(eStat_Mobility, default.BLUR_MOBILITIY_BONUS);
+	BlurEffect.AddPersistentStatChange(eStat_Mobility, default.BLUR_MOBILITY_BONUS);
 	BlurEffect.AddPersistentStatChange(eStat_Defense, default.BLUR_DEFENSE_BONUS);
 	BlurEffect.AddPersistentStatChange(eStat_Dodge, default.BLUR_DODGE_BONUS);
 	BlurEffect.SetDisplayInfo(ePerkBuff_Passive, Template.LocFriendlyName, Template.LocLongDescription, Template.IconImage, true,,Template.AbilitySourceName);
@@ -1455,8 +1457,6 @@ static function X2AbilityTemplate RTGhostInTheShellEffect()
 
 	return Template;
 }
-
-
 
 //---------------------------------------------------------------------------------------
 //---Queen of Blades---------------------------------------------------------------------

@@ -257,12 +257,12 @@ LocFlyOverText="Shock And Awe"
 LocPromotionPopupText="<Bullet/> When this unit deals more than 25 damage in a single turn, it disorients all nearby enemies<br/>"
 
 [RTKillzone X2AbilityTemplate]
-LocFriendlyName="Psionic KillZone"
+LocFriendlyName="Psionic Killzone"
 LocLongDescription="Take a reaction shot against any enemy that moves or attacks within a cone of fire."
 LocHelpText="Enhanced overwatch in a cone of fire."
 LocFlyOverText="Psionic Killzone"
 LocPromotionPopupText="<Bullet/> There is no limit to the amount of Kill Zone shots a soldier can take outside of ammo counts.<br/><Bullet/> Kill Zone utilizes Squadsight, even if the soldier does not have the Long Watch ability.<br/><Bullet/> Kill Zone has a <Ability:SelfCooldown/> turn cooldown.<br/>"
-LocFriendlyNameWhenConcealed="Psionic KillZone (Concealed)"
+LocFriendlyNameWhenConcealed="Psionic Killzone (Concealed)"
 
 [RT_Berserker X2SoldierClassTemplate]
 DisplayName="GHOST Berserker"

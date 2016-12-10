@@ -38,6 +38,7 @@ class RTAbility_MarksmanAbilitySet extends RTAbility_GhostAbilitySet
 	var config int SOC_WILL_BONUS;
 	var config int DGG_DEFENSE_BONUS; 
 	var config int DGG_AIM_BONUS;
+	var config int SND_DEFENSE_BONUS;
 
 	var Name KillZoneReserveType;
 
@@ -115,6 +116,7 @@ static function X2AbilityTemplate ScopedAndDropped()
 	ScopedEffect.SetDisplayInfo(ePerkBuff_Passive, Template.LocFriendlyName, Template.LocLongDescription, Template.IconImage, true,,Template.AbilitySourceName);
 	ScopedEffect.iPanicChance = default.SOVEREIGN_PANIC_CHANCE;
 	ScopedEffect.iDamageRequiredToActivate = default.SHOCKANDAWE_DAMAGE_TO_ACTIVATE;
+	ScopedEffect.DEFENSE_BONUS = default.SND_DEFENSE_BONUS;
 	Template.AddTargetEffect(ScopedEffect);
 	
 	SSEffect = new class'RTEffect_Squadsight';

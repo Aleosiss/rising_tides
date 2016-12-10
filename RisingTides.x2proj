@@ -146,6 +146,9 @@
     <Content Include="Src\RisingTides\Classes\RTEffect_GhostInTheShell.uc">
       <SubType>Content</SubType>
     </Content>
+    <Content Include="Src\RisingTides\Classes\RTEffect_GhostPerkBase.uc">
+      <SubType>Content</SubType>
+    </Content>
     <Content Include="Src\RisingTides\Classes\RTEffect_Harbinger.uc">
       <SubType>Content</SubType>
     </Content>

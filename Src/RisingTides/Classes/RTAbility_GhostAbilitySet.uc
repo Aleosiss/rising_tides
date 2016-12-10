@@ -11,11 +11,16 @@
 class RTAbility_GhostAbilitySet extends X2Ability
 	config(RisingTides);
 
-	var config int BASE_REFLECTION_CHANCE, BASE_DEFENSE_INCREASE;
-	var config int TEEK_REFLECTION_INCREASE, TEEK_DEFENSE_INCREASE, TEEK_DODGE_INCREASE;
-	var config int OVERLOAD_CHARGES, OVERLOAD_BASE_COOLDOWN;
+	var config int BASE_REFLECTION_CHANCE;
+	var config int BASE_DEFENSE_INCREASE;
+	var config int TEEK_REFLECTION_INCREASE;
+	var config int TEEK_DEFENSE_INCREASE;
+	var config int TEEK_DODGE_INCREASE;
+	var config int OVERLOAD_CHARGES;
+	var config int OVERLOAD_BASE_COOLDOWN;
 	var config int OVERLOAD_PANIC_CHECK;
-	var config int FADE_DURATION, FADE_COOLDOWN;
+	var config int FADE_DURATION;
+	var config int FADE_COOLDOWN;
 	var config int MAX_BLOODLUST_MELDJOIN;
 
 //---------------------------------------------------------------------------------------
@@ -27,13 +32,17 @@ static function array<X2DataTemplate> CreateTemplates()
 
 	Templates.AddItem(GhostPsiSuite());
 	Templates.AddItem(StandardGhostShot());
+
 	Templates.AddItem(LeaveMeld());
 	Templates.AddItem(JoinMeld());
+
 	//Templates.AddItem(Reflection());
 	Templates.AddItem(PsiOverload());
 	Templates.AddItem(PsiOverloadPanic());
+
 	Templates.AddItem(Teek());
 	Templates.AddItem(Fade());
+
 	Templates.AddItem(LIOverwatchShot());
 	Templates.AddItem(PsionicActivate());
 	Templates.AddItem(RTRemoveAdditionalAnimSets());
@@ -47,7 +56,7 @@ static function array<X2DataTemplate> CreateTemplates()
 static function X2AbilityTemplate GhostPsiSuite()
 {
 	local X2AbilityTemplate						Template;
-	local X2Effect_PersistentStatChange			Effect;
+	local X2Effect_Persistent		Effect;
 
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'GhostPsiSuite');
 	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_adventpsiwitch_mindcontrol";
@@ -55,20 +64,15 @@ static function X2AbilityTemplate GhostPsiSuite()
 	Template.AbilitySourceName = 'eAbilitySource_Perk';
 	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_NeverShow;
 	Template.Hostility = eHostility_Neutral;
+
 	Template.AbilityToHitCalc = default.DeadEye;
 	Template.AbilityTargetStyle = default.SelfTarget;
 	Template.AbilityTriggers.AddItem(default.UnitPostBeginPlayTrigger);
 
-	Effect = new class 'X2Effect_PersistentStatChange';
-	Effect.BuildPersistentEffect(1, true, true, true);
-	Effect.AddPersistentStatChange(eStat_Defense, default.BASE_DEFENSE_INCREASE); 
+	Effect = new class 'X2Effect_Persistent';
+	Effect.BuildPersistentEffect(1, true, true, true); 
 	Effect.SetDisplayInfo(ePerkBuff_Passive, Template.LocFriendlyName, Template.LocLongDescription, Template.IconImage, true,, Template.AbilitySourceName);
 	Template.AddTargetEffect(Effect);
-
-	Template.AdditionalAbilities.AddItem('JoinMeld');
-	Template.AdditionalAbilities.AddItem('LeaveMeld');
-	//Template.AdditionalAbilities.AddItem('Reflection');
-	//Template.AdditionalAbilities.AddItem('PsiOverload');
 
 
 	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
@@ -520,42 +524,31 @@ static function X2AbilityTemplate Fade()
 //---------------------------------------------------------------------------------------
 //---Teek--------------------------------------------------------------------------------
 //---------------------------------------------------------------------------------------
-static function X2AbilityTemplate Teek()
-{
-	local X2AbilityTemplate					Template;
-	local X2Effect_PersistentStatChange 	TeekEffect;
-	local X2AbilityCooldown                 Cooldown;	
+static function X2AbilityTemplate Teek() {
+	local X2AbilityTemplate Template;
+	local X2Effect_PersistentStatChange BlurEffect;
 	
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'Teek');
 	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_voidrift";
 	
 	Template.AbilitySourceName = 'eAbilitySource_Psionic';
-	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_NeverShow;
-	Template.AbilityConfirmSound = "TacticalUI_ActivateAbility";
+	Template.eAbilityIconBehaviorHUD = EAbilityIconBehavior_NeverShow;
 	Template.Hostility = eHostility_Neutral;
-
-	Template.ConcealmentRule = eConceal_Always;
-
-	TeekEffect = new class'X2Effect_PersistentStatChange';
-	TeekEffect.BuildPersistentEffect(1, true, true, false, eGameRule_PlayerTurnEnd);
-	TeekEffect.AddPersistentStatChange(eStat_Dodge, default.TEEK_DODGE_INCREASE);
-	TeekEffect.AddPersistentStatChange(eStat_Defense, default.TEEK_DEFENSE_INCREASE);
-	TeekEffect.SetDisplayInfo(ePerkBuff_Passive, Template.LocFriendlyName, Template.LocLongDescription, Template.IconImage, true,,Template.AbilitySourceName);
-	TeekEffect.DuplicateResponse = eDupe_Ignore;
-	TeekEffect.EffectName = 'Teek';
-	Template.AddTargetEffect(TeekEffect);
 	
-	// Add dead eye to guarantee
+	// Apply perk at start of the mission.
 	Template.AbilityToHitCalc = default.DeadEye;
 	Template.AbilityTargetStyle = default.SelfTarget;
 	Template.AbilityTriggers.AddItem(default.UnitPostBeginPlayTrigger);
 
-
+	BlurEffect = new class'X2Effect_PersistentStatChange';
+	BlurEffect.BuildPersistentEffect(1, true, true, true);
+	BlurEffect.AddPersistentStatChange(eStat_Defense, default.TEEK_DEFENSE_INCREASE);
+	BlurEffect.AddPersistentStatChange(eStat_Dodge, default.TEEK_DODGE_INCREASE);
+	BlurEffect.SetDisplayInfo(ePerkBuff_Passive, Template.LocFriendlyName, Template.LocLongDescription, Template.IconImage, true,,Template.AbilitySourceName);
+	Template.AddTargetEffect(BlurEffect);
+	
 	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
-	//Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
-	//  NOTE: No visualization on purpose!
-
-	Template.bCrossClassEligible = false;				
+	// NOTE: No visualization on purpose!
 
 	return Template;
 }
