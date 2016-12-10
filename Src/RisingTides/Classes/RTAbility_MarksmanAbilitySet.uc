@@ -12,8 +12,10 @@ class RTAbility_MarksmanAbilitySet extends RTAbility_GhostAbilitySet
 	config(RisingTides);
 
 	var config int SLOWISSMOOTH_AIM_BONUS, SLOWISSMOOTH_CRIT_BONUS;
+	var config float HEADSHOT_CRITDMG_BONUS;
 	var config int HEADSHOT_CRIT_BONUS, HEADSHOT_COOLDOWN;
 	var config int HEADSHOT_AIM_MULTIPLIER;
+	var config int SQUADSIGHT_CRIT_CHANCE;
 	var config int SNAPSHOT_AIM_BONUS;
 	var config int DISABLESHOT_AIM_BONUS, DISABLESHOT_COOLDOWN;
 	var config float KNOCKTHEMDOWN_CRITDMG_MULTIPLIER;
@@ -29,6 +31,13 @@ class RTAbility_MarksmanAbilitySet extends RTAbility_GhostAbilitySet
 	var config int SHOCKANDAWE_DAMAGE_TO_ACTIVATE;
 	var config int SOVEREIGN_PANIC_CHANCE;
 	var config int PSIONICKILLZONE_COOLDOWN;
+	var config float DISABLING_SHOT_REDUCTION;
+	var config int SNAPSHOT_AIM_PENALTY;
+	var config int SOC_DEFENSE_BONUS;
+	var config int SOC_PSI_BONUS; 
+	var config int SOC_WILL_BONUS;
+	var config int DGG_DEFENSE_BONUS; 
+	var config int DGG_AIM_BONUS;
 
 	var Name KillZoneReserveType;
 
@@ -47,8 +56,8 @@ static function array<X2DataTemplate> CreateTemplates()
 	Templates.AddItem(RTPrecisionShotDamage());
 	Templates.AddItem(Aggression());
 	Templates.AddItem(KnockThemDown());
-	Templates.AddItem(DisablingShot());
-	Templates.AddItem(DisablingShotDamage());
+	Templates.AddItem(RTDisablingShot());
+	Templates.AddItem(RTDisablingShotDamage());
 	Templates.AddItem(RTSnapshot());
 	Templates.AddItem(SixOClock());
 	Templates.AddItem(SixOClockEffect());
@@ -495,6 +504,9 @@ static function X2AbilityTemplate RTPrecisionShotDamage()
 	Template.AbilityTriggers.AddItem(default.UnitPostBeginPlayTrigger);
 
 	DamageEffect = new class'RTEffect_PrecisionShotDamage';
+	DamageEffect.HEADSHOT_CRITDMG_BONUS = default.HEADSHOT_CRITDMG_BONUS;
+	DamageEffect.HEADSHOT_CRIT_BONUS = default.HEADSHOT_CRIT_BONUS;
+	DamageEffect.SQUADSIGHT_CRIT_CHANCE = default.SQUADSIGHT_CRIT_CHANCE;
 	DamageEffect.BuildPersistentEffect(1, true, true, true);
 	DamageEffect.SetDisplayInfo(ePerkBuff_Passive, Template.LocFriendlyName, Template.GetMyLongDescription(), Template.IconImage, false,,Template.AbilitySourceName);
 	Template.AddTargetEffect(DamageEffect);
@@ -558,6 +570,7 @@ static function X2AbilityTemplate KnockThemDown()
 	Template.AbilityTriggers.AddItem(default.UnitPostBeginPlayTrigger);
 
 	KnockEffect = new class'RTEffect_KnockThemDown';
+	KnockEffect.CRIT_DAMAGE_MODIFIER = default.KNOCKTHEMDOWN_CRITDMG_MULTIPLIER;
 	KnockEffect.BuildPersistentEffect(1, true, true, true);
 	KnockEffect.SetDisplayInfo(ePerkBuff_Passive, Template.LocFriendlyName, Template.LocLongDescription, Template.IconImage, true,,Template.AbilitySourceName);
 	Template.AddTargetEffect(KnockEffect);
@@ -571,7 +584,7 @@ static function X2AbilityTemplate KnockThemDown()
 //---------------------------------------------------------------------------------------
 //---Disabling Shot----------------------------------------------------------------------
 //---------------------------------------------------------------------------------------
-static function X2AbilityTemplate DisablingShot()
+static function X2AbilityTemplate RTDisablingShot()
 {
 	local X2AbilityTemplate                 Template;
 	local RTAbilityCooldown                 Cooldown;
@@ -581,9 +594,9 @@ static function X2AbilityTemplate DisablingShot()
 	local X2AbilityCost_ActionPoints        ActionPointCost;
 	local X2Effect_DisableWeapon			DisableWeapon;
 
-	`CREATE_X2ABILITY_TEMPLATE(Template, 'DisablingShot');
+	`CREATE_X2ABILITY_TEMPLATE(Template, 'RTDisablingShot');
 
-	Template.AdditionalAbilities.AddItem('DisablingShotDamage');
+	Template.AdditionalAbilities.AddItem('RTDisablingShotDamage');
 
 	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_disablingshot";
 	Template.AbilitySourceName = 'eAbilitySource_Perk';
@@ -647,13 +660,13 @@ static function X2AbilityTemplate DisablingShot()
 //---------------------------------------------------------------------------------------
 //---Disabling Shot Damage Effect--------------------------------------------------------
 //---------------------------------------------------------------------------------------
-static function X2AbilityTemplate DisablingShotDamage()
+static function X2AbilityTemplate RTDisablingShotDamage()
 {
 	local X2AbilityTemplate						Template;
 	local RTEffect_DisablingShotDamage          DamageEffect;
 
 	// Icon Properties
-	`CREATE_X2ABILITY_TEMPLATE(Template, 'DisablingShotDamage');
+	`CREATE_X2ABILITY_TEMPLATE(Template, 'RTDisablingShotDamage');
 	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_momentum";
 
 	Template.AbilitySourceName = 'eAbilitySource_Perk';
@@ -665,6 +678,7 @@ static function X2AbilityTemplate DisablingShotDamage()
 	Template.AbilityTriggers.AddItem(default.UnitPostBeginPlayTrigger);
 
 	DamageEffect = new class'RTEffect_DisablingShotDamage';
+	DamageEffect.DISABLING_SHOT_REDUCTION = default.DISABLING_SHOT_REDUCTION;
 	DamageEffect.BuildPersistentEffect(1, true, true, true);
 	DamageEffect.SetDisplayInfo(ePerkBuff_Passive, Template.LocFriendlyName, Template.GetMyLongDescription(), Template.IconImage, false,,Template.AbilitySourceName);
 	Template.AddTargetEffect(DamageEffect);
@@ -697,6 +711,7 @@ static function X2AbilityTemplate RTSnapshot()
 	Template.AbilityTriggers.AddItem(default.UnitPostBeginPlayTrigger);
 
 	SnapshotEffect = new class'RTEffect_SnapshotEffect';
+	SnapshotEffect.SNAPSHOT_AIM_PENALTY = default.SNAPSHOT_AIM_PENALTY;
 	SnapshotEffect.BuildPersistentEffect(1, true, true, true);
 	SnapshotEffect.SetDisplayInfo(ePerkBuff_Passive, Template.LocFriendlyName, Template.LocLongDescription, Template.IconImage, true,,Template.AbilitySourceName);
 	Template.AddTargetEffect(SnapshotEffect);
@@ -801,19 +816,19 @@ static function X2AbilityTemplate SixOClockEffect()
 	ClockEffect = new class'RTEffect_SixOClockEffect';
 	// One turn duration
 	ClockEffect.BuildPersistentEffect(1, false, true, false, eGameRule_PlayerTurnBegin);
-	ClockEffect.AddPersistentStatChange(eStat_Defense, default.SIXOCLOCK_DEFENSE_BONUS);
-	ClockEffect.AddPersistentStatChange(eStat_PsiOffense, default.SIXOCLOCK_PSI_BONUS);
-	ClockEffect.AddPersistentStatChange(eStat_Will, default.SIXOCLOCK_WILL_BONUS);
+	ClockEffect.AddPersistentStatChange(eStat_Defense, default.SOC_DEFENSE_BONUS);
+	ClockEffect.AddPersistentStatChange(eStat_PsiOffense, default.SOC_PSI_BONUS);
+	ClockEffect.AddPersistentStatChange(eStat_Will, default.SOC_WILL_BONUS);
 	ClockEffect.SetDisplayInfo(ePerkBuff_Bonus, "I've got your six.", 
 		"Whisper has this unit's six. Gain +" @ 10 @ " bonus to defense, psi, and will.", Template.IconImage);
 	
 
 	// Add it
 	Template.AddMultiTargetEffect(ClockEffect);
-	//Template.bShowActivation = true;
-	//Template.bSkipFireAction = true;
+	Template.bShowActivation = true;
+	Template.bSkipFireAction = true;
 	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
-	//Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
+	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
 	//  NOTE: No visualization on purpose!
 
 	return Template;
@@ -875,6 +890,8 @@ static function X2AbilityTemplate DamnGoodGround()
 	Template.AbilityTriggers.AddItem(default.UnitPostBeginPlayTrigger);
 
 	DGGEffect = new class 'RTEffect_DamnGoodGround';
+	DGGEffect.DGG_DEFENSE_BONUS = default.DGG_DEFENSE_BONUS;
+	DGGEffect.DGG_AIM_BONUS = default.DGG_AIM_BONUS;
 	DGGEffect.BuildPersistentEffect(1, true, false, false);
 	DGGEffect.SetDisplayInfo(ePerkBuff_Passive, Template.LocFriendlyName, Template.LocLongDescription, Template.IconImage, true,, Template.AbilitySourceName);
 	Template.AddTargetEffect(DGGEffect);
@@ -945,10 +962,11 @@ static function X2AbilityTemplate SlowIsSmoothEffect()
 	Template.AbilityTriggers.AddItem(default.UnitPostBeginPlayTrigger);
 
 	SISEffect = new class 'RTEffect_SlowIsSmooth';
+	SISEffect.AIM_BONUS = default.SLOWISSMOOTH_AIM_BONUS;
+	SISEffect.CRIT_BONUS = default.SLOWISSMOOTH_CRIT_BONUS;
 	SISEffect.BuildPersistentEffect(1, true, false, false,  eGameRule_PlayerTurnEnd);
 	//Temporary Icon to confirm effect is on target					 
 	Template.AddTargetEffect(SISEffect);
-	Template.AddTargetEffect(class'X2Effect_Spotted'.static.CreateUnspottedEffect());
 
 	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
 	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
@@ -1589,7 +1607,7 @@ static function X2AbilityTemplate TwitchReactionShot()
 	AmmoCost.iAmmo = 1;
 	Template.AbilityCosts.AddItem(AmmoCost);
 
-	Template.AbilityTriggers.AddItem(default.PlayerInputTrigger);
+	Template.AbilityTriggers.AddItem(new class'X2AbilityTrigger_Placeholder');
 
 	ReserveActionPointCost = new class'X2AbilityCost_ReserveActionPoints';
 	ReserveActionPointCost.iNumPoints = 1;

@@ -7,7 +7,7 @@
 ; LocFlyOverText=""
 ; LocPromotionPopupText="<Bullet/> <br/><Bullet/> <br/><Bullet/> <br/><Bullet/> <br/>"
 
-[ StandardGhostShot X2AbilityTemplate]
+[StandardGhostShot X2AbilityTemplate]
 LocFriendlyName="Fire Weapon"
 LocHelpText="Fire a shot at a target. <Ability:CANNOTBEDODGED/>"
 LocLongDescription="<Bullet/>Firing the primary weapon always ends a unit's turn."
@@ -47,14 +47,14 @@ LocHelpText="Gain 15% critical damage per enemy spotted."
 LocFlyOverText="Knock Them Down"
 LocPromotionPopupText="<Bullet/> Gain 15% critical damage per visible enemy unit. (Squadsight included).<br/>"
 
-[DisablingShot X2AbilityTemplate]
+[RTDisablingShot X2AbilityTemplate]
 LocFriendlyName="Disabling Shot"
 LocLongDescription="A carefully aimed shot, suffering decreased aim and damage but forcing the target to reload their primary weapon."
 LocHelpText="Weak and hard-to-hit shot that disables target enemy weapon for a turn."
 LocFlyOverText="Disabling Shot"
 LocPromotionPopupText="<Bullet/> A carefully aimed shot, suffering decreased aim and damage but forcing the target to reload their primary weapon.<br/>"
 
-[Snapshot X2AbilityTemplate]
+[RTSnapshot X2AbilityTemplate]
 LocFriendlyName="Snapshot"
 LocLongDescription="Use primary weapon with only a single action point, but with a -15 aim penalty."
 LocHelpText="Fire primary weapon after moving at an aim penalty."

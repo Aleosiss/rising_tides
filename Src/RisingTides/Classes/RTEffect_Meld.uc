@@ -46,7 +46,7 @@ simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffe
 	ListenerObj = MeldEffectState;
 	if(ListenerObj == none)
 	{
-		`Redscreen("RTMeld: Failed to find Meld component when registering listener (WE DUN FUCKED)");
+		`Redscreen("RTMeld: Failed to find Meld component when registering listener... what?");
 		return;
 	}
 	EventMgr.RegisterForEvent(ListenerObj, 'RTAddToMeld', MeldEffectState.AddUnitToMeld, ELD_OnStateSubmitted,,,true);
@@ -54,7 +54,6 @@ simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffe
 	EventMgr.RegisterForEvent(ListenerObj, 'UnitPanicked', MeldEffectState.RemoveUnitFromMeld,ELD_OnStateSubmitted,,,true); 
 	EventMgr.RegisterForEvent(ListenerObj, 'TacticalGameEnd', MeldEffectState.OnTacticalGameEnd, ELD_OnStateSubmitted);
 
-	`LOG("Rising Tides: The Meld has finished registering for events, initalizing...");
 
 	MeldEffectState.Initialize(EffectTargetUnit);
 	
@@ -64,7 +63,6 @@ simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffe
 	MeldWill = MeldEffectState.GetMeldStrength() - EffectTargetUnit.GetBaseStat(eStat_Will);
 	MeldPsiOff = MeldEffectState.GetMeldStrength() - EffectTargetUnit.GetBaseStat(eStat_PsiOffense);
 	MeldHacking = MeldEffectState.SharedHack - EffectTargetUnit.GetBaseStat(eStat_Hacking);
-	`LOG("Rising Tides: YHME: Adding the following value to Hacking Stat: " @ MeldHacking);
 
 	AddPersistentStatChange(eStat_Will, MeldWill);
 	AddPersistentStatChange(eStat_Hacking, MeldHacking);

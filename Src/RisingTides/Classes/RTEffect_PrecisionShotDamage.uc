@@ -9,9 +9,9 @@
 //---------------------------------------------------------------------------------------
 class RTEffect_PrecisionShotDamage extends X2Effect_Persistent config(RisingTides);
 
-var config float HEADSHOT_CRITDMG_BONUS;
-var config int HEADSHOT_CRIT_BONUS;
-var config int SQUADSIGHT_CRIT_CHANCE;
+var float HEADSHOT_CRITDMG_BONUS;
+var int HEADSHOT_CRIT_BONUS;
+var int SQUADSIGHT_CRIT_CHANCE;
 var localized string RTFriendlyName;
 
 //CREDIT: user guby on Steam (/u/munchbunny)
@@ -22,7 +22,7 @@ function GetToHitModifiers(XComGameState_Effect EffectState, XComGameState_Unit 
 	local XComGameState_Item SourceWeapon;
 	local GameRulesCache_VisibilityInfo VisInfo;
 	local bool bSquadsight;
-	local int crit_bonus;
+	local int iCritBonus;
 	
 	// Check for squadsight because we will silently cancel the squadsight crit if it's squadsight.
 	`TACTICALRULES.VisibilityMgr.GetVisibilityInfo(Attacker.ObjectID, Target.ObjectID, VisInfo);
@@ -37,14 +37,14 @@ function GetToHitModifiers(XComGameState_Effect EffectState, XComGameState_Unit 
 		// If squadsight, apply squadsight compensation.
 		if (bSquadsight)
 		{
-			crit_bonus = HEADSHOT_CRIT_BONUS + SQUADSIGHT_CRIT_CHANCE;
+			iCritBonus = HEADSHOT_CRIT_BONUS + SQUADSIGHT_CRIT_CHANCE;
 		}
 		else
 		{
-			crit_bonus = HEADSHOT_CRIT_BONUS;
+			iCritBonus = HEADSHOT_CRIT_BONUS;
 		}
 
-		ModInfo.Value = crit_bonus;
+		ModInfo.Value = iCritBonus;
 		ShotModifiers.AddItem(ModInfo);
 	}
 }
@@ -60,6 +60,7 @@ function int GetAttackingDamageModifier(XComGameState_Effect EffectState, XComGa
 		if (AbilityState.GetMyTemplateName() == 'RTPrecisionShot')
 		{
 			ExtraDamage = CurrentDamage * HEADSHOT_CRITDMG_BONUS;
+			ExtraDamage -= CurrentDamage;
 		}
 	}
 	return int(ExtraDamage);
@@ -67,5 +68,5 @@ function int GetAttackingDamageModifier(XComGameState_Effect EffectState, XComGa
 
 DefaultProperties
 {
-	EffectName="PrecisionShotDamage";
+	EffectName="RTPrecisionShotDamage";
 }

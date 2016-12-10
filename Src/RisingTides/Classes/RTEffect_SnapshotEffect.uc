@@ -10,7 +10,7 @@
 
 class RTEffect_SnapshotEffect extends X2Effect_Persistent config(RisingTides);
 
-var config int AIM_PENALTY;
+var int SNAPSHOT_AIM_PENALTY;
 var localized string RTFriendlyName;
 
 function GetToHitModifiers(XComGameState_Effect EffectState, XComGameState_Unit Attacker, XComGameState_Unit Target, XComGameState_Ability AbilityState, class<X2AbilityToHitCalc> ToHitType, bool bMelee, bool bFlanking, bool bIndirectFire, out array<ShotModifierInfo> ShotModifiers)
@@ -24,7 +24,7 @@ function GetToHitModifiers(XComGameState_Effect EffectState, XComGameState_Unit 
 		{	
 			ShotInfo.ModType = eHit_Success;
 			ShotInfo.Reason = RTFriendlyName;
-			ShotInfo.Value = -(AIM_PENALTY);
+			ShotInfo.Value = -(SNAPSHOT_AIM_PENALTY);
 			ShotModifiers.AddItem(ShotInfo);
 		}
 	}

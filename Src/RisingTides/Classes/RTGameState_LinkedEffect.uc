@@ -8,6 +8,7 @@ function EventListenerReturn LinkedFireCheck (Object EventData, Object EventSour
 	local RTEffect_LinkedIntelligence LinkedEffect;
     local RTGameState_MeldEffect  MeldEffectState;
 	local StateObjectReference AbilityRef;
+	local GameRulesCache_VisibilityInfo	VisInfo;
 	local XComGameState_Ability AbilityState, OriginalShot;
 	local XComGameStateContext_Ability AbilityContext;
 	local XComGameState NewGameState;
@@ -32,7 +33,7 @@ function EventListenerReturn LinkedFireCheck (Object EventData, Object EventSour
 		return ELR_NoInterrupt;
 	}
 	//`LOG("Rising Tides: Linked Fire Check Stage 2");
-	// The LinkedSourceUnit should be the unit that has Linked Intelligence, and the unit that is currently attacking
+	// The LinkedSourceUnit should be  the unit that is currently attacking
 	LinkedSourceUnit = class'X2TacticalGameRulesetDataStructures'.static.GetAttackingUnitState(GameState);
 
 	// The Linked Unit is the one responding to the call to arms
@@ -76,6 +77,14 @@ function EventListenerReturn LinkedFireCheck (Object EventData, Object EventSour
 
     // only shoot enemy units
 	if (TargetUnit != none && TargetUnit.IsEnemyUnit(LinkedUnit)) {
+		// for some reason, standard target visibility conditions weren't preventing units from shooting
+		// leading to annoying siuations involving shooting through walls
+		`TACTICALRULES.VisibilityMgr.GetVisibilityInfo(LinkedUnit.ObjectID, TargetUnit.ObjectID, VisInfo);
+		if(!VisInfo.bClearLOS && !LinkedUnit.HasSoldierAbility('DaybreakFlame')) {
+			// only whisper can shoot through walls...
+			return ELR_NoInterrupt;
+		}
+
 		// break out if we can't shoot
 		if (AbilityState != none) {
 				// break out if we can't grant an action point to shoot with
@@ -92,7 +101,7 @@ function EventListenerReturn LinkedFireCheck (Object EventData, Object EventSour
 					// add a action point to shoot with
 					LinkedUnit = XComGameState_Unit(NewGameState.CreateStateObject(LinkedUnit.Class, LinkedUnit.ObjectID));
 					if(LinkedUnit.ReserveActionPoints.Length < 1) {
-						LinkedUnit.ReserveActionPoints.AddItem(LinkedEffect.GrantActionPoint);
+						LinkedUnit.ReserveActionPoints.AddItem(class'X2CharacterTemplateManager'.default.OverwatchReserveActionPoint);
 					}
 					NewGameState.AddStateObject(LinkedUnit);
 					// check if we can shoot. if we can't, clean up the gamestate from history
@@ -174,7 +183,6 @@ function TriggerLinkedEffectFlyoverVisualizationFn(XComGameState VisualizeGameSt
 		History.GetCurrentAndPreviousGameStatesForObjectID(UnitState.ObjectID, BuildTrack.StateObject_OldState, BuildTrack.StateObject_NewState, , VisualizeGameState.HistoryIndex);
 		BuildTrack.StateObject_NewState = UnitState;
 		BuildTrack.TrackActor = UnitState.GetVisualizer();
-		`RedScreen(""@AbilityState.GetMyTemplateName()@"");
 
 		AbilityTemplate = AbilityState.GetMyTemplate();
 		if (AbilityTemplate != none)

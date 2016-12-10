@@ -8,7 +8,7 @@
 //---------------------------------------------------------------------------------------
 class RTEffect_DisablingShotDamage extends X2Effect_Persistent config(RisingTides);
 
-var config float DISABLING_SHOT_REDUCTION;
+var float DISABLING_SHOT_REDUCTION;
 
 //Add damage reduction for disabling shot
 function int GetAttackingDamageModifier(XComGameState_Effect EffectState, XComGameState_Unit Attacker, Damageable TargetDamageable, XComGameState_Ability AbilityState, const out EffectAppliedData AppliedData, const int CurrentDamage, optional XComGameState NewGameState)
@@ -18,7 +18,7 @@ function int GetAttackingDamageModifier(XComGameState_Effect EffectState, XComGa
 	if (AppliedData.AbilityResultContext.HitResult == eHit_Success)
 	{
 		//Check for disabling shot
-		if (AbilityState.GetMyTemplateName() == 'DisablingShot')
+		if (AbilityState.GetMyTemplateName() == 'RTDisablingShot')
 		{
 			ExtraDamage = CurrentDamage * DISABLING_SHOT_REDUCTION * -1;
 		}

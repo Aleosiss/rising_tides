@@ -47,7 +47,7 @@ static function array<X2DataTemplate> CreateTemplates()
 static function X2AbilityTemplate GhostPsiSuite()
 {
 	local X2AbilityTemplate						Template;
-	local X2Effect_Persistent					Effect;
+	local X2Effect_PersistentStatChange			Effect;
 
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'GhostPsiSuite');
 	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_adventpsiwitch_mindcontrol";
@@ -59,8 +59,9 @@ static function X2AbilityTemplate GhostPsiSuite()
 	Template.AbilityTargetStyle = default.SelfTarget;
 	Template.AbilityTriggers.AddItem(default.UnitPostBeginPlayTrigger);
 
-	Effect = new class 'X2Effect_Persistent';
+	Effect = new class 'X2Effect_PersistentStatChange';
 	Effect.BuildPersistentEffect(1, true, true, true);
+	Effect.AddPersistentStatChange(eStat_Defense, default.BASE_DEFENSE_INCREASE); 
 	Effect.SetDisplayInfo(ePerkBuff_Passive, Template.LocFriendlyName, Template.LocLongDescription, Template.IconImage, true,, Template.AbilitySourceName);
 	Template.AddTargetEffect(Effect);
 
@@ -621,7 +622,7 @@ static function X2AbilityTemplate LIOverwatchShot()
 	AmmoCost.iAmmo = 1;	
 	Template.AbilityCosts.AddItem(AmmoCost);
 
-	Template.AbilityTriggers.AddItem(default.PlayerInputTrigger);
+	Template.AbilityTriggers.AddItem(new class'X2AbilityTrigger_Placeholder');
 	
 	ReserveActionPointCost = new class'X2AbilityCost_ReserveActionPoints';
 	ReserveActionPointCost.iNumPoints = 1;
@@ -635,7 +636,6 @@ static function X2AbilityTemplate LIOverwatchShot()
 
 	Template.AbilityTargetConditions.AddItem(default.LivingHostileUnitDisallowMindControlProperty);
 	TargetVisibilityCondition = new class'X2Condition_Visibility';
-	TargetVisibilityCondition.bRequireGameplayVisible = true;
 	TargetVisibilityCondition.bDisablePeeksOnMovement = true;
 	TargetVisibilityCondition.bAllowSquadsight = true;
 	Template.AbilityTargetConditions.AddItem(TargetVisibilityCondition);

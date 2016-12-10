@@ -1,5 +1,3 @@
-// This is an Unreal Script
-
 class RTEffect_HeatChannel extends X2Effect_Persistent;
 
 function RegisterForEvents(XComGameState_Effect EffectGameState)

@@ -31,7 +31,7 @@ simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffe
 		if( (SourceUnit != none) && (OldTargetUnit != none) )
 		{
 			LifeAmount = (OldTargetUnit.GetCurrentStat(eStat_HP) - TargetUnit.GetCurrentStat(eStat_HP));
-			LifeAmount = LifeAmount * SiphonAmountMultiplier;
+			LifeAmount = LifeAmount * (1 + SiphonAmountMultiplier);
 			
 			if(LifeAmount > SiphonMaxVal && SiphonMaxVal > -1) {
 				FinalLifeAmount = SiphonMaxVal;

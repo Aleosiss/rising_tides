@@ -10,7 +10,7 @@
 class RTEffect_SlowIsSmooth extends X2Effect_Persistent config(RisingTides);
 
 var localized string RTFriendlyName;
-var config int AIM_BONUS, CRIT_BONUS;
+var int AIM_BONUS, CRIT_BONUS;
 
 function GetToHitModifiers(XComGameState_Effect EffectState, XComGameState_Unit Attacker, XComGameState_Unit Target, XComGameState_Ability AbilityState, class<X2AbilityToHitCalc> ToHitType, bool bMelee, bool bFlanking, bool bIndirectFire, out array<ShotModifierInfo> ShotModifiers)
 {
@@ -49,6 +49,7 @@ simulated function bool OnEffectTicked(const out EffectAppliedData ApplyEffectPa
 			{
 				//OnEffectAdded(ApplyEffectParameters, EffectTargetUnit, NewGameState, kNewEffectState);
 				`XEVENTMGR.TriggerEvent('EffectEnterUnitConcealment', EffectTargetUnit, EffectTargetUnit, NewGameState);
+				EffectTargetUnit.m_bSpotted = false;
 				EffectTargetUnit.SetUnitFloatValue('SISCounter', 0, eCleanup_Never);	
 			}
 		}
