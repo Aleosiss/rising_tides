@@ -19,7 +19,6 @@ This would be a bare-bones content mod. I also have the following content in min
 ###### Current TODOs: 
   - Berserker:
       - Implement Stealth visual overlay
-      - Troubleshoot why Pyroclastic Flow gives burning effect on hit
   - Marksman: 
       - Shock n' Awe replacer or Sovereign replacer
   - Gatherer: 
