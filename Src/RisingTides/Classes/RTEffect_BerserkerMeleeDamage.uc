@@ -45,7 +45,7 @@ simulated function WeaponDamageValue CreatePsionicBladeDamageEffect(WeaponDamage
 simulated function WeaponDamageValue CreateHiddenBladeDamageEffect(WeaponDamageValue ReturnDamageValue, StateObjectReference TargetRef) {
 
     ReturnDamageValue = CreateNormalBladeDamageEffect(ReturnDamageValue, TargetRef);
-    ReturnDamageValue.Crit += (ReturnDamageValue.Crit / fHiddenBladeCritModifier);    
+    ReturnDamageValue.Crit += (ReturnDamageValue.Crit * (1 + fHiddenBladeCritModifier)); // 100% damage increase + fHiddenBladeCritModifier % damage increase    
 
     return ReturnDamageValue;
 }

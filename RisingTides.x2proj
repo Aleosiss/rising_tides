@@ -113,9 +113,6 @@
     <Content Include="Src\RisingTides\Classes\RTCondition_EffectStackCount.uc">
       <SubType>Content</SubType>
     </Content>
-    <Content Include="Src\RisingTides\Classes\RTCondition_OverwatchVisibility.uc">
-      <SubType>Content</SubType>
-    </Content>
     <Content Include="Src\RisingTides\Classes\RTEffect_Acid.uc">
       <SubType>Content</SubType>
     </Content>
@@ -155,9 +152,6 @@
     <Content Include="Src\RisingTides\Classes\RTEffect_HeatChannel.uc">
       <SubType>Content</SubType>
     </Content>
-    <Content Include="Src\RisingTides\Classes\RTEffect_Inevitibility.uc">
-      <SubType>Content</SubType>
-    </Content>
     <Content Include="Src\RisingTides\Classes\RTEffect_KnockThemDown.uc">
       <SubType>Content</SubType>
     </Content>
@@ -165,9 +159,6 @@
       <SubType>Content</SubType>
     </Content>
     <Content Include="Src\RisingTides\Classes\RTEffect_Meld.uc">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Src\RisingTides\Classes\RTEffect_MeldRemoved.uc">
       <SubType>Content</SubType>
     </Content>
     <Content Include="Src\RisingTides\Classes\RTEffect_Panicked.uc">
@@ -303,9 +294,6 @@
       <SubType>Content</SubType>
     </Content>
     <Content Include="Src\RisingTides\Classes\RTTargetingMethod_TargetedMeleeTeleport.uc">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Src\RisingTides\Classes\SeqAct_RTModifyConcealment.uc">
       <SubType>Content</SubType>
     </Content>
     <Content Include="Src\RisingTides\Classes\SeqAct_RTStopTimer.uc">

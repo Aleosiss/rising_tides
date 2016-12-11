@@ -45,37 +45,34 @@ static function array<X2DataTemplate> CreateTemplates()
 {
 	local array<X2DataTemplate> Templates;
 
-	Templates.AddItem(BumpInTheNight());
-	Templates.AddItem(BumpInTheNightBloodlustListener());
-	Templates.AddItem(BumpInTheNightStealthListener());
-	Templates.AddItem(RTBerserkerKnifeAttack());
-	// TODO: Icons
-	Templates.AddItem(PurePassive('RTAcidicBlade', "img:///UILibrary_PerkIcons.UIPerk_salvo", true));
-	Templates.AddItem(PurePassive('RTPsionicBlade', "img:///UILibrary_PerkIcons.UIPerk_salvo", true));
-	Templates.AddItem(PurePassive('RTHiddenBlade', "img:///UILibrary_PerkIcons.UIPerk_salvo", true));
-	Templates.AddItem(PurePassive('RTSiphon', "img:///UILibrary_PerkIcons.UIPerk_salvo", true));
-
-	Templates.AddItem(RTBurst());
-	Templates.AddItem(RTBlur());
-	Templates.AddItem(RTPurge());
-	Templates.AddItem(RTMentor());
-	Templates.AddItem(RTReprobateWaltz());
-	Templates.AddItem(RTReprobateWaltzIcon());
-	Templates.AddItem(RTPyroclasticFlow());
-	Templates.AddItem(RTCreateFireTrailAbility());
-	Templates.AddItem(RTPyroclasticSlash());
+	Templates.AddItem(BumpInTheNight());																							  // icon
+	Templates.AddItem(BumpInTheNightBloodlustListener());																			  
+	Templates.AddItem(BumpInTheNightStealthListener());																				  
+	Templates.AddItem(RTBerserkerKnifeAttack());																					  // icon
+	Templates.AddItem(PurePassive('RTAcidicBlade', "img:///RisingTidesContentPackage.PerkIcons.UIPerk_stim_knife", true));
+	Templates.AddItem(PurePassive('RTPsionicBlade', "img:///RisingTidesContentPackage.PerkIcons.UIPerk_psi_knife", true));
+	Templates.AddItem(PurePassive('RTHiddenBlade', "img:///RisingTidesContentPackage.PerkIcons.UIPerk_stealth_knife", true));
+	Templates.AddItem(PurePassive('RTSiphon', "img:///UILibrary_PerkIcons.UIPerk_salvo", true));									  // icon
+	Templates.AddItem(RTBurst());																									  // icon
+	Templates.AddItem(RTBlur());																									  // icon
+	Templates.AddItem(RTPurge());																									  // icon
+	Templates.AddItem(RTMentor());																									  // icon
+	Templates.AddItem(RTReprobateWaltz());																							  
+	Templates.AddItem(RTReprobateWaltzIcon());																						  // icon
+	Templates.AddItem(RTPyroclasticFlow());																							  // icon
+	Templates.AddItem(RTCreateFireTrailAbility());																					  
+	Templates.AddItem(RTPyroclasticSlash());																						  // icon
 	Templates.AddItem(RTContainedFuryMeldJoin());
-	Templates.AddItem(RTContainedFury());
-	Templates.AddItem(RTUnstableConduit());
-	Templates.AddItem(RTUnstableConduitIcon());
-	Templates.AddItem(RTUnstableConduitBurst());
+	Templates.AddItem(RTContainedFury());																							  // icon
+	Templates.AddItem(RTUnstableConduit());																							  
+	Templates.AddItem(RTUnstableConduitIcon());																						  // icon
+	Templates.AddItem(RTUnstableConduitBurst());																					  // icon
 	Templates.AddItem(RTPersistingImages());
-	Templates.AddItem(RTPersistingImagesIcon());
-	Templates.AddItem(RTGhostInTheShell());
+	Templates.AddItem(RTPersistingImagesIcon());																					  // icon
+	Templates.AddItem(RTGhostInTheShell());																							  
 	Templates.AddItem(RTGhostInTheShellEffect());
-	Templates.AddItem(RTQueenOfBlades());
-
-	Templates.AddItem(RTShadowStrike());
+	Templates.AddItem(RTQueenOfBlades());																							  // icon
+	Templates.AddItem(RTShadowStrike());																							  // icon
 	Templates.AddItem(RTDashingStrike());
 	
 
@@ -1026,7 +1023,7 @@ static function X2AbilityTemplate RTContainedFuryMeldJoin()
 	local RTEffect_Meld					MeldEffect;
 	
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'RTContainedFuryMeldJoin');
-	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_adventpsiwitch_mindcontrol";
+	Template.IconImage = "img:///RisingTidesContentPackage.PerkIcons.UIPerk_psi_circle";
 	
 	Template.AbilitySourceName = 'eAbilitySource_Psionic';
 	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_HideSpecificErrors;
@@ -1386,7 +1383,7 @@ static function X2AbilityTemplate RTGhostInTheShell()
 	local X2Effect_StayConcealed PhantomEffect;
 	
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'RTGhostInTheShell');
-    Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_aim";	   // TODO: THIS
+    Template.IconImage = "img:///RisingTidesContentPackage.PerkIcons.rt_ghostintheshell";	   // TODO: THIS
     Template.AbilitySourceName = 'eAbilitySource_Psionic';
     Template.eAbilityIconBehaviorHUD = EAbilityIconBehavior_NeverShow;
     Template.Hostility = eHostility_Neutral;

@@ -21,11 +21,6 @@ simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffe
 	UnitState = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(ApplyEffectParameters.SourceStateObjectRef.ObjectID));
 	fCurrentModifier = UnitState.GetCurrentStat(eStat_DetectionModifier);
 	fFinalModifier = fStealthModifier - fCurrentModifier; // newcurrentstat = currentstat + finalmodifier 
-														  //			  y = x + ( y - x )
-														  //			  1	= 8 + ( 1 - 8 )
-	`LOG("Rising Tides: kNewTargetState:  "@ XComGameState_Unit(kNewTargetState).GetCurrentStat(eStat_DetectionModifier));
-	`LOG("Rising Tides: fCurrentModifier: "@ fCurrentModifier);
-	`LOG("Rising Tides: Adding fFinalModifier: " @ fFinalModifier);
 
 	m_aStatChanges.Length = 0;
 	AddPersistentStatChange(eStat_DetectionModifier, fFinalModifier);

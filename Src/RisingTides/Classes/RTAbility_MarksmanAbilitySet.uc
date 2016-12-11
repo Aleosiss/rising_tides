@@ -49,42 +49,42 @@ static function array<X2DataTemplate> CreateTemplates()
 {
 	local array<X2DataTemplate> Templates;
 
-	Templates.AddItem(ScopedAndDropped());
+	Templates.AddItem(ScopedAndDropped());						   // icon
 	Templates.AddItem(RTStandardSniperShot());
 	Templates.AddItem(RTOverwatch());
 	Templates.AddItem(RTOverwatchShot());
 	Templates.AddItem(RTPrecisionShot());
 	Templates.AddItem(RTPrecisionShotDamage());
-	Templates.AddItem(Aggression());
+	Templates.AddItem(RTAggression());
 	Templates.AddItem(KnockThemDown());
 	Templates.AddItem(RTDisablingShot());
 	Templates.AddItem(RTDisablingShotDamage());
 	Templates.AddItem(RTSnapshot());
-	Templates.AddItem(SixOClock());
+	Templates.AddItem(SixOClock());								   // icon
 	Templates.AddItem(SixOClockEffect());
 	Templates.AddItem(VitalPointTargeting());
 	Templates.AddItem(DamnGoodGround());
-	Templates.AddItem(SlowIsSmooth());
+	Templates.AddItem(SlowIsSmooth());							   // icon
 	Templates.AddItem(SlowIsSmoothEffect());
-	Templates.AddItem(Sovereign());
+	Templates.AddItem(Sovereign());								   // icon
 	Templates.AddItem(SovereignEffect());
 	Templates.AddItem(DaybreakFlame());
-	Templates.AddItem(DaybreakFlameIcon());
-	Templates.AddItem(YourHandsMyEyes());
-	Templates.AddItem(TimeStandsStill());
+	Templates.AddItem(DaybreakFlameIcon());						   // icon
+	Templates.AddItem(YourHandsMyEyes());						   // icon
+	Templates.AddItem(TimeStandsStill());						   // icon
 	Templates.AddItem(TimeStandsStillEndListener());
 	Templates.AddItem(TwitchReaction());
 	Templates.AddItem(TwitchReactionShot());
-	Templates.AddItem(LinkedIntelligence());
-	Templates.AddItem(PsionicSurge());
-	Templates.AddItem(EyeInTheSky());
+	Templates.AddItem(LinkedIntelligence());					   // icon
+	Templates.AddItem(PsionicSurge());							   // icon
+	Templates.AddItem(EyeInTheSky());							   // icon
 	Templates.AddItem(HeatChannel());
-	Templates.AddItem(HeatChannelIcon());
-	Templates.AddItem(Harbinger());
+	Templates.AddItem(HeatChannelIcon());						   // icon
+	Templates.AddItem(Harbinger());								   // icon
 	Templates.AddItem(HarbingerCleanseListener());
-	Templates.AddItem(ShockAndAwe());
+	Templates.AddItem(ShockAndAwe());							   // icon
 	Templates.AddItem(ShockAndAweListener());
-	Templates.AddItem(RTKillzone());
+	Templates.AddItem(RTKillzone());							   // icon
 
 	return Templates;
 }
@@ -521,13 +521,13 @@ static function X2AbilityTemplate RTPrecisionShotDamage()
 //---------------------------------------------------------------------------------------
 //---Aggression--------------------------------------------------------------------------
 //---------------------------------------------------------------------------------------
-static function X2AbilityTemplate Aggression()
+static function X2AbilityTemplate RTAggression()
 {
 	local X2AbilityTemplate						Template;
 	local RTEffect_Aggression					AgroEffect;
 
 	//Icon Properties
-	`CREATE_X2ABILITY_TEMPLATE(Template, 'Aggression');
+	`CREATE_X2ABILITY_TEMPLATE(Template, 'RTAggression');
 	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_aggression";
 	
 	Template.AbilitySourceName = 'eAbilitySource_Perk';
@@ -560,7 +560,7 @@ static function X2AbilityTemplate KnockThemDown()
 
 	// Icon Properties
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'KnockThemDown');
-	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_ammo_fletchette";
+	Template.IconImage = "img:///RisingTidesContentPackage.PerkIcons.UIPerk_sniper_bullet_x3";
 
 	Template.AbilitySourceName = 'eAbilitySource_Perk';
 	Template.eAbilityIconBehaviorHUD = EAbilityIconBehavior_NeverShow;
@@ -1247,7 +1247,7 @@ static function X2AbilityTemplate DaybreakFlameIcon()
 	local X2Effect_Persistent					SOVEffect;
 
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'DaybreakFlameIcon');
-	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_snipershot";
+	Template.IconImage = "img:///RisingTidesContentPackage.PerkIcons.rt_daybreaker";
 
 	Template.AbilitySourceName = 'eAbilitySource_Perk';
 	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_NeverShow;
@@ -1270,37 +1270,7 @@ static function X2AbilityTemplate DaybreakFlameIcon()
 
 	return Template;
 }
-//---------------------------------------------------------------------------------------
-//---Inevitibility-----------------------------------------------------------------------
-//---------------------------------------------------------------------------------------
-static function X2AbilityTemplate Inevitibility()
-{
-	local X2AbilityTemplate						Template;
-	local RTEffect_Inevitibility				RTEffect;
 
-	 `CREATE_X2ABILITY_TEMPLATE(Template, 'Inevitibility');
-	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_snipershot";
-
-	Template.AbilitySourceName = 'eAbilitySource_Perk';
-	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_NeverShow;
-	Template.Hostility = eHostility_Neutral;
-
-	Template.AbilityToHitCalc = default.DeadEye;
-	Template.AbilityTargetStyle = default.SelfTarget;
-	Template.AbilityTriggers.AddItem(default.UnitPostBeginPlayTrigger);
-
-	RTEffect = new class 'RTEffect_Inevitibility';
-	RTEffect.BuildPersistentEffect(1, true, false, false,  eGameRule_PlayerTurnEnd);
-	RTEffect.SetDisplayInfo(ePerkBuff_Passive, Template.LocFriendlyName, Template.LocLongDescription, Template.IconImage, true,, Template.AbilitySourceName);
-	Template.AddTargetEffect(RTEffect);
-
-	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
-	// Note: no visualization on purpose!
-	
-	Template.bCrossClassEligible = false;
-
-	return Template;
-}
 //---------------------------------------------------------------------------------------
 //---Your Hands, My Eyes-----------------------------------------------------------------
 //---------------------------------------------------------------------------------------
@@ -1349,7 +1319,7 @@ static function X2AbilityTemplate TimeStandsStill()
 	local RTEffect_TimeStopTag					TagEffect;
 
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'TimeStandsStill');
-	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_insanity";
+	Template.IconImage = "img:///RisingTidesContentPackage.PerkIcons.rt_horoarma";
 
 	Template.AbilitySourceName = 'eAbilitySource_Psionic';
 	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_AlwaysShow;
@@ -1502,6 +1472,7 @@ static function X2AbilityTemplate TimeStandsStillEndListener()
 	Template.bCrossClassEligible = false;
 	return Template;
 }
+
 //---------------------------------------------------------------------------------------
 //---Linked Intelligence-----------------------------------------------------------------
 //---------------------------------------------------------------------------------------

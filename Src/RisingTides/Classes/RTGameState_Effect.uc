@@ -14,8 +14,6 @@ protected function ActivateAbility(XComGameState_Ability AbilityState, StateObje
 	}
 }
 
-
-
 protected function InitializeAbilityForActivation(out XComGameState_Ability AbilityState, XComGameState_Unit AbilityOwnerUnit, Name AbilityName, XComGameStateHistory History) {
 	local StateObjectReference AbilityRef;
 

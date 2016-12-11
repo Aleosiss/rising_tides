@@ -226,7 +226,7 @@ static function X2AbilityTemplate JoinMeld()
 	local RTEffect_Meld						MeldEffect;
 	
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'JoinMeld');
-	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_adventpsiwitch_mindcontrol";
+	Template.IconImage = "img:///RisingTidesContentPackage.PerkIcons.UIPerk_psi_circle";
 	
 	Template.AbilitySourceName = 'eAbilitySource_Psionic';
 	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_HideSpecificErrors;
@@ -286,7 +286,7 @@ static function X2AbilityTemplate LeaveMeld()
 	local X2Effect_RemoveEffects			MeldRemovedEffect;
 	
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'LeaveMeld');
-	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_adventpsiwitch_mindcontrol";
+	Template.IconImage = "img:///RisingTidesContentPackage.PerkIcons.UIPerk_psi_move";
 	
 	Template.AbilitySourceName = 'eAbilitySource_Psionic';
 	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_HideIfOtherAvailable;
@@ -519,7 +519,6 @@ static function X2AbilityTemplate Fade()
 
 	return Template;
 }
-
 
 //---------------------------------------------------------------------------------------
 //---Teek--------------------------------------------------------------------------------

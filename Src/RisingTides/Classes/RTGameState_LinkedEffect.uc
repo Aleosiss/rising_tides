@@ -14,6 +14,7 @@ function EventListenerReturn LinkedFireCheck (Object EventData, Object EventSour
 	local XComGameState NewGameState;
 	local RTGameState_LinkedEffect NewLinkedEffectState;
 	local StateObjectReference	EmptyRef;
+	local bool bShouldTrigger; 
 	
 	if(!bCanTrigger) {
 		`LOG("Rising Tides: this should never happen");
@@ -27,11 +28,17 @@ function EventListenerReturn LinkedFireCheck (Object EventData, Object EventSour
 	if (AbilityContext == none) {
 		return ELR_NoInterrupt;	
 	}
+
+
 	//`LOG("Rising Tides: Linked Fire Check Stage 1");
 	// We only want to link fire when the source is actually shooting a reaction shot
-	if(AbilityContext.InputContext.AbilityTemplateName != 'RTOverwatchShot' && AbilityContext.InputContext.AbilityTemplateName != 'KillZoneShot' && AbilityContext.InputContext.AbilityTemplateName != 'OverwatchShot') {
+	if( AbilityContext.InputContext.AbilityTemplateName != 'RTOverwatchShot' && 
+		AbilityContext.InputContext.AbilityTemplateName != 'KillZoneShot' && 
+		AbilityContext.InputContext.AbilityTemplateName != 'OverwatchShot' && 
+		AbilityContext.InputContext.AbilityTemplateName != 'CloseCombatSpecialistAttack') {
 		return ELR_NoInterrupt;
 	}
+
 	//`LOG("Rising Tides: Linked Fire Check Stage 2");
 	// The LinkedSourceUnit should be  the unit that is currently attacking
 	LinkedSourceUnit = class'X2TacticalGameRulesetDataStructures'.static.GetAttackingUnitState(GameState);

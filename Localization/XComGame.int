@@ -33,7 +33,7 @@ LocHelpText="Shoot with decreased aim, but increased critical chance and critica
 LocFlyOverText="Precision Shot"
 LocPromotionPopupText="<Bullet/> Shoot a precision shot, suffering from decreased chance to hit, but increased critical chance and critical damage.<br/>"
 
-[Aggression X2AbilityTemplate]
+[RTAggression X2AbilityTemplate]
 LocFriendlyName="Aggression"
 LocLongDescription="Gain 10% critical chance per visible enemy unit, up to 30%. (Squadsight included)"
 LocHelpText="Gain 10% critical chance per enemy spotted."
@@ -42,7 +42,7 @@ LocPromotionPopupText="<Bullet/> Gain 10% critical chance per visible enemy unit
 
 [KnockThemDown X2AbilityTemplate]
 LocFriendlyName="Knock Them Down"
-LocLongDescription="Gain 15% critical damage per visible enemy unit. (Squadsight included)"
+LocLongDescription="Gain 20% critical damage per visible enemy unit. (Squadsight included)"
 LocHelpText="Gain 15% critical damage per enemy spotted."
 LocFlyOverText="Knock Them Down"
 LocPromotionPopupText="<Bullet/> Gain 15% critical damage per visible enemy unit. (Squadsight included).<br/>"
@@ -173,11 +173,11 @@ LocFlyOverText="Mind Wrack"
 LocPromotionPopupText="<Bullet/>Overload an organic unit's brain with pure psionic energy, killing it immediately. The feedback from the ability will cause a brief moment of panic.<br/>"
 
 [LinkedIntelligence X2AbilityTemplate]
-LocFriendlyName="Linked Intelligences"
-LocLongDescription="Units within the meld can react instanteously to fire commands. Reaction shots taken by a single soldier in the meld are taken by all."
-LocHelpText="When a unit in the Meld takes a reaction shot, all do."
-LocFlyOverText="Linked Minds"
-LocPromotionPopupText="<Bullet/>Units within the meld can react instanteously to fire commands. Reaction shots taken by a single soldier in the meld are taken by all.<br/>"
+LocFriendlyName="Networked OI"
+LocLongDescription="Units within the meld can react instanteously to fire commands. When a unit in the Meld takes a reaction shot, all melded units attempt to fire against the target."
+LocHelpText="When a unit in the Meld takes a reaction shot, all melded units attempt to fire against the target."
+LocFlyOverText="Networked OI"
+LocPromotionPopupText="<Bullet/>Units within the meld can react instanteously to fire commands. When a unit in the Meld takes a reaction shot, all melded units attempt to fire against the target.<br/>"
 
 [TwitchReaction X2AbilityTemplate]
 LocFriendlyName="Twitch Reaction"
@@ -297,6 +297,34 @@ LocFriendlyName="Slash (Berserker)"
 LocLongDescription="Attack any enemy within movement range with your <Ability:SecondaryWeaponName/>."
 LocHelpText="Attack an enemy within movement range with your <Ability:SecondaryWeaponName/>."
 LocPromotionPopupText="<Bullet/> You can trigger the Slash ability by placing the movement cursor over an enemy.<br/><Bullet/> A Berserker can perform a \"Dash\" move, using both actions to move, and still trigger a Slash against an adjacent enemy.<br/>"
+
+[RTSiphon X2AbilityTemplate]
+LocFriendlyName="Siphon"
+LocLongDescription="This unit will siphon hitpoints from organic enemies based on the damage it deals to them."
+LocHelpText="This unit will siphon hitpoints from organic enemies based on the damage it deals to them."
+LocFlyOverText="Bump In The Night"
+LocPromotionPopupText="<Bullet/> This unit will siphon hitpoints from organic enemies based on the damage it deals to them. <br/><Bullet/> Minimum health gain per attack is 2. <br/>"
+
+[RTAcidicBlade X2AbilityTemplate]
+LocFriendlyName="Acid Blade"
+LocLongDescription="This unit's blade is covered in a classified acidic compound. It shreds armor and applies this compound to the target."
+LocHelpText="This unit's melee attacks deal additional acid damage."
+LocFlyOverText="Acid Blade"
+LocPromotionPopupText="<Bullet/> This unit's blade is covered in a classified acidic compound. It shreds armor and applies this compound to the target.<br/><Bullet/> Acid shreds additional armor and does damage per turn.<br/><Bullet/> Consecutive melee attacks will refresh the duration of the acid and increase its potency, stacking the damage effect.<br/>"
+
+[RTPsionicBlade X2AbilityTemplate]
+LocFriendlyName="Psiblade"
+LocLongDescription="This unit's blade is a manifestation of psionic energy. It pierces armor entirely."
+LocHelpText="This unit's melee attacks deal pierce all armor."
+LocFlyOverText="Psiblade"
+LocPromotionPopupText="<Bullet/> This unit's blade is a manifestation of psionic energy. It pierces armor entirely.<br/>"
+
+[RTHiddenBlade X2AbilityTemplate]
+LocFriendlyName="Hidden Blade"
+LocLongDescription="This unit's blade is designed to deal additional damage to unaware targets. It deals additional critical damage from concealment."
+LocHelpText="This unit's melee attacks deal additional critical damage from concealment."
+LocFlyOverText="Psiblade"
+LocPromotionPopupText="<Bullet/> This unit's blade is designed to deal additional damage to unaware targets. It deals additional critical damage from concealment.<br/><Bullet/> Critical hits deal an additional 150% damage when the critera is met.<br/>"
 
 [RTBurst X2AbilityTemplate]
 LocFriendlyName="Burst"
