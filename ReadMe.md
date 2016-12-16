@@ -34,6 +34,7 @@ This would be a bare-bones content mod. I also have the following content in min
 ###### Current Bugs
       - Time Stop damage calculation isn't visualized properly
       - Time Stop probably won't work on Frozen enemies
+      - Time Stop doesn't work on Stasis'd units (despite this making no sense whatsoever) because it's hard-coded
       - Shock And Awe readout not displayed
               
               
