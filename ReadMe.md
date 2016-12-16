@@ -20,7 +20,7 @@ This would be a bare-bones content mod. I also have the following content in min
   - Berserker:
       - Implement Stealth visual overlay
   - Marksman: 
-      - Shock n' Awe replacer or Sovereign replacer
+      - Nothing
   - Gatherer: 
       - Everything
 
