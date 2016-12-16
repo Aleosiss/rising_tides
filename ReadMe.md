@@ -20,18 +20,21 @@ This would be a bare-bones content mod. I also have the following content in min
   - Berserker:
       - Implement Stealth visual overlay
   - Marksman: 
-      - Shock n' Awe replacer or Sovereign replacer
+      - Nothing
   - Gatherer: 
       - Everything
 
 ###### Current Unresolved:
       - Visuals
       - Dashing Strike
+      - Implement cooldown debuffs to notify players of passive ability triggers and cooldowns
 ###### Current Table
       - Triangulation: Spread Over the Shoulder to all melded allies.
       - Shatter The Line: If this unit kills an enemy within X tiles, it triggers a flush effect on other enemies within X tiles. 2/3 turn cooldown. credits to /u/PostOfficeBuddy
 ###### Current Bugs
       - Time Stop damage calculation isn't visualized properly
+      - Time Stop probably won't work on Frozen enemies
+      - Time Stop doesn't work on Stasis'd units (despite this making no sense whatsoever) because it's hard-coded
       - Shock And Awe readout not displayed
               
               
