@@ -95,6 +95,9 @@
     <Content Include="Src\RisingTides\Classes\RTAbility_BerserkerAbilitySet.uc">
       <SubType>Content</SubType>
     </Content>
+    <Content Include="Src\RisingTides\Classes\RTAbility_GathererAbilitySet.uc">
+      <SubType>Content</SubType>
+    </Content>
     <Content Include="Src\RisingTides\Classes\RTAbility_GhostAbilitySet.uc">
       <SubType>Content</SubType>
     </Content>
@@ -192,9 +195,6 @@
       <SubType>Content</SubType>
     </Content>
     <Content Include="Src\RisingTides\Classes\RTEffect_SixOClock.uc">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Src\RisingTides\Classes\RTEffect_SixOClockEffect.uc">
       <SubType>Content</SubType>
     </Content>
     <Content Include="Src\RisingTides\Classes\RTEffect_SlowIsSmooth.uc">

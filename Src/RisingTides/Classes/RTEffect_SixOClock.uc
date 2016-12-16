@@ -32,10 +32,6 @@ function bool PostAbilityCostPaid(XComGameState_Effect EffectState, XComGameStat
 	local XComGameState_Ability AbilityState;       //  used for looking up our source ability (Guardian), not the incoming one that was activated
 	local UnitValue Count;
 
-	//  if under the effect of Trance, let that handle restoring the full action cost (Trance not implemented yet)
-	//if (SourceUnit.IsUnitAffectedByEffectName(class'X2Effect_Serial'.default.EffectName))
-	//	return false;
-
 	if (SourceUnit.ReserveActionPoints.Length != PreCostReservePoints.Length && AbilityContext.IsResultContextHit() && AllowedAbilities.Find(kAbility.GetMyTemplate().DataName) != INDEX_NONE)
 	{
 		AbilityState = XComGameState_Ability(`XCOMHISTORY.GetGameStateForObjectID(EffectState.ApplyEffectParameters.AbilityStateObjectRef.ObjectID));
@@ -56,7 +52,7 @@ function bool PostAbilityCostPaid(XComGameState_Effect EffectState, XComGameStat
 				EventMgr = `XEVENTMGR;
 				EventMgr.TriggerEvent('SixOClockTriggered', AbilityState, SourceUnit, NewGameState);
 
-				return true;
+				return false;
 			}
 		}
 	}

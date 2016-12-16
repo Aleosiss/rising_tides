@@ -170,28 +170,28 @@ LocFriendlyName="Mind Wrack"
 LocLongDescription="Overload an organic unit's brain with pure psionic energy, killing it immediately."
 LocHelpText="Overload an organic unit's brain with pure psionic energy, killing it immediately."
 LocFlyOverText="Mind Wrack"
-LocPromotionPopupText="<Bullet/>Overload an organic unit's brain with pure psionic energy, killing it immediately. The feedback from the ability will cause a brief moment of panic.<br/>"
+LocPromotionPopupText="<Bullet/> Overload an organic unit's brain with pure psionic energy, killing it immediately. The feedback from the ability will cause a brief moment of panic.<br/>"
 
 [LinkedIntelligence X2AbilityTemplate]
 LocFriendlyName="Networked OI"
 LocLongDescription="Units within the meld can react instanteously to fire commands. When a unit in the Meld takes a reaction shot, all melded units attempt to fire against the target."
 LocHelpText="When a unit in the Meld takes a reaction shot, all melded units attempt to fire against the target."
 LocFlyOverText="Networked OI"
-LocPromotionPopupText="<Bullet/>Units within the meld can react instanteously to fire commands. When a unit in the Meld takes a reaction shot, all melded units attempt to fire against the target.<br/>"
+LocPromotionPopupText="<Bullet/> Units within the meld can react instanteously to fire commands. When a unit in the Meld takes a reaction shot, all melded units attempt to fire against the target.<br/>"
 
 [TwitchReaction X2AbilityTemplate]
 LocFriendlyName="Twitch Reaction"
 LocLongDescription="This unit can spontaenously take covering fire reaction shots at units attacking fellow melded allies."
 LocHelpText="Take an instant reaction shot when a melded ally is attacked."
 LocFlyOverText="Twitch Reaction"
-LocPromotionPopupText="<Bullet/>This unit can spontaenously take covering fire reaction shots at units attacking fellow melded allies.<br/>"
+LocPromotionPopupText="<Bullet/> This unit can spontaenously take covering fire reaction shots at units attacking fellow melded allies.<br/>"
 
 [TimeStandsStill X2AbilityTemplate]
 LocFriendlyName="Time Stands Still"
 LocLongDescription="Throw a wrench in the gears of the universe for a brief moment. Allies and Enemies alike become Greyscaled, losing their ability to affect or percieve the world around them."
 LocHelpText="The World! Stop Time!"
 LocFlyOverText="Time Stands Still"
-LocPromotionPopupText="<Bullet/>Throw a wrench in the gears of the universe for a brief moment. Allies and Enemies alike become Greyscaled, losing their ability to affect or percieve the world around them.<br/>"
+LocPromotionPopupText="<Bullet/> Throw a wrench in the gears of the universe for a brief moment.<br/><Bullet/> Allies and Enemies alike become Greyscaled, losing their ability to affect or percieve the world around them.<br/><Bullet/> Greyscaled units are easy to hit and critically hit.<br/>"
 
 [PsionicSurge X2AbilityTemplate]
 LocFriendlyName="Psionic Surge"
@@ -236,6 +236,13 @@ LocFlyOverText="Heat Channel"
 LocPromotionPopupText="<Bullet/> When using Psionic abilities, this unit can channel heat from its weapon to fuel the ability, reloading the weapon and reducing the cooldown of the ability by one per ammo reloaded.<br/><Bullet/> 8 turn cooldown.<br/>"
 
 [HeatChannelIcon X2AbilityTemplate]
+LocFriendlyName="Heat Channel"
+LocLongDescription="When using Psionic abilities, this unit can channel heat from its weapon to fuel the ability, reloading the weapon and reducing the cooldown of the ability by one per ammo reloaded."
+LocHelpText="When using Psionic abilities, this unit can channel heat from its weapon to fuel the ability, reloading the weapon and reducing the cooldown of the ability by one per ammo reloaded."
+LocFlyOverText="Heat Channel"
+LocPromotionPopupText="<Bullet/> When using Psionic abilities, this unit can channel heat from its weapon to fuel the ability, reloading the weapon and reducing the cooldown of the ability by one per ammo reloaded.<br/><Bullet/> 8 turn cooldown.<br/>"
+
+[HeatChannelCooldown X2AbilityTemplate]
 LocFriendlyName="Heat Channel"
 LocLongDescription="When using Psionic abilities, this unit can channel heat from its weapon to fuel the ability, reloading the weapon and reducing the cooldown of the ability by one per ammo reloaded."
 LocHelpText="When using Psionic abilities, this unit can channel heat from its weapon to fuel the ability, reloading the weapon and reducing the cooldown of the ability by one per ammo reloaded."
@@ -465,6 +472,18 @@ LocLongDescription="Lunge forward, dealing damage to all enemies in the path of 
 LocHelpText="Lunge forward, dealing damage to all enemies in the path of the strike."
 LocFlyOverText="Dashing Strike"
 LocPromotionPopupText="<Bullet/>Lunge forward, dealing damage to all enemies in the path of the strike.<br/>"
+
+
+
+
+[OverTheShoulder X2AbilityTemplate]
+LocFriendlyName="Over The Shoulder"
+LocLongDescription="Peer over the shoulder of enemy units, seeing what they see."
+LocHelpText="Peer over the shoulder of enemy units, seeing what they see. "
+LocFlyOverText="Over The Shoulder"
+LocPromotionPopupText="<Bullet/> Peer over the shoulder of enemy units, seeing what they see.<br/>"
+
+
 
 
 ;----------------------------------------------------------------------------------------------------------------------------

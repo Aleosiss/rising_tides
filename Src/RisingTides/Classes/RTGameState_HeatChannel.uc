@@ -12,6 +12,8 @@ function EventListenerReturn HeatChannelCheck(Object EventData, Object EventSour
   local XComGameState NewGameState;
   local UnitValue HeatChannelValue;
   local int iHeatChanneled;
+  
+  local XComGameState_Ability CooldownAbilityState;
 
   `LOG("Rising Tides: Starting HeatChannel");
   // EventData = AbilityState to Channel
@@ -92,6 +94,12 @@ function EventListenerReturn HeatChannelCheck(Object EventData, Object EventSour
   XComGameStateContext_ChangeContainer(NewGameState.GetContext()).BuildVisualizationFn = TriggerHeatChannelFlyoverVisualizationFn;
 
   `TACTICALRULES.SubmitGameState(NewGameState);
+
+	InitializeAbilityForActivation(CooldownAbilityState, NewSourceUnit, 'HeatChannelCooldown', History);
+	ActivateAbility(CooldownAbilityState, NewSourceUnit.GetReference());
+	NewSourceUnit = XComGameState_Unit(History.GetGameStateForObjectID(NewSourceUnit.ObjectID));
+
+
 
   return ELR_NoInterrupt;
 }

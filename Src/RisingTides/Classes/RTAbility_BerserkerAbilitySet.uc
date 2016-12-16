@@ -45,7 +45,7 @@ static function array<X2DataTemplate> CreateTemplates()
 {
 	local array<X2DataTemplate> Templates;
 
-	Templates.AddItem(BumpInTheNight());																							  // icon
+	Templates.AddItem(BumpInTheNight());																							  // icon	// animation
 	Templates.AddItem(BumpInTheNightBloodlustListener());																			  
 	Templates.AddItem(BumpInTheNightStealthListener());																				  
 	Templates.AddItem(RTBerserkerKnifeAttack());																					  // icon
@@ -53,10 +53,10 @@ static function array<X2DataTemplate> CreateTemplates()
 	Templates.AddItem(PurePassive('RTPsionicBlade', "img:///RisingTidesContentPackage.PerkIcons.UIPerk_psi_knife", true));
 	Templates.AddItem(PurePassive('RTHiddenBlade', "img:///RisingTidesContentPackage.PerkIcons.UIPerk_stealth_knife", true));
 	Templates.AddItem(PurePassive('RTSiphon', "img:///UILibrary_PerkIcons.UIPerk_salvo", true));									  // icon
-	Templates.AddItem(RTBurst());																									  // icon
+	Templates.AddItem(RTBurst());																									  // icon	// animation
 	Templates.AddItem(RTBlur());																									  // icon
-	Templates.AddItem(RTPurge());																									  // icon
-	Templates.AddItem(RTMentor());																									  // icon
+	Templates.AddItem(RTPurge());																									  // icon	// animation
+	Templates.AddItem(RTMentor());																									  // icon	// animation
 	Templates.AddItem(RTReprobateWaltz());																							  
 	Templates.AddItem(RTReprobateWaltzIcon());																						  // icon
 	Templates.AddItem(RTPyroclasticFlow());																							  // icon
@@ -64,14 +64,14 @@ static function array<X2DataTemplate> CreateTemplates()
 	Templates.AddItem(RTPyroclasticSlash());																						  // icon
 	Templates.AddItem(RTContainedFuryMeldJoin());
 	Templates.AddItem(RTContainedFury());																							  // icon
-	Templates.AddItem(RTUnstableConduit());																							  
+	Templates.AddItem(RTUnstableConduit());																							  			// animation
 	Templates.AddItem(RTUnstableConduitIcon());																						  // icon
 	Templates.AddItem(RTUnstableConduitBurst());																					  // icon
 	Templates.AddItem(RTPersistingImages());
 	Templates.AddItem(RTPersistingImagesIcon());																					  // icon
 	Templates.AddItem(RTGhostInTheShell());																							  
 	Templates.AddItem(RTGhostInTheShellEffect());
-	Templates.AddItem(RTQueenOfBlades());																							  // icon
+	Templates.AddItem(RTQueenOfBlades());																							  // icon	
 	Templates.AddItem(RTShadowStrike());																							  // icon
 	Templates.AddItem(RTDashingStrike());
 	

@@ -49,7 +49,7 @@ static function array<X2DataTemplate> CreateTemplates()
 {
 	local array<X2DataTemplate> Templates;
 
-	Templates.AddItem(ScopedAndDropped());						   // icon
+	Templates.AddItem(ScopedAndDropped());							// icon
 	Templates.AddItem(RTStandardSniperShot());
 	Templates.AddItem(RTOverwatch());
 	Templates.AddItem(RTOverwatchShot());
@@ -60,31 +60,32 @@ static function array<X2DataTemplate> CreateTemplates()
 	Templates.AddItem(RTDisablingShot());
 	Templates.AddItem(RTDisablingShotDamage());
 	Templates.AddItem(RTSnapshot());
-	Templates.AddItem(SixOClock());								   // icon
+	Templates.AddItem(SixOClock());									// icon
 	Templates.AddItem(SixOClockEffect());
 	Templates.AddItem(VitalPointTargeting());
 	Templates.AddItem(DamnGoodGround());
-	Templates.AddItem(SlowIsSmooth());							   // icon
+	Templates.AddItem(SlowIsSmooth());								// icon
 	Templates.AddItem(SlowIsSmoothEffect());
-	Templates.AddItem(Sovereign());								   // icon
+	Templates.AddItem(Sovereign());									// icon
 	Templates.AddItem(SovereignEffect());
-	Templates.AddItem(DaybreakFlame());
-	Templates.AddItem(DaybreakFlameIcon());						   // icon
-	Templates.AddItem(YourHandsMyEyes());						   // icon
-	Templates.AddItem(TimeStandsStill());						   // icon
+	Templates.AddItem(DaybreakFlame());										// animation
+	Templates.AddItem(DaybreakFlameIcon());							// icon
+	Templates.AddItem(YourHandsMyEyes());							// icon
+	Templates.AddItem(TimeStandsStill());									// animation
 	Templates.AddItem(TimeStandsStillEndListener());
 	Templates.AddItem(TwitchReaction());
 	Templates.AddItem(TwitchReactionShot());
-	Templates.AddItem(LinkedIntelligence());					   // icon
-	Templates.AddItem(PsionicSurge());							   // icon
-	Templates.AddItem(EyeInTheSky());							   // icon
-	Templates.AddItem(HeatChannel());
-	Templates.AddItem(HeatChannelIcon());						   // icon
-	Templates.AddItem(Harbinger());								   // icon
+	Templates.AddItem(LinkedIntelligence());						// icon
+	Templates.AddItem(PsionicSurge());								// icon
+	Templates.AddItem(EyeInTheSky());								// icon
+	Templates.AddItem(HeatChannel());										// animation
+	Templates.AddItem(HeatChannelIcon());							// icon
+	Templates.AddItem(HeatChannelCooldown());								
+	Templates.AddItem(Harbinger());									// icon	// animation
 	Templates.AddItem(HarbingerCleanseListener());
-	Templates.AddItem(ShockAndAwe());							   // icon
+	Templates.AddItem(ShockAndAwe());								// icon
 	Templates.AddItem(ShockAndAweListener());
-	Templates.AddItem(RTKillzone());							   // icon
+	Templates.AddItem(RTKillzone());								// icon
 
 	return Templates;
 }
@@ -766,7 +767,7 @@ static function X2AbilityTemplate SixOClock()
 static function X2AbilityTemplate SixOClockEffect()
 {
 	local X2AbilityTemplate						Template;
-	local RTEffect_SixOClockEffect				ClockEffect;
+	local X2Effect_PersistentStatChange			ClockEffect;
 	local X2AbilityTrigger_EventListener		Trigger;
 	local X2Condition_UnitProperty				UnitPropertyCondition;
 	local X2AbilityMultiTarget_Radius			MultiTarget;
@@ -815,7 +816,7 @@ static function X2AbilityTemplate SixOClockEffect()
 	Template.AbilityMultiTargetConditions.AddItem(UnitPropertyCondition);
 
 	// Build the effect
-	ClockEffect = new class'RTEffect_SixOClockEffect';
+	ClockEffect = new class'X2Effect_PersistentStatChange';
 	// One turn duration
 	ClockEffect.BuildPersistentEffect(1, false, true, false, eGameRule_PlayerTurnBegin);
 	ClockEffect.AddPersistentStatChange(eStat_Defense, default.SOC_DEFENSE_BONUS);
@@ -1021,6 +1022,7 @@ static function X2AbilityTemplate SovereignEffect()
 	local X2AbilityCooldown						Cooldown;
  	local X2AbilityTrigger_EventListener		EventListener;
 	local X2AbilityMultiTarget_Radius			MultiTarget;
+	local X2Effect_Persistent					CooldownEffect;
 
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'SovereignEffect');
 	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_voidadept";
@@ -1042,6 +1044,11 @@ static function X2AbilityTemplate SovereignEffect()
 	Cooldown = new class'X2AbilityCooldown';
 	Cooldown.iNumTurns = 5;
 	Template.AbilityCooldown = Cooldown;
+
+	CooldownEffect = new class'X2Effect_Persistent';
+	CooldownEffect.BuildPersistentEffect(5, false, true, false, eGameRule_PlayerTurnEnd);
+	CooldownEffect.SetDisplayInfo(ePerkBuff_Penalty, Template.LocFriendlyName, "Sovereign is on cooldown!", Template.IconImage, true,, Template.AbilitySourceName);
+	Template.AddShooterEffect(CooldownEffect);
 
 	EventListener = new class'X2AbilityTrigger_EventListener';
 	EventListener.ListenerData.EventID = 'SovereignTrigger';
@@ -1070,7 +1077,6 @@ static function X2AbilityTemplate SovereignEffect()
 	Template.bShowActivation = true;
 	
 	Template.bCrossClassEligible = false;
-	// Note: no visualization on purpose!
 
 
 	return Template;
@@ -1362,14 +1368,6 @@ static function X2AbilityTemplate TimeStandsStill()
 
 	Template.ConcealmentRule = eConceal_Always;
 
-	UnitPropertyCondition = new class'X2Condition_UnitProperty';
-	UnitPropertyCondition.ExcludeDead = true;												  
-	UnitPropertyCondition.ExcludeFriendlyToSource = false;
-	UnitPropertyCondition.ExcludeHostileToSource = false;
-	UnitPropertyCondition.ExcludeCivilian = false;
-	UnitPropertyCondition.FailOnNonUnits = false;
-	Template.AbilityMultiTargetConditions.AddItem(UnitPropertyCondition);
-
 	ActionPointCost = new class'X2AbilityCost_ActionPoints';
 	ActionPointCost.iNumPoints = 2;
 	ActionPointCost.bConsumeAllPoints = true;
@@ -1379,9 +1377,14 @@ static function X2AbilityTemplate TimeStandsStill()
 	Cooldown.iNumTurns = default.TIMESTANDSSTILL_COOLDOWN;
 	Template.AbilityCooldown = Cooldown;
 
+	// this effect should always apply (even if it is forced to miss) and lasts until Whisper ends it himself
 	TimeStopEffect = new class'RTEffect_TimeStop';
 	TimeStopEffect.BuildPersistentEffect(1, true, true, false, eGameRule_PlayerTurnEnd);
 	TimeStopEffect.ApplyChance = 100;
+	TimeStopEffect.bIsImpairing = true;
+	TimeStopEffect.bTickWhenApplied = false;
+	TimeStopEffect.bCanBeRedirected = false;
+	TimeStopEffect.bApplyOnMiss = true;
 	TimeStopEffect.EffectTickedVisualizationFn = class'RTEffect_TimeStop'.static.TimeStopVisualizationTicked;
 	TimeStopEffect.SetDisplayInfo(ePerkBuff_Penalty, "Greyscaled", 
 		"This unit has been frozen in time. It cannot take actions and is much easier to hit.", Template.IconImage);
@@ -1757,6 +1760,7 @@ static function X2AbilityTemplate HeatChannel()
 	Template.FrameAbilityCameraType = eCameraFraming_Never;
 
 	Template.AdditionalAbilities.AddItem('HeatChannelIcon');
+	Template.AdditionalAbilities.AddItem('HeatChannelCooldown');
 
 
 	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
@@ -1802,6 +1806,58 @@ static function X2AbilityTemplate HeatChannelIcon()
 
 	return Template;
 }
+
+
+	
+//---------------------------------------------------------------------------------------
+//---Heat Channel Cooldown---------------------------------------------------------------
+//---------------------------------------------------------------------------------------
+static function X2AbilityTemplate HeatChannelCooldown()
+{
+	local X2AbilityTemplate					Template;
+	local X2AbilityCooldown                 Cooldown;
+	local X2AbilityCost_ActionPoints		ActionPoint;
+	local X2Effect_Persistent				AgroEffect;
+	
+	`CREATE_X2ABILITY_TEMPLATE(Template, 'HeatChannelCooldown');
+	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_adventpsiwitch_mindcontrol";
+	
+	Template.AbilitySourceName = 'eAbilitySource_Psionic';
+	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_AlwaysShow;
+	Template.Hostility = eHostility_Neutral;
+	Template.ConcealmentRule = eConceal_Always;
+
+	ActionPoint = new class'X2AbilityCost_ActionPoints';
+	ActionPoint.iNumPoints = 0;
+	ActionPoint.bFreeCost = true;
+	ActionPoint.bConsumeAllPoints = false;
+	Template.AbilityCosts.AddItem(ActionPoint);
+	
+	Cooldown = new class'X2AbilityCooldown';
+	Cooldown.iNumTurns = 0;
+	Template.AbilityCooldown = Cooldown;
+
+	Template.AbilityTriggers.AddItem(default.PlayerInputTrigger);
+
+	// Add dead eye to guarantee
+	Template.AbilityToHitCalc = default.DeadEye;
+	Template.AbilityTargetStyle = default.SelfTarget;
+
+	AgroEffect = new class'X2Effect_Persistent';
+	AgroEffect.BuildPersistentEffect(default.HEATCHANNEL_COOLDOWN + 2, false, true, true, eGameRule_PlayerTurnEnd);
+	AgroEffect.SetDisplayInfo(ePerkBuff_Penalty, Template.LocFriendlyName, "Heat Channel is on cooldown!", Template.IconImage, true,,Template.AbilitySourceName);
+	Template.AddTargetEffect(AgroEffect);
+
+	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
+	
+	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;	//TODO: VISUALIZATION
+	Template.bSkipFireAction = true;
+
+	Template.bCrossClassEligible = false;
+
+	return Template;
+}
+
 
 //---------------------------------------------------------------------------------------
 //---Eye in the Sky----------------------------------------------------------------------
@@ -1933,7 +1989,7 @@ static function X2AbilityTemplate ShockAndAweListener()
 	return Template;
 }
 //---------------------------------------------------------------------------------------
-//---Harbinger-----------------------------------------------------------------------
+//---Harbinger---------------------------------------------------------------------------
 //---------------------------------------------------------------------------------------
 static function X2AbilityTemplate Harbinger()
 {
