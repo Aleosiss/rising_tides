@@ -33,6 +33,7 @@ This would be a bare-bones content mod. I also have the following content in min
       - Shatter The Line: If this unit kills an enemy within X tiles, it triggers a flush effect on other enemies within X tiles. 2/3 turn cooldown. credits to /u/PostOfficeBuddy
 ###### Current Bugs
       - Time Stop damage calculation isn't visualized properly
+      - Time Stop probably won't work on Frozen enemies
       - Shock And Awe readout not displayed
               
               
