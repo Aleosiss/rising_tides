@@ -1,4 +1,4 @@
-// This is an Unreal Script
+// X2MeleePathingPawn, except no line to the target. Still working on not actually requiring a path to the target but this will do for now.
 
 class RTMeleePathingPawn extends X2MeleePathingPawn;
 

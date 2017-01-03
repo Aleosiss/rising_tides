@@ -140,6 +140,9 @@
     <Content Include="Src\RisingTides\Classes\RTEffect_DisablingShotDamage.uc">
       <SubType>Content</SubType>
     </Content>
+    <Content Include="Src\RisingTides\Classes\RTEffect_EveryMomentMatters.uc">
+      <SubType>Content</SubType>
+    </Content>
     <Content Include="Src\RisingTides\Classes\RTEffect_GenerateAfterimage.uc">
       <SubType>Content</SubType>
     </Content>
@@ -249,6 +252,9 @@
       <SubType>Content</SubType>
     </Content>
     <Content Include="Src\RisingTides\Classes\RTGameState_Effect.uc">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Src\RisingTides\Classes\RTGameState_EveryMomentMatters.uc">
       <SubType>Content</SubType>
     </Content>
     <Content Include="Src\RisingTides\Classes\RTGameState_GhostInTheShell.uc">

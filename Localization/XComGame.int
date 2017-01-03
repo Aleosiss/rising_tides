@@ -271,6 +271,14 @@ LocFlyOverText="Psionic Killzone"
 LocPromotionPopupText="<Bullet/> There is no limit to the amount of Kill Zone shots a soldier can take outside of ammo counts.<br/><Bullet/> Kill Zone utilizes Squadsight, even if the soldier does not have the Long Watch ability.<br/><Bullet/> Kill Zone has a <Ability:SelfCooldown/> turn cooldown.<br/>"
 LocFriendlyNameWhenConcealed="Psionic Killzone (Concealed)"
 
+[RTEveryMomentMatters X2AbilityTemplate]
+LocFriendlyName="Every Moment Matters"
+LocLongDescription="The last bullet in this unit's magazine is guarenteed to Critically Hit and deals bonus damage based on the target's missing health."
+LocHelpText="The last bullet in this unit's magazine is guarenteed to Critically Hit and deals bonus damage based on the target's missing health."
+LocFlyOverText="Every Moment Matters"
+LocPromotionPopupText="<Bullet/> The last bullet in this unit's magazine is guarenteed to Critically Hit and deals bonus damage based on the target's missing health.<br/><Bullet/> Shooting the last bullet additionally grants a movement-only action point.<br/>"
+
+
 [RT_Berserker X2SoldierClassTemplate]
 DisplayName="GHOST Berserker"
 ClassSummary="Queen is the unit's leader and close-combat specialist."

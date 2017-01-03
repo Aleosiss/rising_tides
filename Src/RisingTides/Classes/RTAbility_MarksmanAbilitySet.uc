@@ -39,6 +39,7 @@ class RTAbility_MarksmanAbilitySet extends RTAbility_GhostAbilitySet
 	var config int DGG_DEFENSE_BONUS; 
 	var config int DGG_AIM_BONUS;
 	var config int SND_DEFENSE_BONUS;
+	var config float EMM_DAMAGE_PERCENT;
 
 	var Name KillZoneReserveType;
 
@@ -86,6 +87,7 @@ static function array<X2DataTemplate> CreateTemplates()
 	Templates.AddItem(ShockAndAwe());								// icon
 	Templates.AddItem(ShockAndAweListener());
 	Templates.AddItem(RTKillzone());								// icon
+	Templates.AddItem(RTEveryMomentMatters());
 
 	return Templates;
 }
@@ -1806,8 +1808,6 @@ static function X2AbilityTemplate HeatChannelIcon()
 
 	return Template;
 }
-
-
 	
 //---------------------------------------------------------------------------------------
 //---Heat Channel Cooldown---------------------------------------------------------------
@@ -1823,7 +1823,7 @@ static function X2AbilityTemplate HeatChannelCooldown()
 	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_adventpsiwitch_mindcontrol";
 	
 	Template.AbilitySourceName = 'eAbilitySource_Psionic';
-	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_AlwaysShow;
+	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_NeverShow;
 	Template.Hostility = eHostility_Neutral;
 	Template.ConcealmentRule = eConceal_Always;
 
@@ -1857,7 +1857,6 @@ static function X2AbilityTemplate HeatChannelCooldown()
 
 	return Template;
 }
-
 
 //---------------------------------------------------------------------------------------
 //---Eye in the Sky----------------------------------------------------------------------
@@ -2225,6 +2224,38 @@ static function X2AbilityTemplate RTKillZone()
 	Template.bCrossClassEligible = false;
 	Template.PostActivationEvents.AddItem('UnitUsedPsionicAbility');
 
+	return Template;
+}
+
+//---------------------------------------------------------------------------------------
+//---Every Moment Matters----------------------------------------------------------------
+//---------------------------------------------------------------------------------------
+static function X2AbilityTemplate RTEveryMomentMatters()
+{
+	local X2AbilityTemplate						Template;
+	local RTEffect_EveryMomentMatters			RTEffect;
+
+	 `CREATE_X2ABILITY_TEMPLATE(Template, 'RTEveryMomentMatters');
+	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_insanity";
+
+	Template.AbilitySourceName = 'eAbilitySource_Perk';
+	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_NeverShow;
+	Template.Hostility = eHostility_Neutral;
+
+	Template.AbilityToHitCalc = default.DeadEye;
+	Template.AbilityTargetStyle = default.SelfTarget;
+	Template.AbilityTriggers.AddItem(default.UnitPostBeginPlayTrigger);
+
+	RTEffect = new class 'RTEffect_EveryMomentMatters';
+	RTEffect.BuildPersistentEffect(1, true, false, false,  eGameRule_PlayerTurnEnd);
+	RTEffect.BONUS_DAMAGE_PERCENT = default.EMM_DAMAGE_PERCENT;
+	RTEffect.SetDisplayInfo(ePerkBuff_Passive, Template.LocFriendlyName, Template.LocLongDescription, Template.IconImage, true,, Template.AbilitySourceName);
+	Template.AddTargetEffect(RTEffect);
+
+	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
+	// Note: no visualization on purpose!
+	
+	Template.bCrossClassEligible = false;
 	return Template;
 }
 
