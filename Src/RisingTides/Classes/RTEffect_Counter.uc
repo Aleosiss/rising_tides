@@ -22,7 +22,7 @@ simulated function bool OnEffectTicked(const out EffectAppliedData ApplyEffectPa
 	}
 	CounterUnit.GetUnitValue(CounterUnitValName, UnitVal); 	// I still don't know if the above method actually populates the out param 
 								// in the if statement so this a fallback
-								// I blame my CS2 teacher
+								
 
 	if(UnitVal.fValue < 1)
 	{
