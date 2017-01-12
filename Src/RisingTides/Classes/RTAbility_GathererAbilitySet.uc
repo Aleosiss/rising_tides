@@ -5,7 +5,7 @@
 //  PURPOSE: Defines abilities used by Nova.
 //           
 //---------------------------------------------------------------------------------------
-//	Queen's perks.
+//	Nova's perks.
 //---------------------------------------------------------------------------------------
 
 class RTAbility_GathererAbilitySet extends RTAbility_GhostAbilitySet config(RisingTides);
