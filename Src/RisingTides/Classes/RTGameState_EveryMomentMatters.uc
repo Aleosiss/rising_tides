@@ -9,8 +9,6 @@ function EventListenerReturn EveryMomentMattersCheck(Object EventData, Object Ev
 	local XComGameState_Unit SourceUnit;
 	local XComGameStateHistory History;
 
-	`LOG("Rising Tides - Every Moment Matters Activated!");
-
 	AbilityContext = XComGameStateContext_Ability(GameState.GetContext());
 	if (AbilityContext != none) {
 		if (AbilityContext.InputContext.SourceObject.ObjectID == ApplyEffectParameters.SourceStateObjectRef.ObjectID) {
@@ -19,14 +17,11 @@ function EventListenerReturn EveryMomentMattersCheck(Object EventData, Object Ev
 			if (`TACTICALRULES.GetCachedUnitActionPlayerRef().ObjectID == SourceUnit.ControllingPlayer.ObjectID) {
 
 				// We only want to grant points when the source is actually shooting a shot
-				`LOG("Rising Tides - Every Moment Matters: Checking For a sniper shot! AbilityTemplateName: " @ AbilityContext.InputContext.AbilityTemplateName @"----------------------------------------------------------------");		
 				if( !class'RTHelpers'.static.CheckAbilityActivated(AbilityContext.InputContext.AbilityTemplateName, eChecklist_SniperShots)) {
-						`LOG("Rising Tides - Every Moment Matters: Wasn't a sniper shot! AbilityTemplateName: " @ AbilityContext.InputContext.AbilityTemplateName @"----------------------------------------------------------------");
 						return ELR_NoInterrupt;
 				} 
 
-			   `LOG("Rising Tides - Every Moment Matters: Checking for the last shot! Ammo Count: " @ SourceUnit.GetItemInSlot(eInvSlot_PrimaryWeapon).Ammo @"----------------------------------------------------------------");
-				if(SourceUnit.GetItemInSlot(eInvSlot_PrimaryWeapon).Ammo == 0) {	
+			   if(SourceUnit.GetItemInSlot(eInvSlot_PrimaryWeapon).Ammo == 0) {	
 					NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState(string(GetFuncName()));
 					XComGameStateContext_ChangeContainer(NewGameState.GetContext()).BuildVisualizationFn = EveryMomentMattersVisualizationFn;
 					SourceUnit = XComGameState_Unit(NewGameState.CreateStateObject(SourceUnit.Class, SourceUnit.ObjectID));
@@ -34,10 +29,7 @@ function EventListenerReturn EveryMomentMattersCheck(Object EventData, Object Ev
 					NewGameState.AddStateObject(SourceUnit);
 					`TACTICALRULES.SubmitGameState(NewGameState);
 				
-				} else {
-					`LOG("Rising Tides - Every Moment Matters: Wasn't the last shot! Ammo Count: " @ SourceUnit.GetItemInSlot(eInvSlot_PrimaryWeapon).Ammo @"----------------------------------------------------------------");
-						
-				}	
+				} 	
 			}
 		}
 	}
@@ -69,7 +61,7 @@ function EveryMomentMattersVisualizationFn(XComGameState VisualizeGameState, out
 
 			OutVisualizationTracks.AddItem(BuildTrack);
 		} else {
-			`LOG("Rising Tides - Every Moment Matters: Couldn't find AbilityTemplate for visualization!------------------------------------------------------------------------------------");
+			`LOG("Rising Tides - Every Moment Matters: Couldn't find AbilityTemplate for visualization!");
 		}
 		break;
 	}

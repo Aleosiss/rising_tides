@@ -27,16 +27,20 @@ function int GetAttackingDamageModifier(XComGameState_Effect EffectState, XComGa
 		}
 	}
 
-	if(bLastShot) {
-		TargetState = XComGameState_Unit(TargetDamageable);
-		if(TargetState != none) {
-			iMissingHealth = TargetState.GetMaxStat(eStat_HP) - TargetState.GetCurrentStat(eStat_HP);
-			if(iMissingHealth > 0) {
-				ExtraDamage = iMissingHealth * BONUS_DAMAGE_PERCENT;
-			}	
-		}
+	if(!bLastShot) {
+		return int(ExtraDamage);
 	}
 
+	TargetState = XComGameState_Unit(TargetDamageable);
+	if(TargetState == none) {
+		return int(ExtraDamage);
+	}
+
+	iMissingHealth = TargetState.GetMaxStat(eStat_HP) - TargetState.GetCurrentStat(eStat_HP);
+	if(iMissingHealth > 0) {
+		ExtraDamage = iMissingHealth * BONUS_DAMAGE_PERCENT;
+	}	
+	
 	return int(ExtraDamage);
 }
 
@@ -72,8 +76,6 @@ function RegisterForEvents(XComGameState_Effect EffectGameState)
 	`LOG("Rising Tides - Every Moment Matters: Registered for event, FilterObj = " @ XComGameState_Unit(FilterObj).GetFullName() @"-------------------------------------");
 	EventMgr.RegisterForEvent(EffectObj, 'AbilityActivated', EMMGameState.EveryMomentMattersCheck, ELD_OnStateSubmitted,,FilterObj);
 }												  
-
-
 
 DefaultProperties
 {

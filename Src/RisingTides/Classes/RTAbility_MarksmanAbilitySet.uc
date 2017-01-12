@@ -1392,6 +1392,11 @@ static function X2AbilityTemplate TimeStandsStill()
 		"This unit has been frozen in time. It cannot take actions and is much easier to hit.", Template.IconImage);
 	TimeStopEffect.bRemoveWhenTargetDies = true;
 	TimeStopEffect.bCanTickEveryAction = true;
+
+	UnitPropertyCondition = new class'X2Condition_UnitProperty';
+	UnitPropertyCondition.FailOnNonUnits = true;
+	TimeStopEffect.TargetConditions.AddItem(UnitPropertyCondition);
+
 	Template.AddMultiTargetEffect(TimeStopEffect);
 
 	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;

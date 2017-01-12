@@ -5,10 +5,13 @@
 //  PURPOSE: Defines abilities used by Nova.
 //           
 //---------------------------------------------------------------------------------------
-//	Queen's perks.
+//	Nova's perks.
 //---------------------------------------------------------------------------------------
 
 class RTAbility_GathererAbilitySet extends RTAbility_GhostAbilitySet config(RisingTides);
+
+
+	var config name OverTheShoulderEffectName;
 
 	var config int OTS_RADIUS;
 
@@ -21,10 +24,16 @@ static function array<X2DataTemplate> CreateTemplates()
 
 
 	Templates.AddItem(OverTheShoulder());
+	Templates.AddItem(OverTheShoulderCleanse());
 	
 
 	return Templates;
 }
+
+// TODO:
+// OTS needs to update whenever a unit moves
+// OTS needs to update its cleanse effect whenever a unit moves
+
 
 //---------------------------------------------------------------------------------------
 //---Over the Shoulder-------------------------------------------------------------------
@@ -39,8 +48,7 @@ static function X2AbilityTemplate OverTheShoulder()
 
 	local X2Condition_UnitProperty				AllyCondition, EnemyCondition;
 
-
-	`CREATE_X2ABILITY_TEMPLATE(Template, 'OverTheShoulder');
+	`CREATE_X2TEMPLATE(class'RTAbilityTemplate', Template, 'OverTheShoulder');
 	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_swordSlash";
 	Template.AbilitySourceName = 'eAbilitySource_Psionic';
 	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_AlwaysShow;
@@ -60,11 +68,14 @@ static function X2AbilityTemplate OverTheShoulder()
 	AllyCondition.ExcludeCivilian = true;
 	AllyCondition.ExcludeRobotic = true;
 	AllyCondition.ExcludeHostileToSource = true;
+	AllyCondition.ExcludeFriendlyToSource = false;
+	AllyCondition.FailOnNonUnits = true;
 
 	EnemyCondition = new class 'X2Condition_UnitProperty';
 	EnemyCondition.ExcludeDead = true;
 	EnemyCondition.ExcludeRobotic = true;
 	EnemyCondition.ExcludeFriendlyToSource = true;
+	EnemyCondition.FailOnNonUnits = true;
 
 	Radius = new class'X2AbilityMultiTarget_Radius';
 	Radius.bUseWeaponRadius = false;
@@ -72,22 +83,25 @@ static function X2AbilityTemplate OverTheShoulder()
 	Radius.bExcludeSelfAsTargetIfWithinRadius = true; // for now
 	Radius.fTargetRadius = 	default.OTS_RADIUS;
 	Template.AbilityMultiTargetStyle = Radius;
-
+		
 	EnemyEffect = new class'X2Effect_Persistent';
 	EnemyEffect.BuildPersistentEffect(1, false, true, false, eGameRule_PlayerTurnEnd);
-	EnemyEffect.SetDisplayInfo(ePerkBuff_Penalty, "Over The Shoulder", "Activated!", Template.IconImage, true,,Template.AbilitySourceName);
-	EnemyEffect.TargetConditions.AddItem(EnemyCondition);
+	EnemyEffect.SetDisplayInfo(ePerkBuff_Penalty, "Over The Shoulder - EnemyEffect", "Activated!", Template.IconImage, true,,Template.AbilitySourceName);
+	EnemyEffect.TargetConditions.AddItem(default.LivingHostileUnitOnlyProperty);
+	EnemyEffect.DuplicateResponse = eDupe_Ignore;
 	Template.AddMultiTargetEffect(EnemyEffect);
 
 	AllyEffect = new class'X2Effect_Persistent';
 	AllyEffect.BuildPersistentEffect(1, false, true, false, eGameRule_PlayerTurnEnd);
-	AllyEffect.SetDisplayInfo(ePerkBuff_Bonus, "Over The Shoulder", "Activated!", Template.IconImage, true,,Template.AbilitySourceName);
-	AllyEffect.TargetConditions.AddItem(AllyCondition);
+	AllyEffect.SetDisplayInfo(ePerkBuff_Bonus, "Over The Shoulder - AllyEffect", "Activated!", Template.IconImage, true,,Template.AbilitySourceName);
+	AllyEffect.TargetConditions.AddItem(default.LivingShooterProperty);
+	AllyEffect.DuplicateResponse = eDupe_Ignore;
 	Template.AddMultiTargetEffect(AllyEffect);
 
 	SelfEffect = new class'X2Effect_Persistent';
 	SelfEffect.BuildPersistentEffect(1, false, true, false, eGameRule_PlayerTurnEnd);
-	SelfEffect.SetDisplayInfo(ePerkBuff_Bonus, "Over The Shoulder", "Activated!", Template.IconImage, true,,Template.AbilitySourceName);
+	SelfEffect.SetDisplayInfo(ePerkBuff_Bonus, "Over The Shoulder - SelfEffect", "Activated!", Template.IconImage, true,,Template.AbilitySourceName);
+	SelfEffect.DuplicateResponse = eDupe_Ignore;
 	Template.AddShooterEffect(SelfEffect);
  
 	Template.AbilityToHitCalc = default.DeadEye; 
@@ -99,4 +113,70 @@ static function X2AbilityTemplate OverTheShoulder()
 	Template.bShowActivation = true;
 
 	return Template;
+}
+
+//---------------------------------------------------------------------------------------
+//---Unsettling Voices-------------------------------------------------------------------
+//---------------------------------------------------------------------------------------
+static function X2AbilityTemplate OverTheShoulderCleanse() {
+	local X2AbilityTemplate                     Template;
+	local X2AbilityTrigger_EventListener        EventListener;
+
+	`CREATE_X2ABILITY_TEMPLATE(Template, 'OverTheShoulderCleanse');
+
+	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_solace";
+	Template.AbilitySourceName = 'eAbilitySource_Psionic';
+	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_NeverShow;
+	Template.Hostility = eHostility_Neutral;
+
+	Template.AbilityToHitCalc = default.DeadEye;
+	Template.AbilityTargetStyle = default.SimpleSingleTarget;
+	Template.AbilityShooterConditions.AddItem(default.LivingShooterProperty);
+
+	EventListener = new class'X2AbilityTrigger_EventListener';
+	EventListener.ListenerData.Deferral = ELD_OnStateSubmitted;
+	EventListener.ListenerData.EventID = 'UnitMoveFinished';
+	EventListener.ListenerData.Filter = eFilter_None;
+	EventListener.ListenerData.EventFn = class'XComGameState_Ability'.static.SolaceCleanseListener;
+	Template.AbilityTriggers.AddItem(EventListener);
+
+	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
+	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
+
+	return Template;
+
+}
+
+
+
+//---------------------------------------------------------------------------------------
+//---Unsettling Voices-------------------------------------------------------------------
+//---------------------------------------------------------------------------------------
+static function X2AbilityTemplate RTUnsettlingVoices() {
+	local X2AbilityTemplate                     Template;
+	local X2AbilityTrigger_EventListener        EventListener;
+
+	`CREATE_X2ABILITY_TEMPLATE(Template, 'RTUnsettlingVoices');
+
+	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_solace";
+	Template.AbilitySourceName = 'eAbilitySource_Psionic';
+	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_NeverShow;
+	Template.Hostility = eHostility_Neutral;
+
+	Template.AbilityToHitCalc = default.DeadEye;
+	Template.AbilityTargetStyle = default.SimpleSingleTarget;
+	Template.AbilityShooterConditions.AddItem(default.LivingShooterProperty);
+
+	EventListener = new class'X2AbilityTrigger_EventListener';
+	EventListener.ListenerData.Deferral = ELD_OnStateSubmitted;
+	EventListener.ListenerData.EventID = 'UnitMoveFinished';
+	EventListener.ListenerData.Filter = eFilter_None;
+	EventListener.ListenerData.EventFn = class'XComGameState_Ability'.static.SolaceCleanseListener;
+	Template.AbilityTriggers.AddItem(EventListener);
+
+	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
+	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
+
+	return Template;
+
 }

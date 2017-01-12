@@ -105,3 +105,24 @@ simulated function int SortAvailableTargets(AvailableTarget TargetA, AvailableTa
 
 	return 1;
 }
+
+
+// this is for when OTS is already active and
+// the source unit moves 
+// or
+// another unit moves into the zone
+function EventListenerReturn OTSInclusiveListener(Object EventData, Object EventSource, XComGameState GameState, Name EventID)
+{
+	local XComGameState_Unit TargetUnit, SourceUnit;
+
+	SourceUnit = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(OwnerStateObject.ObjectID));
+	if(SourceUnit.AffectedByEffectNames.Find(class'RTAbility_GathererAbilitySet'.default.OverTheShoulderEffectName) == INDEX_NONE)
+		return ELR_NoInterrupt;
+
+	foreach `XCOMHISTORY.IterateByClassType(class'XComGameState_Unit', TargetUnit, , , GameState.HistoryIndex)
+	{
+		AbilityTriggerAgainstSingleTarget(TargetUnit.GetReference(), false);
+	}
+
+	return ELR_NoInterrupt;
+}
