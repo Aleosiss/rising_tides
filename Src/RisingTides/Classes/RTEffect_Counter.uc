@@ -22,14 +22,14 @@ simulated function bool OnEffectTicked(const out EffectAppliedData ApplyEffectPa
 	}
 	CounterUnit.GetUnitValue(CounterUnitValName, UnitVal); 	// I still don't know if the above method actually populates the out param 
 								// in the if statement so this a fallback
-								// I blame my CS2 teacher
+								
 
 	if(UnitVal.fValue < 1)
 	{
 		if(bShouldTriggerEvent) // sometimes the effect trigger looks for the counter instead of the other way around
 		{
 			`XEVENTMGR.TriggerEvent(TriggerEventName, CounterUnit, CounterSourceUnit, NewGameState);
-			`RedScreenOnce("Rising Tides: " @ TriggerEventName @ " Counter triggered!");
+			`LOG("Rising Tides: " @ TriggerEventName @ " Counter triggered!");
 		}
 		return super.OnEffectTicked(ApplyEffectParameters, kNewEffectState, NewGameState, FirstApplication);
 	}

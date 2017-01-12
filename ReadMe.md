@@ -27,7 +27,9 @@ This would be a bare-bones content mod. I also have the following content in min
 ###### Current Unresolved:
       - Visuals
       - Dashing Strike
-      - Implement cooldown debuffs to notify players of passive ability triggers and cooldowns
+      - Add mental effect cleanse to RTMentor
+      - Implement OnTacticalGameEnd() for all RTGameState_Effects
+      - Prevent MultiTarget_Radius effects (TimeStop and OverTheShoulder) from randomly opening all doors in their AO
 ###### Current Table
       - Triangulation: Spread Over the Shoulder to all melded allies.
       - Shatter The Line: If this unit kills an enemy within X tiles, it triggers a flush effect on other enemies within X tiles. 2/3 turn cooldown. credits to /u/PostOfficeBuddy
