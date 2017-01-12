@@ -1,0 +1,3 @@
+class RTGameState_SquadViewer extends XComGameState_SquadViewer;
+
+var StateObjectReference AssociatedUnit;
