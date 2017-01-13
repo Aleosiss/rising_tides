@@ -30,6 +30,8 @@ This would be a bare-bones content mod. I also have the following content in min
       - Add mental effect cleanse to RTMentor
       - Implement OnTacticalGameEnd() for all RTGameState_Effects
       - Prevent MultiTarget_Radius effects (TimeStop and OverTheShoulder) from randomly opening all doors in their AO
+      - Implement Unrealscript-based Kismet Variable Handling for Time Stands Still
+      - Implement RTEffect_Counter event-based cooldown tracker cleansing for Heat Channel
 ###### Current Table
       - Triangulation: Spread Over the Shoulder to all melded allies.
       - Shatter The Line: If this unit kills an enemy within X tiles, it triggers a flush effect on other enemies within X tiles. 2/3 turn cooldown. credits to /u/PostOfficeBuddy
