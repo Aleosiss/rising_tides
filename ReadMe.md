@@ -34,6 +34,7 @@ This would be a bare-bones content mod. I also have the following content in min
       - Implement RTEffect_Counter event-based cooldown tracker cleansing for Heat Channel
       - Implement cooldown tracker for Fade
       - Implement will-based damage increase for Psionic Blade
+      - Implement Disabling Shot ap reduction (-1)
 ###### Current Table
       - Triangulation: Spread Over the Shoulder to all melded allies.
       - Shatter The Line: If this unit kills an enemy within X tiles, it triggers a flush effect on other enemies within X tiles. 2/3 turn cooldown. credits to /u/PostOfficeBuddy
