@@ -167,6 +167,9 @@
     <Content Include="Src\RisingTides\Classes\RTEffect_Meld.uc">
       <SubType>Content</SubType>
     </Content>
+    <Content Include="Src\RisingTides\Classes\RTEffect_MobileSquadViewer.uc">
+      <SubType>Content</SubType>
+    </Content>
     <Content Include="Src\RisingTides\Classes\RTEffect_Panicked.uc">
       <SubType>Content</SubType>
     </Content>
@@ -273,6 +276,9 @@
       <SubType>Content</SubType>
     </Content>
     <Content Include="Src\RisingTides\Classes\RTGameState_ReprobateWaltz.uc">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Src\RisingTides\Classes\RTGameState_SquadViewer.uc">
       <SubType>Content</SubType>
     </Content>
     <Content Include="Src\RisingTides\Classes\RTGameState_TimeStopEffect.uc">

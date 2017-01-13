@@ -1,7 +1,5 @@
 class RTEffect_MobileSquadViewer extends X2Effect_PersistentSquadViewer;
 
-simulated float GetViewRadius() {    return ViewRadius; }
-
 simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffectParameters, XComGameState_BaseObject kNewTargetState, XComGameState NewGameState, XComGameState_Effect NewEffectState) {
     local XComGameStateHistory History;
     local XComGameState_Unit SourceUnitState, TargetUnitState;
@@ -15,12 +13,11 @@ simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffe
 
     TargetUnitState = XComGameState_Unit(kNewTargetState);
     if(TargetUnitState == none) {
-        `RedScreenOnce("Rising Tides: Attempting to create a SquadViewer on a non-unit target!")
+        `RedScreenOnce("Rising Tides: Attempting to create a SquadViewer on a non-unit target!");
         return;
     }
 
-    ViewerLocation = TargetUnitState.GetLocation();
-    ViewerTile = `XWORLD.GetTileCoordinatesFromPosition(ViewerLocation);
+    ViewerTile = TargetUnitState.TileLocation;
 
     ViewerState = RTGameState_SquadViewer(NewGameState.CreateStateObject(class'RTGameState_SquadViewer'));
     ViewerState.AssociatedPlayer = ApplyEffectParameters.PlayerStateObjectRef;
@@ -44,7 +41,6 @@ function OnUnitChangedTile(const out TTile NewTileLocation, XComGameState_Effect
     // we only need to update the SquadViewer if it's moving.
     if(TargetUnit.ObjectID == ViewerState.AssociatedUnit.ObjectID) {
         ViewerState.ViewerTile = NewTileLocation;
-        ViewerLocation = `XWORLD.GetPostionFromTileCoordinates(NewTileLocation);
 
     } 
 }
