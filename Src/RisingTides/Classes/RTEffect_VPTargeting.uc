@@ -12,7 +12,10 @@ class RTEffect_VPTargeting extends X2Effect_Persistent;
 function int GetAttackingDamageModifier(XComGameState_Effect EffectState, XComGameState_Unit Attacker, Damageable TargetDamageable, XComGameState_Ability AbilityState, const out EffectAppliedData AppliedData, const int CurrentDamage, optional XComGameState NewGameState)
 {
 	local int FinalDamage;
+	local int BonusTier;
 	//Check for disabling shot
+	
+	
 	if (AbilityState.GetMyTemplateName() == 'RTDisablingShot')
 	{
 		return FinalDamage;
@@ -28,7 +31,7 @@ function int GetAttackingDamageModifier(XComGameState_Effect EffectState, XComGa
 		return FinalDamage;
 }	
 
-function int CalculatedBonusTier(XComGameState_Unit SourceUnitState, Damageable TargetDamageable) {
+function int CalculateBonusTier(XComGameState_Unit SourceUnitState, Damageable TargetDamageable, bool bCheckCritTier = false) {
 
       local RTGameState_VPTargetingData TargetingDataState;
       local XComGameState_Unit TargetUnitState;
@@ -50,20 +53,37 @@ function int CalculatedBonusTier(XComGameState_Unit SourceUnitState, Damageable 
       foreach TargetingDataState.Record(IteratorRecord) {
                 if(IteratorRecord.CharacterTemplateName != TargetTemplate.CharacterGroupName)
                       continue;
-
-                ReturnValue = IteratorRecord.NumDeaths;
-                foreach IteratorRecord.IndividualKillCount(IteratorKillCount) {
-                      if(IteratorKillCount.UnitRef.ObjectID != SourceUnitState.ObjectID)
-                          continue;
-                      ReturnValue += IteratorKillCount.KillCount; // each kill the unit made counts as two for tier calculation
-                      break;
-                }
+		if(!bCheckCritTier) {
+                	ReturnValue = IteratorRecord.NumDeaths;
+                	foreach IteratorRecord.IndividualKillCount(IteratorKillCount) {
+                      		if(IteratorKillCount.UnitRef.ObjectID != SourceUnitState.ObjectID)
+                          		continue;
+                      		ReturnValue += IteratorKillCount.KillCount; // each kill the unit made counts as two for tier calculation
+                      	
+                	}
+		} else {
+			ReturnValue = IteratorRecord.NumCrits;
+		}
+	      	break;
       }
 
-      return ReturnValue;
+      return LookupBonusTier(ReturnValue);
       
+}	
 
-      
-
-
-}																	  
+function int LookupBonusTier(int InValue) {
+	switch (InValue) {
+		case InValue < 1: 
+			return 1;
+		case InValue = 1:
+			return 2;
+		case InValue > 1 && InValue < 5:
+			return 3;
+		case InValue >= 5 && Invalue < 10;
+			return 4;
+		case inValue >= 10:
+			return 5;
+		
+	}
+	return 1;
+}
