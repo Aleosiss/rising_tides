@@ -20,6 +20,8 @@ function int GetAttackingDamageModifier(XComGameState_Effect EffectState, XComGa
 	{
 		return FinalDamage;
 	}
+	
+	BonusTier = CalculateBonusTier(Attacker, TargetDamageable, true);
 
 	//if(XComGameState_Unit(TargetDamagable) != none) {
 		//if(ResearchedTemplates.Find(XComGameState_Unit(TargetDamagable).GetMyTemplateName()) != INDEX_NONE) {
