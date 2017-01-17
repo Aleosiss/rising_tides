@@ -31,7 +31,6 @@ This would be a bare-bones content mod. I also have the following content in min
       - Implement OnTacticalGameEnd() for all RTGameState_Effects
       - Prevent MultiTarget_Radius effects (TimeStop and OverTheShoulder) from randomly opening all doors in their AO
       - Implement Unrealscript-based Kismet Variable Handling for Time Stands Still
-      - Implement RTEffect_Counter event-based cooldown tracker cleansing for Heat Channel
       - Implement Disabling Shot ap reduction (-1)
 ###### Current Table
       - Triangulation: Spread Over the Shoulder to all melded allies.
