@@ -745,3 +745,42 @@ static function X2AbilityTemplate RTRemoveAdditionalAnimSets()
 
 	return Template;
 }
+
+
+
+
+
+// helpers
+
+// cooldown cleanser
+
+static function X2AbilityTemplate CreateRTCooldownCleanse (name TemplateName, name EffectNameToRemove, name EventIDToListenFor) {
+        local X2AbilityTemplate Template;
+        local X2Effect_RemoveEffects RemoveEffectEffect;
+        local X2AbilityTrigger_EventListener Trigger;
+
+	`CREATE_X2ABILITY_TEMPLATE(Template, TemplateName);
+	Template.AbilitySourceName = 'eAbilitySource_Perk';
+	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_NeverShow;
+	Template.Hostility = eHostility_Neutral;
+	Template.ConcealmentRule = eConceal_Always;
+
+        Trigger = new class'X2AbilityTrigger_EventListener';
+	Trigger.ListenerData.Deferral = ELD_OnStateSubmitted;
+	Trigger.ListenerData.EventID = 'EventIDToListenFor';
+	Trigger.ListenerData.Filter = eFilter_Unit;
+        Trigger.ListenerData.EventFn = class'XComGameState_Ability'.static.AbilityTriggerEventListener_Self;
+
+        RemoveEffectEffect = new class'X2Effect_RemoveEffects';
+        RemoveEffectEffect.EffectNamesToRemove.AddItem(EffectNameToRemove);
+        
+        Template.AbilityTargetStyle = default.SelfTarget;
+        Template.AddTargetEffect(RemoveEffectEffect);
+
+	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
+	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
+	Template.bSkipFireAction = true;
+
+	Template.bCrossClassEligible = false;
+	return Template;
+}
