@@ -33,7 +33,6 @@ This would be a bare-bones content mod. I also have the following content in min
       - Implement Unrealscript-based Kismet Variable Handling for Time Stands Still
       - Implement RTEffect_Counter event-based cooldown tracker cleansing for Heat Channel
       - Implement cooldown tracker for Fade
-      - Implement will-based damage increase for Psionic Blade
       - Implement Disabling Shot ap reduction (-1)
 ###### Current Table
       - Triangulation: Spread Over the Shoulder to all melded allies.
