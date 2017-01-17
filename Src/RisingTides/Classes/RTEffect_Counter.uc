@@ -28,18 +28,13 @@ simulated function bool OnEffectTicked(const out EffectAppliedData ApplyEffectPa
 		return super.OnEffectTicked(ApplyEffectParameters, kNewEffectState, NewGameState, FirstApplication);
 	}
 
-	if(UnitVal.fValue == 0)
-	{
-		if(bShouldTriggerEvent) // sometimes the effect trigger looks for the counter instead of the other way around
-		{
+	if(UnitVal.fValue == 0) {
+		if(bShouldTriggerEvent) // sometimes the effect trigger looks for the counter instead of the other way around {
 			`XEVENTMGR.TriggerEvent(TriggerEventName, CounterUnit, CounterSourceUnit, NewGameState);
 			`LOG("Rising Tides: " @ TriggerEventName @ " Counter triggered!");
-		}
-		
-		return super.OnEffectTicked(ApplyEffectParameters, kNewEffectState, NewGameState, FirstApplication);
+		}	
 	}
-	else
-		CounterUnit.SetUnitFloatValue(CounterUnitValName, UnitVal.fValue - 1, eCleanup_BeginTactical);
-
+	
+	CounterUnit.SetUnitFloatValue(CounterUnitValName, UnitVal.fValue - 1, eCleanup_BeginTactical);
 	return super.OnEffectTicked(ApplyEffectParameters, kNewEffectState, NewGameState, FirstApplication);
 }
