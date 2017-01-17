@@ -475,6 +475,7 @@ static function X2AbilityTemplate Fade()
 	local X2AbilityTrigger_EventListener	Trigger;
 	local RTEffect_Stealth					StealthEffect;
 	local X2AbilityCooldown                 Cooldown;	
+	local X2Effect_Persistent		CooldownTrackerEffect;
 	
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'Fade');
 	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_phantom";
@@ -503,6 +504,11 @@ static function X2AbilityTemplate Fade()
 	Template.AddTargetEffect(StealthEffect);
 	
 	Template.AddTargetEffect(class'X2Effect_Spotted'.static.CreateUnspottedEffect());
+	
+	CooldownTrackerEffect = new class'X2Effect_Persistent';
+	CooldownTrackerEffect.BuildPersistentEffect(default.FADE_COOLDOWN, false, true, false, eGameRule_PlayerTurnEnd);
+	CooldownTrackerEffect.SetDisplayInfo(ePerkBuff_Penalty, "Fade Cooldown", "Fade is cooling down", Template.IconImage, true,,Template.AbilitySourceName);
+	Template.AddTargetEffect(CooldownTrackerEffect);
 	
 	// Add dead eye to guarantee
 	Template.AbilityToHitCalc = default.DeadEye;
