@@ -35,8 +35,13 @@ simulated function WeaponDamageValue CreateAcidicBladeDamageEffect(WeaponDamageV
 }
 
 simulated function WeaponDamageValue CreatePsionicBladeDamageEffect(WeaponDamageValue ReturnDamageValue, StateObjectReference TargetRef) {
+    
+    local int iBonusPsionicDamage;
+    
+    iBonusPsionicDamage = 7 - (XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(TargetRef.ObjectID)).GetBaseStat(eStat_Will) / 10)
 
     ReturnDamageValue = CreateNormalBladeDamageEffect(ReturnDamageValue, TargetRef);
+    ReturnDamageValue.Damage += iBonusPsionicDamage;
     ReturnDamageValue.Pierce = 999; // i have no idea how psionic damage interacts with the armor system, this should work
     ReturnDamageValue.DamageType = 'Psi';
     return ReturnDamageValue;
