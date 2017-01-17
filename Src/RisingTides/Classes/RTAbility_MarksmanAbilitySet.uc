@@ -1849,8 +1849,9 @@ static function X2AbilityTemplate HeatChannelCooldown()
 	Template.AbilityTargetStyle = default.SelfTarget;
 
 	AgroEffect = new class'X2Effect_Persistent';
-	AgroEffect.BuildPersistentEffect(default.HEATCHANNEL_COOLDOWN + 2, false, true, true, eGameRule_PlayerTurnEnd);
+	AgroEffect.BuildPersistentEffect(1, true, true, true, eGameRule_PlayerTurnEnd);
 	AgroEffect.SetDisplayInfo(ePerkBuff_Penalty, Template.LocFriendlyName, "Heat Channel is on cooldown!", Template.IconImage, true,,Template.AbilitySourceName);
+	AgroEffect.EffectName = 'HeatChannelCooldownTrackerEffect';
 	Template.AddTargetEffect(AgroEffect);
 
 	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
