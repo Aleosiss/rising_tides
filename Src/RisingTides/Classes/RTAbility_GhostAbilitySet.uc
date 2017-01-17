@@ -790,3 +790,45 @@ static function X2AbilityTemplate CreateRTCooldownCleanse (name TemplateName, na
 	Template.bCrossClassEligible = false;
 	return Template;
 }
+
+static function X2AbilityTemplate CreateRTPassiveAbilityCooldown(name TemplateName, name CooldownTrackerEffectName, bool bTriggerCooldownViaEvent = false, name EventIDToListenFor = none) {
+        local X2AbilityTemplate Template;
+        local X2Effect_Persistent Effect;
+        local X2AbilityTrigger_EventListener Trigger;
+        
+	`CREATE_X2ABILITY_TEMPLATE(Template, TemplateName);
+	Template.AbilitySourceName = 'eAbilitySource_Perk';
+	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_NeverShow;
+	Template.Hostility = eHostility_Neutral;
+	Template.ConcealmentRule = eConceal_Always;
+
+        Trigger = new class'X2AbilityTrigger_EventListener';
+	Trigger.ListenerData.Deferral = ELD_OnStateSubmitted;
+	Trigger.ListenerData.EventID = 'EventIDToListenFor';
+	Trigger.ListenerData.Filter = eFilter_Unit;
+        Trigger.ListenerData.EventFn = class'XComGameState_Ability'.static.AbilityTriggerEventListener_Self;        
+        if(bTriggerCooldownViaEvent) {
+                Template.AbilityTriggers.AddItem(Trigger);
+        } else {
+                Template.AbilityTriggers.AddItem(class'X2AbilityTrigger_Placeholder');
+        }
+
+        // Add dead eye to guarantee
+	Template.AbilityToHitCalc = default.DeadEye;
+	Template.AbilityTargetStyle = default.SelfTarget;
+
+	Effect = new class'X2Effect_Persistent';
+	Effect.BuildPersistentEffect(1, true, true, true, eGameRule_PlayerTurnEnd);
+	Effect.SetDisplayInfo(ePerkBuff_Penalty, Template.LocFriendlyName, "Heat Channel is on cooldown!", Template.IconImage, true,,Template.AbilitySourceName);
+	Effect.EffectName = 'CooldownTrackerEffectName';
+	Template.AddTargetEffect(Effect);
+
+	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
+	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;	//TODO: VISUALIZATION
+
+	Template.bSkipFireAction = true;
+
+	Template.bCrossClassEligible = false;
+
+        return Template;
+}
