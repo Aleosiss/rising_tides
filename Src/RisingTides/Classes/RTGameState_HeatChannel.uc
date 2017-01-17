@@ -94,7 +94,7 @@ function EventListenerReturn HeatChannelCheck(Object EventData, Object EventSour
   XComGameStateContext_ChangeContainer(NewGameState.GetContext()).BuildVisualizationFn = TriggerHeatChannelFlyoverVisualizationFn;
 
   `TACTICALRULES.SubmitGameState(NewGameState);
-
+	// trigger cooldown ability
 	InitializeAbilityForActivation(CooldownAbilityState, NewSourceUnit, 'HeatChannelCooldown', History);
 	ActivateAbility(CooldownAbilityState, NewSourceUnit.GetReference());
 	NewSourceUnit = XComGameState_Unit(History.GetGameStateForObjectID(NewSourceUnit.ObjectID));
