@@ -1747,12 +1747,14 @@ static function X2AbilityTemplate HeatChannel()
 	CounterEffect.BuildPersistentEffect(1, true, true, false, eGameRule_PlayerTurnEnd);
 	CounterEffect.CounterUnitValName = 'RTEffect_HeatChannel_Cooldown';
 	CounterEffect.WatchRule = eGameRule_PlayerTurnEnd;
-	CounterEffect.bShouldTriggerEvent = false;
+	CounterEffect.bShouldTriggerEvent = true;
+	CounterEffect.TriggerEventName = 'HeatChannelCooldownComplete';
 	CounterEffect.EffectName = 'HeatChannelCounterEffect';
 	Template.AddShooterEffect(CounterEffect);
 	
 	HeatEffect = new class'RTEffect_HeatChannel';
 	HeatEffect.BuildPersistentEffect(1, true, false, false, eGameRule_PlayerTurnEnd);
+	HeatEffect.SetDisplayInfo(ePerkBuff_Passive, Template.LocFriendlyName, Template.LocLongDescription, Template.IconImage, true,,Template.AbilitySourceName);
 	Template.AddShooterEffect(HeatEffect);
 	
 	Template.ConcealmentRule = eConceal_Always;
@@ -1785,33 +1787,7 @@ static function X2AbilityTemplate HeatChannel()
 //---------------------------------------------------------------------------------------
 static function X2AbilityTemplate HeatChannelIcon()
 {
-	local X2AbilityTemplate					Template;
-	local X2Effect_Persistent				AgroEffect;
-
-	//Icon Properties
-	`CREATE_X2ABILITY_TEMPLATE(Template, 'HeatChannelIcon');
-	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_aggression";
-	
-	Template.AbilitySourceName = 'eAbilitySource_Psionic';
-	Template.eAbilityIconBehaviorHUD = EAbilityIconBehavior_NeverShow;
-	Template.Hostility = eHostility_Neutral;
-
-	//Apply perk at the start of the mission. 
-	Template.AbilityToHitCalc = default.DeadEye; 
-	Template.AbilityTargetStyle = default.SelfTarget;
-	Template.AbilityTriggers.AddItem(default.UnitPostBeginPlayTrigger);
-
-	AgroEffect = new class'X2Effect_Persistent';
-	AgroEffect.BuildPersistentEffect(1, true, true, true);
-	AgroEffect.SetDisplayInfo(ePerkBuff_Passive, Template.LocFriendlyName, Template.LocLongDescription, Template.IconImage, true,,Template.AbilitySourceName);
-	Template.AddTargetEffect(AgroEffect);
-
-
-
-	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
-	//  NOTE: No visualization on purpose!
-
-	return Template;
+	return CreateRTCooldownCleanse('HeatChannelIcon', 'HeatChannelCooldownTrackerEffect', 'HeatChannelCooldownComplete');
 }
 	
 //---------------------------------------------------------------------------------------
