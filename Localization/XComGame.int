@@ -24,7 +24,7 @@ LocFriendlyName="Scoped And Dropped"
 LocLongDescription="Enhanced Squadsight. Killing a flanked or uncovered target with a sniper rifle does not cost an action."
 LocHelpText="Killing a flanked or uncovered target with a sniper rifle does not cost an action."
 LocFlyOverText="Scoped And Dropped"
-LocPromotionPopupText="<Bullet/> Whisper does not suffer from squadsight penalties and wastes no time lining up easy shots on exposed units.<br/>"
+LocPromotionPopupText="<Bullet/> This unit does not suffer from squadsight penalties and requires little effort to line up easy shots on exposed units.<br/>"
 
 [RTPrecisionShot X2AbilityTemplate]
 LocFriendlyName="Precision Shot"
@@ -198,7 +198,7 @@ LocFriendlyName="Psionic Surge"
 LocLongDescription="Empower this unit's weapon with psionic energy, increasing its fire rate and energy throughput."
 LocHelpText="Empower this unit's weapon with psionic energy."
 LocFlyOverText="Psionic Surge"
-LocPromotionPopupText="<Bullet/> Empower  this unit's weapon with psionic energy, increasing its fire rate and energy throughput.<br/><Bullet/> Standard shots do not end turn and cost one AP. Special shots do not have cooldowns while this effect is active.<br/>"
+LocPromotionPopupText="<Bullet/> Empower this unit's weapon with psionic energy, increasing its fire rate and energy throughput.<br/><Bullet/> Standard shots do not end turn and cost one AP. Special shots do not have cooldowns while this effect is active.<br/>"
 
 [FadeIcon X2AbilityTemplate]
 LocFriendlyName="Fade"
@@ -278,7 +278,6 @@ LocHelpText="The last bullet in this unit's magazine is guarenteed to Critically
 LocFlyOverText="Every Moment Matters"
 LocPromotionPopupText="<Bullet/> The last bullet in this unit's magazine is guarenteed to Critically Hit and deals bonus damage based on the target's missing health.<br/><Bullet/> Shooting the last bullet additionally grants a movement-only action point.<br/>"
 
-
 [RT_Berserker X2SoldierClassTemplate]
 DisplayName="GHOST Berserker"
 ClassSummary="Queen is the unit's leader and close-combat specialist."
@@ -291,7 +290,7 @@ LocFriendlyName="Bump In The Night"
 LocLongDescription="This unit gains Stealth after killing a unit within 3 tiles. If it was a melee kill, additionally gain a stack of Bloodlust."
 LocHelpText="Gain Stealth after killing a unit within 3 tiles. Melee kills additionally grant a stack of Bloodlust."
 LocFlyOverText="Bump In The Night"
-LocPromotionPopupText="<Bullet/>This unit gains Stealth after killing a unit within 3 tiles. <br/><Bullet/>If it was a melee kill, additionally gain a stack of Bloodlust. <br/><Bullet/> <br/><Bullet/> <br/>"
+LocPromotionPopupText="<Bullet/> This unit gains Stealth after killing a unit within 3 tiles. <br/><Bullet/> If it was a melee kill, additionally gain a stack of Bloodlust. <br/>"
 
 [BumpInTheNightBloodlustListener X2AbilityTemplate]
 LocFriendlyName="Bump In The Night"
@@ -329,8 +328,8 @@ LocPromotionPopupText="<Bullet/> This unit's blade is covered in a classified ac
 
 [RTPsionicBlade X2AbilityTemplate]
 LocFriendlyName="Psiblade"
-LocLongDescription="This unit's blade is a manifestation of psionic energy. It pierces armor entirely."
-LocHelpText="This unit's melee attacks deal pierce all armor."
+LocLongDescription="This unit's blade is a manifestation of psionic energy. It pierces armor entirely and deals additional damage based on the target's will."
+LocHelpText="This unit's melee attacks deal pierce all armor and deal bonus damage based on the target's will."
 LocFlyOverText="Psiblade"
 LocPromotionPopupText="<Bullet/> This unit's blade is a manifestation of psionic energy. It pierces armor entirely.<br/>"
 
@@ -339,56 +338,56 @@ LocFriendlyName="Hidden Blade"
 LocLongDescription="This unit's blade is designed to deal additional damage to unaware targets. It deals additional critical damage from concealment."
 LocHelpText="This unit's melee attacks deal additional critical damage from concealment."
 LocFlyOverText="Psiblade"
-LocPromotionPopupText="<Bullet/> This unit's blade is designed to deal additional damage to unaware targets. It deals additional critical damage from concealment.<br/><Bullet/> Critical hits deal an additional 150% damage when the critera is met.<br/>"
+LocPromotionPopupText="<Bullet/> This unit's blade is designed to deal additional damage to unaware targets. It deals extra critical damage from concealment.<br/><Bullet/> Critical hits deal an additional 150% damage when the critera is met.<br/>"
 
 [RTBurst X2AbilityTemplate]
 LocFriendlyName="Burst"
 LocLongDescription="Unleash a burst of psionic energy, damaging surrounding enemies and tiles."
 LocHelpText="Unleash a burst of psionic energy, damaging surrounding enemies and tiles."
 LocFlyOverText="Burst"
-LocPromotionPopupText="<Bullet/>Unleash a burst of psionic energy, damaging surrounding enemies and tiles.<br/>"
+LocPromotionPopupText="<Bullet/> Unleash a burst of psionic energy, damaging surrounding enemies and tiles.<br/>"
 
 [RTBlur X2AbilityTemplate]
 LocFriendlyName="Blur"
 LocLongDescription="Gain additional dodge, movement, and defense."
 LocHelpText="Gain additional dodge, movement, and defense."
 LocFlyOverText=""
-LocPromotionPopupText="<Bullet/>Gain additional dodge, movement, and defense.<br/>"
+LocPromotionPopupText="<Bullet/> Gain additional dodge, movement, and defense.<br/>"
 
 [RTPurge X2AbilityTemplate]
 LocFriendlyName="Purge"
 LocLongDescription="Purge your bloodlust and regain concealment."
 LocHelpText="Lose five stacks of bloodlust. Gain concealment."
 LocFlyOverText="Purge"
-LocPromotionPopupText="<Bullet/>Lose five stacks of bloodlust. Gain concealment.<br/>"
+LocPromotionPopupText="<Bullet/> Lose five stacks of bloodlust. Gain concealment.<br/>"
 
 [RTMentor X2AbilityTemplate]
 LocFriendlyName="Mentor"
 LocLongDescription="Lend a friendly melded unit psionic support though the meld."
 LocHelpText="Lend a friendly melded unit psionic support though the meld."
 LocFlyOverText="Mentor"
-LocPromotionPopupText="<Bullet/>Lend a friendly melded unit psionic support though the meld.<br/><Bullet/>Grants +60 Will and Psi Offense to targeted unit.<br/>"
+LocPromotionPopupText="<Bullet/> Lend a friendly melded unit psionic support though the meld.<br/><Bullet/>Grants +60 Will and Psi Offense to targeted unit.<br/>"
 
 [RTReprobateWaltz X2AbilityTemplate]
 LocFriendlyName="Reprobate Waltz"
 LocLongDescription="Whenever this unit uses a melee attack, there is a chance to attack again, increasing with Bloodlust stacks."
 LocHelpText="Whenever this unit uses a melee attack, there is a chance to attack again, increasing with Bloodlust stacks."
 LocFlyOverText="Reprobate Waltz"
-LocPromotionPopupText="<Bullet/>Whenever this unit uses a melee attack, there is a chance to attack again, increasing with Bloodlust stacks.<br/>"
+LocPromotionPopupText="<Bullet/> Whenever this unit uses a melee attack, there is a chance to attack again, increasing with Bloodlust stacks.<br/>"
 
 [RTReprobateWaltzIcon X2AbilityTemplate]
 LocFriendlyName="Reprobate Waltz"
 LocLongDescription="Whenever this unit uses a melee attack, there is a chance to attack again, increasing with Bloodlust stacks."
 LocHelpText="Whenever this unit uses a melee attack, there is a chance to attack again, increasing with Bloodlust stacks."
 LocFlyOverText="Reprobate Waltz"
-LocPromotionPopupText="<Bullet/>Whenever this unit uses a melee attack, there is a chance to attack again, increasing with Bloodlust stacks.<br/>"
+LocPromotionPopupText="<Bullet/> Whenever this unit uses a melee attack, there is a chance to attack again, increasing with Bloodlust stacks.<br/>"
 
 [RTPyroclasticFlow X2AbilityTemplate]
 LocFriendlyName="Pyroclastic Flow"
 LocLongDescription="When this unit is affected by burning, it gains additional movement speed, and its melee attacks gain additional fire damage."
 LocHelpText="When this unit is affected by burning, it gains additional movement speed, and its melee attacks gain additional fire damage."
 LocFlyOverText="Pyroclastic Flow"
-LocPromotionPopupText="<Bullet/>When this unit is affected by burning, it gains additional movement speed, and its melee attacks gain additional fire damage.<br/>"
+LocPromotionPopupText="<Bullet/> When this unit is affected by burning, it gains additional movement speed, and its melee attacks gain additional fire damage.<br/>"
 
 [RTPyroclasticSlash X2AbilityTemplate]
 LocFriendlyName="Slash (Pyroclastic)"
@@ -401,50 +400,49 @@ LocFriendlyName="Contained Fury"
 LocLongDescription="This unit's meld status is no longer affected by Bloodlust stacks."
 LocHelpText="This unit's meld status is no longer affected by Bloodlust stacks."
 LocFlyOverText="Contained Fury"
-LocPromotionPopupText="<Bullet/This unit's meld status is no longer affected by Bloodlust stacks.<br/>"
+LocPromotionPopupText="<Bullet/> This unit's meld status is no longer affected by Bloodlust stacks.<br/>"
 
 [RTContainedFuryMeldJoin X2AbilityTemplate]
 LocFriendlyName="Enter Meld"
 LocLongDescription="Enter the meld, gaining increased will and sharing certain abilities."
 LocHelpText="Enter the meld, gaining increased will and sharing certain abilities."
 LocFlyOverText="Enter Meld"
-LocPromotionPopupText="<Bullet/>Enter the meld, gaining increased will and sharing certain abilities.<br/>"
+LocPromotionPopupText="<Bullet/> Enter the meld, gaining increased will and sharing certain abilities.<br/>"
 
 [RTUnstableConduit X2AbilityTemplate]
 LocFriendlyName="Unstable Tempest"
 LocLongDescription="Whenever this unit uses a psionic ability, it triggers a Burst around it and all melded allies."
 LocHelpText="Whenever this unit uses a psionic ability, it triggers a Burst around it and all melded allies."
 LocFlyOverText="Unstable Tempest"
-LocPromotionPopupText="<Bullet/>Whenever this unit uses a psionic ability, it triggers a Burst around it and all melded allies.<br/><Bullet/>Certain abilities are not considered to be Psionic for the purposes of this ability, like Join Meld and Leave Meld.<br/>"
+LocPromotionPopupText="<Bullet/> Whenever this unit uses a psionic ability, it triggers a Burst around it and all melded allies.<br/><Bullet/>Certain abilities are not considered to be Psionic for the purposes of this ability, like Join Meld and Leave Meld.<br/>"
 
 [RTUnstableConduitBurst X2AbilityTemplate]
 LocFriendlyName="Unstable Tempest Burst"
 LocLongDescription="Whenever this unit uses a psionic ability, it triggers a Burst around it and all melded allies."
 LocHelpText="Whenever this unit uses a psionic ability, it triggers a Burst around it and all melded allies."
 LocFlyOverText="Unstable Tempest"
-LocPromotionPopupText="<Bullet/>Whenever this unit uses a psionic ability, it triggers a Burst around it and all melded allies.<br/><Bullet/>Certain abilities are not considered to be Psionic for the purposes of this ability, like Join Meld and Leave Meld.<br/>"
-
+LocPromotionPopupText="<Bullet/> Whenever this unit uses a psionic ability, it triggers a Burst around it and all melded allies.<br/><Bullet/>Certain abilities are not considered to be Psionic for the purposes of this ability, like Join Meld and Leave Meld.<br/>"
 
 [RTPersistingImages X2AbilityTemplate]
 LocFriendlyName="Persisting Images"
 LocLongDescription="Whenever this unit gains Stealth, it creates a afterimage of itself nearby."
 LocHelpText="Whenever this unit gains Stealth, it creates a afterimage of itself nearby."
 LocFlyOverText="Persisting Images"
-LocPromotionPopupText="<Bullet/>Whenever this unit gains Stealth, it creates a afterimage of itself nearby.<br/>"
+LocPromotionPopupText="<Bullet/> Whenever this unit gains Stealth, it creates a afterimage of itself nearby.<br/>"
 
 [RTUnstableConduitIcon X2AbilityTemplate]
 LocFriendlyName="Unstable Tempest"
 LocLongDescription="Whenever this unit uses a psionic ability, it triggers a Burst around it and all melded allies."
 LocHelpText="Whenever this unit uses a psionic ability, it triggers a Burst around it and all melded allies."
 LocFlyOverText="Unstable Tempest"
-LocPromotionPopupText="<Bullet/>Whenever this unit uses a psionic ability, it triggers a Burst around it and all melded allies.<br/><Bullet/>Certain abilities are not considered to be Psionic for the purposes of this ability, like Join Meld and Leave Meld.<br/>"
+LocPromotionPopupText="<Bullet/> Whenever this unit uses a psionic ability, it triggers a Burst around it and all melded allies.<br/><Bullet/>Certain abilities are not considered to be Psionic for the purposes of this ability, like Join Meld and Leave Meld.<br/>"
 
 [RTPersistingImagesIcon X2AbilityTemplate]
 LocFriendlyName="Persisting Images"
 LocLongDescription="Whenever this unit gains Stealth, it creates a afterimage of itself nearby."
 LocHelpText="Whenever this unit gains Stealth, it creates a afterimage of itself nearby."
 LocFlyOverText="Persisting Images"
-LocPromotionPopupText="<Bullet/>Whenever this unit gains Stealth, it creates a afterimage of itself nearby.<br/>"
+LocPromotionPopupText="<Bullet/> Whenever this unit gains Stealth, it creates a afterimage of itself nearby.<br/>"
 
 [RTGhostInTheShell X2AbilityTemplate]
 LocFriendlyName="Ghost In The Shell"
@@ -458,28 +456,28 @@ LocFriendlyName="Ghost In The Shell"
 LocLongDescription="When this unit interacts with objectives, it is not unconcealed."
 LocHelpText="When this unit interacts with objectives, it is not unconcealed."
 LocFlyOverText="Ghost In The Shell"
-LocPromotionPopupText="<Bullet/>When this unit interacts with objectives, it is not unconcealed.<br/>"
+LocPromotionPopupText="<Bullet/> When this unit interacts with objectives, it is not unconcealed.<br/>"
 
 [RTQueenOfBlades X2AbilityTemplate]
 LocFriendlyName="The Queen of Blades"
-LocLongDescription="If a melee attack kills a unit, the action points for the attack are refunded."
-LocHelpText="If a melee attack kills a unit, the action points for the attack are refunded."
+LocLongDescription="If a melee attack kills a unit, the action points for the attack are refunded. Additionally, Bloodlust stacks will increase mobility, instead of decreasing it."
+LocHelpText="If a melee attack kills a unit, the action points for the attack are refunded. Additionally, Bloodlust stacks will increase mobility, instead of decreasing it."
 LocFlyOverText="The Queen of Blades"
-LocPromotionPopupText="<Bullet/> If a melee attack kills a unit, the action points for the attack are refunded.<br/>"
+LocPromotionPopupText="<Bullet/> If a melee attack kills a unit, the action points for the attack are refunded.<br/><Bullet/> Additionally, Bloodlust stacks will increase mobility, instead of decreasing it.<br/>"
 
 [RTShadowStrike X2AbilityTemplate]
 LocFriendlyName="Shadow Strike"
 LocLongDescription="Leap through shadows to strike at a target."
 LocHelpText="Leap through shadows to strike at a target."
 LocFlyOverText="Shadow Strike"
-LocPromotionPopupText="<Bullet/>Leap through shadows to strike at a target.<br/><Bullet/>Squadsight range, direct path to target not required.<br/>"
+LocPromotionPopupText="<Bullet/> Leap through shadows to strike at a target.<br/><Bullet/> Squadsight range, direct path to target not required.<br/>"
 
 [RTDashingStrike X2AbilityTemplate]
 LocFriendlyName="Dashing Strike"
 LocLongDescription="Lunge forward, dealing damage to all enemies in the path of the strike."
 LocHelpText="Lunge forward, dealing damage to all enemies in the path of the strike."
 LocFlyOverText="Dashing Strike"
-LocPromotionPopupText="<Bullet/>Lunge forward, dealing damage to all enemies in the path of the strike.<br/>"
+LocPromotionPopupText="<Bullet/> Lunge forward, dealing damage to all enemies in the path of the strike.<br/>"
 
 
 
