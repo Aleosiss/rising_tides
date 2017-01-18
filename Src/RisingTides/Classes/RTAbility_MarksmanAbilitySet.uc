@@ -1831,7 +1831,6 @@ static function X2AbilityTemplate HeatChannelCooldown()
 	Template.AddTargetEffect(AgroEffect);
 
 	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
-	
 	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;	//TODO: VISUALIZATION
 	Template.bSkipFireAction = true;
 

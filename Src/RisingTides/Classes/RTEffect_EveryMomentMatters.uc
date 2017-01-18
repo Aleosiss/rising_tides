@@ -73,13 +73,12 @@ function RegisterForEvents(XComGameState_Effect EffectGameState)
 	EffectObj = EMMGameState;
 
 	FilterObj = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(EMMGameState.ApplyEffectParameters.SourceStateObjectRef.ObjectID));
-	`LOG("Rising Tides - Every Moment Matters: Registered for event, FilterObj = " @ XComGameState_Unit(FilterObj).GetFullName() @"-------------------------------------");
 	EventMgr.RegisterForEvent(EffectObj, 'AbilityActivated', EMMGameState.EveryMomentMattersCheck, ELD_OnStateSubmitted,,FilterObj);
 }												  
 
 DefaultProperties
 {
 	DuplicateResponse = eDupe_Ignore
-	BONUS_DAMAGE_PERCENT = 0.25
+	BONUS_DAMAGE_PERCENT = 0.25f
 	GameStateEffectClass = class'RTGameState_EveryMomentMatters'
 }

@@ -278,6 +278,9 @@
     <Content Include="Src\RisingTides\Classes\RTGameState_ReprobateWaltz.uc">
       <SubType>Content</SubType>
     </Content>
+    <Content Include="Src\RisingTides\Classes\RTGameState_RisingTidesCommand.uc">
+      <SubType>Content</SubType>
+    </Content>
     <Content Include="Src\RisingTides\Classes\RTGameState_SquadViewer.uc">
       <SubType>Content</SubType>
     </Content>

@@ -38,7 +38,7 @@ simulated function WeaponDamageValue CreatePsionicBladeDamageEffect(WeaponDamage
     
     local int iBonusPsionicDamage;
     
-    iBonusPsionicDamage = 7 - (XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(TargetRef.ObjectID)).GetBaseStat(eStat_Will) / 10)
+    iBonusPsionicDamage = 7 - (XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(TargetRef.ObjectID)).GetBaseStat(eStat_Will) / 10);
 
     ReturnDamageValue = CreateNormalBladeDamageEffect(ReturnDamageValue, TargetRef);
     ReturnDamageValue.Damage += iBonusPsionicDamage;
