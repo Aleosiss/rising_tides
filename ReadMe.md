@@ -27,6 +27,7 @@ This would be a bare-bones content mod. I also have the following content in min
 ###### Current Unresolved:
       - Visuals
       - Dashing Strike
+      - Shadow Strike infinite range targeting style
       - Add mental effect cleanse to RTMentor
       - Implement OnTacticalGameEnd() for all RTGameState_Effects
       - Prevent MultiTarget_Radius effects (TimeStop and OverTheShoulder) from randomly opening all doors in their AO
