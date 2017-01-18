@@ -448,10 +448,10 @@ LocPromotionPopupText="<Bullet/>Whenever this unit gains Stealth, it creates a a
 
 [RTGhostInTheShell X2AbilityTemplate]
 LocFriendlyName="Ghost In The Shell"
-LocLongDescription="When this unit interacts with objectives, it is not unconcealed."
-LocHelpText="When this unit interacts with objectives, it is not unconcealed."
+LocLongDescription="When this unit interacts with objectives, it gains short burst of Stealth."
+LocHelpText="When this unit interacts with objectives, it gains short burst of Stealth."
 LocFlyOverText="Ghost In The Shell"
-LocPromotionPopupText="<Bullet/>When this unit interacts with objectives, it is not unconcealed.<br/>"
+LocPromotionPopupText="<Bullet/> When this unit interacts with objectives, it gains short burst of Stealth.<br/><Bullet/> 3 turns.<br/>"
 
 [RTGhostInTheShellListener X2AbilityTemplate]
 LocFriendlyName="Ghost In The Shell"
@@ -465,7 +465,7 @@ LocFriendlyName="The Queen of Blades"
 LocLongDescription="If a melee attack kills a unit, the action points for the attack are refunded."
 LocHelpText="If a melee attack kills a unit, the action points for the attack are refunded."
 LocFlyOverText="The Queen of Blades"
-LocPromotionPopupText="<Bullet/>If a melee attack kills a unit, the action points for the attack are refunded.<br/>"
+LocPromotionPopupText="<Bullet/> If a melee attack kills a unit, the action points for the attack are refunded.<br/>"
 
 [RTShadowStrike X2AbilityTemplate]
 LocFriendlyName="Shadow Strike"
