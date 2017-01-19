@@ -55,5 +55,5 @@ function OnUnitChangedTile(const out TTile NewTileLocation, XComGameState_Effect
 
 defaultproperties
 {
-    IgnoreRule = eDupe_Refresh
+    DuplicateResponse = eDupe_Refresh
 }
