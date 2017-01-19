@@ -87,7 +87,7 @@ static function array<X2DataTemplate> CreateTemplates()
 	Templates.AddItem(ShockAndAwe());								// icon
 	Templates.AddItem(ShockAndAweListener());
 	Templates.AddItem(RTKillzone());								// icon
-	Templates.AddItem(RTEveryMomentMatters());
+	Templates.AddItem(RTEveryMomentMatters());							// icon
 
 	return Templates;
 }
