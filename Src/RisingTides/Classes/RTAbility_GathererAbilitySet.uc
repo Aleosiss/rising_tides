@@ -3,7 +3,7 @@
 //  AUTHOR:  Aleosiss
 //  DATE:    18 December 2016
 //  PURPOSE: Defines abilities used by Nova.
-//           
+//
 //---------------------------------------------------------------------------------------
 //	Nova's perks.
 //---------------------------------------------------------------------------------------
@@ -13,7 +13,8 @@ class RTAbility_GathererAbilitySet extends RTAbility_GhostAbilitySet config(Risi
 
 	var config name OverTheShoulderEffectName;
 
-	var config int OTS_RADIUS;
+	var config int   OTS_RADIUS;
+  var config float OTS_RADIUS_SQ;
 
 //---------------------------------------------------------------------------------------
 //---CreateTemplates---------------------------------------------------------------------
@@ -25,7 +26,7 @@ static function array<X2DataTemplate> CreateTemplates()
 
 	Templates.AddItem(OverTheShoulder());
 	Templates.AddItem(OverTheShoulderCleanse());
-	
+
 
 	return Templates;
 }
@@ -43,10 +44,26 @@ static function X2AbilityTemplate OverTheShoulder()
 	local X2AbilityTemplate						Template;
 	local X2AbilityCost_ActionPoints			ActionPoint;
 	local X2AbilityCooldown						Cooldown;
-	local X2Effect_Persistent					SelfEffect, EnemyEffect, AllyEffect;
 	local X2AbilityMultiTarget_Radius			Radius;
-
 	local X2Condition_UnitProperty				AllyCondition, EnemyCondition;
+
+  local RTEffect_OverTheShoulder  OTSEffect;      // I'm unsure of how this works... but it appears that
+                                                  // this will control the application and removal of aura effects within its range
+  local RTEffect_MobileSquadViewer VisionEffect;  // This is the effect that will actually give vision.
+
+	local X2Effect_Persistent					SelfEffect, EnemyEffect, AllyEffect;
+
+
+  OTSEffect = new class'RTEffect_OverTheShoulder';
+  OTSEffect.BuildPersistentEffect(1, false, true, false, eGameRule_PlayerTurnBegin);
+  OTSEffect.SetDisplayInfo(ePerkBuff_Bonus, "Over The Shoulder - SelfEffect", "Activated!", Template.IconImage, true,,Template.AbilitySourceName);
+  Template.AddShooterEffect(OTSEffect);
+
+  VisionEffect = new class'RTEffect_MobileSquadViewer';
+  VisionEffect.BuildPersistentEffect(1, false, true, false, eGameRule_PlayerTurnBegin);
+  VisionEffect.SetDisplayInfo(ePerkBuff_Penalty, "Over The Shoulder", "I see you... see me.", Template.IconImage, true,,Template.AbilitySourceName);
+  VisionEffect.TargetConditions.AddItem(EnemyCondition);
+  Template.AddMultiTargetEffect(VisionEffect);
 
 	`CREATE_X2TEMPLATE(class'RTAbilityTemplate', Template, 'OverTheShoulder');
 	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_swordSlash";
@@ -79,11 +96,11 @@ static function X2AbilityTemplate OverTheShoulder()
 
 	Radius = new class'X2AbilityMultiTarget_Radius';
 	Radius.bUseWeaponRadius = false;
-	Radius.bIgnoreBlockingCover = true; 
+	Radius.bIgnoreBlockingCover = true;
 	Radius.bExcludeSelfAsTargetIfWithinRadius = true; // for now
 	Radius.fTargetRadius = 	default.OTS_RADIUS;
 	Template.AbilityMultiTargetStyle = Radius;
-		
+
 	EnemyEffect = new class'X2Effect_Persistent';
 	EnemyEffect.BuildPersistentEffect(1, false, true, false, eGameRule_PlayerTurnEnd);
 	EnemyEffect.SetDisplayInfo(ePerkBuff_Penalty, "Over The Shoulder - EnemyEffect", "Activated!", Template.IconImage, true,,Template.AbilitySourceName);
@@ -103,26 +120,27 @@ static function X2AbilityTemplate OverTheShoulder()
 	SelfEffect.SetDisplayInfo(ePerkBuff_Bonus, "Over The Shoulder - SelfEffect", "Activated!", Template.IconImage, true,,Template.AbilitySourceName);
 	SelfEffect.DuplicateResponse = eDupe_Ignore;
 	Template.AddShooterEffect(SelfEffect);
- 
-	Template.AbilityToHitCalc = default.DeadEye; 
+
+	Template.AbilityToHitCalc = default.DeadEye;
 	Template.AbilityTargetStyle = default.SelfTarget;
 	Template.AbilityTriggers.AddItem(default.PlayerInputTrigger);
 
+  Template.PostActivationEvents.AddItem('ActivatedOTS');
 	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
 	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
 	Template.bShowActivation = true;
 
 	return Template;
 }
-
+// might not need this anymore...
 //---------------------------------------------------------------------------------------
-//---Unsettling Voices-------------------------------------------------------------------
+//---OverTheShoulderCleanse--------------------------------------------------------------
 //---------------------------------------------------------------------------------------
 static function X2AbilityTemplate OverTheShoulderCleanse() {
 	local X2AbilityTemplate                     Template;
 	local X2AbilityTrigger_EventListener        EventListener;
 
-	`CREATE_X2ABILITY_TEMPLATE(Template, 'OverTheShoulderCleanse');
+	`CREATE_X2TEMPLATE(class'RTAbilityTemplate', Template, 'OverTheShoulderCleanse');
 
 	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_solace";
 	Template.AbilitySourceName = 'eAbilitySource_Psionic';
@@ -146,8 +164,6 @@ static function X2AbilityTemplate OverTheShoulderCleanse() {
 	return Template;
 
 }
-
-
 
 //---------------------------------------------------------------------------------------
 //---Unsettling Voices-------------------------------------------------------------------
