@@ -598,6 +598,7 @@ static function X2AbilityTemplate RTDisablingShot()
 	local X2AbilityCost_Ammo                AmmoCost;
 	local X2AbilityCost_ActionPoints        ActionPointCost;
 	local X2Effect_DisableWeapon			DisableWeapon;
+	local X2Effect_Stunned			StunEffect;
 
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'RTDisablingShot');
 
@@ -651,6 +652,11 @@ static function X2AbilityTemplate RTDisablingShot()
 	DisableWeapon = new class'X2Effect_DisableWeapon';
 	DisableWeapon.TargetConditions.AddItem(default.LivingTargetUnitOnlyProperty);
 	Template.AddTargetEffect(DisableWeapon);
+	
+	StunEffect = new class'X2Effect_Stunned';
+	StunEffect.StunLevel = 1;
+	StunEffect.TargetConditions.AddItem(default.LivingTargetUnitOnlyProperty);
+	Template.AddTargetEffect(StunEffect);
 
 	Template.bAllowAmmoEffects = true;
 
