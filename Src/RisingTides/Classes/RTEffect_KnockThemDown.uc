@@ -17,10 +17,11 @@ function int GetAttackingDamageModifier(XComGameState_Effect EffectState, XComGa
 	local int iNumUnits;
 	
 
-	//Check for crit
+	// Check for crit
+	// TODO:: Decide whether or not this should apply to all units the player can see. This matters for Daybreak Flame.
 	if (AppliedData.AbilityResultContext.HitResult == eHit_Crit)
 	{
-		//Get total number of enemy units visible to the UI
+		// Get total number of enemy units visible to the UI
 		class'X2TacticalVisibilityHelpers'.static.GetAllVisibleEnemyUnitsForUnit(Attacker.ObjectID, VisibleUnits);
 		class'X2TacticalVisibilityHelpers'.static.GetAllSquadsightEnemiesForUnit(Attacker.ObjectID, SSVisibleUnits);
 		iNumUnits = VisibleUnits.length + SSVisibleUnits.length;
