@@ -2,8 +2,6 @@
 
 class RTGameState_Ability extends XComGameState_Ability;
 
-var bool bTesting;
-
 // Get Bloodlust Stack Count  
 public static function int getBloodlustStackCount(XComGameState_Unit WaltzUnit) {
    local int iStackCount;
@@ -160,5 +158,4 @@ simulated function int SortAvailableTargets(AvailableTarget TargetA, AvailableTa
 
 defaultproperties
 {
-	bTesting = true;
 }
