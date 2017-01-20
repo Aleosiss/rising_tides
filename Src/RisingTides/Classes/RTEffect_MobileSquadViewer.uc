@@ -114,7 +114,7 @@ function OnUnitChangedTile(const out TTile NewTileLocation, XComGameState_Effect
   if(ViewerState != none) {
     // if the unit that was moving is the one that had this SquadViewer, we need to update its position.
     if(TargetUnit.ObjectID == ViewerState.AssociatedUnit.ObjectID) {
-      class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("Rising Tides: Updating MobileSquadViewer position...");
+      NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("Rising Tides: Updating MobileSquadViewer position...");
       NewViewerState = RTGameState_SquadViewer(NewGameState.CreateStateObject(ViewerState.class, ViewerState.ObjectID));
       NewViewerState.ViewerTile = TargetUnit.TileLocation;
 	  NewViewerState.SetVisibilityLocation(TargetUnit.TileLocation);
