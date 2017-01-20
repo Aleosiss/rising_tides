@@ -109,4 +109,6 @@ private function RemoveAuraTargetEffects(XComGameState_Unit SourceUnitState, XCo
 
 defaultproperties
 {
+	EffectName = "OverTheShoulder"
+	DuplicateResponse = eDupe_Ignore
 }
