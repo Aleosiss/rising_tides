@@ -1,7 +1,34 @@
 //-----------------------------------------------------------
 // Used by the visualizer system to control a Visualization Actor
 //-----------------------------------------------------------
-class RTAction_PsionicGetOverHereTarget extends X2Action_ViperGetOverHereTarget;
+class RTAction_PsionicGetOverHereTarget extends X2Action;
+
+var private XComGameStateContext_Ability AbilityContext;
+var private CustomAnimParams	Params;
+var private Vector				DesiredLocation;
+var private float				DistanceToTargetSquared;
+
+var private BoneAtom StartingAtom;
+var private Rotator DesiredRotation;
+//*************************************
+
+function Init(const out VisualizationTrack InTrack)
+{
+	super.Init(InTrack);
+
+	AbilityContext = XComGameStateContext_Ability(StateChangeContext);
+}
+
+function bool CheckInterrupted()
+{
+	return false;
+}
+
+function SetDesiredLocation(Vector NewDesiredLocation, XGUnit NeededForZ)
+{
+	DesiredLocation = NewDesiredLocation;
+	DesiredLocation.Z = NeededForZ.GetDesiredZForLocation(DesiredLocation);
+}
 
 simulated state Executing
 {

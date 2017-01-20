@@ -9,12 +9,6 @@
     <RootNamespace>RisingTides</RootNamespace>
     <ProjectGuid>{2658fcde-2aec-4764-ac25-080dec17732f}</ProjectGuid>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)' == 'Standard' ">
-    <OutputPath>bin\Standard\</OutputPath>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)' == 'aasdf' ">
-    <OutputPath>bin\aasdf\</OutputPath>
-  </PropertyGroup>
   <ItemGroup>
     <Folder Include="Config\" />
     <Folder Include="Content\" />
@@ -113,6 +107,9 @@
     <Content Include="Src\RisingTides\Classes\RTAction_GreyscaledEnd.uc">
       <SubType>Content</SubType>
     </Content>
+    <Content Include="Src\RisingTides\Classes\RTAction_PsionicGetOverHereTarget.uc">
+      <SubType>Content</SubType>
+    </Content>
     <Content Include="Src\RisingTides\Classes\RTCondition_EffectStackCount.uc">
       <SubType>Content</SubType>
     </Content>
@@ -170,10 +167,16 @@
     <Content Include="Src\RisingTides\Classes\RTEffect_MobileSquadViewer.uc">
       <SubType>Content</SubType>
     </Content>
+    <Content Include="Src\RisingTides\Classes\RTEffect_OverTheShoulder.uc">
+      <SubType>Content</SubType>
+    </Content>
     <Content Include="Src\RisingTides\Classes\RTEffect_Panicked.uc">
       <SubType>Content</SubType>
     </Content>
     <Content Include="Src\RisingTides\Classes\RTEffect_PrecisionShotDamage.uc">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Src\RisingTides\Classes\RTEffect_PsionicLash.uc">
       <SubType>Content</SubType>
     </Content>
     <Content Include="Src\RisingTides\Classes\RTEffect_PsionicSurge.uc">
@@ -317,7 +320,9 @@
     <Content Include="Src\RisingTides\Classes\SeqCond_RTShouldStopTimer.uc">
       <SubType>Content</SubType>
     </Content>
-    <Content Include="Src\RisingTides\Classes\X2DownloadableContentInfo_RisingTides.uc" />
+    <Content Include="Src\RisingTides\Classes\X2DownloadableContentInfo_RisingTides.uc">
+      <SubType>Content</SubType>
+    </Content>
     <Content Include="Src\XComGame\Classes\AnalyticsManager.uc">
       <SubType>Content</SubType>
     </Content>

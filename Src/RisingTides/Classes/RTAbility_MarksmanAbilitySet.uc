@@ -1373,6 +1373,7 @@ static function X2AbilityTemplate TimeStandsStill()
 	MultiTarget.bExcludeSelfAsTargetIfWithinRadius = true;
 	MultiTarget.bIgnoreBlockingCover = true;
 	Template.AbilityMultiTargetStyle = MultiTarget;
+	Template.AbilityMultiTargetConditions.Additem(default.LivingTargetUnitOnlyProperty);
 
 	Template.ConcealmentRule = eConceal_Always;
 
@@ -1476,6 +1477,7 @@ static function X2AbilityTemplate TimeStandsStillEndListener()
 	KnockbackEffect.KnockbackDistance = 2;
 	KnockbackEffect.bUseTargetLocation = true;
 	Template.AddMultiTargetEffect(KnockbackEffect);
+	Template.AbilityMultiTargetConditions.Additem(default.LivingTargetUnitOnlyProperty);
 	
 	Template.AddShooterEffect(RemoveSelfEffect);
 	Template.AddMultiTargetEffect(RemoveMultiEFfect);

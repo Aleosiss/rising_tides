@@ -54,16 +54,7 @@ static function X2AbilityTemplate OverTheShoulder()
 	local X2Effect_Persistent					SelfEffect, EnemyEffect, AllyEffect;
 
 
-  OTSEffect = new class'RTEffect_OverTheShoulder';
-  OTSEffect.BuildPersistentEffect(1, false, true, false, eGameRule_PlayerTurnBegin);
-  OTSEffect.SetDisplayInfo(ePerkBuff_Bonus, "Over The Shoulder - SelfEffect", "Activated!", Template.IconImage, true,,Template.AbilitySourceName);
-  Template.AddShooterEffect(OTSEffect);
 
-  VisionEffect = new class'RTEffect_MobileSquadViewer';
-  VisionEffect.BuildPersistentEffect(1, false, true, false, eGameRule_PlayerTurnBegin);
-  VisionEffect.SetDisplayInfo(ePerkBuff_Penalty, "Over The Shoulder", "I see you... see me.", Template.IconImage, true,,Template.AbilitySourceName);
-  VisionEffect.TargetConditions.AddItem(EnemyCondition);
-  Template.AddMultiTargetEffect(VisionEffect);
 
 	`CREATE_X2TEMPLATE(class'RTAbilityTemplate', Template, 'OverTheShoulder');
 	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_swordSlash";
@@ -100,13 +91,21 @@ static function X2AbilityTemplate OverTheShoulder()
 	Radius.bExcludeSelfAsTargetIfWithinRadius = true; // for now
 	Radius.fTargetRadius = 	default.OTS_RADIUS;
 	Template.AbilityMultiTargetStyle = Radius;
+	Template.AbilityMultiTargetConditions.Additem(default.LivingTargetUnitOnlyProperty);
 
-	EnemyEffect = new class'X2Effect_Persistent';
-	EnemyEffect.BuildPersistentEffect(1, false, true, false, eGameRule_PlayerTurnEnd);
-	EnemyEffect.SetDisplayInfo(ePerkBuff_Penalty, "Over The Shoulder - EnemyEffect", "Activated!", Template.IconImage, true,,Template.AbilitySourceName);
-	EnemyEffect.TargetConditions.AddItem(default.LivingHostileUnitOnlyProperty);
-	EnemyEffect.DuplicateResponse = eDupe_Ignore;
-	Template.AddMultiTargetEffect(EnemyEffect);
+	//EnemyEffect = new class'X2Effect_Persistent';
+	//EnemyEffect.BuildPersistentEffect(1, false, true, false, eGameRule_PlayerTurnEnd);
+	//EnemyEffect.SetDisplayInfo(ePerkBuff_Penalty, "Over The Shoulder - EnemyEffect", "Activated!", Template.IconImage, true,,Template.AbilitySourceName);
+	//EnemyEffect.TargetConditions.AddItem(default.LivingHostileUnitOnlyProperty);
+	//EnemyEffect.DuplicateResponse = eDupe_Ignore;
+	//Template.AddMultiTargetEffect(EnemyEffect);
+
+	VisionEffect = new class'RTEffect_MobileSquadViewer';
+	VisionEffect.BuildPersistentEffect(1, false, true, false, eGameRule_PlayerTurnBegin);
+	VisionEffect.SetDisplayInfo(ePerkBuff_Penalty, "Over The Shoulder", "I see you... see me.", Template.IconImage, true,,Template.AbilitySourceName);
+	VisionEffect.TargetConditions.AddItem(default.LivingHostileUnitOnlyProperty);
+	VisionEffect.DuplicateResponse = eDupe_Ignore;
+	Template.AddMultiTargetEffect(VisionEffect);
 
 	AllyEffect = new class'X2Effect_Persistent';
 	AllyEffect.BuildPersistentEffect(1, false, true, false, eGameRule_PlayerTurnEnd);
@@ -115,20 +114,21 @@ static function X2AbilityTemplate OverTheShoulder()
 	AllyEffect.DuplicateResponse = eDupe_Ignore;
 	Template.AddMultiTargetEffect(AllyEffect);
 
-	SelfEffect = new class'X2Effect_Persistent';
-	SelfEffect.BuildPersistentEffect(1, false, true, false, eGameRule_PlayerTurnEnd);
-	SelfEffect.SetDisplayInfo(ePerkBuff_Bonus, "Over The Shoulder - SelfEffect", "Activated!", Template.IconImage, true,,Template.AbilitySourceName);
-	SelfEffect.DuplicateResponse = eDupe_Ignore;
-	Template.AddShooterEffect(SelfEffect);
+	//OTSEffect = new class'RTEffect_OverTheShoulder';
+	//OTSEffect.BuildPersistentEffect(1, false, true, false, eGameRule_PlayerTurnBegin);
+	//OTSEffect.SetDisplayInfo(ePerkBuff_Bonus, "Over The Shoulder", "I peer back.", Template.IconImage, true,,Template.AbilitySourceName);
+	//OTSEffect.DuplicateResponse = eDupe_Ignore;
+	//Template.AddShooterEffect(OTSEffect);
+
 
 	Template.AbilityToHitCalc = default.DeadEye;
 	Template.AbilityTargetStyle = default.SelfTarget;
 	Template.AbilityTriggers.AddItem(default.PlayerInputTrigger);
 
-  Template.PostActivationEvents.AddItem('ActivatedOTS');
 	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
 	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
 	Template.bShowActivation = true;
+	Template.bSkipFireAction = true;
 
 	return Template;
 }
