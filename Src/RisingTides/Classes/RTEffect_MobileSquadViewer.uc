@@ -127,5 +127,6 @@ function OnUnitChangedTile(const out TTile NewTileLocation, XComGameState_Effect
 
 defaultproperties
 {
+    EffectName = RTMobileSquadViewer
     DuplicateResponse = eDupe_Refresh
 }
