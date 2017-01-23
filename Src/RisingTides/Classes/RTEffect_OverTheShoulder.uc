@@ -76,6 +76,7 @@ private function RemoveAuraTargetEffects(XComGameState_Unit SourceUnitState, XCo
 	AuraAbilityStateObject = XComGameState_Ability(History.GetGameStateForObjectID(SourceAuraEffectGameState.ApplyEffectParameters.AbilityStateObjectRef.ObjectID));
 	AuraAbilityTemplate = AuraAbilityStateObject.GetMyTemplate();
 	
+	
 
 	for (i = 0; i < AuraAbilityTemplate.AbilityMultiTargetEffects.Length; ++i)
 	{
@@ -95,7 +96,6 @@ private function RemoveAuraTargetEffects(XComGameState_Unit SourceUnitState, XCo
 		}
 	}
 	RemoveContext = class'XComGameStateContext_EffectRemoved'.static.CreateEffectsRemovedContext(EffectsToRemove);
-	NewGameState.GetContext() = RemoveContext;
 	for (i = 0; i < EffectsToRemove.Length; ++i)
 	{
 		// Remove each of the aura's effects from the target

@@ -96,7 +96,7 @@ protected function ContextBuildVisualization(out array<VisualizationTrack> Visua
 					FoundSourceTrack = True;
 					SourceTrackIndex = TargetTrackIndex;
 				}
-				/*
+				
 				SourceTrack.TrackActor = History.GetVisualizer(EffectSource.ObjectID);
 				if (SourceTrack.TrackActor != none)
 				{
@@ -104,7 +104,7 @@ protected function ContextBuildVisualization(out array<VisualizationTrack> Visua
 					if (SourceTrack.StateObject_NewState == none)
 						SourceTrack.StateObject_NewState = SourceTrack.StateObject_OldState;
 
-					EffectTemplate.AddX2ActionsForVisualization_RemovedSource(AssociatedState, SourceTrack, 'AA_Success', EffectState);
+					EffectTemplate.AddX2ActionsForVisualizationSource(AssociatedState, SourceTrack, 'AA_Success');
 					if (FoundSourceTrack)
 					{
 						VisualizationTracks[SourceTrackIndex] = SourceTrack;
@@ -114,7 +114,7 @@ protected function ContextBuildVisualization(out array<VisualizationTrack> Visua
 						SourceTrackIndex = VisualizationTracks.AddItem(SourceTrack);
 					}
 				}
-				*/
+				
 			}
 		}
 	}

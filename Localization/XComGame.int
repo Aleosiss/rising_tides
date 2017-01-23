@@ -99,10 +99,10 @@ LocPromotionPopupText="<Bullet/>Knowledge of target vital points gives a damage 
 
 [RTDamnGoodGround X2AbilityTemplate]
 LocFriendlyName="Damn Good Ground"
-LocLongDescription="Confers +10 Aim and +10 Defense against enemies at lower elevation, in addition to the usual elevation bonuses."
+LocLongDescription="Confers +15 Aim and +15 Defense against enemies at lower elevation, in addition to the usual elevation bonuses."
 LocHelpText=" "
 LocFlyOverText="Damn Good Ground"
-LocPromotionPopupText="<Bullet/>Confers +10 Aim and +10 Defense against enemies at lower elevation, in addition to the usual elevation bonuses.<br/>"
+LocPromotionPopupText="<Bullet/>Confers +15 Aim and +15 Defense against enemies at lower elevation, in addition to the usual elevation bonuses.<br/>"
 
 [SlowIsSmooth X2AbilityTemplate]
 LocFriendlyName="Slow Is Smooth"
