@@ -4,17 +4,18 @@ function RegisterForEvents(XComGameState_Effect EffectGameState)
 {
 	local X2EventManager EventMgr;
 	local Object EffectObj;
+	local RTGameState_Effect RTEffectState;
 
 	EventMgr = `XEVENTMGR;
-
-	EffectObj = EffectGameState;
+	RTEffectState = RTGameState_Effect(EffectGameState);
+	EffectObj = RTEffectState;
 
 	// Register for the required events
 	// At the start of every turn, each Aura Source checks what Units it should affect
 	//EventMgr.RegisterForEvent(EffectObj, 'PlayerTurnBegun', EffectGameState.OnTotalAuraCheck, ELD_OnStateSubmitted);
 
 	// It also checks when anything moves...right?
-	EventMgr.RegisterForEvent(EffectObj, 'UnitMoveFinished', EffectGameState.OnUpdateAuraCheck, ELD_OnStateSubmitted);
+	EventMgr.RegisterForEvent(EffectObj, 'UnitMoveFinished', RTEffectState.OnUpdateAuraCheck, ELD_OnStateSubmitted);
 }
 
 function UpdateBasedOnAuraTarget(XComGameState_Unit SourceUnitState, XComGameState_Unit TargetUnitState, XComGameState_Effect SourceAuraEffectGameState, XComGameState NewGameState)
@@ -108,4 +109,5 @@ defaultproperties
 {
 	EffectName = "OverTheShoulder"
 	DuplicateResponse = eDupe_Ignore
+	GameStateEffectClass = class'RTGameState_Effect'
 }
