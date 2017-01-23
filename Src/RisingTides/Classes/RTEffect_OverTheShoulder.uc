@@ -28,6 +28,7 @@ function UpdateBasedOnAuraTarget(XComGameState_Unit SourceUnitState, XComGameSta
 	local int i;
 	local name EffectAttachmentResult;
 	local bool bIsAtLeastOneEffectAttached;
+	local bool bShouldAffect;
 
 	History = `XCOMHISTORY;
 
@@ -45,6 +46,9 @@ function UpdateBasedOnAuraTarget(XComGameState_Unit SourceUnitState, XComGameSta
 	bIsAtLeastOneEffectAttached = false;
 
 	if(class'Helpers'.static.IsTileInRange(SourceUnitState.TileLocation, TargetUnitState.TileLocation, class'RTAbility_GathererAbilitySet'.default.OTS_RADIUS_SQ)) {
+		bShouldEffect = true;
+	}
+	if(bShouldEffect) {
 		for (i = 0; i < AbilityTemplate.AbilityMultiTargetEffects.Length; ++i)
 		{
 			// Apply each of the aura's effects to the target
