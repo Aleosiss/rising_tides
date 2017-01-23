@@ -97,7 +97,7 @@ LocHelpText=" "
 LocFlyOverText="Vital Point Targeting"
 LocPromotionPopupText="<Bullet/>Knowledge of target vital points gives a damage increase of +2.<br/>"
 
-[DamnGoodGround X2AbilityTemplate]
+[RTDamnGoodGround X2AbilityTemplate]
 LocFriendlyName="Damn Good Ground"
 LocLongDescription="Confers +10 Aim and +10 Defense against enemies at lower elevation, in addition to the usual elevation bonuses."
 LocHelpText=" "

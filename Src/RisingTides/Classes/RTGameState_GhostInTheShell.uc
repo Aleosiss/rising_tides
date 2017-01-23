@@ -49,7 +49,7 @@ function EventListenerReturn GhostInTheShellCheck(Object EventData, Object Event
 	
 	if(AbilityState.GetMyTemplateName() == 'Interact_OpenChest' ||  AbilityState.GetMyTemplateName() == 'Interact_TakeVial' || AbilityState.GetMyTemplateName() == 'Interact_StasisTube')
             bShouldTrigger = true;
-	if(AbilityState.GetMyTemplateName() == 'Interact' ||  AbilityState.GetMyTemplateName() == 'Interact_PlantBomb' || AbilityState.GetMyTemplateName() == 'Interact_OpenDoor')
+	if(AbilityState.GetMyTemplateName() == 'Interact' ||  AbilityState.GetMyTemplateName() == 'Interact_PlantBomb' /*|| AbilityState.GetMyTemplateName() == 'Interact_OpenDoor'*/)
             bShouldTrigger = true;
 	if(AbilityState.GetMyTemplateName() == 'FinalizeHack' ||  AbilityState.GetMyTemplateName() == 'GatherEvidence' || AbilityState.GetMyTemplateName() == 'PlantExplosiveMissionDevice')
             bShouldTrigger = true;

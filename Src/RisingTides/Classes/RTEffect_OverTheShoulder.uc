@@ -11,7 +11,7 @@ function RegisterForEvents(XComGameState_Effect EffectGameState)
 
 	// Register for the required events
 	// At the start of every turn, each Aura Source checks what Units it should affect
-	EventMgr.RegisterForEvent(EffectObj, 'PlayerTurnBegun', EffectGameState.OnTotalAuraCheck, ELD_OnStateSubmitted);
+	//EventMgr.RegisterForEvent(EffectObj, 'PlayerTurnBegun', EffectGameState.OnTotalAuraCheck, ELD_OnStateSubmitted);
 
 	// It also checks when anything moves...right?
 	EventMgr.RegisterForEvent(EffectObj, 'UnitMoveFinished', EffectGameState.OnUpdateAuraCheck, ELD_OnStateSubmitted);
@@ -19,7 +19,7 @@ function RegisterForEvents(XComGameState_Effect EffectGameState)
 
 function UpdateBasedOnAuraTarget(XComGameState_Unit SourceUnitState, XComGameState_Unit TargetUnitState, XComGameState_Effect SourceAuraEffectGameState, XComGameState NewGameState)
 {
-	local XComGameState_BaseObject NewTargetState;
+	local XComGameState_Unit NewTargetState;
 	local EffectAppliedData AuraTargetApplyData;
 	local XComGameStateHistory History;
 	local XComGameState_Ability AbilityStateObject;
@@ -30,7 +30,9 @@ function UpdateBasedOnAuraTarget(XComGameState_Unit SourceUnitState, XComGameSta
 
 	History = `XCOMHISTORY;
 
-	NewTargetState = NewGameState.CreateStateObject(TargetUnitState.Class, TargetUnitState.ObjectID);
+	NewTargetState = XComGameState_Unit(NewGameState.CreateStateObject(TargetUnitState.Class, TargetUnitState.ObjectID));
+	NewTargetState.bRequiresVisibilityUpdate = true;
+	NewGameState.AddStateObject(NewTargetState);
 
 	AuraTargetApplyData = SourceAuraEffectGameState.ApplyEffectParameters;
 	AuraTargetApplyData.EffectRef.LookupType = TELT_AbilityMultiTargetEffects;
@@ -50,19 +52,11 @@ function UpdateBasedOnAuraTarget(XComGameState_Unit SourceUnitState, XComGameSta
 
 			// If it didn't attach, now check to see if the effect is already attached
 			bIsAtLeastOneEffectAttached = bIsAtLeastOneEffectAttached || (EffectAttachmentResult == 'AA_Success');
-		}
-
-		if (bIsAtLeastOneEffectAttached)
-		{
-			NewGameState.AddStateObject(NewTargetState);
-		}
-		else
-		{
-			NewGameState.PurgeGameStateForObjectID(NewTargetState.ObjectID);
+			
 		}
 	}
 	else {
-		RemoveAuraTargetEffects(SourceUnitState, TargetUnitState, SourceAuraEffectGameState, NewGameState);
+		RemoveAuraTargetEffects(SourceUnitState, NewTargetState, SourceAuraEffectGameState, NewGameState);
 	}
 }
 
@@ -75,11 +69,13 @@ private function RemoveAuraTargetEffects(XComGameState_Unit SourceUnitState, XCo
 	local int i;
 	local array<XComGameState_Effect> EffectsToRemove;
 	local X2Effect_Persistent PersistentAuraEffect;
+	local XComGameStateContext_EffectRemoved RemoveContext; 
 
 	History = `XCOMHISTORY;
 
 	AuraAbilityStateObject = XComGameState_Ability(History.GetGameStateForObjectID(SourceAuraEffectGameState.ApplyEffectParameters.AbilityStateObjectRef.ObjectID));
 	AuraAbilityTemplate = AuraAbilityStateObject.GetMyTemplate();
+	
 
 	for (i = 0; i < AuraAbilityTemplate.AbilityMultiTargetEffects.Length; ++i)
 	{
@@ -98,7 +94,8 @@ private function RemoveAuraTargetEffects(XComGameState_Unit SourceUnitState, XCo
 			}
 		}
 	}
-
+	RemoveContext = class'XComGameStateContext_EffectRemoved'.static.CreateEffectsRemovedContext(EffectsToRemove);
+	NewGameState.GetContext() = RemoveContext;
 	for (i = 0; i < EffectsToRemove.Length; ++i)
 	{
 		// Remove each of the aura's effects from the target

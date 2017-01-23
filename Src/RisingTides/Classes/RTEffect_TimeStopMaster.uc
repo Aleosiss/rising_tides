@@ -126,44 +126,41 @@ simulated function ModifyTimer(bool bEnabled) {
 				}
 				
 			
-				// I'll handle SecureUFO on the kismet side of things
-
-				
-				//if(objectiveName == "Obj_SecureUFO") {
-					//`Log("UFO mission special handler");
-					//SeqObjs.Length = 0;
-					//mainSequence.FindSeqObjectsByClass( class'SequenceVariable', true, SeqObjs);
-					//if(SeqObjs.Length != 0) {
-						//`Log("Kismet variables found");
-						//for(i = 0; i < SeqObjs.Length; i++) {
-							//if(InStr(string(SequenceVariable(SeqObjs[i]).VarName), "DistressBeaconActive") != -1) {
-								//`Log("Variable found: " $ SequenceVariable(SeqObjs[i]).VarName);
-								//`Log("bValue = " $ SeqVar_Bool(SeqObjs[i]).bValue);
-								//TimerEngagedVariable = SeqVar_Bool(SeqObjs[i]);
-								//TimerEngagedVariable.bValue = 1;
-								//`Log("Timer disabled");
-							//}
-							//if(InStr(string(SequenceVariable(SeqObjs[i]).VarName), "DistressResolved") != -1) {
-								//`Log("Variable found: " $ SequenceVariable(SeqObjs[i]).VarName);
-								//`Log("bValue = " $ SeqVar_Bool(SeqObjs[i]).bValue);
-								//TimerEngagedVariable = SeqVar_Bool(SeqObjs[i]);
-								//TimerEngagedVariable.bValue = 1;
-								//`Log("Timer disabled");
-							//}
-						//}
-					//}
-					///*SeqObjs.Length = 0;
-					//mainSequence.FindSeqObjectsByClass( class'SeqCond_CompareBool', true, SeqObjs);
-					//if(SeqObjs.Length != 0) {
-						//`Log("Kismet actions found");
-						//for(i = 0; i < SeqObjs.Length; i++) {
-							//if(InStr(SeqObjs[i].ObjComment, "Was beacon already disarmed?") != -1) {
-								//`Log("Was beacon already disarmed? found");
-								//SequenceOp(SeqObjs[i]).OutputLinks[1].bDisabled = true; //"false" link
-							//}
-						//}
-					//}
-				//}
+				if(objectiveName == "Obj_SecureUFO") {
+					`Log("UFO mission special handler");
+					SeqObjs.Length = 0;
+					mainSequence.FindSeqObjectsByClass( class'SequenceVariable', true, SeqObjs);
+					if(SeqObjs.Length != 0) {
+						`Log("Kismet variables found");
+						for(i = 0; i < SeqObjs.Length; i++) {
+							if(InStr(string(SequenceVariable(SeqObjs[i]).VarName), "DistressBeaconActive") != -1) {
+								`Log("Variable found: " $ SequenceVariable(SeqObjs[i]).VarName);
+								`Log("bValue = " $ SeqVar_Bool(SeqObjs[i]).bValue);
+								TimerEngagedVariable = SeqVar_Bool(SeqObjs[i]);
+								TimerEngagedVariable.bValue = 1;
+								`Log("Timer disabled");
+							}
+							if(InStr(string(SequenceVariable(SeqObjs[i]).VarName), "DistressResolved") != -1) {
+								`Log("Variable found: " $ SequenceVariable(SeqObjs[i]).VarName);
+								`Log("bValue = " $ SeqVar_Bool(SeqObjs[i]).bValue);
+								TimerEngagedVariable = SeqVar_Bool(SeqObjs[i]);
+								TimerEngagedVariable.bValue = 1;
+								`Log("Timer disabled");
+							}
+						}
+					}
+					SeqObjs.Length = 0;
+					mainSequence.FindSeqObjectsByClass( class'SeqCond_CompareBool', true, SeqObjs);
+					if(SeqObjs.Length != 0) {
+						`Log("Kismet actions found");
+						for(i = 0; i < SeqObjs.Length; i++) {
+							if(InStr(SeqObjs[i].ObjComment, "Was beacon already disarmed?") != -1) {
+								`Log("Was beacon already disarmed? found");
+								SequenceOp(SeqObjs[i]).OutputLinks[1].bDisabled = true; //"false" link
+							}
+						}
+					}
+				}
 				
 				
 			}

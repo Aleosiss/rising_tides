@@ -29,7 +29,7 @@ This would be a bare-bones content mod. I also have the following content in min
       - Dashing Strike
       - Shadow Strike infinite range targeting style
       - Add mental effect cleanse to RTMentor
-      - Prevent MultiTarget_Radius effects (TimeStop and OverTheShoulder) from randomly opening all doors in their AO
+	  - Implement contextualization for RTEffect_OverTheShoulder.UpdateBasedOnAuraTarget
       - Implement Unrealscript-based Kismet Variable Handling for Time Stands Still
 ###### Current Table
       - Triangulation: Spread Over the Shoulder to all melded allies.

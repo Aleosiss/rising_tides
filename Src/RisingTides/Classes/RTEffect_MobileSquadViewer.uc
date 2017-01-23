@@ -1,4 +1,8 @@
-class RTEffect_MobileSquadViewer extends X2Effect_PersistentSquadViewer;
+class RTEffect_MobileSquadViewer extends X2Effect_Persistent;
+
+var bool bUseTargetSightRadius;
+var int iCustomTileRadius;
+var float ViewRadius;
 
 simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffectParameters, XComGameState_BaseObject kNewTargetState, XComGameState NewGameState, XComGameState_Effect NewEffectState) {
   local XComGameStateHistory History;
@@ -9,8 +13,10 @@ simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffe
   local float fViewRadius;
   local TTile ViewerTile;
 
+  super.OnEffectAdded(ApplyEffectParameters, kNewTargetState, NewGameState, NewEffectState);
+  kNewTargetState.bRequiresVisibilityUpdate = true;
   
-  `LOG("Rising Tides: Adding ViewerState in GameState StateObjectRef " @ NewGameState.HistoryIndex);
+  `LOG("Rising Tides: Adding ViewerState in GameState HistoryIndex " @ NewGameState.HistoryIndex);
 
   History = `XCOMHISTORY;
 
@@ -19,12 +25,17 @@ simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffe
     `RedScreenOnce("Rising Tides: Attempting to create a SquadViewer on a non-unit target!");
     return;
   }
-
+  
   ViewerTile = TargetUnitState.TileLocation;
-  fViewRadius = TargetUnitState.GetBaseStat(eStat_SightRadius) * class'XComWorldData'.const.WORLD_METERS_TO_UNITS_MULTIPLIER / class'XComWorldData'.const.WORLD_StepSize;
+  
+  if(bUseTargetSightRadius) {
+	fViewRadius = TargetUnitState.GetBaseStat(eStat_SightRadius) * class'XComWorldData'.const.WORLD_METERS_TO_UNITS_MULTIPLIER / class'XComWorldData'.const.WORLD_StepSize;
+  } else {
+	fViewRadius = float(iCustomTileRadius) * class'XComWorldData'.const.WORLD_METERS_TO_UNITS_MULTIPLIER / class'XComWorldData'.const.WORLD_StepSize;
+  }
 
   ViewerState = RTGameState_SquadViewer(NewGameState.CreateStateObject(class'RTGameState_SquadViewer'));
-  ViewerState.AssociatedPlayer = ApplyEffectParameters.PlayerStateObjectRef;
+  ViewerState.AssociatedPlayer = XComGameState_Unit(History.GetGameStateForObjectID(ApplyEffectParameters.SourceStateObjectRef.ObjectID)).ControllingPlayer;
   ViewerState.AssociatedUnit = TargetUnitState.GetReference();
   ViewerState.SetVisibilityLocation(ViewerTile);
   ViewerState.ViewerTile = ViewerTile;
@@ -39,9 +50,18 @@ simulated function OnEffectRemoved(const out EffectAppliedData ApplyEffectParame
 {
 	local RTGameState_SquadViewer Viewer;
 	local XComGameStateHistory History;
+	local XComGameState_Unit NewUnitState;
 
 	History = `XCOMHISTORY;
 	Viewer = RTGameState_SquadViewer(History.GetGameStateForObjectID(RemovedEffectState.CreatedObjectReference.ObjectID));	
+
+	
+	super.OnEffectRemoved(ApplyEffectParameters, NewGameState, bCleansed, RemovedEffectState);
+
+	//Effects that change visibility must actively indicate it
+	NewUnitState = XComGameState_Unit(NewGameState.CreateStateObject(class'XComGameState_Unit', ApplyEffectParameters.TargetStateObjectRef.ObjectID));
+	NewUnitState.bRequiresVisibilityUpdate = true;
+	NewGameState.AddStateObject(NewUnitState);
 
 	if(Viewer == none)
 	{
@@ -52,34 +72,48 @@ simulated function OnEffectRemoved(const out EffectAppliedData ApplyEffectParame
 	NewGameState.RemoveStateObject(RemovedEffectState.CreatedObjectReference.ObjectID);
 }
 
+function ModifyGameplayVisibilityForTarget(out GameRulesCache_VisibilityInfo InOutVisibilityInfo, XComGameState_Unit SourceUnit, XComGameState_Unit TargetUnit)
+{
+	if( !SourceUnit.IsEnemyUnit(TargetUnit) ) {
+		return;
+	}
+	
+	InOutVisibilityInfo.bVisibleGameplay = true;
+	InOutVisibilityInfo.GameplayVisibleTags.AddItem('OverTheShoulder');
+	
+}
+
+
 simulated function AddX2ActionsForVisualization(XComGameState VisualizeGameState, out VisualizationTrack BuildTrack, name EffectApplyResult)
 {
 	local XComGameState_Effect EffectState, VisualizeEffect;
 	local RTGameState_SquadViewer SquadViewer;
 
 
-	`LOG("Rising Tides: Looking for ViewerState in GameState StateObjectRef " @ VisualizeGameState.HistoryIndex);
+	`LOG("Rising Tides: Looking for ViewerState in GameState HistoryIndex " @ VisualizeGameState.HistoryIndex);
 	foreach VisualizeGameState.IterateByClassType(class'XComGameState_Effect', EffectState)
 	{
 		if (EffectState.GetX2Effect() == self)
 		{
 			VisualizeEffect = EffectState;
-			break;
+			
+			if (VisualizeEffect == none)
+			{
+				`RedScreen("Could not find Squad Viewer effect - FOW will not be lifted. Author: jbouscher Contact: @gameplay");
+				continue;
+			}
+			SquadViewer = RTGameState_SquadViewer(VisualizeGameState.GetGameStateForObjectID(EffectState.CreatedObjectReference.ObjectID));
+			if (SquadViewer == none)
+			{
+				`RedScreen("Could not find Squad Viewer game state - FOW will not be lifted. Author: jbouscher Contact: @gameplay");
+				continue;
+			}	
+			SquadViewer.FindOrCreateVisualizer(VisualizeGameState);
+			SquadViewer.SyncVisualizer(VisualizeGameState);     //  @TODO - use an action instead, but the incoming track will not have the right object to sync
+			
 		}
 	}
-	if (VisualizeEffect == none)
-	{
-		`RedScreen("Could not find Squad Viewer effect - FOW will not be lifted. Author: jbouscher Contact: @gameplay");
-		return;
-	}
-	SquadViewer = RTGameState_SquadViewer(VisualizeGameState.GetGameStateForObjectID(EffectState.CreatedObjectReference.ObjectID));
-	if (SquadViewer == none)
-	{
-		`RedScreen("Could not find Squad Viewer game state - FOW will not be lifted. Author: jbouscher Contact: @gameplay");
-		return;
-	}
-	SquadViewer.FindOrCreateVisualizer(VisualizeGameState);
-	SquadViewer.SyncVisualizer(VisualizeGameState);     //  @TODO - use an action instead, but the incoming track will not have the right object to sync
+
 }
 
 simulated function AddX2ActionsForVisualization_Removed(XComGameState VisualizeGameState, out VisualizationTrack BuildTrack, const name EffectApplyResult, XComGameState_Effect RemovedEffect)
@@ -98,35 +132,49 @@ simulated function AddX2ActionsForVisualization_Removed(XComGameState VisualizeG
 }
 
 
-
 // TargetUnit is the unit that just changed its tile I'm guessing.
 // EffectState is the effect that contains the SquadViewer.
 function OnUnitChangedTile(const out TTile NewTileLocation, XComGameState_Effect EffectState, XComGameState_Unit TargetUnit) {
-  local XComGameStateHistory History;
-  local XComGameState_Unit SourceUnitState;
-  local RTGameState_SquadViewer ViewerState, NewViewerState;
-  local XComGameState         NewGameState;
+	local XComGameStateHistory History;
+	local XComGameState_Unit SourceUnitState, NewUnitState;
+	local RTGameState_SquadViewer ViewerState, NewViewerState;
+	local XComGameState         NewGameState;
 
-  History = `XCOMHISTORY;
-  ViewerState = RTGameState_SquadViewer(History.GetGameStateForObjectID(EffectState.CreatedObjectReference.ObjectID));
-  SourceUnitState = XComGameState_Unit(History.GetGameStateForObjectID(EffectState.ApplyEffectParameters.SourceStateObjectRef.ObjectID));
-  // It appears Over the Shoulder will handle the creation and removal of all MobileSquadViewers, all we need to do is update our position. If it's too far, OTS will remove us.
-  if(ViewerState != none) {
-    // if the unit that was moving is the one that had this SquadViewer, we need to update its position.
-    if(TargetUnit.ObjectID == ViewerState.AssociatedUnit.ObjectID) {
-      NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("Rising Tides: Updating MobileSquadViewer position...");
-      NewViewerState = RTGameState_SquadViewer(NewGameState.CreateStateObject(ViewerState.class, ViewerState.ObjectID));
-      NewViewerState.ViewerTile = TargetUnit.TileLocation;
-	  NewViewerState.SetVisibilityLocation(TargetUnit.TileLocation);
-		
-      NewGameState.AddStateObject(NewViewerState);
-      `TACTICALRULES.SubmitGameState(NewGameState);
+	History = `XCOMHISTORY;
+	ViewerState = RTGameState_SquadViewer(History.GetGameStateForObjectID(EffectState.CreatedObjectReference.ObjectID));
+	SourceUnitState = XComGameState_Unit(History.GetGameStateForObjectID(EffectState.ApplyEffectParameters.SourceStateObjectRef.ObjectID));
+	// It appears Over the Shoulder will handle the creation and removal of all MobileSquadViewers, all we need to do is update our position. If it's too far, OTS will remove us.
+
+	if(ViewerState != none) {
+		// if the unit that was moving is the one that had this SquadViewer, we need to update its position.
+		if(TargetUnit.ObjectID == ViewerState.AssociatedUnit.ObjectID) {
+			NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("Rising Tides: Updating MobileSquadViewer position...");
+			NewViewerState = RTGameState_SquadViewer(NewGameState.CreateStateObject(ViewerState.class, ViewerState.ObjectID));
+			NewUnitState = XComGameState_Unit(NewGameState.CreateStateObject(TargetUnit.class, TargetUnit.ObjectID));
+			
+			NewUnitState.bRequiresVisibilityUpdate = true;
+
+			NewViewerState.ViewerTile = TargetUnit.TileLocation;
+			NewViewerState.SetVisibilityLocation(TargetUnit.TileLocation);
+
+			NewViewerState.DestroyVisualizer();
+
+			NewViewerState.FindOrCreateVisualizer(NewGameState);
+			NewViewerState.SyncVisualizer(NewGameState);
+			NewGameState.AddStateObject(NewViewerState); 
+
+			NewGameState.AddStateObject(NewUnitState);
+
+
+			`TACTICALRULES.SubmitGameState(NewGameState);
     }
   }
 }
 
 defaultproperties
 {
-    EffectName = RTMobileSquadViewer
+    EffectName = "RTMobileSquadViewer"
     DuplicateResponse = eDupe_Refresh
+	iCustomTileRadius = 3
+	bUseTargetSightRadius = true;
 }

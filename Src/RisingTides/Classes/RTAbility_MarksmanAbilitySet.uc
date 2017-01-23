@@ -64,7 +64,7 @@ static function array<X2DataTemplate> CreateTemplates()
 	Templates.AddItem(SixOClock());									// icon
 	Templates.AddItem(SixOClockEffect());
 	Templates.AddItem(VitalPointTargeting());
-	Templates.AddItem(DamnGoodGround());
+	Templates.AddItem(RTDamnGoodGround());
 	Templates.AddItem(SlowIsSmooth());								// icon
 	Templates.AddItem(SlowIsSmoothEffect());
 	Templates.AddItem(Sovereign());									// icon
@@ -87,7 +87,7 @@ static function array<X2DataTemplate> CreateTemplates()
 	Templates.AddItem(ShockAndAwe());								// icon
 	Templates.AddItem(ShockAndAweListener());
 	Templates.AddItem(RTKillzone());								// icon
-	Templates.AddItem(RTEveryMomentMatters());							// icon
+	Templates.AddItem(RTEveryMomentMatters());						// icon
 
 	return Templates;
 }
@@ -883,12 +883,12 @@ static function X2AbilityTemplate VitalPointTargeting()
 //---------------------------------------------------------------------------------------
 //---Damn Good Ground--------------------------------------------------------------------
 //---------------------------------------------------------------------------------------
-static function X2AbilityTemplate DamnGoodGround()
+static function X2AbilityTemplate RTDamnGoodGround()
 {
 	local X2AbilityTemplate						Template;
 	local RTEffect_DamnGoodGround				DGGEffect;
 
-	`CREATE_X2ABILITY_TEMPLATE(Template, 'DamnGoodGround');
+	`CREATE_X2ABILITY_TEMPLATE(Template, 'RTDamnGoodGround');
 	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_damngoodground";
 
 	Template.AbilitySourceName = 'eAbilitySource_Perk';
@@ -1110,6 +1110,8 @@ static function X2AbilityTemplate SovereignEffect()
 	local X2AbilityTarget_Cursor				CursorTarget;
 	local X2AbilityTarget_Single				SingleTarget;
 
+	local RTCondition_VisibleToPlayer			PlayerVisibilityCondition;
+
 	
 	//Macro to do localisation and stuffs
 	`CREATE_X2TEMPLATE(class'RTAbilityTemplate', Template, 'DaybreakFlame');
@@ -1135,10 +1137,15 @@ static function X2AbilityTemplate SovereignEffect()
 	// *** TARGETING PARAMETERS *** //
 	// Can only shoot visible enemies
 	TargetVisibilityCondition = new class'X2Condition_Visibility';
-	TargetVisibilityCondition.bRequireGameplayVisible = true;
 	TargetVisibilityCondition.bAllowSquadsight = true;
 	TargetVisibilityCondition.bVisibleToAnyAlly = true;
-	Template.AbilityTargetConditions.AddItem(TargetVisibilityCondition);
+	//TargetVisibilityCondition.RequireGameplayVisibleTags.AddItem('OverTheShoulder');
+	//Template.AbilityTargetConditions.AddItem(TargetVisibilityCondition);
+
+	// can only shoot visible (to the player) enemies
+	PlayerVisibilityCondition = new class'RTCondition_VisibleToPlayer';
+	Template.AbilityTargetConditions.AddItem(PlayerVisibilityCondition); 
+
 	// Can't target dead; Can't target friendlies
 	Template.AbilityTargetConditions.AddItem(default.LivingHostileTargetProperty);
 	// Can't shoot while dead
@@ -1826,7 +1833,7 @@ static function X2AbilityTemplate HeatChannelCooldown()
 	Cooldown.iNumTurns = 0;
 	Template.AbilityCooldown = Cooldown;
 
-	Template.AbilityTriggers.AddItem(default.PlayerInputTrigger);
+	Template.AbilityTriggers.AddItem(new class'X2AbilityTrigger_Placeholder');
 
 	// Add dead eye to guarantee
 	Template.AbilityToHitCalc = default.DeadEye;

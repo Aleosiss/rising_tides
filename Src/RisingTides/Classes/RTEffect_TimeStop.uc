@@ -92,12 +92,12 @@ simulated function bool OnEffectTicked(const out EffectAppliedData ApplyEffectPa
 	TimeStopperUnit = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(ApplyEffectParameters.SourceStateObjectRef.ObjectID));
 	TimeStoppedUnit = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(ApplyEffectParameters.TargetStateObjectRef.ObjectID));
 	if(TimeStoppedUnit != none) {
-	TimeStoppedUnit.ActionPoints.Length = 0;
-	TimeStoppedUnit.ReserveActionPoints.Length = 0;
+		TimeStoppedUnit.ActionPoints.Length = 0;
+		TimeStoppedUnit.ReserveActionPoints.Length = 0;
 	
-	// extend cooldown/effect timers
-	ExtendCooldownTimers(TimeStoppedUnit); 
-	ExtendEffectDurations(TimeStoppedUnit);
+		// extend cooldown/effect timers
+		ExtendCooldownTimers(TimeStoppedUnit); 
+		ExtendEffectDurations(TimeStoppedUnit);
 	}
 	return super.OnEffectTicked(ApplyEffectParameters, kNewEffectState, NewGameState, FirstApplication);
 }
