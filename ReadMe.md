@@ -29,7 +29,8 @@ This would be a bare-bones content mod. I also have the following content in min
       - Dashing Strike
       - Shadow Strike infinite range targeting style
       - Add mental effect cleanse to RTMentor
-	  - Implement contextualization for RTEffect_OverTheShoulder.UpdateBasedOnAuraTarget
+      - Further investigate how to get OverTheShoulder/DaybreakFlame to properly update target visibility
+      - Verify that Unstable Tempest actually works
       - Implement Unrealscript-based Kismet Variable Handling for Time Stands Still
 ###### Current Table
       - Triangulation: Spread Over the Shoulder to all melded allies.
