@@ -14,7 +14,6 @@ function RegisterForEvents(XComGameState_Effect EffectGameState)
 
 	// Check when anything moves. OnUpdateAuraCheck will handle a total update check as well as a single update check.
 	EventMgr.RegisterForEvent(EffectObj, 'UnitMoveFinished', RTEffectState.OnUpdateAuraCheck, ELD_OnStateSubmitted);
-	EventMgr.RegisterForEvent(EffectObj, 'PlayerTurnBegun', RTEffectState.CleanupMobileSquadViewers, ELD_OnStateSubmitted);
 }
 
 function bool CheckAuraConditions(XComGameState_Unit SourceUnitState, XComGameState_Unit TargetUnitState, XComGameState_Effect SourceAuraEffectGameState) {
@@ -58,10 +57,17 @@ function UpdateBasedOnAuraTarget(XComGameState_Unit SourceUnitState, XComGameSta
 
 	bIsAtLeastOneEffectAttached = false;
 
+<<<<<<< HEAD
+	if(class'Helpers'.static.IsTileInRange(SourceUnitState.TileLocation, TargetUnitState.TileLocation, class'RTAbility_GathererAbilitySet'.default.OTS_RADIUS_SQ)) {
+		bShouldEffect = true;
+	}
+	if(bShouldEffect) {
+=======
 	RTSourceAuraEffectGameState = RTGameState_Effect(SourceAuraEffectGameState);
 	if(RTSourceAuraEffectGameState == none) {
 		`RedScreenOnce("The source aura isn't of type RTGameState_Effect! The Visualization may fail!");
 	}
+	RTSourceAuraEffectGameState.EffectList.Length = 0;
 
 
 	if(CheckAuraConditions(SourceUnitState, NewTargetState, SourceAuraEffectGameState)) {
@@ -70,6 +76,7 @@ function UpdateBasedOnAuraTarget(XComGameState_Unit SourceUnitState, XComGameSta
 		// NewGameState = History.CreateGameState(true, EffectAddedContext);
 
 
+>>>>>>> 2b3be72464fbd1ac7a042f0d1d9455bf2bd526ca
 		for (i = 0; i < AbilityTemplate.AbilityMultiTargetEffects.Length; ++i)
 		{
 			// Apply each of the aura's effects to the target
@@ -81,7 +88,7 @@ function UpdateBasedOnAuraTarget(XComGameState_Unit SourceUnitState, XComGameSta
 				PersistentAuraEffect = X2Effect_Persistent(AbilityTemplate.AbilityMultiTargetEffects[i]);
 				if(PersistentAuraEffect != none) {
 					NewAuraEffectState = NewTargetState.GetUnitAffectedByEffectState(PersistentAuraEffect.EffectName);
-					RTSourceAuraEffectGameState.EffectsAddedList.AddItem(NewAuraEffectState.GetReference());
+					RTSourceAuraEffectGameState.EffectList.AddItem(NewAuraEffectState.GetReference());
 					EffectsToAdd.AddItem(NewAuraEffectState.GetReference());
 				}
 			}
@@ -92,7 +99,7 @@ function UpdateBasedOnAuraTarget(XComGameState_Unit SourceUnitState, XComGameSta
 		//XComGameStateContext_EffectAdded(NewGameState.GetContext()).EffectsToAdd = EffectsToAdd;
 		//NewGameState.AddStateObject(NewTargetState);
 		//`TACTICALRULES.SubmitGameState(NewGameState);
-		XComGameStateContext_ChangeContainer(NewGameState.GetContext()).BuildVisualizationFn = RTSourceAuraEffectGameState.EffectsModifiedBuildVisualizationFn;
+		XComGameStateContext_ChangeContainer(NewGameState.GetContext()).BuildVisualizationFn = RTSourceAuraEffectGameState.EffectAddedBuildVisualizationFn;
 	}
 	else {
 		// RemoveAuraTargetEffects(SourceUnitState, NewTargetState, SourceAuraEffectGameState, GameState);
@@ -120,6 +127,7 @@ private function RemoveAuraTargetEffects(XComGameState_Unit SourceUnitState, XCo
 	if(RTSourceAuraEffectGameState == none) {
 		`RedScreenOnce("The source aura isn't of type RTGameState_Effect! The Visualization may fail!");
 	}
+	RTSourceAuraEffectGameState.EffectList.Length = 0;
 
 	AuraAbilityStateObject = XComGameState_Ability(History.GetGameStateForObjectID(SourceAuraEffectGameState.ApplyEffectParameters.AbilityStateObjectRef.ObjectID));
 	AuraAbilityTemplate = AuraAbilityStateObject.GetMyTemplate();
@@ -138,7 +146,7 @@ private function RemoveAuraTargetEffects(XComGameState_Unit SourceUnitState, XCo
 				// This effect should be removed if it is affecting this Target Unit and the Source Unit of the
 				// effect is the same as the SourceUnitState
 				EffectsToRemove.AddItem(TargetUnitAuraEffect);
-				RTSourceAuraEffectGameState.EffectsRemovedList.AddItem(TargetUnitAuraEffect.GetReference());
+				RTSourceAuraEffectGameState.EffectList.AddItem(TargetUnitAuraEffect.GetReference());
 			}
 		}
 	}
@@ -154,7 +162,7 @@ private function RemoveAuraTargetEffects(XComGameState_Unit SourceUnitState, XCo
 	}
 	// Visualization
 	//
-	XComGameStateContext_ChangeContainer(NewGameState.GetContext()).BuildVisualizationFn = RTSourceAuraEffectGameState.EffectsModifiedBuildVisualizationFn;
+	XComGameStateContext_ChangeContainer(NewGameState.GetContext()).BuildVisualizationFn = RTSourceAuraEffectGameState.EffectRemovedBuildVisualizationFn;
 
 }
 

@@ -16,8 +16,6 @@ simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffe
   super.OnEffectAdded(ApplyEffectParameters, kNewTargetState, NewGameState, NewEffectState);
   kNewTargetState.bRequiresVisibilityUpdate = true;
   
-  `LOG("Rising Tides: Adding ViewerState in GameState HistoryIndex " @ NewGameState.HistoryIndex);
-
   History = `XCOMHISTORY;
 
   TargetUnitState = XComGameState_Unit(kNewTargetState);
@@ -54,8 +52,7 @@ simulated function OnEffectRemoved(const out EffectAppliedData ApplyEffectParame
 
 	History = `XCOMHISTORY;
 	Viewer = RTGameState_SquadViewer(History.GetGameStateForObjectID(RemovedEffectState.CreatedObjectReference.ObjectID));	
-
-	
+	Viewer.bRequiresVisibilityUpdate = true;
 	super.OnEffectRemoved(ApplyEffectParameters, NewGameState, bCleansed, RemovedEffectState);
 
 	//Effects that change visibility must actively indicate it
@@ -72,16 +69,16 @@ simulated function OnEffectRemoved(const out EffectAppliedData ApplyEffectParame
 	NewGameState.RemoveStateObject(RemovedEffectState.CreatedObjectReference.ObjectID);
 }
 
-function ModifyGameplayVisibilityForTarget(out GameRulesCache_VisibilityInfo InOutVisibilityInfo, XComGameState_Unit SourceUnit, XComGameState_Unit TargetUnit)
-{
-	if( !SourceUnit.IsEnemyUnit(TargetUnit) ) {
-		return;
-	}
-	
-	InOutVisibilityInfo.bVisibleGameplay = true;
-	InOutVisibilityInfo.GameplayVisibleTags.AddItem('OverTheShoulder');
-	
-}
+//function ModifyGameplayVisibilityForTarget(out GameRulesCache_VisibilityInfo InOutVisibilityInfo, XComGameState_Unit SourceUnit, XComGameState_Unit TargetUnit)
+//{
+	//if( !SourceUnit.IsEnemyUnit(TargetUnit) ) {
+		//return;
+	//}
+	//
+	//InOutVisibilityInfo.bVisibleGameplay = true;
+	//InOutVisibilityInfo.GameplayVisibleTags.AddItem('OverTheShoulder');
+	//
+//}
 
 
 simulated function AddX2ActionsForVisualization(XComGameState VisualizeGameState, out VisualizationTrack BuildTrack, name EffectApplyResult)
@@ -89,8 +86,6 @@ simulated function AddX2ActionsForVisualization(XComGameState VisualizeGameState
 	local XComGameState_Effect EffectState, VisualizeEffect;
 	local RTGameState_SquadViewer SquadViewer;
 
-
-	`LOG("Rising Tides: Looking for ViewerState in GameState HistoryIndex " @ VisualizeGameState.HistoryIndex);
 	foreach VisualizeGameState.IterateByClassType(class'XComGameState_Effect', EffectState)
 	{
 		if (EffectState.GetX2Effect() == self)
@@ -124,6 +119,7 @@ simulated function AddX2ActionsForVisualization_Removed(XComGameState VisualizeG
 	SquadViewer = RTGameState_SquadViewer(`XCOMHISTORY.GetGameStateForObjectID(RemovedEffect.CreatedObjectReference.ObjectID));
 	if (SquadViewer != none)
 	{
+		SquadViewer.bRequiresVisibilityUpdate = true;
 		SquadViewer.DestroyVisualizer();        //  @TODO - use an action instead
 	}
 
@@ -153,6 +149,7 @@ function OnUnitChangedTile(const out TTile NewTileLocation, XComGameState_Effect
 			NewUnitState = XComGameState_Unit(NewGameState.CreateStateObject(TargetUnit.class, TargetUnit.ObjectID));
 			
 			NewUnitState.bRequiresVisibilityUpdate = true;
+			NewViewerState.bRequiresVisibilityUpdate = true;
 
 			NewViewerState.ViewerTile = TargetUnit.TileLocation;
 			NewViewerState.SetVisibilityLocation(TargetUnit.TileLocation);
@@ -161,8 +158,8 @@ function OnUnitChangedTile(const out TTile NewTileLocation, XComGameState_Effect
 
 			NewViewerState.FindOrCreateVisualizer(NewGameState);
 			NewViewerState.SyncVisualizer(NewGameState);
-			NewGameState.AddStateObject(NewViewerState); 
 
+			NewGameState.AddStateObject(NewViewerState); 
 			NewGameState.AddStateObject(NewUnitState);
 
 

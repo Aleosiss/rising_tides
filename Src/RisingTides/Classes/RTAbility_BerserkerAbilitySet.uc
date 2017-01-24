@@ -424,6 +424,7 @@ static function X2AbilityTemplate RTBurst() {
 	Template.PostActivationEvents.AddItem('UnitUsedPsionicAbility');
 
 	Template.bShowActivation = true;
+	Template.bSkipFireAction = true;
 
 	Template.CustomFireAnim = 'HL_Psi_MindControl';
 	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
