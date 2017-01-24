@@ -27,14 +27,9 @@ simulated function bool OnEffectTicked(const out EffectAppliedData ApplyEffectPa
   	
 	History = `XCOMHISTORY;
 	foreach History.IterateByClassType(class'XComGameState_AIReinforcementSpawner', OldSpawnerState) {
-		NewSpawnerState = XComGameState_AIReinforcementSpawner(NewGameState.CreateStateObject(class'XComGameState_AIReinforcementSpawner', OldSpawnerState.ObjectID));
-		`LOG("Spawner is spawning:");
-		foreach NewSpawnerState.SpawnedUnitIDs(SpawnedUnitID) {
-			`LOG(XComGameState_Unit(History.GetGameStateForObjectID(SpawnedUnitID)).GetMyTemplateName());
-		}
-		
-		NewSpawnerState.Countdown = OldSpawnerState.Countdown + 1;
+		NewSpawnerState = XComGameState_AIReinforcementSpawner(NewGamestate.CreateStateObject(class'XComGameState_AIReinforcementSpawner', OldSpawnerState.ObjectID));
 		NewGameState.AddStateObject(NewSpawnerState);
+		NewSpawnerState.CountDown += 1;
 	}							
 	return false;
 }	
