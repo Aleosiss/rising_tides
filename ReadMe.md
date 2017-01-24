@@ -32,7 +32,7 @@ This would be a bare-bones content mod. I also have the following content in min
       - Further investigate how to get OverTheShoulder/DaybreakFlame to properly update target visibility (probably going to manually add another GameState to history by forcibly activating a placeholder ability)
       - Get the condition verification for OverTheShoulder to actually work
       - Verify that Unstable Tempest actually works. We can change it to use PI's ImmediateMultipleAbilityActivation if it doesn't. It probably doesn't.
-      - Implement Unrealscript-based Kismet Variable Handling for Time Stands Still
+      - Investigate PI's UiTimer-based timer system and change TSS to it if possible.
 ###### Current Table
       - Triangulation: Spread Over the Shoulder to all melded allies.
       - Shatter The Line: If this unit kills an enemy within X tiles, it triggers a flush effect on other enemies within X tiles. 2/3 turn cooldown. credits to /u/PostOfficeBuddy
