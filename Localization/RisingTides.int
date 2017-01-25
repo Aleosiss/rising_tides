@@ -36,3 +36,10 @@ LargeUnitTimeStopLostFlyover="Time Stop Ended!"
 LocFriendlyName="Fire Sniper Rifle (Daybreak Flame)"
 LocHelpText="Fire your sniper rifle at a target."
 LocLongDescription="<Bullet/> The sniper rifle is powerful and accurate at long range, but usually requires two actions to fire<br><Bullet/>Firing the primary weapon always ends a soldier's turn<br>"
+
+[OverTheShoulder RTAbilityTemplate]
+LocFriendlyName="Over The Shoulder"
+LocLongDescription="Peer over the shoulder of enemy units, seeing what they see."
+LocHelpText="Peer over the shoulder of enemy units, seeing what they see. "
+LocFlyOverText="Over The Shoulder"
+LocPromotionPopupText="<Bullet/> Peer over the shoulder of enemy units, seeing what they see.<br/>"
