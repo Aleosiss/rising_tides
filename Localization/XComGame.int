@@ -43,7 +43,7 @@ LocPromotionPopupText="<Bullet/> Gain 10% critical chance per visible enemy unit
 [KnockThemDown X2AbilityTemplate]
 LocFriendlyName="Knock Them Down"
 LocLongDescription="Gain 20% critical damage per visible enemy unit. (Squadsight included)"
-LocHelpText="Gain 15% critical damage per enemy spotted."
+LocHelpText="Gain 20% critical damage per enemy spotted."
 LocFlyOverText="Knock Them Down"
 LocPromotionPopupText="<Bullet/> Gain 15% critical damage per visible enemy unit. (Squadsight included).<br/>"
 
@@ -90,7 +90,7 @@ LocHelpText=" "
 LocFlyOverText="Six O'Clock Effect"
 LocPromotionPopupText="<Bullet/> Allies that can see your overwatch gain bonuses to defense, psi, and will.<br/>"
 
-[VitalPointTargeting X2AbilityTemplate]
+[RTVitalPointTargeting X2AbilityTemplate]
 LocFriendlyName="Vital Point Targeting"
 LocLongDescription="Knowledge of target vital points gives a damage increase of +2."
 LocHelpText=" "
