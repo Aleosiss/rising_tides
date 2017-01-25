@@ -20,19 +20,16 @@ This would be a bare-bones content mod. I also have the following content in min
   - Berserker:
       - Implement Stealth visual overlay
   - Marksman: 
-      - Nothing
+      - Harbinger replacement ability
   - Gatherer: 
-      - Everything
+      - Everything besides OTS
 
 ###### Current Unresolved:
       - Visuals
       - Dashing Strike
       - Shadow Strike infinite range targeting style
       - Add mental effect cleanse to RTMentor
-      - Further investigate how to get OverTheShoulder/DaybreakFlame to properly update target visibility (probably going to manually add another GameState to history by forcibly activating a placeholder ability)
-      - Get the condition verification for OverTheShoulder to actually work
-      - Verify that Unstable Tempest actually works. We can change it to use PI's ImmediateMultipleAbilityActivation if it doesn't. It probably doesn't.
-      - Investigate PI's UiTimer-based timer system and change TSS to it if possible.
+	  - Clean up SeqAct and .umap files
 ###### Current Table
       - Triangulation: Spread Over the Shoulder to all melded allies.
       - Shatter The Line: If this unit kills an enemy within X tiles, it triggers a flush effect on other enemies within X tiles. 2/3 turn cooldown. credits to /u/PostOfficeBuddy
