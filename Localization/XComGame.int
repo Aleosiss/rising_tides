@@ -45,7 +45,7 @@ LocFriendlyName="Knock Them Down"
 LocLongDescription="Gain 20% critical damage per visible enemy unit. (Squadsight included)"
 LocHelpText="Gain 20% critical damage per enemy spotted."
 LocFlyOverText="Knock Them Down"
-LocPromotionPopupText="<Bullet/> Gain 15% critical damage per visible enemy unit. (Squadsight included).<br/>"
+LocPromotionPopupText="<Bullet/> Gain 20% critical damage per visible enemy unit. (Squadsight included).<br/>"
 
 [RTDisablingShot X2AbilityTemplate]
 LocFriendlyName="Disabling Shot"
