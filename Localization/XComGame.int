@@ -479,9 +479,6 @@ LocHelpText="Lunge forward, dealing damage to all enemies in the path of the str
 LocFlyOverText="Dashing Strike"
 LocPromotionPopupText="<Bullet/> Lunge forward, dealing damage to all enemies in the path of the strike.<br/>"
 
-
-
-
 [OverTheShoulder X2AbilityTemplate]
 LocFriendlyName="Over The Shoulder"
 LocLongDescription="Peer over the shoulder of enemy units, seeing what they see."
