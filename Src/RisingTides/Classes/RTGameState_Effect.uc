@@ -479,6 +479,8 @@ function EventListenerReturn CleanupMobileSquadViewers(Object EventData, Object 
 		ViewerState.DestroyVisualizer();
 	}
 
+	SubmitNewGameState(NewGameState);
+
 
 
 	return ELR_NoInterrupt;
@@ -521,9 +523,10 @@ function EventListenerReturn OnUpdateAuraCheck(Object EventData, Object EventSou
 
 		// Submit the new gamestate
 		SubmitNewGameState(NewGameState);
-		`PRES.GetTacticalHUD().m_kEnemyTargets.RealizeTargets(-1);
 
 	}
+
+
 
 	return ELR_NoInterrupt;
 }
@@ -561,7 +564,6 @@ function EventListenerReturn OnTotalAuraCheck(Object EventData, Object EventSour
 
 	// Submit the new gamestate
 	SubmitNewGameState(NewGameState);
-	`PRES.GetTacticalHUD().m_kEnemyTargets.RealizeTargets(-1);
 
 	return ELR_NoInterrupt;
 }

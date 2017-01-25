@@ -13,12 +13,12 @@ function RegisterForEvents(XComGameState_Effect EffectGameState)
 	// Register for the required events
 
 	// Check when anything moves. OnUpdateAuraCheck will handle a total update check as well as a single update check.
-	EventMgr.RegisterForEvent(EffectObj, 'UnitMoveFinished', RTEffectState.OnUpdateAuraCheck, ELD_OnStateSubmitted);
-	EventMgr.RegisterForEvent(EffectObj, 'PlayerTurnBegun', RTEffectState.CleanupMobileSquadViewers, ELD_OnStateSubmitted);
+	EventMgr.RegisterForEvent(EffectObj, 'UnitMoveFinished', RTEffectState.OnUpdateAuraCheck, ELD_OnStateSubmitted, 50);
+	EventMgr.RegisterForEvent(EffectObj, 'PlayerTurnBegun', RTEffectState.CleanupMobileSquadViewers, ELD_OnStateSubmitted, 50);
 }
 
 function bool CheckAuraConditions(XComGameState_Unit SourceUnitState, XComGameState_Unit TargetUnitState, XComGameState_Effect SourceAuraEffectGameState) {
-	if(class'Helpers'.static.IsTileInRange(SourceUnitState.TileLocation, TargetUnitState.TileLocation, class'RTAbility_GathererAbilitySet'.default.OTS_RADIUS_SQ)) {
+	if(class'Helpers'.static.IsTileInRange(SourceUnitState.TileLocation, TargetUnitState.TileLocation, class'RTAbility_GathererAbilitySet'.default.OTS_RADIUS_SQ, 100)) {
 		return true;
 	}
 	return false;

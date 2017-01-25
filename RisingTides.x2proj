@@ -14,10 +14,10 @@
     <Folder Include="Content\" />
     <Folder Include="Localization\" />
     <Folder Include="Src\" />
-    <Folder Include="Src\XComGame\" />
-    <Folder Include="Src\XComGame\Classes\" />
+    <Folder Include="Src\XComGame" />
     <Folder Include="Src\RisingTides\" />
     <Folder Include="Src\RisingTides\Classes\" />
+    <Folder Include="Src\XComGame\Classes" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Config\XComClassData.ini">
@@ -443,6 +443,9 @@
     <Content Include="Src\XComGame\Classes\Helpers.uc">
       <SubType>Content</SubType>
     </Content>
+    <Content Include="Src\XComGame\Classes\Helpers_LW.uc">
+      <SubType>Content</SubType>
+    </Content>
     <Content Include="Src\XComGame\Classes\HiddenOnMap.uc">
       <SubType>Content</SubType>
     </Content>
@@ -462,6 +465,12 @@
       <SubType>Content</SubType>
     </Content>
     <Content Include="Src\XComGame\Classes\Lootable.uc">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Src\XComGame\Classes\LWUtilities_Ranks.uc">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Src\XComGame\Classes\LWVisualizedInterface.uc">
       <SubType>Content</SubType>
     </Content>
     <Content Include="Src\XComGame\Classes\ObjectiveSpawnPossibility.uc">
@@ -1196,6 +1205,9 @@
     <Content Include="Src\XComGame\Classes\UIAbilityDescription.uc">
       <SubType>Content</SubType>
     </Content>
+    <Content Include="Src\XComGame\Classes\UIAbilityInfoScreen.uc">
+      <SubType>Content</SubType>
+    </Content>
     <Content Include="Src\XComGame\Classes\UIAbilityList.uc">
       <SubType>Content</SubType>
     </Content>
@@ -1301,6 +1313,9 @@
     <Content Include="Src\XComGame\Classes\UIButton.uc">
       <SubType>Content</SubType>
     </Content>
+    <Content Include="Src\XComGame\Classes\UIButtonIconPC.uc">
+      <SubType>Content</SubType>
+    </Content>
     <Content Include="Src\XComGame\Classes\UICallbackData.uc">
       <SubType>Content</SubType>
     </Content>
@@ -1392,6 +1407,9 @@
       <SubType>Content</SubType>
     </Content>
     <Content Include="Src\XComGame\Classes\UICustomize_Trait.uc">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Src\XComGame\Classes\UICustomize_Voice.uc">
       <SubType>Content</SubType>
     </Content>
     <Content Include="Src\XComGame\Classes\UIDebugBehaviorTree.uc">
@@ -1598,6 +1616,9 @@
     <Content Include="Src\XComGame\Classes\UIFontTest.uc">
       <SubType>Content</SubType>
     </Content>
+    <Content Include="Src\XComGame\Classes\UIGamepadIcons.uc">
+      <SubType>Content</SubType>
+    </Content>
     <Content Include="Src\XComGame\Classes\UIGraphicsOptionsDebugScreen.uc">
       <SubType>Content</SubType>
     </Content>
@@ -1649,6 +1670,9 @@
     <Content Include="Src\XComGame\Classes\UIInventory_Storage.uc">
       <SubType>Content</SubType>
     </Content>
+    <Content Include="Src\XComGame\Classes\UIInventory_VIPListItem.uc">
+      <SubType>Content</SubType>
+    </Content>
     <Content Include="Src\XComGame\Classes\UIInventory_VIPRecovered.uc">
       <SubType>Content</SubType>
     </Content>
@@ -1673,6 +1697,12 @@
     <Content Include="Src\XComGame\Classes\UIList.uc">
       <SubType>Content</SubType>
     </Content>
+    <Content Include="Src\XComGame\Classes\UIListItemAbility.uc">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Src\XComGame\Classes\UIListItemPerk.uc">
+      <SubType>Content</SubType>
+    </Content>
     <Content Include="Src\XComGame\Classes\UIListItemSpinner.uc">
       <SubType>Content</SubType>
     </Content>
@@ -1680,6 +1710,9 @@
       <SubType>Content</SubType>
     </Content>
     <Content Include="Src\XComGame\Classes\UIListItemUnitPresetData.uc">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Src\XComGame\Classes\UIList_SquadEditor.uc">
       <SubType>Content</SubType>
     </Content>
     <Content Include="Src\XComGame\Classes\UILoadGame.uc">
@@ -1895,6 +1928,9 @@
     <Content Include="Src\XComGame\Classes\UINavigator.uc">
       <SubType>Content</SubType>
     </Content>
+    <Content Include="Src\XComGame\Classes\UINotificationMenu.uc">
+      <SubType>Content</SubType>
+    </Content>
     <Content Include="Src\XComGame\Classes\UIObjectiveList.uc">
       <SubType>Content</SubType>
     </Content>
@@ -2052,6 +2088,9 @@
       <SubType>Content</SubType>
     </Content>
     <Content Include="Src\XComGame\Classes\UIScrollbar.uc">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Src\XComGame\Classes\UIScrollingHTMLText.uc">
       <SubType>Content</SubType>
     </Content>
     <Content Include="Src\XComGame\Classes\UIScrollingText.uc">
@@ -2253,6 +2292,9 @@
       <SubType>Content</SubType>
     </Content>
     <Content Include="Src\XComGame\Classes\UIStrategyTutorialBox.uc">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Src\XComGame\Classes\UITacticalCharInfoScreen.uc">
       <SubType>Content</SubType>
     </Content>
     <Content Include="Src\XComGame\Classes\UITacticalHUD.uc">
@@ -3749,6 +3791,9 @@
     <Content Include="Src\XComGame\Classes\X2DummyLightRig.uc">
       <SubType>Content</SubType>
     </Content>
+    <Content Include="Src\XComGame\Classes\X2EarnedAbilityContainer.uc">
+      <SubType>Content</SubType>
+    </Content>
     <Content Include="Src\XComGame\Classes\X2Effect.uc">
       <SubType>Content</SubType>
     </Content>
@@ -4205,6 +4250,9 @@
     <Content Include="Src\XComGame\Classes\X2GameRulesetVisibilityManager.uc">
       <SubType>Content</SubType>
     </Content>
+    <Content Include="Src\XComGame\Classes\X2GrapplePathingPawn.uc">
+      <SubType>Content</SubType>
+    </Content>
     <Content Include="Src\XComGame\Classes\X2GrapplePuck.uc">
       <SubType>Content</SubType>
     </Content>
@@ -4572,6 +4620,9 @@
       <SubType>Content</SubType>
     </Content>
     <Content Include="Src\XComGame\Classes\X2StrategyGame_SimCombat.uc">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Src\XComGame\Classes\X2SwordSliceSlashPathingPawn.uc">
       <SubType>Content</SubType>
     </Content>
     <Content Include="Src\XComGame\Classes\X2TacticalChallengeModeManager.uc">
@@ -5580,6 +5631,9 @@
       <SubType>Content</SubType>
     </Content>
     <Content Include="Src\XComGame\Classes\XComLootDropActor.uc">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Src\XComGame\Classes\XComLWTuple.uc">
       <SubType>Content</SubType>
     </Content>
     <Content Include="Src\XComGame\Classes\XComMainMenuController.uc">

@@ -11,35 +11,35 @@ local XComGameStateContext_Ability AbilityContext;
 	local RTEffect_Bloodlust		BloodlustEffect;
 
 	
-			UnitState = XComGameState_Unit(GameState.GetGameStateForObjectID(ApplyEffectParameters.SourceStateObjectRef.ObjectID));
-			if (UnitState == None)
-				UnitState = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(ApplyEffectParameters.SourceStateObjectRef.ObjectID));
-			`assert(UnitState != None);
+	UnitState = XComGameState_Unit(GameState.GetGameStateForObjectID(ApplyEffectParameters.SourceStateObjectRef.ObjectID));
+	if (UnitState == None)
+		UnitState = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(ApplyEffectParameters.SourceStateObjectRef.ObjectID));
+	`assert(UnitState != None);
                         
-            NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState(string(GetFuncName()));
-			NewUnitState = XComGameState_Unit(NewGameState.CreateStateObject(UnitState.Class, UnitState.ObjectID));
+	NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState(string(GetFuncName()));
+	NewUnitState = XComGameState_Unit(NewGameState.CreateStateObject(UnitState.Class, UnitState.ObjectID));
 
-			TempEffect = self;
-            NewUnitState.UnApplyEffectFromStats(TempEffect, NewGameState);
+	TempEffect = self;
+	NewUnitState.UnApplyEffectFromStats(TempEffect, NewGameState);
                         
-            StatChanges.Length = 0;
-			TempEffect.StatChanges.Length = 0;
+	StatChanges.Length = 0;
+	TempEffect.StatChanges.Length = 0;
 
-            if(UnitState.HasSoldierAbility('RTQueenOfBlades')) {
-				AddPersistentStatChange(StatChanges, eStat_Mobility, (RTEffect_Bloodlust(GetX2Effect()).iMobilityMod) * iStacks);
-				TempEffect.AddPersistentStatChange(StatChanges, eStat_Mobility, (RTEffect_Bloodlust(GetX2Effect()).iMobilityMod) * iStacks);
-            } else {
-				AddPersistentStatChange(StatChanges, eStat_Mobility, -(RTEffect_Bloodlust(GetX2Effect()).iMobilityMod) * iStacks);
-				TempEffect.AddPersistentStatChange(StatChanges, eStat_Mobility, -(RTEffect_Bloodlust(GetX2Effect()).iMobilityMod) * iStacks);
-            }
+	if(UnitState.HasSoldierAbility('RTQueenOfBlades')) {
+		AddPersistentStatChange(StatChanges, eStat_Mobility, (RTEffect_Bloodlust(GetX2Effect()).iMobilityMod) * iStacks);
+		TempEffect.AddPersistentStatChange(StatChanges, eStat_Mobility, (RTEffect_Bloodlust(GetX2Effect()).iMobilityMod) * iStacks);
+	} else {
+		AddPersistentStatChange(StatChanges, eStat_Mobility, -(RTEffect_Bloodlust(GetX2Effect()).iMobilityMod) * iStacks);
+		TempEffect.AddPersistentStatChange(StatChanges, eStat_Mobility, -(RTEffect_Bloodlust(GetX2Effect()).iMobilityMod) * iStacks);
+	}
 
 
-			//XComGameStateContext_ChangeContainer(NewGameState.GetContext()).BuildVisualizationFn = BloodlustStackVisualizationFn;		  //TODO: this
+	//XComGameStateContext_ChangeContainer(NewGameState.GetContext()).BuildVisualizationFn = BloodlustStackVisualizationFn;		  //TODO: this
 
-            NewUnitState.ApplyEffectToStats(TempEffect, NewGameState);
+	NewUnitState.ApplyEffectToStats(TempEffect, NewGameState);
                         
-			NewGameState.AddStateObject(NewUnitState);
-			`TACTICALRULES.SubmitGameState(NewGameState);
+	NewGameState.AddStateObject(NewUnitState);
+	`TACTICALRULES.SubmitGameState(NewGameState);
 		
 	
 

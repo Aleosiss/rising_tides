@@ -25,6 +25,7 @@ static function array<X2DataTemplate> CreateTemplates()
 
 
 	Templates.AddItem(OverTheShoulder());
+	Templates.AddItem(OverTheShoulderVisibilityUpdate());
 
 
 	return Templates;
@@ -112,10 +113,11 @@ static function X2AbilityTemplate OverTheShoulder()
 
 	ScanningEffect = new class'X2Effect_ScanningProtocol';
 	ScanningEffect.BuildPersistentEffect(1, false, true, false, eGameRule_PlayerTurnBegin);
-	ScanningEffect.SetDisplayInfo(ePerkBuff_Penalty, "DEBUG", "DEBUG X2EFFECT_SCANNINGPROTOCOL", Template.IconImage, true,,Template.AbilitySourceName);
 	ScanningEffect.TargetConditions.AddItem(LivingNonAllyUnitOnlyProperty);
 	ScanningEffect.DuplicateResponse = eDupe_Ignore;
 	Template.AddMultiTargetEffect(ScanningEffect);
+
+
 
 	// end non-ally aura effects  -----------------------------------------
 
@@ -140,6 +142,8 @@ static function X2AbilityTemplate OverTheShoulder()
 	Template.AbilityTargetStyle = default.SelfTarget;
 	Template.AbilityTriggers.AddItem(default.PlayerInputTrigger);
 
+	Template.AdditionalAbilities.AddItem('OverTheShoulderVisibilityUpdate');
+
 	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
 	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
 	Template.bShowActivation = true;
@@ -147,6 +151,50 @@ static function X2AbilityTemplate OverTheShoulder()
 
 	return Template;
 }
+
+static function X2AbilityTemplate OverTheShoulderVisibilityUpdate() {
+	local X2AbilityTemplate                     Template;
+	local X2AbilityTrigger_EventListener        EventListener;
+	local X2Effect_Persistent					Effect;
+
+	`CREATE_X2ABILITY_TEMPLATE(Template, 'OverTheShoulderVisibilityUpdate')
+
+	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_solace";
+	Template.AbilitySourceName = 'eAbilitySource_Psionic';
+	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_NeverShow;
+	Template.Hostility = eHostility_Neutral;
+
+	Template.AbilityToHitCalc = default.DeadEye;
+	Template.AbilityTargetStyle = default.SelfTarget;
+
+	Effect = new class'X2Effect_Persistent';
+	Effect.BuildPersistentEffect(1, false, true, false, eGameRule_PlayerTurnEnd);
+	Effect.SetDisplayInfo(ePerkBuff_Penalty, "DEBUG", "DEBUG X2EFFECT_VISIBILITYUPDATE", Template.IconImage, true,,Template.AbilitySourceName);
+	Effect.DuplicateResponse = eDupe_Allow;
+	Template.AddTargetEffect(Effect);
+
+	// If I remove this, it works. But if I remove it, then you get that annoying "No points, no abilities, still doesn't automatically end turn" state.
+	Template.AbilityCosts.AddItem(default.FreeActionCost);
+
+	EventListener = new class'X2AbilityTrigger_EventListener';
+	EventListener.ListenerData.Deferral = ELD_OnVisualizationBlockCompleted;
+	EventListener.ListenerData.EventID = 'UnitMoveFinished';
+	EventListener.ListenerData.Filter = eFilter_None;
+	EventListener.ListenerData.EventFn = class'XComGameState_Ability'.static.AbilityTriggerEventListener_Self;
+	EventListener.ListenerData.Priority = 40;
+
+
+	//Template.AbilityTriggers.AddItem(EventListener);
+	Template.AbilityTriggers.AddItem(default.PlayerInputTrigger);
+
+	Template.bSkipFireAction = true;
+
+	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
+	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
+
+	return Template;
+}
+
 
 //---------------------------------------------------------------------------------------
 //---Unsettling Voices-------------------------------------------------------------------

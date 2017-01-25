@@ -60,9 +60,9 @@ simulated function DelayTimer(XComGameState NewGameState) {
 		NewUiTimer.TimerValue += 1; // hardcoded to one, since it is called every turn and would extend the timer instead of delay
 		if(NewUiTimer.TimerValue > 3) // the 3 value is hard-coded into the kismet mission maps, so we hard-code it here as well {
 			NewUiTimer.UiState = Normal_Blue;
-		}
 	}
 }
+
 
 
 // Modify Timer, ripped from wghost's configure timers mod
