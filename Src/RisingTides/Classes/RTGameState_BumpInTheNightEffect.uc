@@ -78,10 +78,10 @@ function EventListenerReturn RTBumpInTheNight(Object EventData, Object EventSour
 		Attacker = XComGameState_Unit(EventSource);
 		if(bShouldTriggerWaltz) {
 			iNumWaltzActionPoints = 0;
-			j = 1;
+			j = 0;
 			// the first gamestate we find where we find action points on the unit
 			// or 20 times at maximum
-			while(iNumWaltzActionPoints == 0 || j == 20) {
+			while(iNumWaltzActionPoints == 0 && j != 20) {
 				j++;																													 
 				History.GetCurrentAndPreviousGameStatesForObjectID(ApplyEffectParameters.TargetStateObjectRef.ObjectID, PreviousObject, CurrentObject,, GameState.HistoryIndex - j);
 				AttackerStatePrevious = XComGameState_Unit(PreviousObject);
