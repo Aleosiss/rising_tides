@@ -82,6 +82,9 @@ static function X2AbilityTemplate OverTheShoulder()
 	AllyCondition.ExcludeHostileToSource = true;
 	AllyCondition.ExcludeFriendlyToSource = false;
 	AllyCondition.FailOnNonUnits = true;
+	
+	SkipExclusions.AddItem(class'X2AbilityTemplateManager'.default.DisorientedName);
+	Template.AddShooterEffectExclusions(SkipExclusions);
 
 	LivingNonAllyUnitOnlyProperty = new class 'X2Condition_UnitProperty';
 	LivingNonAllyUnitOnlyProperty.ExcludeAlive = false;
