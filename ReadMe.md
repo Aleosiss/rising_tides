@@ -29,7 +29,9 @@ This would be a bare-bones content mod. I also have the following content in min
       - Dashing Strike
       - Shadow Strike infinite range targeting style
       - Add mental effect cleanse to RTMentor
-	  - Clean up SeqAct and .umap files
+      - Clean up SeqAct and .umap files
+      - Change certain abilities to be targetable at enemies targeted by Over The Shoulder (BerserkerKnifeAttack, ShadowStrike)
+      - Add Gun Damage / Bloodlust Gain Effect to Contained Fury
 ###### Current Table
       - Triangulation: Spread Over the Shoulder to all melded allies.
       - Shatter The Line: If this unit kills an enemy within X tiles, it triggers a flush effect on other enemies within X tiles. 2/3 turn cooldown. credits to /u/PostOfficeBuddy
