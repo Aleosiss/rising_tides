@@ -475,8 +475,10 @@ function EventListenerReturn CleanupMobileSquadViewers(Object EventData, Object 
 	NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("RTGameState_Effect cleaning up OTS SquadViewers!");
 
 	foreach History.IterateByClassType(class'RTGameState_SquadViewer', ViewerState) {
-		ViewerState.bRequiresVisibilityUpdate = true;
-		ViewerState.DestroyVisualizer();
+		if(XComGameState_Unit(History.GetGameStateForObjectID(ViewerState.AssociatedUnit.ObjectID)).AffectedByEffectNames.Find(class'RTEffect_TimeStop'.default.EffectName) != INDEX_NONE) {
+			ViewerState.bRequiresVisibilityUpdate = true;
+			ViewerState.DestroyVisualizer();
+		}
 	}
 
 	SubmitNewGameState(NewGameState);
