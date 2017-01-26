@@ -119,7 +119,7 @@ static function X2AbilityTemplate OverTheShoulder()
 
 
 
-	// end non-ally aura effects  -----------------------------------------
+	// end non-ally aura effects      -----------------------------------------
 
 	// begin ally aura effects	  -----------------------------------------
 
@@ -132,6 +132,8 @@ static function X2AbilityTemplate OverTheShoulder()
 
 	// end ally aura effects	  ------------------------------------------
 
+	
+	// aura controller effect         ------------------------------------------
 	OTSEffect = new class'RTEffect_OverTheShoulder';
 	OTSEffect.BuildPersistentEffect(1,,,, eGameRule_PlayerTurnBegin);
 	OTSEffect.SetDisplayInfo(ePerkBuff_Bonus, "Over The Shoulder", "I peer back.", Template.IconImage, true,,Template.AbilitySourceName);
