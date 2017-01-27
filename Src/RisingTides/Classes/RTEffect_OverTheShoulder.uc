@@ -109,7 +109,7 @@ function UpdateBasedOnAuraTarget(XComGameState_Unit SourceUnitState, XComGameSta
 	}
 }
 
-private function RemoveAuraTargetEffects(XComGameState_Unit SourceUnitState, XComGameState_Unit TargetUnitState, XComGameState_Effect SourceAuraEffectGameState, XComGameState NewGameState)
+protected function RemoveAuraTargetEffects(XComGameState_Unit SourceUnitState, XComGameState_Unit TargetUnitState, XComGameState_Effect SourceAuraEffectGameState, XComGameState NewGameState)
 {
 	local XComGameState_Effect TargetUnitAuraEffect;
 	local XComGameState_Ability AuraAbilityStateObject;
