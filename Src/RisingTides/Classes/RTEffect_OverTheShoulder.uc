@@ -17,11 +17,21 @@ function RegisterForEvents(XComGameState_Effect EffectGameState)
 	EventMgr.RegisterForEvent(EffectObj, 'PlayerTurnBegun', RTEffectState.CleanupMobileSquadViewers, ELD_OnStateSubmitted, 50);
 }
 
-function bool CheckAuraConditions(XComGameState_Unit SourceUnitState, XComGameState_Unit TargetUnitState, XComGameState_Effect SourceAuraEffectGameState) {
+protected function bool CheckAuraConditions(XComGameState_Unit SourceUnitState, XComGameState_Unit TargetUnitState, XComGameState_Effect SourceAuraEffectGameState) {
 	if(class'Helpers'.static.IsTileInRange(SourceUnitState.TileLocation, TargetUnitState.TileLocation, class'RTAbility_GathererAbilitySet'.default.OTS_RADIUS_SQ, 100)) {
 		return true;
 	}
 	return false;
+}
+
+protected function X2AbilityTemplate GetAuraTemplate(XComGameState_Unit SourceUnitState, XComGameState_Unit TargetUnitState, XComGameState_Effect SourceAuraEffectGameState, XComGameState NewGameState) {
+        local X2AbilityTemplate Template;
+        local XComGameState_Ability AbilityState;
+
+        AbilityState = XComGameState_Ability(History.GetGameStateForObjectID(SourceAuraEffectGameState.ApplyEffectParameters.AbilityStateObjectRef.ObjectID));
+	Template = AbilityState.GetMyTemplate();
+
+        return Template;
 }
 
 function UpdateBasedOnAuraTarget(XComGameState_Unit SourceUnitState, XComGameState_Unit TargetUnitState, XComGameState_Effect SourceAuraEffectGameState, XComGameState NewGameState)
@@ -53,8 +63,7 @@ function UpdateBasedOnAuraTarget(XComGameState_Unit SourceUnitState, XComGameSta
 	AuraTargetApplyData.EffectRef.LookupType = TELT_AbilityMultiTargetEffects;
 	AuraTargetApplyData.TargetStateObjectRef = TargetUnitState.GetReference();
 
-	AbilityStateObject = XComGameState_Ability(History.GetGameStateForObjectID(SourceAuraEffectGameState.ApplyEffectParameters.AbilityStateObjectRef.ObjectID));
-	AbilityTemplate = AbilityStateObject.GetMyTemplate();
+	AbilityTemplate = GetAuraTemplate(SourceUnitState, TargetUnitState, SourceAuraEffectGameState, NewGameState);
 
 	bIsAtLeastOneEffectAttached = false;
 
