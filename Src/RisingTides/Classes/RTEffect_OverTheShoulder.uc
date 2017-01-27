@@ -28,7 +28,7 @@ protected function X2AbilityTemplate GetAuraTemplate(XComGameState_Unit SourceUn
         local X2AbilityTemplate Template;
         local XComGameState_Ability AbilityState;
 
-        AbilityState = XComGameState_Ability(History.GetGameStateForObjectID(SourceAuraEffectGameState.ApplyEffectParameters.AbilityStateObjectRef.ObjectID));
+        AbilityState = XComGameState_Ability(`XCOMHISTORY.GetGameStateForObjectID(SourceAuraEffectGameState.ApplyEffectParameters.AbilityStateObjectRef.ObjectID));
 	Template = AbilityState.GetMyTemplate();
 
         return Template;
