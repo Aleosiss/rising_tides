@@ -17,7 +17,7 @@ function RegisterForEvents(XComGameState_Effect EffectGameState)
 	EventMgr.RegisterForEvent(EffectObj, 'PlayerTurnBegun', RTEffectState.CleanupMobileSquadViewers, ELD_OnStateSubmitted, 50);
 }
 
-protected function bool CheckAuraConditions(XComGameState_Unit SourceUnitState, XComGameState_Unit TargetUnitState, XComGameState_Effect SourceAuraEffectGameState) {
+protected function bool CheckAuraConditions(XComGameState_Unit SourceUnitState, XComGameState_Unit TargetUnitState, XComGameState_Effect SourceAuraEffectGameState, X2AbilityTemplate AuraEffectTemplate) {
 	if(class'Helpers'.static.IsTileInRange(SourceUnitState.TileLocation, TargetUnitState.TileLocation, class'RTAbility_GathererAbilitySet'.default.OTS_RADIUS_SQ, 100)) {
 		return true;
 	}
@@ -73,7 +73,7 @@ function UpdateBasedOnAuraTarget(XComGameState_Unit SourceUnitState, XComGameSta
 	}
 
 
-	if(CheckAuraConditions(SourceUnitState, NewTargetState, SourceAuraEffectGameState)) {
+	if(CheckAuraConditions(SourceUnitState, NewTargetState, SourceAuraEffectGameState, AbilityTemplate)) {
 
 		// EffectAddedContext = class'XComGameStateContext_EffectAdded'.static.CreateEffectsAddedState(EffectsToAdd);
 		// NewGameState = History.CreateGameState(true, EffectAddedContext);
