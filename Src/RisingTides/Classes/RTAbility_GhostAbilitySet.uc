@@ -5,11 +5,32 @@
 //  PURPOSE: Defines abilities used by all Rising Tides classes.
 //           
 //---------------------------------------------------------------------------------------
-//	General Perks
+//	General Perks	
 //---------------------------------------------------------------------------------------
 
 class RTAbility_GhostAbilitySet extends X2Ability
 	config(RisingTides);
+
+
+	var localized string FEEDBACK_NAME;
+	var localized string FEEDBACK_DESC;
+	var localized string OTS_TITLE;
+	var localized string OTS_DESC_SELF;
+	var localized string OTS_DESC_ALLY;
+	var localized string OTS_DESC_ENEMY;
+	var localized string BLOODLUST_TITLE;
+	var localized string BLOODLUST_DESC;
+	var localized string STEALTH_TITLE;
+	var localized string STEALTH_DESC;
+	var localized string MELD_TITLE;
+	var localized string MELD_DESC;
+	var localized string FADE_COOLDOWN_TITLE;
+	var localized string FADE_COOLDOWN_DESC;
+	var localized string SOC_TITLE;
+	var localized string SOC_DESC;
+	var localized string GREYSCALED_TITLE;
+	var localized string GREYSCALED_DESC;
+	var localized string HARBINGER_BROKEN_ALERT;
 
 	var config int BASE_REFLECTION_CHANCE;
 	var config int BASE_DEFENSE_INCREASE;
