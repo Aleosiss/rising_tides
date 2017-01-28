@@ -14,8 +14,9 @@ function int GetAttackingDamageModifier(XComGameState_Effect EffectState, XComGa
 	local float ExtraDamage, TOTAL_DMG_BONUS;
 	local UnitValue UnitVal;
 	
-	if(Attacker.GetUnitValue('RT_KnockThemDownVal', UnitVal)
+	if(Attacker.GetUnitValue('RT_KnockThemDownVal', UnitVal)) {
 		ExtraDamage = UnitVal.fValue;
+	}
 	
 	
 	return int(ExtraDamage);

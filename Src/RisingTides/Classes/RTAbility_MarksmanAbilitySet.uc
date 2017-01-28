@@ -1407,9 +1407,9 @@ static function X2AbilityTemplate TimeStandsStill()
 	TimeStopEffect.bRemoveWhenTargetDies = true;
 	TimeStopEffect.bCanTickEveryAction = true;
 
-	UnitPropertyCondition = new class'X2Condition_UnitProperty';
-	UnitPropertyCondition.FailOnNonUnits = true;
-	TimeStopEffect.TargetConditions.AddItem(UnitPropertyCondition);
+	//UnitPropertyCondition = new class'X2Condition_UnitProperty';
+	//UnitPropertyCondition.FailOnNonUnits = true;
+	//TimeStopEffect.TargetConditions.AddItem(UnitPropertyCondition);
 
 	Template.AddMultiTargetEffect(TimeStopEffect);
 

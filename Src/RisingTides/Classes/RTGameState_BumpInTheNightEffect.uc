@@ -115,7 +115,7 @@ function EventListenerReturn RTBumpInTheNight(Object EventData, Object EventSour
 			if(Attacker.TileDistanceBetween(TargetUnit) < BITNEffect.iTileDistanceToActivate) {
 				
 				// melee kills additionally give bloodlust stacks and proc queen of blades
-				if(bShouldTriggerMelee) { 
+				if(bShouldTriggerMelee || NewAttacker.HasSoldierAbility('RTContainedFury')) { 
 					// t-t-t-t-triggered
 					InitializeAbilityForActivation(BloodlustAbilityState, NewAttacker, 'BumpInTheNightBloodlustListener', History);
 					ActivateAbility(BloodlustAbilityState, NewAttacker.GetReference());

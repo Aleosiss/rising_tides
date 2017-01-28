@@ -443,9 +443,9 @@ simulated function AddX2ActionsForVisualization_Removed(XComGameState VisualizeG
 		if (bVisible)
 		{
 			FlyoverText = ShouldTimeStopAsLargeUnit(UnitState) ? default.LargeUnitTimeStopLostFlyover : default.TimeStopLostFlyover;
-			class'X2StatusEffects'.static.AddEffectCameraPanToAffectedUnitToTrack(BuildTrack, VisualizeGameState.GetContext());
+			//class'X2StatusEffects'.static.AddEffectCameraPanToAffectedUnitToTrack(BuildTrack, VisualizeGameState.GetContext());
 			class'X2StatusEffects'.static.AddEffectSoundAndFlyOverToTrack(BuildTrack, VisualizeGameState.GetContext(), FlyoverText, '', eColor_Good, default.StatusIcon);
-			class'X2StatusEffects'.static.AddEffectMessageToTrack(BuildTrack, default.TimeStopEffectRemovedString, VisualizeGameState.GetContext());
+			//class'X2StatusEffects'.static.AddEffectMessageToTrack(BuildTrack, default.TimeStopEffectRemovedString, VisualizeGameState.GetContext());
 			
 			
 		}

@@ -23,7 +23,7 @@ simulated function bool OnEffectTicked(const out EffectAppliedData ApplyEffectPa
 {
 	DelayReinforcementSpawners(NewGameState);
 	DelayTimer(NewGameState);
-	return false;
+	return true;
 }	
 
 simulated function OnEffectRemoved(const out EffectAppliedData ApplyEffectParameters, XComGameState NewGameState, bool bCleansed, XComGameState_Effect RemovedEffectState)

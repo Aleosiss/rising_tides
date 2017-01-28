@@ -262,6 +262,7 @@ static function X2AbilityTemplate RTBerserkerKnifeAttack()
 	local X2Condition_AbilityProperty  		AcidCondition, SiphonCondition;
 	local X2Condition_UnitProperty			TargetUnitPropertyCondition;
 	local RTEffect_Siphon					SiphonEffect;
+	local RTCondition_VisibleToPlayer		PlayerVisibilityCondition;
 
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'RTBerserkerKnifeAttack');
 
@@ -292,7 +293,10 @@ static function X2AbilityTemplate RTBerserkerKnifeAttack()
 	// Target Conditions
 	//
 	Template.AbilityTargetConditions.AddItem(default.LivingHostileTargetProperty);
-	Template.AbilityTargetConditions.AddItem(default.MeleeVisibilityCondition);
+	//Template.AbilityTargetConditions.AddItem(default.MeleeVisibilityCondition);
+
+	PlayerVisibilityCondition = new class'RTCondition_VisibleToPlayer';
+	Template.AbilityTargetConditions.AddItem(PlayerVisibilityCondition); 
 
 	// Shooter Conditions
 	//
@@ -1511,6 +1515,7 @@ static function X2DataTemplate RTShadowStrike()
 	local X2AbilityTarget_MovingMelee TargetStyle;
 	local X2Condition_Visibility TargetVisibilityCondition;
 	local X2Effect_AdditionalAnimSets AnimSets;
+	local RTCondition_VisibleToPlayer PlayerVisibilityCondition;
 
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'RTShadowStrike');
 
@@ -1548,7 +1553,10 @@ static function X2DataTemplate RTShadowStrike()
 	TargetVisibilityCondition.bRequireGameplayVisible = true;
 	TargetVisibilityCondition.bAllowSquadsight = true;
 	TargetVisibilityCondition.bVisibleToAnyAlly = true;
-	Template.AbilityTargetConditions.AddItem(TargetVisibilityCondition);
+	//Template.AbilityTargetConditions.AddItem(TargetVisibilityCondition);
+
+	PlayerVisibilityCondition = new class'RTCondition_VisibleToPlayer';
+	Template.AbilityTargetConditions.AddItem(PlayerVisibilityCondition); 
 
 	Template.AbilityTargetConditions.AddItem(default.LivingHostileTargetProperty);
 

@@ -46,6 +46,7 @@ static function X2AbilityTemplate OverTheShoulder()
 	local X2AbilityCooldown						Cooldown;
 	local X2AbilityMultiTarget_Radius			Radius;
 	local X2Condition_UnitProperty				AllyCondition, LivingNonAllyUnitOnlyProperty;
+	local array<name>                       SkipExclusions;
 	
 
 	local RTEffect_OverTheShoulder				OTSEffect;      // I'm unsure of how this works... but it appears that

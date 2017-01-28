@@ -42,10 +42,10 @@ LocPromotionPopupText="<Bullet/> Gain 10% critical chance per visible enemy unit
 
 [KnockThemDown X2AbilityTemplate]
 LocFriendlyName="Knock Them Down"
-LocLongDescription="Gain 20% critical damage per visible enemy unit. (Squadsight included)"
-LocHelpText="Gain 20% critical damage per enemy spotted."
+LocLongDescription="Gain +1 Damage for each consecutive shot this unit takes."
+LocHelpText="Gain +1 Damage for each consecutive shot this unit takes."
 LocFlyOverText="Knock Them Down"
-LocPromotionPopupText="<Bullet/> Gain 20% critical damage per visible enemy unit. (Squadsight included).<br/>"
+LocPromotionPopupText="<Bullet/> Gain +1 Damage for each consecutive shot this unit takes.<br/>"
 
 [RTDisablingShot X2AbilityTemplate]
 LocFriendlyName="Disabling Shot"

@@ -29,43 +29,13 @@
     <Content Include="Config\XComRisingTides.ini">
       <SubType>Content</SubType>
     </Content>
-    <Content Include="Content\Obj_AvengerDefense.umap">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Content\Obj_DestroyObject.umap">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Content\Obj_ExtractVIP.umap">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Content\Obj_Fortress.umap">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Content\Obj_FortressShowdown.umap">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Content\Obj_HackWorkstation.umap">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Content\Obj_NeutralizeTarget.umap">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Content\Obj_RecoverFlightDevice.umap">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Content\Obj_RecoverItem.umap">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Content\Obj_RescueVIP.umap">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Content\Obj_SecureUFO.umap">
-      <SubType>Content</SubType>
-    </Content>
     <Content Include="Content\RisingTidesContentPackage.upk">
       <SubType>Content</SubType>
     </Content>
     <Content Include="Localization\RisingTides.int">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="ReadMe.md">
       <SubType>Content</SubType>
     </Content>
     <Content Include="ReadMe.txt" />
@@ -315,12 +285,6 @@
       <SubType>Content</SubType>
     </Content>
     <Content Include="Src\RisingTides\Classes\RTTargetingMethod_TargetedMeleeTeleport.uc">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Src\RisingTides\Classes\SeqAct_RTStopTimer.uc">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Src\RisingTides\Classes\SeqCond_RTShouldStopTimer.uc">
       <SubType>Content</SubType>
     </Content>
     <Content Include="Src\RisingTides\Classes\X2DownloadableContentInfo_RisingTides.uc">

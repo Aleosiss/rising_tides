@@ -59,8 +59,16 @@ function GetToHitModifiers(XComGameState_Effect EffectState, XComGameState_Unit 
 function int GetAttackingDamageModifier(XComGameState_Effect EffectState, XComGameState_Unit Attacker, Damageable TargetDamageable, XComGameState_Ability AbilityState, const out EffectAppliedData AppliedData, const int CurrentDamage, optional XComGameState NewGameState) {
 	local float ExtraCritDamage;
 	local RTGameState_BloodlustEffect BumpEffect;
+	local bool bValid;
 
-	if(!AbilityState.IsMeleeAbility() && AbilityState.GetMyTemplateName() != 'RTBerserkerKnifeAttack' && AbilityState.GetMyTemplateName() != 'RTPyroclasticSlash' && AbilityState.GetMyTemplateName() != 'RTReprobateWaltz') {
+	if(AbilityState.GetMyTemplateName() == 'RTBerserkerKnifeAttack' || AbilityState.GetMyTemplateName() == 'RTPyroclasticSlash' || AbilityState.GetMyTemplateName() == 'RTReprobateWaltz') {
+		bValid = true;
+	}
+	if(Attacker.HasSoldierAbility('RTContainedFury')) {
+		bValid = true;
+	}
+
+	if(!bValid) {
 		return 0;
 	}
 

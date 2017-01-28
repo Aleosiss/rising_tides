@@ -7,6 +7,7 @@ enum ERTChecklist {
 	eChecklist_SniperShots,
 	eChecklist_OverwatchShots,
 	eChecklist_PsionicAbilities,
+	eChecklist_MeleeAbilities
 };
 
 
@@ -18,10 +19,16 @@ static function bool IsUnitAlienRuler(XComGameState_Unit UnitState)
 
 
 
-
+// where the fuck is the array? hello?
 static function bool CheckAbilityActivated(name AbilityTemplateName, ERTChecklist Checklist) {
 
 	switch(Checklist) {
+		case eChecklist_MeleeAbilities:
+					if( AbilityTemplateName != 'RTBerserkerKnifeAttack' &&
+						AbilityTemplateName != 'RTPyroclasticSlash' &&
+						AbilityTemplateName != 'RTReprobateWaltz')
+					{ return false; }
+					break;
 		case eChecklist_SniperShots: 
 					if( AbilityTemplateName != 'RTStandardSniperShot' && 
 						AbilityTemplateName != 'DaybreakFlame' && 
