@@ -805,7 +805,7 @@ static function X2AbilityTemplate CreateRTPassiveAbilityCooldown(name TemplateNa
 
     Trigger = new class'X2AbilityTrigger_EventListener';
 	Trigger.ListenerData.Deferral = ELD_OnStateSubmitted;
-	Trigger.ListenerData.EventID = 'EventIDToListenFor';
+	Trigger.ListenerData.EventID = EventIDToListenFor;
 	Trigger.ListenerData.Filter = eFilter_Unit;
     Trigger.ListenerData.EventFn = class'XComGameState_Ability'.static.AbilityTriggerEventListener_Self;        
     if(bTriggerCooldownViaEvent) {
@@ -820,8 +820,8 @@ static function X2AbilityTemplate CreateRTPassiveAbilityCooldown(name TemplateNa
 
 	Effect = new class'X2Effect_Persistent';
 	Effect.BuildPersistentEffect(1, true, true, true, eGameRule_PlayerTurnEnd);
-	Effect.SetDisplayInfo(ePerkBuff_Penalty, Template.LocFriendlyName, "Heat Channel is on cooldown!", Template.IconImage, true,,Template.AbilitySourceName);
-	Effect.EffectName = 'CooldownTrackerEffectName';
+	Effect.SetDisplayInfo(ePerkBuff_Penalty, Template.LocFriendlyName, Template.LocLongDescription, Template.IconImage, true,,Template.AbilitySourceName);
+	Effect.EffectName = CooldownTrackerEffectName;
 	Template.AddTargetEffect(Effect);
 
 	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
