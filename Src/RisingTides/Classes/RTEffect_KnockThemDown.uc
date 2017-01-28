@@ -26,7 +26,7 @@ function bool PostAbilityCostPaid(XComGameState_Effect EffectState, XComGameStat
 	
 	SourceUnit.GetUnitValue('RT_KnockThemDownVal', UnitVal);
 	
-	if(class'RTHelpers'.static.CheckAbilityActivated(kAbility.GetMyTemplateName(), eChecklist_SniperShots) {
+	if(class'RTHelpers'.static.CheckAbilityActivated(kAbility.GetMyTemplateName(), eChecklist_SniperShots)) {
 		SourceUnit.SetUnitFloatValue('RT_KnockThemDownVal', UnitVal.fValue + 1, eCleanup_BeginTurn);
 	} else {
 		SourceUnit.SetUnitFloatValue('RT_KnockThemDownVal', 0, eCleanup_BeginTurn);
