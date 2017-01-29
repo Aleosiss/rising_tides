@@ -57,9 +57,11 @@ simulated function WeaponDamageValue CreateHiddenBladeDamageEffect(WeaponDamageV
 
 simulated function WeaponDamageValue CreateNormalBladeDamageEffect(WeaponDamageValue ReturnDamageValue, StateObjectReference TargetRef) {
     
-    ReturnDamageValue.Damage = iBaseBladeDamage;
-    ReturnDamageValue.Crit = iBaseBladeCritDamage;
-    ReturnDamageValue.Spread = iBaseBladeDamageSpread;
+    if(bIgnoreBaseDamage) {
+		ReturnDamageValue.Damage = iBaseBladeDamage;
+		ReturnDamageValue.Crit = iBaseBladeCritDamage;
+		ReturnDamageValue.Spread = iBaseBladeDamageSpread;
+	}
 
     return ReturnDamageValue;
 }

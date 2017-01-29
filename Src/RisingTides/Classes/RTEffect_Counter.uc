@@ -21,7 +21,7 @@ simulated function bool OnEffectTicked(const out EffectAppliedData ApplyEffectPa
 		return super.OnEffectTicked(ApplyEffectParameters, kNewEffectState, NewGameState, FirstApplication);
 	}
 	CounterUnit.GetUnitValue(CounterUnitValName, UnitVal); 	// I still don't know if the above method actually populates the out param 
-								// in the if statement so this a fallback
+															// in the if statement so this a fallback
 				
 	if(UnitVal.fValue < 0) {
 		// this is the case that the counter is done counting

@@ -29,6 +29,8 @@ This would be a bare-bones content mod. I also have the following content in min
       - Shadow Strike infinite range targeting style
       - Add mental effect cleanse to RTMentor
 	  - Gatherer Perks
+	  - Rework the Feedback system (change RTPsiOverloadPanic into a more general feedback ability that listens for the RTFeedback event)
+	  - Make the meld respond to feedback events instead of panic events
 ###### Current Table
       - Triangulation: Spread Over the Shoulder to all melded allies.
       - Shatter The Line: If this unit kills an enemy within X tiles, it triggers a flush effect on other enemies within X tiles. 2/3 turn cooldown. credits to /u/PostOfficeBuddy

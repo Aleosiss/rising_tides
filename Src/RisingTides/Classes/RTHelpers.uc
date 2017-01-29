@@ -1,6 +1,9 @@
 // This is an Unreal Script
 
-class RTHelpers extends Object;
+class RTHelpers extends Object config(RisingTides);
+
+// todo...
+var config array<name> MeleeAbilities, SniperShots, OverwatchShots, PsionicAbilities;
 
 enum ERTChecklist {
 	eChecklist_DefaultAbilities,

@@ -1081,6 +1081,7 @@ static function X2AbilityTemplate RTUnstableConduit()
 	local X2Condition_UnitEffects			Condition;
 	local X2AbilityMultiTarget_AllAllies	MultiTarget;
 	local X2AbilityTrigger_EventListener	Trigger;
+	local X2Effect_ImmediateMultiTargetAbilityActivation MultiActivateAbilityEffect;
 	local X2Effect_ImmediateAbilityActivation ActivateAbilityEffect;
 	
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'RTUnstableConduit');
@@ -1114,12 +1115,16 @@ static function X2AbilityTemplate RTUnstableConduit()
 	Template.AbilityTargetStyle = default.SelfTarget;
 
 	MultiTarget = new class'X2AbilityMultiTarget_AllAllies';
+	MultiTarget.bExcludeSelfAsTargetIfWithinRadius = true;
 	Template.AbilityMultiTargetStyle = MultiTarget;
 
 	ActivateAbilityEffect = new class'X2Effect_ImmediateAbilityActivation';
-	ActivateAbilityEffect.AbilityName = 'UnstableConduitBurst';
+	ActivateAbilityEffect.AbilityName = 'RTUnstableConduitBurst';	
 	Template.AddTargetEffect(ActivateAbilityEffect);
-	Template.AddMultiTargetEffect(ActivateAbilityEffect);
+
+	MultiActivateAbilityEffect = new class'X2Effect_ImmediateMultiTargetAbilityActivation';
+	MultiActivateAbilityEffect.AbilityName = 'RTUnstableConduitBurst';
+	Template.AddMultiTargetEffect(MultiActivateAbilityEffect);
 
 	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
 	// Note: no visualization on purpose!
