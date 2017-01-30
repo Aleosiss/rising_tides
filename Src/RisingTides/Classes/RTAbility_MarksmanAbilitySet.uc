@@ -1353,7 +1353,7 @@ static function X2AbilityTemplate TimeStandsStill()
 	SetUnitValueEffect = new class'X2Effect_SetUnitValue';
 	SetUnitValueEffect.UnitName = 'TimeStopCounter';
 	SetUnitValueEffect.NewValueToSet = 3;
-	SetUnitValueEffect.CleanupType = eCleanup_Never;
+	SetUnitValueEffect.CleanupType = eCleanup_BeginTactical;
 	Template.AddShooterEffect(SetUnitValueEffect);
 	
 	TimeMasterEffect = new class'RTEffect_TimeStopMaster';
@@ -1373,7 +1373,6 @@ static function X2AbilityTemplate TimeStandsStill()
 	CounterEffect.bShouldTriggerEvent = true;
 	CounterEffect.EffectName = 'TimeStandsStillCounterEffect';
 	Template.AddShooterEffect(CounterEffect);
-
 
 	MultiTarget = new class'X2AbilityMultiTarget_Radius';
 	MultiTarget.fTargetRadius = 500;
