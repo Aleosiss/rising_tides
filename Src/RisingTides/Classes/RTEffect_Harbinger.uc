@@ -25,6 +25,26 @@ function RegisterForEvents(XComGameState_Effect EffectState) {
   EventMgr.RegisterForEvent(ListenerObj, 'RTRemoveUnitFromMeld', HarbyEffectState.RemoveHarbingerEffect, ELD_OnStateSubmitted, , FilterObj); // shields expended appears to just be a generic remove effect listener
 }
 
+simulated function bool OnEffectTicked(const out EffectAppliedData ApplyEffectParameters, XComGameState_Effect kNewEffectState, XComGameState NewGameState, bool FirstApplication)
+{
+	local XComGameState_Ability OldAbilityState, NewAbilityState;
+	local XComGameStateHistory History;
+	
+	History = `XCOMHISTORY;
+	
+	OldAbilityState = XComGameState_Ability(History.GetGameStateForObjectID(ApplyEffectParameters.AbilityStateObjectRef.ObjectID));
+	if(OldAbilityState != none) {
+		NewAbilityState = XComGameState_Ability(NewGameState.CreateStateObject(OldAbilityState.class, OldAbilityState.ObjectID));
+		NewGameState.AddStateObject(NewAbilityState);
+		
+		NewAbilityState.iCooldown += 1;
+	}
+	
+	
+	
+	return true;
+}	
+
 
 simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffectParameters, XComGameState_BaseObject kNewTargetState, XComGameState NewGameState, XComGameState_Effect NewEffectState)
 {
