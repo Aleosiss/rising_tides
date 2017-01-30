@@ -120,6 +120,7 @@ static function X2AbilityTemplate OverTheShoulder()
 	ScanningEffect.BuildPersistentEffect(1, false, true, false, eGameRule_PlayerTurnBegin);
 	ScanningEffect.TargetConditions.AddItem(LivingNonAllyUnitOnlyProperty);
 	ScanningEffect.DuplicateResponse = eDupe_Ignore;
+	ScanningEffect.bRemoveWhenTargetDies = true;
 	Template.AddMultiTargetEffect(ScanningEffect);
 
 
