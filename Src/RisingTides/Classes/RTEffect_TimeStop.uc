@@ -96,33 +96,37 @@ simulated function bool OnEffectTicked(const out EffectAppliedData ApplyEffectPa
 		TimeStoppedUnit.ReserveActionPoints.Length = 0;
 	
 		// extend cooldown/effect timers
-		ExtendCooldownTimers(TimeStoppedUnit); 
-		ExtendEffectDurations(TimeStoppedUnit);
+		ExtendCooldownTimers(TimeStoppedUnit, NewGameState); 
+		ExtendEffectDurations(TimeStoppedUnit, NewGameState);
 	}
 	return super.OnEffectTicked(ApplyEffectParameters, kNewEffectState, NewGameState, FirstApplication);
 }
 
-simulated function ExtendCooldownTimers(XComGameState_Unit TimeStoppedUnit) {
-	local XComGameState_Ability AbilityState;
+simulated function ExtendCooldownTimers(XComGameState_Unit TimeStoppedUnit, XComGameState NewGameState) {
+	local XComGameState_Ability AbilityState, NewAbilityState;
 	local int i;
 	
 	for(i = 0; i < TimeStoppedUnit.Abilities.Length; i++) {
 		AbilityState = XComGameState_Ability(`XCOMHISTORY.GetGameStateForObjectID(TimeStoppedUnit.Abilities[i].ObjectID));
 		if(AbilityState.IsCoolingDown()) {
-			AbilityState.iCooldown += 1; // need to add to config	
+			NewAbilityState = XComGameState_Ability(NewGameState.CreateStateObject(AbilityState.class, AbilityState.ObjectID));
+			NewGameState.AddStateObject(NewAbilityState);
+			NewAbilityState.iCooldown += 1; // need to add to config	
 		}
 	}
 }
 
-simulated function ExtendEffectDurations(XComGameState_Unit TimeStoppedUnit) {
-	local XComGameState_Effect EffectState;
+simulated function ExtendEffectDurations(XComGameState_Unit TimeStoppedUnit, XComGameState NewGameState) {
+	local XComGameState_Effect EffectState, NewEffectState;
 	local int i;
 
 	foreach `XCOMHISTORY.IterateByClassType(class'XComGameState_Effect', EffectState) {
 		if(EffectState.ApplyEffectParameters.TargetStateObjectRef.ObjectID == TimeStoppedUnit.ObjectID) {
 			if(!EffectState.GetX2Effect().bInfiniteDuration) {
-			EffectState.iTurnsRemaining += 1;			   
-			// need to somehow prevent these effects from doing damage/ticking while active... no idea how atm.
+				NewEffectState = XComGameState_Effect(NewGameState.CreateStateObject(EffectState.class, EffectState.ObjectID));
+				NewGameState.AddStateObject(NewEffectState);
+				NewEffectState.iTurnsRemaining += 1;			   
+				// need to somehow prevent these effects from doing damage/ticking while active... no idea how atm.
 			}
 		}
 	}
