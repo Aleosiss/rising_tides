@@ -113,6 +113,7 @@ static function X2AbilityTemplate OverTheShoulder()
 	VisionEffect.DuplicateResponse = eDupe_Ignore;
 	VisionEffect.bUseTargetSightRadius = false;
 	VisionEffect.iCustomTileRadius = 3;
+	VisionEffect.bRemoveWhenTargetDies = true;
 	Template.AddMultiTargetEffect(VisionEffect);
 
 	ScanningEffect = new class'X2Effect_ScanningProtocol';
