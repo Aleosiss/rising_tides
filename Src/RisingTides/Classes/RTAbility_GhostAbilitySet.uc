@@ -59,7 +59,7 @@ static function array<X2DataTemplate> CreateTemplates()
 
 	//Templates.AddItem(Reflection());
 	Templates.AddItem(PsiOverload());
-	Templates.AddItem(PsiOverloadPanic());
+	Templates.AddItem(RTFeedback());
 
 	Templates.AddItem(Teek());
 	Templates.AddItem(Fade());
@@ -393,7 +393,7 @@ static function X2AbilityTemplate PsiOverload()
 	KillUnitEffect.BuildPersistentEffect(1, false, false, false,  eGameRule_PlayerTurnBegin);
 	Template.AddTargetEffect(KillUnitEffect);
 
-	Template.PostActivationEvents.AddItem('RTPsiOverload');
+	Template.PostActivationEvents.AddItem('RTFeedback');
 	Template.PostActivationEvents.AddItem('UnitUsedPsionicAbility');
 	//Template.AdditionalAbilities.AddItem('PsiOverloadPanic');
 
@@ -411,7 +411,7 @@ static function X2AbilityTemplate PsiOverload()
 //---------------------------------------------------------------------------------------
 //---PsiOverloadPanic--------------------------------------------------------------------
 //---------------------------------------------------------------------------------------
-static function X2AbilityTemplate PsiOverloadPanic()
+static function X2AbilityTemplate RTFeedback()
 {
 	local X2AbilityTemplate					Template;
 	local X2AbilityTrigger_EventListener	Trigger;
@@ -421,7 +421,7 @@ static function X2AbilityTemplate PsiOverloadPanic()
 	local X2AbilityCost_ActionPoints		ActionPointCost;
 
 	
-	`CREATE_X2ABILITY_TEMPLATE(Template, 'PsiOverloadPanic');
+	`CREATE_X2ABILITY_TEMPLATE(Template, 'RTFeedback');
 	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_hunter";
 	
 	Template.AbilitySourceName = 'eAbilitySource_Psionic';
@@ -437,7 +437,7 @@ static function X2AbilityTemplate PsiOverloadPanic()
 
 	Trigger = new class'X2AbilityTrigger_EventListener';
 	Trigger.ListenerData.Deferral = ELD_OnStateSubmitted;
-	Trigger.ListenerData.EventID = 'RTPsiOverload';
+	Trigger.ListenerData.EventID = 'RTFeedback';
 	Trigger.ListenerData.Filter = eFilter_Unit;
 	Trigger.ListenerData.EventFn = class'XComGameState_Ability'.static.AbilityTriggerEventListener_Self;
 	Template.AbilityTriggers.AddItem(Trigger);
@@ -460,7 +460,7 @@ static function X2AbilityTemplate PsiOverloadPanic()
 	Template.AddTargetEffect(PanicEffect);
 
 	PanickedWillEffect = new class'X2Effect_PanickedWill';
-	PanickedWillEffect.BuildPersistentEffect(5, false, true, false);
+	PanickedWillEffect.BuildPersistentEffect(4, false, true, false, eGameRule_PlayerTurnBegin);
 	Template.AddTargetEffect(PanickedWillEffect);
 
 	Condition = new class'X2Condition_UnitProperty';
@@ -472,6 +472,7 @@ static function X2AbilityTemplate PsiOverloadPanic()
 	Template.AbilityToHitCalc = default.DeadEye;
 	Template.AbilityTargetStyle = default.SelfTarget;
 	Template.PostActivationEvents.AddItem('UnitPanicked');
+	Template.PostActivationEvents.AddItem('RTUnitFeedbacked');
 
 	Template.bSkipFireAction = true;
 	Template.FrameAbilityCameraType = eCameraFraming_Never;

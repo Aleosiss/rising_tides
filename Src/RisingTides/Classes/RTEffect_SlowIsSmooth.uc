@@ -10,7 +10,7 @@
 class RTEffect_SlowIsSmooth extends X2Effect_Persistent config(RisingTides);
 
 var localized string RTFriendlyName;
-var int AIM_BONUS, CRIT_BONUS, CONCEALMENT_DELAY_TURNS
+var int AIM_BONUS, CRIT_BONUS, CONCEALMENT_DELAY_TURNS;
 
 function GetToHitModifiers(XComGameState_Effect EffectState, XComGameState_Unit Attacker, XComGameState_Unit Target, XComGameState_Ability AbilityState, class<X2AbilityToHitCalc> ToHitType, bool bMelee, bool bFlanking, bool bIndirectFire, out array<ShotModifierInfo> ShotModifiers)
 {

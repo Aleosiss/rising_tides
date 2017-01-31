@@ -50,8 +50,8 @@ simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffe
 
 		// TODO: Catch and delay the duration/effects of other effects
 		PreviousStunDuration = UnitState.StunnedActionPoints;
-		ExtendCooldownTimers(UnitState);
-		ExtendEffectDurations(UnitState);
+		ExtendCooldownTimers(UnitState, NewGameState);
+		ExtendEffectDurations(UnitState, NewGameState);
 		
 	}																			
 	

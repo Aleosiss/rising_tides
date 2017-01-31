@@ -112,7 +112,7 @@ static function X2AbilityTemplate BumpInTheNight()
 	Template.AdditionalAbilities.AddItem('JoinMeld');
 	Template.AdditionalAbilities.AddItem('LeaveMeld');
 	Template.AdditionalAbilities.AddItem('PsiOverload');
-	Template.AdditionalAbilities.AddItem('PsiOverloadPanic');
+	Template.AdditionalAbilities.AddItem('RTFeedback');
 	
 	// unique abilities for Bump In The Night
 	Template.AdditionalAbilities.AddItem('BumpInTheNightBloodlustListener');

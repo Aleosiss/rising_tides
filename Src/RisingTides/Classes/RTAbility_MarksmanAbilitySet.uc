@@ -40,6 +40,7 @@ class RTAbility_MarksmanAbilitySet extends RTAbility_GhostAbilitySet
 	var config int DGG_AIM_BONUS;
 	var config int SND_DEFENSE_BONUS;
 	var config float EMM_DAMAGE_PERCENT;
+	var config int SIS_CONCEALMENT_TURNS;
 
 	var Name KillZoneReserveType;
 
@@ -63,7 +64,7 @@ static function array<X2DataTemplate> CreateTemplates()
 	Templates.AddItem(RTSnapshot());
 	Templates.AddItem(SixOClock());									// icon
 	Templates.AddItem(SixOClockEffect());
-	Templates.AddItem(VitalPointTargeting());
+	//Templates.AddItem(VitalPointTargeting());
 	Templates.AddItem(RTDamnGoodGround());
 	Templates.AddItem(SlowIsSmooth());								// icon
 	Templates.AddItem(SlowIsSmoothEffect());
@@ -131,7 +132,7 @@ static function X2AbilityTemplate ScopedAndDropped()
 	Template.AdditionalAbilities.AddItem('JoinMeld');
 	Template.AdditionalAbilities.AddItem('LeaveMeld');
 	Template.AdditionalAbilities.AddItem('PsiOverload');
-	Template.AdditionalAbilities.AddItem('PsiOverloadPanic');
+	Template.AdditionalAbilities.AddItem('RTFeedback');
 
 	// unique abilities for Scoped and Dropped
 	Template.AdditionalAbilities.AddItem('RTStandardSniperShot');
@@ -975,6 +976,7 @@ static function X2AbilityTemplate SlowIsSmoothEffect()
 	SISEffect = new class 'RTEffect_SlowIsSmooth';
 	SISEffect.AIM_BONUS = default.SLOWISSMOOTH_AIM_BONUS;
 	SISEffect.CRIT_BONUS = default.SLOWISSMOOTH_CRIT_BONUS;
+	SISEffect.CONCEALMENT_DELAY_TURNS = default.SIS_CONCEALMENT_TURNS;
 	SISEffect.BuildPersistentEffect(1, true, false, false,  eGameRule_PlayerTurnEnd);
 	//Temporary Icon to confirm effect is on target					 
 	Template.AddTargetEffect(SISEffect);

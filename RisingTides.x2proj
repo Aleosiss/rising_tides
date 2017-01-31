@@ -197,9 +197,6 @@
     <Content Include="Src\RisingTides\Classes\RTEffect_TimeStopDamage.uc">
       <SubType>Content</SubType>
     </Content>
-    <Content Include="Src\RisingTides\Classes\RTEffect_TimeStopEnd.uc">
-      <SubType>Content</SubType>
-    </Content>
     <Content Include="Src\RisingTides\Classes\RTEffect_TimeStopMaster.uc">
       <SubType>Content</SubType>
     </Content>
@@ -207,6 +204,9 @@
       <SubType>Content</SubType>
     </Content>
     <Content Include="Src\RisingTides\Classes\RTEffect_TwitchReaction.uc">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Src\RisingTides\Classes\RTEffect_UnsettlingVoices.uc">
       <SubType>Content</SubType>
     </Content>
     <Content Include="Src\RisingTides\Classes\RTEffect_VPTargeting.uc">

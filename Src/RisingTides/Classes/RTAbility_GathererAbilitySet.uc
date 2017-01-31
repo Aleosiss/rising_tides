@@ -15,6 +15,9 @@ class RTAbility_GathererAbilitySet extends RTAbility_GhostAbilitySet config(Risi
 
 	var config float   OTS_RADIUS;
 	var config float OTS_RADIUS_SQ;
+	var config int UV_AIM_PENALTY;
+	var config int UV_DEFENSE_PENALTY;
+	var config int UV_WILL_PENALTY;
 
 //---------------------------------------------------------------------------------------
 //---CreateTemplates---------------------------------------------------------------------
@@ -26,6 +29,9 @@ static function array<X2DataTemplate> CreateTemplates()
 
 	Templates.AddItem(OverTheShoulder());
 	Templates.AddItem(OverTheShoulderVisibilityUpdate());
+
+	Templates.AddItem(RTForcedIntroversion());
+	Templates.AddItem(PurePassive('RTUnsettlingVoices', "img:///UILibrary_PerkIcons.UIPerk_swordSlash", true));
 
 
 	return Templates;
@@ -55,6 +61,8 @@ static function X2AbilityTemplate OverTheShoulder()
 	// Aura effects
 	local RTEffect_MobileSquadViewer			VisionEffect;
 	local X2Effect_ScanningProtocol				ScanningEffect;
+	local RTEffect_UnsettlingVoices				VoiceEffect;
+	local X2Condition_AbilityProperty			VoicesCondition;
 
 	local X2Effect_Persistent					SelfEffect, EnemyEffect, AllyEffect;
 
@@ -114,6 +122,7 @@ static function X2AbilityTemplate OverTheShoulder()
 	VisionEffect.bUseTargetSightRadius = false;
 	VisionEffect.iCustomTileRadius = 3;
 	VisionEffect.bRemoveWhenTargetDies = true;
+	VisionEffect.bRemoveWhenSourceDies = true;
 	Template.AddMultiTargetEffect(VisionEffect);
 
 	ScanningEffect = new class'X2Effect_ScanningProtocol';
@@ -121,7 +130,26 @@ static function X2AbilityTemplate OverTheShoulder()
 	ScanningEffect.TargetConditions.AddItem(LivingNonAllyUnitOnlyProperty);
 	ScanningEffect.DuplicateResponse = eDupe_Ignore;
 	ScanningEffect.bRemoveWhenTargetDies = true;
+	ScanningEffect.bRemoveWhenSourceDies = true;
 	Template.AddMultiTargetEffect(ScanningEffect);
+
+	VoiceEffect = new class'RTEffect_UnsettlingVoices';
+	VoiceEffect.BuildPersistentEffect(1, false, true, false, eGameRule_PlayerTurnBegin);
+	VoiceEffect.TargetConditions.AddItem(LivingNonAllyUnitOnlyProperty);
+	VoiceEffect.DuplicateResponse = eDupe_Ignore;
+	VoiceEffect.bRemoveWhenTargetDies = true;
+	VoiceEffect.bRemoveWhenSourceDies = true;
+	VoiceEffect.UV_AIM_PENALTY = default.UV_AIM_PENALTY;
+	VoiceEffect.UV_DEFENSE_PENALTY = default.UV_DEFENSE_PENALTY;
+	VoiceEffect.UV_WILL_PENALTY = default.UV_WILL_PENALTY;
+
+	VoicesCondition = new class'X2Condition_AbilityProperty';
+	VoicesCondition.OwnerHasSoldierAbilities.AddItem('RTUnsettlingVoices');
+	VoiceEffect.TargetConditions.AddItem(VoicesCondition);
+
+	Template.AddMultiTargetEffect(VoiceEffect);
+
+
 
 
 
@@ -156,6 +184,19 @@ static function X2AbilityTemplate OverTheShoulder()
 	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
 	Template.bShowActivation = true;
 	Template.bSkipFireAction = true;
+
+	// standard ghost abilities
+	Template.AdditionalAbilities.AddItem('GhostPsiSuite');
+	Template.AdditionalAbilities.AddItem('JoinMeld');
+	Template.AdditionalAbilities.AddItem('LeaveMeld');
+	Template.AdditionalAbilities.AddItem('PsiOverload');
+	Template.AdditionalAbilities.AddItem('RTFeedback');
+
+	// special meld abilities
+	Template.AdditionalAbilities.AddItem('LIOverwatchShot');
+	Template.AdditionalAbilities.AddItem('RTUnstableConduitBurst');
+	Template.AdditionalAbilities.AddItem('PsionicActivate');
+
 
 	return Template;
 }
@@ -205,13 +246,14 @@ static function X2AbilityTemplate OverTheShoulderVisibilityUpdate() {
 
 
 //---------------------------------------------------------------------------------------
-//---Unsettling Voices-------------------------------------------------------------------
+//---Forced Introversion-----------------------------------------------------------------
 //---------------------------------------------------------------------------------------
-static function X2AbilityTemplate RTUnsettlingVoices() {
-	local X2AbilityTemplate                     Template;
-	local X2AbilityTrigger_EventListener        EventListener;
+static function X2AbilityTemplate RTForcedIntroversion() {
+	local X2AbilityTemplate Template;
+	local X2AbilityTrigger_EventListener Trigger;
+	local RTEffect_Stealth StealthEffect;
 
-	`CREATE_X2ABILITY_TEMPLATE(Template, 'RTUnsettlingVoices');
+	`CREATE_X2ABILITY_TEMPLATE(Template, 'RTForcedIntroversion');
 
 	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_solace";
 	Template.AbilitySourceName = 'eAbilitySource_Psionic';
@@ -219,19 +261,30 @@ static function X2AbilityTemplate RTUnsettlingVoices() {
 	Template.Hostility = eHostility_Neutral;
 
 	Template.AbilityToHitCalc = default.DeadEye;
-	Template.AbilityTargetStyle = default.SimpleSingleTarget;
-	Template.AbilityShooterConditions.AddItem(default.LivingShooterProperty);
+	Template.AbilityTargetStyle = default.SelfTarget;
 
-	EventListener = new class'X2AbilityTrigger_EventListener';
-	EventListener.ListenerData.Deferral = ELD_OnStateSubmitted;
-	EventListener.ListenerData.EventID = 'UnitMoveFinished';
-	EventListener.ListenerData.Filter = eFilter_None;
-	EventListener.ListenerData.EventFn = class'XComGameState_Ability'.static.SolaceCleanseListener;
-	Template.AbilityTriggers.AddItem(EventListener);
+	Trigger = new class'X2AbilityTrigger_EventListener';
+	Trigger.ListenerData.Deferral = ELD_OnVisualizationBlockCompleted;
+	Trigger.ListenerData.EventID = 'RTUnitFeedbacked';
+	Trigger.ListenerData.Filter = eFilter_Unit;
+	Trigger.ListenerData.EventFn = class'XComGameState_Ability'.static.AbilityTriggerEventListener_Self;
+	Trigger.ListenerData.Priority = 50;
+	Template.AbilityTriggers.AddItem(Trigger);
 
+	StealthEffect = new class'RTEffect_Stealth';
+	StealthEffect.fStealthModifier = 1.0f;
+	StealthEffect.BuildPersistentEffect(4, false, true, false, eGameRule_PlayerTurnBegin);
+	StealthEffect.SetDisplayInfo(ePerkBuff_Bonus, "Stealth", "Become invisible, and extremely difficult to detect.", Template.IconImage, true,,Template.AbilitySourceName);
+	Template.AddTargetEffect(StealthEffect);
+
+	Template.AddTargetEffect(class'X2Effect_Spotted'.static.CreateUnspottedEffect());
+
+	Template.bShowPostActivation = true;
+	Template.bSkipFireAction = true;
 	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
 	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
+	// TODO: Visualization!
 
 	return Template;
-
 }
+
