@@ -572,10 +572,11 @@ function EventListenerReturn OnTotalAuraCheck(Object EventData, Object EventSour
 
 
 function EventListenerReturn RTOverkillDamageRecorder(Object EventData, Object EventSource, XComGameState GameState, Name EventID) {
-    local XComGameState_Unit DeadUnitState, PreviousDeadUnitState, KillerUnitState;
+    local XComGameState_Unit DeadUnitState, PreviousDeadUnitState, KillerUnitState, NewKillerUnitState;
     local UnitValue LastEffectDamageValue;
     local int iOverKillDamage;
     local XComGameStateHistory History;
+    local XComGameState NewGameState;
 
     History = `XCOMHISTORY;
 
@@ -594,9 +595,14 @@ function EventListenerReturn RTOverkillDamageRecorder(Object EventData, Object E
     DeadUnitState.GetUnitValue('LastEffectDamage', LastEffectDamageValue);
     PreviousDeadUnitState = History.GetPreviousGameStateForObject(DeadUnitState);
     iOverKillDamage = abs(PreviousDeadUnitState.GetCurrentStat( eStat_HP )) - LastEffectDamageValue.fValue);
-
-    KillerUnitState.SetUnitFloatValue('RTLastOverkillDamage', iOverKillDamage);
-
+	
+    NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("Rising Tides: Recording Overkill Damage!");
+    NewKillerUnitState = XComGameState_Unit(NewGameState.CreateStateObject(KillerUnitState.class, KillerUnitState.ObjectID));
+    NewKillerUnitState.SetUnitFloatValue('RTLastOverkillDamage', iOverKillDamage);
+	
+    NewGameState.AddStateObject(NewKillerUnitState);
+    SubmitNewGameState(NewGameState);
+	
     return ELR_NoInterrupt;
 }
 
