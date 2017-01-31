@@ -570,6 +570,37 @@ function EventListenerReturn OnTotalAuraCheck(Object EventData, Object EventSour
 	return ELR_NoInterrupt;
 }
 
+
+function EventListenerReturn RTOverkillDamageRecorder(Object EventData, Object EventSource, XComGameState GameState, Name EventID) {
+    local XComGameState_Unit DeadUnitState, PreviousDeadUnitState, KillerUnitState;
+    local UnitValue LastEffectDamageValue;
+    local int iOverKillDamage;
+    local XComGameStateHistory History;
+
+    History = `XCOMHISTORY;
+
+    DeadUnitState = XComGameState_Unit(EventData);
+    KillerUnitState = XComGameState_Unit(EventSource);
+    if(DeadUnitState == none || KillerUnitState == none) {
+        `RedScreenOnce("Rising Tides: OverkillDamageRecorder received invalid Killer or Dead Unit from KillMail")
+        return ELR_NoInterrupt;
+    }
+
+    if(KillerUnitState.ObjectID != ApplyEffectParameters.TargetStateObjectRef.ObjectID) {
+        // not me! (teehee)
+        return ELR_NoInterrupt;
+    }
+
+    DeadUnitState.GetUnitValue('LastEffectDamage', LastEffectDamageValue);
+    PreviousDeadUnitState = History.GetPreviousGameStateForObject(DeadUnitState);
+    iOverKillDamage = abs(PreviousDeadUnitState.GetCurrentStat( eStat_HP )) - LastEffectDamageValue.fValue);
+
+    KillerUnitState.SetUnitFloatValue('RTLastOverkillDamage', iOverKillDamage);
+
+    return ELR_NoInterrupt;
+}
+
+
 private function SubmitNewGameState(out XComGameState NewGameState)
 {
 	local X2TacticalGameRuleset TacticalRules;
