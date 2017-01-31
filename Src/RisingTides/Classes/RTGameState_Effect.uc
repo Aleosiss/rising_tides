@@ -598,7 +598,7 @@ function EventListenerReturn RTOverkillDamageRecorder(Object EventData, Object E
 	
     NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("Rising Tides: Recording Overkill Damage!");
     NewKillerUnitState = XComGameState_Unit(NewGameState.CreateStateObject(KillerUnitState.class, KillerUnitState.ObjectID));
-    NewKillerUnitState.SetUnitFloatValue('RTLastOverkillDamage', iOverKillDamage);
+    NewKillerUnitState.SetUnitFloatValue('RTLastOverkillDamage', iOverKillDamage, eCleanup_BeginTactical);
 	
     NewGameState.AddStateObject(NewKillerUnitState);
     SubmitNewGameState(NewGameState);
