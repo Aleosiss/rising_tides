@@ -78,7 +78,7 @@ static function array<X2DataTemplate> CreateTemplates()
 	Templates.AddItem(TwitchReaction());
 	Templates.AddItem(TwitchReactionShot());
 	Templates.AddItem(LinkedIntelligence());						// icon
-	Templates.AddItem(PsionicSurge());								// icon
+	Templates.AddItem(PsionicSurge());								// icon	// animation
 	Templates.AddItem(EyeInTheSky());								// icon
 	Templates.AddItem(HeatChannel());										// animation
 	Templates.AddItem(HeatChannelIcon());							// icon
@@ -89,7 +89,7 @@ static function array<X2DataTemplate> CreateTemplates()
 	Templates.AddItem(ShockAndAweListener());
 	Templates.AddItem(RTKillzone());								// icon
 	Templates.AddItem(RTEveryMomentMatters());						// icon
-	Templates.AddItem(RTOverflowBarrier());
+	Templates.AddItem(RTOverflowBarrier());							// icon // animation
 	Templates.AddItem(RTOverflowBarrierEvent());
 
 	return Templates;
@@ -2267,13 +2267,13 @@ static function X2AbilityTemplate RTOverflowBarrier()
 	local RTEffect_OverflowBarrier RTEffect;
 	local X2AbilityTrigger_EventListener Trigger;
 	local X2Condition_UnitEffects		MeldCondition;
-	local X2AbilityMultiTarget_AllUnits	MultiTarget;	
+	local X2AbilityMultiTarget_Radius	MultiTarget;	
 
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'RTOverflowBarrier');
 	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_insanity";
 
-	Template.AbilitySourceName = 'eAbilitySource_Perk';
-	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_AlwaysShow;
+	Template.AbilitySourceName = 'eAbilitySource_Psionic';
+	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_NeverShow;
 	Template.Hostility = eHostility_Neutral;
 
 	MeldCondition = new class'X2Condition_UnitEffects';
@@ -2282,12 +2282,12 @@ static function X2AbilityTemplate RTOverflowBarrier()
 	Template.AbilityShooterConditions.AddItem(default.LivingShooterProperty);
 	Template.AbilityShooterConditions.AddItem(MeldCondition);
 
-	MultiTarget = new class 'X2AbilityMultiTarget_AllUnits';
-	MultiTarget.bAcceptFriendlyUnits = true;
-	MultiTarget.bAcceptEnemyUnits = true;
-	MultiTarget.bDontAcceptNeutralUnits = false;
-	MultiTarget.bUseAbilitySourceAsPrimaryTarget = true;
+	MultiTarget = new class'X2AbilityMultiTarget_Radius';
+	MultiTarget.fTargetRadius = 500;
+	MultiTarget.bExcludeSelfAsTargetIfWithinRadius = true;
+	MultiTarget.bIgnoreBlockingCover = true;
 	Template.AbilityMultiTargetStyle = MultiTarget;
+	Template.AbilityMultiTargetConditions.Additem(default.LivingTargetUnitOnlyProperty);
 	Template.AbilityMultiTargetConditions.AddItem(MeldCondition);
 
 	Template.AbilityToHitCalc = default.DeadEye;
@@ -2298,9 +2298,10 @@ static function X2AbilityTemplate RTOverflowBarrier()
 	Trigger.ListenerData.Priority = 40;
 	Trigger.ListenerData.EventFn = class'XComGameState_Ability'.static.AbilityTriggerEventListener_Self;
 	Trigger.ListenerData.Deferral = ELD_OnStateSubmitted;
+	Trigger.ListenerData.Filter = eFilter_Unit;
 	Template.AbilityTriggers.AddItem(Trigger);
 
-	Template.AbilityTriggers.AddItem(default.PlayerInputTrigger);
+	// Template.AbilityTriggers.AddItem(default.PlayerInputTrigger);
 
 	RTEffect = new class 'RTEffect_OverflowBarrier';
 	RTEffect.BuildPersistentEffect(1, false, true, false,  eGameRule_PlayerTurnBegin);
@@ -2310,8 +2311,10 @@ static function X2AbilityTemplate RTOverflowBarrier()
 	Template.AddMultiTargetEffect(RTEffect);
 
 	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
-	Template.BuildVisualizationFn = Shielded_BuildVisualization;
-	Template.CinescriptCameraType = "AdvShieldBearer_EnergyShieldArmor";
+	//Template.BuildVisualizationFn = Shielded_BuildVisualization;
+	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
+	//Template.CinescriptCameraType = "AdvShieldBearer_EnergyShieldArmor";
+	Template.bSkipFireAction = true;
 
 	Template.AdditionalAbilities.AddItem('RTOverflowBarrierEvent');
 	

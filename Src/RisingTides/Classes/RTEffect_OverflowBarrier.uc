@@ -11,6 +11,7 @@ simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffe
         
         History = `XCOMHISTORY;
         
+		m_aStatChanges.Length = 0;
         SourceUnitState = XComGameState_Unit(History.GetGameStateForObjectID(ApplyEffectParameters.SourceStateObjectRef.ObjectID)); // unit with Overflow Barrier
         MeldEffectState = RTGameState_MeldEffect(SourceUnitState.GetUnitAffectedByEffectState(class'RTEffect_Meld'.default.EffectName));
         if(MeldEffectState == none) {
@@ -18,16 +19,24 @@ simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffe
             NewEffectState.RemoveEffect(NewGameState, NewGameState, true, true);
             return;
         } else {
+			`LOG("Rising Tides: iNumMeldMembers = "@MeldEffectState.Members.Length); 
             iNumMeldMembers = MeldEffectState.Members.Length;
         }
 
         SourceUnitState.GetUnitValue('RTLastOverkillDamage', TotalShieldPoolValue);
         if(TotalShieldPoolValue.fValue > 0) {
-              iShieldValue = max(1, round(TotalShieldPoolValue.fValue/iNumMeldMembers));
+              iShieldValue = max(1, (int(TotalShieldPoolValue.fValue) / iNumMeldMembers));
               AddPersistentStatChange(eStat_ShieldHP, iShieldValue);
+			  `LOG("Rising Tides: Got ShieldValue:" @ iShieldValue);
               
         }
   
         super.OnEffectAdded(ApplyEffectParameters, kNewTargetState, NewGameState, NewEffectState);
+		return;
 } 
+
+defaultproperties
+{
+	DuplicateResponse = eDupe_Allow;
+}
 
