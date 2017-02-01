@@ -19,7 +19,6 @@ simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffe
             NewEffectState.RemoveEffect(NewGameState, NewGameState, true, true);
             return;
         } else {
-			`LOG("Rising Tides: iNumMeldMembers = "@MeldEffectState.Members.Length); 
             iNumMeldMembers = MeldEffectState.Members.Length;
         }
 
@@ -27,7 +26,6 @@ simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffe
         if(TotalShieldPoolValue.fValue > 0) {
               iShieldValue = max(1, (int(TotalShieldPoolValue.fValue) / iNumMeldMembers));
               AddPersistentStatChange(eStat_ShieldHP, iShieldValue);
-			  `LOG("Rising Tides: Got ShieldValue:" @ iShieldValue);
               
         }
   
