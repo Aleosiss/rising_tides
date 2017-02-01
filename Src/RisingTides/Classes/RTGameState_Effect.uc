@@ -570,7 +570,7 @@ function EventListenerReturn OnTotalAuraCheck(Object EventData, Object EventSour
 	return ELR_NoInterrupt;
 }
 
-
+// Overkill Damage Recorder (KillMail);
 function EventListenerReturn RTOverkillDamageRecorder(Object EventData, Object EventSource, XComGameState GameState, Name EventID) {
     local XComGameState_Unit DeadUnitState, PreviousDeadUnitState, KillerUnitState, NewKillerUnitState;
     local UnitValue LastEffectDamageValue;
@@ -583,7 +583,7 @@ function EventListenerReturn RTOverkillDamageRecorder(Object EventData, Object E
     DeadUnitState = XComGameState_Unit(EventData);
     KillerUnitState = XComGameState_Unit(EventSource);
     if(DeadUnitState == none || KillerUnitState == none) {
-        `RedScreenOnce("Rising Tides: OverkillDamageRecorder received invalid Killer or Dead Unit from KillMail")
+        `RedScreenOnce("Rising Tides: OverkillDamageRecorder received invalid Killer or Dead Unit from KillMail");
         return ELR_NoInterrupt;
     }
 
@@ -593,8 +593,8 @@ function EventListenerReturn RTOverkillDamageRecorder(Object EventData, Object E
     }
 
     DeadUnitState.GetUnitValue('LastEffectDamage', LastEffectDamageValue);
-    PreviousDeadUnitState = History.GetPreviousGameStateForObject(DeadUnitState);
-    iOverKillDamage = abs(PreviousDeadUnitState.GetCurrentStat( eStat_HP )) - LastEffectDamageValue.fValue);
+    PreviousDeadUnitState = XComGameState_Unit(History.GetPreviousGameStateForObject(DeadUnitState));
+    iOverKillDamage = abs(PreviousDeadUnitState.GetCurrentStat( eStat_HP ) - LastEffectDamageValue.fValue);
 	
     NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("Rising Tides: Recording Overkill Damage!");
     NewKillerUnitState = XComGameState_Unit(NewGameState.CreateStateObject(KillerUnitState.class, KillerUnitState.ObjectID));

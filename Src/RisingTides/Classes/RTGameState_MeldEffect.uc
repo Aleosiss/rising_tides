@@ -302,7 +302,7 @@ simulated function EventListenerReturn RemoveUnitFromMeld(Object EventData, Obje
 	
 		EventManager.UnRegisterFromEvent(ListenerObj, 'RTAddUnitToMeld');
 		EventManager.UnRegisterFromEvent(ListenerObj, 'RTRemoveUnitFromMeld');
-		EventManager.UnRegisterFromEvent(ListenerObj, 'UnitPanicked');
+		//EventManager.UnRegisterFromEvent(ListenerObj, 'UnitPanicked');
 		EventManager.UnRegisterFromEvent(ListenerObj, 'TacticalGameEnd');
 		
 		RemoveEffect(NewGameState, NewGameState);

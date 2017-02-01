@@ -68,9 +68,6 @@
     <Content Include="Src\RisingTides\Classes\RTAbility_MarksmanAbilitySet.uc">
       <SubType>Content</SubType>
     </Content>
-    <Content Include="Src\RisingTides\Classes\RTAbility_RiflemanAbilitySet.uc">
-      <SubType>Content</SubType>
-    </Content>
     <Content Include="Src\RisingTides\Classes\RTAction_Greyscaled.uc">
       <SubType>Content</SubType>
     </Content>
@@ -140,6 +137,9 @@
     <Content Include="Src\RisingTides\Classes\RTEffect_MobileSquadViewer.uc">
       <SubType>Content</SubType>
     </Content>
+    <Content Include="Src\RisingTides\Classes\RTEffect_OverflowBarrier.uc">
+      <SubType>Content</SubType>
+    </Content>
     <Content Include="Src\RisingTides\Classes\RTEffect_OverTheShoulder.uc">
       <SubType>Content</SubType>
     </Content>
@@ -153,6 +153,9 @@
       <SubType>Content</SubType>
     </Content>
     <Content Include="Src\RisingTides\Classes\RTEffect_PsionicSurge.uc">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Src\RisingTides\Classes\RTEffect_OverflowEvent.uc">
       <SubType>Content</SubType>
     </Content>
     <Content Include="Src\RisingTides\Classes\RTEffect_RemoveStacks.uc">

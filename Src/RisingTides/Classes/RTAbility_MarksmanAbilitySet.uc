@@ -89,6 +89,8 @@ static function array<X2DataTemplate> CreateTemplates()
 	Templates.AddItem(ShockAndAweListener());
 	Templates.AddItem(RTKillzone());								// icon
 	Templates.AddItem(RTEveryMomentMatters());						// icon
+	Templates.AddItem(RTOverflowBarrier());
+	Templates.AddItem(RTOverflowBarrierEvent());
 
 	return Templates;
 }
@@ -2011,7 +2013,7 @@ static function X2AbilityTemplate Harbinger()
 	ShieldedEffect.BuildPersistentEffect(1, true, true, , eGameRule_PlayerTurnEnd);
 	ShieldedEffect.SetDisplayInfo(ePerkBuff_Passive, Template.LocFriendlyName, Template.GetMyLongDescription(), Template.IconImage,true,,Template.AbilitySourceName);
 	ShieldedEffect.AddPersistentStatChange(eStat_ShieldHP, default.HARBINGER_SHIELD_AMOUNT);
-	ShieldedEffect.EffectRemovedVisualizationFn = OnShieldRemoved_BuildVisualization;
+	ShieldedEffect.EffectRemovedVisualizationFn = OnHarbingerShieldRemoved_BuildVisualization;
 	Template.AddTargetEffect(ShieldedEffect);
 
 	ActionPoint = new class'X2AbilityCost_ActionPoints';
@@ -2076,7 +2078,7 @@ static function X2AbilityTemplate Harbinger()
 	return Template;
 }
 
-simulated function OnShieldRemoved_BuildVisualization(XComGameState VisualizeGameState, out VisualizationTrack BuildTrack, const name EffectApplyResult)
+simulated function OnHarbingerShieldRemoved_BuildVisualization(XComGameState VisualizeGameState, out VisualizationTrack BuildTrack, const name EffectApplyResult)
 {
 	local X2Action_PlaySoundAndFlyOver SoundAndFlyOver;
 
@@ -2254,6 +2256,130 @@ static function X2AbilityTemplate RTEveryMomentMatters()
 	
 	Template.bCrossClassEligible = false;
 	return Template;
+}
+
+//---------------------------------------------------------------------------------------
+//---Overflow Barrier----------------------------------------------------------------
+//---------------------------------------------------------------------------------------
+static function X2AbilityTemplate RTOverflowBarrier()
+{
+	local X2AbilityTemplate Template;
+	local RTEffect_OverflowBarrier RTEffect;
+	local X2AbilityTrigger_EventListener Trigger;
+	local X2Condition_UnitEffects		MeldCondition;
+	local X2AbilityMultiTarget_AllUnits	MultiTarget;	
+
+	`CREATE_X2ABILITY_TEMPLATE(Template, 'RTOverflowBarrier');
+	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_insanity";
+
+	Template.AbilitySourceName = 'eAbilitySource_Perk';
+	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_AlwaysShow;
+	Template.Hostility = eHostility_Neutral;
+
+	MeldCondition = new class'X2Condition_UnitEffects';
+	MeldCondition.AddRequireEffect(class'RTEffect_Meld'.default.EffectName, 'AA_UnitNotMelded');
+
+	Template.AbilityShooterConditions.AddItem(default.LivingShooterProperty);
+	Template.AbilityShooterConditions.AddItem(MeldCondition);
+
+	MultiTarget = new class 'X2AbilityMultiTarget_AllUnits';
+	MultiTarget.bAcceptFriendlyUnits = true;
+	MultiTarget.bAcceptEnemyUnits = true;
+	MultiTarget.bDontAcceptNeutralUnits = false;
+	MultiTarget.bUseAbilitySourceAsPrimaryTarget = true;
+	Template.AbilityMultiTargetStyle = MultiTarget;
+	Template.AbilityMultiTargetConditions.AddItem(MeldCondition);
+
+	Template.AbilityToHitCalc = default.DeadEye;
+	Template.AbilityTargetStyle = default.SelfTarget;
+
+	Trigger = new class'X2AbilityTrigger_EventListener';
+	Trigger.ListenerData.EventID = 'KillMail';
+	Trigger.ListenerData.Priority = 40;
+	Trigger.ListenerData.EventFn = class'XComGameState_Ability'.static.AbilityTriggerEventListener_Self;
+	Trigger.ListenerData.Deferral = ELD_OnStateSubmitted;
+	Template.AbilityTriggers.AddItem(Trigger);
+
+	Template.AbilityTriggers.AddItem(default.PlayerInputTrigger);
+
+	RTEffect = new class 'RTEffect_OverflowBarrier';
+	RTEffect.BuildPersistentEffect(1, false, true, false,  eGameRule_PlayerTurnBegin);
+	RTEffect.SetDisplayInfo(ePerkBuff_Bonus, Template.LocFriendlyName, Template.LocLongDescription, Template.IconImage, true,, Template.AbilitySourceName);
+	RTEffect.EffectRemovedVisualizationFn = OnShieldRemoved_BuildVisualization;
+	Template.AddTargetEffect(RTEffect);
+	Template.AddMultiTargetEffect(RTEffect);
+
+	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
+	Template.BuildVisualizationFn = Shielded_BuildVisualization;
+	Template.CinescriptCameraType = "AdvShieldBearer_EnergyShieldArmor";
+
+	Template.AdditionalAbilities.AddItem('RTOverflowBarrierEvent');
+	
+	Template.bCrossClassEligible = false;
+	return Template;
+
+}
+
+static function X2AbilityTemplate RTOverflowBarrierEvent() {
+	local X2AbilityTemplate Template;
+	local RTEffect_OverflowEvent EventEffect;
+
+	`CREATE_X2ABILITY_TEMPLATE(Template, 'RTOverflowBarrierEvent');
+	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_insanity";
+
+	Template.AbilitySourceName = 'eAbilitySource_Perk';
+	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_NeverShow;
+	Template.Hostility = eHostility_Neutral;
+
+	EventEffect = new class'RTEffect_OverflowEvent';
+	EventEffect.BuildPersistentEffect(1, true, false, false);
+	EventEffect.SetDisplayInfo(ePerkBuff_Passive, Template.LocFriendlyName, Template.LocLongDescription, Template.IconImage, true,, Template.AbilitySourceName);
+	Template.AddTargetEffect(EventEffect);
+
+	Template.AbilityTriggers.AddItem(default.UnitPostBeginPlayTrigger);
+	Template.AbilityToHitCalc = default.DeadEye;
+	Template.AbilityTargetStyle = default.SelfTarget;
+
+	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
+	return Template;
+}
+
+simulated function OnShieldRemoved_BuildVisualization(XComGameState VisualizeGameState, out VisualizationTrack BuildTrack, const name EffectApplyResult)
+{
+	local X2Action_PlaySoundAndFlyOver SoundAndFlyOver;
+
+	if (XGUnit(BuildTrack.TrackActor).IsAlive())
+	{
+		SoundAndFlyOver = X2Action_PlaySoundAndFlyOver(class'X2Action_PlaySoundAndFlyOver'.static.AddToVisualizationTrack(BuildTrack, VisualizeGameState.GetContext()));
+		SoundAndFlyOver.SetSoundAndFlyOverParameters(None, class'XLocalizedData'.default.ShieldRemovedMsg, '', eColor_Bad, , 0.75, true);
+	}
+}
+
+simulated function Shielded_BuildVisualization(XComGameState VisualizeGameState, out array<VisualizationTrack> OutVisualizationTracks)
+{
+	local XComGameStateHistory History;
+	local XComGameStateContext_Ability  Context;
+	local StateObjectReference InteractingUnitRef;
+	local VisualizationTrack EmptyTrack;
+	local VisualizationTrack BuildTrack;
+	local X2Action_PlayAnimation PlayAnimationAction;
+
+	History = `XCOMHISTORY;
+
+	Context = XComGameStateContext_Ability(VisualizeGameState.GetContext());
+	InteractingUnitRef = Context.InputContext.SourceObject;
+
+	//Configure the visualization track for the shooter
+	//****************************************************************************************
+	BuildTrack = EmptyTrack;
+	BuildTrack.StateObject_OldState = History.GetGameStateForObjectID(InteractingUnitRef.ObjectID, eReturnType_Reference, VisualizeGameState.HistoryIndex - 1);
+	BuildTrack.StateObject_NewState = VisualizeGameState.GetGameStateForObjectID(InteractingUnitRef.ObjectID);
+	BuildTrack.TrackActor = History.GetVisualizer(InteractingUnitRef.ObjectID);
+
+	PlayAnimationAction = X2Action_PlayAnimation(class'X2Action_PlayAnimation'.static.AddToVisualizationTrack(BuildTrack, Context));
+	PlayAnimationAction.Params.AnimName = 'HL_EnergyShield';
+
+	OutVisualizationTracks.AddItem(BuildTrack);
 }
 
 defaultproperties
