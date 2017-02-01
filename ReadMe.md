@@ -19,6 +19,8 @@ This would be a bare-bones content mod. I also have the following content in min
 ###### Current TODOs: 
   - Berserker:
       - Implement Stealth visual overlay
+      - Fix Reprobate Waltz to actually get the correct stack count and use it for calculating chance to activate
+      - Fix Shadow Strike to proc Reprobate Waltz
   - Marksman: 
       - None
   - Gatherer: 
