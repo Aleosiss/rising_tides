@@ -494,6 +494,13 @@ LocHelpText="Lunge forward, dealing damage to all enemies in the path of the str
 LocFlyOverText="Dashing Strike"
 LocPromotionPopupText="<Bullet/> Lunge forward, dealing damage to all enemies in the path of the strike.<br/>"
 
+[RT_Gatherer X2SoldierClassTemplate]
+DisplayName="GHOST Gatherer"
+ClassSummary="Nova is the team's HUMINT expert and psionic support."
+LeftAbilityTreeTitle="Clairvoyant"
+RightAbilityTreeTitle="Teeker"
+RandomNickNames[0]="Nova"
+
 [OverTheShoulder X2AbilityTemplate]
 LocFriendlyName="Over The Shoulder"
 LocLongDescription="Peer over the shoulder of enemy units, seeing what they see."
