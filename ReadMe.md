@@ -20,7 +20,7 @@ This would be a bare-bones content mod. I also have the following content in min
   - Berserker:
       - Implement Stealth visual overlay
   - Marksman: 
-      - Harbinger replacement ability
+      - None
   - Gatherer: 
       - Everything besides OTS
 
@@ -29,7 +29,6 @@ This would be a bare-bones content mod. I also have the following content in min
       - Shadow Strike infinite range targeting style
       - Add mental effect cleanse to RTMentor
 	  - Gatherer Perks
-	  - https://hastebin.com/votavilete.lua
 	  - Make the meld respond to feedback events instead of panic events
 ###### Current Table
       - Triangulation: Spread Over the Shoulder to all melded allies.
