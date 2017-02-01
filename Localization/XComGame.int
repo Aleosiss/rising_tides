@@ -498,7 +498,7 @@ LocPromotionPopupText="<Bullet/> Lunge forward, dealing damage to all enemies in
 DisplayName="GHOST Gatherer"
 ClassSummary="Nova is the team's HUMINT expert and psionic support."
 LeftAbilityTreeTitle="Clairvoyant"
-RightAbilityTreeTitle="Teeker"
+RightAbilityTreeTitle="Telepath"
 RandomNickNames[0]="Nova"
 
 [OverTheShoulder X2AbilityTemplate]
