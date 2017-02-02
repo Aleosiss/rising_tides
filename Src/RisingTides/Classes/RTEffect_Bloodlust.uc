@@ -42,10 +42,18 @@ function GetToHitModifiers(XComGameState_Effect EffectState, XComGameState_Unit 
 
 	local ShotModifierInfo HitMod, CritMod;
 	local RTGameState_BloodlustEffect BumpEffect;
+	local bool bValid;
 
-	if(!bMelee && AbilityState.GetMyTemplateName() != 'RTBerserkerKnifeAttack' && AbilityState.GetMyTemplateName() != 'RTPyroclasticSlash' && AbilityState.GetMyTemplateName() != 'RTReprobateWaltz') {
-		return;
+	if(AbilityState.GetMyTemplateName() == 'RTBerserkerKnifeAttack' || AbilityState.GetMyTemplateName() == 'RTPyroclasticSlash' || AbilityState.GetMyTemplateName() == 'RTReprobateWaltz' || AbilityState.GetMyTemplateName() == 'RTShadowStrike') {
+		bValid = true;
 	}
+	
+	if(Attacker.HasSoldierAbility('RTContainedFury') {
+		bValid = true;	
+	}
+	   
+	if(!bValid)
+   		return;
 
 	BumpEffect = RTGameState_BloodlustEffect(EffectState);
   
@@ -61,7 +69,7 @@ function int GetAttackingDamageModifier(XComGameState_Effect EffectState, XComGa
 	local RTGameState_BloodlustEffect BumpEffect;
 	local bool bValid;
 
-	if(AbilityState.GetMyTemplateName() == 'RTBerserkerKnifeAttack' || AbilityState.GetMyTemplateName() == 'RTPyroclasticSlash' || AbilityState.GetMyTemplateName() == 'RTReprobateWaltz') {
+	if(AbilityState.GetMyTemplateName() == 'RTBerserkerKnifeAttack' || AbilityState.GetMyTemplateName() == 'RTPyroclasticSlash' || AbilityState.GetMyTemplateName() == 'RTReprobateWaltz' || AbilityState.GetMyTemplateName() == 'RTShadowStrike') {
 		bValid = true;
 	}
 	if(Attacker.HasSoldierAbility('RTContainedFury')) {
