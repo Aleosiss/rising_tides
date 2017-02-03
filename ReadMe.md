@@ -19,8 +19,6 @@ This would be a bare-bones content mod. I also have the following content in min
 ###### Current TODOs: 
   - Berserker:
       - Implement Stealth visual overlay
-      - Fix Reprobate Waltz to actually get the correct stack count and use it for calculating chance to activate
-      - Fix Shadow Strike to proc Reprobate Waltz
   - Marksman: 
       - None
   - Gatherer: 
@@ -32,7 +30,7 @@ This would be a bare-bones content mod. I also have the following content in min
       - Add mental effect cleanse to RTMentor
 	  - Gatherer Perks
 	  - Make the meld respond to feedback events instead of panic events
-	  - https://hastebin.com/huhamopovi.uc
+	- Added redacted name localization for ghosts
 ###### Current Table
       - Triangulation: Spread Over the Shoulder to all melded allies.
       - Shatter The Line: If this unit kills an enemy within X tiles, it triggers a flush effect on other enemies within X tiles. 2/3 turn cooldown. credits to /u/PostOfficeBuddy
