@@ -15,7 +15,8 @@ function EventListenerReturn ReprobateWaltzCheck( Object EventData, Object Event
 	TargetUnit = XComGameState_Unit(History.GetGameStateForObjectID(AbilityContext.InputContext.PrimaryTarget.ObjectID));
 
 	if(AbilityContext != none) {
-		fFinalPercentChance = ( class'RTAbility_BerserkerAbilitySet'.default.REPROBATE_WALTZ_BASE_CHANCE + ( class'RTAbility_BerserkerAbilitySet'.default.REPROBATE_WALTZ_BLOODLUST_STACK_CHANCE * iStacks ));
+		iStackCount = class'RTHelpers'.static.getBloodlustStackCount(WaltzUnit);
+		fFinalPercentChance = (class'RTAbility_BerserkerAbilitySet'.default.REPROBATE_WALTZ_BASE_CHANCE + ( class'RTAbility_BerserkerAbilitySet'.default.REPROBATE_WALTZ_BLOODLUST_STACK_CHANCE * iStackCount ));
 		iRandom = `SYNC_RAND(100);
 		if(iRandom <= int(fFinalPercentChance)) {
 			InitializeAbilityForActivation(AbilityState, WaltzUnit, 'RTReprobateWaltz', History);
