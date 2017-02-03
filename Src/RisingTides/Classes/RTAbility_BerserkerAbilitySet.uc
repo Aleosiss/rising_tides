@@ -1615,6 +1615,7 @@ static function X2DataTemplate RTShadowStrike()
 	Template.AbilityMultiTargetConditions.AddItem(default.LivingTargetUnitOnlyProperty);
 	Template.PostActivationEvents.AddItem('RTRemoveAnimSets');
 	Template.AdditionalAbilities.AddItem('RTRemoveAdditionalAnimSets');
+	Template.PostActivationEvents.AddItem('RTBerserkerKnifeAttack');
 
 	Template.ModifyNewContextFn = Teleport_ModifyActivatedAbilityContext;
 	Template.BuildNewGameStateFn = Teleport_BuildGameState;
