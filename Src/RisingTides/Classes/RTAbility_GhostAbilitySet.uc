@@ -12,7 +12,13 @@ class RTAbility_GhostAbilitySet extends X2Ability
 	config(RisingTides);
 
 
-	var localized string FEEDBACK_NAME;
+
+	var protected X2Condition_UnitProperty						LivingFriendlyUnitOnlyProperty;
+	var protected X2Condition_UnitEffectsWithAbilitySource		OverTheShoulderProperty;
+	var protected EffectReason									TagReason;
+
+
+	var localized string FEEDBACK_TITLE;
 	var localized string FEEDBACK_DESC;
 	var localized string OTS_TITLE;
 	var localized string OTS_DESC_SELF;
@@ -26,6 +32,8 @@ class RTAbility_GhostAbilitySet extends X2Ability
 	var localized string MELD_DESC;
 	var localized string FADE_COOLDOWN_TITLE;
 	var localized string FADE_COOLDOWN_DESC;
+	var localized string UV_TITLE;
+	var localized string UV_DESC;
 	var localized string SOC_TITLE;
 	var localized string SOC_DESC;
 	var localized string GREYSCALED_TITLE;
@@ -43,6 +51,8 @@ class RTAbility_GhostAbilitySet extends X2Ability
 	var config int FADE_DURATION;
 	var config int FADE_COOLDOWN;
 	var config int MAX_BLOODLUST_MELDJOIN;
+
+	var name RTFeedbackEffectName;
 
 //---------------------------------------------------------------------------------------
 //---CreateTemplates---------------------------------------------------------------------
@@ -283,8 +293,8 @@ static function X2AbilityTemplate JoinMeld()
 
 	MeldEffect = new class 'RTEffect_Meld';
 	MeldEffect.BuildPersistentEffect(1, true, true, false,  eGameRule_PlayerTurnEnd);
-		MeldEffect.SetDisplayInfo(ePerkBuff_Bonus, "Mind Meld", 
-		"This unit has joined the squad's mind meld, gaining and delivering psionic support.", Template.IconImage);
+		MeldEffect.SetDisplayInfo(ePerkBuff_Bonus, default.MELD_TITLE, 
+		default.MELD_DESC, Template.IconImage);
 	Template.AddTargetEffect(MeldEffect);
 
 	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
@@ -453,10 +463,11 @@ static function X2AbilityTemplate RTFeedback()
 	PanicEffect.EffectRemovedVisualizationFn = class'X2StatusEffects'.static.PanickedVisualizationRemoved;
 	PanicEffect.bRemoveWhenTargetDies = true;
 	PanicEffect.DelayVisualizationSec = 0.0f;
+	PanicEffect.EffectName = default.RTFeedbackEffectName;
 	// One turn duration
 	PanicEffect.BuildPersistentEffect(4, false, true, false, eGameRule_PlayerTurnBegin);
-	PanicEffect.SetDisplayInfo(ePerkBuff_Penalty, "AGugHGGHGH", 
-		"This unit recently overloaded another unit's brain, and is suffering from psionic feedback. Protect them while they recover!", Template.IconImage);
+	PanicEffect.SetDisplayInfo(ePerkBuff_Penalty, default.FEEDBACK_TITLE, 
+		default.FEEDBACK_DESC, Template.IconImage);
 	Template.AddTargetEffect(PanicEffect);
 
 	PanickedWillEffect = new class'X2Effect_PanickedWill';
@@ -529,7 +540,7 @@ static function X2AbilityTemplate Fade()
 	
 	CooldownTrackerEffect = new class'X2Effect_Persistent';
 	CooldownTrackerEffect.BuildPersistentEffect(default.FADE_COOLDOWN, false, true, false, eGameRule_PlayerTurnEnd);
-	CooldownTrackerEffect.SetDisplayInfo(ePerkBuff_Penalty, "Fade Cooldown", "Fade is cooling down", Template.IconImage, true,,Template.AbilitySourceName);
+	CooldownTrackerEffect.SetDisplayInfo(ePerkBuff_Penalty, default.FADE_COOLDOWN_TITLE, default.FADE_COOLDOWN_DESC, Template.IconImage, true,,Template.AbilitySourceName);
 	Template.AddTargetEffect(CooldownTrackerEffect);
 	
 	// Add dead eye to guarantee
@@ -780,6 +791,16 @@ static function X2AbilityTemplate RTRemoveAdditionalAnimSets()
 
 // helpers
 
+static function X2Condition_UnitEffectsWithAbilitySource CreateOverTheShoulderProperty() {
+	local X2Condition_UnitEffectsWithAbilitySource Condition;
+
+	Condition = new class'X2Condition_UnitEffectsWithAbilitySource';
+	Condition.AddExcludeEffect(class'RTAbility_GathererAbilitySet'.default.OverTheShoulderTagName, 'AA_UnitIsImmune');
+
+	return Condition;
+
+}
+
 // cooldown cleanser
 
 static function X2AbilityTemplate CreateRTCooldownCleanse (name TemplateName, name EffectNameToRemove, name EventIDToListenFor) {
@@ -854,4 +875,22 @@ static function X2AbilityTemplate CreateRTPassiveAbilityCooldown(name TemplateNa
 	Template.bCrossClassEligible = false;
 
         return Template;
+}
+
+defaultproperties
+{
+	Begin Object Class=X2Condition_UnitProperty Name=DefaultLivingFriendlyUnitOnlyProperty
+		ExcludeAlive=false
+		ExcludeDead=true
+		ExcludeFriendlyToSource=false
+		ExcludeHostileToSource=true
+		TreatMindControlledSquadmateAsHostile=false
+		FailOnNonUnits=true
+	End Object
+	LivingFriendlyUnitOnlyProperty = DefaultLivingFriendlyUnitOnlyProperty
+
+	RTFeedbackEffectName = "RTFeedback"
+
+
+
 }

@@ -301,8 +301,8 @@ static function X2AbilityTemplate RTBerserkerKnifeAttack()
 	// Shooter Conditions
 	//
 	Template.AbilityShooterConditions.AddItem(default.LivingShooterProperty);
-	SkipExclusions.AddItem(class'X2StatusEffects'.default.BurningName);
-	Template.AddShooterEffectExclusions(SkipExclusions);
+	//SkipExclusions.AddItem(class'X2StatusEffects'.default.BurningName);
+	Template.AddShooterEffectExclusions();
 
 	// Damage Effect
 	//		var int iBaseBladeDamage, iBaseBladeCritDamage, iBaseBladeDamageSpread, iAcidicBladeShred;var float fHiddenBladeCritModifier;
@@ -408,7 +408,7 @@ static function X2AbilityTemplate RTBurst() {
     WorldDamage = new class'X2Effect_ApplyDirectionalWorldDamage';  //creates the framework to apply damage to the world
 	WorldDamage.bUseWeaponDamageType = False;                       //overrides the normal weapon damage type
 	WorldDamage.bUseWeaponEnvironmentalDamage = false;              //replaces the weapon's environmental damage with the abilities
-	WorldDamage.EnvironmentalDamageAmount = 3000;                   //determines the amount of enviornmental damage the ability applies
+	WorldDamage.EnvironmentalDamageAmount = 250;                   //determines the amount of enviornmental damage the ability applies
 	WorldDamage.bApplyOnHit = true;                                 //obv
 	WorldDamage.bApplyOnMiss = true;                                //obv
 	WorldDamage.bApplyToWorldOnHit = true;                          //obv
@@ -422,7 +422,8 @@ static function X2AbilityTemplate RTBurst() {
 	WeaponDamageEffect = new class'X2Effect_ApplyWeaponDamage';   
 	WeaponDamageEffect.bIgnoreBaseDamage = true;	
 	WeaponDamageEffect.EffectDamageValue.Damage = default.BURST_DAMAGE;			 
-	WeaponDamageEffect.bApplyWorldEffectsForEachTargetLocation = true;          
+	WeaponDamageEffect.bApplyWorldEffectsForEachTargetLocation = true; 
+	WeaponDamageEffect.EnvironmentalDamageAmount = 250;            
 	Template.AddMultiTargetEffect(WeaponDamageEffect);          
 
 	Template.PostActivationEvents.AddItem('UnitUsedPsionicAbility');
@@ -578,6 +579,8 @@ static function X2AbilityTemplate RTMentor() {
 	BloodlustCondition.StackingEffect = class'RTEffect_Bloodlust'.default.EffectName;
 	BloodlustCondition.bRequireEffect = false;
     Template.AbilityShooterConditions.AddItem(BloodlustCondition);
+	Template.AbilityShooterConditions.AddItem(default.LivingShooterProperty);
+	Template.AddShooterEffectExclusions();
 
     Template.PostActivationEvents.AddItem('UnitUsedPsionicAbility');
 
@@ -921,6 +924,9 @@ static function X2AbilityTemplate RTPyroclasticSlash()
 	//
 	Template.AbilityShooterConditions.AddItem(default.LivingShooterProperty);
 
+	SkipExclusions.AddItem(class'X2StatusEffects'.default.BurningName);
+	Template.AddShooterEffectExclusions(SkipExclusions);
+
 	// Damage Effect
 	//		var int iBaseBladeDamage, iBaseBladeCritDamage, iBaseBladeDamageSpread, iAcidicBladeShred;var float fHiddenBladeCritModifier;
 	WeaponDamageEffect = new class'RTEffect_BerserkerMeleeDamage';	 
@@ -1217,7 +1223,7 @@ static function X2AbilityTemplate RTUnstableConduitBurst() {
     WorldDamage = new class'X2Effect_ApplyDirectionalWorldDamage';  //creates the framework to apply damage to the world
 	WorldDamage.bUseWeaponDamageType = False;                       //overrides the normal weapon damage type
 	WorldDamage.bUseWeaponEnvironmentalDamage = false;              //replaces the weapon's environmental damage with the abilities
-	WorldDamage.EnvironmentalDamageAmount = 3000;                   //determines the amount of enviornmental damage the ability applies
+	WorldDamage.EnvironmentalDamageAmount = 250;                   //determines the amount of enviornmental damage the ability applies
 	WorldDamage.bApplyOnHit = true;                                 //obv
 	WorldDamage.bApplyOnMiss = true;                                //obv
 	WorldDamage.bApplyToWorldOnHit = true;                          //obv
@@ -1231,7 +1237,8 @@ static function X2AbilityTemplate RTUnstableConduitBurst() {
 	WeaponDamageEffect = new class'X2Effect_ApplyWeaponDamage';   
 	WeaponDamageEffect.bIgnoreBaseDamage = true;	
 	WeaponDamageEffect.EffectDamageValue.Damage = default.BURST_DAMAGE;			 
-	WeaponDamageEffect.bApplyWorldEffectsForEachTargetLocation = true;          
+	WeaponDamageEffect.bApplyWorldEffectsForEachTargetLocation = true;
+	WeaponDamageEffect.EnvironmentalDamageAmount = 250;          
 	Template.AddMultiTargetEffect(WeaponDamageEffect);          
 
 	Template.bSkipFireAction = true;

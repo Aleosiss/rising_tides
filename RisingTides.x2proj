@@ -173,6 +173,9 @@
     <Content Include="Src\RisingTides\Classes\RTEffect_ShockAndAwe.uc">
       <SubType>Content</SubType>
     </Content>
+    <Content Include="Src\RisingTides\Classes\RTEffect_SimpleHeal.uc">
+      <SubType>Content</SubType>
+    </Content>
     <Content Include="Src\RisingTides\Classes\RTEffect_Siphon.uc">
       <SubType>Content</SubType>
     </Content>

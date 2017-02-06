@@ -48,7 +48,7 @@ function GetToHitModifiers(XComGameState_Effect EffectState, XComGameState_Unit 
 		bValid = true;
 	}
 	
-	if(Attacker.HasSoldierAbility('RTContainedFury') {
+	if(Attacker.HasSoldierAbility('RTContainedFury')) {
 		bValid = true;	
 	}
 	   

@@ -43,3 +43,31 @@ LocLongDescription="Peer over the shoulder of enemy units, seeing what they see.
 LocHelpText="Peer over the shoulder of enemy units, seeing what they see. "
 LocFlyOverText="Over The Shoulder"
 LocPromotionPopupText="<Bullet/> Peer over the shoulder of enemy units, seeing what they see.<br/>"
+
+[RTAbility_GhostAbilitySet]
+FEEDBACK_NAME="AGugHGGHGH"
+FEEDBACK_DESC="This unit is suffering from psionic feedback! Protect them while they recover."
+OTS_TITLE="Over the Shoulder"
+OTS_DESC_SELF="I peer back."
+OTS_DESC_ALLY="I'll keep an eye out for you!"
+OTS_DESC_ENEMY="I see you... see me."
+BLOODLUST_TITLE="Bloodlust"
+BLOODLUST_DESC="<todo>"
+STEALTH_TITLE="Stealth"
+STEALTH_DESC="This unit is invisible, and cannot be seen by most units."
+MELD_TITLE="Mind Meld"
+MELD_DESC="This unit has joined the Meld, and is recieving and delivering psionic support."
+FADE_COOLDOWN_TITLE="Fade"
+FADE_COOLDOWN_DESC="Fade is on cooldown."
+UV_TITLE="Unsettling Voices"
+UV_DESC="Don't look behind you..."
+SOC_TITLE="Six O'Clock"
+SOC_DESC="I've got your six."
+GREYSCALED_TITLE="Greyscale"
+GREYSCALED_DESC="Frozen in time..."
+HARBINGER_BROKEN_ALERT="Shield lost!"
+
+[RTAbility_GathererAbilitySet]
+GuardianAngelHealText="Guardian Angel"
+
+

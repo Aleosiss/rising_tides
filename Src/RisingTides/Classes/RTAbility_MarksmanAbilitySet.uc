@@ -1209,11 +1209,12 @@ static function X2AbilityTemplate SovereignEffect()
 	WeaponDamageEffect = new class'X2Effect_ApplyWeaponDamage';
 	WeaponDamageEffect.EffectDamageValue.Pierce = 9999;
 	WeaponDamageEffect.EffectDamageValue.Shred = 4;			 
-	WeaponDamageEffect.bApplyWorldEffectsForEachTargetLocation = true;     
+	WeaponDamageEffect.bApplyWorldEffectsForEachTargetLocation = true;  
+	WeaponDamageEffect.EnvironmentalDamageAmount = 250;   
 	Template.AddTargetEffect(WeaponDamageEffect);     
 	Template.AddMultiTargetEffect(WeaponDamageEffect);   
 	
-	BurningEffect = class'X2StatusEffects'.static.CreateBurningStatusEffect(3, 0);   //Adds Burning Effect for 3 damage, 0 spread
+	BurningEffect = class'X2StatusEffects'.static.CreateBurningStatusEffect(3, 2);   //Adds Burning Effect for 3 damage, 0 spread
 	BurningEffect.ApplyChance = 100;                                         //Should be a 100% chance to actually apply burning 
 	Template.AddTargetEffect(BurningEffect);
 	Template.AddMultiTargetEffect(BurningEffect);                                    //Adds the burning effect to the targeted area
@@ -1221,7 +1222,7 @@ static function X2AbilityTemplate SovereignEffect()
 	WorldDamage = new class'X2Effect_ApplyDirectionalWorldDamage';  //creates the framework to apply damage to the world
 	WorldDamage.bUseWeaponDamageType = False;                       //overrides the normal weapon damage type
 	WorldDamage.bUseWeaponEnvironmentalDamage = false;              //replaces the weapon's environmental damage with the abilities
-	WorldDamage.EnvironmentalDamageAmount = 3000;                   //determines the amount of enviornmental damage the ability applies
+	WorldDamage.EnvironmentalDamageAmount = 250;                    //determines the amount of enviornmental damage the ability applies
 	WorldDamage.bApplyOnHit = true;                                 //obv
 	WorldDamage.bApplyOnMiss = true;                                //obv
 	WorldDamage.bApplyToWorldOnHit = true;                          //obv
@@ -1354,6 +1355,8 @@ static function X2AbilityTemplate TimeStandsStill()
 	Template.AbilityTargetStyle = default.SelfTarget;
 	Template.AbilityTriggers.AddItem(default.PlayerInputTrigger);
 
+	Template.AddShooterEffectExclusions();
+
 	SetUnitValueEffect = new class'X2Effect_SetUnitValue';
 	SetUnitValueEffect.UnitName = 'TimeStopCounter';
 	SetUnitValueEffect.NewValueToSet = 3;
@@ -1379,7 +1382,7 @@ static function X2AbilityTemplate TimeStandsStill()
 	Template.AddShooterEffect(CounterEffect);
 
 	MultiTarget = new class'X2AbilityMultiTarget_Radius';
-	MultiTarget.fTargetRadius = 500;
+	MultiTarget.fTargetRadius = 500 * class'XComWorldData'.const.WORLD_StepSize * class'XComWorldData'.const.WORLD_UNITS_TO_METERS_MULTIPLIER;
 	MultiTarget.bExcludeSelfAsTargetIfWithinRadius = true;
 	MultiTarget.bIgnoreBlockingCover = true;
 	Template.AbilityMultiTargetStyle = MultiTarget;
@@ -1454,7 +1457,7 @@ static function X2AbilityTemplate TimeStandsStillEndListener()
 	Template.ConcealmentRule = eConceal_Always;
 
 	MultiTarget = new class'X2AbilityMultiTarget_Radius';
-	MultiTarget.fTargetRadius = 500;
+	MultiTarget.fTargetRadius = 500 * class'XComWorldData'.const.WORLD_StepSize * class'XComWorldData'.const.WORLD_UNITS_TO_METERS_MULTIPLIER;
 	MultiTarget.bExcludeSelfAsTargetIfWithinRadius = true;
 	MultiTarget.bIgnoreBlockingCover = true;
 	Template.AbilityMultiTargetStyle = MultiTarget;
@@ -1714,6 +1717,9 @@ static function X2AbilityTemplate PsionicSurge()
 	// Add dead eye to guarantee
 	Template.AbilityToHitCalc = default.DeadEye;
 	Template.AbilityTargetStyle = default.SelfTarget;
+
+	Template.AbilityShooterConditions.AddItem(default.LivingShooterProperty);
+	Template.AddShooterEffectExclusions();
 
 	SurgeEffect = new class 'RTEffect_PsionicSurge';
 	SurgeEffect.BuildPersistentEffect(1, false, true, false,  eGameRule_PlayerTurnEnd);
@@ -2037,7 +2043,7 @@ static function X2AbilityTemplate Harbinger()
 	Template.AbilityTriggers.AddItem(default.PlayerInputTrigger);
 
 	TargetCondition = new class'X2Condition_UnitProperty';
-	TargetCondition.ExcludeHostileToSource = true;
+	TargetCondition.ExcludeHostileToSource = false;
 	TargetCondition.ExcludeFriendlyToSource = false;
 	TargetCondition.RequireSquadmates = true;
 	TargetCondition.FailOnNonUnits = true;
@@ -2065,6 +2071,9 @@ static function X2AbilityTemplate Harbinger()
 	TagEffect.BuildPersistentEffect(1, true, true, false, eGameRule_PlayerTurnEnd);
 	TagEffect.EffectName = 'HarbingerTagEffect';
 	Template.AddShooterEffect(TagEffect);
+
+	Template.AbilityShooterConditions.AddItem(default.LivingShooterProperty);
+	Template.AddShooterEffectExclusions();
 
 	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
 
@@ -2281,7 +2290,7 @@ static function X2AbilityTemplate RTOverflowBarrier()
 
 	Template.AbilityShooterConditions.AddItem(default.LivingShooterProperty);
 	Template.AbilityShooterConditions.AddItem(MeldCondition);
-
+	
 	MultiTarget = new class'X2AbilityMultiTarget_Radius';
 	MultiTarget.fTargetRadius = 500;
 	MultiTarget.bExcludeSelfAsTargetIfWithinRadius = true;
