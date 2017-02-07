@@ -32,6 +32,9 @@ function EventListenerReturn OnTacticalGameEnd(Object EventData, Object EventSou
 protected function ActivateAbility(XComGameState_Ability AbilityState, StateObjectReference TargetRef) {
 	local XComGameStateContext_Ability AbilityContext;
 	
+	if(AbilityState.CanActivateAbilityForObserverEvent(XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(TargetRef.ObjectID))) != 'AA_Success')
+		`LOG("Rising Tides: Couldn't Activate "@ AbilityState.GetMyTemplateName() @ " for observer event.");
+	
 	AbilityContext = class'XComGameStateContext_Ability'.static.BuildContextFromAbility(AbilityState, TargetRef.ObjectID);
 	
 	if( AbilityContext.Validate() ) {
