@@ -23,6 +23,7 @@ function RegisterForEvents(XComGameState_Effect EffectState) {
   ListenerObj = HarbyEffectState;
   FilterObj = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(EffectState.ApplyEffectParameters.TargetStateObjectRef.ObjectID)); 
   EventMgr.RegisterForEvent(ListenerObj, 'RTRemoveUnitFromMeld', HarbyEffectState.RemoveHarbingerEffect, ELD_OnStateSubmitted, , FilterObj); // shields expended appears to just be a generic remove effect listener
+  EventMgr.RegisterForEvent(ListenerObj, 'AbilityActivated', HarbyEffectState.RTHarbingerBonusDamage, ELD_Immediate, 75, FilterObj); // this should go before everything...
 }
 
 simulated function bool OnEffectTicked(const out EffectAppliedData ApplyEffectParameters, XComGameState_Effect kNewEffectState, XComGameState NewGameState, bool FirstApplication)
