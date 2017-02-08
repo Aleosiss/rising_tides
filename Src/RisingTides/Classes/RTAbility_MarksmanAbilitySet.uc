@@ -83,7 +83,8 @@ static function array<X2DataTemplate> CreateTemplates()
 	Templates.AddItem(HeatChannel());										// animation
 	Templates.AddItem(HeatChannelIcon());							// icon
 	Templates.AddItem(HeatChannelCooldown());								
-	Templates.AddItem(Harbinger());									// icon	// animation
+	Templates.AddItem(Harbinger());								// icon	// animation
+	Templates.AddItem(RTHarbingerBonusDamage());
 	Templates.AddItem(HarbingerCleanseListener());
 	Templates.AddItem(ShockAndAwe());								// icon
 	Templates.AddItem(ShockAndAweListener());
@@ -2081,6 +2082,8 @@ static function X2AbilityTemplate Harbinger()
 	
 	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;	//TODO: VISUALIZATION
 	Template.bSkipFireAction = true;
+	Template.AdditionalAbilities.AddItem('RTHarbingerBonusDamage');
+	Template.AdditionalAbilities.AddItem('HarbingerCleanseListener');
 
 	Template.bCrossClassEligible = false;
 
@@ -2097,6 +2100,40 @@ simulated function OnHarbingerShieldRemoved_BuildVisualization(XComGameState Vis
 		SoundAndFlyOver.SetSoundAndFlyOverParameters(None, "Harbinger Shield Broken", '', eColor_Bad, , 0.75, true);
 	}
 }
+
+//---------------------------------------------------------------------------------------
+//---Harbinger Bonus Damage--------------------------------------------------------------
+//---------------------------------------------------------------------------------------
+static function X2AbilityTemplate RTHarbingerBonusDamage() {
+    local X2AbilityTemplate Template;
+    local X2Effect_ApplyWeaponDamage DamageEffect
+
+    `CREATE_X2ABILITY_TEMPLATE(Template, 'RTHarbingerBonusDamage');
+
+    Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_NeverShow;
+    Template.Hostility = eHostility_Neutral;
+    Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_swordSlash";
+    Template.AbilitySourceName = 'eAbilitySource_Psionic';
+
+    Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
+    Template.bCrossClassEligible = false;
+
+    Template.AbilityTargetStyle = default.SimpleSingleTarget;
+    Template.AbilityToHitCalc = default.Deadeye;
+    Template.AbilityTriggers.AddItem(new class'X2AbilityTrigger_Placeholder'); // triggered by listener return
+
+    DamageEffect = new class'X2Effect_ApplyWeaponDamage';
+    DamageEffect.bIgnoreBaseDamage = true;
+    DamageEffect.EffectDamageValue = default.HarbingerBonusDamageValue;
+    DamageEffect.DamageTypes.Length = 0;
+    DamageEffect.DamageTypes.AddItem('psi');
+    Template.AddTargetEffect(DamageEffect);
+
+    return Template;
+}
+
+
+
 //---------------------------------------------------------------------------------------
 //---Harbinger Cleanse Listener----------------------------------------------------------
 //---------------------------------------------------------------------------------------
