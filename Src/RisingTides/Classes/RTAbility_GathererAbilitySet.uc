@@ -56,6 +56,8 @@ static function array<X2DataTemplate> CreateTemplates()
 	Templates.AddItem(RTTheSixPathsOfPainIcon());
 	Templates.AddItem(RTMeldInduction());
 	Templates.AddItem(RTGuardianAngel());
+	Templates.AddItem(RTRudimentaryCreatures());
+	Templates.AddItem(RTRudimentaryCreaturesEvent());
 
 
 	return Templates;
