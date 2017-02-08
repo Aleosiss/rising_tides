@@ -713,8 +713,8 @@ function EventListenerReturn RTHarbingerBonusDamage(Object EventData, Object Eve
 
     }
 
-    if(class'RTHelpers'.static.CheckAbility(AbilityState.GetMyTemplateName(), eChecklist_SniperShots) ||
-       class'RTHelpers'.static.CheckAbility(AbilityState.GetMyTemplateName(), eChecklist_DefaultShots)) {
+    if(class'RTHelpers'.static.CheckAbilityActivated(AbilityState.GetMyTemplateName(), eChecklist_SniperShots) ||
+       class'RTHelpers'.static.CheckAbilityActivated(AbilityState.GetMyTemplateName(), eChecklist_StandardShots)) {
         InitializeAbilityForActivation(InterruptAbilityState, SourceUnitState, 'RTHarbingerBonusDamage', History);
         ActivateAbility(InterruptAbilityState, TargetUnitState.GetReference());
         return ELR_NoInterrupt;
