@@ -30,9 +30,6 @@ This would be a bare-bones content mod. I also have the following content in min
       - Add mental effect cleanse to RTMentor
 	  - Gatherer Perks
 	  - Make the meld respond to feedback events instead of panic events
-	- Added redacted name localization for ghosts
-	- Add Template.AddShooterEffectExclusions to most skills where I forgot them
-	- Make sure PyroclasticSlash and BerserkerKnifeAttack have the correct availability when burning
 	- implement new skills as defined here https://hastebin.com/latilokawo.java
 ###### Current Table
       - Triangulation: Spread Over the Shoulder to all melded allies.
