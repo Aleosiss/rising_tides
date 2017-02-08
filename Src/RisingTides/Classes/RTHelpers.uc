@@ -59,7 +59,10 @@ static function bool CheckAbilityActivated(name AbilityTemplateName, ERTChecklis
 					{ return false; }
 					break;
 		case eChecklist_DefaultAbilities:
-					if( AbilityTemplateName != 'StandardShot' )
+					if( AbilityTemplateName != 'StandardShot' && 
+					  	AbilityTemplateName != 'StandardGhostShot'
+					   	
+					  )
 
 					{ return false; }
 					break;
