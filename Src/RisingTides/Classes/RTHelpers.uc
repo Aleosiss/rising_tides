@@ -6,7 +6,7 @@ class RTHelpers extends Object config(RisingTides);
 var config array<name> MeleeAbilities, SniperShots, OverwatchShots, PsionicAbilities;
 
 enum ERTChecklist {
-	eChecklist_DefaultAbilities,
+	eChecklist_StandardShots,
 	eChecklist_SniperShots,
 	eChecklist_OverwatchShots,
 	eChecklist_PsionicAbilities,
@@ -58,7 +58,7 @@ static function bool CheckAbilityActivated(name AbilityTemplateName, ERTChecklis
 						AbilityTemplateName != 'RTMentor')
 					{ return false; }
 					break;
-		case eChecklist_DefaultAbilities:
+		case eChecklist_StandardShots:
 					if( AbilityTemplateName != 'StandardShot' && 
 					  	AbilityTemplateName != 'StandardGhostShot'
 					   	
