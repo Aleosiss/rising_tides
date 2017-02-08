@@ -777,7 +777,6 @@ static function X2AbilityTemplate RTRemoveAdditionalAnimSets()
 	Template.AbilityTriggers.AddItem(Trigger);
 
 	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
-	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
 	//  NOTE: No visualization on purpose!
 
 	Template.bCrossClassEligible = false;				
