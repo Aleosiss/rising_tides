@@ -772,6 +772,64 @@ static function X2Effect_DamageImmunity CreateGuardianAngelImmunitiesEffect() {
         return Effect;
 }
 
+// Rudimentary Creatures is another one of my standard "there's gotta be a better way" abilities where it's just an event listener that does everything.
+static function X2AbilityTemplate RTRudimentaryCreatures() {
+    local X2AbilityTemplate Template;
+    local RTEffect_Rudimentary Effect;
+
+    `CREATE_X2ABILITY_TEMPLATE(Template, 'RTRudimentaryCreatures');
+    Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_NeverShow;
+    Template.Hostility = eHostility_Neutral;
+    Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_swordSlash";
+    Template.AbilitySourceName = 'eAbilitySource_Psionic';
+
+    Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
+    Template.bCrossClassEligible = false;
+
+    Template.AbilityTargetStyle = default.SelfTarget;
+    Template.AbilityToHitCalc = default.Deadeye;
+    Template.AbilityTriggers.AddItem(default.PostUnitBeginPlayTrigger);
+
+    Effect = new class'RTEffect_Rudimentary';
+    Effect.BuildPersistentEffect(1, true, true, false, eGameRule_PlayerTurnEnd);
+    Effect.SetDisplayInfo(ePerkBuff_Perk, Template.LocFriendlyName, Template.LocLongDescription, Template.IconImage, true,, Template.AbilitySourceName);
+    Template.AddShooterEffect(Effect)
+    Template.AdditionalAbilities.AddItem('RTRudimentaryCreaturesEvent');
+	   
+
+    return Template;
+}
+
+static function X2AbilityTemplate RTRudimentaryCreaturesEvent() {
+    local X2AbilityTemplate Template;
+    local X2Effect_ApplyWeaponDamage DamageEffect;
+
+    `CREATE_X2ABILITY_TEMPLATE(Template, 'RTRudimentaryCreaturesEvent');
+
+    Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_NeverShow;
+    Template.Hostility = eHostility_Neutral;
+    Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_swordSlash";
+    Template.AbilitySourceName = 'eAbilitySource_Psionic';
+
+    Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
+    Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
+    Template.bCrossClassEligible = false;
+
+    Template.AbilityTargetStyle = default.SimpleSingleTarget;
+    Template.AbilityToHitCalc = default.Deadeye;
+    Template.AbilityTriggers.AddItem(new class'X2AbilityTrigger_Placeholder'); // triggered by listener return
+
+    Template.AddTargetEffect(class'X2StatusEffects'.static.CreateStunnedEffect());
+
+    DamageEffect = new class'X2Effect_ApplyWeaponDamage';
+    DamageEffect.bIgnoreBaseDamage = true;
+    DamageEffect.EffectDamageValue = default.RudimentaryCreaturesDamageValue;
+    Template.AddTargetEffect(DamageEffect);
+
+    return Template;
+}
+
+
 defaultproperties
 {
 	ExtinctionEventStageThreeEventName = "RTExtinctionEventStageThree";
