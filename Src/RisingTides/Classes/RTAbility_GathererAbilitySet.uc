@@ -820,6 +820,9 @@ static function X2AbilityTemplate RTRudimentaryCreaturesEvent() {
     Template.AbilityTargetStyle = default.SimpleSingleTarget;
     Template.AbilityToHitCalc = default.Deadeye;
     Template.AbilityTriggers.AddItem(new class'X2AbilityTrigger_Placeholder'); // triggered by listener return
+	
+	Template.AbilityShooterConditions.AddItem(default.LivingShooterProperty);
+	Template.AbilityTargetConditions.AddItem(default.LivingTargetProperty);
 
     Template.AddTargetEffect(class'X2StatusEffects'.static.CreateStunnedEffect());
 
