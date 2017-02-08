@@ -2117,6 +2117,9 @@ static function X2AbilityTemplate RTHarbingerBonusDamage() {
 
     Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
     Template.bCrossClassEligible = false;
+	
+	Template.AbilityShooterConditions.AddItem(default.LivingShooterProperty);
+	Template.AbilityTargetConditions.AddItem(default.LivingTargetProperty);
 
     Template.AbilityTargetStyle = default.SimpleSingleTarget;
     Template.AbilityToHitCalc = default.Deadeye;
