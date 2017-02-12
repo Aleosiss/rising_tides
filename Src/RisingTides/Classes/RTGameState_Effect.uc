@@ -648,7 +648,7 @@ function EventListenerReturn RTPsionicInterrupt(Object EventData, Object EventSo
 
     TargetUnitState = XComGameState_Unit(EventSource);
     if(TargetUnitState == none) {
-        `LOG("Rising Tides: " @ GetFuncName() @ " has invalid EventSource!")`
+        `LOG("Rising Tides: " @ GetFuncName() @ " has invalid EventSource!");
         return ELR_NoInterrupt;
     }
 
@@ -658,10 +658,14 @@ function EventListenerReturn RTPsionicInterrupt(Object EventData, Object EventSo
         return ELR_NoInterrupt;
 
     }
-    if(TargetUnitState.AffectedByEffectNames.Find(class'RTAbility_GathererAbilitySet'.default.OverTheShoulderName) == INDEX_NONE)
+    if(TargetUnitState.AffectedByEffectNames.Find(class'RTAbility_GathererAbilitySet'.default.OverTheShoulderEffectName) == INDEX_NONE)
         return ELR_NoInterrupt;
 
-    if(class'RTHelpers'.static.CheckAbility(AbilityState.GetMyTemplateName(), eChecklist_PsionicAbilities)) {
+	if(!TargetUnitState.IsEnemyUnit(SourceUnitState)) {
+		return ELR_NoInterrupt;
+	}
+
+    if(class'RTHelpers'.static.CheckAbilityActivated(AbilityState.GetMyTemplateName(), eChecklist_PsionicAbilities)) {
         InitializeAbilityForActivation(InterruptAbilityState, SourceUnitState, 'RTRudimentaryCreaturesEvent', History);
         ActivateAbility(InterruptAbilityState, TargetUnitState.GetReference());
         return ELR_InterruptEventAndListeners;
@@ -673,23 +677,27 @@ function EventListenerReturn RTPsionicInterrupt(Object EventData, Object EventSo
 // intended event id AbilityActivated filter = unit with Harbinger attached
 // intended EventData is the ability we're going to add bonus damage to
 // intended EventSource is the unit with Harbinger attached
-function EventListenerReturn RTHarbingerBonusDamage(Object EventData, Object EventSource, XComGameState GameState Name EventID) {
+function EventListenerReturn RTHarbingerBonusDamage(Object EventData, Object EventSource, XComGameState GameState, Name EventID) {
     local XComGameStateHistory History;
     local XComGameState_Ability AbilityState, AdditionalDamageState;
     local XComGameState_Unit TargetUnitState, SourceUnitState;
-    local XComGameStateContext AbilityContext;
+    local XComGameStateContext Context;
+	local XComGameStateContext_Ability AbilityContext;
 
-    AbilityContext = GameState.GetContext();
-    if(AbilityContext == none) {
+    Context = GameState.GetContext();
+    if(Context == none) {
+		`LOG("Rising Tides: No Context!");
         return ELR_NoInterrupt;
     }
+	AbilityContext = XComGameStateContext_Ability(Context);
+	if(AbilityContext == none) {
+		`LOG("Rising Tides: No Ability Context!");
+		return ELR_NoInterrupt;
+	}
+
     // we want to do the additional damage first, i think
     if(AbilityContext.InterruptionStatus != eInterruptionStatus_Interrupt) {
-        return ELR_NoInterrupt;
-    }
-
-    // don't add bonus damage to an attack that missed...
-    if(AbilityContext.ResultContext.HitResult != (eHit_Success | eHit_Crit | eHit_Graze) ) {
+		`LOG("Rising Tides: Not the interrupt stage!");
         return ELR_NoInterrupt;
     }
 
@@ -700,9 +708,17 @@ function EventListenerReturn RTHarbingerBonusDamage(Object EventData, Object Eve
         return ELR_NoInterrupt;
     }
 
+	if(AbilityState.GetMyTemplateName() != 'DaybreakFlame') {
+    // don't add bonus damage to an attack that missed...
+		if(AbilityContext.ResultContext.HitResult != eHit_Success || AbilityContext.ResultContext.HitResult != eHit_Crit || AbilityContext.ResultContext.HitResult != eHit_Graze) {
+			`LOG("Rising Tides: Shot didn't hit!");
+			return ELR_NoInterrupt;
+		}
+	}			 
+
     SourceUnitState = XComGameState_Unit(EventSource);
     if(SourceUnitState == none) {
-        `LOG("Rising Tides: " @ GetFuncName() @ " has invalid EventSource!")`
+        `LOG("Rising Tides: " @ GetFuncName() @ " has invalid EventSource!");
         return ELR_NoInterrupt;
     }
 
@@ -712,11 +728,11 @@ function EventListenerReturn RTHarbingerBonusDamage(Object EventData, Object Eve
         return ELR_NoInterrupt;
 
     }
-
+	`LOG("Rising Tides: RTHarbingerBonusDamage is checking for the current ability to add damage to...");
     if(class'RTHelpers'.static.CheckAbilityActivated(AbilityState.GetMyTemplateName(), eChecklist_SniperShots) ||
        class'RTHelpers'.static.CheckAbilityActivated(AbilityState.GetMyTemplateName(), eChecklist_StandardShots)) {
-        InitializeAbilityForActivation(InterruptAbilityState, SourceUnitState, 'RTHarbingerBonusDamage', History);
-        ActivateAbility(InterruptAbilityState, TargetUnitState.GetReference());
+        InitializeAbilityForActivation(AdditionalDamageState, SourceUnitState, 'RTHarbingerBonusDamage', History);
+        ActivateAbility(AdditionalDamageState, TargetUnitState.GetReference());
         return ELR_NoInterrupt;
     }
 

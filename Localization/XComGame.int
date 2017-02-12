@@ -40,7 +40,6 @@ LocHelpText="When this unit deals overkill damage, it converts it into shielding
 LocFlyOverText="Overflow Barrier"
 LocPromotionPopupText="<Bullet/> When this unit deals overkill damage, it converts it into shielding for itself and its melded allies.<br/><Bullet/> Minimum of 1 Shield HP if overkill damage is dealt.<br/><Bullet/> The unit with Overflow Barrier must be melded to generate any shielding.<br/><Bullet/> Shields persist even if the meld is lost.<br/>"
 
-
 [RTPrecisionShot X2AbilityTemplate]
 LocFriendlyName="Precision Shot"
 LocLongDescription="A carefully aimed shot, suffering decreased aim but increased critical chance and critical damage."
@@ -546,6 +545,41 @@ LocLongDescription="When this unit recieves Feedback, it also recieves Stealth."
 LocHelpText="When this unit recieves Feedback, it also recieves Stealth."
 LocFlyOverText="Meld Induction"
 LocPromotionPopupText="<Bullet/> When this unit recieves Feedback, it also recieves Stealth.<br/><Bullet/> Stealth usually lasts for the duration of the Feedback event.<br/>"
+
+[RTRudimentaryCreatures X2AbilityTemplate]
+LocFriendlyName="Rudimentary Creatures"
+LocLongDescription="When units affected by Over the Shoulder attempt to use psionic abilities, this unit will attempt to interrupt the ability, stunning the user and dealing minor psionic damage."
+LocHelpText="When units affected by Over the Shoulder attempt to use psionic abilities, this unit will attempt to interrupt the ability, stunning the user and dealing minor psionic damage."
+LocFlyOverText="Rudimentary Creatures"
+LocPromotionPopupText="<Bullet/> When units affected by Over the Shoulder attempt to use psionic abilities, this unit will attempt to interrupt the ability, stunning the user and dealing minor psionic damage.<br/>"
+
+[RTRudimentaryCreaturesEvent X2AbilityTemplate]
+LocFriendlyName="Rudimentary Creatures"
+LocLongDescription="When units affected by Over the Shoulder attempt to use psionic abilities, this unit will attempt to interrupt the ability, stunning the user and dealing minor psionic damage."
+LocHelpText="When units affected by Over the Shoulder attempt to use psionic abilities, this unit will attempt to interrupt the ability, stunning the user and dealing minor psionic damage."
+LocFlyOverText="Rudimentary Creatures"
+LocPromotionPopupText="<Bullet/> When units affected by Over the Shoulder attempt to use psionic abilities, this unit will attempt to interrupt the ability, stunning the user and dealing minor psionic damage.<br/>"
+
+[RTExtinctionEventPartOne X2AbilityTemplate]
+LocFriendlyName="Extinction Event"
+LocLongDescription="Gain Stealth, charging a powerful attack. On the next turn, unleash an overwhelming psionic nova, obliterating everything in a massive radius."
+LocHelpText="Gain Stealth, charging a powerful attack. On the next turn, unleash an overwhelming psionic nova, obliterating everything in a massive radius."
+LocFlyOverText="Extinction Event"
+LocPromotionPopupText="<Bullet/> 350 tile radius.<br/><Bullet/> Friendly units should attempt to evac before this ability completes!<br/>"
+
+[RTExtinctionEventPartTwo X2AbilityTemplate]
+LocFriendlyName="Extinction Event"
+LocLongDescription="Gain Stealth, charging a powerful attack. On the next turn, unleash an overwhelming psionic nova, obliterating everything in a massive radius."
+LocHelpText="Gain Stealth, charging a powerful attack. On the next turn, unleash an overwhelming psionic nova, obliterating everything in a massive radius."
+LocFlyOverText="Extinction Event"
+LocPromotionPopupText="<Bullet/> 350 tile radius.<br/><Bullet/> Friendly units should attempt to evac before this ability completes!<br/>"
+
+[RTExtinctionEventPartThree X2AbilityTemplate]
+LocFriendlyName="Extinction Event"
+LocLongDescription="Gain Stealth, charging a powerful attack. On the next turn, unleash an overwhelming psionic nova, obliterating everything in a massive radius."
+LocHelpText="Gain Stealth, charging a powerful attack. On the next turn, unleash an overwhelming psionic nova, obliterating everything in a massive radius."
+LocFlyOverText="Extinction Event"
+LocPromotionPopupText="<Bullet/> 350 tile radius.<br/><Bullet/> Friendly units should attempt to evac before this ability completes!<br/>"
 
 ;----------------------------------------------------------------------------------------------------------------------------
 

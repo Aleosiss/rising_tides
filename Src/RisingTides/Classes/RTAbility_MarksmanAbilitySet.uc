@@ -27,7 +27,6 @@ class RTAbility_MarksmanAbilitySet extends RTAbility_GhostAbilitySet
 	var config int VITAL_POINT_TARGETING_DAMAGE;
 	var config int SURGE_COOLDOWN;
 	var config int HEATCHANNEL_COOLDOWN;
-	var config int HARBINGER_SHIELD_AMOUNT, HARBINGER_COOLDOWN, HARBINGER_DAMAGE_BONUS, HARBINGER_WILL_BONUS, HARBINGER_AIM_BONUS, HARBINGER_ARMOR_BONUS;
 	var config int SHOCKANDAWE_DAMAGE_TO_ACTIVATE;
 	var config int SOVEREIGN_PANIC_CHANCE;
 	var config int PSIONICKILLZONE_COOLDOWN;
@@ -41,6 +40,9 @@ class RTAbility_MarksmanAbilitySet extends RTAbility_GhostAbilitySet
 	var config int SND_DEFENSE_BONUS;
 	var config float EMM_DAMAGE_PERCENT;
 	var config int SIS_CONCEALMENT_TURNS;
+
+	var config int HARBINGER_SHIELD_AMOUNT, HARBINGER_COOLDOWN, HARBINGER_DAMAGE_BONUS, HARBINGER_WILL_BONUS, HARBINGER_AIM_BONUS, HARBINGER_ARMOR_BONUS;
+	var config WeaponDamageValue HARBINGER_DMG;
 
 	var Name KillZoneReserveType;
 
@@ -146,6 +148,7 @@ static function X2AbilityTemplate ScopedAndDropped()
 	Template.AdditionalAbilities.AddItem('LIOverwatchShot');
 	Template.AdditionalAbilities.AddItem('RTUnstableConduitBurst');
 	Template.AdditionalAbilities.AddItem('PsionicActivate');
+	Template.AdditionalAbilities.AddItem('RTHarbingerBonusDamage');
 
 	// Probably required 
 	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
@@ -2082,7 +2085,6 @@ static function X2AbilityTemplate Harbinger()
 	
 	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;	//TODO: VISUALIZATION
 	Template.bSkipFireAction = true;
-	Template.AdditionalAbilities.AddItem('RTHarbingerBonusDamage');
 	Template.AdditionalAbilities.AddItem('HarbingerCleanseListener');
 
 	Template.bCrossClassEligible = false;
@@ -2106,7 +2108,7 @@ simulated function OnHarbingerShieldRemoved_BuildVisualization(XComGameState Vis
 //---------------------------------------------------------------------------------------
 static function X2AbilityTemplate RTHarbingerBonusDamage() {
     local X2AbilityTemplate Template;
-    local X2Effect_ApplyWeaponDamage DamageEffect
+    local X2Effect_ApplyWeaponDamage DamageEffect;
 
     `CREATE_X2ABILITY_TEMPLATE(Template, 'RTHarbingerBonusDamage');
 
@@ -2116,10 +2118,13 @@ static function X2AbilityTemplate RTHarbingerBonusDamage() {
     Template.AbilitySourceName = 'eAbilitySource_Psionic';
 
     Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
+	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
+	Template.bSkipFireAction = true;
+	Template.bShowActivation = true;
     Template.bCrossClassEligible = false;
 	
 	Template.AbilityShooterConditions.AddItem(default.LivingShooterProperty);
-	Template.AbilityTargetConditions.AddItem(default.LivingTargetProperty);
+	Template.AbilityTargetConditions.AddItem(default.LivingTargetOnlyProperty);
 
     Template.AbilityTargetStyle = default.SimpleSingleTarget;
     Template.AbilityToHitCalc = default.Deadeye;
@@ -2127,9 +2132,8 @@ static function X2AbilityTemplate RTHarbingerBonusDamage() {
 
     DamageEffect = new class'X2Effect_ApplyWeaponDamage';
     DamageEffect.bIgnoreBaseDamage = true;
-    DamageEffect.EffectDamageValue = default.HarbingerBonusDamageValue;
-    DamageEffect.DamageTypes.Length = 0;
-    DamageEffect.DamageTypes.AddItem('psi');
+    DamageEffect.EffectDamageValue = default.HARBINGER_DMG;
+	DamageEffect.bIgnoreArmor = true;
     Template.AddTargetEffect(DamageEffect);
 
     return Template;
@@ -2354,14 +2358,14 @@ static function X2AbilityTemplate RTOverflowBarrier()
 
 	RTEffect = new class 'RTEffect_OverflowBarrier';
 	RTEffect.BuildPersistentEffect(1, false, true, false,  eGameRule_PlayerTurnBegin);
-	RTEffect.SetDisplayInfo(ePerkBuff_Bonus, Template.LocFriendlyName, Template.LocLongDescription, Template.IconImage, true,, Template.AbilitySourceName);
+	//RTEffect.SetDisplayInfo(ePerkBuff_Bonus, Template.LocFriendlyName, Template.LocLongDescription, Template.IconImage, true,, Template.AbilitySourceName);
 	RTEffect.EffectRemovedVisualizationFn = OnShieldRemoved_BuildVisualization;
 	Template.AddTargetEffect(RTEffect);
 	Template.AddMultiTargetEffect(RTEffect);
 
 	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
 	//Template.BuildVisualizationFn = Shielded_BuildVisualization;
-	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
+	Template.BuildVisualizationFn = OverflowShielded_BuildVisualization;
 	//Template.CinescriptCameraType = "AdvShieldBearer_EnergyShieldArmor";
 	Template.bSkipFireAction = true;
 
@@ -2407,7 +2411,7 @@ simulated function OnShieldRemoved_BuildVisualization(XComGameState VisualizeGam
 	}
 }
 
-simulated function Shielded_BuildVisualization(XComGameState VisualizeGameState, out array<VisualizationTrack> OutVisualizationTracks)
+simulated function OverflowShielded_BuildVisualization(XComGameState VisualizeGameState, out array<VisualizationTrack> OutVisualizationTracks)
 {
 	local XComGameStateHistory History;
 	local XComGameStateContext_Ability  Context;
@@ -2415,6 +2419,7 @@ simulated function Shielded_BuildVisualization(XComGameState VisualizeGameState,
 	local VisualizationTrack EmptyTrack;
 	local VisualizationTrack BuildTrack;
 	local X2Action_PlayAnimation PlayAnimationAction;
+	local X2Action_PlaySoundAndFlyOver SoundAndFlyOver;
 
 	History = `XCOMHISTORY;
 
@@ -2431,7 +2436,13 @@ simulated function Shielded_BuildVisualization(XComGameState VisualizeGameState,
 	PlayAnimationAction = X2Action_PlayAnimation(class'X2Action_PlayAnimation'.static.AddToVisualizationTrack(BuildTrack, Context));
 	PlayAnimationAction.Params.AnimName = 'HL_EnergyShield';
 
+	SoundAndFlyOver = X2Action_PlaySoundAndFlyOver(class'X2Action_PlaySoundAndFlyOver'.static.AddToVisualizationTrack(BuildTrack, VisualizeGameState.GetContext()));
+	SoundAndFlyOver.SetSoundAndFlyOverParameters(None, "Overflow", '', eColor_Good, , 0.75, true);
+
+
 	OutVisualizationTracks.AddItem(BuildTrack);
+
+
 }
 
 defaultproperties

@@ -32,6 +32,9 @@ class RTAbility_GathererAbilitySet extends RTAbility_GhostAbilitySet config(Risi
 	var config int EXTINCTION_EVENT_ACTION_POINT_COST;
 	var config int EXTINCTION_EVENT_CHARGES;
 
+	var config WeaponDamageValue EXTINCTION_EVENT_DMG;
+	var config WeaponDamageValue RUDIMENTARY_CREATURES_DMG;
+
 	var name ExtinctionEventStageThreeEventName;
 	var name OverTheShoulderTagName;
 	var name OverTheShoulderEffectName;
@@ -58,6 +61,9 @@ static function array<X2DataTemplate> CreateTemplates()
 	Templates.AddItem(RTGuardianAngel());
 	Templates.AddItem(RTRudimentaryCreatures());
 	Templates.AddItem(RTRudimentaryCreaturesEvent());
+	Templates.AddItem(RTExtinctionEventPartOne());
+	Templates.AddItem(RTExtinctionEventPartTwo());
+	Templates.AddItem(RTExtinctionEventPartThree());
 
 
 	return Templates;
@@ -85,7 +91,7 @@ static function X2AbilityTemplate OverTheShoulder()
 	// Over The Shoulder
 	local RTEffect_MobileSquadViewer			VisionEffect;	// this lifts a small amount of the FOG around the unit
 	local X2Effect_ScanningProtocol				ScanningEffect;	// this gives sight of the unit to the player														
-	local X2Effect_Persistent					TagEffect;		// this tags the unit so certain OTS effects can only proc once per turn
+	local X2Effect_IncrementUnitValue			TagEffect;		// this tags the unit so certain OTS effects can only proc once per turn
 
 	// Unsettling Voices
 	local RTEffect_UnsettlingVoices				VoiceEffect;
@@ -141,9 +147,10 @@ static function X2AbilityTemplate OverTheShoulder()
 	Template.AbilityMultiTargetStyle = Radius;
 	Template.AbilityMultiTargetConditions.Additem(default.LivingTargetUnitOnlyProperty);
 
-	TagEffect = new class'X2Effect_Persistent';
-	TagEffect.BuildPersistentEffect(1, false, false, false, eGameRule_PlayerTurnBegin);
-	TagEffect.EffectName = default.OverTheShoulderTagName;
+	TagEffect = new class'X2Effect_IncrementUnitValue';
+	TagEffect.UnitName = default.OverTheShoulderTagName;
+	TagEffect.NewValueToSet = 1;
+	TagEffect.CleanupType = eCleanup_BeginTurn;
 	TagEffect.SetupEffectOnShotContextResult(true, true);      //  mark them regardless of whether the shot hit or missed
 	Template.AddMultiTargetEffect(TagEffect);
 
@@ -158,6 +165,7 @@ static function X2AbilityTemplate OverTheShoulder()
 	VisionEffect.iCustomTileRadius = 3;
 	VisionEffect.bRemoveWhenTargetDies = true;
 	VisionEffect.bRemoveWhenSourceDies = true;
+	VisionEffect.EffectName = default.OverTheShoulderEffectName;
 	Template.AddMultiTargetEffect(VisionEffect);
 
 	ScanningEffect = new class'X2Effect_ScanningProtocol';
@@ -238,6 +246,7 @@ static function X2AbilityTemplate OverTheShoulder()
 	Template.AdditionalAbilities.AddItem('LIOverwatchShot');
 	Template.AdditionalAbilities.AddItem('RTUnstableConduitBurst');
 	Template.AdditionalAbilities.AddItem('PsionicActivate');
+	Template.AdditionalAbilities.AddItem('RTHarbingerBonusDamage');
 
 
 	return Template;
@@ -344,15 +353,14 @@ static function X2AbilityTemplate RTExtinctionEventPartOne() {
 
       `CREATE_X2ABILITY_TEMPLATE(Template, 'RTExtinctionEventPartOne');
       Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_AlwaysShow;
-      Template.Hostility = eHostility_Movement;
+      Template.Hostility = eHostility_Neutral;
       Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_swordSlash";
       Template.AbilitySourceName = 'eAbilitySource_Psionic';
 
       Template.FrameAbilityCameraType = eCameraFraming_Never;
 
-  	  Template.BuildNewGameStateFn = class'X2Ability_DefaultAbilitySet'.static.MoveAbility_BuildGameState;
-  	  Template.BuildVisualizationFn = class'X2Ability_DefaultAbilitySet'.static.MoveAbility_BuildVisualization;
-  	  Template.BuildInterruptGameStateFn = class'X2Ability_DefaultAbilitySet'.static.MoveAbility_BuildInterruptGameState;
+  	  Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
+  	  Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
 
       Template.CinescriptCameraType = "StandardMovement";
 
@@ -360,12 +368,11 @@ static function X2AbilityTemplate RTExtinctionEventPartOne() {
   	  Template.bCrossClassEligible = false;
 
       Template.AbilityTriggers.AddItem(default.PlayerInputTrigger);
-      Template.AbilityTargetStyle = new class'X2AbilityTarget_Path';
+      Template.AbilityTargetStyle = default.SelfTarget;
       Template.AbilityToHitCalc = default.Deadeye;
 
       ActionPointCost = new class'X2AbilityCost_ActionPoints';
       ActionPointCost.iNumPoints = default.EXTINCTION_EVENT_ACTION_POINT_COST;
-      ActionPointCost.bMoveCost = true;
       ActionPointCost.bConsumeAllPoints = true;
       Template.AbilityCosts.AddItem(ActionPointCost);
 
@@ -376,8 +383,7 @@ static function X2AbilityTemplate RTExtinctionEventPartOne() {
       Template.AbilityShooterConditions.AddItem(default.LivingShooterProperty);
       Template.AddShooterEffectExclusions();
 
-
-      Template.PostActivationEvents.AddItem('RTExtinctionEvent');
+      Template.PostActivationEvents.AddItem('RTExtinctionEventPartTwo');
 	  Template.AdditionalAbilities.AddItem('RTExtinctionEventPartTwo');
 	  Template.AdditionalAbilities.AddItem('RTExtinctionEventPartThree');
 
@@ -393,7 +399,7 @@ static function X2AbilityTemplate RTExtinctionEventPartTwo() {
 
       `CREATE_X2ABILITY_TEMPLATE(Template, 'RTExtinctionEventPartTwo');
       Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_NeverShow;
-      Template.Hostility = eHostility_Offensive;
+      Template.Hostility = eHostility_Neutral;
       Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_swordSlash";
       Template.AbilitySourceName = 'eAbilitySource_Psionic';
 
@@ -403,7 +409,7 @@ static function X2AbilityTemplate RTExtinctionEventPartTwo() {
   	  Template.bCrossClassEligible = false;
 
       Trigger = new class'X2AbilityTrigger_EventListener';
-      Trigger.ListenerData.EventID = 'RTExtinctionEvent';
+      Trigger.ListenerData.EventID = 'RTExtinctionEventPartTwo';
       Trigger.ListenerData.EventFn = class'XComGameState_Ability'.static.AbilityTriggerEventListener_Self;
       Trigger.ListenerData.Filter = eFilter_Unit;
       Trigger.ListenerData.Deferral = ELD_OnStateSubmitted;
@@ -439,7 +445,7 @@ static function X2AbilityTemplate RTExtinctionEventPartThree() {
 
       `CREATE_X2ABILITY_TEMPLATE(Template, 'RTExtinctionEventPartThree');
       Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_NeverShow;
-      Template.Hostility = eHostility_Neutral;
+      Template.Hostility = eHostility_Offensive;
       Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_swordSlash";
       Template.AbilitySourceName = 'eAbilitySource_Psionic';
 
@@ -471,11 +477,12 @@ static function X2AbilityTemplate RTExtinctionEventPartThree() {
       UnconsciousEffect = class'X2StatusEffects'.static.CreateUnconsciousStatusEffect();
       Template.AddTargetEffect(UnconsciousEffect);
 
-	  // TODO: DAMAGE/WORLDDAMAGE EFFECTS
-
-
-
-
+	  WeaponDamage = new class'X2Effect_ApplyWeaponDamage';
+      WeaponDamage.bIgnoreBaseDamage = true;
+      WeaponDamage.EnvironmentalDamageAmount = 9999999; // good bye
+      WeaponDamage.EffectDamageValue = default.EXTINCTION_EVENT_DMG;
+	  WeaponDamage.DamageTypes.AddItem('Psi');
+      Template.AddMultiTargetEffect(WeaponDamage);
 
       return Template;
   }
@@ -519,7 +526,7 @@ static function X2AbilityTemplate RTTheSixPathsOfPain() {
       Template.AbilityToHitCalc = default.Deadeye;
 
       Trigger = new class'X2AbilityTrigger_EventListener';
-      Trigger.ListenerData.Priority = 40; // this way we don't conflict with automatic SquadViewer cleanup
+      Trigger.ListenerData.Priority = 35; // this way we don't conflict with automatic SquadViewer cleanup
       Trigger.ListenerData.EventID = 'PlayerTurnBegun';
       Trigger.ListenerData.EventFn = class'XComGameState_Ability'.static.AbilityTriggerEventListener_Self;
       Trigger.ListenerData.Filter = eFilter_None;
@@ -757,6 +764,7 @@ static function X2Effect_DamageImmunity CreateGuardianAngelImmunitiesEffect() {
 
         Effect = new class'X2Effect_DamageImmunity';
         Effect.BuildPersistentEffect(1, false, true, false, eGameRule_PlayerTurnEnd);
+		Effect.SetDisplayInfo(ePerkBuff_Bonus, "Guardian Angel", "Get up.", "img:///UILibrary_PerkIcons.UIPerk_swordSlash", true,, 'eAbilitySource_Psionic');
         // Guardian Angel will not stop hard CC, but cleanse it next turn.
         Effect.ImmuneTypes.AddItem(class'X2AbilityTemplateManager'.default.DisorientedName);
         Effect.ImmuneTypes.AddItem(class'X2AbilityTemplateManager'.default.ConfusedName);
@@ -790,12 +798,12 @@ static function X2AbilityTemplate RTRudimentaryCreatures() {
 
     Template.AbilityTargetStyle = default.SelfTarget;
     Template.AbilityToHitCalc = default.Deadeye;
-    Template.AbilityTriggers.AddItem(default.PostUnitBeginPlayTrigger);
+    Template.AbilityTriggers.AddItem(default.UnitPostBeginPlayTrigger);
 
     Effect = new class'RTEffect_Rudimentary';
     Effect.BuildPersistentEffect(1, true, true, false, eGameRule_PlayerTurnEnd);
-    Effect.SetDisplayInfo(ePerkBuff_Perk, Template.LocFriendlyName, Template.LocLongDescription, Template.IconImage, true,, Template.AbilitySourceName);
-    Template.AddShooterEffect(Effect)
+    Effect.SetDisplayInfo(ePerkBuff_Passive, Template.LocFriendlyName, Template.LocLongDescription, Template.IconImage, true,, Template.AbilitySourceName);
+    Template.AddShooterEffect(Effect);
     Template.AdditionalAbilities.AddItem('RTRudimentaryCreaturesEvent');
 	   
 
@@ -822,13 +830,15 @@ static function X2AbilityTemplate RTRudimentaryCreaturesEvent() {
     Template.AbilityTriggers.AddItem(new class'X2AbilityTrigger_Placeholder'); // triggered by listener return
 	
 	Template.AbilityShooterConditions.AddItem(default.LivingShooterProperty);
-	Template.AbilityTargetConditions.AddItem(default.LivingTargetProperty);
+	Template.AbilityTargetConditions.AddItem(default.LivingTargetOnlyProperty);
 
-    Template.AddTargetEffect(class'X2StatusEffects'.static.CreateStunnedEffect());
+    Template.AddTargetEffect(class'X2StatusEffects'.static.CreateStunnedStatusEffect(3, 100, true));
 
     DamageEffect = new class'X2Effect_ApplyWeaponDamage';
     DamageEffect.bIgnoreBaseDamage = true;
-    DamageEffect.EffectDamageValue = default.RudimentaryCreaturesDamageValue;
+    DamageEffect.EffectDamageValue = default.RUDIMENTARY_CREATURES_DMG;
+	DamageEffect.bIgnoreArmor = true;
+	DamageEffect.DamageTypes.AddItem('Psi');
     Template.AddTargetEffect(DamageEffect);
 
     return Template;

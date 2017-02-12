@@ -167,6 +167,9 @@
     <Content Include="Src\RisingTides\Classes\RTEffect_ReserveOverwatchPoints.uc">
       <SubType>Content</SubType>
     </Content>
+    <Content Include="Src\RisingTides\Classes\RTEffect_Rudimentary.uc">
+      <SubType>Content</SubType>
+    </Content>
     <Content Include="Src\RisingTides\Classes\RTEffect_ScopedAndDropped.uc">
       <SubType>Content</SubType>
     </Content>

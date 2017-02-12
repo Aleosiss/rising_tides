@@ -29,9 +29,18 @@ function bool PostAbilityCostPaid(XComGameState_Effect EffectState, XComGameStat
 	
 	if(class'RTHelpers'.static.CheckAbilityActivated(kAbility.GetMyTemplateName(), eChecklist_SniperShots)) {
 		SourceUnit.SetUnitFloatValue('RT_KnockThemDownVal', UnitVal.fValue + 1, eCleanup_BeginTurn);
-	} else {
-		SourceUnit.SetUnitFloatValue('RT_KnockThemDownVal', 0, eCleanup_BeginTurn);
-	}	
+		return false;
+	}
+
+	if(class'RTHelpers'.static.CheckAbilityActivated(kAbility.GetMyTemplateName(), eChecklist_FreeActions)) {
+		return false;
+	}
+	
+	`LOG("Rising Tides: Knock Them Down: " @ kAbility.GetMyTemplateName() @ " broke the Knock Them Down chain! -----------------------------------------------------------------------------");
+	SourceUnit.SetUnitFloatValue('RT_KnockThemDownVal', 0, eCleanup_BeginTurn);
+		
+
+	return false;
 }
 
 DefaultProperties

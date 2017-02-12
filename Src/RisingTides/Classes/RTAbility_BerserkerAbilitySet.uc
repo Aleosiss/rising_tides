@@ -123,6 +123,7 @@ static function X2AbilityTemplate BumpInTheNight()
 	Template.AdditionalAbilities.AddItem('LIOverwatchShot');
 	Template.AdditionalAbilities.AddItem('RTUnstableConduitBurst');
 	Template.AdditionalAbilities.AddItem('PsionicActivate');
+	Template.AdditionalAbilities.AddItem('RTHarbingerBonusDamage');
 
 	// Probably required 
 	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;

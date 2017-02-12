@@ -53,14 +53,17 @@ simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffe
 	local XComGameStateHistory History;
 	local int HealAmount, ShredAmount, RuptureAmount;
 
+	m_aStatChanges.Length = 0;
+
 	
 	// gain bonus will and psi offense
 	AddPersistentStatChange(eStat_Will, BONUS_WILL);
 	AddPersistentStatChange(eStat_PsiOffense, BONUS_WILL);
+	AddPersistentStatChange(eStat_ArmorMitigation, BONUS_ARMOR);
 	
 	
 	// gain bonus armor pen to simulate psi damage for now
-	AddPersistentStatChange(eStat_ArmorPiercing, BONUS_PSI_DAMAGE);
+	//AddPersistentStatChange(eStat_ArmorPiercing, BONUS_PSI_DAMAGE);
 	
 	TargetUnitState = XComGameState_Unit(kNewTargetState);
 	// heal to full
@@ -79,8 +82,8 @@ function ModifyTurnStartActionPoints(XComGameState_Unit UnitState, out array<nam
 }
 
 
-function int GetArmorMitigation(XComGameState_Effect EffectState, XComGameState_Unit UnitState) { return BONUS_ARMOR; }
-function string GetArmorName(XComGameState_Effect EffectState, XComGameState_Unit UnitState) { return "Harbinger"; }
+//function int GetArmorMitigation(XComGameState_Effect EffectState, XComGameState_Unit UnitState) { return BONUS_ARMOR; }
+//function string GetArmorName(XComGameState_Effect EffectState, XComGameState_Unit UnitState) { return "Harbinger"; }
 
 function GetToHitModifiers(XComGameState_Effect EffectState, XComGameState_Unit Attacker, XComGameState_Unit Target, XComGameState_Ability AbilityState, class<X2AbilityToHitCalc> ToHitType, bool bMelee, bool bFlanking, bool bIndirectFire, out array<ShotModifierInfo> ShotModifiers) {
 	local ShotModifierInfo ModInfoAim;
@@ -99,7 +102,7 @@ function int GetDefendingDamageModifier(XComGameState_Effect EffectState, XComGa
 
 function int GetAttackingDamageModifier(XComGameState_Effect EffectState, XComGameState_Unit Attacker, Damageable TargetDamageable, XComGameState_Ability AbilityState, const out EffectAppliedData AppliedData, const int CurrentDamage, optional XComGameState NewGameState)
 {
-	return BONUS_PSI_DAMAGE;
+	//return BONUS_PSI_DAMAGE;
 }
 
 

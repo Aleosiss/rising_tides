@@ -3,14 +3,15 @@
 class RTHelpers extends Object config(RisingTides);
 
 // todo...
-var config array<name> MeleeAbilities, SniperShots, OverwatchShots, PsionicAbilities;
+var config array<name> StandardShots, MeleeAbilities, SniperShots, OverwatchShots, PsionicAbilities, FreeActions;
 
 enum ERTChecklist {
 	eChecklist_StandardShots,
 	eChecklist_SniperShots,
 	eChecklist_OverwatchShots,
 	eChecklist_PsionicAbilities,
-	eChecklist_MeleeAbilities
+	eChecklist_MeleeAbilities,
+	eChecklist_FreeActions
 };
 
 
@@ -20,55 +21,83 @@ static function bool IsUnitAlienRuler(XComGameState_Unit UnitState)
 	return UnitState.IsUnitAffectedByEffectName('AlienRulerPassive');
 }
 
+static function ListDefaultAbilityLists() {
+	local name n;
+
+	foreach default.StandardShots(n) {
+		`LOG("Rising Tides: Standard Shots: " @ n);
+	} 
+
+	foreach default.MeleeAbilities(n) {
+		`LOG("Rising Tides: Melee Abilities: " @ n);
+	} 
+
+	foreach default.SniperShots(n) {
+		`LOG("Rising Tides: Sniper Shots: " @ n);
+	} 
+
+	foreach default.OverwatchShots(n) {
+		`LOG("Rising Tides: Overwatch Shots: " @ n);
+	} 
+
+	foreach default.PsionicAbilities(n) {
+		`LOG("Rising Tides: Psionic Abilities: " @ n);
+	}
+	
+	foreach default.FreeActions(n) {
+		`LOG("Rising Tides: Free Actions: " @ n);
+	} 
 
 
-// where the fuck is the array? hello?
+}
+
+
 static function bool CheckAbilityActivated(name AbilityTemplateName, ERTChecklist Checklist) {
+	local bool b;
+	local string n;
+	b = true;
+
+	//ListDefaultAbilityLists();
 
 	switch(Checklist) {
 		case eChecklist_MeleeAbilities:
-					if( AbilityTemplateName != 'RTBerserkerKnifeAttack' &&
-						AbilityTemplateName != 'RTPyroclasticSlash' &&
-						AbilityTemplateName != 'RTReprobateWaltz')
-					{ return false; }
+					n = "Melee Abilities";
+					if( default.MeleeAbilities.Find(AbilityTemplateName) == INDEX_NONE )
+					{ b = false; }
 					break;
 		case eChecklist_SniperShots: 
-					if( AbilityTemplateName != 'RTStandardSniperShot' && 
-						AbilityTemplateName != 'DaybreakFlame' && 
-						AbilityTemplateName != 'RTOverwatchShot' &&
-						AbilityTemplateName != 'RTPrecisionShot' && 
-						AbilityTemplateName != 'RTDisablingShot' &&  
-						AbilityTemplateName != 'KillZoneShot') 
-					{ return false; }
+					n = "Sniper Shots";
+					if( default.SniperShots.Find(AbilityTemplateName) == INDEX_NONE )
+					{ b = false; }
 					break;
 		case eChecklist_OverwatchShots: 
-					if( AbilityTemplateName != 'RTOverwatchShot' && 
-						AbilityTemplateName != 'KillZoneShot' && 
-						AbilityTemplateName != 'OverwatchShot' && 
-						AbilityTemplateName != 'CloseCombatSpecialistAttack')
-					{ return false; }
+					n = "Overwatch Shots";
+					if( default.OverwatchShots.Find(AbilityTemplateName) == INDEX_NONE )
+					{ b = false; }
 					break;
 		case eChecklist_PsionicAbilities:
-					if( AbilityTemplateName != 'PsiOverload' &&
-						AbilityTemplateName != 'RTBurst' && 
-						AbilityTemplateName != 'PsionicSurge' && 
-						AbilityTemplateName != 'Harbinger' && 
-						AbilityTemplateName != 'RTKillzone' && 
-						AbilityTemplateName != 'TimeStandsStill' &&
-						AbilityTemplateName != 'RTMentor')
-					{ return false; }
+					n = "Psionic Abilities";
+					if( default.PsionicAbilities.Find(AbilityTemplateName) == INDEX_NONE )
+					{ b = false; }
 					break;
 		case eChecklist_StandardShots:
-					if( AbilityTemplateName != 'StandardShot' && 
-					  	AbilityTemplateName != 'StandardGhostShot'
-					   	
-					  )
-
-					{ return false; }
+					n = "Standard Shots";
+					if( default.StandardShots.Find(AbilityTemplateName) == INDEX_NONE )
+					{ b = false; }
+					break;
+		case eChecklist_FreeActions:
+					n = "Free Actions";
+					if( default.FreeActions.Find(AbilityTemplateName) == INDEX_NONE )
+					{ b = false; }
 					break;
 		default:
-					return false;
+					b = false;
 	} 
 
-	return true;
+	if(!b) {
+		`LOG("Rising Tides: " @ AbilityTemplateName @ " was not found in " @ n);
+	}
+
+
+	return b;
 }

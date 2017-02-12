@@ -454,7 +454,6 @@ static function X2AbilityTemplate RTFeedback()
 
 	// Build the effect
 	PanicEffect = new class'RTEffect_Panicked';
-	PanicEffect.EffectName = class'X2AbilityTemplateManager'.default.PanickedName;
 	PanicEffect.DuplicateResponse = eDupe_Ignore;
 	PanicEffect.AddPersistentStatChange(eStat_Offense, -10);
 	PanicEffect.EffectHierarchyValue = 550;
@@ -537,6 +536,7 @@ static function X2AbilityTemplate Fade()
 	Template.AddTargetEffect(StealthEffect);
 	
 	Template.AddTargetEffect(class'X2Effect_Spotted'.static.CreateUnspottedEffect());
+	Template.AbilityShooterConditions.AddItem(default.LivingShooterProperty);
 	
 	CooldownTrackerEffect = new class'X2Effect_Persistent';
 	CooldownTrackerEffect.BuildPersistentEffect(default.FADE_COOLDOWN, false, true, false, eGameRule_PlayerTurnEnd);
@@ -790,11 +790,11 @@ static function X2AbilityTemplate RTRemoveAdditionalAnimSets()
 
 // helpers
 
-static function X2Condition_UnitEffectsWithAbilitySource CreateOverTheShoulderProperty() {
-	local X2Condition_UnitEffectsWithAbilitySource Condition;
+static function X2Condition_UnitValue CreateOverTheShoulderProperty() {
+	local X2Condition_UnitValue Condition;
 
-	Condition = new class'X2Condition_UnitEffectsWithAbilitySource';
-	Condition.AddExcludeEffect(class'RTAbility_GathererAbilitySet'.default.OverTheShoulderTagName, 'AA_UnitIsImmune');
+	Condition = new class'X2Condition_UnitValue';
+	Condition.AddCheckValue(class'RTAbility_GathererAbilitySet'.default.OverTheShoulderTagName, 1, eCheck_GreaterThanOrEqual);
 
 	return Condition;
 
