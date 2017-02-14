@@ -17,20 +17,19 @@ This would be a bare-bones content mod. I also have the following content in min
 >- New enemy units, possible returns from EW
 
 ###### Current TODOs: 
-  - Berserker:
-      - Implement Stealth visual overlay
-  - Marksman: 
-      - None
-  - Gatherer: 
-      - Everything besides OTS
-
-###### Current Unresolved:
-      - Visuals
-      - Shadow Strike infinite range targeting style
-      - Add mental effect cleanse to RTMentor
-	  - Gatherer Perks
-	  - Make the meld respond to feedback events instead of panic events
-	- implement new skills as defined here https://hastebin.com/latilokawo.java
+- Berserker:
+	- Shadow Strike unbound targeting style
+	- Mentor feedback cleanse effect
+- Marksman:
+	- nothing
+- Gatherer: 
+	- Triangulation
+	- AbilitySet
+- General:
+	- Animations/Visuals
+	- Meld respond to feedback event
+	- implement new RTEffectBuilder class: https://hastebin.com/nopifexogo.scala
+	- implement new TargetAbility condition: https://hastebin.com/eleboyigib.scala
 ###### Current Table
       - Triangulation: Spread Over the Shoulder to all melded allies.
       - Shatter The Line: If this unit kills an enemy within X tiles, it triggers a flush effect on other enemies within X tiles. 2/3 turn cooldown. credits to /u/PostOfficeBuddy
