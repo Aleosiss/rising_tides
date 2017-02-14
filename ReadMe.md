@@ -20,6 +20,7 @@ This would be a bare-bones content mod. I also have the following content in min
 - Berserker:
 	- Shadow Strike unbound targeting style
 	- Mentor feedback cleanse effect
+	- Move the Acid stack count off the template
 - Marksman:
 	- nothing
 - Gatherer: 
