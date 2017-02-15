@@ -17,32 +17,32 @@ This would be a bare-bones content mod. I also have the following content in min
 >- New enemy units, possible returns from EW
 
 ###### Current TODOs: 
-- Berserker:
-	- Shadow Strike unbound targeting style
-	- Mentor feedback cleanse effect
-	- Move the Acid stack count off the template
-- Marksman:
-	- nothing
-- Gatherer: 
-	- Let's try to move away from scanning protocol-- it's ugly and unimmersive. Instead, we'll directly set the visibility in RTEffect_MobileSquadViewer.
-	- More investigation seems to indicate that ObjectMoved will trigger on each tile, good for Over The Shoulder. Set the Tile Listener to slightly higher priority than the ObjectMoved listener.
-	- Investigate bug related to removing Aura Effects; first try removing Guardian Angel to see if that is the cause
-	- Triangulation
-	- AbilitySet
-- General:
-	- Animations/Visuals
-	- Meld respond to feedback event
-	- implement new RTEffectBuilder class: https://hastebin.com/raxahacezo.uc
-		- replace effects in various abilitysets with constructors from the builder/factory class
-	- implement configuration for RTEffectBuilder
-	- implement new TargetAbility condition: https://hastebin.com/eleboyigib.uc
-	- i may have broken the feedback panic visualization, investigate
+	- Berserker:
+		- Shadow Strike unbound targeting style
+		- Mentor feedback cleanse effect
+		- Move the Acid stack count off the template
+	- Marksman:
+		- nothing
+	- Gatherer: 
+		- Let's try to move away from scanning protocol-- it's ugly and unimmersive. Instead, we'll directly set the visibility in RTEffect_MobileSquadViewer.
+		- More investigation seems to indicate that ObjectMoved will trigger on each tile, good for Over The Shoulder. Set the Tile Listener to slightly higher priority than the ObjectMoved listener.
+		- Investigate bug related to removing Aura Effects; first try removing Guardian Angel to see if that is the cause
+		- Triangulation
+		- AbilitySet
+	- General:
+		- Animations/Visuals
+		- Meld respond to feedback event
+		- implement new RTEffectBuilder class: https://hastebin.com/raxahacezo.uc
+			- replace effects in various abilitysets with constructors from the builder/factory class
+		- implement configuration for RTEffectBuilder
+		- implement new TargetAbility condition: https://hastebin.com/eleboyigib.uc
+		- I may have broken the feedback panic visualization, investigate
+		- Add x2/lw abilities to PsionicAbilityList
 	
-###### Current Table
-      - Triangulation: Spread Over the Shoulder to all melded allies.
+###### Current Table:
       - Shatter The Line: If this unit kills an enemy within X tiles, it triggers a flush effect on other enemies within X tiles. 2/3 turn cooldown. credits to /u/PostOfficeBuddy
       
-###### Current Bugs
+###### Current Bugs:
       - Time Stop damage calculation isn't visualized properly
       - Time Stop probably won't work on Frozen enemies
       - Time Stop doesn't work on Stasis'd units (despite this making no sense whatsoever) because it's hard-coded
