@@ -25,7 +25,7 @@ This would be a bare-bones content mod. I also have the following content in min
 		- nothing
 	- Gatherer: 
 		- Let's try to move away from scanning protocol-- it's ugly and unimmersive. Instead, we'll directly set the visibility in RTEffect_MobileSquadViewer.
-		- More investigation seems to indicate that ObjectMoved will trigger on each tile, good for Over The Shoulder. Set the Tile Listener to slightly higher priority than the ObjectMoved listener.
+		- More investigation seems to indicate that ObjectMoved will trigger on each tile, good for Over The Shoulder. Set the ObjectMoved listener to slightly higher priority than the UnitMoveFinished listener.
 		- Investigate bug related to removing Aura Effects; first try removing Guardian Angel to see if that is the cause
 		- Triangulation
 		- AbilitySet
