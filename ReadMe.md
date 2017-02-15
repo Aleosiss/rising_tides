@@ -24,16 +24,18 @@ This would be a bare-bones content mod. I also have the following content in min
 - Marksman:
 	- nothing
 - Gatherer: 
-	- Let's try to move away from scanning protocol-- it's ugly and unimmersive. Instead, we'll directly set the visibility in RTEffect_MobileSquadViewer.]
+	- Let's try to move away from scanning protocol-- it's ugly and unimmersive. Instead, we'll directly set the visibility in RTEffect_MobileSquadViewer.
+	- More investigation seems to indicate that ObjectMoved will trigger on each tile, good for Over The Shoulder. Set the Tile Listener to slightly higher priority than the ObjectMoved listener.
 	- Investigate bug related to removing Aura Effects; first try removing Guardian Angel to see if that is the cause
 	- Triangulation
 	- AbilitySet
 - General:
 	- Animations/Visuals
 	- Meld respond to feedback event
-	- implement new RTEffectBuilder class: https://hastebin.com/retolosoki.js
+	- implement new RTEffectBuilder class: https://hastebin.com/raxahacezo.uc
 		- replace effects in various abilitysets with constructors from the builder/factory class
-	- implement new TargetAbility condition: https://hastebin.com/eleboyigib.js
+	- implement configuration for RTEffectBuilder
+	- implement new TargetAbility condition: https://hastebin.com/eleboyigib.uc
 	- i may have broken the feedback panic visualization, investigate
 	
 ###### Current Table
