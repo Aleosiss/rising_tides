@@ -32,6 +32,7 @@ This would be a bare-bones content mod. I also have the following content in min
 	- Animations/Visuals
 	- Meld respond to feedback event
 	- implement new RTEffectBuilder class: https://hastebin.com/nopifexogo.scala
+		- replace effects in various abilitysets with constructors from the builder/factory class
 	- implement new TargetAbility condition: https://hastebin.com/eleboyigib.sca
 	- i may have broken the feedback panic visualization, investigate
 	
