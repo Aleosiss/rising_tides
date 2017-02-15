@@ -8,7 +8,7 @@
 //---------------------------------------------------------------------------------------
 class RTEffect_KnockThemDown extends X2Effect_Persistent config(RisingTides);
 
-	var float CRIT_DAMAGE_MODIFIER;
+	var int DAMAGE_INCREMENT;
 
 function int GetAttackingDamageModifier(XComGameState_Effect EffectState, XComGameState_Unit Attacker, Damageable TargetDamageable, XComGameState_Ability AbilityState, const out EffectAppliedData AppliedData, const int CurrentDamage, optional XComGameState NewGameState) {
 	local float ExtraDamage, TOTAL_DMG_BONUS;
@@ -28,7 +28,7 @@ function bool PostAbilityCostPaid(XComGameState_Effect EffectState, XComGameStat
 	SourceUnit.GetUnitValue('RT_KnockThemDownVal', UnitVal);
 	
 	if(class'RTHelpers'.static.CheckAbilityActivated(kAbility.GetMyTemplateName(), eChecklist_SniperShots)) {
-		SourceUnit.SetUnitFloatValue('RT_KnockThemDownVal', UnitVal.fValue + 1, eCleanup_BeginTurn);
+		SourceUnit.SetUnitFloatValue('RT_KnockThemDownVal', UnitVal.fValue + DAMAGE_INCREMENT, eCleanup_BeginTurn);
 		return false;
 	}
 
@@ -36,7 +36,7 @@ function bool PostAbilityCostPaid(XComGameState_Effect EffectState, XComGameStat
 		return false;
 	}
 	
-	`LOG("Rising Tides: Knock Them Down: " @ kAbility.GetMyTemplateName() @ " broke the Knock Them Down chain! -----------------------------------------------------------------------------");
+	`LOG("Rising Tides: Knock Them Down: " @ kAbility.GetMyTemplateName() @ " broke the Knock Them Down chain!");
 	SourceUnit.SetUnitFloatValue('RT_KnockThemDownVal', 0, eCleanup_BeginTurn);
 		
 
@@ -46,4 +46,5 @@ function bool PostAbilityCostPaid(XComGameState_Effect EffectState, XComGameStat
 DefaultProperties
 {
 	DuplicateResponse = eDupe_Ignore
+	DAMAGE_INCREMENT = 1
 }
