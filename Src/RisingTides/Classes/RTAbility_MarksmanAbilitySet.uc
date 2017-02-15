@@ -18,7 +18,7 @@ class RTAbility_MarksmanAbilitySet extends RTAbility_GhostAbilitySet
 	var config int SQUADSIGHT_CRIT_CHANCE;
 	var config int SNAPSHOT_AIM_BONUS;
 	var config int DISABLESHOT_AIM_BONUS, DISABLESHOT_COOLDOWN;
-	var config float KNOCKTHEMDOWN_CRITDMG_MULTIPLIER;
+	var config int KNOCKTHEMDOWN_DAMAGE_INCREMENT;
 	var config float SIXOCLOCK_WILL_BONUS;
 	var config float SIXOCLOCK_PSI_BONUS;
 	var config float SIXOCLOCK_DEFENSE_BONUS;
@@ -582,7 +582,7 @@ static function X2AbilityTemplate KnockThemDown()
 	Template.AbilityTriggers.AddItem(default.UnitPostBeginPlayTrigger);
 
 	KnockEffect = new class'RTEffect_KnockThemDown';
-	KnockEffect.CRIT_DAMAGE_MODIFIER = default.KNOCKTHEMDOWN_CRITDMG_MULTIPLIER;
+	KnockEffect.DAMAGE_INCREMENT = default.KNOCKTHEMDOWN_DAMAGE_INCREMENT;
 	KnockEffect.BuildPersistentEffect(1, true, true, true);
 	KnockEffect.SetDisplayInfo(ePerkBuff_Passive, Template.LocFriendlyName, Template.LocLongDescription, Template.IconImage, true,,Template.AbilitySourceName);
 	Template.AddTargetEffect(KnockEffect);
