@@ -24,7 +24,8 @@ This would be a bare-bones content mod. I also have the following content in min
 - Marksman:
 	- nothing
 - Gatherer: 
-	- Let's try to move away from scanning protocol-- it's ugly and unimmersive. Instead, we'll directly set the visibility in RTEffect_MobileSquadViewer.
+	- Let's try to move away from scanning protocol-- it's ugly and unimmersive. Instead, we'll directly set the visibility in RTEffect_MobileSquadViewer.]
+	- Investigate bug related to removing Aura Effects; first try removing Guardian Angel to see if that is the cause
 	- Triangulation
 	- AbilitySet
 - General:
