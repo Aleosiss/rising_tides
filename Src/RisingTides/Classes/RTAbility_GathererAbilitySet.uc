@@ -324,7 +324,7 @@ static function X2AbilityTemplate RTForcedIntroversion() {
 
 	StealthEffect = new class'RTEffect_Stealth';
 	StealthEffect.fStealthModifier = 1.0f;
-	StealthEffect.BuildPersistentEffect(4, false, true, false, eGameRule_PlayerTurnBegin);
+	StealthEffect.BuildPersistentEffect(default.FEEDBACK_DURATION, false, true, false, eGameRule_PlayerTurnBegin);
 	StealthEffect.SetDisplayInfo(ePerkBuff_Bonus, "Stealth", "Become invisible, and extremely difficult to detect.", Template.IconImage, true,,Template.AbilitySourceName);
 	Template.AddTargetEffect(StealthEffect);
 
