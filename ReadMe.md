@@ -24,6 +24,7 @@ This would be a bare-bones content mod. I also have the following content in min
 - Marksman:
 	- nothing
 - Gatherer: 
+	- Let's try to move away from scanning protocol-- it's ugly and unimmersive. Instead, we'll directly set the visibility in RTEffect_MobileSquadViewer.
 	- Triangulation
 	- AbilitySet
 - General:
