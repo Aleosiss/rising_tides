@@ -51,6 +51,7 @@ class RTAbility_GhostAbilitySet extends X2Ability
 	var config int FADE_DURATION;
 	var config int FADE_COOLDOWN;
 	var config int MAX_BLOODLUST_MELDJOIN;
+	var config int FEEDBACK_DURATION;
 
 	var name RTFeedbackEffectName;
 
@@ -464,13 +465,13 @@ static function X2AbilityTemplate RTFeedback()
 	PanicEffect.DelayVisualizationSec = 0.0f;
 	PanicEffect.EffectName = default.RTFeedbackEffectName;
 	// One turn duration
-	PanicEffect.BuildPersistentEffect(4, false, true, false, eGameRule_PlayerTurnBegin);
+	PanicEffect.BuildPersistentEffect(default.FEEDBACK_DURATION, false, true, false, eGameRule_PlayerTurnBegin);
 	PanicEffect.SetDisplayInfo(ePerkBuff_Penalty, default.FEEDBACK_TITLE, 
 		default.FEEDBACK_DESC, Template.IconImage);
 	Template.AddTargetEffect(PanicEffect);
 
 	PanickedWillEffect = new class'X2Effect_PanickedWill';
-	PanickedWillEffect.BuildPersistentEffect(4, false, true, false, eGameRule_PlayerTurnBegin);
+	PanickedWillEffect.BuildPersistentEffect(default.FEEDBACK_DURATION, false, true, false, eGameRule_PlayerTurnBegin);
 	Template.AddTargetEffect(PanickedWillEffect);
 
 	Condition = new class'X2Condition_UnitProperty';
