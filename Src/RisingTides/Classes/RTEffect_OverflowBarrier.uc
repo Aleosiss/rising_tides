@@ -11,7 +11,7 @@ simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffe
         
         History = `XCOMHISTORY;
         
-		m_aStatChanges.Length = 0;
+		m_aStatChanges.Length = 0; // Reset the template shield strength, since it is dynamically generated. maybe I should make a RTEffect_DynamicStatChange
         SourceUnitState = XComGameState_Unit(History.GetGameStateForObjectID(ApplyEffectParameters.SourceStateObjectRef.ObjectID)); // unit with Overflow Barrier
         MeldEffectState = RTGameState_MeldEffect(SourceUnitState.GetUnitAffectedByEffectState(class'RTEffect_Meld'.default.EffectName));
         if(MeldEffectState == none) {
