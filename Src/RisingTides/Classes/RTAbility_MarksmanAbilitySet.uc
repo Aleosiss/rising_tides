@@ -2439,7 +2439,7 @@ simulated function OverflowShielded_BuildVisualization(XComGameState VisualizeGa
 	PlayAnimationAction.Params.AnimName = 'HL_EnergyShield';
 
 	SoundAndFlyOver = X2Action_PlaySoundAndFlyOver(class'X2Action_PlaySoundAndFlyOver'.static.AddToVisualizationTrack(BuildTrack, VisualizeGameState.GetContext()));
-	SoundAndFlyOver.SetSoundAndFlyOverParameters(None, "Overflow", '', eColor_Good, , 0.75, true);
+	SoundAndFlyOver.SetSoundAndFlyOverParameters(None, default.OVERFLOW_READOUT, '', eColor_Good, , 0.75, true);
 
 
 	OutVisualizationTracks.AddItem(BuildTrack);

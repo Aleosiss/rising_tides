@@ -66,6 +66,7 @@ SOC_DESC="I've got your six."
 GREYSCALED_TITLE="Greyscale"
 GREYSCALED_DESC="Frozen in time..."
 HARBINGER_BROKEN_ALERT="Shield lost!"
+OVERFLOW_READOUT="Overflow"
 
 [RTAbility_GathererAbilitySet]
 GuardianAngelHealText="Guardian Angel"

@@ -39,6 +39,7 @@ class RTAbility_GhostAbilitySet extends X2Ability
 	var localized string GREYSCALED_TITLE;
 	var localized string GREYSCALED_DESC;
 	var localized string HARBINGER_BROKEN_ALERT;
+	var localized string OVERFLOW_READOUT;
 
 	var config int BASE_REFLECTION_CHANCE;
 	var config int BASE_DEFENSE_INCREASE;

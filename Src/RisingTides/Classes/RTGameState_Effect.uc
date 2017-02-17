@@ -30,10 +30,18 @@ function EventListenerReturn OnTacticalGameEnd(Object EventData, Object EventSou
 
 // ActivateAbility
 protected function ActivateAbility(XComGameState_Ability AbilityState, StateObjectReference TargetRef) {
-	local XComGameStateContext_Ability AbilityContext;
+	local XComGameStateContext_Ability	AbilityContext;
+	local XComGameState					NewGameState;
 	
-	if(AbilityState.CanActivateAbilityForObserverEvent(XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(TargetRef.ObjectID))) != 'AA_Success')
+	if(AbilityState.CanActivateAbilityForObserverEvent(XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(TargetRef.ObjectID))) != 'AA_Success') {
 		`LOG("Rising Tides: Couldn't Activate "@ AbilityState.GetMyTemplateName() @ " for observer event.");
+	} else {
+
+		NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState(string(GetFuncName()));
+		AbilityState = XComGameState_Ability(NewGameState.CreateStateObject(AbilityState.Class, AbilityState.ObjectID));
+		NewGameState.AddStateObject(AbilityState);
+		`TACTICALRULES.SubmitGameState(NewGameState);
+	}
 	
 	AbilityContext = class'XComGameStateContext_Ability'.static.BuildContextFromAbility(AbilityState, TargetRef.ObjectID);
 	
@@ -695,9 +703,9 @@ function EventListenerReturn RTHarbingerBonusDamage(Object EventData, Object Eve
 		return ELR_NoInterrupt;
 	}
 
-    // we want to do the additional damage first, i think
-    if(AbilityContext.InterruptionStatus != eInterruptionStatus_Interrupt) {
-		`LOG("Rising Tides: Not the interrupt stage!");
+    // we want to do the additional damage after, i think
+    if(AbilityContext.InterruptionStatus == eInterruptionStatus_Interrupt) {
+		`LOG("Rising Tides: only after interrupt stage!");
         return ELR_NoInterrupt;
     }
 
@@ -729,8 +737,9 @@ function EventListenerReturn RTHarbingerBonusDamage(Object EventData, Object Eve
 
     }
 	`LOG("Rising Tides: RTHarbingerBonusDamage is checking for the current ability to add damage to...");
-    if(class'RTHelpers'.static.CheckAbilityActivated(AbilityState.GetMyTemplateName(), eChecklist_SniperShots) ||
-       class'RTHelpers'.static.CheckAbilityActivated(AbilityState.GetMyTemplateName(), eChecklist_StandardShots)) {
+    if(class'RTHelpers'.static.CheckAbilityActivated(AbilityState.GetMyTemplateName(), eChecklist_SniperShots)   ||
+       class'RTHelpers'.static.CheckAbilityActivated(AbilityState.GetMyTemplateName(), eChecklist_StandardShots) ||
+	   class'RTHelpers'.static.CheckAbilityActivated(AbilityState.GetMyTemplateName(), eChecklist_MeleeAbilities) ) {
         InitializeAbilityForActivation(AdditionalDamageState, SourceUnitState, 'RTHarbingerBonusDamage', History);
         ActivateAbility(AdditionalDamageState, TargetUnitState.GetReference());
         return ELR_NoInterrupt;
