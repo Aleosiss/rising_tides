@@ -44,7 +44,8 @@ class RTAbility_MarksmanAbilitySet extends RTAbility_GhostAbilitySet
 	var config int HARBINGER_SHIELD_AMOUNT, HARBINGER_COOLDOWN, HARBINGER_DAMAGE_BONUS, HARBINGER_WILL_BONUS, HARBINGER_AIM_BONUS, HARBINGER_ARMOR_BONUS;
 	var config WeaponDamageValue HARBINGER_DMG;
 
-	var Name KillZoneReserveType;
+	var name KillZoneReserveType;
+	var name TimeStopEffectName;
 
 //---------------------------------------------------------------------------------------
 //---CreateTemplates---------------------------------------------------------------------
@@ -1416,6 +1417,7 @@ static function X2AbilityTemplate TimeStandsStill()
 		"This unit has been frozen in time. It cannot take actions and is much easier to hit.", Template.IconImage);
 	TimeStopEffect.bRemoveWhenTargetDies = true;
 	TimeStopEffect.bCanTickEveryAction = true;
+	TimeStopEffect.EffectName = default.TimeStopEffectName;
 
 	//UnitPropertyCondition = new class'X2Condition_UnitProperty';
 	//UnitPropertyCondition.FailOnNonUnits = true;
@@ -1487,7 +1489,7 @@ static function X2AbilityTemplate TimeStandsStillEndListener()
 	RemoveSelfEffect.bCheckSource = false;
 
 	RemoveMultiEffect = new class'X2Effect_RemoveEffects';
-	RemoveMultiEffect.EffectNamesToRemove.AddItem('Freeze');
+	RemoveMultiEffect.EffectNamesToRemove.AddItem(default.TimeStopEffectName);
 	RemoveMultiEffect.bCheckSource = false;
 
 	KnockbackEffect = new class'X2Effect_Knockback';
@@ -2447,5 +2449,6 @@ simulated function OverflowShielded_BuildVisualization(XComGameState VisualizeGa
 
 defaultproperties
 {
-	KillZoneReserveType = "KillZone";
+	KillZoneReserveType = "KillZone"
+	TimeStopEffectName = "TimeStopEffect"
 }

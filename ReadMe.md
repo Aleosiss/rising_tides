@@ -19,24 +19,16 @@ This would be a bare-bones content mod. I also have the following content in min
 ###### Current TODOs: 
 	- Berserker:
 		- Shadow Strike unbound targeting style
-		- Mentor feedback cleanse effect
-		- Move the Acid stack count off the template
 	- Marksman:
 		- nothing
 	- Gatherer: 
 		- Let's try to move away from scanning protocol-- it's ugly and unimmersive. Instead, we'll directly set the visibility in RTEffect_MobileSquadViewer.
-		- More investigation seems to indicate that ObjectMoved will trigger on each tile, good for Over The Shoulder. Set the ObjectMoved listener to slightly higher priority than the UnitMoveFinished listener.
-		- Investigate bug related to removing Aura Effects; first try removing Guardian Angel to see if that is the cause
 		- Triangulation
 		- AbilitySet
 	- General:
 		- Animations/Visuals
-		- Meld respond to feedback event
-		- implement new RTEffectBuilder class: https://hastebin.com/raxahacezo.uc
-			- replace effects in various abilitysets with constructors from the builder/factory class
-		- implement configuration for RTEffectBuilder
+		- replace effects in various abilitysets with constructors from the builder/factory class
 		- implement new TargetAbility condition: https://hastebin.com/eleboyigib.uc
-		- I may have broken the feedback panic visualization, investigate
 		- Add x2/lw abilities to PsionicAbilityList
 	
 ###### Current Table:
@@ -44,8 +36,6 @@ This would be a bare-bones content mod. I also have the following content in min
       
 ###### Current Bugs:
       - Time Stop damage calculation isn't visualized properly
-      - Time Stop probably won't work on Frozen enemies
       - Time Stop doesn't work on Stasis'd units (despite this making no sense whatsoever) because it's hard-coded
-      - Shock And Awe readout not displayed
               
               

@@ -525,6 +525,7 @@ static function X2AbilityTemplate RTMentor() {
 	local X2AbilityCost_ActionPoints		ActionPointCost;
     local RTCondition_EffectStackCount      BloodlustCondition;
 	local X2AbilityCooldown					Cooldown;
+	local X2Effect_RemoveEffects			RemoveEffect;
 	
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'RTMentor');
     Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_snipershot"; //TODO: Change this
@@ -554,19 +555,22 @@ static function X2AbilityTemplate RTMentor() {
 	TargetUnitPropertyCondition.FailOnNonUnits = true;
 	Template.AbilityTargetConditions.AddItem(TargetUnitPropertyCondition);
 
+	RemoveEffect = new class'X2Effect_RemoveEffects';   
+	RemoveEffect.EffectNamesToRemove.AddItem(default.RTFeedbackEffectName);
+	RemoveEffect.EffectNamesToRemove.AddItem(default.RTFeedbackWillDebuffName);
+	Template.AddTargetEffect(RemoveEffect);
+
     MentorEffect = new class'X2Effect_PersistentStatChange';
     MentorEffect.BuildPersistentEffect(1, false, false, false, eGameRule_PlayerTurnEnd);
     MentorEffect.SetDisplayInfo(ePerkBuff_Bonus, Template.LocFriendlyName, Template.GetMyHelpText(), Template.IconImage, true, , Template.AbilitySourceName);
     MentorEffect.AddPersistentStatChange(eStat_Will, default.MENTOR_BONUS);
     MentorEffect.AddPersistentStatChange(eStat_PsiOffense, default.MENTOR_BONUS);
-    Template.AddTargetEffect(MentorEffect);        
-    
+    Template.AddTargetEffect(MentorEffect);     
+	
 	// melded  
-    MeldCondition = new class'X2Condition_UnitEffects';
     MeldCondition = new class'X2Condition_UnitEffects';
 	MeldCondition.AddRequireEffect('RTEffect_Meld', 'AA_UnitNotMelded');
 	Template.AbilityShooterConditions.AddItem(MeldCondition);
-	Template.AbilityTargetConditions.AddItem(MeldCondition);
 
 	// You probably can't be a good mentor if you're filled with bloodlust
     BloodlustCondition = new class'RTCondition_EffectStackCount';

@@ -54,6 +54,7 @@ class RTAbility_GhostAbilitySet extends X2Ability
 	var config int FEEDBACK_DURATION;
 
 	var name RTFeedbackEffectName;
+	var name RTFeedbackWillDebuffName;
 
 //---------------------------------------------------------------------------------------
 //---CreateTemplates---------------------------------------------------------------------
@@ -472,6 +473,7 @@ static function X2AbilityTemplate RTFeedback()
 
 	PanickedWillEffect = new class'X2Effect_PanickedWill';
 	PanickedWillEffect.BuildPersistentEffect(default.FEEDBACK_DURATION, false, true, false, eGameRule_PlayerTurnBegin);
+	PanickedWillEffect.EffectName = default.RTFeedbackWillDebuffName;
 	Template.AddTargetEffect(PanickedWillEffect);
 
 	Condition = new class'X2Condition_UnitProperty';
@@ -889,6 +891,7 @@ defaultproperties
 	LivingFriendlyUnitOnlyProperty = DefaultLivingFriendlyUnitOnlyProperty
 
 	RTFeedbackEffectName = "RTFeedback"
+	RTFeedbackWillDebuffName = "RTFeedbackWillDebuff"
 
 
 
