@@ -70,4 +70,12 @@ HARBINGER_BROKEN_ALERT="Shield lost!"
 [RTAbility_GathererAbilitySet]
 GuardianAngelHealText="Guardian Angel"
 
+[RTEffectBuilder]
+StealthFriendlyName="Stealth"
+StealthFriendlyDesc="This unit is invisible, and cannot be seen by most units."
+FeedbackFriendlyName="AGugHGGHGH"
+FeedbackFriendlyDesc="This unit is suffering from psionic feedback! Protect them while they recover."
+MeldFriendlyName="Mind Meld"
+MeldFriendlyDesc="This unit has joined the Meld, and is recieving and delivering psionic support."
+
 

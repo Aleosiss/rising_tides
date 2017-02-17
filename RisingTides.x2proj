@@ -68,6 +68,9 @@
     <Content Include="Src\RisingTides\Classes\RTAbility_MarksmanAbilitySet.uc">
       <SubType>Content</SubType>
     </Content>
+    <Content Include="Src\RisingTides\Classes\RTAction_ApplyMITV.uc">
+      <SubType>Content</SubType>
+    </Content>
     <Content Include="Src\RisingTides\Classes\RTAction_Greyscaled.uc">
       <SubType>Content</SubType>
     </Content>
@@ -77,10 +80,16 @@
     <Content Include="Src\RisingTides\Classes\RTAction_PsionicGetOverHereTarget.uc">
       <SubType>Content</SubType>
     </Content>
+    <Content Include="Src\RisingTides\Classes\RTAction_RemoveMITV.uc">
+      <SubType>Content</SubType>
+    </Content>
     <Content Include="Src\RisingTides\Classes\RTCondition_EffectStackCount.uc">
       <SubType>Content</SubType>
     </Content>
     <Content Include="Src\RisingTides\Classes\RTCondition_VisibleToPlayer.uc">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Src\RisingTides\Classes\RTEffectBuilder.uc">
       <SubType>Content</SubType>
     </Content>
     <Content Include="Src\RisingTides\Classes\RTEffect_Acid.uc">

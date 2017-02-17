@@ -322,11 +322,9 @@ static function X2AbilityTemplate RTForcedIntroversion() {
 	Trigger.ListenerData.Priority = 50;
 	Template.AbilityTriggers.AddItem(Trigger);
 
-	StealthEffect = new class'RTEffect_Stealth';
-	StealthEffect.fStealthModifier = 1.0f;
-	StealthEffect.BuildPersistentEffect(default.FEEDBACK_DURATION, false, true, false, eGameRule_PlayerTurnBegin);
-	StealthEffect.SetDisplayInfo(ePerkBuff_Bonus, "Stealth", "Become invisible, and extremely difficult to detect.", Template.IconImage, true,,Template.AbilitySourceName);
+	StealthEffect = class'RTEffectBuilder'.static.RTCreateStealthEffect(default.FEEDBACK_DURATION, false, 1.0f, eGameRule_PlayerTurnBegin, Template.AbilitySourceName); 
 	Template.AddTargetEffect(StealthEffect);
+
 
 	Template.AddTargetEffect(class'X2Effect_Spotted'.static.CreateUnspottedEffect());
 
@@ -848,6 +846,6 @@ static function X2AbilityTemplate RTRudimentaryCreaturesEvent() {
 defaultproperties
 {
 	ExtinctionEventStageThreeEventName = "RTExtinctionEventStageThree";
-	OverTheShoulderEffectName = "RTEffect_OverTheShoulder"
+	OverTheShoulderEffectName = "RTEffect_MobileSquadViewer"
 	OverTheShoulderTagName = "OverTheShoulderTag"
 }

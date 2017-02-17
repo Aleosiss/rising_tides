@@ -13,8 +13,8 @@ function RegisterForEvents(XComGameState_Effect EffectGameState)
 	// Register for the required events
 
 	// Check when anything moves. OnUpdateAuraCheck will handle a total update check as well as a single update check.
-	EventMgr.RegisterForEvent(EffectObj, 'ObjectMoved', RTEffectState.OnUpdateAuraCheck, ELD_OnStateSubmitted, 50);
-	EventMgr.RegisterForEvent(EffectObj, 'UnitMoveFinished', RTEffectState.OnUpdateAuraCheck, ELD_OnStateSubmitted, 50);
+	// EventMgr.RegisterForEvent(EffectObj, 'ObjectMoved', RTEffectState.OnUpdateAuraCheck, ELD_OnStateSubmitted, 75);
+	EventMgr.RegisterForEvent(EffectObj, 'UnitMoveFinished', RTEffectState.OnUpdateAuraCheck, ELD_OnStateSubmitted, 60);
 	EventMgr.RegisterForEvent(EffectObj, 'PlayerTurnBegun', RTEffectState.CleanupMobileSquadViewers, ELD_OnStateSubmitted, 50);
 }
 
@@ -30,7 +30,7 @@ protected function X2AbilityTemplate GetAuraTemplate(XComGameState_Unit SourceUn
         local XComGameState_Ability AbilityState;
 
         AbilityState = XComGameState_Ability(`XCOMHISTORY.GetGameStateForObjectID(SourceAuraEffectGameState.ApplyEffectParameters.AbilityStateObjectRef.ObjectID));
-	Template = AbilityState.GetMyTemplate();
+		Template = AbilityState.GetMyTemplate();
 
         return Template;
 }

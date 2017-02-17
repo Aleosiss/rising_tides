@@ -73,22 +73,28 @@ simulated function OnEffectRemoved(const out EffectAppliedData ApplyEffectParame
 
 simulated function AddX2ActionsForVisualization(XComGameState VisualizeGameState, out VisualizationTrack BuildTrack, name EffectApplyResult)
 {
-	/*local XComGameStateHistory			History;
+	local XComGameStateHistory			History;
 	local XComGameStateContext_Ability	Context;
 	local StateObjectReference			InteractingUnitRef;
 	local XComGameState_Unit			UnitState;
 	local XGUnit						UnitActor;
 	local XComUnitPawn					UnitPawn;
 	local MaterialInstanceTimeVarying	MITV;
-	*/
+
+	local RTAction_ApplyMITV MITVAction;
+	
 	super.AddX2ActionsForVisualization(VisualizeGameState, BuildTrack, EffectApplyResult);
+	
+	MITVAction = RTAction_ApplyMITV(class'RTAction_ApplyMITV'.static.AddToVisualizationTrack(BuildTrack, VisualizeGameState.GetContext()));
+	MITVAction.MITVPath = "FX_Wraith_Armor.M_Wraith_Armor_Overlay_On_MITV";
+	
 	/*
 	History = `XCOMHISTORY;
 
 	Context = XComGameStateContext_Ability(VisualizeGameState.GetContext());
 	InteractingUnitRef = Context.InputContext.SourceObject;
 
-	MITV = MaterialInstanceTimeVarying(DynamicLoadObject("FX_Wraith_Armor.M_Wraith_Armor_Overlay_INST", class'MaterialInstanceTimeVarying'));
+	MITV = MaterialInstanceTimeVarying(DynamicLoadObject("FX_Wraith_Armor.M_Wraith_Armor_Overlay_On_MITV", class'MaterialInstanceTimeVarying'));
 	//MITV.SetScalarParameterValue('Ghost',1);
 
 	UnitState = XComGameState_Unit(History.GetGameStateForObjectID(InteractingUnitRef.ObjectID));
@@ -104,9 +110,13 @@ simulated function AddX2ActionsForVisualization_Removed(XComGameState VisualizeG
 	local XComGameState_Unit		UnitState;
 	local XComGameState_Effect		SilentMeleeEffect, EffectState;
 	local X2Action_StartStopSound	SoundAction;
+	local RTAction_RemoveMITV		MITVAction;
 
+	MITVAction = RTAction_RemoveMITV(class'RTAction_RemoveMITV'.static.AddToVisualizationTrack(BuildTrack, VisualizeGameState.GetContext()));
 	super.AddX2ActionsForVisualization_Removed(VisualizeGameState, BuildTrack, EffectApplyResult, RemovedEffect);
-
+	
+	
+	/*
 	if (EffectApplyResult != 'AA_Success' || BuildTrack.TrackActor == none)
 	{
 		return;
@@ -132,6 +142,7 @@ simulated function AddX2ActionsForVisualization_Removed(XComGameState VisualizeG
 	
 	UnitState = XComGameState_Unit(BuildTrack.StateObject_OldState);
 	CleanUpMITV(UnitState);
+	*/
 	
 }
 
@@ -161,6 +172,8 @@ static function CleanUpMITV(XComGameState_Unit UnitState)
 		UnitPawn.UpdateAllMeshMaterials();
 	}
 }
+
+
 
 
 DefaultProperties
