@@ -71,6 +71,9 @@
     <Content Include="Src\RisingTides\Classes\RTAction_ApplyMITV.uc">
       <SubType>Content</SubType>
     </Content>
+    <Content Include="Src\RisingTides\Classes\RTAction_ForceVisibility.uc">
+      <SubType>Content</SubType>
+    </Content>
     <Content Include="Src\RisingTides\Classes\RTAction_Greyscaled.uc">
       <SubType>Content</SubType>
     </Content>

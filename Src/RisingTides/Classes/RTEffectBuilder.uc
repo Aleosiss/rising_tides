@@ -28,7 +28,25 @@ var config string FeedbackParticleName;
 var config name FeedbackSocketName;
 var config name FeedbackSocketsArrayName;
 
-private static function X2Action_PlayEffect BuildEffectParticle(XComGameState VisualizeGameState, out VisualizationTrack BuildTrack, string ParticleName, name SocketName, name SocketsArrayName, bool _AttachToUnit, bool _bStopEffect) {
+var config string OverTheShoulderParticleString;
+var config name OverTheShoulderSocketName;
+var config name OverTheShoulderArrayName;
+
+var config string SurgeStartupParticleString;
+var config string SurgePersistentParticleString;
+var config name SurgeSocketName;
+var config name SurgeArrayName;
+
+var config string KillzoneStartupParticleString;
+var config string KillzonePersistentParticleString;
+var config name KillzoneSocketName;
+var config name KillzoneArrayName;
+
+var config string SiphonParticleString;
+var config name SiphonSocketName;
+var config name SiphonArrayName;
+
+static function X2Action_PlayEffect BuildEffectParticle(XComGameState VisualizeGameState, out VisualizationTrack BuildTrack, string ParticleName, name SocketName, name SocketsArrayName, bool _AttachToUnit, bool _bStopEffect) {
     local X2Action_PlayEffect EffectAction;
 
     EffectAction = X2Action_PlayEffect(class'X2Action_PlayEffect'.static.AddToVisualizationTrack(BuildTrack, VisualizeGameState.GetContext()));
@@ -68,11 +86,11 @@ static function RTEffect_Stealth RTCreateStealthEffect(int iDuration = 1, option
     Effect.VisualizationFn = StealthVisualization;
     Effect.EffectRemovedVisualizationFn = StealthRemovedVisualization;
 
-    //if (default.StealthStartParticleName != "" && !default.bUseEffectVisualizationOverride) {
-    		//Effect.VFXTemplateName = default.StealthStartParticleName;
-    		//Effect.VFXSocket = default.StealthSocketName;
-    		//Effect.VFXSocketsArrayName = default.StealthSocketsArrayName;
-    //}
+    if (default.StealthStartParticleName != "" && !default.bUseEffectVisualizationOverride) {
+    		Effect.VFXTemplateName = default.StealthPersistentParticleName;
+    		Effect.VFXSocket = default.StealthSocketName;
+    		Effect.VFXSocketsArrayName = default.StealthSocketsArrayName;
+    }
 
     return Effect;
 }
@@ -111,7 +129,7 @@ static function RTEffect_Meld RTCreateMeldEffect(int iDuration = 1, optional boo
     //Effect.VisualizationFn = MeldVisualization;
     //Effect.EffectRemovedVisualizationFn = MeldRemovedVisualization;
 
-    if (default.MeldParticleName != "" && !default.bUseEffectVisualizationOverride) {
+    if (default.MeldParticleName != "") {
     		Effect.VFXTemplateName = default.MeldParticleName;
     		Effect.VFXSocket = default.MeldSocketName;
     		Effect.VFXSocketsArrayName = default.MeldSocketsArrayName;

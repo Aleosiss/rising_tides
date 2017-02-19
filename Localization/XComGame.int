@@ -433,11 +433,11 @@ LocFlyOverText="Unstable Tempest"
 LocPromotionPopupText="<Bullet/> Whenever this unit uses a psionic ability, it triggers a Burst around it and all melded allies.<br/><Bullet/>Certain abilities are not considered to be Psionic for the purposes of this ability, like Join Meld and Leave Meld.<br/>"
 
 [RTUnstableConduitBurst X2AbilityTemplate]
-LocFriendlyName="Unstable Tempest Burst"
-LocLongDescription="Whenever this unit uses a psionic ability, it triggers a Burst around it and all melded allies."
-LocHelpText="Whenever this unit uses a psionic ability, it triggers a Burst around it and all melded allies."
-LocFlyOverText="Unstable Tempest"
-LocPromotionPopupText="<Bullet/> Whenever this unit uses a psionic ability, it triggers a Burst around it and all melded allies.<br/><Bullet/>Certain abilities are not considered to be Psionic for the purposes of this ability, like Join Meld and Leave Meld.<br/>"
+LocFriendlyName="Burst"
+LocLongDescription="Unleash a burst of psionic energy, damaging surrounding enemies and tiles."
+LocHelpText="Unleash a burst of psionic energy, damaging surrounding enemies and tiles."
+LocFlyOverText="Burst"
+LocPromotionPopupText="<Bullet/> Unleash a burst of psionic energy, damaging surrounding enemies and tiles.<br/>"
 
 [RTPersistingImages X2AbilityTemplate]
 LocFriendlyName="Persisting Images"

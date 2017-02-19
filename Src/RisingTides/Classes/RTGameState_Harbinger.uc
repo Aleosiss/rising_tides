@@ -13,13 +13,15 @@ function EventListenerReturn RemoveHarbingerEffect(Object EventData, Object Even
 	
 	if (!bRemoved)	
 	{
+		`LOG("Rising Tides: Removing the Harbinger Effect due to Meld Loss!");
+
+		History = `XCOMHISTORY;
 		RemoveContext = class'XComGameStateContext_EffectRemoved'.static.CreateEffectRemovedContext(self);
-		NewGameState = `XCOMHISTORY.CreateNewGameState(true, RemoveContext);
+		NewGameState = History.CreateNewGameState(true, RemoveContext);
 		// remove effect
 		RemoveEffect(NewGameState, GameState);
 
 		// remove tag effect from source
-		History = `XCOMHISTORY;
 		SourceUnitState = XComGameState_Unit(History.GetGameStateForObjectID(ApplyEffectParameters.SourceStateObjectRef.ObjectID));
 		foreach SourceUnitState.AffectedByEffects(EffectRef) {
 			EffectState = XComGameState_Effect(History.GetGameStateForObjectID(EffectRef.ObjectID));
@@ -30,6 +32,8 @@ function EventListenerReturn RemoveHarbingerEffect(Object EventData, Object Even
 		}
 
 		SubmitNewGameState(NewGameState);
+	} else {
+		`LOG("Rising Tides: Harbinger effect tried to remove itself, but it was already bRemoved?!");
 	}
 
 	return ELR_NoInterrupt;

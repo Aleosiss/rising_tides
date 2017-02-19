@@ -12,6 +12,8 @@ class RTEffect_Stealth extends X2Effect_PersistentStatChange;
 	
 var float fStealthModifier;
 
+var name StealthPreviousUnitValName;
+
 simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffectParameters, XComGameState_BaseObject kNewTargetState, XComGameState NewGameState, XComGameState_Effect NewEffectState)
 {
 	local XComGameState_Unit UnitState, NewUnitState;
@@ -29,9 +31,9 @@ simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffe
 	
 	bWasPreviouslyConcealed = UnitState.IsConcealed();
 	if(bWasPreviouslyConcealed) {
-		UnitState.SetUnitFloatValue('UnitPreviouslyConcealed', 1, eCleanUp_BeginTactical);	
+		UnitState.SetUnitFloatValue(StealthPreviousUnitValName, 1, eCleanUp_BeginTactical);	
 	} else {
-		UnitState.SetUnitFloatValue('UnitPreviouslyConcealed', 0, eCleanUp_BeginTactical);
+		UnitState.SetUnitFloatValue(StealthPreviousUnitValName, 0, eCleanUp_BeginTactical);
 	}
 	
 	if (UnitState != none && !bWasPreviouslyConcealed) {
@@ -52,7 +54,7 @@ simulated function OnEffectRemoved(const out EffectAppliedData ApplyEffectParame
 	super.OnEffectRemoved(ApplyEffectParameters, NewGameState, bCleansed, RemovedEffectState);
 
 	OldUnitState = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(ApplyEffectParameters.TargetStateObjectRef.ObjectID));
-	OldUnitState.GetUnitValue('UnitPreviouslyConcealed', PreviousValue);
+	OldUnitState.GetUnitValue(StealthPreviousUnitValName, PreviousValue);
 	if(PreviousValue.fValue == 1) {
 		bWasPreviouslyConcealed = true;
 	} else {
@@ -60,7 +62,7 @@ simulated function OnEffectRemoved(const out EffectAppliedData ApplyEffectParame
 	}
 
 	NewUnitState = XComGameState_Unit(NewGameState.CreateStateObject(class'XComGameState_Unit', OldUnitState.ObjectID));
-	NewUnitState.SetUnitFloatValue('UnitPreviouslyConcealed', 0, eCleanUp_BeginTactical);
+	NewUnitState.SetUnitFloatValue(StealthPreviousUnitValName, 0, eCleanUp_BeginTactical);
 	
 	// Stealth can wear off naturally and not break concealment
 	if (NewUnitState != none && !bWasPreviouslyConcealed && OldUnitState.IsConcealed()) {
@@ -81,7 +83,7 @@ simulated function AddX2ActionsForVisualization(XComGameState VisualizeGameState
 	local XComUnitPawn					UnitPawn;
 	local MaterialInstanceTimeVarying	MITV;
 
-	local RTAction_ApplyMITV MITVAction;
+	local RTAction_ApplyMITV	MITVAction;
 	
 	super.AddX2ActionsForVisualization(VisualizeGameState, BuildTrack, EffectApplyResult);
 	
@@ -104,16 +106,27 @@ simulated function AddX2ActionsForVisualization(XComGameState VisualizeGameState
 	*/
 }
 
+simulated function AddX2ActionsForVisualization_Sync(XComGameState VisualizeGameState, out VisualizationTrack BuildTrack)
+{
+	AddX2ActionsForVisualization(VisualizeGameState, BuildTrack, 'AA_Success');
+}
+
 
 simulated function AddX2ActionsForVisualization_Removed(XComGameState VisualizeGameState, out VisualizationTrack BuildTrack, const name EffectApplyResult, XComGameState_Effect RemovedEffect)
 {
 	local XComGameState_Unit		UnitState;
 	local XComGameState_Effect		SilentMeleeEffect, EffectState;
 	local X2Action_StartStopSound	SoundAction;
+	
 	local RTAction_RemoveMITV		MITVAction;
+	local X2Action_Delay			DelayAction;
 
 	MITVAction = RTAction_RemoveMITV(class'RTAction_RemoveMITV'.static.AddToVisualizationTrack(BuildTrack, VisualizeGameState.GetContext()));
 	super.AddX2ActionsForVisualization_Removed(VisualizeGameState, BuildTrack, EffectApplyResult, RemovedEffect);
+
+	DelayAction = X2Action_Delay(class'X2Action_Delay'.static.AddToVisualizationTrack(BuildTrack, VisualizeGameState.GetContext()));
+	DelayAction.Duration = 0.33f;
+	DelayAction.bIgnoreZipMode = true;
 	
 	
 	/*
@@ -145,7 +158,7 @@ simulated function AddX2ActionsForVisualization_Removed(XComGameState VisualizeG
 	*/
 	
 }
-
+/*
 static function CleanUpMITV(XComGameState_Unit UnitState)
 {
 	local XGUnit					UnitActor;
@@ -172,7 +185,7 @@ static function CleanUpMITV(XComGameState_Unit UnitState)
 		UnitPawn.UpdateAllMeshMaterials();
 	}
 }
-
+*/
 
 
 
@@ -183,4 +196,7 @@ DefaultProperties
 	DuplicateResponse = eDupe_Refresh
 	bStackOnRefresh = true
 	bRemoveWhenTargetConcealmentBroken = true
+	StealthPreviousUnitValName= "UnitPreviouslyConcealed"
+
+
 }

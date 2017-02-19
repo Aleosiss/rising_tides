@@ -13,7 +13,7 @@ class RTAbility_BerserkerAbilitySet extends RTAbility_GhostAbilitySet config(Ris
 	var config int BITN_TILEDISTANCE;
 	var config int ACID_BLADE_DOT_DAMAGE;
 	var config int ACID_BLADE_DOT_SHRED;
-	var config int BURST_DAMAGE;
+	var config WeaponDamageValue BURST_DMG;
 	var config int BURST_COOLDOWN;
 	var config float SIPHON_AMOUNT_MULTIPLIER;
 	var config int SIPHON_MIN_VAL;
@@ -219,30 +219,6 @@ static function X2AbilityTemplate BumpInTheNightStealthListener()
 	return Template;
 }
 
-simulated function Ghosting_BuildVisualization(XComGameState VisualizeGameState, out array<VisualizationTrack> OutVisualizationTracks)
-{
-	local XComGameStateHistory			History;
-	local XComGameStateContext_Ability	Context;
-	local StateObjectReference			InteractingUnitRef;
-	local XComGameState_Unit			UnitState;
-	local XGUnit						UnitActor;
-	local XComUnitPawn					UnitPawn;
-	local MaterialInstanceTimeVarying	MITV;
-
-	History = `XCOMHISTORY;
-																					 
-	Context = XComGameStateContext_Ability(VisualizeGameState.GetContext());
-	InteractingUnitRef = Context.InputContext.SourceObject;
-
-	MITV = MaterialInstanceTimeVarying(DynamicLoadObject("FX_Wraith_Armor.M_Wraith_Armor_Overlay_INST", class'MaterialInstanceTimeVarying'));
-	//MITV.SetScalarParameterValue('Ghost',1);
-
-	UnitState = XComGameState_Unit(History.GetGameStateForObjectID(InteractingUnitRef.ObjectID));
-	UnitActor = XGUnit(UnitState.GetVisualizer());
-	UnitPawn = UnitActor.GetPawn();	
-	UnitPawn.ApplyMITV(MITV);
-}
-
 //---------------------------------------------------------------------------------------
 //---RTBerserker Knife Attack------------------------------------------------------------
 //---------------------------------------------------------------------------------------
@@ -372,6 +348,7 @@ static function X2AbilityTemplate RTBurst() {
     local X2AbilityCooldown Cooldown;
     local X2AbilityCost_ActionPoints  ActionPointCost;
     local X2Effect_Knockback  KnockbackEffect;
+	local X2Effect_Persistent				Effect;
 
     `CREATE_X2ABILITY_TEMPLATE(Template, 'RTBurst');
     Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_snipershot"; //TODO: Change this
@@ -400,6 +377,12 @@ static function X2AbilityTemplate RTBurst() {
 	MultiTarget.bIgnoreBlockingCover = true;
 	Template.AbilityMultiTargetStyle = MultiTarget;
 
+
+	Effect = new class'X2Effect_Persistent';
+	Effect.BuildPersistentEffect(0, false);
+	Effect.VFXTemplateName = default.BurstParticleString;
+	Template.AddShooterEffect(Effect);
+
     WorldDamage = new class'X2Effect_ApplyDirectionalWorldDamage';  //creates the framework to apply damage to the world
 	WorldDamage.bUseWeaponDamageType = False;                       //overrides the normal weapon damage type
 	WorldDamage.bUseWeaponEnvironmentalDamage = false;              //replaces the weapon's environmental damage with the abilities
@@ -412,21 +395,20 @@ static function X2AbilityTemplate RTBurst() {
 	WorldDamage.PlusNumZTiles = 2;                                 //determines how 'high' the world damage is applied
 	WorldDamage.bHitTargetTile = false;                              
 	WorldDamage.ApplyChance = 100;
-	Template.AddMultiTargetEffect(WorldDamage);                    
+	// Template.AddMultiTargetEffect(WorldDamage);                    
 
 	WeaponDamageEffect = new class'X2Effect_ApplyWeaponDamage';   
 	WeaponDamageEffect.bIgnoreBaseDamage = true;	
-	WeaponDamageEffect.EffectDamageValue.Damage = default.BURST_DAMAGE;			 
+	WeaponDamageEffect.EffectDamageValue = default.BURST_DMG;			 
 	WeaponDamageEffect.bApplyWorldEffectsForEachTargetLocation = true; 
 	WeaponDamageEffect.EnvironmentalDamageAmount = 250;            
 	Template.AddMultiTargetEffect(WeaponDamageEffect);          
 
-	Template.PostActivationEvents.AddItem('UnitUsedPsionicAbility');
+	Template.PostActivationEvents.AddItem(default.UnitUsedPsionicAbilityEvent);
 
 	Template.bShowActivation = true;
 	Template.bSkipFireAction = true;
 
-	Template.CustomFireAnim = 'HL_Psi_MindControl';
 	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
 	Template.BuildInterruptGameStateFn = TypicalAbility_BuildInterruptGameState;
 	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
@@ -581,7 +563,7 @@ static function X2AbilityTemplate RTMentor() {
 	Template.AbilityShooterConditions.AddItem(default.LivingShooterProperty);
 	Template.AddShooterEffectExclusions();
 
-    Template.PostActivationEvents.AddItem('UnitUsedPsionicAbility');
+    Template.PostActivationEvents.AddItem(default.UnitUsedPsionicAbilityEvent);
 
 	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
 	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
@@ -887,6 +869,8 @@ static function X2AbilityTemplate RTPyroclasticSlash()
 	local X2Condition_UnitProperty			TargetUnitPropertyCondition;
 	local RTEffect_Siphon					SiphonEffect;
 
+	local RTCondition_VisibleToPlayer			PlayerVisibilityCondition;
+
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'RTPyroclasticSlash');
 
 	Template.AbilitySourceName = 'eAbilitySource_Standard';
@@ -917,7 +901,9 @@ static function X2AbilityTemplate RTPyroclasticSlash()
 	// Target Conditions
 	//
 	Template.AbilityTargetConditions.AddItem(default.LivingHostileTargetProperty);
-	Template.AbilityTargetConditions.AddItem(default.MeleeVisibilityCondition);
+	// can only target visible (to the player) enemies
+	PlayerVisibilityCondition = new class'RTCondition_VisibleToPlayer';
+	Template.AbilityTargetConditions.AddItem(PlayerVisibilityCondition); 
 
 	// Shooter Conditions
 	//
@@ -1060,10 +1046,7 @@ static function X2AbilityTemplate RTContainedFuryMeldJoin()
 	Template.AbilityToHitCalc = default.DeadEye;
 	Template.AbilityTargetStyle = default.SelfTarget;
 
-	MeldEffect = new class 'RTEffect_Meld';
-	MeldEffect.BuildPersistentEffect(1, true, true, false,  eGameRule_PlayerTurnEnd);
-	MeldEffect.SetDisplayInfo(ePerkBuff_Bonus, "Mind Meld", 
-		"This unit has joined the squad's mind meld, gaining and delivering psionic support.", Template.IconImage);
+	MeldEffect = class'RTEffectBuilder'.static.RTCreateMeldEffect(1, true) ;
 	Template.AddTargetEffect(MeldEffect);
 
 	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
@@ -1098,19 +1081,16 @@ static function X2AbilityTemplate RTUnstableConduit()
 
 	Template.ConcealmentRule = eConceal_Miss;		// unsure
 
-	Template.AbilityCosts.AddItem(default.FreeActionCost);
 
 	Template.AbilityShooterConditions.AddItem(default.LivingShooterProperty);
-	Template.AddShooterEffectExclusions();
 	
 	Condition = new class'X2Condition_UnitEffects';
 	Condition.AddRequireEffect('RTEffect_Meld', 'AA_UnitNotMelded');
 	Template.AbilityShooterConditions.AddItem(Condition);
-	Template.AbilityMultiTargetConditions.AddItem(Condition);
 
 	Trigger = new class'X2AbilityTrigger_EventListener';
 	Trigger.ListenerData.Deferral = ELD_OnStateSubmitted;
-	Trigger.ListenerData.EventID = 'UnitUsedPsionicAbility';
+	Trigger.ListenerData.EventID = default.UnitUsedPsionicAbilityEvent;
 	Trigger.ListenerData.Filter = eFilter_Unit;
 	Trigger.ListenerData.EventFn = class'XComGameState_Ability'.static.AbilityTriggerEventListener_Self;
 	Template.AbilityTriggers.AddItem(Trigger);
@@ -1119,22 +1099,20 @@ static function X2AbilityTemplate RTUnstableConduit()
 	Template.AbilityToHitCalc = default.DeadEye;
 	Template.AbilityTargetStyle = default.SelfTarget;
 
-	MultiTarget = new class'X2AbilityMultiTarget_AllAllies';
-	MultiTarget.bExcludeSelfAsTargetIfWithinRadius = true;
-	Template.AbilityMultiTargetStyle = MultiTarget;
+	// MultiTarget = new class'X2AbilityMultiTarget_AllAllies';
+	// MultiTarget.bExcludeSelfAsTargetIfWithinRadius = true;
+	// Template.AbilityMultiTargetStyle = MultiTarget;
 
-	ActivateAbilityEffect = new class'X2Effect_ImmediateAbilityActivation';
-	ActivateAbilityEffect.AbilityName = 'RTUnstableConduitBurst';	
-	Template.AddTargetEffect(ActivateAbilityEffect);
+	// ActivateAbilityEffect = new class'X2Effect_ImmediateAbilityActivation';
+	// ActivateAbilityEffect.AbilityName = 'RTUnstableConduitBurst';	
+	// Template.AddTargetEffect(ActivateAbilityEffect);
 
-	MultiActivateAbilityEffect = new class'X2Effect_ImmediateMultiTargetAbilityActivation';
-	MultiActivateAbilityEffect.AbilityName = 'RTUnstableConduitBurst';
-	Template.AddMultiTargetEffect(MultiActivateAbilityEffect);
+	// MultiActivateAbilityEffect = new class'X2Effect_ImmediateMultiTargetAbilityActivation';
+	// MultiActivateAbilityEffect.AbilityName = 'RTUnstableConduitBurst';
+	//Template.AddMultiTargetEffect(MultiActivateAbilityEffect);
 
 	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
 	// Note: no visualization on purpose!
-	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
-	Template.bSkipFireAction = true;
 
 	Template.AdditionalAbilities.AddItem('RTUnstableConduitIcon');
 	Template.PostActivationEvents.AddItem('RTUnstableConduitActivation');
@@ -1186,6 +1164,9 @@ static function X2AbilityTemplate RTUnstableConduitBurst() {
 	local X2Condition_UnitEffects			Condition;
     local X2Effect_Knockback  KnockbackEffect;
 	local X2AbilityTrigger_EventListener Trigger;
+	local X2Effect_Persistent				Effect;
+
+
 
     `CREATE_X2ABILITY_TEMPLATE(Template, 'RTUnstableConduitBurst');
     Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_snipershot"; //TODO: Change this
@@ -1194,10 +1175,11 @@ static function X2AbilityTemplate RTUnstableConduitBurst() {
 	Template.AbilityConfirmSound = "TacticalUI_ActivateAbility";
 	Template.Hostility = eHostility_Neutral;
 
-	Template.AbilityCosts.AddItem(default.FreeActionCost);
+	// Template.AbilityCosts.AddItem(default.FreeActionCost);
+	Template.ConcealmentRule = eConceal_Always;
 
 	Template.AbilityShooterConditions.AddItem(default.LivingShooterProperty);
-	Template.AddShooterEffectExclusions();
+	// Template.AddShooterEffectExclusions();
 
 	Trigger = new class'X2AbilityTrigger_EventListener';
 	Trigger.ListenerData.Deferral = ELD_OnStateSubmitted;
@@ -1210,7 +1192,7 @@ static function X2AbilityTemplate RTUnstableConduitBurst() {
 	Template.AbilityTargetStyle = default.SelfTarget;
 
 	Condition = new class'X2Condition_UnitEffects';
-	Condition.AddRequireEffect('RTEffect_Meld', 'AA_UnitNotMelded');
+	Condition.AddRequireEffect(class'RTEffectBuilder'.default.MeldEffectName, 'AA_UnitNotMelded');
 	Template.AbilityShooterConditions.AddItem(Condition);
 
 	MultiTarget = new class'X2AbilityMultiTarget_Radius';
@@ -1218,6 +1200,11 @@ static function X2AbilityTemplate RTUnstableConduitBurst() {
 	MultiTarget.bExcludeSelfAsTargetIfWithinRadius = true;
 	MultiTarget.bIgnoreBlockingCover = true;
 	Template.AbilityMultiTargetStyle = MultiTarget;
+
+	Effect = new class'X2Effect_Persistent';
+	Effect.BuildPersistentEffect(0, false);
+	Effect.VFXTemplateName = default.BurstParticleString;
+	Template.AddShooterEffect(Effect);
 
     WorldDamage = new class'X2Effect_ApplyDirectionalWorldDamage';  //creates the framework to apply damage to the world
 	WorldDamage.bUseWeaponDamageType = False;                       //overrides the normal weapon damage type
@@ -1231,18 +1218,17 @@ static function X2AbilityTemplate RTUnstableConduitBurst() {
 	WorldDamage.PlusNumZTiles = 2;                                 //determines how 'high' the world damage is applied
 	WorldDamage.bHitTargetTile = false;                              
 	WorldDamage.ApplyChance = 100;
-	Template.AddMultiTargetEffect(WorldDamage);                    
+	// Template.AddMultiTargetEffect(WorldDamage);                    
 
 	WeaponDamageEffect = new class'X2Effect_ApplyWeaponDamage';   
 	WeaponDamageEffect.bIgnoreBaseDamage = true;	
-	WeaponDamageEffect.EffectDamageValue.Damage = default.BURST_DAMAGE;			 
+	WeaponDamageEffect.EffectDamageValue = default.BURST_DMG;			 
 	WeaponDamageEffect.bApplyWorldEffectsForEachTargetLocation = true;
 	WeaponDamageEffect.EnvironmentalDamageAmount = 250;          
 	Template.AddMultiTargetEffect(WeaponDamageEffect);          
 
 	Template.bSkipFireAction = true;
 
-	Template.CustomFireAnim = 'HL_Psi_MindControl';
 	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
 	Template.BuildInterruptGameStateFn = TypicalAbility_BuildInterruptGameState;
 	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;

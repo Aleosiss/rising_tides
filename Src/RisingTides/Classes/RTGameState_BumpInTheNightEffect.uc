@@ -41,6 +41,11 @@ function EventListenerReturn RTBumpInTheNight(Object EventData, Object EventSour
 	AbilityContext = XComGameStateContext_Ability(GameState.GetContext());
 	if (AbilityContext == none)
 		return ELR_NoInterrupt;
+
+	if(AbilityContext.InterruptionStatus == eInterruptionStatus_Interrupt) {
+		`LOG("Rising Tides: not on the interrupt stage!");
+        return ELR_NoInterrupt;
+    }
 	
 	// Check if the source object was the source unit for this effect, and make sure the target was not
 	if (AbilityContext.InputContext.SourceObject.ObjectID != ApplyEffectParameters.SourceStateObjectRef.ObjectID ||
@@ -73,9 +78,24 @@ function EventListenerReturn RTBumpInTheNight(Object EventData, Object EventSour
 			bTargetIsDead = TargetUnit.IsDead();
 	}
 
+	
+
+	Attacker = XComGameState_Unit(EventSource);
+	if(Attacker != none) {
+		// trigger psionic activation if psionic blades were present and used
+		if(Attacker.HasSoldierAbility('RTPsionicBlade') && bShouldTriggerMelee) {
+			`LOG("Rising Tides: attempted to force a psionic ability event.");
+			InitializeAbilityForActivation(PsionicActivationAbilityState, Attacker, 'PsionicActivate', History);
+			ActivateAbility(PsionicActivationAbilityState, Attacker.GetReference());
+		} else {
+			`LOG("Rising Tides: did not attempt to force a psionic ability event.");
+		}
+	}
+
+
 	if (bTargetIsDead)
 	{
-		Attacker = XComGameState_Unit(EventSource);
+		
 		if(bShouldTriggerWaltz) {
 			iNumWaltzActionPoints = 0;
 			j = 0;
@@ -137,14 +157,7 @@ function EventListenerReturn RTBumpInTheNight(Object EventData, Object EventSour
 				} 
 			}
 		}
-	}
-
-	// trigger psionic activation for unstable conduit if psionic blades were present and used
-	if(Attacker.HasSoldierAbility('RTPsionicBlades') && bShouldTriggerMelee) {
-		InitializeAbilityForActivation(PsionicActivationAbilityState, NewAttacker, 'PsionicActivate', History);
-		ActivateAbility(PsionicActivationAbilityState, NewAttacker.GetReference());
-		NewAttacker = XComGameState_Unit(History.GetGameStateForObjectID(NewAttacker.ObjectID));
-	}
+	} 
 
 	return ELR_NoInterrupt;
 }

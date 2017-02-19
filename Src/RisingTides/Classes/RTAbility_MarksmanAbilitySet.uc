@@ -1427,7 +1427,7 @@ static function X2AbilityTemplate TimeStandsStill()
 
 	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
 
-	Template.PostActivationEvents.AddItem('UnitUsedPsionicAbility');
+	Template.PostActivationEvents.AddItem(default.UnitUsedPsionicAbilityEvent);
 
 	// TODO: VISUALIZATION
 	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
@@ -1700,6 +1700,7 @@ static function X2AbilityTemplate PsionicSurge()
 	local X2AbilityCost_ActionPoints		ActionPoint;
 	local RTEffect_PsionicSurge				SurgeEffect;
 	local X2Effect_GrantActionPoints		ActionPointEffect;
+	local X2Effect_Persistent				Effect;
 	
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'PsionicSurge');
 	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_adventpsiwitch_mindcontrol";
@@ -1727,9 +1728,17 @@ static function X2AbilityTemplate PsionicSurge()
 	Template.AbilityShooterConditions.AddItem(default.LivingShooterProperty);
 	Template.AddShooterEffectExclusions();
 
+	Effect = new class'X2Effect_Persistent';
+	Effect.BuildPersistentEffect(0, false);
+	Effect.VFXTemplateName = class'RTEffectBuilder'.default.SurgeStartupParticleString;
+	Template.AddShooterEffect(Effect);
+
 	SurgeEffect = new class 'RTEffect_PsionicSurge';
 	SurgeEffect.BuildPersistentEffect(1, false, true, false,  eGameRule_PlayerTurnEnd);
 	SurgeEffect.SetDisplayInfo(ePerkBuff_Bonus, Template.LocFriendlyName, Template.LocLongDescription, Template.IconImage, true,,Template.AbilitySourceName);
+	SurgeEffect.VFXTemplateName = class'RTEffectBuilder'.default.SurgePersistentParticleString;
+	SurgeEffect.VFXSocket = class'RTEffectBuilder'.default.SurgeSocketName;
+	SurgeEffect.VFXSocketsArrayName = class'RTEffectBuilder'.default.SurgeArrayName;
 	Template.AddTargetEffect(SurgeEffect);
 
 	ActionPointEffect = new class'X2Effect_GrantActionPoints';
@@ -1737,10 +1746,9 @@ static function X2AbilityTemplate PsionicSurge()
 	ActionPointEffect.PointType = class'X2CharacterTemplateManager'.default.StandardActionPoint;
 	Template.AddTargetEffect(ActionPointEffect);
 
-	Template.PostActivationEvents.AddItem('UnitUsedPsionicAbility');
+	Template.PostActivationEvents.AddItem(default.UnitUsedPsionicAbilityEvent);
 
 	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
-	
 	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;	//TODO: VISUALIZATION
 	Template.bShowActivation = true;
 	Template.bSkipFireAction = true;
@@ -2083,7 +2091,7 @@ static function X2AbilityTemplate Harbinger()
 
 	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
 
-	Template.PostActivationEvents.AddItem('UnitUsedPsionicAbility');
+	Template.PostActivationEvents.AddItem(default.UnitUsedPsionicAbilityEvent);
 	
 	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;	//TODO: VISUALIZATION
 	Template.bSkipFireAction = true;
@@ -2202,19 +2210,22 @@ static function X2AbilityTemplate HarbingerCleanseListener()
 //---------------------------------------------------------------------------------------
 static function X2AbilityTemplate RTKillZone()
 {
-	local X2AbilityTemplate             Template;
-	local X2AbilityCooldown             Cooldown;
-	local X2AbilityCost_Ammo            AmmoCost;
-	local X2AbilityCost_ActionPoints    ActionPointCost;
-	local X2AbilityTarget_Cursor        CursorTarget;
-	local X2AbilityMultiTarget_Cone     ConeMultiTarget;
-	local X2Effect_ReserveActionPoints  ReservePointsEffect;
-	local X2Effect_MarkValidActivationTiles MarkTilesEffect;
-	local X2Condition_UnitEffects           SuppressedCondition;
+	local X2AbilityTemplate						Template;
+	local X2AbilityCooldown						Cooldown;
+	local X2AbilityCost_Ammo					AmmoCost;
+	local RTAbilityCost_SnapshotActionPoints    ActionPointCost;
+	local X2AbilityTarget_Cursor				CursorTarget;
+	local X2AbilityMultiTarget_Cone				ConeMultiTarget;
+	local X2Effect_ReserveActionPoints			ReservePointsEffect;
+	local X2Effect_MarkValidActivationTiles		MarkTilesEffect;
+	local X2Condition_UnitEffects				SuppressedCondition;
+	local X2Effect_Persistent					Effect, Effect2;
+
 
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'RTKillZone');
 
-	ActionPointCost = new class'X2AbilityCost_ActionPoints';
+	ActionPointCost = new class'RTAbilityCost_SnapshotActionPoints';
+	ActionPointCost.bIgnore = true;
 	ActionPointCost.iNumPoints = 2;
 	ActionPointCost.bConsumeAllPoints = true;   //  this will guarantee the unit has at least 1 action point
 	ActionPointCost.bFreeCost = true;           //  ReserveActionPoints effect will take all action points away
@@ -2254,6 +2265,18 @@ static function X2AbilityTemplate RTKillZone()
 	MarkTilesEffect.AbilityToMark = 'KillZoneShot';
 	Template.AddShooterEffect(MarkTilesEffect);
 
+	Effect = new class'X2Effect_Persistent';
+	Effect.BuildPersistentEffect(0, false);
+	Effect.VFXTemplateName = class'RTEffectBuilder'.default.KillzoneStartupParticleString;
+	Template.AddShooterEffect(Effect);
+
+	Effect2 = new class'X2Effect_Persistent';
+	Effect2.BuildPersistentEffect(1, false, true, false, eGameRule_PlayerTurnBegin);
+	Effect2.VFXTemplateName = class'RTEffectBuilder'.default.KillzoneStartupParticleString;
+	Effect2.VFXSocket = class'RTEffectBuilder'.default.KillzoneSocketName;
+	Effect2.VFXSocketsArrayName = class'RTEffectBuilder'.default.KillzoneArrayName;
+	Template.AddShooterEffect(Effect2);
+
 	Template.AdditionalAbilities.AddItem('KillZoneShot');
 	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
 	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
@@ -2276,7 +2299,7 @@ static function X2AbilityTemplate RTKillZone()
 	Template.TargetingMethod = class'X2TargetingMethod_Cone';
 
 	Template.bCrossClassEligible = false;
-	Template.PostActivationEvents.AddItem('UnitUsedPsionicAbility');
+	Template.PostActivationEvents.AddItem(default.UnitUsedPsionicAbilityEvent);
 
 	return Template;
 }

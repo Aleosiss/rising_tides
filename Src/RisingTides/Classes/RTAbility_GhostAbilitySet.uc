@@ -57,6 +57,14 @@ class RTAbility_GhostAbilitySet extends X2Ability
 	var name RTFeedbackEffectName;
 	var name RTFeedbackWillDebuffName;
 
+	var name UnitUsedPsionicAbilityEvent;
+	var name ForcePsionicAbilityEvent;
+
+	var config string BurstParticleString;
+	var config name BurstSocketName;
+	var config name BurstArrayName;
+	var config name BurstAnimName;
+
 //---------------------------------------------------------------------------------------
 //---CreateTemplates---------------------------------------------------------------------
 //---------------------------------------------------------------------------------------
@@ -294,11 +302,9 @@ static function X2AbilityTemplate JoinMeld()
 	Template.AbilityToHitCalc = default.DeadEye;
 	Template.AbilityTargetStyle = default.SelfTarget;
 
-	MeldEffect = new class 'RTEffect_Meld';
-	MeldEffect.BuildPersistentEffect(1, true, true, false,  eGameRule_PlayerTurnEnd);
-		MeldEffect.SetDisplayInfo(ePerkBuff_Bonus, default.MELD_TITLE, 
-		default.MELD_DESC, Template.IconImage);
+	MeldEffect = class'RTEffectBuilder'.static.RTCreateMeldEffect(1, true) ;
 	Template.AddTargetEffect(MeldEffect);
+
 
 	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
 	// Note: no visualization on purpose!
@@ -407,7 +413,7 @@ static function X2AbilityTemplate PsiOverload()
 	Template.AddTargetEffect(KillUnitEffect);
 
 	Template.PostActivationEvents.AddItem('RTFeedback');
-	Template.PostActivationEvents.AddItem('UnitUsedPsionicAbility');
+	Template.PostActivationEvents.AddItem(default.UnitUsedPsionicAbilityEvent);
 	//Template.AdditionalAbilities.AddItem('PsiOverloadPanic');
 
 	Template.CustomFireAnim = 'HL_Psi_MindControl';
@@ -734,15 +740,15 @@ static function X2AbilityTemplate PsionicActivate()
 	
 	Trigger = new class'X2AbilityTrigger_EventListener';
 	Trigger.ListenerData.Deferral = ELD_OnStateSubmitted;
-	Trigger.ListenerData.EventID = 'RTForcePsionicActivation';
+	Trigger.ListenerData.EventID = default.ForcePsionicAbilityEvent;
 	Trigger.ListenerData.Filter = eFilter_Unit;
 	Trigger.ListenerData.EventFn = class'XComGameState_Ability'.static.AbilityTriggerEventListener_Self;
 	Template.AbilityTriggers.AddItem(Trigger);
 
 	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
-	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
+	// Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
 	//  NOTE: No visualization on purpose!
-	Template.PostActivationEvents.AddItem('UnitUsedPsionicAbility');
+	Template.PostActivationEvents.AddItem(default.UnitUsedPsionicAbilityEvent);
 
 	Template.bCrossClassEligible = false;				
 
@@ -879,6 +885,49 @@ static function X2AbilityTemplate CreateRTPassiveAbilityCooldown(name TemplateNa
         return Template;
 }
 
+function RTPsionicBurst_BuildVisualization(XComGameState VisualizeGameState, out array<VisualizationTrack> OutVisualizationTracks) {
+	local XComGameStateHistory			History;
+	local XComGameStateContext_Ability  Context;
+	local StateObjectReference          InteractingUnitRef;
+	local XComGameState_Ability         Ability;
+
+	local VisualizationTrack			EmptyTrack;
+	local VisualizationTrack			BuildTrack;
+
+	local X2Action_PlayAnimation		AnimAction;
+	local X2Action_PlayEffect			EffectAction;
+	local X2Action_PlaySoundAndFlyOver  FlyoverAction;
+
+
+
+	Context = XComGameStateContext_Ability(VisualizeGameState.GetContext());
+	InteractingUnitRef = Context.InputContext.SourceObject;
+
+	
+
+	//Configure the visualization track for the shooter
+	//****************************************************************************************
+	BuildTrack = EmptyTrack;
+	BuildTrack.StateObject_OldState = History.GetGameStateForObjectID(InteractingUnitRef.ObjectID, eReturnType_Reference, VisualizeGameState.HistoryIndex - 1);
+	BuildTrack.StateObject_NewState = VisualizeGameState.GetGameStateForObjectID(InteractingUnitRef.ObjectID);
+	BuildTrack.TrackActor = History.GetVisualizer(InteractingUnitRef.ObjectID);
+
+	Ability = XComGameState_Ability(History.GetGameStateForObjectID(Context.InputContext.AbilityRef.ObjectID, eReturnType_Reference, VisualizeGameState.HistoryIndex - 1));
+	FlyoverAction = X2Action_PlaySoundAndFlyOver(class'X2Action_PlaySoundAndFlyOver'.static.AddToVisualizationTrack(BuildTrack, VisualizeGameState.GetContext()));
+	FlyoverAction.SetSoundAndFlyOverParameters(None, Ability.GetMyTemplate().LocFlyOverText, '', eColor_Good);
+	OutVisualizationTracks.AddItem(BuildTrack);
+
+	//AnimAction = X2Action_PlayAnimation(class'X2Action_PlayAnimation'.static.AddToVisualizationTrack(BuildTrack, VisualizeGameState.GetContext()));
+	//AnimAction.Params.AnimName = default.BurstAnimName;
+	 
+	EffectAction = class'RTEffectBuilder'.static.BuildEffectParticle(VisualizeGameState, BuildTrack, default.BurstParticleString, default.BurstSocketName, default.BurstArrayName, true, false);
+
+
+
+
+
+}
+
 defaultproperties
 {
 	Begin Object Class=X2Condition_UnitProperty Name=DefaultLivingFriendlyUnitOnlyProperty
@@ -893,6 +942,8 @@ defaultproperties
 
 	RTFeedbackEffectName = "RTFeedback"
 	RTFeedbackWillDebuffName = "RTFeedbackWillDebuff"
+	UnitUsedPsionicAbilityEvent = "UnitUsedPsionicAbility"
+	ForcePsionicAbilityEvent = "ForcePsionicAbilityEvent"
 
 
 

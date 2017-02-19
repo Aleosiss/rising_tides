@@ -61,7 +61,6 @@ protected function InitializeAbilityForActivation(out XComGameState_Ability Abil
 	if(AbilityState == none) {
 		`LOG("Rising Tides: Couldn't initialize ability for activation!");
 	}
-
 }
 
 // EffectAddedBuildVisualizationFn
@@ -703,9 +702,9 @@ function EventListenerReturn RTHarbingerBonusDamage(Object EventData, Object Eve
 		return ELR_NoInterrupt;
 	}
 
-    // we want to do the additional damage after, i think
-    if(AbilityContext.InterruptionStatus == eInterruptionStatus_Interrupt) {
-		`LOG("Rising Tides: only after interrupt stage!");
+    // we want to do the additional damage before, i think
+    if(AbilityContext.InterruptionStatus != eInterruptionStatus_Interrupt) {
+		`LOG("Rising Tides: only on interrupt stage!");
         return ELR_NoInterrupt;
     }
 
@@ -744,6 +743,8 @@ function EventListenerReturn RTHarbingerBonusDamage(Object EventData, Object Eve
         ActivateAbility(AdditionalDamageState, TargetUnitState.GetReference());
         return ELR_NoInterrupt;
     }
+
+	`LOG("Rising Tides: RTHarbingerBonusDamage failed!");
 
     return ELR_NoInterrupt;
 }

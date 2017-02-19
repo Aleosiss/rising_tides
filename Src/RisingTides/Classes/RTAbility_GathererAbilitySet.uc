@@ -89,8 +89,7 @@ static function X2AbilityTemplate OverTheShoulder()
 																// this will control the application and removal of aura effects within its range
 
 	// Over The Shoulder
-	local RTEffect_MobileSquadViewer			VisionEffect;	// this lifts a small amount of the FOG around the unit
-	local X2Effect_ScanningProtocol				ScanningEffect;	// this gives sight of the unit to the player														
+	local RTEffect_MobileSquadViewer			VisionEffect;	// this lifts a small amount of the FOG around the unit	and gives vision of it										
 	local X2Effect_IncrementUnitValue			TagEffect;		// this tags the unit so certain OTS effects can only proc once per turn
 
 	// Unsettling Voices
@@ -167,14 +166,6 @@ static function X2AbilityTemplate OverTheShoulder()
 	VisionEffect.bRemoveWhenSourceDies = true;
 	VisionEffect.EffectName = default.OverTheShoulderEffectName;
 	Template.AddMultiTargetEffect(VisionEffect);
-
-	ScanningEffect = new class'X2Effect_ScanningProtocol';
-	ScanningEffect.BuildPersistentEffect(1, false, true, false, eGameRule_PlayerTurnBegin);
-	ScanningEffect.TargetConditions.AddItem(LivingNonAllyUnitOnlyProperty);
-	ScanningEffect.DuplicateResponse = eDupe_Ignore;
-	ScanningEffect.bRemoveWhenTargetDies = true;
-	ScanningEffect.bRemoveWhenSourceDies = true;
-	Template.AddMultiTargetEffect(ScanningEffect);
 
 	VoiceEffect = new class'RTEffect_UnsettlingVoices';
 	VoiceEffect.BuildPersistentEffect(1, false, true, false, eGameRule_PlayerTurnBegin);
@@ -381,6 +372,7 @@ static function X2AbilityTemplate RTExtinctionEventPartOne() {
       Template.AbilityShooterConditions.AddItem(default.LivingShooterProperty);
       Template.AddShooterEffectExclusions();
 
+	  Template.PostActivationEvents.AddItem(default.UnitUsedPsionicAbilityEvent);
       Template.PostActivationEvents.AddItem('RTExtinctionEventPartTwo');
 	  Template.AdditionalAbilities.AddItem('RTExtinctionEventPartTwo');
 	  Template.AdditionalAbilities.AddItem('RTExtinctionEventPartThree');
@@ -523,6 +515,8 @@ static function X2AbilityTemplate RTTheSixPathsOfPain() {
       Template.AbilityTargetStyle = default.SelfTarget;
       Template.AbilityToHitCalc = default.Deadeye;
 
+	  Template.AbilityCosts.AddItem(default.FreeActionCost);
+
       Trigger = new class'X2AbilityTrigger_EventListener';
       Trigger.ListenerData.Priority = 35; // this way we don't conflict with automatic SquadViewer cleanup
       Trigger.ListenerData.EventID = 'PlayerTurnBegun';
@@ -645,6 +639,8 @@ static function X2AbilityTemplate RTMeldInduction() {
     MeldEffect.SetDisplayInfo(ePerkBuff_Bonus, default.MELD_TITLE,
 		default.MELD_DESC, Template.IconImage);
     Template.AddTargetEffect(MeldEffect);
+
+	Template.PostActivationEvents.AddItem(default.UnitUsedPsionicAbilityEvent);
 
     Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
 	  Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;

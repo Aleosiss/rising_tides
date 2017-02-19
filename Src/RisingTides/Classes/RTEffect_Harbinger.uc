@@ -22,8 +22,8 @@ function RegisterForEvents(XComGameState_Effect EffectState) {
 
   ListenerObj = HarbyEffectState;
   FilterObj = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(EffectState.ApplyEffectParameters.TargetStateObjectRef.ObjectID)); 
-  EventMgr.RegisterForEvent(ListenerObj, 'RTRemoveUnitFromMeld', HarbyEffectState.RemoveHarbingerEffect, ELD_OnStateSubmitted, , FilterObj); // shields expended appears to just be a generic remove effect listener
-  EventMgr.RegisterForEvent(ListenerObj, 'AbilityActivated', HarbyEffectState.RTHarbingerBonusDamage, ELD_Immediate, 75, FilterObj); // this should go before everything...
+  EventMgr.RegisterForEvent(ListenerObj, 'RTRemoveFromMeld', HarbyEffectState.RemoveHarbingerEffect, ELD_OnStateSubmitted, 40, FilterObj); // shields expended appears to just be a generic remove effect listener
+  EventMgr.RegisterForEvent(ListenerObj, 'AbilityActivated', HarbyEffectState.RTHarbingerBonusDamage, ELD_OnStateSubmitted, 75, FilterObj); // this should go before everything...
 }
 
 simulated function bool OnEffectTicked(const out EffectAppliedData ApplyEffectParameters, XComGameState_Effect kNewEffectState, XComGameState NewGameState, bool FirstApplication)
@@ -40,8 +40,6 @@ simulated function bool OnEffectTicked(const out EffectAppliedData ApplyEffectPa
 		
 		NewAbilityState.iCooldown += 1;
 	}
-	
-	
 	
 	return true;
 }	
@@ -125,7 +123,8 @@ simulated function AddX2ActionsForVisualization(XComGameState VisualizeGameState
 
 simulated function AddX2ActionsForVisualization_Tick(XComGameState VisualizeGameState, out VisualizationTrack BuildTrack, const int TickIndex, XComGameState_Effect EffectState)
 {
-	AddX2ActionsForVisualization(VisualizeGameState, BuildTrack, 'AA_Success');
+	// AddX2ActionsForVisualization(VisualizeGameState, BuildTrack, 'AA_Success');
+	super.AddX2ActionsForVisualization_Tick(VisualizeGameState, BuildTrack, TickIndex, EffectState);
 }
 
 defaultproperties
