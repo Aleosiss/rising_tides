@@ -749,6 +749,60 @@ function EventListenerReturn RTHarbingerBonusDamage(Object EventData, Object Eve
     return ELR_NoInterrupt;
 }
 
+// intended event id = AbilityActivated filter = Unit
+// intended EventData = Ability we're going to try to extend the effect of
+// intended EventSource = Unit casting the ability
+function EventListenerReturn ExtendEffectDuration(Object EventData, Object EventSource, XComGameState GameState, Name EventID) {
+    local XComGameStateHistory History;
+    local XComGameState_Effect OldEffectState, NewEffectState;
+    local XComGameState_Unit TargetUnitState, SourceUnitState;
+    local XComGameState NewGameState;
+    local XComGameStateContext_Ability AbilityContext;
+    local RTEffect_ExtendEffectDuration EffectTemplate
+
+    AbilityContext = XComGameStateContext_Ability(GameState.GetContext());
+    if(AbilityContext == none) {
+      return ELR_NoInterrupt;
+    }
+    // only extend the duration if it actually applied
+    if(AbilityContext.ResultContext.HitResult > 2) { // 0 = Success, 1 = Crit, 2 = Graze
+      return ELR_NoInterrupt;
+    }
+
+    EffectTemplate = RTEffect_ExtendEffectDuration(GetX2Effect());
+    if(EffectTemplate == none) {
+      return ELR_NoInterrupt;
+    }
+
+    if(AbilityContext.InputContext.AbilityTemplateName != EffectTemplate.AbilityToExtendName) {
+      return ELR_NoInterrupt;
+    }
+
+    History = `XCOMHISTORY;
+    TargetUnitState = XComGameState_Unit(History.GetGameStateForObjectID(AbilityContext.InputContext.PrimaryTarget.ObjectID));
+    if(TargetUnitState == none) {
+      return ELR_NoInterrupt;
+    }
+
+    NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState('Rising Tides: Extending Effect Duration');
+    OldEffectState = TargetUnitState.GetUnitAffectedByEffectState(EffectNameToExtend);
+
+    if(OldEffectState == none) {
+      `RedScreenOnce("Rising Tides: ExtendEffectDuration was unable to find the EffectState to extend!");
+      return ELR_NoInterrupt;
+
+    }
+
+    NewEffectState = NewGameState.CreateStateObject(OldEffectState.class, OldEffectState.ObjectID);
+    NewGameState.AddStateObject(NewEffectState);
+
+    NewEffectState.iDuration += EffectTemplate.iDurationExtension;
+    SubmitNewGameState(NewGameState);
+
+    return ELR_NoInterrupt;
+}
+
+
 
 
 private function SubmitNewGameState(out XComGameState NewGameState)
