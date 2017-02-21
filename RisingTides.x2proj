@@ -86,6 +86,9 @@
     <Content Include="Src\RisingTides\Classes\RTAction_RemoveMITV.uc">
       <SubType>Content</SubType>
     </Content>
+    <Content Include="Src\RisingTides\Classes\RTCondition_Conditional.uc">
+      <SubType>Content</SubType>
+    </Content>
     <Content Include="Src\RisingTides\Classes\RTCondition_EffectStackCount.uc">
       <SubType>Content</SubType>
     </Content>
@@ -237,9 +240,6 @@
       <SubType>Content</SubType>
     </Content>
     <Content Include="Src\RisingTides\Classes\RTGameState_Ability.uc">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Src\RisingTides\Classes\RTGameState_AbilityMultiTarget.uc">
       <SubType>Content</SubType>
     </Content>
     <Content Include="Src\RisingTides\Classes\RTGameState_BloodlustEffect.uc">
