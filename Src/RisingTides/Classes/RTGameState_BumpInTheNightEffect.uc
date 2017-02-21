@@ -81,9 +81,9 @@ function EventListenerReturn RTBumpInTheNight(Object EventData, Object EventSour
 	
 
 	Attacker = XComGameState_Unit(EventSource);
-	if(Attacker != none) {
-		// trigger psionic activation if psionic blades were present and used
-		if(Attacker.HasSoldierAbility('RTPsionicBlade') && bShouldTriggerMelee) {
+	if(Attacker != none && bShouldTriggerMelee) { 
+		// trigger psionic activation if psionic blades were present and used or on shadow strike
+		if(Attacker.HasSoldierAbility('RTPsionicBlade') || AbilityState.GetMyTemplateName() == 'RTShadowStrike') {
 			`LOG("Rising Tides: attempted to force a psionic ability event.");
 			InitializeAbilityForActivation(PsionicActivationAbilityState, Attacker, 'PsionicActivate', History);
 			ActivateAbility(PsionicActivationAbilityState, Attacker.GetReference());

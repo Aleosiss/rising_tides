@@ -202,7 +202,7 @@ static function X2AbilityTemplate StandardGhostShot()
 	SiphonEffect.DamageTypes.AddItem('Psi');
 
 	TargetUnitPropertyCondition = new class'X2Condition_UnitProperty';
-	TargetUnitPropertyCondition.ExcludeDead = true;
+	TargetUnitPropertyCondition.ExcludeDead = false;
 	TargetUnitPropertyCondition.ExcludeRobotic = true;
 	TargetUnitPropertyCondition.ExcludeFriendlyToSource = false;
 	TargetUnitPropertyCondition.ExcludeHostileToSource = false;
@@ -803,7 +803,7 @@ static function X2Condition_UnitValue CreateOverTheShoulderProperty() {
 	local X2Condition_UnitValue Condition;
 
 	Condition = new class'X2Condition_UnitValue';
-	Condition.AddCheckValue(class'RTAbility_GathererAbilitySet'.default.OverTheShoulderTagName, 1, eCheck_GreaterThanOrEqual);
+	Condition.AddCheckValue(class'RTAbility_GathererAbilitySet'.default.OverTheShoulderTagName, 1, eCheck_LessThan);
 
 	return Condition;
 

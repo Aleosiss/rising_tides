@@ -152,6 +152,113 @@ simulated function int SortAvailableTargets(AvailableTarget TargetA, AvailableTa
 	return 1;
 }
 
+// Unwilling Conduits
+// this should be triggered off of a UnitUsedPsionicAbilityEvent:
+// EventData = XComGameState_Ability
+// EventSource = XComGameState_Unit
+function EventListenerReturn UnwillingConduitEvent(Object EventData, Object EventSource, XComGameState GameState, Name EventID) {
+	local XComGameStateHistory					History;
+	local XComGameState_Ability					PreviousAbilityState, NewAbilityState;
+	local XComGameState							NewGameState;
+	local XComGameState_Unit					PreviousSourceUnitState, NewSourceUnitState, IteratorUnitState;
+	local int									iConduits;
+	local XComGameStateContext_Ability			AbilityContext;
+	
+	`LOG("Rising Tides: Starting Unwilling Conduit check!");
+
+	AbilityContext = XComGameStateContext_Ability(GameState.GetContext());
+	if (AbilityContext == none) {
+		`LOG("Rising Tides: Unwilling Conduit Event failed, no AbilityContext!");
+		`RedScreenOnce("Rising Tides: Unwilling Conduit Event failed, no AbilityContext!");
+  		return ELR_NoInterrupt;	
+	}
+	
+	History = `XCOMHISTORY;
+
+	// EventData = AbilityState to Channel
+	PreviousAbilityState = XComGameState_Ability(EventData);
+	// Event Source = UnitState of AbilityState
+	PreviousSourceUnitState = XComGameState_Unit(EventSource);
+															
+	if(PreviousAbilityState == none || PreviousSourceUnitState == none) {
+		`RedScreenOnce("Rising Tides: Unwilling Conduit Event failed, no previous AbilityState or SourceUnitState!");
+		return ELR_NoInterrupt;
+	}
+
+	if(!PreviousAbilityState.IsCoolingDown()) {
+		return ELR_NoInterrupt;
+	}
+
+
+	iConduits = 0;
+	foreach History.IterateByClassType(class'XComGameState_Unit', IteratorUnitState) {
+		if(IteratorUnitState.AffectedByEffectNames.Find(class'RTAbility_GathererAbilitySet'.default.OverTheShoulderEffectName) != INDEX_NONE) {
+			iConduits++;
+		}
+	}	
+
+	NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState(string(GetFuncName()));
+	NewSourceUnitState = XComGameState_Unit(NewGameState.CreateStateObject(class'XComGameState_Unit', PreviousSourceUnitState.ObjectID));
+	NewAbilityState = XComGameState_Ability(NewGameState.CreateStateObject(class'XComGameState_Ability', PreviousAbilityState.ObjectID));
+
+	if(PreviousAbilityState.iCooldown <= iConduits) {
+		NewAbilityState.iCooldown = 1;
+	} else {
+		NewAbilityState.iCooldown -= iConduits;
+	}
+
+	NewGameState.AddStateObject(NewAbilityState);
+	NewGameState.AddStateObject(NewSourceUnitState);
+  
+	XComGameStateContext_ChangeContainer(NewGameState.GetContext()).BuildVisualizationFn = ConduitVisualizationFn;
+
+	`LOG("Rising Tides: Finishing Unwilling Conduit check!");
+
+	`TACTICALRULES.SubmitGameState(NewGameState);
+
+	
+	AbilityTriggerAgainstSingleTarget(OwnerStateObject, false);
+	return ELR_NoInterrupt;
+}
+
+function ConduitVisualizationFn(XComGameState VisualizeGameState, out array<VisualizationTrack> OutVisualizationTracks)
+{
+	local XComGameState_Unit UnitState;
+	local X2Action_PlaySoundAndFlyOver SoundAndFlyOver;
+	local VisualizationTrack BuildTrack;
+	local XComGameStateHistory History;
+	local X2AbilityTemplate AbilityTemplate;
+	local XComGameState_Ability AbilityState;
+
+	History = `XCOMHISTORY;
+	foreach VisualizeGameState.IterateByClassType(class'XComGameState_Unit', UnitState)
+	{
+		foreach VisualizeGameState.IterateByClassType(class'XComGameState_Ability', AbilityState)
+		{
+			break;
+		}
+		if (AbilityState == none)
+		{
+			`RedScreenOnce("Ability state missing from" @ GetFuncName() @ "-jbouscher @gameplay");
+			return;
+		}
+
+		History.GetCurrentAndPreviousGameStatesForObjectID(UnitState.ObjectID, BuildTrack.StateObject_OldState, BuildTrack.StateObject_NewState, , VisualizeGameState.HistoryIndex);
+		BuildTrack.StateObject_NewState = UnitState;
+		BuildTrack.TrackActor = UnitState.GetVisualizer();
+
+		AbilityTemplate = AbilityState.GetMyTemplate();
+		if (AbilityTemplate != none)
+		{
+			SoundAndFlyOver = X2Action_PlaySoundAndFlyOver(class'X2Action_PlaySoundAndFlyOver'.static.AddToVisualizationTrack(BuildTrack, VisualizeGameState.GetContext()));
+			SoundAndFlyOver.SetSoundAndFlyOverParameters(None, "Unwilling Conduits", '', eColor_Good, "img:///UILibrary_PerkIcons.UIPerk_reload");
+
+			OutVisualizationTracks.AddItem(BuildTrack);
+		}
+		break;
+	}
+}
+
 
 
 

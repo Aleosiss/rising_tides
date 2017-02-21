@@ -1219,7 +1219,7 @@ static function X2AbilityTemplate SovereignEffect()
 	Template.AddTargetEffect(WeaponDamageEffect);     
 	Template.AddMultiTargetEffect(WeaponDamageEffect);   
 	
-	BurningEffect = class'X2StatusEffects'.static.CreateBurningStatusEffect(3, 2);   //Adds Burning Effect for 3 damage, 0 spread
+	BurningEffect = class'X2StatusEffects'.static.CreateBurningStatusEffect(3, 2);   //Adds Burning Effect for 3 damage, 2 spread
 	BurningEffect.ApplyChance = 100;                                         //Should be a 100% chance to actually apply burning 
 	Template.AddTargetEffect(BurningEffect);
 	Template.AddMultiTargetEffect(BurningEffect);                                    //Adds the burning effect to the targeted area

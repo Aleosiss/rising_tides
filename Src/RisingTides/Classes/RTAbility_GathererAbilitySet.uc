@@ -34,6 +34,7 @@ class RTAbility_GathererAbilitySet extends RTAbility_GhostAbilitySet config(Risi
 
 	var config WeaponDamageValue EXTINCTION_EVENT_DMG;
 	var config WeaponDamageValue RUDIMENTARY_CREATURES_DMG;
+	var config WeaponDamageValue UNWILL_DMG;
 
 	var name ExtinctionEventStageThreeEventName;
 	var name OverTheShoulderTagName;
@@ -64,14 +65,14 @@ static function array<X2DataTemplate> CreateTemplates()
 	Templates.AddItem(RTExtinctionEventPartOne());
 	Templates.AddItem(RTExtinctionEventPartTwo());
 	Templates.AddItem(RTExtinctionEventPartThree());
+	Templates.AddItem(RTUnwillingConduits());
+	Templates.AddItem(PurePassive('RTUnwillingConduitsIcon', "img://UILibrary_PerkIcons.UIPerk_swordSlash", true));
 
 
 	return Templates;
 }
 
 	
-
-
 //---------------------------------------------------------------------------------------
 //---Over the Shoulder-------------------------------------------------------------------
 //---------------------------------------------------------------------------------------
@@ -146,12 +147,6 @@ static function X2AbilityTemplate OverTheShoulder()
 	Template.AbilityMultiTargetStyle = Radius;
 	Template.AbilityMultiTargetConditions.Additem(default.LivingTargetUnitOnlyProperty);
 
-	TagEffect = new class'X2Effect_IncrementUnitValue';
-	TagEffect.UnitName = default.OverTheShoulderTagName;
-	TagEffect.NewValueToSet = 1;
-	TagEffect.CleanupType = eCleanup_BeginTurn;
-	TagEffect.SetupEffectOnShotContextResult(true, true);      //  mark them regardless of whether the shot hit or missed
-	Template.AddMultiTargetEffect(TagEffect);
 
 	// begin non-ally aura effects	---------------------------------------
 
@@ -192,11 +187,13 @@ static function X2AbilityTemplate OverTheShoulder()
 
 	// begin ally aura effects	  -----------------------------------------
 
+	// general tag effect to mark all units with OTS
 	AllyEffect = new class'X2Effect_Persistent';
 	AllyEffect.BuildPersistentEffect(1, false, true, false, eGameRule_PlayerTurnEnd);
 	AllyEffect.SetDisplayInfo(ePerkBuff_Bonus,default.OTS_TITLE, default.OTS_DESC_ALLY, Template.IconImage, true,,Template.AbilitySourceName);
-	AllyEffect.TargetConditions.AddItem(default.LivingShooterProperty);
+	AllyEffect.TargetConditions.AddItem(default.LivingFriendlyUnitOnlyProperty);
 	AllyEffect.DuplicateResponse = eDupe_Ignore;
+	AllyEffect.EffectName = default.OverTheShoulderEffectName;
 	Template.AddMultiTargetEffect(AllyEffect);
 
 	// guardian angel
@@ -214,6 +211,14 @@ static function X2AbilityTemplate OverTheShoulder()
 	OTSEffect.SetDisplayInfo(ePerkBuff_Bonus, default.OTS_TITLE, default.OTS_DESC_SELF, Template.IconImage, true,,Template.AbilitySourceName);
 	OTSEffect.DuplicateResponse = eDupe_Ignore;
 	Template.AddShooterEffect(OTSEffect);
+
+	// tag effect. add this last
+	TagEffect = new class'X2Effect_IncrementUnitValue';
+	TagEffect.UnitName = default.OverTheShoulderTagName;
+	TagEffect.NewValueToSet = 1;
+	TagEffect.CleanupType = eCleanup_BeginTurn;
+	TagEffect.SetupEffectOnShotContextResult(true, true);      //  mark them regardless of whether the shot hit or missed
+	Template.AddMultiTargetEffect(TagEffect);
 
 	Template.AbilityToHitCalc = default.DeadEye;
 	Template.AbilityTargetStyle = default.SelfTarget;
@@ -285,7 +290,6 @@ static function X2AbilityTemplate OverTheShoulderVisibilityUpdate() {
 
 	return Template;
 }
-
 
 //---------------------------------------------------------------------------------------
 //---Forced Introversion-----------------------------------------------------------------
@@ -643,15 +647,17 @@ static function X2AbilityTemplate RTMeldInduction() {
 	Template.PostActivationEvents.AddItem(default.UnitUsedPsionicAbilityEvent);
 
     Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
-	  Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
-	  Template.bSkipFireAction = true; // TODO: Visualization!
+	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
+	Template.bSkipFireAction = true; // TODO: Visualization!
 
-	  Template.bCrossClassEligible = false;
+	Template.bCrossClassEligible = false;
 
     return Template;
 }
 
-
+//---------------------------------------------------------------------------------------
+//---Guardian Angel----------------------------------------------------------------------
+//---------------------------------------------------------------------------------------
 static function X2AbilityTemplate RTGuardianAngel() {
     return PurePassive('RTGuardianAngel', "img:///UILibrary_PerkIcons.UIPerk_swordSlash", true);
  }
@@ -697,12 +703,10 @@ static function X2Effect_RemoveEffects CreateGuardianAngelCleanseEffect() {
         Effect.EffectNamesToRemove.AddItem(class'X2AbilityTemplateManager'.default.ConfusedName);
         Effect.EffectNamesToRemove.AddItem(class'X2AbilityTemplateManager'.default.PanickedName);
         Effect.EffectNamesToRemove.AddItem(class'X2AbilityTemplateManager'.default.StunnedName);
-        Effect.EffectNamesToRemove.AddItem(class'X2StatusEffects'.default.BleedingOutName);
 
 
         AbilityProperty = new class'X2Condition_AbilityProperty';
         AbilityProperty.OwnerHasSoldierAbilities.AddItem('RTGuardianAngel');
-
         Effect.TargetConditions.AddItem(AbilityProperty);
 
         Effect.TargetConditions.AddItem(default.LivingFriendlyUnitOnlyProperty);
@@ -712,7 +716,7 @@ static function X2Effect_RemoveEffects CreateGuardianAngelCleanseEffect() {
 static function X2Effect_Persistent CreateGuardianAngelStabilizeEffectPartOne() {
         local X2Effect_Persistent Effect;
         local X2Condition_AbilityProperty AbilityProperty;
-        local X2Condition_UnitStatCheck UnitStatCheckCondition;
+        local X2Condition_UnitEffects EffectCheckCondition;
 
         Effect = class'X2StatusEffects'.static.CreateUnconsciousStatusEffect();
 
@@ -720,10 +724,10 @@ static function X2Effect_Persistent CreateGuardianAngelStabilizeEffectPartOne() 
         AbilityProperty.OwnerHasSoldierAbilities.AddItem('RTGuardianAngel');
         Effect.TargetConditions.AddItem(AbilityProperty);
 
-        UnitStatCheckCondition = new class'X2Condition_UnitStatCheck';
-        UnitStatCheckCondition.AddCheckStat(eStat_HP, 0, eCheck_Exact);
+        EffectCheckCondition = new class'X2Condition_UnitEffects';
+        EffectCheckCondition.AddRequireEffect(class'X2StatusEffects'.default.BleedingOutName, 'AA_BleedingOut');
 
-        Effect.TargetConditions.AddItem(UnitStatCheckCondition);
+        Effect.TargetConditions.AddItem(EffectCheckCondition);
 
         Effect.TargetConditions.AddItem(default.LivingFriendlyUnitOnlyProperty);
 
@@ -775,7 +779,9 @@ static function X2Effect_DamageImmunity CreateGuardianAngelImmunitiesEffect() {
 
         return Effect;
 }
-
+//---------------------------------------------------------------------------------------
+//---Rudimentary Creatures---------------------------------------------------------------
+//---------------------------------------------------------------------------------------
 // Rudimentary Creatures is another one of my standard "there's gotta be a better way" abilities where it's just an event listener that does everything.
 static function X2AbilityTemplate RTRudimentaryCreatures() {
     local X2AbilityTemplate Template;
@@ -804,6 +810,9 @@ static function X2AbilityTemplate RTRudimentaryCreatures() {
     return Template;
 }
 
+//---------------------------------------------------------------------------------------
+//---Rudimentary Creatures Events--------------------------------------------------------
+//---------------------------------------------------------------------------------------
 static function X2AbilityTemplate RTRudimentaryCreaturesEvent() {
     local X2AbilityTemplate Template;
     local X2Effect_ApplyWeaponDamage DamageEffect;
@@ -838,10 +847,70 @@ static function X2AbilityTemplate RTRudimentaryCreaturesEvent() {
     return Template;
 }
 
+//---------------------------------------------------------------------------------------
+//---Unwilling Conduits------------------------------------------------------------------
+//---------------------------------------------------------------------------------------
+// Unwilling Conduits
+static function X2AbilityTemplate RTUnwillingConduits() {
+	local RTAbilityTemplate							Template;
+	local X2Effect_ApplyWeaponDamage				DamageEffect;
+	local X2AbilityTrigger_EventListener			Trigger;
+	local X2AbilityMultiTarget_AllUnits				MultiTarget;
+	local X2Condition_UnitEffects					UnitEffectCondition;		
+
+	`CREATE_X2TEMPLATE(class'RTAbilityTemplate', Template, 'RTUnwillingConduits');
+
+	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_NeverShow;
+    Template.Hostility = eHostility_Neutral;
+    Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_swordSlash";
+    Template.AbilitySourceName = 'eAbilitySource_Psionic';
+
+    Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
+    Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
+    Template.bCrossClassEligible = false;
+	Template.bSkipFireAction = true;
+
+    Template.AbilityTargetStyle = default.SelfTarget;
+    Template.AbilityToHitCalc = default.Deadeye;
+
+	MultiTarget = new class'X2AbilityMultiTarget_AllUnits';
+	MultiTarget.bDontAcceptNeutralUnits = false;
+	MultiTarget.bExcludeSelfAsTargetIfWithinRadius = true;
+	Template.AbilityMultiTargetStyle = MultiTarget;
+
+	UnitEffectCondition = new class'X2Condition_UnitEffects';
+	UnitEffectCondition.AddRequireEffect(default.OverTheShoulderEffectName, 'AA_NotAUnit');
+	Template.AbilityMultiTargetConditions.AddItem(UnitEffectCondition);
+
+	Template.AbilityShooterConditions.AddItem(default.LivingShooterProperty);
+
+	DamageEffect = new class'X2Effect_ApplyWeaponDamage';
+	DamageEffect.bIgnoreBaseDamage = true;
+	DamageEffect.bIgnoreArmor = true;
+	DamageEffect.bBypassShields = true;
+	DamageEffect.EffectDamageValue = default.UNWILL_DMG;
+	Template.AddMultiTargetEffect(DamageEffect);
+
+	Trigger = new class'X2AbilityTrigger_EventListener';
+	Trigger.ListenerData.Deferral = ELD_OnStateSubmitted;
+	Trigger.ListenerData.EventID = default.UnitUsedPsionicAbilityEvent;
+	Trigger.ListenerData.Filter = eFilter_Unit;
+	Trigger.ListenerData.EventFn = class'RTGameState_Ability'.static.UnwillingConduitEvent;
+	Template.AbilityTriggers.AddItem(Trigger);
+
+	Template.CinescriptCameraType = "Psionic_FireAtUnit";
+
+	Template.AdditionalAbilities.AddItem('RTUnwillingConduitsIcon');
+
+	return Template;
+}
+
+
+
 
 defaultproperties
 {
 	ExtinctionEventStageThreeEventName = "RTExtinctionEventStageThree";
-	OverTheShoulderEffectName = "RTEffect_MobileSquadViewer"
+	OverTheShoulderEffectName = "OverTheShoulderEffect"
 	OverTheShoulderTagName = "OverTheShoulderTag"
 }

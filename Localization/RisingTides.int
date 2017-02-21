@@ -40,9 +40,18 @@ LocLongDescription="<Bullet/> The sniper rifle is powerful and accurate at long 
 [OverTheShoulder RTAbilityTemplate]
 LocFriendlyName="Over The Shoulder"
 LocLongDescription="Peer over the shoulder of enemy units, seeing what they see."
-LocHelpText="Peer over the shoulder of enemy units, seeing what they see. "
+LocHelpText="Peer over the shoulder of enemy units, seeing what they see."
 LocFlyOverText="Over The Shoulder"
 LocPromotionPopupText="<Bullet/> Peer over the shoulder of enemy units, seeing what they see.<br/>"
+
+[RTUnwillingConduits RTAbilityTemplate]
+LocFriendlyName="Unwilling Conduits"
+LocLongDescription="Whenever this unit casts a psionic ability, it drains energy from units affected by Over the Shoulder to fuel the action,  reducing the cooldown for each unit affected."
+LocHelpText="Whenever this unit casts a psionic ability, it drains energy from units affected by Over the Shoulder to fuel the action, reducing the cooldown for each unit affected."
+LocFlyOverText="Unwilling Conduits"
+LocPromotionPopupText="<Bullet/> Deals a small amount of damage to enemy and ally alike.<br/><Bullet/> Cooldown will be reduced to a minimum of 1; usable next turn.<br/>"
+
+
 
 [RTAbility_GhostAbilitySet]
 FEEDBACK_NAME="AGugHGGHGH"

@@ -23,5 +23,5 @@ function EventListenerReturn ReprobateWaltzCheck( Object EventData, Object Event
 			ActivateAbility(AbilityState, TargetUnit.GetReference());
 		}	
 	}	
-	return ELR_NoInterrupt;
+	return ELR_NoInterrupt;	
 }

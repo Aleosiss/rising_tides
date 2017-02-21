@@ -15,6 +15,7 @@ class RTAbility_BerserkerAbilitySet extends RTAbility_GhostAbilitySet config(Ris
 	var config int ACID_BLADE_DOT_SHRED;
 	var config WeaponDamageValue BURST_DMG;
 	var config int BURST_COOLDOWN;
+	var config float BURST_RADIUS_METERS;
 	var config float SIPHON_AMOUNT_MULTIPLIER;
 	var config int SIPHON_MIN_VAL;
 	var config int SIPHON_MAX_VAL;
@@ -154,7 +155,7 @@ static function X2AbilityTemplate BumpInTheNightBloodlustListener()
 	BloodlustEffect = new class'RTEffect_Bloodlust';
 	BloodlustEffect.iMobilityMod = 1;
 	BloodlustEffect.iMeleeHitChanceMod = 5;
-	BloodlustEffect.fCritDamageMod = 0.2f;
+	BloodlustEffect.fCritDamageMod = 0.1f;
 	BloodlustEffect.BuildPersistentEffect(2, false, true, false, eGameRule_PlayerTurnEnd);
 	BloodlustEffect.SetDisplayInfo(ePerkBuff_Bonus, "Bloodlust", "Gain bonus melee crit chance and crit damage, but lose movement speed.", Template.IconImage, true,,Template.AbilitySourceName);
 	Template.AddTargetEffect(BloodlustEffect);
@@ -303,7 +304,7 @@ static function X2AbilityTemplate RTBerserkerKnifeAttack()
 	SiphonEffect.DamageTypes.AddItem('Psi');
 
 	TargetUnitPropertyCondition = new class'X2Condition_UnitProperty';
-	TargetUnitPropertyCondition.ExcludeDead = true;
+	TargetUnitPropertyCondition.ExcludeDead = false;
 	TargetUnitPropertyCondition.ExcludeRobotic = true;
 	TargetUnitPropertyCondition.ExcludeFriendlyToSource = false;
 	TargetUnitPropertyCondition.ExcludeHostileToSource = false;
@@ -341,14 +342,14 @@ static function X2AbilityTemplate RTBerserkerKnifeAttack()
 //---Burst-------------------------------------------------------------------------------
 //---------------------------------------------------------------------------------------
 static function X2AbilityTemplate RTBurst() {
-    local X2AbilityTemplate Template;
-    local X2AbilityMultiTarget_Radius MultiTarget;
-    local X2Effect_ApplyDirectionalWorldDamage WorldDamage;
-    local X2Effect_ApplyWeaponDamage WeaponDamageEffect;
-    local X2AbilityCooldown Cooldown;
-    local X2AbilityCost_ActionPoints  ActionPointCost;
-    local X2Effect_Knockback  KnockbackEffect;
-	local X2Effect_Persistent				Effect;
+    local X2AbilityTemplate							Template;
+    local X2AbilityMultiTarget_Radius				MultiTarget;
+    local X2Effect_ApplyDirectionalWorldDamage		WorldDamage;
+    local X2Effect_ApplyWeaponDamage				WeaponDamageEffect;
+    local X2AbilityCooldown							Cooldown;
+    local X2AbilityCost_ActionPoints				ActionPointCost;
+    local X2Effect_Knockback						KnockbackEffect;
+	local X2Effect_Persistent						Effect;
 
     `CREATE_X2ABILITY_TEMPLATE(Template, 'RTBurst');
     Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_snipershot"; //TODO: Change this
@@ -372,11 +373,10 @@ static function X2AbilityTemplate RTBurst() {
 	Template.AbilityTargetStyle = default.SelfTarget;
 
 	MultiTarget = new class'X2AbilityMultiTarget_Radius';
-	MultiTarget.fTargetRadius = 2.5;
+	MultiTarget.fTargetRadius = default.BURST_RADIUS_METERS * class'XComWorldData'.const.WORLD_StepSize * class'XComWorldData'.const.WORLD_UNITS_TO_METERS_MULTIPLIER;
 	MultiTarget.bExcludeSelfAsTargetIfWithinRadius = true;
 	MultiTarget.bIgnoreBlockingCover = true;
 	Template.AbilityMultiTargetStyle = MultiTarget;
-
 
 	Effect = new class'X2Effect_Persistent';
 	Effect.BuildPersistentEffect(0, false);
@@ -386,23 +386,24 @@ static function X2AbilityTemplate RTBurst() {
     WorldDamage = new class'X2Effect_ApplyDirectionalWorldDamage';  //creates the framework to apply damage to the world
 	WorldDamage.bUseWeaponDamageType = False;                       //overrides the normal weapon damage type
 	WorldDamage.bUseWeaponEnvironmentalDamage = false;              //replaces the weapon's environmental damage with the abilities
-	WorldDamage.EnvironmentalDamageAmount = 250;                   //determines the amount of enviornmental damage the ability applies
+	WorldDamage.EnvironmentalDamageAmount = 2500;                   //determines the amount of enviornmental damage the ability applies
 	WorldDamage.bApplyOnHit = true;                                 //obv
 	WorldDamage.bApplyOnMiss = true;                                //obv
 	WorldDamage.bApplyToWorldOnHit = true;                          //obv
 	WorldDamage.bApplyToWorldOnMiss = true;                         //obv
 	WorldDamage.bHitAdjacentDestructibles = true;                   
 	WorldDamage.PlusNumZTiles = 2;                                 //determines how 'high' the world damage is applied
-	WorldDamage.bHitTargetTile = false;                              
+	WorldDamage.bHitTargetTile = true;                              
 	WorldDamage.ApplyChance = 100;
-	// Template.AddMultiTargetEffect(WorldDamage);                    
+	WorldDamage.bAllowDestructionOfDamageCauseCover = true;
+	Template.AddMultiTargetEffect(WorldDamage);                    
 
 	WeaponDamageEffect = new class'X2Effect_ApplyWeaponDamage';   
 	WeaponDamageEffect.bIgnoreBaseDamage = true;	
 	WeaponDamageEffect.EffectDamageValue = default.BURST_DMG;			 
-	WeaponDamageEffect.bApplyWorldEffectsForEachTargetLocation = true; 
-	WeaponDamageEffect.EnvironmentalDamageAmount = 250;            
-	Template.AddMultiTargetEffect(WeaponDamageEffect);          
+	WeaponDamageEffect.bApplyWorldEffectsForEachTargetLocation = true;
+	WeaponDamageEffect.EnvironmentalDamageAmount = 250;        
+	Template.AddMultiTargetEffect(WeaponDamageEffect);              
 
 	Template.PostActivationEvents.AddItem(default.UnitUsedPsionicAbilityEvent);
 
@@ -633,7 +634,7 @@ static function X2AbilityTemplate RTReprobateWaltz()
 
 	TargetUnitPropertyCondition = new class'X2Condition_UnitProperty';
 	TargetUnitPropertyCondition.ExcludeDead = true;
-	TargetUnitPropertyCondition.ExcludeRobotic = true;
+	TargetUnitPropertyCondition.ExcludeRobotic = false;
 	TargetUnitPropertyCondition.ExcludeFriendlyToSource = false;
 	TargetUnitPropertyCondition.ExcludeHostileToSource = false;
 	TargetUnitPropertyCondition.FailOnNonUnits = true;
@@ -940,7 +941,7 @@ static function X2AbilityTemplate RTPyroclasticSlash()
 	SiphonEffect.DamageTypes.AddItem('Psi');
 
 	TargetUnitPropertyCondition = new class'X2Condition_UnitProperty';
-	TargetUnitPropertyCondition.ExcludeDead = true;
+	TargetUnitPropertyCondition.ExcludeDead = false;
 	TargetUnitPropertyCondition.ExcludeRobotic = true;
 	TargetUnitPropertyCondition.ExcludeFriendlyToSource = false;
 	TargetUnitPropertyCondition.ExcludeHostileToSource = false;
@@ -1196,7 +1197,7 @@ static function X2AbilityTemplate RTUnstableConduitBurst() {
 	Template.AbilityShooterConditions.AddItem(Condition);
 
 	MultiTarget = new class'X2AbilityMultiTarget_Radius';
-	MultiTarget.fTargetRadius = 2.5;
+	MultiTarget.fTargetRadius = default.BURST_RADIUS_METERS * class'XComWorldData'.const.WORLD_StepSize * class'XComWorldData'.const.WORLD_UNITS_TO_METERS_MULTIPLIER;
 	MultiTarget.bExcludeSelfAsTargetIfWithinRadius = true;
 	MultiTarget.bIgnoreBlockingCover = true;
 	Template.AbilityMultiTargetStyle = MultiTarget;
@@ -1209,22 +1210,23 @@ static function X2AbilityTemplate RTUnstableConduitBurst() {
     WorldDamage = new class'X2Effect_ApplyDirectionalWorldDamage';  //creates the framework to apply damage to the world
 	WorldDamage.bUseWeaponDamageType = False;                       //overrides the normal weapon damage type
 	WorldDamage.bUseWeaponEnvironmentalDamage = false;              //replaces the weapon's environmental damage with the abilities
-	WorldDamage.EnvironmentalDamageAmount = 250;                   //determines the amount of enviornmental damage the ability applies
+	WorldDamage.EnvironmentalDamageAmount = 2500;                   //determines the amount of enviornmental damage the ability applies
 	WorldDamage.bApplyOnHit = true;                                 //obv
 	WorldDamage.bApplyOnMiss = true;                                //obv
 	WorldDamage.bApplyToWorldOnHit = true;                          //obv
 	WorldDamage.bApplyToWorldOnMiss = true;                         //obv
 	WorldDamage.bHitAdjacentDestructibles = true;                   
 	WorldDamage.PlusNumZTiles = 2;                                 //determines how 'high' the world damage is applied
-	WorldDamage.bHitTargetTile = false;                              
+	WorldDamage.bHitTargetTile = true;                              
 	WorldDamage.ApplyChance = 100;
-	// Template.AddMultiTargetEffect(WorldDamage);                    
+	WorldDamage.bAllowDestructionOfDamageCauseCover = true;
+	Template.AddMultiTargetEffect(WorldDamage);                    
 
 	WeaponDamageEffect = new class'X2Effect_ApplyWeaponDamage';   
 	WeaponDamageEffect.bIgnoreBaseDamage = true;	
 	WeaponDamageEffect.EffectDamageValue = default.BURST_DMG;			 
 	WeaponDamageEffect.bApplyWorldEffectsForEachTargetLocation = true;
-	WeaponDamageEffect.EnvironmentalDamageAmount = 250;          
+	WeaponDamageEffect.EnvironmentalDamageAmount = 250;        
 	Template.AddMultiTargetEffect(WeaponDamageEffect);          
 
 	Template.bSkipFireAction = true;
@@ -1516,7 +1518,7 @@ static function X2DataTemplate RTShadowStrike()
 
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'RTShadowStrike');
 
-	Template.AbilitySourceName = 'eAbilitySource_Standard';
+	Template.AbilitySourceName = 'eAbilitySource_Psionic';
 	Template.eAbilityIconBehaviorHUD = EAbilityIconBehavior_AlwaysShow;
 	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_codex_teleport";
 
@@ -1589,7 +1591,7 @@ static function X2DataTemplate RTShadowStrike()
 	SiphonEffect.DamageTypes.AddItem('Psi');
 
 	TargetUnitPropertyCondition = new class'X2Condition_UnitProperty';
-	TargetUnitPropertyCondition.ExcludeDead = true;
+	TargetUnitPropertyCondition.ExcludeDead = false;
 	TargetUnitPropertyCondition.ExcludeRobotic = true;
 	TargetUnitPropertyCondition.ExcludeFriendlyToSource = false;
 	TargetUnitPropertyCondition.ExcludeHostileToSource = false;

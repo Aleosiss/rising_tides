@@ -581,6 +581,13 @@ LocHelpText="Gain Stealth, charging a powerful attack. On the next turn, unleash
 LocFlyOverText="Extinction Event"
 LocPromotionPopupText="<Bullet/> 350 tile radius.<br/><Bullet/> Friendly units should attempt to evac before this ability completes!<br/>"
 
+[RTUnwillingConduitsIcon X2AbilityTemplate]
+LocFriendlyName="Unwilling Conduits"
+LocLongDescription="Whenever this unit casts a psionic ability, it drains energy from units affected by Over the Shoulder to fuel the action,  reducing the cooldown for each unit affected."
+LocHelpText="Whenever this unit casts a psionic ability, it drains energy from units affected by Over the Shoulder to fuel the action, reducing the cooldown for each unit affected."
+LocFlyOverText="Unwilling Conduits"
+LocPromotionPopupText="<Bullet/> Deals a small amount of damage to enemy and ally alike.<br/><Bullet/> Cooldown will be reduced to a minimum of 1; usable next turn.<br/>"
+
 ;----------------------------------------------------------------------------------------------------------------------------
 
 ; +AbilityAvailabilityCodes="AA_UnitNotMelded"
