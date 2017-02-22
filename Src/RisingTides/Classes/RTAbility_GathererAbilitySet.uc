@@ -18,6 +18,7 @@ class RTAbility_GathererAbilitySet extends RTAbility_GhostAbilitySet config(Risi
 	var config int UV_AIM_PENALTY;
 	var config int UV_DEFENSE_PENALTY;
 	var config int UV_WILL_PENALTY;
+	var config int DOMINATION_STRENGTH;
 
 	var config int GUARDIAN_ANGEL_HEAL_VALUE;
 	
@@ -67,6 +68,8 @@ static function array<X2DataTemplate> CreateTemplates()
 	Templates.AddItem(RTExtinctionEventPartThree());
 	Templates.AddItem(RTUnwillingConduits());
 	Templates.AddItem(PurePassive('RTUnwillingConduitsIcon', "img://UILibrary_PerkIcons.UIPerk_swordSlash", true));
+	Templates.AddItem(RTDomination());
+	Templates.AddItem(RTTechnopathy());
 
 
 	return Templates;
@@ -811,7 +814,7 @@ static function X2AbilityTemplate RTRudimentaryCreatures() {
 }
 
 //---------------------------------------------------------------------------------------
-//---Rudimentary Creatures Events--------------------------------------------------------
+//---Rudimentary Creatures Event---------------------------------------------------------
 //---------------------------------------------------------------------------------------
 static function X2AbilityTemplate RTRudimentaryCreaturesEvent() {
     local X2AbilityTemplate Template;
@@ -850,7 +853,6 @@ static function X2AbilityTemplate RTRudimentaryCreaturesEvent() {
 //---------------------------------------------------------------------------------------
 //---Unwilling Conduits------------------------------------------------------------------
 //---------------------------------------------------------------------------------------
-// Unwilling Conduits
 static function X2AbilityTemplate RTUnwillingConduits() {
 	local RTAbilityTemplate							Template;
 	local X2Effect_ApplyWeaponDamage				DamageEffect;
@@ -901,6 +903,54 @@ static function X2AbilityTemplate RTUnwillingConduits() {
 	Template.CinescriptCameraType = "Psionic_FireAtUnit";
 
 	Template.AdditionalAbilities.AddItem('RTUnwillingConduitsIcon');
+
+	return Template;
+}
+
+//---------------------------------------------------------------------------------------
+//---Domination--------------------------------------------------------------------------
+//---------------------------------------------------------------------------------------
+static function X2AbilityTemplate RTDomination() {
+	local X2AbilityTemplate Template;
+	local RTEffect_ExtendEffectDuration Effect;
+
+	`CREATE_X2ABILITY_TEMPLATE(Template, 'RTDomination');
+
+	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_NeverShow;
+    Template.Hostility = eHostility_Neutral;
+    Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_swordSlash";
+    Template.AbilitySourceName = 'eAbilitySource_Psionic';
+
+    Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
+    // Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
+    Template.bCrossClassEligible = false;
+
+    Template.AbilityTargetStyle = default.SelfTarget;
+    Template.AbilityToHitCalc = default.Deadeye;
+
+	Template.AbilityTriggers.AddItem(default.UnitPostBeginPlayTrigger);		 
+	Template.AbilityShooterConditions.AddItem(default.LivingShooterProperty);
+
+	Effect = new class'RTEffect_ExtendEffectDuration';
+	Effect.BuildPersistentEffect(1, true, true, false);
+	Effect.SetDisplayInfo(ePerkBuff_Passive, Template.LocFriendlyName, Template.LocLongDescription, Template.IconImage, true,, Template.AbilitySourceName);
+	Effect.bSelfBuff = true;
+	Effect.AbilityToExtendName = default.RTMindControlTemplateName;
+	Effect.EffectToExtendName = default.RTMindControlEffectName;
+	Effect.iDurationExtension = default.DOMINATION_STRENGTH;
+
+	Template.AddTargetEffect(Effect);
+
+	return Template;
+}
+
+static function X2AbilityTemplate RTTechnopathy() {
+	local X2AbilityTemplate Template;
+
+	Template = PurePassive(default.RTTechnopathyTemplateName, "img:///UILibrary_PerkIcons.UIPerk_swordSlash", true);
+
+
+ 
 
 	return Template;
 }

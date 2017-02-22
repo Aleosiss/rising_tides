@@ -86,6 +86,9 @@
     <Content Include="Src\RisingTides\Classes\RTAction_RemoveMITV.uc">
       <SubType>Content</SubType>
     </Content>
+    <Content Include="Src\RisingTides\Classes\RTConditionBuilder.uc">
+      <SubType>Content</SubType>
+    </Content>
     <Content Include="Src\RisingTides\Classes\RTCondition_Conditional.uc">
       <SubType>Content</SubType>
     </Content>
@@ -123,6 +126,9 @@
       <SubType>Content</SubType>
     </Content>
     <Content Include="Src\RisingTides\Classes\RTEffect_EveryMomentMatters.uc">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Src\RisingTides\Classes\RTEffect_ExtendEffectDuration.uc">
       <SubType>Content</SubType>
     </Content>
     <Content Include="Src\RisingTides\Classes\RTEffect_GenerateAfterimage.uc">

@@ -56,9 +56,16 @@ class RTAbility_GhostAbilitySet extends X2Ability
 
 	var name RTFeedbackEffectName;
 	var name RTFeedbackWillDebuffName;
+	var name RTMindControlEffectName;
+
+	var name RTMindControlTemplateName;
+	var name RTTechnopathyTemplateName;
+
 
 	var name UnitUsedPsionicAbilityEvent;
 	var name ForcePsionicAbilityEvent;
+
+
 
 	var config string BurstParticleString;
 	var config name BurstSocketName;
@@ -88,6 +95,8 @@ static function array<X2DataTemplate> CreateTemplates()
 	Templates.AddItem(LIOverwatchShot());
 	Templates.AddItem(PsionicActivate());
 	Templates.AddItem(RTRemoveAdditionalAnimSets());
+
+	Templates.AddItem(TestAbility());
 	
 
 	return Templates;
@@ -885,46 +894,38 @@ static function X2AbilityTemplate CreateRTPassiveAbilityCooldown(name TemplateNa
         return Template;
 }
 
-function RTPsionicBurst_BuildVisualization(XComGameState VisualizeGameState, out array<VisualizationTrack> OutVisualizationTracks) {
-	local XComGameStateHistory			History;
-	local XComGameStateContext_Ability  Context;
-	local StateObjectReference          InteractingUnitRef;
-	local XComGameState_Ability         Ability;
+static function X2AbilityTemplate TestAbility() {
+	local X2AbilityTemplate Template;
+	local X2Effect_Persistent Effect;
 
-	local VisualizationTrack			EmptyTrack;
-	local VisualizationTrack			BuildTrack;
+	`CREATE_X2ABILITY_TEMPLATE(Template, 'TestAbility');
+	Template.AbilitySourceName = 'eAbilitySource_Standard';
+	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_AlwaysShow;
+	Template.Hostility = eHostility_Neutral;
+	Template.ConcealmentRule = eConceal_Always;
+	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_solace";
 
-	local X2Action_PlayAnimation		AnimAction;
-	local X2Action_PlayEffect			EffectAction;
-	local X2Action_PlaySoundAndFlyOver  FlyoverAction;
+	Template.AbilityCosts.AddItem(default.FreeActionCost);
+	Template.AbilityTriggers.AddItem(default.PlayerInputTrigger);
+	Template.AbilityTargetStyle = default.SimpleSingleTarget;
+	Template.AbilityToHitCalc = default.DeadEye;
 
+	Effect = new class'X2Effect_Persistent';
+	Effect.BuildPersistentEffect(1, false, true, false, eGameRule_PlayerTurnEnd);
+	Effect.SetDisplayInfo(ePerkBuff_Penalty, "DEBUG", "DEBUG TEST EFFECT", Template.IconImage, true,,Template.AbilitySourceName);
+	Effect.DuplicateResponse = eDupe_Allow;
+	Template.AddTargetEffect(Effect);
 
+	Template.AbilityTargetConditions.AddItem(class'RTConditionBuilder'.static.CreatePsionicTargetingProperty());
+	Template.AbilityShooterConditions.AddItem(default.LivingShooterProperty);
 
-	Context = XComGameStateContext_Ability(VisualizeGameState.GetContext());
-	InteractingUnitRef = Context.InputContext.SourceObject;
+	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
+	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;	//TODO: VISUALIZATION
 
-	
+	Template.bSkipFireAction = true;
+	Template.bCrossClassEligible = false;
 
-	//Configure the visualization track for the shooter
-	//****************************************************************************************
-	BuildTrack = EmptyTrack;
-	BuildTrack.StateObject_OldState = History.GetGameStateForObjectID(InteractingUnitRef.ObjectID, eReturnType_Reference, VisualizeGameState.HistoryIndex - 1);
-	BuildTrack.StateObject_NewState = VisualizeGameState.GetGameStateForObjectID(InteractingUnitRef.ObjectID);
-	BuildTrack.TrackActor = History.GetVisualizer(InteractingUnitRef.ObjectID);
-
-	Ability = XComGameState_Ability(History.GetGameStateForObjectID(Context.InputContext.AbilityRef.ObjectID, eReturnType_Reference, VisualizeGameState.HistoryIndex - 1));
-	FlyoverAction = X2Action_PlaySoundAndFlyOver(class'X2Action_PlaySoundAndFlyOver'.static.AddToVisualizationTrack(BuildTrack, VisualizeGameState.GetContext()));
-	FlyoverAction.SetSoundAndFlyOverParameters(None, Ability.GetMyTemplate().LocFlyOverText, '', eColor_Good);
-	OutVisualizationTracks.AddItem(BuildTrack);
-
-	//AnimAction = X2Action_PlayAnimation(class'X2Action_PlayAnimation'.static.AddToVisualizationTrack(BuildTrack, VisualizeGameState.GetContext()));
-	//AnimAction.Params.AnimName = default.BurstAnimName;
-	 
-	EffectAction = class'RTEffectBuilder'.static.BuildEffectParticle(VisualizeGameState, BuildTrack, default.BurstParticleString, default.BurstSocketName, default.BurstArrayName, true, false);
-
-
-
-
+	return Template;
 
 }
 
@@ -944,6 +945,12 @@ defaultproperties
 	RTFeedbackWillDebuffName = "RTFeedbackWillDebuff"
 	UnitUsedPsionicAbilityEvent = "UnitUsedPsionicAbility"
 	ForcePsionicAbilityEvent = "ForcePsionicAbilityEvent"
+	
+	
+	RTMindControlEffectName = "RTMindControlEffect"
+
+	RTMindControlTemplateName = "RTMindControl"
+	RTTechnopathyTemplateName = "RTTechnopathy"
 
 
 

@@ -758,7 +758,7 @@ function EventListenerReturn ExtendEffectDuration(Object EventData, Object Event
     local XComGameState_Unit TargetUnitState, SourceUnitState;
     local XComGameState NewGameState;
     local XComGameStateContext_Ability AbilityContext;
-    local RTEffect_ExtendEffectDuration EffectTemplate
+    local RTEffect_ExtendEffectDuration EffectTemplate;
 
     AbilityContext = XComGameStateContext_Ability(GameState.GetContext());
     if(AbilityContext == none) {
@@ -784,19 +784,19 @@ function EventListenerReturn ExtendEffectDuration(Object EventData, Object Event
       return ELR_NoInterrupt;
     }
 
-    NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState('Rising Tides: Extending Effect Duration');
-    OldEffectState = TargetUnitState.GetUnitAffectedByEffectState(EffectNameToExtend);
-
+    OldEffectState = TargetUnitState.GetUnitAffectedByEffectState(EffectTemplate.EffectToExtendName);
     if(OldEffectState == none) {
       `RedScreenOnce("Rising Tides: ExtendEffectDuration was unable to find the EffectState to extend!");
       return ELR_NoInterrupt;
 
     }
 
-    NewEffectState = NewGameState.CreateStateObject(OldEffectState.class, OldEffectState.ObjectID);
+	NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState(string(GetFuncName()));
+
+    NewEffectState = XComGameState_Effect(NewGameState.CreateStateObject(OldEffectState.class, OldEffectState.ObjectID));
     NewGameState.AddStateObject(NewEffectState);
 
-    NewEffectState.iDuration += EffectTemplate.iDurationExtension;
+    NewEffectState.iTurnsRemaining += EffectTemplate.iDurationExtension;
     SubmitNewGameState(NewGameState);
 
     return ELR_NoInterrupt;

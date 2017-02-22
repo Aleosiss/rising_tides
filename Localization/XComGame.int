@@ -588,6 +588,21 @@ LocHelpText="Whenever this unit casts a psionic ability, it drains energy from u
 LocFlyOverText="Unwilling Conduits"
 LocPromotionPopupText="<Bullet/> Deals a small amount of damage to enemy and ally alike.<br/><Bullet/> Cooldown will be reduced to a minimum of 1; usable next turn.<br/>"
 
+[RTDomination X2AbilityTemplate]
+LocFriendlyName="Domination"
+LocLongDescription="The duration of this unit's mind control is greatly increased."
+LocHelpText="The duration of this unit's mind control is greatly increased."
+LocFlyOverText="Domination"
+LocPromotionPopupText="<Bullet/> Multiple mind controls can be active at once.<br/>"
+
+[RTTechnopathy X2AbilityTemplate]
+LocFriendlyName="Technopathy"
+LocLongDescription="This unit can affect robotic units with its psionic abilities and can hack objectives from range via telepathy."
+LocHelpText="This unit can affect robotic units with its psionic abilities and can hack objectives from range via telepathy."
+LocFlyOverText="Technopathy"
+LocPromotionPopupText="<Bullet/> The unit will hack with its Psi Offense stat instead of the Hack stat.<br/>"
+
+
 ;----------------------------------------------------------------------------------------------------------------------------
 
 ; +AbilityAvailabilityCodes="AA_UnitNotMelded"
@@ -615,3 +630,10 @@ AbilityAvailabilityStrings[95]="There are too many stacks for the ability to fun
 AbilityAvailabilityStrings[96]="The effect was not found."
 
 ;----------------------------------------------------------------------------------------------------------------------------
+
+[TestAbility X2AbilityTemplate]
+LocFriendlyName="Test"
+LocLongDescription="You should never see this."
+LocHelpText="You should never see this."
+LocFlyOverText="Test"
+LocPromotionPopupText="<Bullet/> You should never see this.<br/>"
