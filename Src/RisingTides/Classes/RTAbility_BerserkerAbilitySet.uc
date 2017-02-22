@@ -38,6 +38,7 @@ class RTAbility_BerserkerAbilitySet extends RTAbility_GhostAbilitySet config(Ris
 	var config bool PYROCLASTICFLOW_SHOULDUSECURRENTDAMAGETICK;
 	var config int PYROCLASTICFLOW_DAMAGE;
 	var config int BITN_DEFENSE_BONUS;
+	var config int GITS_STEALTH_DURATION;
 
 //---------------------------------------------------------------------------------------
 //---CreateTemplates---------------------------------------------------------------------
