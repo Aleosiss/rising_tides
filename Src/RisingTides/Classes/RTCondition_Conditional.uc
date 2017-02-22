@@ -8,6 +8,7 @@ var array<X2Condition> PassConditions;	// return the output of these conditions 
 var array<X2Condition> FailConditions;	// return the output of these conditions if we failed the first check
 
 // oh no 
+// Not sure of a better away around the problem of being able to call every Condition check from within every Condition check
 var private XComGameState_Ability			CachedAbilityState;
 var private XComGameState_BaseObject		CachedTargetUnitState;
 var private XComGameSTate_BaseObject		CachedSourceUnitState;
