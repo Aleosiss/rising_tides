@@ -21,7 +21,8 @@ var private bool bAbilityMeetsCondition;
 event name CallAbilityMeetsCondition(XComGameState_Ability kAbility, XComGameState_BaseObject kTarget) {
 	local name RetCode;
 	local X2Condition Condition;
-
+	
+	`LOG("Rising Tides: " @ string(GetFuncName()));
 	// this is usually called first; for AbilityShooterConditions, the source is the target
 	CacheConditionInputs(kAbility, kTarget, );
 	bAbilityMeetsCondition = true;
@@ -49,6 +50,8 @@ event name CallAbilityMeetsCondition(XComGameState_Ability kAbility, XComGameSta
 	// need to clear the cache if we're not going to hit the last call
 	if(RetCode != 'AA_Success')
 		ClearConditionCache();
+	
+	`LOG("Rising Tides: " @ RetCode);
 
 	return RetCode;
 }
@@ -61,6 +64,8 @@ event name CallMeetsCondition(XComGameState_BaseObject kTarget) {
 	bMeetsCondition = true;
 	RetCode = 'AA_Success';
 	CacheConditionInputs( , kTarget, );
+	
+	`LOG("Rising Tides: " @ string(GetFuncName()));
 
 	// check the conditionals
 	foreach Conditionals(Condition) {
@@ -84,6 +89,8 @@ event name CallMeetsCondition(XComGameState_BaseObject kTarget) {
 	// need to clear the cache if we're not going to hit the last call
 	if(RetCode != 'AA_Success')
 		ClearConditionCache();
+	
+	`LOG("Rising Tides: " @ RetCode);
 
 	return RetCode;
 }
@@ -95,6 +102,8 @@ event name CallMeetsConditionWithSource(XComGameState_BaseObject kTarget, XComGa
 	bMeetsConditionWithSource = true;
 	RetCode = 'AA_Success';
 	CacheConditionInputs( , kTarget, kSource);
+	
+	`LOG("Rising Tides: " @ string(GetFuncName()));
 	// check the conditionals
 	`LOG("Rising Tides: Checking the conditionals with source...");
 	foreach Conditionals(Condition) {
@@ -119,6 +128,8 @@ event name CallMeetsConditionWithSource(XComGameState_BaseObject kTarget, XComGa
 
 	if(RetCode != 'AA_Success')
 		ClearConditionCache();
+	
+	`LOG("Rising Tides: " @ RetCode);
 
 	return RetCode;
 }
