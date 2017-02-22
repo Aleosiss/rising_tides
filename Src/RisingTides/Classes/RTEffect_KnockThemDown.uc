@@ -47,7 +47,6 @@ function bool PostAbilityCostPaid(XComGameState_Effect EffectState, XComGameStat
 		return false;
 	}
 	
-	`LOG("Rising Tides: Knock Them Down: " @ kAbility.GetMyTemplateName() @ " broke the Knock Them Down chain!");
 	SourceUnit.SetUnitFloatValue('RT_KnockThemDownVal', 0, eCleanup_BeginTurn);
 		
 

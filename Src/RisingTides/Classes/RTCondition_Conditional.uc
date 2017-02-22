@@ -222,7 +222,7 @@ event name CallMeetsConditionWithSource(XComGameState_BaseObject kTarget, XComGa
 protected function CacheConditionInputs(XComGameState_Ability kAbility, XComGameState_BaseObject kTarget) {
 	CachedAbilityState = kAbility;
 	CachedTargetUnitState = kTarget;
-	CachedSourceUnitState = XComGameState_BaseObject(`XCOMHISTORY.GetGameStateForObjectID(kAbility.OwnerStateObject.ObjectID));
+	CachedSourceUnitState = `XCOMHISTORY.GetGameStateForObjectID(kAbility.OwnerStateObject.ObjectID);
 }
 
 protected function ClearConditionCache() {
