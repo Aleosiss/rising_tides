@@ -70,6 +70,7 @@ static function array<X2DataTemplate> CreateTemplates()
 	Templates.AddItem(PurePassive('RTUnwillingConduitsIcon', "img://UILibrary_PerkIcons.UIPerk_swordSlash", true));
 	Templates.AddItem(RTDomination());
 	Templates.AddItem(RTTechnopathy());
+	Templates.AddItem(RTSibyl());
 
 
 	return Templates;
@@ -943,7 +944,9 @@ static function X2AbilityTemplate RTDomination() {
 
 	return Template;
 }
-
+//---------------------------------------------------------------------------------------
+//---Technopathy-------------------------------------------------------------------------
+//---------------------------------------------------------------------------------------
 static function X2AbilityTemplate RTTechnopathy() {
 	local X2AbilityTemplate Template;
 
@@ -954,6 +957,44 @@ static function X2AbilityTemplate RTTechnopathy() {
 
 	return Template;
 }
+
+//---------------------------------------------------------------------------------------
+//---Sibyl's Gaze------------------------------------------------------------------------
+//---------------------------------------------------------------------------------------
+static function X2AbilityTemplate RTSibyl() {
+    local X2AbilityTemplate Template;
+    local RTEffect_ExtendEffectDuration Effect;
+
+    `CREATE_X2ABILITYTEMPLATE(Template, 'RTSibyl');
+
+    Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_NeverShow;
+    Template.Hostility = eHostility_Neutral;
+    Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_swordSlash";
+    Template.AbilitySourceName = 'eAbilitySource_Psionic';
+
+    Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
+    // Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
+    Template.bCrossClassEligible = false;
+
+    Template.AbilityTargetStyle = default.SelfTarget;
+    Template.AbilityToHitCalc = default.Deadeye;
+
+    Template.AbilityTriggers.AddItem(default.UnitPostBeginPlayTrigger);
+    Template.AbilityShooterConditions.AddItem(default.LivingShooterProperty);
+
+    Effect = new class'RTEffect_ExtendEffectDuration';
+    Effect.BuildPersistentEffect(1, true, true, false);
+    Effect.SetDisplayInfo(ePerkBuff_Passive, Template.LocFriendlyName, Template.LocLongDescription, Template.IconImage, true,, Template.AbilitySourceName);
+    Effect.bSelfBuff = true;
+    Effect.AbilityToExtendName = 'OverTheShoulder';
+    Effect.EffectToExtendName = default.OverTheShoulderEffectName;
+    Effect.iDurationExtension = default.SIBYL_STRENGTH;
+
+    Template.AddTargetEffect(Effect);
+
+    return Template;
+}
+
 
 
 
