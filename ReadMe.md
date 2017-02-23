@@ -23,6 +23,7 @@ This would be a bare-bones content mod. I also have the following content in min
 		- nothing
 	- Gatherer: 
 		- Work on RTEffect_OverTheShoulder: should not remove effect if the duration is not 1
+		- Redo Guardian Angel
 		- Implement Sibyl 
 		- Verify that Domination works
 		- Verify that the PsionicTargetProperty works
