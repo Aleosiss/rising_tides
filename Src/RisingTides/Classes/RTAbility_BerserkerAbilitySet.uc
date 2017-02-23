@@ -38,6 +38,7 @@ class RTAbility_BerserkerAbilitySet extends RTAbility_GhostAbilitySet config(Ris
 	var config bool PYROCLASTICFLOW_SHOULDUSECURRENTDAMAGETICK;
 	var config int PYROCLASTICFLOW_DAMAGE;
 	var config int BITN_DEFENSE_BONUS;
+	var config int GITS_STEALTH_DURATION;
 
 //---------------------------------------------------------------------------------------
 //---CreateTemplates---------------------------------------------------------------------
@@ -1440,13 +1441,10 @@ static function X2AbilityTemplate RTGhostInTheShellEffect()
 	ConcealEffect.BuildPersistentEffect(1, true, true, false, eGameRule_PlayerTurnEnd);
 	ConcealEffect.bRemoveWhenTargetConcealmentBroken = true;
 	Template.AddTargetEffect(ConcealEffect);
-
-	StealthEffect = new class'RTEffect_Stealth';
-	StealthEffect.fStealthModifier = 1.0f;
-	StealthEffect.BuildPersistentEffect(3, false, true, false, eGameRule_PlayerTurnBegin);
-	StealthEffect.SetDisplayInfo(ePerkBuff_Bonus, "Stealth", "Become invisible, and extremely difficult to detect.", Template.IconImage, true,,Template.AbilitySourceName);
+	
+	StealthEffect = class'RTEffectBuilder'.static.RTCreateStealthEffect(default.GITS_STEALTH_DURATION, false, 1.0f, eGameRule_PlayerTurnBegin, Template.AbilitySourceName);
 	Template.AddTargetEffect(StealthEffect);
-
+	
 	Template.AddTargetEffect(class'X2Effect_Spotted'.static.CreateUnspottedEffect());
 
 	// ability will be triggered through a custom event listener
