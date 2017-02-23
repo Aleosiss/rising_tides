@@ -57,6 +57,7 @@ class RTAbility_GhostAbilitySet extends X2Ability
 	var name RTFeedbackEffectName;
 	var name RTFeedbackWillDebuffName;
 	var name RTMindControlEffectName;
+	var name RTGhostTagEffectName;
 
 	var name RTMindControlTemplateName;
 	var name RTTechnopathyTemplateName;
@@ -916,7 +917,7 @@ static function X2AbilityTemplate TestAbility() {
 	Effect.DuplicateResponse = eDupe_Allow;
 	Template.AddTargetEffect(Effect);
 
-	Template.AbilityTargetConditions.AddItem(class'RTConditionBuilder'.static.CreatePsionicTargetingProperty());
+	Template.AbilityTargetConditions.AddItem(class'RTConditionBuilder'.default.PsionicTargetingProperty);
 	Template.AbilityShooterConditions.AddItem(default.LivingShooterProperty);
 
 	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
@@ -948,6 +949,7 @@ defaultproperties
 	
 	
 	RTMindControlEffectName = "RTMindControlEffect"
+	RTGhostTagEffectName = "RTGhostOperative"
 
 	RTMindControlTemplateName = "RTMindControl"
 	RTTechnopathyTemplateName = "RTTechnopathy"

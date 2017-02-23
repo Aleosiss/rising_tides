@@ -143,7 +143,7 @@ protected function RemoveAuraTargetEffects(XComGameState_Unit SourceUnitState, X
 		{
 			TargetUnitAuraEffect = TargetUnitState.GetUnitAffectedByEffectState(PersistentAuraEffect.EffectName);
 
-			if (TargetUnitAuraEffect != none && (TargetUnitAuraEffect.ApplyEffectParameters.SourceStateObjectRef.ObjectID == SourceUnitState.ObjectID))
+			if (TargetUnitAuraEffect != none && (TargetUnitAuraEffect.ApplyEffectParameters.SourceStateObjectRef.ObjectID == SourceUnitState.ObjectID) && TargetUnitAuraEffect.iTurnsRemaining < 2)	// only remove effects that drop immediately
 			{
 				// This effect should be removed if it is affecting this Target Unit and the Source Unit of the
 				// effect is the same as the SourceUnitState
@@ -152,10 +152,6 @@ protected function RemoveAuraTargetEffects(XComGameState_Unit SourceUnitState, X
 			}
 		}
 	}
-	// EffectRemovedContext = class'XComGameStateContext_EffectRemoved'.static.CreateEffectsRemovedState(EffectsToRemove);
-	// NewGameState = History.CreateGameState(true, EffectRemovedContext);
-	// NewGameState.AddStateObject(TargetUnitState);
-
 
 	for (i = 0; i < EffectsToRemove.Length; ++i)
 	{
