@@ -19,6 +19,7 @@ class RTAbility_GathererAbilitySet extends RTAbility_GhostAbilitySet config(Risi
 	var config int UV_DEFENSE_PENALTY;
 	var config int UV_WILL_PENALTY;
 	var config int DOMINATION_STRENGTH;
+	var config int SIBYL_STRENGTH;
 
 	var config int GUARDIAN_ANGEL_HEAL_VALUE;
 	
@@ -965,7 +966,7 @@ static function X2AbilityTemplate RTSibyl() {
     local X2AbilityTemplate Template;
     local RTEffect_ExtendEffectDuration Effect;
 
-    `CREATE_X2ABILITYTEMPLATE(Template, 'RTSibyl');
+    `CREATE_X2ABILITY_TEMPLATE(Template, 'RTSibyl');
 
     Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_NeverShow;
     Template.Hostility = eHostility_Neutral;
