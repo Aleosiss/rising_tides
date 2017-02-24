@@ -88,8 +88,7 @@ static function X2AbilityTemplate OverTheShoulder()
 	local X2AbilityCooldown						Cooldown;
 	local X2AbilityMultiTarget_Radius			Radius;
 	local X2Condition_UnitProperty				AllyCondition, LivingNonAllyUnitOnlyProperty;
-	local array<name>                       SkipExclusions;
-	
+	local array<name>                       SkipExclusions;	
 
 	local RTEffect_OverTheShoulder				OTSEffect;      // I'm unsure of how this works... but it appears that
 																// this will control the application and removal of aura effects within its range
@@ -150,15 +149,16 @@ static function X2AbilityTemplate OverTheShoulder()
 	Radius.bExcludeSelfAsTargetIfWithinRadius = true; // for now
 	Radius.fTargetRadius = 	default.OTS_RADIUS * class'XComWorldData'.const.WORLD_StepSize * class'XComWorldData'.const.WORLD_UNITS_TO_METERS_MULTIPLIER;
 	Template.AbilityMultiTargetStyle = Radius;
+
 	Template.AbilityMultiTargetConditions.Additem(default.LivingTargetUnitOnlyProperty);
 
 
-	// begin non-ally aura effects	---------------------------------------
+	// begin enemy aura effects	---------------------------------------
 
 	VisionEffect = new class'RTEffect_MobileSquadViewer';
 	VisionEffect.BuildPersistentEffect(1, false, true, false, eGameRule_PlayerTurnBegin);
 	VisionEffect.SetDisplayInfo(ePerkBuff_Penalty, default.OTS_TITLE, default.OTS_DESC_ENEMY, Template.IconImage, true,,Template.AbilitySourceName);
-	VisionEffect.TargetConditions.AddItem(LivingNonAllyUnitOnlyProperty);
+	VisionEffect.TargetConditions.AddItem(default.PsionicTargetingProperty);
 	VisionEffect.DuplicateResponse = eDupe_Ignore;
 	VisionEffect.bUseTargetSightRadius = false;
 	VisionEffect.iCustomTileRadius = 3;
@@ -169,7 +169,7 @@ static function X2AbilityTemplate OverTheShoulder()
 
 	VoiceEffect = new class'RTEffect_UnsettlingVoices';
 	VoiceEffect.BuildPersistentEffect(1, false, true, false, eGameRule_PlayerTurnBegin);
-	VoiceEffect.TargetConditions.AddItem(LivingNonAllyUnitOnlyProperty);
+	VoiceEffect.TargetConditions.AddItem(default.PsionicTargetingProperty);
 	VoiceEffect.SetDisplayInfo(ePerkBuff_Penalty,default.UV_TITLE, default.UV_DESC, Template.IconImage, true,,Template.AbilitySourceName);	// TODO: ICON
 	VoiceEffect.DuplicateResponse = eDupe_Ignore;
 	VoiceEffect.bRemoveWhenTargetDies = true;
@@ -188,7 +188,7 @@ static function X2AbilityTemplate OverTheShoulder()
 
 
 
-	// end non-ally aura effects      -----------------------------------------
+	// end enemy aura effects      ----------------------------------------
 
 	// begin ally aura effects	  -----------------------------------------
 
@@ -418,11 +418,8 @@ static function X2AbilityTemplate RTExtinctionEventPartTwo() {
       Template.AbilityTargetStyle = default.SelfTarget;
       Template.AbilityToHitCalc = default.Deadeye;
 
-      StealthEffect = new class'RTEffect_Stealth';
-      StealthEffect.fStealthModifier = 1.0f;
-      StealthEffect.BuildPersistentEffect(1, false, true, false, eGameRule_PlayerTurnBegin);
-      StealthEffect.SetDisplayInfo(ePerkBuff_Bonus, "Stealth", "Become invisible, and extremely difficult to detect.", Template.IconImage, true,,Template.AbilitySourceName);
-      Template.AddTargetEffect(StealthEffect);
+	  StealthEffect = class'RTEffectBuilder'.static.RTCreateStealthEffect(1, false, 1.0f, eGameRule_PlayerTurnBegin, Template.AbilitySourceName); 
+	  Template.AddTargetEffect(StealthEffect);
 
       ActivationEffect = new class'X2Effect_DelayedAbilityActivation';
       ActivationEffect.BuildPersistentEffect(1, false, false, , eGameRule_PlayerTurnBegin);
@@ -595,7 +592,6 @@ static function X2AbilityTemplate RTMeldInduction() {
     local RTEffect_Meld MeldEffect;
     local X2AbilityCost_ActionPoints ActionPointCost;
     local X2AbilityCooldown Cooldown;
-    local X2Condition_UnitProperty LivingOrganicUnitProperty;
     local X2AbilityToHitCalc_StatCheck_UnitVsUnit ToHitCalc;
 	local X2Condition_UnitEffects	MeldCondition, NoMeldCondition;
 
@@ -614,19 +610,9 @@ static function X2AbilityTemplate RTMeldInduction() {
     Cooldown.iNumTurns = default.MELD_INDUCTION_COOLDOWN;
     Template.AbilityCooldown = Cooldown;
 
-    LivingOrganicUnitProperty = new class 'X2Condition_UnitProperty';
-    LivingOrganicUnitProperty.ExcludeAlive = false;
-    LivingOrganicUnitProperty.ExcludeDead = true;
-    LivingOrganicUnitProperty.ExcludeFriendlyToSource = false;
-    LivingOrganicUnitProperty.ExcludeHostileToSource = false;
-    LivingOrganicUnitProperty.TreatMindControlledSquadmateAsHostile = true;
-    LivingOrganicUnitProperty.FailOnNonUnits = true;
-    LivingOrganicUnitProperty.ExcludeCivilian = false;
-    LivingOrganicUnitProperty.ExcludeRobotic = true;
-
     Template.AbilityTriggers.AddItem(default.PlayerInputTrigger);
     Template.AbilityTargetStyle = default.SimpleSingleTarget;
-    Template.AbilityTargetConditions.AddItem(LivingOrganicUnitProperty);
+    Template.AbilityTargetConditions.AddItem(default.PsionicTargetingProperty);
 
     ToHitCalc = new class 'X2AbilityToHitCalc_StatCheck_UnitVsUnit';
     Template.AbilityToHitCalc = ToHitCalc;
@@ -987,7 +973,7 @@ static function X2AbilityTemplate RTSibyl() {
     Effect.BuildPersistentEffect(1, true, true, false);
     Effect.SetDisplayInfo(ePerkBuff_Passive, Template.LocFriendlyName, Template.LocLongDescription, Template.IconImage, true,, Template.AbilitySourceName);
     Effect.bSelfBuff = true;
-    Effect.AbilityToExtendName = 'OverTheShoulder';
+    Effect.AdditionalEvents.AddItem('UnitMoveFinished');
     Effect.EffectToExtendName = default.OverTheShoulderEffectName;
     Effect.iDurationExtension = default.SIBYL_STRENGTH;
 
