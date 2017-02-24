@@ -602,6 +602,14 @@ LocHelpText="This unit can affect robotic units with its psionic abilities and c
 LocFlyOverText="Technopathy"
 LocPromotionPopupText="<Bullet/> The unit will hack with its Psi Offense stat instead of the Hack stat.<br/>"
 
+[RTSibyl X2AbilityTemplate]
+LocFriendlyName="Sibyl's Gaze"
+LocLongDescription="The vision component of Over The Shoulder lasts forever, even when the ability is inactive."
+LocHelpText="The vision component of Over The Shoulder lasts forever, even when the ability is inactive."
+LocFlyOverText="Sibyl's Gaze"
+LocPromotionPopupText="<Bullet/> Technically not infinite; only 10 million turns.<br/>"
+
+
 
 ;----------------------------------------------------------------------------------------------------------------------------
 

@@ -15,6 +15,8 @@ class RTAbility_GhostAbilitySet extends X2Ability
 
 	var protected X2Condition_UnitProperty						LivingFriendlyUnitOnlyProperty;
 	var protected X2Condition_UnitEffectsWithAbilitySource		OverTheShoulderProperty;
+	var protected X2Condition_UnitProperty						LivingHostileUnitOnlyNonRoboticProperty;
+	var protected RTCondition_PsionicTarget						PsionicTargetingProperty;
 	var protected EffectReason									TagReason;
 
 
@@ -917,7 +919,7 @@ static function X2AbilityTemplate TestAbility() {
 	Effect.DuplicateResponse = eDupe_Allow;
 	Template.AddTargetEffect(Effect);
 
-	Template.AbilityTargetConditions.AddItem(class'RTConditionBuilder'.default.PsionicTargetingProperty);
+	Template.AbilityTargetConditions.AddItem(default.PsionicTargetingProperty);
 	Template.AbilityShooterConditions.AddItem(default.LivingShooterProperty);
 
 	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
@@ -939,8 +941,34 @@ defaultproperties
 		ExcludeHostileToSource=true
 		TreatMindControlledSquadmateAsHostile=false
 		FailOnNonUnits=true
+		ExcludeCivilian=true
 	End Object
 	LivingFriendlyUnitOnlyProperty = DefaultLivingFriendlyUnitOnlyProperty
+
+	Begin Object Class=X2Condition_UnitProperty Name=DefaultLivingHostileUnitOnlyNonRoboticProperty
+		ExcludeAlive=false
+		ExcludeDead=true
+		ExcludeFriendlyToSource=true
+		ExcludeHostileToSource=false
+		TreatMindControlledSquadmateAsHostile=true
+		ExcludeRobotic=true
+		FailOnNonUnits=true
+	End Object
+	LivingHostileUnitOnlyNonRoboticProperty = DefaultLivingHostileUnitOnlyNonRoboticProperty
+
+	Begin Object Class=RTCondition_PsionicTarget Name=DefaultPsionicTargetingProperty
+		bIgnoreRobotic=false
+		bIgnorePsionic=false
+		bIgnoreGHOSTs=false
+		bIgnoreDead=true
+		bIgnoreEnemies=false
+		bTargetAllies=false
+		bTargetCivilians=false
+	End Object
+	PsionicTargetingProperty = DefaultPsionicTargetingProperty
+
+
+
 
 	RTFeedbackEffectName = "RTFeedback"
 	RTFeedbackWillDebuffName = "RTFeedbackWillDebuff"

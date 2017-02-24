@@ -762,42 +762,53 @@ function EventListenerReturn ExtendEffectDuration(Object EventData, Object Event
 
     AbilityContext = XComGameStateContext_Ability(GameState.GetContext());
     if(AbilityContext == none) {
-      return ELR_NoInterrupt;
-    }
-    // only extend the duration if it actually applied
-    if(AbilityContext.ResultContext.HitResult > 2) { // 0 = Success, 1 = Crit, 2 = Graze
+		`LOG("Rising Tides: ExtendEffectDuration had no context!");
       return ELR_NoInterrupt;
     }
 
     EffectTemplate = RTEffect_ExtendEffectDuration(GetX2Effect());
     if(EffectTemplate == none) {
+	`LOG("Rising Tides: ExtendEffectDuration had no template!");
       return ELR_NoInterrupt;
     }
 
-    if(AbilityContext.InputContext.AbilityTemplateName != EffectTemplate.AbilityToExtendName) {
-      return ELR_NoInterrupt;
-    }
-
-    History = `XCOMHISTORY;
-    TargetUnitState = XComGameState_Unit(History.GetGameStateForObjectID(AbilityContext.InputContext.PrimaryTarget.ObjectID));
-    if(TargetUnitState == none) {
-      return ELR_NoInterrupt;
-    }
-
-    OldEffectState = TargetUnitState.GetUnitAffectedByEffectState(EffectTemplate.EffectToExtendName);
-    if(OldEffectState == none) {
-      `RedScreenOnce("Rising Tides: ExtendEffectDuration was unable to find the EffectState to extend!");
-      return ELR_NoInterrupt;
-
-    }
-
+	History = `XCOMHISTORY;
 	NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState(string(GetFuncName()));
+   
 
-    NewEffectState = XComGameState_Effect(NewGameState.CreateStateObject(OldEffectState.class, OldEffectState.ObjectID));
-    NewGameState.AddStateObject(NewEffectState);
+	if(EffectTemplate.AbilityToExtendName != '') {	 // null AbilityToExtendName name is an untargeted effect. Extend All Effects of Type.
+		if(EffectTemplate.AbilityToExtendName == AbilityContext.InputContext.AbilityTemplateName) {
+			TargetUnitState = XComGameState_Unit(History.GetGameStateForObjectID(AbilityContext.InputContext.PrimaryTarget.ObjectID));
+			if(TargetUnitState != none) {
+				OldEffectState = TargetUnitState.GetUnitAffectedByEffectState(EffectTemplate.EffectToExtendName);
+				if(OldEffectState != none) {
+					NewEffectState = XComGameState_Effect(NewGameState.CreateStateObject(OldEffectState.class, OldEffectState.ObjectID));
+					NewGameState.AddStateObject(NewEffectState);
+					NewEffectState.iTurnsRemaining += EffectTemplate.iDurationExtension;
+				} else {
+					`LOG("Rising Tides: ExtendEffectDuration was unable to find the EffectState to extend!");
+				}
+		
+			} else {
+			`LOG("Rising Tides: ExtendEffectDuration had no target!");
+			}
+		}
+	} else { // extend all effects of name
+		foreach History.IterateByClassType(class'XComGameState_Effect', OldEffectState) {
+			if(OldEffectState.GetX2Effect().EffectName != EffectTemplate.EffectToExtendName)
+				continue;
+			if(OldEffectState.iTurnsRemaining >= 2)
+				continue;
 
-    NewEffectState.iTurnsRemaining += EffectTemplate.iDurationExtension;
+			NewEffectState = XComGameState_Effect(NewGameState.CreateStateObject(OldEffectState.class, OldEffectState.ObjectID));
+			NewGameState.AddStateObject(NewEffectState);
+			NewEffectState.iTurnsRemaining += EffectTemplate.iDurationExtension;
+	    }
+	}
+
     SubmitNewGameState(NewGameState);
+
+	`LOG("Rising Tides: ExtendEffectDuration was successful!");
 
     return ELR_NoInterrupt;
 }
