@@ -444,7 +444,7 @@ LocFriendlyName="Persisting Images"
 LocLongDescription="Whenever this unit gains Stealth, it creates a afterimage of itself nearby."
 LocHelpText="Whenever this unit gains Stealth, it creates a afterimage of itself nearby."
 LocFlyOverText="Persisting Images"
-LocPromotionPopupText="<Bullet/> Whenever this unit gains Stealth, it creates a afterimage of itself nearby.<br/>"
+LocPromotionPopupText="<Bullet/> Whenever this unit gains Stealth, it creates a afterimage of itself nearby.<br/><Bullet/> Afterimages will draw enemy attention, but have only one HP.<br/>"
 
 [RTUnstableConduitIcon X2AbilityTemplate]
 LocFriendlyName="Unstable Tempest"
@@ -458,14 +458,14 @@ LocFriendlyName="Persisting Images"
 LocLongDescription="Whenever this unit gains Stealth, it creates a afterimage of itself nearby."
 LocHelpText="Whenever this unit gains Stealth, it creates a afterimage of itself nearby."
 LocFlyOverText="Persisting Images"
-LocPromotionPopupText="<Bullet/> Whenever this unit gains Stealth, it creates a afterimage of itself nearby.<br/>"
+LocPromotionPopupText="<Bullet/> Whenever this unit gains Stealth, it creates a afterimage of itself nearby.<br/><Bullet/> Afterimages will draw enemy attention, but have only one HP.<br/>"
 
 [RTGhostInTheShell X2AbilityTemplate]
 LocFriendlyName="Ghost In The Shell"
 LocLongDescription="When this unit interacts with objectives, it gains short burst of Stealth."
 LocHelpText="When this unit interacts with objectives, it gains short burst of Stealth."
 LocFlyOverText="Ghost In The Shell"
-LocPromotionPopupText="<Bullet/> When this unit interacts with objectives, it gains short burst of Stealth.<br/><Bullet/> 3 turns.<br/>"
+LocPromotionPopupText="<Bullet/> When this unit interacts with objectives, it gains short burst of Stealth.<br/>"
 
 [RTGhostInTheShellListener X2AbilityTemplate]
 LocFriendlyName="Ghost In The Shell"
