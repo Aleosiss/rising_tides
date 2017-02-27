@@ -13,8 +13,13 @@ function RegisterForEvents(XComGameState_Effect EffectGameState)
 	// Register for the required events
 
 	// Check when anything moves. OnUpdateAuraCheck will handle a total update check as well as a single update check.
-	// EventMgr.RegisterForEvent(EffectObj, 'ObjectMoved', RTEffectState.OnUpdateAuraCheck, ELD_OnStateSubmitted, 75);
 	EventMgr.RegisterForEvent(EffectObj, 'UnitMoveFinished', RTEffectState.OnUpdateAuraCheck, ELD_OnStateSubmitted, 60);
+	
+	// Check when anything spawns.
+	EventMgr.RegisterForEvent(EffectObj, 'UnitSpawned', RTEffectState.OnUpdateAuraCheck, ELD_OnStateSubmitted, 45);
+	
+	// Clean up MobileSquadViewers. Shouldn't actually need this.
+	// TODO: Verify that this is extraneous and remove. 
 	EventMgr.RegisterForEvent(EffectObj, 'PlayerTurnBegun', RTEffectState.CleanupMobileSquadViewers, ELD_OnStateSubmitted, 50);
 }
 
