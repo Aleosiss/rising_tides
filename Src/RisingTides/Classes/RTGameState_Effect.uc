@@ -764,35 +764,37 @@ function EventListenerReturn ExtendEffectDuration(Object EventData, Object Event
     local RTEffect_ExtendEffectDuration EffectTemplate;
 
     local bool bDebug;
-
-    AbilityContext = XComGameStateContext_Ability(GameState.GetContext());
-    if(AbilityContext == none) {
-		`LOG("Rising Tides: ExtendEffectDuration had no context!");
-      return ELR_NoInterrupt;
-    }
-
+	
     EffectTemplate = RTEffect_ExtendEffectDuration(GetX2Effect());
     if(EffectTemplate == none) {
 	    `LOG("Rising Tides: ExtendEffectDuration had no template!");
       return ELR_NoInterrupt;
     }
 
-    if(AbilityContext.InputContext.AbilityTemplateName != EffectTemplate.AbilityToExtendName) {
-      `LOG("Rising Tides: ExtendEffectDuration had the wrong ability!");
-      return ELR_NoInterrupt;
+    if(EventID == 'AbilityActivated') {
+        AbilityContext = XComGameStateContext_Ability(GameState.GetContext());
+        if(AbilityContext == none) {
+              `LOG("Rising Tides: ExtendEffectDuration had no context!");
+              return ELR_NoInterrupt;
+        }
+
+        if(AbilityContext.InputContext.AbilityTemplateName != EffectTemplate.AbilityToExtendName) {
+            `LOG("Rising Tides: ExtendEffectDuration had the wrong ability!");
+            return ELR_NoInterrupt;
+        }
     }
 
-	foreach GameState.IterateByClassType(IteratorEffectState.class, IteratorEffectState) {
+    foreach GameState.IterateByClassType(IteratorEffectState.class, IteratorEffectState) {
       bDebug = true;
       if(IteratorEffectState.Effect == EffectTemplate.EffectToExtendName)
           IteratorEffectState.iTurnsRemaining += EffectTemplate.iDurationExtension;
     }
 
     if(!bDebug) {
-      `LOG("Rising Tides: ExtendEffectDuration fired on the right ability, but there was no effects on the gamestate?");
+      `LOG("Rising Tides: ExtendEffectDuration fired on the right ability / event, but there was no effects on the gamestate?");
     }
 
-	`LOG("Rising Tides: ExtendEffectDuration was successful!");
+    `LOG("Rising Tides: ExtendEffectDuration was successful!");
 
     return ELR_NoInterrupt;
 }
