@@ -22,15 +22,12 @@ function RegisterForEvents(XComGameState_Effect EffectGameState)
 	FilterObj = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(EffectGameState.ApplyEffectParameters.SourceStateObjectRef.ObjectID));
 	if(!bSelfBuff) {
 		EventMgr.RegisterForEvent(EffectObj, 'AbilityActivated', RTEffectState.ExtendEffectDuration, ELD_OnStateSubmitted);
-		foreach AdditionalEvents(IteratorName) {
-			EventMgr.RegisterForEvent(EffectObj, IteratorName, RTEffectState.ExtendEffectDuration, ELD_OnStateSubmitted);
-		}
 
 	} else { 
-		EventMgr.RegisterForEvent(EffectObj, 'AbilityActivated', RTEffectState.ExtendEffectDuration, ELD_OnStateSubmitted, , FilterObj);
-		foreach AdditionalEvents(IteratorName) {
-			EventMgr.RegisterForEvent(EffectObj, IteratorName, RTEffectState.ExtendEffectDuration, ELD_OnStateSubmitted, , FilterObj);
-		}
+		EventMgr.RegisterForEvent(EffectObj, 'AbilityActivated', RTEffectState.ExtendEffectDuration, ELD_OnStateSubmitted, , FilterObj);	
+	}
+	foreach AdditionalEvents(IteratorName) {
+		EventMgr.RegisterForEvent(EffectObj, IteratorName, RTEffectState.ExtendEffectDuration, ELD_OnStateSubmitted);
 	}
 }
 
