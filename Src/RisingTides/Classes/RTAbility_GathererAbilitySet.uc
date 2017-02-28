@@ -974,6 +974,7 @@ static function X2AbilityTemplate RTSibyl() {
     Effect.SetDisplayInfo(ePerkBuff_Passive, Template.LocFriendlyName, Template.LocLongDescription, Template.IconImage, true,, Template.AbilitySourceName);
     Effect.bSelfBuff = true;
     Effect.AdditionalEvents.AddItem('UnitMoveFinished');
+    Effect.AbilityToExtendName = 'OverTheShoulder';
     Effect.EffectToExtendName = default.OverTheShoulderEffectName;
     Effect.iDurationExtension = default.SIBYL_STRENGTH;
 
