@@ -783,8 +783,13 @@ function EventListenerReturn ExtendEffectDuration(Object EventData, Object Event
 
     foreach GameState.IterateByClassType(IteratorEffectState.class, IteratorEffectState) {
       bDebug = true;
-      if(IteratorEffectState.Effect == EffectTemplate.EffectToExtendName)
+      if(IteratorEffectState.bRemoved) {
+          continue;
+      }
+	    
+      if(IteratorEffectState.Effect == EffectTemplate.EffectToExtendName) {
           IteratorEffectState.iTurnsRemaining += EffectTemplate.iDurationExtension;
+      }
     }
 
     if(!bDebug) {
