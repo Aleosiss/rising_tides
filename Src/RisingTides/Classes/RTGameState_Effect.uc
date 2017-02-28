@@ -752,9 +752,6 @@ function EventListenerReturn RTHarbingerBonusDamage(Object EventData, Object Eve
 // intended event id = AbilityActivated filter = Unit
 // intended EventData = Ability we're going to try to extend the effect of
 // intended EventSource = Unit casting the ability
-// intended event id = AbilityActivated filter = Unit
-// intended EventData = Ability we're going to try to extend the effect of
-// intended EventSource = Unit casting the ability
 function EventListenerReturn ExtendEffectDuration(Object EventData, Object EventSource, XComGameState GameState, Name EventID) {
     local XComGameStateHistory History;
     local XComGameState_Effect IteratorEffectState;
