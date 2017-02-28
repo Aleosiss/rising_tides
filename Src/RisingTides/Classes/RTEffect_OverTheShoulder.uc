@@ -16,7 +16,7 @@ function RegisterForEvents(XComGameState_Effect EffectGameState)
 	EventMgr.RegisterForEvent(EffectObj, 'UnitMoveFinished', RTEffectState.OnUpdateAuraCheck, ELD_OnStateSubmitted, 60);
 	
 	// Check when anything spawns.
-	EventMgr.RegisterForEvent(EffectObj, 'UnitSpawned', RTEffectState.OnUpdateAuraCheck, ELD_OnStateSubmitted, 45);
+	EventMgr.RegisterForEvent(EffectObj, 'UnitSpawned', RTEffectState.OnUpdateAuraCheck, ELD_OnStateSubmitted, 40);
 	
 	// Clean up MobileSquadViewers. Shouldn't actually need this.
 	// TODO: Verify that this is extraneous and remove. 
