@@ -26,12 +26,10 @@ This would be a bare-bones content mod. I also have the following content in min
 		- Redo Guardian Angel
 		- Implement Sibyl 
 		- Verify that Domination works
-		- Verify that the PsionicTargetProperty works
 		- Triangulation
-		- AbilitySet
+		- Echoed Agony: https://hastebin.com/upatovixoy.java
 	- General:
 		- Animations/Visuals
-		- replace effects in various abilitysets with constructors from the builder/factory class
 		- implement new TargetAbility condition: https://hastebin.com/eleboyigib.uc
 		- Add x2/lw abilities to PsionicAbilityList
 	
