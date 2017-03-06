@@ -46,6 +46,10 @@ var config string SiphonParticleString;
 var config name SiphonSocketName;
 var config name SiphonArrayName;
 
+var config int PANIC_STRENGTH_TAKE_FEEDBACK;
+var config int PANIC_STRENGTH_TAKE_DAMAGE;
+var config int PANIC_STRENGTH_TAKE_ECHO;
+
 static function X2Action_PlayEffect BuildEffectParticle(XComGameState VisualizeGameState, out VisualizationTrack BuildTrack, string ParticleName, name SocketName, name SocketsArrayName, bool _AttachToUnit, bool _bStopEffect) {
     local X2Action_PlayEffect EffectAction;
 
