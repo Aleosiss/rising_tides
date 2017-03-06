@@ -73,6 +73,7 @@ static function array<X2DataTemplate> CreateTemplates()
 	Templates.AddItem(RTTechnopathy());
 	Templates.AddItem(RTSibyl());
 	Templates.AddItem(RTEchoedAgony());
+	Templetes.AddItem(PurePassive('RTEchoedAgonyIcon', "img://UILibrary_PerkIcons.UIPerk_swordSlash", true));
 
 
 	return Templates;
