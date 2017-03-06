@@ -1029,6 +1029,13 @@ static function X2AbilityTemplate RTEchoedAgony() {
     Trigger.ListenerData.EventFn = class'RTGameState_Ability'.static.EchoedAgonyListener;
     Trigger.ListenerData.Filter = eFilter_Unit;
     Template.AbilityTriggers.AddItem(Trigger);
+	
+    Trigger = new class'X2AbilityTrigger_EventListener';
+    Trigger.ListenerData.Deferral = ELD_OnStateSubmitted;
+    Trigger.ListenerData.EventID = 'UnitPanicked';          // moderate panic chance
+    Trigger.ListenerData.EventFn = class'RTGameState_Ability'.static.EchoedAgonyListener;
+    Trigger.ListenerData.Filter = eFilter_Unit;
+    Template.AbilityTriggers.AddItem(Trigger);
 
     Trigger = new class'X2AbilityTrigger_EventListener';
     Trigger.ListenerData.Deferral = ELD_OnStateSubmitted;
