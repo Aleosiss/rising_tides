@@ -72,6 +72,7 @@ static function array<X2DataTemplate> CreateTemplates()
 	Templates.AddItem(RTDomination());
 	Templates.AddItem(RTTechnopathy());
 	Templates.AddItem(RTSibyl());
+	Templates.AddItem(RTEchoedAgony());
 
 
 	return Templates;
@@ -983,6 +984,64 @@ static function X2AbilityTemplate RTSibyl() {
     return Template;
 }
 
+static function X2AbilityTemplate RTEchoedAgony() {
+    local X2AbilityTemplate Template;
+    local X2Condition_UnitEffects OTSCondition;
+    local X2Condition_UnitProperty Condition;
+    local RTAbilityToHitCalc_PanicCheck PanicHitCalc;
+    local X2AbilityTrigger_EventListener Trigger;
+
+    `CREATE_X2TEMPLATE(class'RTAbilityTemplate', Template, 'RTEchoedAgony');
+
+    Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_NeverShow;
+    Template.Hostility = eHostility_Neutral;
+    Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_swordSlash";
+    Template.AbilitySourceName = 'eAbilitySource_Psionic';
+
+    PanicHitCalc = new class'RTAbilityToHitCalc_PanicCheck'; // modified to test robotic hacking defense instead of their will
+    Template.AbilityToHitCalc = PanicHitCalc;
+
+    Template.AbilityTargetStyle = default.SelfTarget;
+    Template.AbilityMultiTargetStyle = new class'X2AbilityMultiTarget_AllEnemies'; // otscondition will handle 'range check'
+
+    Template.AbilityMultiTargetConditions.AddItem(default.PsionicTargetingProperty)
+
+    Template.AddTargetEffect(class'X2StatusEffects'.static.CreatePanickedStatusEffect());
+
+    Template.AddShooterEffectExclusions();
+    Template.AbilityShooterConditions.AddItem(default.LivingShooterProperty);
+
+    OTSCondition = new class'X2Condition_UnitEffects';
+    OTSCondition.AddRequireEffect(default.OverTheShoulderEffectName, 'AA_AbilityUnavailable');
+    Template.AbilityShooterConditions.AddItem(OTSCondition);
+
+    Condition = new class'X2Condition_UnitProperty';
+    Condition.ExcludeImpaired = true;
+    Condition.ExcludePanicked = true;
+    Template.AbilityShooterConditions.AddItem(Condition);
+
+    Trigger = new class'X2AbilityTrigger_EventListener';
+    Trigger.ListenerData.Deferral = ELD_OnStateSubmitted;
+    Trigger.ListenerData.EventID = 'UnitTakeEffectDamage';  // low to moderate panic chance
+    Trigger.ListenerData.EventFn = class'RTGameState_Ability'.static.EchoedAgonyListener;
+    Trigger.ListenerData.Filter = eFilter_Unit;
+    Template.AbilityTriggers.AddItem(Trigger);
+
+    Trigger = new class'X2AbilityTrigger_EventListener';
+    Trigger.ListenerData.Deferral = ELD_OnStateSubmitted;
+    Trigger.ListenerData.EventID = 'RTFeedback';            // moderate to high panic chance
+    Trigger.ListenerData.EventFn = class'RTGameState_Ability'.static.EchoedAgonyListener;
+    Trigger.ListenerData.Filter = eFilter_Unit;
+    Template.AbilityTriggers.AddItem(Trigger);
+
+    Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
+    Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
+    Template.bSkipFireAction = true;
+    Template.FrameAbilityCameraType = eCameraFraming_Never;
+
+    Template.AdditionalAbilities.AddItem('RTEchoedAgonyIcon');
+    return Template;
+}
 
 
 
