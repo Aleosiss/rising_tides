@@ -1007,19 +1007,21 @@ static function X2AbilityTemplate RTEchoedAgony() {
 
     Template.AbilityMultiTargetConditions.AddItem(default.PsionicTargetingProperty)
 
-    Template.AddTargetEffect(class'X2StatusEffects'.static.CreatePanickedStatusEffect());
+    Template.AddMultiTargetEffect(class'X2StatusEffects'.static.CreatePanickedStatusEffect());
 
     Template.AddShooterEffectExclusions();
     Template.AbilityShooterConditions.AddItem(default.LivingShooterProperty);
 
     OTSCondition = new class'X2Condition_UnitEffects';
     OTSCondition.AddRequireEffect(default.OverTheShoulderEffectName, 'AA_AbilityUnavailable');
-    Template.AbilityShooterConditions.AddItem(OTSCondition);
+    Template.AbilityMultiTargetConditions.AddItem(OTSCondition);
 
     Condition = new class'X2Condition_UnitProperty';
     Condition.ExcludeImpaired = true;
     Condition.ExcludePanicked = true;
     Template.AbilityShooterConditions.AddItem(Condition);
+    Condition.ExcludeImpaired = false;
+    Template.AbilityMultiTargetConditions.AddItem(Condition);
 
     Trigger = new class'X2AbilityTrigger_EventListener';
     Trigger.ListenerData.Deferral = ELD_OnStateSubmitted;
@@ -1038,6 +1040,7 @@ static function X2AbilityTemplate RTEchoedAgony() {
     Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
     Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
     Template.bSkipFireAction = true;
+    Template.bShowActivation = true;
     Template.FrameAbilityCameraType = eCameraFraming_Never;
 
     Template.AdditionalAbilities.AddItem('RTEchoedAgonyIcon');
