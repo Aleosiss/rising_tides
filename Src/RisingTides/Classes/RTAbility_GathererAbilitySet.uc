@@ -73,7 +73,7 @@ static function array<X2DataTemplate> CreateTemplates()
 	Templates.AddItem(RTTechnopathy());
 	Templates.AddItem(RTSibyl());
 	Templates.AddItem(RTEchoedAgony());
-	Templetes.AddItem(PurePassive('RTEchoedAgonyIcon', "img://UILibrary_PerkIcons.UIPerk_swordSlash", true));
+	Templates.AddItem(PurePassive('RTEchoedAgonyIcon', "img://UILibrary_PerkIcons.UIPerk_swordSlash", true));
 
 
 	return Templates;
@@ -1003,9 +1003,9 @@ static function X2AbilityTemplate RTEchoedAgony() {
     Template.AbilityToHitCalc = PanicHitCalc;
 
     Template.AbilityTargetStyle = default.SelfTarget;
-    Template.AbilityMultiTargetStyle = new class'X2AbilityMultiTarget_AllEnemies'; // otscondition will handle 'range check'
+    Template.AbilityMultiTargetStyle = new class'X2AbilityMultiTarget_AllUnits'; // otscondition will handle 'range check', psionic property will handle enemy check
 
-    Template.AbilityMultiTargetConditions.AddItem(default.PsionicTargetingProperty)
+    Template.AbilityMultiTargetConditions.AddItem(default.PsionicTargetingProperty);
 
     Template.AddMultiTargetEffect(class'X2StatusEffects'.static.CreatePanickedStatusEffect());
 

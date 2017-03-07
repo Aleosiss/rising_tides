@@ -56,6 +56,9 @@
     <Content Include="Src\RisingTides\Classes\RTAbilityTemplate.uc">
       <SubType>Content</SubType>
     </Content>
+    <Content Include="Src\RisingTides\Classes\RTAbilityToHitCalc_PanicCheck.uc">
+      <SubType>Content</SubType>
+    </Content>
     <Content Include="Src\RisingTides\Classes\RTAbility_BerserkerAbilitySet.uc">
       <SubType>Content</SubType>
     </Content>

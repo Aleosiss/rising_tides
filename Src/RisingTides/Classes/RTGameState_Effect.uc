@@ -759,6 +759,7 @@ function EventListenerReturn ExtendEffectDuration(Object EventData, Object Event
     local XComGameState NewGameState;
     local XComGameStateContext_Ability AbilityContext;
     local RTEffect_ExtendEffectDuration EffectTemplate;
+	local Object IteratorObject;
 
     local bool bDebug;
 	
@@ -781,13 +782,20 @@ function EventListenerReturn ExtendEffectDuration(Object EventData, Object Event
         }
     }
 
-    foreach GameState.IterateByClassType(IteratorEffectState.class, IteratorEffectState) {
+    foreach GameState.IterateByClassType(IteratorEffectState.class, IteratorObject) {
+
+	  IteratorEffectState = XComGameState_Effect(IteratorObject);
+	  if(IteratorEffectState == none) {
+		  `RedScreen("Rising Tides: What the heck, iterating through gamestate_effects returned a non-gamestate_effect object?");
+		  continue;
+	  }
+	  
       bDebug = true;
       if(IteratorEffectState.bRemoved) {
           continue;
       }
 	    
-      if(IteratorEffectState.Effect == EffectTemplate.EffectToExtendName) {
+      if(IteratorEffectState.GetX2Effect().EffectName == EffectTemplate.EffectToExtendName) {
           IteratorEffectState.iTurnsRemaining += EffectTemplate.iDurationExtension;
       }
     }

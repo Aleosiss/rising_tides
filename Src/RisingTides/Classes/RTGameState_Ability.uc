@@ -260,7 +260,7 @@ function ConduitVisualizationFn(XComGameState VisualizeGameState, out array<Visu
 }
 
 function EventListenerReturn EchoedAgonyListener(Object EventData, Object EventSource, XComGameState GameState, Name EventID) {
-    local RTGameState_Ability AbilityState;
+    local XComGameState_Ability AbilityState;
     local XComGameState_Unit SourceUnitState;
     local XComGameState NewGameState;
     local XComGameStateContext_Ability AbilityContext;
@@ -268,6 +268,7 @@ function EventListenerReturn EchoedAgonyListener(Object EventData, Object EventS
     local int PanicStrength;
     local GameRulesCache_Unit UnitCache;
 	local X2TacticalGameRuleset TacticalRules;
+	local int i;
 
     SourceUnitState = XComGameState_Unit(EventSource); // we are always the source
     if(SourceUnitState.ObjectID != OwnerStateObject.ObjectID) {
@@ -280,15 +281,16 @@ function EventListenerReturn EchoedAgonyListener(Object EventData, Object EventS
     // determine correct panic value...
     switch(EventID) {
         case 'UnitTakeEffectDamage':
-            PanicStrength = class'RTEffectBuilder'.default.PANIC_STRENGTH_TAKE_DAMAGE;
+            PanicStrength = class'RTEffectBuilder'.default.AGONY_STRENGTH_TAKE_DAMAGE;
             break;
         case 'RTFeedback':
-            PanicStrength = class'RTEffectBuilder'.default.PANIC_STRENGTH_TAKE_FEEDBACK;
+            PanicStrength = class'RTEffectBuilder'.default.AGONY_STRENGTH_TAKE_FEEDBACK;
             break;
         case 'UnitPanicked':
-            PanicStrength = class'RTEffectBuilder'.default.PANIC_STRENGTH_TAKE_ECHO;
+            PanicStrength = class'RTEffectBuilder'.default.AGONY_STRENGTH_TAKE_ECHO;
             break;
         default:
+			`LOG("Rising Tides: Echoed Agony had an invalid EventID: " @ EventID);
             PanicStrength = 1;
     }
 
@@ -301,7 +303,7 @@ function EventListenerReturn EchoedAgonyListener(Object EventData, Object EventS
 
     // finally, activate the ability with the updated panic strength
     TacticalRules.GetGameRulesCache_Unit(SourceUnitState.GetReference(), UnitCache);
-    for(i = 0, UnitCache.AvailableActions.Length; ++i) {
+    for(i = 0; i < UnitCache.AvailableActions.Length; i++) {
         AbilityState = XComGameState_Ability(History.GetGameStateForObjectID(UnitCache.AvailableActions[i].AbilityObjectRef.ObjectID));
         if(AbilityState.m_TemplateName == m_TemplateName) { // found myself
             if(UnitCache.AvailableActions[i].AvailableCode == 'AA_Success') {
