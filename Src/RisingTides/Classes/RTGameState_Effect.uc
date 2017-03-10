@@ -2,6 +2,7 @@ class RTGameState_Effect extends XComGameState_Effect;
 
 var array<StateObjectReference> EffectsAddedList;
 var array<StateObjectReference> EffectsRemovedList;
+var bool bCanTrigger;
 
 // OnTacticalGameEnd (Don't need this anymore)
 function EventListenerReturn OnTacticalGameEnd(Object EventData, Object EventSource, XComGameState GameState, Name EventID)
@@ -809,8 +810,770 @@ function EventListenerReturn ExtendEffectDuration(Object EventData, Object Event
     return ELR_NoInterrupt;
 }
 
+// this check grants the mobility change described in for the "Bump In The Night" ability
+function EventListenerReturn BumpInTheNightStatCheck(Object EventData, Object EventSource, XComGameState GameState, Name EventID) {
+local XComGameStateContext_Ability AbilityContext;
+	local XComGameState_Unit UnitState, NewUnitState;
+	local X2AbilityTemplate AbilityTemplate;
+	local XComGameState NewGameState;
+	local UnitValue BloodlustStackCount;
+	local RTGameState_Effect TempEffect;
+	local RTEffect_Bloodlust		BloodlustEffect;
+
+	
+	UnitState = XComGameState_Unit(GameState.GetGameStateForObjectID(ApplyEffectParameters.SourceStateObjectRef.ObjectID));
+	if (UnitState == None)
+		UnitState = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(ApplyEffectParameters.SourceStateObjectRef.ObjectID));
+	`assert(UnitState != None);
+                        
+	NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState(string(GetFuncName()));
+	NewUnitState = XComGameState_Unit(NewGameState.CreateStateObject(UnitState.Class, UnitState.ObjectID));
+
+	TempEffect = self;
+	NewUnitState.UnApplyEffectFromStats(TempEffect, NewGameState);
+                        
+	StatChanges.Length = 0;
+	TempEffect.StatChanges.Length = 0;
+
+	if(UnitState.HasSoldierAbility('RTQueenOfBlades')) {
+		AddPersistentStatChange(StatChanges, eStat_Mobility, (RTEffect_Bloodlust(GetX2Effect()).iMobilityMod) * iStacks);
+		TempEffect.AddPersistentStatChange(StatChanges, eStat_Mobility, (RTEffect_Bloodlust(GetX2Effect()).iMobilityMod) * iStacks);
+	} else {
+		AddPersistentStatChange(StatChanges, eStat_Mobility, -(RTEffect_Bloodlust(GetX2Effect()).iMobilityMod) * iStacks);
+		TempEffect.AddPersistentStatChange(StatChanges, eStat_Mobility, -(RTEffect_Bloodlust(GetX2Effect()).iMobilityMod) * iStacks);
+	}
 
 
+	//XComGameStateContext_ChangeContainer(NewGameState.GetContext()).BuildVisualizationFn = BloodlustStackVisualizationFn;		  //TODO: this
+
+	NewUnitState.ApplyEffectToStats(TempEffect, NewGameState);
+                        
+	NewGameState.AddStateObject(NewUnitState);
+	`TACTICALRULES.SubmitGameState(NewGameState);
+		
+	
+
+	return ELR_NoInterrupt;
+}
+
+// AddPersistentStatChange(out array<StatChange> m_aStatChanges, ECharStatType StatType, float StatAmount, optional EStatModOp InModOp=MODOP_Addition )
+simulated function AddPersistentStatChange(out array<StatChange> m_aStatChanges, ECharStatType StatType, float StatAmount, optional EStatModOp InModOp=MODOP_Addition )
+{
+	local StatChange NewChange;
+	
+	NewChange.StatType = StatType;
+	NewChange.StatAmount = StatAmount;
+	NewChange.ModOp = InModOp;
+
+	m_aStatChanges.AddItem(NewChange);
+}
+
+function EventListenerReturn EveryMomentMattersCheck(Object EventData, Object EventSource, XComGameState GameState, Name EventID)
+{
+	local XComGameStateContext_Ability AbilityContext;
+	local XComGameState NewGameState;
+	local XComGameState_Unit SourceUnit;
+	local XComGameStateHistory History;
+
+	AbilityContext = XComGameStateContext_Ability(GameState.GetContext());
+	if (AbilityContext != none) {
+		if (AbilityContext.InputContext.SourceObject.ObjectID == ApplyEffectParameters.SourceStateObjectRef.ObjectID) {
+			History = `XCOMHISTORY;
+			SourceUnit = XComGameState_Unit(History.GetGameStateForObjectID(ApplyEffectParameters.SourceStateObjectRef.ObjectID));
+			if (`TACTICALRULES.GetCachedUnitActionPlayerRef().ObjectID == SourceUnit.ControllingPlayer.ObjectID) {
+
+				// We only want to grant points when the source is actually shooting a shot
+				if( !class'RTHelpers'.static.CheckAbilityActivated(AbilityContext.InputContext.AbilityTemplateName, eChecklist_SniperShots)) {
+						return ELR_NoInterrupt;
+				} 
+
+			   if(SourceUnit.GetItemInSlot(eInvSlot_PrimaryWeapon).Ammo == 0) {	
+					NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState(string(GetFuncName()));
+					XComGameStateContext_ChangeContainer(NewGameState.GetContext()).BuildVisualizationFn = EveryMomentMattersVisualizationFn;
+					SourceUnit = XComGameState_Unit(NewGameState.CreateStateObject(SourceUnit.Class, SourceUnit.ObjectID));
+					SourceUnit.ActionPoints.AddItem(class'X2CharacterTemplateManager'.default.MoveActionPoint);
+					NewGameState.AddStateObject(SourceUnit);
+					`TACTICALRULES.SubmitGameState(NewGameState);
+				
+				} 	
+			}
+		}
+	}
+
+
+	return ELR_NoInterrupt;
+}
+
+function EveryMomentMattersVisualizationFn(XComGameState VisualizeGameState, out array<VisualizationTrack> OutVisualizationTracks)
+{
+	local XComGameState_Unit UnitState;
+	local X2Action_PlaySoundAndFlyOver SoundAndFlyOver;
+	local VisualizationTrack BuildTrack;
+	local XComGameStateHistory History;
+	local X2AbilityTemplate AbilityTemplate;
+
+	History = `XCOMHISTORY;
+	foreach VisualizeGameState.IterateByClassType(class'XComGameState_Unit', UnitState)
+	{
+		History.GetCurrentAndPreviousGameStatesForObjectID(UnitState.ObjectID, BuildTrack.StateObject_OldState, BuildTrack.StateObject_NewState, , VisualizeGameState.HistoryIndex);
+		BuildTrack.StateObject_NewState = UnitState;
+		BuildTrack.TrackActor = UnitState.GetVisualizer();
+
+		AbilityTemplate = class'X2AbilityTemplateManager'.static.GetAbilityTemplateManager().FindAbilityTemplate('RTEveryMomentMatters');
+		if (AbilityTemplate != none)
+		{
+			SoundAndFlyOver = X2Action_PlaySoundAndFlyOver(class'X2Action_PlaySoundAndFlyOver'.static.AddToVisualizationTrack(BuildTrack, VisualizeGameState.GetContext()));
+			SoundAndFlyOver.SetSoundAndFlyOverParameters(None, "Every Moment Matters", '', eColor_Good, AbilityTemplate.IconImage);
+
+			OutVisualizationTracks.AddItem(BuildTrack);
+		} else {
+			`LOG("Rising Tides - Every Moment Matters: Couldn't find AbilityTemplate for visualization!");
+		}
+		break;
+	}
+}
+
+function EventListenerReturn GhostInTheShellCheck(Object EventData, Object EventSource, XComGameState GameState, Name EventID)
+{
+	local XComGameStateHistory History;
+	local XComGameStateContext_Ability AbilityContext;
+	local StateObjectReference AbilityRef;
+	local XComGameState_Ability GhostAbilityState;
+	local XComGameState_Ability AbilityState;
+	local X2AbilityTemplate AbilityTemplate;
+	local XComGameState_Unit NewAttacker, Attacker;
+	local XComGameState NewGameState;
+	local bool	bShouldTrigger;
+	
+	History = `XCOMHISTORY;
+	AbilityContext = XComGameStateContext_Ability(GameState.GetContext());
+	if (AbilityContext == none)
+		return ELR_NoInterrupt;
+	
+	// Check if the source object was the source unit for this effect, and make sure the target was not
+	if (AbilityContext.InputContext.SourceObject.ObjectID != ApplyEffectParameters.SourceStateObjectRef.ObjectID ||
+		AbilityContext.InputContext.SourceObject.ObjectID == AbilityContext.InputContext.PrimaryTarget.ObjectID)
+		return ELR_NoInterrupt;
+	
+	AbilityState = XComGameState_Ability(`XCOMHISTORY.GetGameStateForObjectID(AbilityContext.InputContext.AbilityRef.ObjectID));
+	if (AbilityState == none || AbilityState.ObjectID == 0)
+		return ELR_NoInterrupt;
+	
+	if(AbilityState.GetMyTemplateName() == 'Interact_OpenChest' ||  AbilityState.GetMyTemplateName() == 'Interact_TakeVial' || AbilityState.GetMyTemplateName() == 'Interact_StasisTube')
+            bShouldTrigger = true;
+	if(AbilityState.GetMyTemplateName() == 'Interact' ||  AbilityState.GetMyTemplateName() == 'Interact_PlantBomb' /*|| AbilityState.GetMyTemplateName() == 'Interact_OpenDoor'*/)
+            bShouldTrigger = true;
+	if(AbilityState.GetMyTemplateName() == 'FinalizeHack' ||  AbilityState.GetMyTemplateName() == 'GatherEvidence' || AbilityState.GetMyTemplateName() == 'PlantExplosiveMissionDevice')
+            bShouldTrigger = true;
+
+	// We only want to trigger GITS when the source is actually using the right ability
+	if(!bShouldTrigger) {
+		return ELR_NoInterrupt;
+	}
+
+	Attacker = XComGameState_Unit(EventSource);	 
+
+	if (Attacker != none) {
+		NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState(string(GetFuncName()));
+		NewAttacker = XComGameState_Unit(NewGameState.CreateStateObject(Attacker.Class, Attacker.ObjectID));
+		//XComGameStateContext_ChangeContainer(NewGameState.GetContext()).BuildVisualizationFn = TriggerBumpInTheNightFlyoverVisualizationFn;
+		NewGameState.AddStateObject(NewAttacker);
+
+		NewAttacker.ModifyCurrentStat(eStat_DetectionModifier, 0);
+		`TACTICALRULES.SubmitGameState(NewGameState);
+
+		InitializeAbilityForActivation(GhostAbilityState, NewAttacker, 'RTGhostInTheShellEffect', History);
+		ActivateAbility(GhostAbilityState, NewAttacker.GetReference());
+		NewAttacker = XComGameState_Unit(History.GetGameStateForObjectID(NewAttacker.ObjectID));
+
+	}
+
+	return ELR_NoInterrupt;
+}
+
+function TriggerGhostInTheShellFlyoverVisualizationFn(XComGameState VisualizeGameState, out array<VisualizationTrack> OutVisualizationTracks)
+{
+	local XComGameState_Unit UnitState;
+	local X2Action_PlaySoundAndFlyOver SoundAndFlyOver;
+	local VisualizationTrack BuildTrack;
+	local XComGameStateHistory History;
+	local X2AbilityTemplate AbilityTemplate;
+	local XComGameState_Ability AbilityState;
+
+	History = `XCOMHISTORY;
+	foreach VisualizeGameState.IterateByClassType(class'XComGameState_Unit', UnitState)
+	{
+		foreach VisualizeGameState.IterateByClassType(class'XComGameState_Ability', AbilityState)
+		{
+			break;
+		}
+		if (AbilityState == none)
+		{
+			`RedScreenOnce("Ability state missing from" @ GetFuncName() @ "-jbouscher @gameplay");
+			`LOG("Rising Tides: ITS BROKEN");
+			return;
+		}
+
+		History.GetCurrentAndPreviousGameStatesForObjectID(UnitState.ObjectID, BuildTrack.StateObject_OldState, BuildTrack.StateObject_NewState, , VisualizeGameState.HistoryIndex);
+		BuildTrack.StateObject_NewState = UnitState;
+		BuildTrack.TrackActor = UnitState.GetVisualizer();
+
+		AbilityTemplate = AbilityState.GetMyTemplate();
+		if (AbilityTemplate != none)
+		{
+			SoundAndFlyOver = X2Action_PlaySoundAndFlyOver(class'X2Action_PlaySoundAndFlyOver'.static.AddToVisualizationTrack(BuildTrack, VisualizeGameState.GetContext()));
+			SoundAndFlyOver.SetSoundAndFlyOverParameters(None,"Ghost in the Shell", '', eColor_Good, AbilityTemplate.IconImage);
+
+			OutVisualizationTracks.AddItem(BuildTrack);
+		}
+		break;
+	}
+}
+
+function EventListenerReturn RemoveHarbingerEffect(Object EventData, Object EventSource, XComGameState GameState, Name EventID)
+{
+	local XComGameStateContext_EffectRemoved RemoveContext;
+	local XComGameState_Effect EffectState, NewEffectState;
+	local StateObjectReference EffectRef;
+	local XComGameState_Unit	SourceUnitState;
+	local XComGameState NewGameState;
+	local XComGameStateHistory History;
+	
+	if (!bRemoved)	
+	{
+		`LOG("Rising Tides: Removing the Harbinger Effect due to Meld Loss!");
+
+		History = `XCOMHISTORY;
+		RemoveContext = class'XComGameStateContext_EffectRemoved'.static.CreateEffectRemovedContext(self);
+		NewGameState = History.CreateNewGameState(true, RemoveContext);
+		// remove effect
+		RemoveEffect(NewGameState, GameState);
+
+		// remove tag effect from source
+		SourceUnitState = XComGameState_Unit(History.GetGameStateForObjectID(ApplyEffectParameters.SourceStateObjectRef.ObjectID));
+		foreach SourceUnitState.AffectedByEffects(EffectRef) {
+			EffectState = XComGameState_Effect(History.GetGameStateForObjectID(EffectRef.ObjectID));
+			if(EffectState.GetX2Effect().EffectName == 'HarbingerTagEffect') {
+				NewEffectState = XComGameState_Effect(NewGameState.CreateStateObject(EffectState.class, EffectState.ObjectID));
+				NewEffectState.RemoveEffect(NewGameState, GameState);
+			}	
+		}
+
+		SubmitNewGameState(NewGameState);
+	} else {
+		`LOG("Rising Tides: Harbinger effect tried to remove itself, but it was already bRemoved?!");
+	}
+
+	return ELR_NoInterrupt;
+}
+
+function EventListenerReturn HeatChannelCheck(Object EventData, Object EventSource, XComGameState GameState, Name EventID) {
+  local XComGameState_Unit OldSourceUnit, NewSourceUnit;
+  local XComGameStateHistory History;
+  local StateObjectReference AbilityRef;
+  local XComGameState_Ability OldAbilityState, NewAbilityState;
+  local XComGameStateContext_Ability AbilityContext;
+  local XComGameState_Item OldWeaponState, NewWeaponState;
+  local XComGameState NewGameState;
+  local UnitValue HeatChannelValue;
+  local int iHeatChanneled;
+  
+  local XComGameState_Ability CooldownAbilityState;
+
+  `LOG("Rising Tides: Starting HeatChannel");
+  // EventData = AbilityState to Channel
+  OldAbilityState = XComGameState_Ability(EventData);
+  // Event Source = UnitState of AbilityState
+  OldSourceUnit = XComGameState_Unit(EventSource);
+
+  if(OldAbilityState == none) {
+	`RedScreenOnce("Rising Tides: EventData was not an XComGameState_Ability!");
+	return ELR_NoInterrupt;
+  }
+
+  // immediately return if the event did not originate from ourselves
+  if(ApplyEffectParameters.SourceStateObjectRef.ObjectID != OldSourceUnit.ObjectID) {
+	`RedScreenOnce("Rising Tides: EventSource was not unit with Heat Channel!");
+    return ELR_NoInterrupt;
+  }
+  // check the cooldown on HeatChannel
+  if(!OldSourceUnit.GetUnitValue('RTEffect_HeatChannel_Cooldown', HeatChannelValue)) {
+  	`RedScreenOnce("Rising Tides: No HeatChannel Cooldown found!");
+  	return ELR_NoInterrupt;
+  }
+  OldSourceUnit.GetUnitValue('RTEffect_HeatChannel_Cooldown', HeatChannelValue);
+  if(HeatChannelValue.fValue > 0) {
+  	// still on cooldown
+  	`LOG("Rising Tides: Heat Channel was on cooldown! @" @ HeatChannelValue.fValue);
+  	return ELR_NoInterrupt;
+  }
+
+  History = `XCOMHISTORY;
+  AbilityContext = XComGameStateContext_Ability(GameState.GetContext());
+  if (AbilityContext == none) {
+  	return ELR_NoInterrupt;	
+  }
+
+  OldWeaponState = OldSourceUnit.GetPrimaryWeapon();
+  
+  // return if there's no heat to be channeled
+  if(OldWeaponState.Ammo == OldWeaponState.GetClipSize()) {
+    return ELR_NoInterrupt;
+  }
+
+  if(!OldAbilityState.IsCoolingDown()) {
+    `RedScreenOnce("Rising Tides: The ability was used but isn't on cooldown?");
+    return ELR_NoInterrupt;
+  }
+
+  NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState(string(GetFuncName()));
+  NewWeaponState = XComGameState_Item(NewGameState.CreateStateObject(class'XComGameState_Item', OldWeaponState.ObjectID));
+  NewSourceUnit = XComGameState_Unit(NewGameState.CreateStateObject(class'XComGameState_Unit', OldSourceUnit.ObjectID));
+  NewAbilityState = XComGameState_Ability(NewGameState.CreateStateObject(class'XComGameState_Ability', OldAbilityState.ObjectID));
+  						
+
+  // get amount of heat channeled
+  iHeatChanneled = OldWeaponState.GetClipSize() - OldWeaponState.Ammo;
+  
+  // channel heat
+  if(OldAbilityState.iCooldown < iHeatChanneled) {
+    NewAbilityState.iCooldown = 0;
+  } else {
+    NewAbilityState.iCooldown -= iHeatChanneled;
+  }
+
+  //  refill the weapon's ammo	
+  NewWeaponState.Ammo = NewWeaponState.GetClipSize();
+  
+  // put the ability on cooldown
+  NewSourceUnit.SetUnitFloatValue('RTEffect_HeatChannel_Cooldown', class'RTAbility_MarksmanAbilitySet'.default.HEATCHANNEL_COOLDOWN, eCleanUp_BeginTactical);
+  
+  `LOG("Rising Tides: Finishing HeatChannel");
+
+
+  // submit gamestate
+  NewGameState.AddStateObject(NewWeaponState);
+  NewGameState.AddStateObject(NewAbilityState);
+  NewGameState.AddStateObject(NewSourceUnit);
+  
+  XComGameStateContext_ChangeContainer(NewGameState.GetContext()).BuildVisualizationFn = TriggerHeatChannelFlyoverVisualizationFn;
+
+  `TACTICALRULES.SubmitGameState(NewGameState);
+	// trigger cooldown ability
+	InitializeAbilityForActivation(CooldownAbilityState, NewSourceUnit, 'HeatChannelCooldown', History);
+	ActivateAbility(CooldownAbilityState, NewSourceUnit.GetReference());
+	NewSourceUnit = XComGameState_Unit(History.GetGameStateForObjectID(NewSourceUnit.ObjectID));
+
+
+
+  return ELR_NoInterrupt;
+}
+
+function TriggerHeatChannelFlyoverVisualizationFn(XComGameState VisualizeGameState, out array<VisualizationTrack> OutVisualizationTracks)
+{
+	local XComGameState_Unit UnitState;
+	local X2Action_PlaySoundAndFlyOver SoundAndFlyOver;
+	local VisualizationTrack BuildTrack;
+	local XComGameStateHistory History;
+	local X2AbilityTemplate AbilityTemplate;
+	local XComGameState_Ability AbilityState;
+
+	History = `XCOMHISTORY;
+	foreach VisualizeGameState.IterateByClassType(class'XComGameState_Unit', UnitState)
+	{
+		foreach VisualizeGameState.IterateByClassType(class'XComGameState_Ability', AbilityState)
+		{
+			break;
+		}
+		if (AbilityState == none)
+		{
+			`RedScreenOnce("Ability state missing from" @ GetFuncName() @ "-jbouscher @gameplay");
+			return;
+		}
+
+		History.GetCurrentAndPreviousGameStatesForObjectID(UnitState.ObjectID, BuildTrack.StateObject_OldState, BuildTrack.StateObject_NewState, , VisualizeGameState.HistoryIndex);
+		BuildTrack.StateObject_NewState = UnitState;
+		BuildTrack.TrackActor = UnitState.GetVisualizer();
+
+		AbilityTemplate = AbilityState.GetMyTemplate();
+		if (AbilityTemplate != none)
+		{
+			SoundAndFlyOver = X2Action_PlaySoundAndFlyOver(class'X2Action_PlaySoundAndFlyOver'.static.AddToVisualizationTrack(BuildTrack, VisualizeGameState.GetContext()));
+			SoundAndFlyOver.SetSoundAndFlyOverParameters(None, "Heat Channel", '', eColor_Good, "img:///UILibrary_PerkIcons.UIPerk_reload");
+
+			OutVisualizationTracks.AddItem(BuildTrack);
+		}
+		break;
+	}
+}
+
+function EventListenerReturn LinkedFireCheck (Object EventData, Object EventSource, XComGameState GameState, Name EventID) {
+    local XComGameState_Unit TargetUnit, LinkedSourceUnit, LinkedUnit;
+	local XComGameStateHistory History;
+	local RTEffect_LinkedIntelligence LinkedEffect;
+    local RTGameState_MeldEffect  MeldEffectState;
+	local StateObjectReference AbilityRef;
+	local GameRulesCache_VisibilityInfo	VisInfo;
+	local XComGameState_Ability AbilityState, OriginalShot;
+	local XComGameStateContext_Ability AbilityContext;
+	local XComGameState NewGameState;
+	local RTGameState_LinkedEffect NewLinkedEffectState;
+	local StateObjectReference	EmptyRef;
+	local bool bShouldTrigger; 
+	
+	if(!bCanTrigger) {
+		`LOG("Rising Tides: this should never happen");
+		return ELR_NoInterrupt;
+	}
+
+	EmptyRef.ObjectID = 0;
+	History = `XCOMHISTORY;
+	AbilityContext = XComGameStateContext_Ability(GameState.GetContext());
+	if (AbilityContext == none) {
+		return ELR_NoInterrupt;	
+	}
+
+
+	// We only want to link fire when the source is actually shooting a reaction shot
+	if( AbilityContext.InputContext.AbilityTemplateName != 'RTOverwatchShot' && 
+		AbilityContext.InputContext.AbilityTemplateName != 'KillZoneShot' && 
+		AbilityContext.InputContext.AbilityTemplateName != 'OverwatchShot' && 
+		AbilityContext.InputContext.AbilityTemplateName != 'CloseCombatSpecialistAttack') {
+		return ELR_NoInterrupt;
+	}
+
+	// The LinkedSourceUnit should be  the unit that is currently attacking
+	LinkedSourceUnit = class'X2TacticalGameRulesetDataStructures'.static.GetAttackingUnitState(GameState);
+
+	// The Linked Unit is the one responding to the call to arms
+	LinkedUnit = XComGameState_Unit(History.GetGameStateForObjectID(ApplyEffectParameters.TargetStateObjectRef.ObjectID));
+	
+	// Only other units can shoot
+	if(LinkedUnit.ObjectID == LinkedSourceUnit.ObjectID) {
+		return ELR_NoInterrupt; 
+	}
+	// make sure we're on the same team 
+	if(LinkedSourceUnit.IsEnemyUnit(LinkedUnit)) {
+		return ELR_NoInterrupt;
+	}
+	// meld check
+	if(!LinkedUnit.IsUnitAffectedByEffectName('RTEffect_Meld')|| !LinkedSourceUnit.IsUnitAffectedByEffectName('RTEffect_Meld')) {
+		return ELR_NoInterrupt;
+	}
+	// Don't reveal ourselves
+	if(LinkedUnit.IsConcealed()) {
+		return ELR_NoInterrupt;
+	}
+	// The TargetUnit is the unit targeted by the source unit
+	TargetUnit = XComGameState_Unit(History.GetGameStateForObjectID(AbilityContext.InputContext.PrimaryTarget.ObjectID));
+
+	// The parent template of this RTGameState_LinkedEffect
+	LinkedEffect = RTEffect_LinkedIntelligence(GetX2Effect()); 
+
+	// We only shoot Linked shots to not make infinite overwatch chains
+	AbilityRef = LinkedUnit.FindAbility(LinkedEffect.AbilityToActivate);
+	AbilityState = XComGameState_Ability(History.GetGameStateForObjectID(AbilityRef.ObjectID));
+
+	if(AbilityState == none) {
+		`RedScreenOnce("Couldn't find an ability to shoot!");
+		`LOG("Rising Tides: AbilityContext.InputContext.AbilityTemplateName = " @ AbilityContext.InputContext.AbilityTemplateName);
+	}
+
+	//  for non-pre emptive fire, don't process during the interrupt step
+	if (AbilityContext.InterruptionStatus == eInterruptionStatus_Interrupt)	{
+		return ELR_NoInterrupt;
+	}
+
+    // only shoot enemy units
+	if (TargetUnit != none && TargetUnit.IsEnemyUnit(LinkedUnit)) {
+		// for some reason, standard target visibility conditions weren't preventing units from shooting
+		// leading to annoying siuations involving shooting through walls
+		`TACTICALRULES.VisibilityMgr.GetVisibilityInfo(LinkedUnit.ObjectID, TargetUnit.ObjectID, VisInfo);
+		if(!VisInfo.bClearLOS && !LinkedUnit.HasSoldierAbility('DaybreakFlame')) {
+			// only whisper can shoot through walls...
+			return ELR_NoInterrupt;
+		}
+
+		// break out if we can't shoot
+		if (AbilityState != none) {
+				// break out if we can't grant an action point to shoot with
+				// this is to tell the difference between stuff like normal Covering Fire, which uses ReserveActionPoints that have already been allocated,
+				// and stuff like Return Fire, which are free and should be allocated a point to shoot with.
+				// Linked Fire is free; this should always be valid
+				if (LinkedEffect.GrantActionPoint != '') {
+					// create an new gamestate and increment the number of grants
+					NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState(string(GetFuncName()));
+					NewLinkedEffectState = RTGameState_LinkedEffect(NewGameState.CreateStateObject(Class, ObjectID));
+					//NewLinkedEffectState.GrantsThisTurn++;
+					NewGameState.AddStateObject(NewLinkedEffectState);
+					
+					// add a action point to shoot with
+					LinkedUnit = XComGameState_Unit(NewGameState.CreateStateObject(LinkedUnit.Class, LinkedUnit.ObjectID));
+					if(LinkedUnit.ReserveActionPoints.Length < 1) {
+						LinkedUnit.ReserveActionPoints.AddItem(class'X2CharacterTemplateManager'.default.OverwatchReserveActionPoint);
+					}
+					NewGameState.AddStateObject(LinkedUnit);
+					// check if we can shoot. if we can't, clean up the gamestate from history
+					if (AbilityState.CanActivateAbilityForObserverEvent(TargetUnit, LinkedUnit) != 'AA_Success')
+					{
+						History.CleanupPendingGameState(NewGameState);
+					}
+					else
+					{
+						bCanTrigger = false;
+
+						AbilityState = XComGameState_Ability(NewGameState.CreateStateObject(AbilityState.Class, AbilityState.ObjectID));
+						NewGameState.AddStateObject(AbilityState);
+						XComGameStateContext_ChangeContainer(NewGameState.GetContext()).BuildVisualizationFn = TriggerLinkedEffectFlyoverVisualizationFn;
+						`TACTICALRULES.SubmitGameState(NewGameState);
+
+						if (LinkedEffect.bUseMultiTargets)
+						{
+							AbilityState.AbilityTriggerAgainstSingleTarget(LinkedUnit.GetReference(), true);
+						}
+						else
+						{
+							AbilityContext = class'XComGameStateContext_Ability'.static.BuildContextFromAbility(AbilityState, TargetUnit.ObjectID);
+							if( AbilityContext.Validate() )
+							{
+								`TACTICALRULES.SubmitGameStateContext(AbilityContext);
+							}
+						}
+
+						
+					}
+				}
+				else if (AbilityState.CanActivateAbilityForObserverEvent(TargetUnit) == 'AA_Success')
+				{
+					if (LinkedEffect.bUseMultiTargets)
+					{
+						AbilityState.AbilityTriggerAgainstSingleTarget(LinkedUnit.GetReference(), true);
+					}
+					else
+					{
+						AbilityContext = class'XComGameStateContext_Ability'.static.BuildContextFromAbility(AbilityState, TargetUnit.ObjectID);
+						if( AbilityContext.Validate() )
+						{
+							`TACTICALRULES.SubmitGameStateContext(AbilityContext);
+						}
+					}
+				}
+		}
+	}
+	bCanTrigger = true;
+	return ELR_NoInterrupt;
+
+
+
+}
+
+function TriggerLinkedEffectFlyoverVisualizationFn(XComGameState VisualizeGameState, out array<VisualizationTrack> OutVisualizationTracks)
+{
+	local XComGameState_Unit UnitState;
+	local X2Action_PlaySoundAndFlyOver SoundAndFlyOver;
+	local VisualizationTrack BuildTrack;
+	local XComGameStateHistory History;
+	local X2AbilityTemplate AbilityTemplate;
+	local XComGameState_Ability AbilityState;
+
+	History = `XCOMHISTORY;
+	foreach VisualizeGameState.IterateByClassType(class'XComGameState_Unit', UnitState)
+	{
+		foreach VisualizeGameState.IterateByClassType(class'XComGameState_Ability', AbilityState)
+		{
+			break;
+		}
+		if (AbilityState == none)
+		{
+			`RedScreenOnce("Ability state missing from" @ GetFuncName() @ "-jbouscher @gameplay");
+			return;
+		}
+
+		History.GetCurrentAndPreviousGameStatesForObjectID(UnitState.ObjectID, BuildTrack.StateObject_OldState, BuildTrack.StateObject_NewState, , VisualizeGameState.HistoryIndex);
+		BuildTrack.StateObject_NewState = UnitState;
+		BuildTrack.TrackActor = UnitState.GetVisualizer();
+
+		AbilityTemplate = AbilityState.GetMyTemplate();
+		if (AbilityTemplate != none)
+		{
+			SoundAndFlyOver = X2Action_PlaySoundAndFlyOver(class'X2Action_PlaySoundAndFlyOver'.static.AddToVisualizationTrack(BuildTrack, VisualizeGameState.GetContext()));
+			SoundAndFlyOver.SetSoundAndFlyOverParameters(None, "Networked OI", '', eColor_Good, "img:///UILibrary_PerkIcons.UIPerk_insanity");
+
+			OutVisualizationTracks.AddItem(BuildTrack);
+		}
+		break;
+	}
+}
+
+function EventListenerReturn ReprobateWaltzCheck( Object EventData, Object EventSource, XComGameState GameState, Name EventID) {
+	local XComGameStateContext_Ability AbilityContext;
+	local XComGameState_Unit WaltzUnit, TargetUnit;
+	local XComGameState_Ability	AbilityState;
+	local int iStackCount, iRandom;
+	local float fStackModifier, fFinalPercentChance;
+	local XComGameStateHistory History;
+
+	History = `XCOMHISTORY;
+
+	AbilityContext = XComGameStateContext_Ability(GameState.GetContext());
+	WaltzUnit = XComGameState_Unit(History.GetGameStateForObjectID(AbilityContext.InputContext.SourceObject.ObjectID));
+	TargetUnit = XComGameState_Unit(History.GetGameStateForObjectID(AbilityContext.InputContext.PrimaryTarget.ObjectID));
+
+	if(AbilityContext != none) {
+		iStackCount = class'RTGameState_Ability'.static.getBloodlustStackCount(WaltzUnit);
+		fFinalPercentChance = (class'RTAbility_BerserkerAbilitySet'.default.REPROBATE_WALTZ_BASE_CHANCE + ( class'RTAbility_BerserkerAbilitySet'.default.REPROBATE_WALTZ_BLOODLUST_STACK_CHANCE * iStackCount ));
+		iRandom = `SYNC_RAND(100);
+		if(iRandom <= int(fFinalPercentChance)) {
+			InitializeAbilityForActivation(AbilityState, WaltzUnit, 'RTReprobateWaltz', History);
+			ActivateAbility(AbilityState, TargetUnit.GetReference());
+		}	
+	}	
+	return ELR_NoInterrupt;	
+}
+
+function EventListenerReturn TwitchFireCheck (Object EventData, Object EventSource, XComGameState GameState, Name EventID) {
+    local XComGameState_Unit AttackingUnit, TwitchAttackingUnit, TwitchLinkedUnit;
+	local XComGameStateHistory History;
+	local RTEffect_TwitchReaction TwitchEffect;
+    local RTGameState_MeldEffect  MeldEffectState;
+	local StateObjectReference AbilityRef;
+	local XComGameState_Ability AbilityState, OriginalShot;
+	local XComGameStateContext_Ability AbilityContext;
+	local XComGameState NewGameState;
+	local RTGameState_TwitchEffect NewTwitchEffectState;
+	local StateObjectReference	EmptyRef;
+
+	if(!bCanTrigger) {
+		`LOG("Rising Tides: TwitchEffect is probably being called before it finishes resolving!");
+		return ELR_NoInterrupt;
+	}
+	
+	EmptyRef.ObjectID = 0;
+
+	`LOG("Rising Tides: Twitch Fire Check startup.");
+	History = `XCOMHISTORY;
+	AbilityContext = XComGameStateContext_Ability(GameState.GetContext());
+	if (AbilityContext == none) {
+		return ELR_NoInterrupt;	
+	}
+	`LOG("Rising Tides: Twitch Fire Check Stage 1");
+	// The AttackingUnit should be the unit that is currently attacking
+	AttackingUnit = class'X2TacticalGameRulesetDataStructures'.static.GetAttackingUnitState(GameState);
+
+	// The TwitchAttackingUnit is the one responding to the call to arms
+	TwitchAttackingUnit = XComGameState_Unit(History.GetGameStateForObjectID(ApplyEffectParameters.TargetStateObjectRef.ObjectID));
+
+	// The TwitchLinkedUnit is the unit targeted by the source unit
+	TwitchLinkedUnit = XComGameState_Unit(History.GetGameStateForObjectID(AbilityContext.InputContext.PrimaryTarget.ObjectID));
+	if(TwitchLinkedUnit == none) {
+		return ELR_NoInterrupt;
+	}
+	
+	// meld check
+	if(!TwitchLinkedUnit.IsUnitAffectedByEffectName('RTEffect_Meld')|| !TwitchAttackingUnit.IsUnitAffectedByEffectName('RTEffect_Meld')) {
+		return ELR_NoInterrupt;
+	}
+	`LOG("Rising Tides: Twitch Fire Check Stage 2");
+	// Don't reveal ourselves
+	if(TwitchAttackingUnit.IsConcealed()) {
+		return ELR_NoInterrupt;
+	}
+	`LOG("Rising Tides: Twitch Fire Check Stage 3");
+
+
+	// The parent template of this RTGameState_TwitchEffect
+	TwitchEffect = RTEffect_TwitchReaction(GetX2Effect()); 
+	
+	// do standard checks here
+	//STUFF
+	//STUFF
+	//STUFF
+
+	// Get the AbilityToActivate (TwitchReactionShot)
+	AbilityRef = TwitchAttackingUnit.FindAbility(TwitchEffect.AbilityToActivate, EmptyRef);
+	AbilityState = XComGameState_Ability(History.GetGameStateForObjectID(AbilityRef.ObjectID));
+
+	if(AbilityState == none) {
+		`RedScreenOnce("Couldn't find an ability to shoot!");
+		`LOG("Rising Tides: TwitchEffect.AbilityToActivate = " @ TwitchEffect.AbilityToActivate);
+	}
+
+	`LOG("Rising Tides: Twitch Fire Check Stage 4");
+    // only shoot enemy units
+	if (AttackingUnit != none && AttackingUnit.IsEnemyUnit(TwitchAttackingUnit)) {
+		`LOG("Rising Tides: Twitch Fire Check Stage 5");
+		// break out if we can't shoot
+		if (AbilityState != none) {
+				`LOG("Rising Tides: Twitch Fire Check Stage 6");
+				// break out if we can't grant an action point to shoot with
+				if (TwitchEffect.GrantActionPoint != '') {
+					`LOG("Rising Tides: Twitch Fire Check Stage 7");
+					// create an new gamestate and increment the number of grants
+					NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState(string(GetFuncName()));
+					NewTwitchEffectState = RTGameState_TwitchEffect(NewGameState.CreateStateObject(Class, ObjectID));
+					//NewTwitchEffectState.GrantsThisTurn++;
+					NewGameState.AddStateObject(NewTwitchEffectState);
+					
+					// add a action point to shoot with
+					TwitchAttackingUnit = XComGameState_Unit(NewGameState.CreateStateObject(TwitchAttackingUnit.Class, TwitchAttackingUnit.ObjectID));
+					TwitchAttackingUnit.ReserveActionPoints.AddItem(TwitchEffect.GrantActionPoint);
+					NewGameState.AddStateObject(TwitchAttackingUnit);
+					`LOG("Rising Tides: Twitch Fire Check Stage 8");
+					// check if we can shoot. if we can't, clean up the gamestate from history
+					if (AbilityState.CanActivateAbilityForObserverEvent(AttackingUnit, TwitchAttackingUnit) != 'AA_Success')
+					{
+						`LOG(AbilityState.CanActivateAbilityForObserverEvent(AttackingUnit, TwitchAttackingUnit));
+						History.CleanupPendingGameState(NewGameState);
+					}
+					else
+					{
+						`LOG("Rising Tides: Twitch Fire Check Stage 9");
+						bCanTrigger = false;
+						AbilityState = XComGameState_Ability(NewGameState.CreateStateObject(AbilityState.Class, AbilityState.ObjectID));
+						NewGameState.AddStateObject(AbilityState);
+						XComGameStateContext_ChangeContainer(NewGameState.GetContext()).BuildVisualizationFn = TriggerAbilityFlyoverVisualizationFn;
+						`TACTICALRULES.SubmitGameState(NewGameState);
+
+						if (TwitchEffect.bUseMultiTargets)
+						{
+							AbilityState.AbilityTriggerAgainstSingleTarget(TwitchAttackingUnit.GetReference(), true);
+						}
+						else
+						{
+							AbilityContext = class'XComGameStateContext_Ability'.static.BuildContextFromAbility(AbilityState, AttackingUnit.ObjectID);
+							if( AbilityContext.Validate() )
+							{
+								`LOG("Rising Tides: Twitch Fire Check Stage 11");
+								`TACTICALRULES.SubmitGameStateContext(AbilityContext);
+								`LOG("Rising Tides: Twitch Fire Check Stage 12");
+							}
+						}
+						bCanTrigger = true;
+					}
+				}
+				else if (AbilityState.CanActivateAbilityForObserverEvent(AttackingUnit) == 'AA_Success')
+				{
+					if (TwitchEffect.bUseMultiTargets)
+					{
+						AbilityState.AbilityTriggerAgainstSingleTarget(TwitchAttackingUnit.GetReference(), true);
+					}
+					else
+					{
+						AbilityContext = class'XComGameStateContext_Ability'.static.BuildContextFromAbility(AbilityState, AttackingUnit.ObjectID);
+						if( AbilityContext.Validate() )
+						{
+							`TACTICALRULES.SubmitGameStateContext(AbilityContext);
+						}
+					}
+				}
+		}
+	}
+
+	return ELR_NoInterrupt;
+
+
+
+}
 
 private function SubmitNewGameState(out XComGameState NewGameState)
 {
@@ -832,3 +1595,7 @@ private function SubmitNewGameState(out XComGameState NewGameState)
 }
 
 
+defaultproperties
+{
+	bCanTrigger=true
+}
