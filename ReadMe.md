@@ -34,13 +34,18 @@ This would be a bare-bones content mod. I also have the following content in min
 		- Add x2/lw abilities to PsionicAbilityList
 	
 ###### Current Table:
-      - Shatter The Line: If this unit kills an enemy within X tiles, it triggers a flush effect on other enemies within X tiles. 2/3 turn cooldown. credits to /u/PostOfficeBuddy
-      - Orpheus Warp: "…the hero of the broken moon. A pawn played by a negligent deity, a marionette manuvered by an... epileptic..."	
-      	>- Gain Stealth while preparing a massive psionic rift. On the following turn, the Stealth is broken and a rift is formed. Friendly units can use the rift to evac from the mission. The rift will persist for an additional two turns, or if this unit enters it.
+	- Shatter The Line: If this unit kills an enemy within X tiles, it triggers a flush effect on other enemies within X tiles. 2/3 turn cooldown. credits to /u/PostOfficeBuddy
+	- Orpheus Warp: "…the hero of the broken moon. A pawn played by a negligent deity, a marionette manuvered by an... epileptic..."	
+      		- Gain Stealth while preparing a massive psionic rift. On the following turn, the Stealth is broken and a rift is formed. Friendly units can use the rift to evac from the mission. The rift will persist for an additional two turns, or if this unit enters it.
 			
       
 ###### Current Bugs:
-      - Time Stop damage calculation isn't visualized properly
-      - Time Stop doesn't work on Stasis'd units (despite this making no sense whatsoever) because it's hard-coded
+	- Time Stop damage calculation isn't visualized properly
+	- Time Stop doesn't work on Stasis'd units (despite this making no sense whatsoever) because it's hard-coded
+      
+###### Current Sprint Goals:
+	- Finish Echoed Agony
+	- Finish Sibyl's Gaze and Domination
+	- Refactor RTGameState_Effects without specialized fields into RTGameState_Effect
               
               
