@@ -254,34 +254,10 @@
     <Content Include="Src\RisingTides\Classes\RTGameState_Ability.uc">
       <SubType>Content</SubType>
     </Content>
-    <Content Include="Src\RisingTides\Classes\RTGameState_BloodlustEffect.uc">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Src\RisingTides\Classes\RTGameState_BumpInTheNightEffect.uc">
-      <SubType>Content</SubType>
-    </Content>
     <Content Include="Src\RisingTides\Classes\RTGameState_Effect.uc">
       <SubType>Content</SubType>
     </Content>
-    <Content Include="Src\RisingTides\Classes\RTGameState_EveryMomentMatters.uc">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Src\RisingTides\Classes\RTGameState_GhostInTheShell.uc">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Src\RisingTides\Classes\RTGameState_Harbinger.uc">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Src\RisingTides\Classes\RTGameState_HeatChannel.uc">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Src\RisingTides\Classes\RTGameState_LinkedEffect.uc">
-      <SubType>Content</SubType>
-    </Content>
     <Content Include="Src\RisingTides\Classes\RTGameState_MeldEffect.uc">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Src\RisingTides\Classes\RTGameState_ReprobateWaltz.uc">
       <SubType>Content</SubType>
     </Content>
     <Content Include="Src\RisingTides\Classes\RTGameState_RisingTidesCommand.uc">
@@ -291,9 +267,6 @@
       <SubType>Content</SubType>
     </Content>
     <Content Include="Src\RisingTides\Classes\RTGameState_TimeStopEffect.uc">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Src\RisingTides\Classes\RTGameState_TwitchEffect.uc">
       <SubType>Content</SubType>
     </Content>
     <Content Include="Src\RisingTides\Classes\RTHelpers.uc">

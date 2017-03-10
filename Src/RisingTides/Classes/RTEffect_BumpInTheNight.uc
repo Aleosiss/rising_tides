@@ -5,12 +5,12 @@ var int iTileDistanceToActivate;
 function RegisterForEvents(XComGameState_Effect EffectGameState)
 {
 	local X2EventManager EventMgr;
-	local RTGameState_BumpInTheNightEffect BITNEffectState;
+	local RTGameState_Effect BITNEffectState;
 	local XComGameState_Unit UnitState;
 	local Object EffectObj, FilterObj;
 
 	EventMgr = `XEVENTMGR;
-	BITNEffectState = RTGameState_BumpInTheNightEffect(EffectGameState);
+	BITNEffectState = RTGameState_Effect(EffectGameState);
 
 
 	EffectObj = BITNEffectState;
@@ -24,5 +24,5 @@ function RegisterForEvents(XComGameState_Effect EffectGameState)
 
 defaultproperties
 {
-	GameStateEffectClass = class'RTGameState_BumpInTheNightEffect'
+	GameStateEffectClass = class'RTGameState_Effect'
 }

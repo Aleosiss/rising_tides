@@ -13,12 +13,12 @@ var localized string RTFriendlyName;
 
 function RegisterForEvents(XComGameState_Effect EffectState) {
   local X2EventManager EventMgr;
-  local RTGameState_Harbinger HarbyEffectState;
+  local RTGameState_Effect HarbyEffectState;
   local Object ListenerObj, FilterObj;
 
   EventMgr = `XEVENTMGR;	 
 
-  HarbyEffectState = RTGameState_Harbinger(EffectState);
+  HarbyEffectState = RTGameState_Effect(EffectState);
 
   ListenerObj = HarbyEffectState;
   FilterObj = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(EffectState.ApplyEffectParameters.TargetStateObjectRef.ObjectID)); 
@@ -129,5 +129,5 @@ simulated function AddX2ActionsForVisualization_Tick(XComGameState VisualizeGame
 
 defaultproperties
 {																   
-	GameStateEffectClass = class'RTGameState_Harbinger'
+	GameStateEffectClass = class'RTGameState_Effect'
 }

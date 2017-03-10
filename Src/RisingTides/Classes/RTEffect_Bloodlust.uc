@@ -8,12 +8,12 @@ function RegisterForEvents(XComGameState_Effect EffectGameState)
 {
 	local X2EventManager EventMgr;
 	local XComGameState_Unit UnitState;
-	local RTGameState_BloodlustEffect BloodEffectState;
+	local RTGameState_Effect BloodEffectState;
 	local Object EffectObj, FilterObj;
 
 	EventMgr = `XEVENTMGR;
 
-	BloodEffectState = RTGameState_BloodlustEffect(EffectGameState);
+	BloodEffectState = RTGameState_Effect(EffectGameState);
 
 	EffectObj = BloodEffectState;
 	UnitState = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(BloodEffectState.ApplyEffectParameters.SourceStateObjectRef.ObjectID));
@@ -41,7 +41,7 @@ simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffe
 function GetToHitModifiers(XComGameState_Effect EffectState, XComGameState_Unit Attacker, XComGameState_Unit Target, XComGameState_Ability AbilityState, class<X2AbilityToHitCalc> ToHitType, bool bMelee, bool bFlanking, bool bIndirectFire, out array<ShotModifierInfo> ShotModifiers) {
 
 	local ShotModifierInfo HitMod, CritMod;
-	local RTGameState_BloodlustEffect BumpEffect;
+	local RTGameState_Effect BumpEffect;
 	local bool bValid;
 
 	if(AbilityState.GetMyTemplateName() == 'RTBerserkerKnifeAttack' || AbilityState.GetMyTemplateName() == 'RTPyroclasticSlash' || AbilityState.GetMyTemplateName() == 'RTReprobateWaltz' || AbilityState.GetMyTemplateName() == 'RTShadowStrike') {
@@ -55,7 +55,7 @@ function GetToHitModifiers(XComGameState_Effect EffectState, XComGameState_Unit 
 	if(!bValid)
    		return;
 
-	BumpEffect = RTGameState_BloodlustEffect(EffectState);
+	BumpEffect = RTGameState_Effect(EffectState);
   
 	HitMod.ModType = eHit_Crit;
 	HitMod.Value = BumpEffect.iStacks * iMeleeHitChanceMod;
@@ -66,7 +66,7 @@ function GetToHitModifiers(XComGameState_Effect EffectState, XComGameState_Unit 
 
 function int GetAttackingDamageModifier(XComGameState_Effect EffectState, XComGameState_Unit Attacker, Damageable TargetDamageable, XComGameState_Ability AbilityState, const out EffectAppliedData AppliedData, const int CurrentDamage, optional XComGameState NewGameState) {
 	local float ExtraCritDamage;
-	local RTGameState_BloodlustEffect BumpEffect;
+	local RTGameState_Effect BumpEffect;
 	local bool bValid;
 
 	if(AbilityState.GetMyTemplateName() == 'RTBerserkerKnifeAttack' || AbilityState.GetMyTemplateName() == 'RTPyroclasticSlash' || AbilityState.GetMyTemplateName() == 'RTReprobateWaltz' || AbilityState.GetMyTemplateName() == 'RTShadowStrike') {
@@ -80,7 +80,7 @@ function int GetAttackingDamageModifier(XComGameState_Effect EffectState, XComGa
 		return 0;
 	}
 
-	BumpEffect = RTGameState_BloodlustEffect(EffectState);
+	BumpEffect = RTGameState_Effect(EffectState);
 	ExtraCritDamage = CurrentDamage * BumpEffect.iStacks * fCritDamageMod;
 	// only on crits...
 	if(AppliedData.AbilityResultContext.HitResult == eHit_Crit) {
@@ -94,6 +94,6 @@ DefaultProperties
 {
 	bStackOnRefresh = true;
 	DuplicateResponse = eDupe_Refresh
-	GameStateEffectClass = class'RTGameState_BloodlustEffect'
+	GameStateEffectClass = class'RTGameState_Effect'
 	EffectName = "RTEffect_Bloodlust"
 }

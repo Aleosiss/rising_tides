@@ -78,12 +78,12 @@ function GetToHitModifiers(XComGameState_Effect EffectState, XComGameState_Unit 
 function RegisterForEvents(XComGameState_Effect EffectGameState)
 {
 	local X2EventManager EventMgr;
-	local RTGameState_EveryMomentMatters EMMGameState;
+	local RTGameState_Effect EMMGameState;
 	local Object EffectObj, FilterObj;
 
 	EventMgr = `XEVENTMGR;
 
-	EMMGameState = RTGameState_EveryMomentMatters(EffectGameState);
+	EMMGameState = RTGameState_Effect(EffectGameState);
 	EffectObj = EMMGameState;
 
 	FilterObj = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(EMMGameState.ApplyEffectParameters.SourceStateObjectRef.ObjectID));
@@ -94,5 +94,5 @@ DefaultProperties
 {
 	DuplicateResponse = eDupe_Ignore
 	BONUS_DAMAGE_PERCENT = 0.25f
-	GameStateEffectClass = class'RTGameState_EveryMomentMatters'
+	GameStateEffectClass = class'RTGameState_Effect'
 }

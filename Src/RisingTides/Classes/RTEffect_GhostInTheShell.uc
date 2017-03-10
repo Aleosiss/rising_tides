@@ -6,11 +6,11 @@ function RegisterForEvents(XComGameState_Effect EffectGameState)
 {
 
 	local X2EventManager EventMgr;
-    local RTGameState_GhostInTheShell GhostEffectState;
+    local RTGameState_Effect GhostEffectState;
 	local Object EffectObj, FilterObj;
 
 	EventMgr = `XEVENTMGR;
-    GhostEffectState = RTGameState_GhostInTheShell(EffectGameState);
+    GhostEffectState = RTGameState_Effect(EffectGameState);
   
 	EffectObj = GhostEffectState;
 	FilterObj = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(EffectGameState.ApplyEffectParameters.SourceStateObjectRef.ObjectID));
@@ -20,5 +20,5 @@ function RegisterForEvents(XComGameState_Effect EffectGameState)
 
 DefaultProperties
 {
-	GameStateEffectClass = class'RTGameState_GhostInTheShell'
+	GameStateEffectClass = class'RTGameState_Effect'
 }

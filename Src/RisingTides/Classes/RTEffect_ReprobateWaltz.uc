@@ -6,11 +6,11 @@ function RegisterForEvents(XComGameState_Effect EffectGameState)
 {
 
 	local X2EventManager EventMgr;
-    local RTGameState_ReprobateWaltz WaltzEffectState;
+    local RTGameState_Effect WaltzEffectState;
 	local Object EffectObj, FilterObj;
 
 	EventMgr = `XEVENTMGR;
-    WaltzEffectState = RTGameState_ReprobateWaltz(EffectGameState);
+    WaltzEffectState = RTGameState_Effect(EffectGameState);
   
 	EffectObj = WaltzEffectState;
 	FilterObj = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(EffectGameState.ApplyEffectParameters.SourceStateObjectRef.ObjectID));
@@ -20,5 +20,5 @@ function RegisterForEvents(XComGameState_Effect EffectGameState)
 
 DefaultProperties
 {
-	GameStateEffectClass = class'RTGameState_ReprobateWaltz'
+	GameStateEffectClass = class'RTGameState_Effect'
 }

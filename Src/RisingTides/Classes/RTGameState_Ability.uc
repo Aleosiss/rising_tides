@@ -6,12 +6,12 @@ class RTGameState_Ability extends XComGameState_Ability;
 public static function int getBloodlustStackCount(XComGameState_Unit WaltzUnit) {
    local int iStackCount;
    local StateObjectReference IteratorObjRef;
-   local RTGameState_BloodlustEffect BloodlustEffectState;
+   local RTGameState_Effect BloodlustEffectState;
 
    if (WaltzUnit != none) {
 		// get our stacking effect
 		foreach WaltzUnit.AffectedByEffects(IteratorObjRef) {
-			BloodlustEffectState = RTGameState_BloodlustEffect(`XCOMHISTORY.GetGameStateForObjectID(IteratorObjRef.ObjectID));
+			BloodlustEffectState = RTGameState_Effect(`XCOMHISTORY.GetGameStateForObjectID(IteratorObjRef.ObjectID));
 			if(BloodlustEffectState != none) {
 				break;
 			}
