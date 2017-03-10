@@ -270,6 +270,8 @@ function EventListenerReturn EchoedAgonyListener(Object EventData, Object EventS
 	local X2TacticalGameRuleset TacticalRules;
 	local int i;
 
+	local bool bDebug;
+
     SourceUnitState = XComGameState_Unit(EventSource); // we are always the source
     if(SourceUnitState.ObjectID != OwnerStateObject.ObjectID) {
         `RedScreen("Rising Tides: Echoed Agony event had an invalid source!");
@@ -301,18 +303,24 @@ function EventListenerReturn EchoedAgonyListener(Object EventData, Object EventS
     NewGameState.AddStateObject(AbilityState);
     `TACTICALRULES.SubmitGameState(NewGameState);
 
+	bDebug = false;
     // finally, activate the ability with the updated panic strength
     TacticalRules.GetGameRulesCache_Unit(SourceUnitState.GetReference(), UnitCache);
     for(i = 0; i < UnitCache.AvailableActions.Length; i++) {
         AbilityState = XComGameState_Ability(History.GetGameStateForObjectID(UnitCache.AvailableActions[i].AbilityObjectRef.ObjectID));
         if(AbilityState.m_TemplateName == m_TemplateName) { // found myself
+			bDebug = true;
             if(UnitCache.AvailableActions[i].AvailableCode == 'AA_Success') {
                 class'XComGameStateContext_Ability'.static.ActivateAbility(UnitCache.AvailableActions[i]);
-            }
+            } else {
+				`LOG("Rising Tides: Could not activate Echoed Agony!");
+			}
             break;
         }
     }
-
+	if(!bDebug) {
+		`LOG("Rising Tides: EchoedAgonyListener did not find Echoed Agony!");
+	}
     return ELR_NoInterrupt;
 }
 
