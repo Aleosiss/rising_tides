@@ -609,7 +609,12 @@ LocHelpText="The vision component of Over The Shoulder lasts forever, even when 
 LocFlyOverText="Sibyl's Gaze"
 LocPromotionPopupText="<Bullet/> Technically not infinite; only 10 million turns.<br/>"
 
-
+[RTEchoedAgonyIcon X2AbilityTemplate]
+LocFriendlyName="Echoed Agony"
+LocLongDescription="This unit will echo panic attempts that affect to nearby enemies affected by Over the Shoulder."
+LocHelpText="This unit will echo panic attempts that affect to nearby enemies affected by Over the Shoulder."
+LocFlyOverText="Echoed Agony"
+LocPromotionPopupText="<Bullet/> Only affects enemy units.<br/><Bullet/> Feedback is a panic effect and is much stronger than other sources of panic.<br/>"
 
 ;----------------------------------------------------------------------------------------------------------------------------
 
