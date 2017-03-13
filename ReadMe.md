@@ -22,16 +22,13 @@ This would be a bare-bones content mod. I also have the following content in min
 	- Marksman:
 		- nothing
 	- Gatherer: 
-		- Work on RTEffect_OverTheShoulder: should not remove effect if the duration is not 1
 		- Redo Guardian Angel
-		- Implement Sibyl 
-		- Verify that Domination works
 		- Triangulation
-		- Echoed Agony: https://hastebin.com/upatovixoy.java
+		- Verify that Over The Shoulder works against burrowed/concealed units
+		- Add Over the Shoulder exception for civilians that are actually faceless
 	- General:
 		- Animations/Visuals
-		- implement new TargetAbility condition: https://hastebin.com/eleboyigib.uc
-		- Add x2/lw abilities to PsionicAbilityList
+=		- Add x2/lw abilities to PsionicAbilityList
 	
 ###### Current Table:
 	- Shatter The Line: If this unit kills an enemy within X tiles, it triggers a flush effect on other enemies within X tiles. 2/3 turn cooldown. credits to /u/PostOfficeBuddy
