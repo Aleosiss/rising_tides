@@ -1051,7 +1051,7 @@ static function X2AbilityTemplate RTEchoedAgony() {
     Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
     Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
     Template.bSkipFireAction = true;
-    Template.bShowActivation = true;
+    // Template.bShowActivation = true;
     Template.FrameAbilityCameraType = eCameraFraming_Never;
 
     Template.AdditionalAbilities.AddItem('RTEchoedAgonyIcon');
@@ -1102,7 +1102,7 @@ static function X2AbilityTemplate RTCreateEchoedAgonyEffectAbility()
 	Template.bSkipPerkActivationActions = true;
 	Template.bSkipFireAction = true;
 	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
-	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
+	// Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
 
 	return Template;
 }

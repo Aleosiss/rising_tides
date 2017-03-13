@@ -305,7 +305,7 @@ function EventListenerReturn EchoedAgonyListener(Object EventData, Object EventS
     NewGameState.AddStateObject(AbilityState);
     `TACTICALRULES.SubmitGameState(NewGameState);
 
-	bDebug = false;
+	//bDebug = false;
     // finally, activate the ability with the updated panic strength
     //TacticalRules.GetGameRulesCache_Unit(SourceUnitState.GetReference(), UnitCache);
     //for(i = 0; i < UnitCache.AvailableActions.Length; i++) {
