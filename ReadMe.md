@@ -26,6 +26,8 @@ This would be a bare-bones content mod. I also have the following content in min
 		- Triangulation
 		- Verify that Over The Shoulder works against burrowed/concealed units
 		- Add Over the Shoulder exception for civilians that are actually faceless
+		- Verify that Echoed Agony panic is working on the right values by logging the rolls
+		- Add Guilty Conscience
 	- General:
 		- Animations/Visuals
 =		- Add x2/lw abilities to PsionicAbilityList
