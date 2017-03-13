@@ -12,7 +12,7 @@ public static function int getBloodlustStackCount(XComGameState_Unit WaltzUnit) 
 		// get our stacking effect
 		foreach WaltzUnit.AffectedByEffects(IteratorObjRef) {
 			BloodlustEffectState = RTGameState_Effect(`XCOMHISTORY.GetGameStateForObjectID(IteratorObjRef.ObjectID));
-			if(BloodlustEffectState != none) {
+			if(BloodlustEffectState != none && BloodlustEffectState.GetX2Effect().EffectName == class'RTEffect_Bloodlust'.default.EffectName) {
 				break;
 			}
 		}
@@ -293,31 +293,36 @@ function EventListenerReturn EchoedAgonyListener(Object EventData, Object EventS
             break;
         default:
 			`LOG("Rising Tides: Echoed Agony had an invalid EventID: " @ EventID);
-            PanicStrength = 1;
+            PanicStrength = class'RTEffectBuilder'.default.AGONY_STRENGTH_TAKE_FEEDBACK;
     }
 
     // this meaty block updates the panic event value and submits the change state
     NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState(string(GetFuncName()));
-    AbilityState = XComGameState_Ability(NewGameState.CreateStateObject(self.class, self.ObjectID));
+	// oh boy
+	AbilityState = XComGameState_Ability(History.GetGameStateForObjectID(SourceUnitState.FindAbility(class'RTAbility_GathererAbilitySet'.default.EchoedAgonyEffectAbilityTemplateName).ObjectID));
+    AbilityState = XComGameState_Ability(NewGameState.CreateStateObject(class'XComGameState_Ability', AbilityState.ObjectID));
     AbilityState.PanicEventValue = PanicStrength;
     NewGameState.AddStateObject(AbilityState);
     `TACTICALRULES.SubmitGameState(NewGameState);
 
 	bDebug = false;
     // finally, activate the ability with the updated panic strength
-    TacticalRules.GetGameRulesCache_Unit(SourceUnitState.GetReference(), UnitCache);
-    for(i = 0; i < UnitCache.AvailableActions.Length; i++) {
-        AbilityState = XComGameState_Ability(History.GetGameStateForObjectID(UnitCache.AvailableActions[i].AbilityObjectRef.ObjectID));
-        if(AbilityState.m_TemplateName == m_TemplateName) { // found myself
-			bDebug = true;
-            if(UnitCache.AvailableActions[i].AvailableCode == 'AA_Success') {
-                class'XComGameStateContext_Ability'.static.ActivateAbility(UnitCache.AvailableActions[i]);
-            } else {
-				`LOG("Rising Tides: Could not activate Echoed Agony!");
-			}
-            break;
-        }
-    }
+    //TacticalRules.GetGameRulesCache_Unit(SourceUnitState.GetReference(), UnitCache);
+    //for(i = 0; i < UnitCache.AvailableActions.Length; i++) {
+        //AbilityState = XComGameState_Ability(History.GetGameStateForObjectID(UnitCache.AvailableActions[i].AbilityObjectRef.ObjectID));
+        //if(AbilityState.m_TemplateName == m_TemplateName) {     // found myself
+			//bDebug = true;											  
+            //if(UnitCache.AvailableActions[i].AvailableCode == 'AA_Success') {
+                //class'XComGameStateContext_Ability'.static.ActivateAbility(UnitCache.AvailableActions[i]);
+            //} else {
+				//`LOG("Rising Tides: Could not activate Echoed Agony!");
+			//}
+            //break;
+        //}
+    //}
+
+	AbilityTriggerAgainstSingleTarget(OwnerStateObject, false);
+
 	if(!bDebug) {
 		`LOG("Rising Tides: EchoedAgonyListener did not find Echoed Agony!");
 	}
@@ -329,4 +334,5 @@ function EventListenerReturn EchoedAgonyListener(Object EventData, Object EventS
 
 defaultproperties
 {
+
 }

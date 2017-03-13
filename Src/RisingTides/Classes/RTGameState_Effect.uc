@@ -770,6 +770,8 @@ function EventListenerReturn ExtendEffectDuration(Object EventData, Object Event
       return ELR_NoInterrupt;
     }
 
+	`LOG("Rising Tides: Extend Effect Duration activated on EVENTID: " @ EventID);
+
     if(EventID == 'AbilityActivated') {
         AbilityContext = XComGameStateContext_Ability(GameState.GetContext());
         if(AbilityContext == none) {
@@ -782,10 +784,8 @@ function EventListenerReturn ExtendEffectDuration(Object EventData, Object Event
             return ELR_NoInterrupt;
         }
     }
-
-    foreach GameState.IterateByClassType(IteratorEffectState.class, IteratorObject) {
-
-	  IteratorEffectState = XComGameState_Effect(IteratorObject);
+	bDebug = false;
+    foreach GameState.IterateByClassType(class'XComGameState_Effect', IteratorEffectState) {
 	  if(IteratorEffectState == none) {
 		  `RedScreen("Rising Tides: What the heck, iterating through gamestate_effects returned a non-gamestate_effect object?");
 		  continue;
@@ -847,6 +847,7 @@ local XComGameStateContext_Ability AbilityContext;
 	//XComGameStateContext_ChangeContainer(NewGameState.GetContext()).BuildVisualizationFn = BloodlustStackVisualizationFn;		  //TODO: this
 
 	NewUnitState.ApplyEffectToStats(TempEffect, NewGameState);
+                      
                         
 	NewGameState.AddStateObject(NewUnitState);
 	`TACTICALRULES.SubmitGameState(NewGameState);

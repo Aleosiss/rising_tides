@@ -19,8 +19,7 @@ function RegisterForEvents(XComGameState_Effect EffectGameState)
 	UnitState = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(BloodEffectState.ApplyEffectParameters.SourceStateObjectRef.ObjectID));
 	FilterObj = UnitState;
 
-	EventMgr.RegisterForEvent(EffectObj, 'RTBumpInTheNight_BloodlustProc', BloodEffectState.BumpInTheNightStatCheck, ELD_OnStateSubmitted, ,FilterObj);
-	EventMgr.RegisterForEvent(EffectObj, 'RTPurge_Proc', BloodEffectState.BumpInTheNightStatCheck, ELD_OnStateSubmitted, ,FilterObj);
+	EventMgr.RegisterForEvent(EffectObj, 'RTBumpInTheNightStatCheck', BloodEffectState.BumpInTheNightStatCheck, ELD_OnStateSubmitted, ,FilterObj);
 }
 
 

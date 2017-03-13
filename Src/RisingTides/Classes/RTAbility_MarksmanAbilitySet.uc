@@ -1213,7 +1213,8 @@ static function X2AbilityTemplate SovereignEffect()
 	// Damage/Burning Effect
 	WeaponDamageEffect = new class'X2Effect_ApplyWeaponDamage';
 	WeaponDamageEffect.EffectDamageValue.Pierce = 9999;
-	WeaponDamageEffect.EffectDamageValue.Shred = 4;			 
+	WeaponDamageEffect.EffectDamageValue.Shred = 4;
+	WeaponDamageEffect.EffectDamageValue.Crit = 4;					 
 	WeaponDamageEffect.bApplyWorldEffectsForEachTargetLocation = true;  
 	WeaponDamageEffect.EnvironmentalDamageAmount = 250;   
 	Template.AddTargetEffect(WeaponDamageEffect);     

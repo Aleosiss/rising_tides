@@ -173,6 +173,8 @@ static function X2AbilityTemplate BumpInTheNightBloodlustListener()
 	Trigger.ListenerData.EventFn = class'XComGameState_Ability'.static.AbilityTriggerEventListener_Self;
 	Template.AbilityTriggers.AddItem(Trigger);
 
+	Template.PostActivationEvents.AddItem('RTBumpInTheNightStatCheck');
+
 	Template.bShowPostActivation = true;
 	Template.bSkipFireAction = true;
 	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
@@ -492,6 +494,8 @@ static function X2AbilityTemplate RTPurge() {
 	Template.AddTargetEffect(PurgeEffect);
 
 	Template.AddTargetEffect(class'X2Effect_Spotted'.static.CreateUnspottedEffect());
+
+	Template.PostActivationEvents.AddItem('RTBumpInTheNightStatCheck');
 	
 	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
 	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;

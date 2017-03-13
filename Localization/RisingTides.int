@@ -51,6 +51,13 @@ LocHelpText="Whenever this unit casts a psionic ability, it drains energy from u
 LocFlyOverText="Unwilling Conduits"
 LocPromotionPopupText="<Bullet/> Deals a small amount of damage to enemy and ally alike.<br/><Bullet/> Cooldown will be reduced to a minimum of 1; usable next turn.<br/>"
 
+[RTEchoedAgony RTAbilityTemplate]
+LocFriendlyName="Echoed Agony"
+LocLongDescription="This unit will echo panic attempts that affect to nearby enemies affected by Over the Shoulder."
+LocHelpText="This unit will echo panic attempts that affect to nearby enemies affected by Over the Shoulder."
+LocFlyOverText="Echoed Agony"
+LocPromotionPopupText="<Bullet/> Only affects enemy units.<br/><Bullet/> Feedback is a panic effect and is much stronger than other sources of panic.<br/>"
+
 
 
 [RTAbility_GhostAbilitySet]

@@ -41,6 +41,7 @@ class RTAbility_GathererAbilitySet extends RTAbility_GhostAbilitySet config(Risi
 	var name ExtinctionEventStageThreeEventName;
 	var name OverTheShoulderTagName;
 	var name OverTheShoulderEffectName;
+	var name EchoedAgonyEffectAbilityTemplateName;
 
 
 	var localized name GuardianAngelHealText;
@@ -74,6 +75,7 @@ static function array<X2DataTemplate> CreateTemplates()
 	Templates.AddItem(RTSibyl());
 	Templates.AddItem(RTEchoedAgony());
 	Templates.AddItem(PurePassive('RTEchoedAgonyIcon', "img://UILibrary_PerkIcons.UIPerk_swordSlash", true));
+	Templates.AddItem(RTCreateEchoedAgonyEffectAbility());
 
 
 	return Templates;
@@ -994,20 +996,22 @@ static function X2AbilityTemplate RTEchoedAgony() {
 
     `CREATE_X2TEMPLATE(class'RTAbilityTemplate', Template, 'RTEchoedAgony');
 
-    Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_NeverShow;
+    Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_AlwaysShow;
     Template.Hostility = eHostility_Neutral;
     Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_swordSlash";
     Template.AbilitySourceName = 'eAbilitySource_Psionic';
 
     PanicHitCalc = new class'RTAbilityToHitCalc_PanicCheck'; // modified to test robotic hacking defense instead of their will
-    Template.AbilityToHitCalc = PanicHitCalc;
+
+    Template.AbilityToHitCalc = default.DeadEye;
 
     Template.AbilityTargetStyle = default.SelfTarget;
     Template.AbilityMultiTargetStyle = new class'X2AbilityMultiTarget_AllUnits'; // otscondition will handle 'range check', psionic property will handle enemy check
 
     Template.AbilityMultiTargetConditions.AddItem(default.PsionicTargetingProperty);
 
-    Template.AddMultiTargetEffect(class'X2StatusEffects'.static.CreatePanickedStatusEffect());
+    Template.AddMultiTargetEffect(CreateEchoedAgonyPanicEventEffect());
+	// Template.AddMultiTargetEffect(class'X2StatusEffects'.static.CreatePanickedStatusEffect());
 
     Template.AddShooterEffectExclusions();
     Template.AbilityShooterConditions.AddItem(default.LivingShooterProperty);
@@ -1019,7 +1023,7 @@ static function X2AbilityTemplate RTEchoedAgony() {
     Condition = new class'X2Condition_UnitProperty';
     Condition.ExcludeImpaired = true;
     Condition.ExcludePanicked = true;
-    Template.AbilityShooterConditions.AddItem(Condition);
+    // Template.AbilityShooterConditions.AddItem(Condition);
     Condition.ExcludeImpaired = false;
     Template.AbilityMultiTargetConditions.AddItem(Condition);
 
@@ -1051,7 +1055,56 @@ static function X2AbilityTemplate RTEchoedAgony() {
     Template.FrameAbilityCameraType = eCameraFraming_Never;
 
     Template.AdditionalAbilities.AddItem('RTEchoedAgonyIcon');
+	Template.AdditionalAbilities.AddItem(default.EchoedAgonyEffectAbilityTemplateName);
     return Template;
+}
+
+static function X2Effect_ImmediateMultiTargetAbilityActivation CreateEchoedAgonyPanicEventEffect()
+{
+	local X2Effect_ImmediateMultiTargetAbilityActivation	EchoedAgonyEffect;
+
+	EchoedAgonyEffect = new class 'X2Effect_ImmediateMultiTargetAbilityActivation';
+
+	EchoedAgonyEffect.BuildPersistentEffect(1, false, false, , eGameRule_PlayerTurnBegin);
+	EchoedAgonyEffect.EffectName = 'TriggerEchoedAgonyEffect';
+	EchoedAgonyEffect.AbilityName = default.EchoedAgonyEffectAbilityTemplateName;
+	EchoedAgonyEffect.bRemoveWhenTargetDies = true;
+	EchoedAgonyEffect.DuplicateResponse = eDupe_Allow;
+
+	return EchoedAgonyEffect;
+}
+
+static function X2AbilityTemplate RTCreateEchoedAgonyEffectAbility()
+{
+	local X2AbilityTemplate             Template;
+	local X2Effect_Panicked             PanicEffect;
+	local RTAbilityToHitCalc_PanicCheck	PanicHitCalc;
+
+	`CREATE_X2ABILITY_TEMPLATE(Template, default.EchoedAgonyEffectAbilityTemplateName);
+
+	Template.bDontDisplayInAbilitySummary = true;
+	Template.AbilitySourceName = 'eAbilitySource_Standard';
+	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_NeverShow;
+
+	Template.AbilityTargetStyle = default.SimpleSingleTarget;
+	Template.AbilityTriggers.AddItem(new class'X2AbilityTrigger_Placeholder');      //  ability is activated by another ability that hits
+
+	Template.AbilityShooterConditions.AddItem(default.LivingShooterProperty);
+    PanicHitCalc = new class'RTAbilityToHitCalc_PanicCheck'; // modified to test robotic hacking defense instead of their will
+	Template.AbilityToHitCalc = PanicHitCalc;
+
+	PanicEffect = class'X2StatusEffects'.static.CreatePanickedStatusEffect();
+	PanicEffect.MinStatContestResult = 1;
+	PanicEffect.MaxStatContestResult = 0;
+	PanicEffect.bRemoveWhenSourceDies = true;
+	Template.AddTargetEffect(PanicEffect);
+
+	Template.bSkipPerkActivationActions = true;
+	Template.bSkipFireAction = true;
+	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
+	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
+
+	return Template;
 }
 
 
@@ -1059,7 +1112,8 @@ static function X2AbilityTemplate RTEchoedAgony() {
 
 defaultproperties
 {
-	ExtinctionEventStageThreeEventName = "RTExtinctionEventStageThree";
+	ExtinctionEventStageThreeEventName = "RTExtinctionEventStageThree"
 	OverTheShoulderEffectName = "OverTheShoulderEffect"
 	OverTheShoulderTagName = "OverTheShoulderTag"
+	EchoedAgonyEffectAbilityTemplateName = "EchoedAgonyEffect"
 }

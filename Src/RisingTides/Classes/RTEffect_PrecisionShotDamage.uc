@@ -59,7 +59,7 @@ function int GetAttackingDamageModifier(XComGameState_Effect EffectState, XComGa
 		//Check for precision shot
 		if (AbilityState.GetMyTemplateName() == 'RTPrecisionShot')
 		{
-			ExtraDamage = CurrentDamage * HEADSHOT_CRITDMG_BONUS;
+			ExtraDamage = CurrentDamage * (HEADSHOT_CRITDMG_BONUS + 1);
 			ExtraDamage -= CurrentDamage;
 		}
 	}
