@@ -16,7 +16,7 @@ function RegisterForEvents(XComGameState_Effect EffectGameState)
 	EventMgr.RegisterForEvent(EffectObj, 'UnitMoveFinished', RTEffectState.OnUpdateAuraCheck, ELD_OnStateSubmitted, 60);
 	
 	// Check when anything spawns.
-	EventMgr.RegisterForEvent(EffectObj, 'UnitSpawned', RTEffectState.OnUpdateAuraCheck, ELD_OnStateSubmitted, 40);
+	EventMgr.RegisterForEvent(EffectObj, 'OnUnitBeginPlay', RTEffectState.OnUpdateAuraCheck, ELD_OnStateSubmitted, 40);
 	
 	// Clean up MobileSquadViewers. Shouldn't actually need this.
 	// TODO: Verify that this is extraneous and remove. 
@@ -34,8 +34,8 @@ protected function X2AbilityTemplate GetAuraTemplate(XComGameState_Unit SourceUn
         local X2AbilityTemplate Template;
         local XComGameState_Ability AbilityState;
 
-        AbilityState = XComGameState_Ability(`XCOMHISTORY.GetGameStateForObjectID(SourceAuraEffectGameState.ApplyEffectParameters.AbilityStateObjectRef.ObjectID));
-		Template = AbilityState.GetMyTemplate();
+	AbilityState = XComGameState_Ability(`XCOMHISTORY.GetGameStateForObjectID(SourceAuraEffectGameState.ApplyEffectParameters.AbilityStateObjectRef.ObjectID));
+	Template = AbilityState.GetMyTemplate();
 
         return Template;
 }
@@ -81,10 +81,7 @@ function UpdateBasedOnAuraTarget(XComGameState_Unit SourceUnitState, XComGameSta
 
 	if(CheckAuraConditions(SourceUnitState, NewTargetState, SourceAuraEffectGameState, AbilityTemplate)) {
 
-		// EffectAddedContext = class'XComGameStateContext_EffectAdded'.static.CreateEffectsAddedState(EffectsToAdd);
-		// NewGameState = History.CreateGameState(true, EffectAddedContext);
-
-
+		
 		for (i = 0; i < AbilityTemplate.AbilityMultiTargetEffects.Length; ++i)
 		{
 			// Apply each of the aura's effects to the target
@@ -103,14 +100,9 @@ function UpdateBasedOnAuraTarget(XComGameState_Unit SourceUnitState, XComGameSta
 
 		}
 
-		// Visualization
-		//XComGameStateContext_EffectAdded(NewGameState.GetContext()).EffectsToAdd = EffectsToAdd;
-		//NewGameState.AddStateObject(NewTargetState);
-		//`TACTICALRULES.SubmitGameState(NewGameState);
 		XComGameStateContext_ChangeContainer(NewGameState.GetContext()).BuildVisualizationFn = RTSourceAuraEffectGameState.EffectsModifiedBuildVisualizationFn;
 	}
 	else {
-		// RemoveAuraTargetEffects(SourceUnitState, NewTargetState, SourceAuraEffectGameState, GameState);
 		RemoveAuraTargetEffects(SourceUnitState, NewTargetState, SourceAuraEffectGameState, NewGameState);
 	}
 }
@@ -164,7 +156,6 @@ protected function RemoveAuraTargetEffects(XComGameState_Unit SourceUnitState, X
 		EffectsToRemove[i].RemoveEffect(NewGameState, NewGameState);
 	}
 	// Visualization
-	//
 	XComGameStateContext_ChangeContainer(NewGameState.GetContext()).BuildVisualizationFn = RTSourceAuraEffectGameState.EffectsModifiedBuildVisualizationFn;
 
 }
