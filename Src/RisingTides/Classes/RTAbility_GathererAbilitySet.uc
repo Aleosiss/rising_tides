@@ -20,7 +20,7 @@ class RTAbility_GathererAbilitySet extends RTAbility_GhostAbilitySet config(Risi
 	var config int UV_WILL_PENALTY;
 	var config int DOMINATION_STRENGTH;
 	var config int SIBYL_STRENGTH;
-
+	var config int GUILTY_BUILDUP_TURNS;
 	var config int GUARDIAN_ANGEL_HEAL_VALUE;
 	
 
@@ -42,6 +42,8 @@ class RTAbility_GathererAbilitySet extends RTAbility_GhostAbilitySet config(Risi
 	var name OverTheShoulderTagName;
 	var name OverTheShoulderEffectName;
 	var name EchoedAgonyEffectAbilityTemplateName;
+	var name GuiltyConscienceEventName;
+	var name GuiltyConscienceEffectName;
 
 
 	var localized name GuardianAngelHealText;
@@ -76,6 +78,8 @@ static function array<X2DataTemplate> CreateTemplates()
 	Templates.AddItem(RTEchoedAgony());
 	Templates.AddItem(PurePassive('RTEchoedAgonyIcon', "img://UILibrary_PerkIcons.UIPerk_swordSlash", true));
 	Templates.AddItem(RTCreateEchoedAgonyEffectAbility());
+	Templates.AddItem(RTGuiltyConscience());
+	Templates.AddItem(RTGuiltyConscienceEvent());
 
 
 	return Templates;
@@ -106,6 +110,9 @@ static function X2AbilityTemplate OverTheShoulder()
 	local X2Condition_AbilityProperty			VoicesCondition;
 
 	// Guardian Angel
+
+	// Guilty Conscience
+	local RTEffect_GuiltyConscience				GuiltyEffect;
 
 	local X2Effect_Persistent					SelfEffect, EnemyEffect, AllyEffect;
 
@@ -159,6 +166,7 @@ static function X2AbilityTemplate OverTheShoulder()
 
 	// begin enemy aura effects	---------------------------------------
 
+	// Vision Effect
 	VisionEffect = new class'RTEffect_MobileSquadViewer';
 	VisionEffect.BuildPersistentEffect(1, false, true, false, eGameRule_PlayerTurnBegin);
 	VisionEffect.SetDisplayInfo(ePerkBuff_Penalty, default.OTS_TITLE, default.OTS_DESC_ENEMY, Template.IconImage, true,,Template.AbilitySourceName);
@@ -171,6 +179,7 @@ static function X2AbilityTemplate OverTheShoulder()
 	VisionEffect.EffectName = default.OverTheShoulderEffectName;
 	Template.AddMultiTargetEffect(VisionEffect);
 
+	// Unsettling Voices
 	VoiceEffect = new class'RTEffect_UnsettlingVoices';
 	VoiceEffect.BuildPersistentEffect(1, false, true, false, eGameRule_PlayerTurnBegin);
 	VoiceEffect.TargetConditions.AddItem(default.PsionicTargetingProperty);
@@ -187,6 +196,10 @@ static function X2AbilityTemplate OverTheShoulder()
 	VoiceEffect.TargetConditions.AddItem(VoicesCondition);
 
 	Template.AddMultiTargetEffect(VoiceEffect);
+
+	// Guilty Conscience
+	GuiltyEffect = CreateGuiltyConscienceEffect(default.GUILTY_BUILDUP_TURNS);
+	Template.AddMultiTargetEffect(GuiltyEffect);
 
 
 
@@ -558,7 +571,7 @@ static function X2AbilityTemplate RTTheSixPathsOfPain() {
       ActionPointEffect = new class'X2Effect_GrantActionPoints';
       ActionPointEffect.NumActionPoints = default.OTS_ACTION_POINT_COST;
       ActionPointEffect.PointType = class'X2CharacterTemplateManager'.default.StandardActionPoint;
-      Template.AddTargetEffect(ActionPointEffect);
+      
       //Template.AddMultiTargetEffect(ActionPointEffect);
 
 	  Template.AddShooterEffectExclusions();
@@ -574,6 +587,7 @@ static function X2AbilityTemplate RTTheSixPathsOfPain() {
 
       Template.AddTargetEffect(ActivationEffect);
       Template.AddMultiTargetEffect(MultiActivationEffect);
+	  Template.AddTargetEffect(ActionPointEffect);				 // add this after activating OTS
 
       Template.AdditionalAbilities.AddItem('RTTheSixPathsOfPainIcon');
 
@@ -986,7 +1000,9 @@ static function X2AbilityTemplate RTSibyl() {
 
     return Template;
 }
-
+//---------------------------------------------------------------------------------------
+//---Echoed Agony------------------------------------------------------------------------
+//---------------------------------------------------------------------------------------
 static function X2AbilityTemplate RTEchoedAgony() {
     local X2AbilityTemplate Template;
     local X2Condition_UnitEffects OTSCondition;
@@ -1107,6 +1123,68 @@ static function X2AbilityTemplate RTCreateEchoedAgonyEffectAbility()
 	return Template;
 }
 
+//---------------------------------------------------------------------------------------
+//---Guilty Conscience-------------------------------------------------------------------
+//---------------------------------------------------------------------------------------
+static function X2AbilityTemplate RTGuiltyConscience() {
+	return PurePassive('RTGuiltyConscience', "img:///UILibrary_PerkIcons.UIPerk_swordSlash", true);
+}
+
+static function RTEffect_GuiltyConscience CreateGuiltyConscienceEffect(int TriggerThreshold) {
+    local RTEffect_GuiltyConscience Effect;
+    local X2Condition_AbilityProperty Condition;
+
+    Effect = new class'RTEffect_GuiltyConscience';
+    Effect.iTriggerThreshold = TriggerThreshold;
+    Effect.BuildPersistentEffect(2, false, true, false, eGameRule_PlayerTurnBegin); // 2 turn duration means it won't get removed by OTS
+	Effect.SetDisplayInfo(ePerkBuff_Penalty, "DEBUG", "DEBUG X2EFFECT", "img:///UILibrary_PerkIcons.UIPerk_swordSlash", true,,'eAbilitySource_Psionic');
+    Effect.DuplicateResponse = eDupe_Refresh;
+    Effect.EffectName = default.GuiltyConscienceEffectName;
+	Effect.GuiltyConscienceEventName = default.GuiltyConscienceEventName;
+    Effect.TargetConditions.AddItem(default.PsionicTargetingProperty);
+
+    Condition = new class'X2Condition_AbilityProperty';
+	Condition.OwnerHasSoldierAbilities.AddItem('RTGuiltyConscience');
+	Effect.TargetConditions.AddItem(Condition);
+
+    return Effect;
+}
+
+static function X2AbilityTemplate RTGuiltyConscienceEvent() {
+	local X2AbilityTemplate					Template;
+	local X2AbilityTrigger_EventListener	Trigger;
+	local X2Effect_PersistentStatChange		Effect;
+
+	`CREATE_X2ABILITY_TEMPLATE(Template, 'RTGuiltyConscienceEvent');
+
+	Template.bDontDisplayInAbilitySummary = true;
+	Template.AbilitySourceName = 'eAbilitySource_Standard';
+	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_NeverShow;
+
+	Template.AbilityTargetStyle = default.SimpleSingleTarget;
+	Template.AbilityShooterConditions.AddItem(default.LivingShooterProperty);
+	Template.AbilityToHitCalc = default.DeadEye;
+	Template.AbilityTargetConditions.AddItem(default.PsionicTargetingProperty);
+
+	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
+	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
+	Template.bSkipFireAction = true;
+
+
+
+	Effect = class'X2StatusEffects'.static.CreateDisorientedStatusEffect(false,,true);
+	Effect.TargetConditions.Length = 0; // we handle this on the abilty itself
+	Template.AddTargetEffect(Effect);
+	
+	Trigger = new class'X2AbilityTrigger_EventListener';
+    Trigger.ListenerData.Deferral = ELD_OnStateSubmitted;
+    Trigger.ListenerData.EventID = default.GuiltyConscienceEventName;           
+    Trigger.ListenerData.EventFn = class'XComGameState_Ability'.static.VoidRiftInsanityListener;
+    Template.AbilityTriggers.AddItem(Trigger);
+	
+	Template.AdditionalAbilities.AddItem('RTGuiltyConscience');
+	return Template;
+}
 
 
 
@@ -1116,4 +1194,6 @@ defaultproperties
 	OverTheShoulderEffectName = "OverTheShoulderEffect"
 	OverTheShoulderTagName = "OverTheShoulderTag"
 	EchoedAgonyEffectAbilityTemplateName = "EchoedAgonyEffect"
+	GuiltyConscienceEventName = "GuiltyConscienceEvent"
+	GuiltyConscienceEffectName = "GuiltyConscienceEffect"
 }

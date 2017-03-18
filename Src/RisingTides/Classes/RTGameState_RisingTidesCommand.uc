@@ -30,7 +30,6 @@ struct RTDeathRecord
     var int                       NumDeaths;              // number of times the unit has been killed by a friendly unit
     var int                       NumCrits;               // number of times the unit has been critically hit
     var array<RTKillCount>        IndividualKillCounts;   // per-unit kill counts ( worth more to VitalPointTargeting than other kills )
-
 };
 
 var() array<RTDeathRecord> DeathRecordData;                  // GHOST Datavault contianing information on every kill made by deployed actor
@@ -43,9 +42,9 @@ var() array<RTDeathRecord> DeathRecordData;                  // GHOST Datavault 
 
 /* BEGIN OPERATIVE RECORD */
 
-var() array<StateObjectReference> Ghosts;
-var() array<StateObjectReference> Squad;
-var() int iOperativeLevel;
+var() array<StateObjectReference> Ghosts;	// ghosts active
+var() array<StateObjectReference> Squad;	// ghosts that will be on the next mission
+var() int iOperativeLevel;					// all ghosts get level ups after a mission, even if they weren't on it. lorewise, they're constantly running missions; the player only sees a fraction of them
 					 
 
 /* END OPERATIVE RECORD   */

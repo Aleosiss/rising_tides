@@ -616,6 +616,20 @@ LocHelpText="This unit will echo panic attempts that affect to nearby enemies af
 LocFlyOverText="Echoed Agony"
 LocPromotionPopupText="<Bullet/> Only affects enemy units.<br/><Bullet/> Feedback is a panic effect and is much stronger than other sources of panic.<br/>"
 
+[RTGuiltyConscience X2AbilityTemplate]
+LocFriendlyName="Guilty Conscience"
+LocLongDescription="Enemies that are forced to suffer this unit's mental presence for too long will be disoriented by the experience."
+LocHelpText="Enemies that are forced to suffer this unit's mental presence for too long will be disoriented by the experience."
+LocFlyOverText="Guilty Conscience"
+LocPromotionPopupText="<Bullet/> Enemy units that are affected by Over the Shoulder multiple turns in a row will be disoriented.<br/>"
+
+[RTGuiltyConscienceEvent X2AbilityTemplate]
+LocFriendlyName="Guilty Conscience"
+LocLongDescription="Enemies that are forced to suffer this unit's mental presence for too long will be disoriented by the experience."
+LocHelpText="Enemies that are forced to suffer this unit's mental presence for too long will be disoriented by the experience."
+LocFlyOverText="Guilty Conscience"
+LocPromotionPopupText="<Bullet/> Enemy units that are affected by Over the Shoulder multiple turns in a row will be disoriented.<br/>"
+
 ;----------------------------------------------------------------------------------------------------------------------------
 
 ; +AbilityAvailabilityCodes="AA_UnitNotMelded"
