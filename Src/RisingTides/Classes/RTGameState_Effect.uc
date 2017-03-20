@@ -770,24 +770,24 @@ function EventListenerReturn ExtendEffectDuration(Object EventData, Object Event
       return ELR_NoInterrupt;
     }
 
-	`LOG("Rising Tides: Extend Effect Duration activated on EVENTID: " @ EventID);
+	//`LOG("Rising Tides: Extend Effect Duration activated on EVENTID: " @ EventID);
 
     if(EventID == 'AbilityActivated') {
         AbilityContext = XComGameStateContext_Ability(GameState.GetContext());
         if(AbilityContext == none) {
-              `LOG("Rising Tides: ExtendEffectDuration had no context!");
+              //`LOG("Rising Tides: ExtendEffectDuration had no context!");
               return ELR_NoInterrupt;
         }
 
         if(AbilityContext.InputContext.AbilityTemplateName != EffectTemplate.AbilityToExtendName) {
-            `LOG("Rising Tides: ExtendEffectDuration had the wrong ability!");
+           //`LOG("Rising Tides: ExtendEffectDuration had the wrong ability!");
             return ELR_NoInterrupt;
         }
     }
 	bDebug = false;
     foreach GameState.IterateByClassType(class'XComGameState_Effect', IteratorEffectState) {
 	  if(IteratorEffectState == none) {
-		  `RedScreen("Rising Tides: What the heck, iterating through gamestate_effects returned a non-gamestate_effect object?");
+		  //`RedScreen("Rising Tides: What the heck, iterating through gamestate_effects returned a non-gamestate_effect object?");
 		  continue;
 	  }
 	  
@@ -802,10 +802,10 @@ function EventListenerReturn ExtendEffectDuration(Object EventData, Object Event
     }
 
     if(!bDebug) {
-      `LOG("Rising Tides: ExtendEffectDuration fired on the right ability / event, but there was no effects on the gamestate?");
+      //`LOG("Rising Tides: ExtendEffectDuration fired on the right ability / event, but there was no effects on the gamestate?");
     }
 
-    `LOG("Rising Tides: ExtendEffectDuration was successful!");
+    //`LOG("Rising Tides: ExtendEffectDuration was successful!");
 
     return ELR_NoInterrupt;
 }

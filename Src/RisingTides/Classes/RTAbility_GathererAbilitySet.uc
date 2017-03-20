@@ -1137,7 +1137,6 @@ static function RTEffect_GuiltyConscience CreateGuiltyConscienceEffect(int Trigg
     Effect = new class'RTEffect_GuiltyConscience';
     Effect.iTriggerThreshold = TriggerThreshold;
     Effect.BuildPersistentEffect(2, false, true, false, eGameRule_PlayerTurnBegin); // 2 turn duration means it won't get removed by OTS
-	Effect.SetDisplayInfo(ePerkBuff_Penalty, "DEBUG", "DEBUG X2EFFECT", "img:///UILibrary_PerkIcons.UIPerk_swordSlash", true,,'eAbilitySource_Psionic');
     Effect.DuplicateResponse = eDupe_Refresh;
     Effect.EffectName = default.GuiltyConscienceEffectName;
 	Effect.GuiltyConscienceEventName = default.GuiltyConscienceEventName;
