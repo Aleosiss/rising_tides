@@ -4,7 +4,6 @@ Rising Tides is an XCOM 2 content addition mod that aims to provide a DLC-like e
 
 >- Three "hero"-type units, each with unique three-branch skill trees
 >- A single Ghost "superclass" extension (as Soldier is to the Vanilla classes) which provides the following:
->  - Additional mobility options ("Icarus"-style vertical mobility, fall damage negation)
 >  - Additional default abilities ("Mind Control", "Mind Wrack", "Mind Meld", "Reflection")
 >  - Shared abilities across child classes ("Teek", "Vital Point Targeting", "Fade")
 >- Special narrative missions to use these units in a controlled environment to ease balancing in a mod-rich environment
@@ -42,6 +41,7 @@ This would be a bare-bones content mod. I also have the following content in min
       
 ###### Current Sprint Goals:
 	- Verify that Echoed Agony works by logging the rolls
-	- Make extend effect duration happen on move as well, possibly by breaking its logic out into a separate method that is called in either place
+	- Make extend effect duration happen on move for Aura Effects as well, possibly by breaking its logic out into a separate method that is called in either place
+	- Add Siphon to RTEffectBuilder
               
               

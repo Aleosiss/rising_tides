@@ -8,7 +8,7 @@
 
 class RTEffect_Acid extends X2Effect_Persistent;
 
-var int iStackCount;
+// var int iStackCount;
 
 
 // trying out a new method of increasing damage per stack
@@ -22,7 +22,7 @@ function bool IsThisEffectBetterThanExistingEffect(const out XComGameState_Effec
         // increase the damage of the effect
         GetAcidDamage().EffectDamageValue.Damage += ExistingAcidEffectTemplate.GetAcidDamage().EffectDamageValue.Damage;
         GetAcidDamage().EffectDamageValue.Shred += ExistingAcidEffectTemplate.GetAcidDamage().EffectDamageValue.Shred;
-        iStackCount = ExistingAcidEffectTemplate.iStackCount + 1;
+        // iStackCount = ExistingAcidEffectTemplate.iStackCount + 1;
 	
 
 	return true; // the effect is always better

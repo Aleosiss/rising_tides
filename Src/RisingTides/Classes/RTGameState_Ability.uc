@@ -259,6 +259,7 @@ function ConduitVisualizationFn(XComGameState VisualizeGameState, out array<Visu
 	}
 }
 
+// Echoed Agony Listener
 function EventListenerReturn EchoedAgonyListener(Object EventData, Object EventSource, XComGameState GameState, Name EventID) {
     local XComGameState_Ability AbilityState;
     local XComGameState_Unit SourceUnitState;
