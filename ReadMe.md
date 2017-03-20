@@ -41,6 +41,7 @@ This would be a bare-bones content mod. I also have the following content in min
 	- Time Stop doesn't work on Stasis'd units (despite this making no sense whatsoever) because it's hard-coded
       
 ###### Current Sprint Goals:
-	- 
+	- Verify that Echoed Agony works by logging the rolls
+	- Make extend effect duration happen on move as well, possibly by breaking its logic out into a separate method that is called in either place
               
               
