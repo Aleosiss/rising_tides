@@ -26,11 +26,9 @@ This would be a bare-bones content mod. I also have the following content in min
 		- Triangulation
 		- Verify that Over The Shoulder works against burrowed/concealed units
 		- Add Over the Shoulder exception for civilians that are actually faceless
-		- Verify that Echoed Agony panic is working on the right values by logging the rolls
-		- Add Guilty Conscience
 	- General:
 		- Animations/Visuals
-=		- Add x2/lw abilities to PsionicAbilityList
+		- Add x2/lw abilities to PsionicAbilityList
 	
 ###### Current Table:
 	- Shatter The Line: If this unit kills an enemy within X tiles, it triggers a flush effect on other enemies within X tiles. 2/3 turn cooldown. credits to /u/PostOfficeBuddy
@@ -43,8 +41,6 @@ This would be a bare-bones content mod. I also have the following content in min
 	- Time Stop doesn't work on Stasis'd units (despite this making no sense whatsoever) because it's hard-coded
       
 ###### Current Sprint Goals:
-	- Finish Echoed Agony
-	- Finish Sibyl's Gaze and Domination
-	- Refactor RTGameState_Effects without specialized fields into RTGameState_Effect
+	- 
               
               
