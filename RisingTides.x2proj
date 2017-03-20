@@ -296,9 +296,6 @@
     <Content Include="Src\RisingTides\Classes\X2DownloadableContentInfo_RisingTides.uc">
       <SubType>Content</SubType>
     </Content>
-    <Content Include="Src\RisingTides\Classes\XComGameStateContext_EffectAdded.uc">
-      <SubType>Content</SubType>
-    </Content>
     <Content Include="Src\XComGame\Classes\AnalyticsManager.uc">
       <SubType>Content</SubType>
     </Content>

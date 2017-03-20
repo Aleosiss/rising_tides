@@ -917,9 +917,10 @@ static function X2AbilityTemplate TestAbility() {
 	Effect.BuildPersistentEffect(1, false, true, false, eGameRule_PlayerTurnEnd);
 	Effect.SetDisplayInfo(ePerkBuff_Penalty, "DEBUG", "DEBUG TEST EFFECT", Template.IconImage, true,,Template.AbilitySourceName);
 	Effect.DuplicateResponse = eDupe_Allow;
+	//Effect.TargetConditions.AddItem(class'X2Condition_OrderCheck'.static.CreateOrderCheck('EffectTargetCondition'));
 	Template.AddTargetEffect(Effect);
 
-	Template.AbilityTargetConditions.AddItem(default.PsionicTargetingProperty);
+	//Template.AbilityTargetConditions.AddItem(class'X2Condition_OrderCheck'.static.CreateOrderCheck('AbilityTargetCondition'));
 	Template.AbilityShooterConditions.AddItem(default.LivingShooterProperty);
 
 	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
