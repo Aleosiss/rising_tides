@@ -5,42 +5,42 @@ var int iCustomTileRadius;
 var float ViewRadius;
 
 simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffectParameters, XComGameState_BaseObject kNewTargetState, XComGameState NewGameState, XComGameState_Effect NewEffectState) {
-  local XComGameStateHistory History;
-  local XComGameState_Unit SourceUnitState, TargetUnitState;
-  local RTGameState_SquadViewer ViewerState;
-  local XComGameState_Ability AbilityState;
-  local Vector ViewerLocation;
-  local float fViewRadius;
-  local TTile ViewerTile;
+	local XComGameStateHistory History;
+	local XComGameState_Unit SourceUnitState, TargetUnitState;
+	local RTGameState_SquadViewer ViewerState;
+	local XComGameState_Ability AbilityState;
+	local Vector ViewerLocation;
+	local float fViewRadius;
+	local TTile ViewerTile;
 
-  super.OnEffectAdded(ApplyEffectParameters, kNewTargetState, NewGameState, NewEffectState);
-  kNewTargetState.bRequiresVisibilityUpdate = true;
-  
-  History = `XCOMHISTORY;
+	super.OnEffectAdded(ApplyEffectParameters, kNewTargetState, NewGameState, NewEffectState);
+	kNewTargetState.bRequiresVisibilityUpdate = true;
 
-  TargetUnitState = XComGameState_Unit(kNewTargetState);
-  if(TargetUnitState == none) {
-    `RedScreenOnce("Rising Tides: Attempting to create a SquadViewer on a non-unit target!");
-    return;
-  }
-  
-  ViewerTile = TargetUnitState.TileLocation;
-  
-  if(bUseTargetSightRadius) {
-	fViewRadius = TargetUnitState.GetBaseStat(eStat_SightRadius) * class'XComWorldData'.const.WORLD_METERS_TO_UNITS_MULTIPLIER / class'XComWorldData'.const.WORLD_StepSize;
-  } else {
-	fViewRadius = float(iCustomTileRadius) * class'XComWorldData'.const.WORLD_METERS_TO_UNITS_MULTIPLIER / class'XComWorldData'.const.WORLD_StepSize;
-  }
+	History = `XCOMHISTORY;
 
-  ViewerState = RTGameState_SquadViewer(NewGameState.CreateStateObject(class'RTGameState_SquadViewer'));
-  ViewerState.AssociatedPlayer = XComGameState_Unit(History.GetGameStateForObjectID(ApplyEffectParameters.SourceStateObjectRef.ObjectID)).ControllingPlayer;
-  ViewerState.AssociatedUnit = TargetUnitState.GetReference();
-  ViewerState.SetVisibilityLocation(ViewerTile);
-  ViewerState.ViewerTile = ViewerTile;
-  ViewerState.ViewerRadius = fViewRadius;
+	TargetUnitState = XComGameState_Unit(kNewTargetState);
+	if(TargetUnitState == none) {
+		`RedScreenOnce("Rising Tides: Attempting to create a SquadViewer on a non-unit target!");
+		return;
+	}
 
-  NewGameState.AddStateObject(ViewerState);
-  NewEffectState.CreatedObjectReference = ViewerState.GetReference();
+	ViewerTile = TargetUnitState.TileLocation;
+
+	if(bUseTargetSightRadius) {
+		fViewRadius = TargetUnitState.GetBaseStat(eStat_SightRadius) * class'XComWorldData'.const.WORLD_METERS_TO_UNITS_MULTIPLIER / class'XComWorldData'.const.WORLD_StepSize;
+	} else {
+		fViewRadius = float(iCustomTileRadius) * class'XComWorldData'.const.WORLD_METERS_TO_UNITS_MULTIPLIER / class'XComWorldData'.const.WORLD_StepSize;
+	}
+
+	ViewerState = RTGameState_SquadViewer(NewGameState.CreateStateObject(class'RTGameState_SquadViewer'));
+	ViewerState.AssociatedPlayer = XComGameState_Unit(History.GetGameStateForObjectID(ApplyEffectParameters.SourceStateObjectRef.ObjectID)).ControllingPlayer;
+	ViewerState.AssociatedUnit = TargetUnitState.GetReference();
+	ViewerState.SetVisibilityLocation(ViewerTile);
+	ViewerState.ViewerTile = ViewerTile;
+	ViewerState.ViewerRadius = fViewRadius;
+
+	NewGameState.AddStateObject(ViewerState);
+	NewEffectState.CreatedObjectReference = ViewerState.GetReference();
 
 }
 
@@ -51,7 +51,7 @@ simulated function OnEffectRemoved(const out EffectAppliedData ApplyEffectParame
 	local XComGameState_Unit NewUnitState;
 
 	History = `XCOMHISTORY;
-	Viewer = RTGameState_SquadViewer(History.GetGameStateForObjectID(RemovedEffectState.CreatedObjectReference.ObjectID));	
+	Viewer = RTGameState_SquadViewer(History.GetGameStateForObjectID(RemovedEffectState.CreatedObjectReference.ObjectID));
 	Viewer.bRequiresVisibilityUpdate = true;
 	super.OnEffectRemoved(ApplyEffectParameters, NewGameState, bCleansed, RemovedEffectState);
 
@@ -88,7 +88,7 @@ simulated function AddX2ActionsForVisualization(XComGameState VisualizeGameState
 		if (EffectState.GetX2Effect() == self)
 		{
 			VisualizeEffect = EffectState;
-			
+
 			if (VisualizeEffect == none)
 			{
 				`RedScreen("Could not find Squad Viewer effect - FOW will not be lifted. Author: jbouscher Contact: @gameplay");
@@ -99,10 +99,10 @@ simulated function AddX2ActionsForVisualization(XComGameState VisualizeGameState
 			{
 				`RedScreen("Could not find Squad Viewer game state - FOW will not be lifted. Author: jbouscher Contact: @gameplay");
 				continue;
-			}	
+			}
 			SquadViewer.FindOrCreateVisualizer(VisualizeGameState);
 			SquadViewer.SyncVisualizer(VisualizeGameState);     //  @TODO - use an action instead, but the incoming track will not have the right object to sync
-			
+
 		}
 	}
 
@@ -160,7 +160,7 @@ function OnUnitChangedTile(const out TTile NewTileLocation, XComGameState_Effect
 			NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("Rising Tides: Updating MobileSquadViewer position...");
 			NewViewerState = RTGameState_SquadViewer(NewGameState.CreateStateObject(ViewerState.class, ViewerState.ObjectID));
 			NewUnitState = XComGameState_Unit(NewGameState.CreateStateObject(TargetUnit.class, TargetUnit.ObjectID));
-			
+
 			NewUnitState.bRequiresVisibilityUpdate = true;
 			NewViewerState.bRequiresVisibilityUpdate = true;
 
@@ -172,19 +172,19 @@ function OnUnitChangedTile(const out TTile NewTileLocation, XComGameState_Effect
 			NewViewerState.FindOrCreateVisualizer(NewGameState);
 			NewViewerState.SyncVisualizer(NewGameState);
 
-			NewGameState.AddStateObject(NewViewerState); 
+			NewGameState.AddStateObject(NewViewerState);
 			NewGameState.AddStateObject(NewUnitState);
 
 
 			`TACTICALRULES.SubmitGameState(NewGameState);
-    }
+	}
   }
 }
 
 defaultproperties
 {
-    EffectName = "RTMobileSquadViewer"
-    DuplicateResponse = eDupe_Refresh
+	EffectName = "RTMobileSquadViewer"
+	DuplicateResponse = eDupe_Refresh
 	iCustomTileRadius = 3
 	bUseTargetSightRadius = true;
 }
