@@ -23,8 +23,20 @@ function GetToHitAsTargetModifiers(XComGameState_Effect EffectState, XComGameSta
 
 function int GetDefendingDamageModifier(XComGameState_Effect EffectState, XComGameState_Unit Attacker, Damageable TargetDamageable, XComGameState_Ability AbilityState, const out EffectAppliedData AppliedData, const int CurrentDamage, X2Effect_ApplyWeaponDamage WeaponDamageEffect) {
 	local int BonusDamage;
+	local bool ShouldApply;
 
 	if(XComGameState_Unit(TargetDamageable).AffectedByEffectNames.Find(class'RTAbility_GathererAbilitySet'.default.OverTheShoulderEffectName) == INDEX_NONE) {
+		return 0;
+	}
+
+	if(class'RTHelpers'.CheckAbilityActivated(AbilityState.GetMyTemplateName(), eCheckList_SniperShots))
+		ShouldApply = true;
+	if(class'RTHelpers'.CheckAbilityActivated(AbilityState.GetMyTemplateName(), eCheckList_StandardShots))
+		ShouldApply = true;
+	if(class'RTHelpers'.CheckAbilityActivated(AbilityState.GetMyTemplateName(), eCheckList_MeleeAttacks))
+		ShouldApply = true;
+
+	if(!ShouldApply) {
 		return 0;
 	}
 
