@@ -22,7 +22,7 @@ class RTAbility_GathererAbilitySet extends RTAbility_GhostAbilitySet config(Risi
 	var config int SIBYL_STRENGTH;
 	var config int GUILTY_BUILDUP_TURNS;
 	var config int GUARDIAN_ANGEL_HEAL_VALUE;
-	
+
 
 
 	var config int MELD_INDUCTION_ACTION_POINT_COST;
@@ -85,7 +85,7 @@ static function array<X2DataTemplate> CreateTemplates()
 	return Templates;
 }
 
-	
+
 //---------------------------------------------------------------------------------------
 //---Over the Shoulder-------------------------------------------------------------------
 //---------------------------------------------------------------------------------------
@@ -96,13 +96,13 @@ static function X2AbilityTemplate OverTheShoulder()
 	local X2AbilityCooldown						Cooldown;
 	local X2AbilityMultiTarget_Radius			Radius;
 	local X2Condition_UnitProperty				AllyCondition, LivingNonAllyUnitOnlyProperty;
-	local array<name>                       SkipExclusions;	
+	local array<name>                       SkipExclusions;
 
 	local RTEffect_OverTheShoulder				OTSEffect;      // I'm unsure of how this works... but it appears that
 																// this will control the application and removal of aura effects within its range
 
 	// Over The Shoulder
-	local RTEffect_MobileSquadViewer			VisionEffect;	// this lifts a small amount of the FOG around the unit	and gives vision of it										
+	local RTEffect_MobileSquadViewer			VisionEffect;	// this lifts a small amount of the FOG around the unit	and gives vision of it
 	local X2Effect_IncrementUnitValue			TagEffect;		// this tags the unit so certain OTS effects can only proc once per turn
 
 	// Unsettling Voices
@@ -141,7 +141,7 @@ static function X2AbilityTemplate OverTheShoulder()
 	AllyCondition.ExcludeHostileToSource = true;
 	AllyCondition.ExcludeFriendlyToSource = false;
 	AllyCondition.FailOnNonUnits = true;
-	
+
 	SkipExclusions.AddItem(class'X2AbilityTemplateManager'.default.DisorientedName);
 	Template.AddShooterEffectExclusions(SkipExclusions);
 
@@ -173,6 +173,7 @@ static function X2AbilityTemplate OverTheShoulder()
 	VisionEffect.TargetConditions.AddItem(default.PsionicTargetingProperty);
 	VisionEffect.DuplicateResponse = eDupe_Ignore;
 	VisionEffect.bUseTargetSightRadius = false;
+	VisionEffect.bUseTargetSizeRadius = false;
 	VisionEffect.iCustomTileRadius = 3;
 	VisionEffect.bRemoveWhenTargetDies = true;
 	VisionEffect.bRemoveWhenSourceDies = true;
@@ -226,7 +227,7 @@ static function X2AbilityTemplate OverTheShoulder()
 
 	// end ally aura effects	  ------------------------------------------
 
-	
+
 	// aura controller effect         ------------------------------------------
 	OTSEffect = new class'RTEffect_OverTheShoulder';
 	OTSEffect.BuildPersistentEffect(1,,,, eGameRule_PlayerTurnBegin);
@@ -339,7 +340,7 @@ static function X2AbilityTemplate RTForcedIntroversion() {
 	Trigger.ListenerData.Priority = 50;
 	Template.AbilityTriggers.AddItem(Trigger);
 
-	StealthEffect = class'RTEffectBuilder'.static.RTCreateStealthEffect(default.FEEDBACK_DURATION, false, 1.0f, eGameRule_PlayerTurnBegin, Template.AbilitySourceName); 
+	StealthEffect = class'RTEffectBuilder'.static.RTCreateStealthEffect(default.FEEDBACK_DURATION, false, 1.0f, eGameRule_PlayerTurnBegin, Template.AbilitySourceName);
 	Template.AddTargetEffect(StealthEffect);
 
 
@@ -435,7 +436,7 @@ static function X2AbilityTemplate RTExtinctionEventPartTwo() {
       Template.AbilityTargetStyle = default.SelfTarget;
       Template.AbilityToHitCalc = default.Deadeye;
 
-	  StealthEffect = class'RTEffectBuilder'.static.RTCreateStealthEffect(1, false, 1.0f, eGameRule_PlayerTurnBegin, Template.AbilitySourceName); 
+	  StealthEffect = class'RTEffectBuilder'.static.RTCreateStealthEffect(1, false, 1.0f, eGameRule_PlayerTurnBegin, Template.AbilitySourceName);
 	  Template.AddTargetEffect(StealthEffect);
 
       ActivationEffect = new class'X2Effect_DelayedAbilityActivation';
@@ -571,7 +572,7 @@ static function X2AbilityTemplate RTTheSixPathsOfPain() {
       ActionPointEffect = new class'X2Effect_GrantActionPoints';
       ActionPointEffect.NumActionPoints = default.OTS_ACTION_POINT_COST;
       ActionPointEffect.PointType = class'X2CharacterTemplateManager'.default.StandardActionPoint;
-      
+
       //Template.AddMultiTargetEffect(ActionPointEffect);
 
 	  Template.AddShooterEffectExclusions();
@@ -814,7 +815,7 @@ static function X2AbilityTemplate RTRudimentaryCreatures() {
     Effect.SetDisplayInfo(ePerkBuff_Passive, Template.LocFriendlyName, Template.LocLongDescription, Template.IconImage, true,, Template.AbilitySourceName);
     Template.AddShooterEffect(Effect);
     Template.AdditionalAbilities.AddItem('RTRudimentaryCreaturesEvent');
-	   
+
 
     return Template;
 }
@@ -840,7 +841,7 @@ static function X2AbilityTemplate RTRudimentaryCreaturesEvent() {
     Template.AbilityTargetStyle = default.SimpleSingleTarget;
     Template.AbilityToHitCalc = default.Deadeye;
     Template.AbilityTriggers.AddItem(new class'X2AbilityTrigger_Placeholder'); // triggered by listener return
-	
+
 	Template.AbilityShooterConditions.AddItem(default.LivingShooterProperty);
 	Template.AbilityTargetConditions.AddItem(default.LivingTargetOnlyProperty);
 
@@ -864,7 +865,7 @@ static function X2AbilityTemplate RTUnwillingConduits() {
 	local X2Effect_ApplyWeaponDamage				DamageEffect;
 	local X2AbilityTrigger_EventListener			Trigger;
 	local X2AbilityMultiTarget_AllUnits				MultiTarget;
-	local X2Condition_UnitEffects					UnitEffectCondition;		
+	local X2Condition_UnitEffects					UnitEffectCondition;
 
 	`CREATE_X2TEMPLATE(class'RTAbilityTemplate', Template, 'RTUnwillingConduits');
 
@@ -934,7 +935,7 @@ static function X2AbilityTemplate RTDomination() {
     Template.AbilityTargetStyle = default.SelfTarget;
     Template.AbilityToHitCalc = default.Deadeye;
 
-	Template.AbilityTriggers.AddItem(default.UnitPostBeginPlayTrigger);		 
+	Template.AbilityTriggers.AddItem(default.UnitPostBeginPlayTrigger);
 	Template.AbilityShooterConditions.AddItem(default.LivingShooterProperty);
 
 	Effect = new class'RTEffect_ExtendEffectDuration';
@@ -958,7 +959,7 @@ static function X2AbilityTemplate RTTechnopathy() {
 	Template = PurePassive(default.RTTechnopathyTemplateName, "img:///UILibrary_PerkIcons.UIPerk_swordSlash", true);
 
 
- 
+
 
 	return Template;
 }
@@ -1049,7 +1050,7 @@ static function X2AbilityTemplate RTEchoedAgony() {
     Trigger.ListenerData.EventFn = class'RTGameState_Ability'.static.EchoedAgonyListener;
     Trigger.ListenerData.Filter = eFilter_Unit;
     Template.AbilityTriggers.AddItem(Trigger);
-	
+
     Trigger = new class'X2AbilityTrigger_EventListener';
     Trigger.ListenerData.Deferral = ELD_OnStateSubmitted;
     Trigger.ListenerData.EventID = 'UnitPanicked';          // moderate panic chance
@@ -1174,13 +1175,13 @@ static function X2AbilityTemplate RTGuiltyConscienceEvent() {
 	Effect = class'X2StatusEffects'.static.CreateDisorientedStatusEffect(false,,true);
 	Effect.TargetConditions.Length = 0; // we handle this on the abilty itself
 	Template.AddTargetEffect(Effect);
-	
+
 	Trigger = new class'X2AbilityTrigger_EventListener';
     Trigger.ListenerData.Deferral = ELD_OnStateSubmitted;
-    Trigger.ListenerData.EventID = default.GuiltyConscienceEventName;           
+    Trigger.ListenerData.EventID = default.GuiltyConscienceEventName;
     Trigger.ListenerData.EventFn = class'XComGameState_Ability'.static.VoidRiftInsanityListener;
     Template.AbilityTriggers.AddItem(Trigger);
-	
+
 	Template.AdditionalAbilities.AddItem('RTGuiltyConscience');
 	return Template;
 }

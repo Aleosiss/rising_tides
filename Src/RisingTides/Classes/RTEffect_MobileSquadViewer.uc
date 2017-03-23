@@ -1,5 +1,6 @@
 class RTEffect_MobileSquadViewer extends X2Effect_Persistent;
 
+var bool bUseTargetSizeRadius;
 var bool bUseTargetSightRadius;
 var int iCustomTileRadius;
 var float ViewRadius;
@@ -28,6 +29,8 @@ simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffe
 
 	if(bUseTargetSightRadius) {
 		fViewRadius = TargetUnitState.GetBaseStat(eStat_SightRadius) * class'XComWorldData'.const.WORLD_METERS_TO_UNITS_MULTIPLIER / class'XComWorldData'.const.WORLD_StepSize;
+	} else if(bUseTargetSizeRadius) {
+		fViewRadius = float(TargetUnitState.UnitSize) * class'XComWorldData'.const.WORLD_METERS_TO_UNITS_MULTIPLIER / class'XComWorldData'.const.WORLD_StepSize;
 	} else {
 		fViewRadius = float(iCustomTileRadius) * class'XComWorldData'.const.WORLD_METERS_TO_UNITS_MULTIPLIER / class'XComWorldData'.const.WORLD_StepSize;
 	}
@@ -187,4 +190,5 @@ defaultproperties
 	DuplicateResponse = eDupe_Refresh
 	iCustomTileRadius = 3
 	bUseTargetSightRadius = true;
+	bUseTargetSizeRadius = true;
 }
