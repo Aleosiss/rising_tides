@@ -55,7 +55,6 @@ function UpdateBasedOnAuraTarget(XComGameState_Unit SourceUnitState, XComGameSta
 	local X2Effect_Persistent PersistentAuraEffect;
 	local XComGameState_Effect NewAuraEffectState;
 	local array<StateObjectReference> EffectsToAdd;
-	local XComGameStateContext_EffectAdded EffectAddedContext;
 
 	local RTGameState_Effect RTSourceAuraEffectGameState;
 
