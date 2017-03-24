@@ -1688,7 +1688,7 @@ static function X2AbilityTemplate TwitchReactionShot()
 	Template.AddTargetEffect(KnockbackEffect);
 
 	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
-	Template.BuisldVisualizationFn = TypicalAbility_BuildVisualization;
+	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
 	Template.BuildInterruptGameStateFn = TypicalAbility_BuildInterruptGameState;
 
 	return Template;

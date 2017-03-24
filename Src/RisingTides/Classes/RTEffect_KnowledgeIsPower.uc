@@ -30,25 +30,28 @@ function GetToHitAsTargetModifiers(XComGameState_Effect EffectState, XComGameSta
 
 function int GetDefendingDamageModifier(XComGameState_Effect EffectState, XComGameState_Unit Attacker, Damageable TargetDamageable, XComGameState_Ability AbilityState, const out EffectAppliedData AppliedData, const int CurrentDamage, X2Effect_ApplyWeaponDamage WeaponDamageEffect) {
 	local int BonusDamage;
-	local bool ShouldApply;
+	local int DamageCap;
+	local bool bShouldApply;
 
 	if(XComGameState_Unit(TargetDamageable).AffectedByEffectNames.Find(class'RTAbility_GathererAbilitySet'.default.OverTheShoulderEffectName) == INDEX_NONE) {
 		return 0;
 	}
 
 	bShouldApply = false;
-	if(class'RTHelpers'.CheckAbilityActivated(AbilityState.GetMyTemplateName(), eCheckList_SniperShots))
+	if(class'RTHelpers'.static.CheckAbilityActivated(AbilityState.GetMyTemplateName(), eCheckList_SniperShots))
 		bShouldApply = true;
-	if(class'RTHelpers'.CheckAbilityActivated(AbilityState.GetMyTemplateName(), eCheckList_StandardShots))
+	if(class'RTHelpers'.static.CheckAbilityActivated(AbilityState.GetMyTemplateName(), eCheckList_StandardShots))
 		bShouldApply = true;
-	if(class'RTHelpers'.CheckAbilityActivated(AbilityState.GetMyTemplateName(), eCheckList_MeleeAttacks))
+	if(class'RTHelpers'.static.CheckAbilityActivated(AbilityState.GetMyTemplateName(), eCheckList_MeleeAbilities))
 		bShouldApply = true;
 
 	if(!bShouldApply) {
 		return 0;
 	}
 
+	DamageCap = StackCap + 1;
 	BonusDamage = EffectState.iStacks + 1;
+
 	if(BonusDamage > DamageCap) {
 		BonusDamage = DamageCap;
 	}
@@ -60,7 +63,7 @@ simulated function bool OnEffectTicked(const out EffectAppliedData ApplyEffectPa
 	local XComGameState_Unit UnitState;
 
 	UnitState = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(ApplyEffectParameters.TargetStateObjectRef.ObjectID));
-	if(!UnitState.AffectedByEffectNames.Find(class'RTAbility_GathererAbilitySet'.default.OverTheShoulderEffectName) == INDEX_NONE)) {
+	if(UnitState.AffectedByEffectNames.Find(class'RTAbility_GathererAbilitySet'.default.OverTheShoulderEffectName) == INDEX_NONE) {
 		kNewEffectState.iStacks = 0;
 	}
 
