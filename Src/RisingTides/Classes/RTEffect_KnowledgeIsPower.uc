@@ -9,14 +9,21 @@ var float CritChancePerStack;
 
 function GetToHitAsTargetModifiers(XComGameState_Effect EffectState, XComGameState_Unit Attacker, XComGameState_Unit Target, XComGameState_Ability AbilityState, class<X2AbilityToHitCalc> ToHitType, bool bMelee, bool bFlanking, bool bIndirectFire, out array<ShotModifierInfo> ShotModifiers) {
 	local ShotModifierInfo ModInfo;
+	local float CritChance;
 
 	if(Target.AffectedByEffectNames.Find(class'RTAbility_GathererAbilitySet'.default.OverTheShoulderEffectName) == INDEX_NONE) {
 		return;
 	}
 
+	if(EffectState.iStacks > StackCap) {
+		CritChance = (StackCap + 1) * CritChancePerStack;
+	} else {
+		CritChance = (EffectState.iStacks + 1) * CritChancePerStack;
+	}
+
 	ModInfo.ModType = eHit_Crit;
 	ModInfo.Reason = FriendlyName;
-	ModInfo.Value = (EffectState.iStacks + 1) * CritChancePerStack;
+	ModInfo.Value = CritChance;
 	ShotModifiers.AddItem(ModInfo);
 }
 
@@ -50,6 +57,13 @@ function int GetDefendingDamageModifier(XComGameState_Effect EffectState, XComGa
 }
 
 simulated function bool OnEffectTicked(const out EffectAppliedData ApplyEffectParameters, XComGameState_Effect kNewEffectState, XComGameState NewGameState, bool FirstApplication) {
+	local XComGameState_Unit UnitState;
+
+	UnitState = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(ApplyEffectParameters.TargetStateObjectRef.ObjectID));
+	if(!UnitState.AffectedByEffectNames.Find(class'RTAbility_GathererAbilitySet'.default.OverTheShoulderEffectName) == INDEX_NONE)) {
+		kNewEffectState.iStacks = 0;
+	}
+
 
 	kNewEffectState.iStacks++;
 
