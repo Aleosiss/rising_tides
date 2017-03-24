@@ -3,9 +3,9 @@
 //  AUTHOR:  Aleosiss
 //  DATE:    8 February 2016
 //  PURPOSE: Defines abilities used by all Rising Tides classes.
-//           
+//
 //---------------------------------------------------------------------------------------
-//	General Perks	
+//	General Perks
 //---------------------------------------------------------------------------------------
 
 class RTAbility_GhostAbilitySet extends X2Ability
@@ -100,7 +100,7 @@ static function array<X2DataTemplate> CreateTemplates()
 	Templates.AddItem(RTRemoveAdditionalAnimSets());
 
 	Templates.AddItem(TestAbility());
-	
+
 
 	return Templates;
 }
@@ -124,14 +124,14 @@ static function X2AbilityTemplate GhostPsiSuite()
 	Template.AbilityTriggers.AddItem(default.UnitPostBeginPlayTrigger);
 
 	Effect = new class 'X2Effect_Persistent';
-	Effect.BuildPersistentEffect(1, true, true, true); 
+	Effect.BuildPersistentEffect(1, true, true, true);
 	Effect.SetDisplayInfo(ePerkBuff_Passive, Template.LocFriendlyName, Template.LocLongDescription, Template.IconImage, true,, Template.AbilitySourceName);
 	Template.AddTargetEffect(Effect);
 
 
 	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
 	// Note: no visualization on purpose!
-	
+
 	Template.bCrossClassEligible = false;
 
 	return Template;
@@ -141,7 +141,7 @@ static function X2AbilityTemplate GhostPsiSuite()
 //---------------------------------------------------------------------------------------
 static function X2AbilityTemplate StandardGhostShot()
 {
-	local X2AbilityTemplate                 Template;	
+	local X2AbilityTemplate                 Template;
 	local X2AbilityCost_Ammo                AmmoCost;
 	local X2AbilityCost_ActionPoints        ActionPointCost;
 	local array<name>                       SkipExclusions;
@@ -186,13 +186,13 @@ static function X2AbilityTemplate StandardGhostShot()
 	ActionPointCost = new class'X2AbilityCost_ActionPoints';
 	ActionPointCost.iNumPoints = 1;
 	ActionPointCost.bConsumeAllPoints = true;
-	Template.AbilityCosts.AddItem(ActionPointCost);	
+	Template.AbilityCosts.AddItem(ActionPointCost);
 
 	// Ammo
-	AmmoCost = new class'X2AbilityCost_Ammo';	
+	AmmoCost = new class'X2AbilityCost_Ammo';
 	AmmoCost.iAmmo = 1;
 	Template.AbilityCosts.AddItem(AmmoCost);
-	Template.bAllowAmmoEffects = true; // 	
+	Template.bAllowAmmoEffects = true; //
 	Template.bAllowBonusWeaponEffects = true;
 
 	// Weapon Upgrade Compatibility
@@ -200,16 +200,16 @@ static function X2AbilityTemplate StandardGhostShot()
 
 	//  Put holo target effect first because if the target dies from this shot, it will be too late to notify the effect.
 	Template.AddTargetEffect(class'X2Ability_GrenadierAbilitySet'.static.HoloTargetEffect());
-	//  Various Soldier ability specific effects - effects check for the ability before applying	
+	//  Various Soldier ability specific effects - effects check for the ability before applying
 	Template.AddTargetEffect(class'X2Ability_GrenadierAbilitySet'.static.ShredderDamageEffect());
-	
+
 	// Damage Effect
 	Template.AddTargetEffect(default.WeaponUpgradeMissDamage);
 
 	// Siphon Effect
 	SiphonEffect = new class'RTEffect_Siphon';
 	SiphonEffect.SiphonAmountMultiplier = class'RTAbility_BerserkerAbilitySet'.default.SIPHON_AMOUNT_MULTIPLIER;
-	SiphonEffect.SiphonMinVal = class'RTAbility_BerserkerAbilitySet'.default.SIPHON_MIN_VAL;						
+	SiphonEffect.SiphonMinVal = class'RTAbility_BerserkerAbilitySet'.default.SIPHON_MIN_VAL;
 	SiphonEffect.SiphonMaxVal = class'RTAbility_BerserkerAbilitySet'.default.SIPHON_MAX_VAL;
 	SiphonEffect.DamageTypes.AddItem('Psi');
 
@@ -233,17 +233,17 @@ static function X2AbilityTemplate StandardGhostShot()
 	// Hit Calculation (Different weapons now have different calculations for range)
 	Template.AbilityToHitCalc = default.SimpleStandardAim;
 	Template.AbilityToHitOwnerOnMissCalc = default.SimpleStandardAim;
-		
+
 	// Targeting Method
 	Template.TargetingMethod = class'X2TargetingMethod_OverTheShoulder';
 	Template.bUsesFiringCamera = true;
-	Template.CinescriptCameraType = "StandardGunFiring";	
+	Template.CinescriptCameraType = "StandardGunFiring";
 
 	Template.AssociatedPassives.AddItem('HoloTargeting');
 
 	// MAKE IT LIVE!
 	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
-	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;	
+	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
 	Template.BuildInterruptGameStateFn = TypicalAbility_BuildInterruptGameState;
 
 	Template.OverrideAbilities.AddItem('StandardShot');
@@ -258,7 +258,7 @@ static function X2AbilityTemplate StandardGhostShot()
 
 	Template.PostActivationEvents.AddItem('StandardGhostShotActivated');
 
-	return Template;	
+	return Template;
 }
 //---------------------------------------------------------------------------------------
 //---Reflection--------------------------------------------------------------------------
@@ -278,10 +278,10 @@ static function X2AbilityTemplate JoinMeld()
 	local X2Condition_UnitEffects			Condition;
 	local RTCondition_EffectStackCount		StackCondition;
 	local RTEffect_Meld						MeldEffect;
-	
+
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'JoinMeld');
 	Template.IconImage = "img:///RisingTidesContentPackage.PerkIcons.UIPerk_psi_circle";
-	
+
 	Template.AbilitySourceName = 'eAbilitySource_Psionic';
 	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_HideSpecificErrors;
 	Template.Hostility = eHostility_Neutral;
@@ -293,7 +293,7 @@ static function X2AbilityTemplate JoinMeld()
 	Template.ConcealmentRule = eConceal_Always;
 
 	Template.AbilityCosts.AddItem(default.FreeActionCost);
-	
+
 	Cooldown = new class'X2AbilityCooldown';
 	Cooldown.iNumTurns = 1;
 	Template.AbilityCooldown = Cooldown;
@@ -336,10 +336,10 @@ static function X2AbilityTemplate LeaveMeld()
 	local X2AbilityTemplate					Template;
 	local X2AbilityCooldown                 Cooldown;
 	local X2Effect_RemoveEffects			MeldRemovedEffect;
-	
+
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'LeaveMeld');
 	Template.IconImage = "img:///RisingTidesContentPackage.PerkIcons.UIPerk_psi_move";
-	
+
 	Template.AbilitySourceName = 'eAbilitySource_Psionic';
 	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_HideIfOtherAvailable;
 	Template.ShotHUDPriority = class'UIUtilities_Tactical'.const.CLASS_CORPORAL_PRIORITY;
@@ -349,7 +349,7 @@ static function X2AbilityTemplate LeaveMeld()
 
 	Template.AbilityCosts.AddItem(default.FreeActionCost);
 	Template.ConcealmentRule = eConceal_Always;
-	
+
 	Cooldown = new class'X2AbilityCooldown';
 	Cooldown.iNumTurns = 1;
 	Template.AbilityCooldown = Cooldown;
@@ -385,10 +385,10 @@ static function X2AbilityTemplate PsiOverload()
 	local X2Effect_KillUnit					KillUnitEffect;
 	local X2AbilityCost_ActionPoints        ActionPointCost;
 	local X2Condition_UnitProperty			UnitPropertyCondition;
-	
+
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'PsiOverload');
 	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_hunter";
-	
+
 	Template.AbilitySourceName = 'eAbilitySource_Psionic';
 	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_AlwaysShow;
 	Template.AbilityConfirmSound = "TacticalUI_ActivateAbility";
@@ -407,9 +407,9 @@ static function X2AbilityTemplate PsiOverload()
 	UnitPropertyCondition.ExcludeFriendlyToSource = true;
 	UnitPropertyCondition.ExcludeRobotic = true;
 	UnitPropertyCondition.FailOnNonUnits = true;
-	Template.AbilityTargetConditions.AddItem(UnitPropertyCondition);	
+	Template.AbilityTargetConditions.AddItem(UnitPropertyCondition);
 	Template.AbilityTargetConditions.AddItem(default.GameplayVisibilityCondition);
-	
+
 	Cooldown = new class'X2AbilityCooldown';
 	Cooldown.iNumTurns = default.OVERLOAD_BASE_COOLDOWN;
 	Template.AbilityCooldown = Cooldown;
@@ -451,10 +451,10 @@ static function X2AbilityTemplate RTFeedback()
 	local X2Effect_PanickedWill				PanickedWillEffect;
 	local X2AbilityCost_ActionPoints		ActionPointCost;
 
-	
+
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'RTFeedback');
 	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_hunter";
-	
+
 	Template.AbilitySourceName = 'eAbilitySource_Psionic';
 	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_NeverShow;
 	Template.AbilityConfirmSound = "TacticalUI_ActivateAbility";
@@ -486,7 +486,7 @@ static function X2AbilityTemplate RTFeedback()
 	PanicEffect.EffectName = default.RTFeedbackEffectName;
 	// One turn duration
 	PanicEffect.BuildPersistentEffect(default.FEEDBACK_DURATION, false, true, false, eGameRule_PlayerTurnBegin);
-	PanicEffect.SetDisplayInfo(ePerkBuff_Penalty, default.FEEDBACK_TITLE, 
+	PanicEffect.SetDisplayInfo(ePerkBuff_Penalty, default.FEEDBACK_TITLE,
 		default.FEEDBACK_DESC, Template.IconImage);
 	Template.AddTargetEffect(PanicEffect);
 
@@ -529,12 +529,12 @@ static function X2AbilityTemplate Fade()
 	local X2AbilityTemplate					Template;
 	local X2AbilityTrigger_EventListener	Trigger;
 	local RTEffect_Stealth					StealthEffect;
-	local X2AbilityCooldown                 Cooldown;	
+	local X2AbilityCooldown                 Cooldown;
 	local X2Effect_Persistent		CooldownTrackerEffect;
-	
+
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'Fade');
 	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_phantom";
-	
+
 	Template.AbilitySourceName = 'eAbilitySource_Psionic';
 	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_NeverShow;
 	Template.AbilityConfirmSound = "TacticalUI_ActivateAbility";
@@ -555,15 +555,15 @@ static function X2AbilityTemplate Fade()
 
 	StealthEffect = class'RTEffectBuilder'.static.RTCreateStealthEffect(default.FADE_DURATION, , , eGameRule_PlayerTurnBegin, Template.AbilitySourceName);
 	Template.AddTargetEffect(StealthEffect);
-	
+
 	Template.AddTargetEffect(class'X2Effect_Spotted'.static.CreateUnspottedEffect());
 	Template.AbilityShooterConditions.AddItem(default.LivingShooterProperty);
-	
+
 	CooldownTrackerEffect = new class'X2Effect_Persistent';
 	CooldownTrackerEffect.BuildPersistentEffect(default.FADE_COOLDOWN, false, true, false, eGameRule_PlayerTurnEnd);
 	CooldownTrackerEffect.SetDisplayInfo(ePerkBuff_Penalty, default.FADE_COOLDOWN_TITLE, default.FADE_COOLDOWN_DESC, Template.IconImage, true,,Template.AbilitySourceName);
 	Template.AddTargetEffect(CooldownTrackerEffect);
-	
+
 	// Add dead eye to guarantee
 	Template.AbilityToHitCalc = default.DeadEye;
 	Template.AbilityTargetStyle = default.SelfTarget;
@@ -575,7 +575,7 @@ static function X2AbilityTemplate Fade()
 	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
 	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
 
-	Template.bCrossClassEligible = false;				
+	Template.bCrossClassEligible = false;
 
 	return Template;
 }
@@ -586,14 +586,14 @@ static function X2AbilityTemplate Fade()
 static function X2AbilityTemplate Teek() {
 	local X2AbilityTemplate Template;
 	local X2Effect_PersistentStatChange BlurEffect;
-	
+
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'Teek');
 	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_voidrift";
-	
+
 	Template.AbilitySourceName = 'eAbilitySource_Psionic';
 	Template.eAbilityIconBehaviorHUD = EAbilityIconBehavior_NeverShow;
 	Template.Hostility = eHostility_Neutral;
-	
+
 	// Apply perk at start of the mission.
 	Template.AbilityToHitCalc = default.DeadEye;
 	Template.AbilityTargetStyle = default.SelfTarget;
@@ -605,7 +605,7 @@ static function X2AbilityTemplate Teek() {
 	BlurEffect.AddPersistentStatChange(eStat_Dodge, default.TEEK_DODGE_INCREASE);
 	BlurEffect.SetDisplayInfo(ePerkBuff_Passive, Template.LocFriendlyName, Template.LocLongDescription, Template.IconImage, true,,Template.AbilitySourceName);
 	Template.AddTargetEffect(BlurEffect);
-	
+
 	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
 	// NOTE: No visualization on purpose!
 
@@ -619,10 +619,10 @@ static function X2AbilityTemplate FadeIcon()
 {
 	local X2AbilityTemplate					Template;
 	local X2Effect_Persistent			 	TeekEffect;
-	
+
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'FadeIcon');
 	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_voidrift";
-	
+
 	Template.AbilitySourceName = 'eAbilitySource_Psionic';
 	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_NeverShow;
 	Template.AbilityConfirmSound = "TacticalUI_ActivateAbility";
@@ -636,7 +636,7 @@ static function X2AbilityTemplate FadeIcon()
 	TeekEffect.DuplicateResponse = eDupe_Ignore;
 	TeekEffect.EffectName = 'FadeIcon';
 	Template.AddTargetEffect(TeekEffect);
-	
+
 	// Add dead eye to guarantee
 	Template.AbilityToHitCalc = default.DeadEye;
 	Template.AbilityTargetStyle = default.SelfTarget;
@@ -648,7 +648,7 @@ static function X2AbilityTemplate FadeIcon()
 	//Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
 	//  NOTE: No visualization on purpose!
 
-	Template.bCrossClassEligible = false;				
+	Template.bCrossClassEligible = false;
 
 	return Template;
 }
@@ -658,7 +658,7 @@ static function X2AbilityTemplate FadeIcon()
 //---------------------------------------------------------------------------------------
 static function X2AbilityTemplate LIOverwatchShot()
 {
-	local X2AbilityTemplate                 Template;	
+	local X2AbilityTemplate                 Template;
 	local X2AbilityCost_Ammo                AmmoCost;
 	local X2AbilityCost_ReserveActionPoints ReserveActionPointCost;
 	local X2AbilityToHitCalc_StandardAim    StandardAim;
@@ -669,18 +669,18 @@ static function X2AbilityTemplate LIOverwatchShot()
 	local X2Condition_Visibility            TargetVisibilityCondition;
 
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'LIOverwatchShot');
-	
-	AmmoCost = new class'X2AbilityCost_Ammo';	
-	AmmoCost.iAmmo = 1;	
+
+	AmmoCost = new class'X2AbilityCost_Ammo';
+	AmmoCost.iAmmo = 1;
 	Template.AbilityCosts.AddItem(AmmoCost);
 
 	Template.AbilityTriggers.AddItem(new class'X2AbilityTrigger_Placeholder');
-	
+
 	ReserveActionPointCost = new class'X2AbilityCost_ReserveActionPoints';
 	ReserveActionPointCost.iNumPoints = 1;
 	ReserveActionPointCost.AllowedTypes.AddItem(class'X2CharacterTemplateManager'.default.OverwatchReserveActionPoint);
 	Template.AbilityCosts.AddItem(ReserveActionPointCost);
-	
+
 	StandardAim = new class'X2AbilityToHitCalc_StandardAim';
 	StandardAim.bReactionFire = true;
 	Template.AbilityToHitCalc = StandardAim;
@@ -693,7 +693,7 @@ static function X2AbilityTemplate LIOverwatchShot()
 	Template.AbilityTargetConditions.AddItem(TargetVisibilityCondition);
 	Template.AbilityTargetConditions.AddItem(class'X2Ability_DefaultAbilitySet'.static.OverwatchTargetEffectsCondition());
 
-	Template.AbilityShooterConditions.AddItem(default.LivingShooterProperty);	
+	Template.AbilityShooterConditions.AddItem(default.LivingShooterProperty);
 	ShooterCondition = new class'X2Condition_UnitProperty';
 	ShooterCondition.ExcludeConcealed = true;
 	Template.AbilityShooterConditions.AddItem(ShooterCondition);
@@ -701,11 +701,11 @@ static function X2AbilityTemplate LIOverwatchShot()
 	SkipExclusions.AddItem(class'X2AbilityTemplateManager'.default.DisorientedName);
 	Template.AddShooterEffectExclusions(SkipExclusions);
 	Template.bAllowAmmoEffects = true;
-	
+
 	SingleTarget = new class'X2AbilityTarget_Single';
 	SingleTarget.OnlyIncludeTargetsInsideWeaponRange = true;
 	Template.AbilityTargetStyle = SingleTarget;
-	
+
 	Template.AbilitySourceName = 'eAbilitySource_Standard';
 	Template.eAbilityIconBehaviorHUD = EAbilityIconBehavior_NeverShow;
 	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_overwatch";
@@ -716,7 +716,8 @@ static function X2AbilityTemplate LIOverwatchShot()
 
 	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
 	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
-	Template.bAllowFreeFireWeaponUpgrade = false;	
+	Template.BuildInterruptGameStateFn = TypicalAbility_BuildInterruptGameState;
+	Template.bAllowFreeFireWeaponUpgrade = false;
 
 	//  Put holo target effect first because if the target dies from this shot, it will be too late to notify the effect.
 	Template.AddTargetEffect(class'X2Ability_GrenadierAbilitySet'.static.HoloTargetEffect());
@@ -724,7 +725,7 @@ static function X2AbilityTemplate LIOverwatchShot()
 	// Damage Effect
 	//
 	Template.AddTargetEffect(default.WeaponUpgradeMissDamage);
-	
+
 	return Template;
 }
 
@@ -735,10 +736,10 @@ static function X2AbilityTemplate PsionicActivate()
 {
 	local X2AbilityTemplate	Template;
 	local X2AbilityTrigger_EventListener Trigger;
-	
+
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'PsionicActivate');
 	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_voidrift";
-	
+
 	Template.AbilitySourceName = 'eAbilitySource_Psionic';
 	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_NeverShow;
 	Template.AbilityConfirmSound = "TacticalUI_ActivateAbility";
@@ -749,7 +750,7 @@ static function X2AbilityTemplate PsionicActivate()
 	// Add dead eye to guarantee
 	Template.AbilityToHitCalc = default.DeadEye;
 	Template.AbilityTargetStyle = default.SelfTarget;
-	
+
 	Trigger = new class'X2AbilityTrigger_EventListener';
 	Trigger.ListenerData.Deferral = ELD_OnStateSubmitted;
 	Trigger.ListenerData.EventID = default.ForcePsionicAbilityEvent;
@@ -762,7 +763,7 @@ static function X2AbilityTemplate PsionicActivate()
 	//  NOTE: No visualization on purpose!
 	Template.PostActivationEvents.AddItem(default.UnitUsedPsionicAbilityEvent);
 
-	Template.bCrossClassEligible = false;				
+	Template.bCrossClassEligible = false;
 
 	return Template;
 }
@@ -784,12 +785,12 @@ static function X2AbilityTemplate RTRemoveAdditionalAnimSets()
 	// Add dead eye to guarantee
 	Template.AbilityToHitCalc = default.DeadEye;
 	Template.AbilityTargetStyle = default.SelfTarget;
-	
+
 	RemoveEffectsEffect	= new class'X2Effect_RemoveEffects';
 	RemoveEffectsEffect.EffectNamesToRemove.AddItem('RTAdventAnimSet');
 	Template.AddTargetEffect(RemoveEffectsEffect);
 
-	
+
 	Trigger = new class'X2AbilityTrigger_EventListener';
 	Trigger.ListenerData.Deferral = ELD_OnStateSubmitted;
 	Trigger.ListenerData.EventID = 'RTRemoveAnimSets';
@@ -800,7 +801,7 @@ static function X2AbilityTemplate RTRemoveAdditionalAnimSets()
 	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
 	//  NOTE: No visualization on purpose!
 
-	Template.bCrossClassEligible = false;				
+	Template.bCrossClassEligible = false;
 
 	return Template;
 }
@@ -843,7 +844,7 @@ static function X2AbilityTemplate CreateRTCooldownCleanse (name TemplateName, na
 
         RemoveEffectEffect = new class'X2Effect_RemoveEffects';
         RemoveEffectEffect.EffectNamesToRemove.AddItem(EffectNameToRemove);
-        
+
         Template.AbilityTargetStyle = default.SelfTarget;
         Template.AddTargetEffect(RemoveEffectEffect);
 
@@ -859,7 +860,7 @@ static function X2AbilityTemplate CreateRTPassiveAbilityCooldown(name TemplateNa
         local X2AbilityTemplate Template;
         local X2Effect_Persistent Effect;
         local X2AbilityTrigger_EventListener Trigger;
-        
+
 	`CREATE_X2ABILITY_TEMPLATE(Template, TemplateName);
 	Template.AbilitySourceName = 'eAbilitySource_Perk';
 	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_NeverShow;
@@ -870,7 +871,7 @@ static function X2AbilityTemplate CreateRTPassiveAbilityCooldown(name TemplateNa
 	Trigger.ListenerData.Deferral = ELD_OnStateSubmitted;
 	Trigger.ListenerData.EventID = EventIDToListenFor;
 	Trigger.ListenerData.Filter = eFilter_Unit;
-    Trigger.ListenerData.EventFn = class'XComGameState_Ability'.static.AbilityTriggerEventListener_Self;        
+    Trigger.ListenerData.EventFn = class'XComGameState_Ability'.static.AbilityTriggerEventListener_Self;
     if(bTriggerCooldownViaEvent) {
 		Template.AbilityTriggers.AddItem(Trigger);
     } else {
@@ -925,6 +926,7 @@ static function X2AbilityTemplate TestAbility() {
 
 	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
 	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;	//TODO: VISUALIZATION
+	Template.BuildInterruptGameStateFn = TypicalAbility_BuildInterruptGameState;
 
 	Template.bSkipFireAction = true;
 	Template.bCrossClassEligible = false;
@@ -975,8 +977,8 @@ defaultproperties
 	RTFeedbackWillDebuffName = "RTFeedbackWillDebuff"
 	UnitUsedPsionicAbilityEvent = "UnitUsedPsionicAbility"
 	ForcePsionicAbilityEvent = "ForcePsionicAbilityEvent"
-	
-	
+
+
 	RTMindControlEffectName = "RTMindControlEffect"
 	RTGhostTagEffectName = "RTGhostOperative"
 

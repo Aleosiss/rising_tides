@@ -251,6 +251,7 @@ static function X2AbilityTemplate OverTheShoulder()
 
 	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
 	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
+	Template.BuildInterruptGameStateFn = TypicalAbility_BuildInterruptGameState;
 	Template.bShowActivation = true;
 	Template.bSkipFireAction = true;
 
@@ -465,6 +466,7 @@ static function X2AbilityTemplate RTExtinctionEventPartThree() {
 
       Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
   	  Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
+	  Template.BuildInterruptGameStateFn = TypicalAbility_BuildInterruptGameState;
   	  Template.bSkipFireAction = true; //TODO
   	  Template.bCrossClassEligible = false;
 
@@ -658,6 +660,7 @@ static function X2AbilityTemplate RTMeldInduction() {
 
     Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
 	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
+	Template.BuildInterruptGameStateFn = TypicalAbility_BuildInterruptGameState;
 	Template.bSkipFireAction = true; // TODO: Visualization!
 
 	Template.bCrossClassEligible = false;

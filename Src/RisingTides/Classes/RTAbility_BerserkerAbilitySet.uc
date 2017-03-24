@@ -3,7 +3,7 @@
 //  AUTHOR:  Aleosiss
 //  DATE:    8 August 2016
 //  PURPOSE: Defines abilities used by Queen.
-//           
+//
 //---------------------------------------------------------------------------------------
 //	Queen's perks.
 //---------------------------------------------------------------------------------------
@@ -22,7 +22,7 @@ class RTAbility_BerserkerAbilitySet extends RTAbility_GhostAbilitySet config(Ris
 	var config int SIPHON_RANGE;
 	var config int BLUR_DEFENSE_BONUS;
 	var config int BLUR_DODGE_BONUS;
-	var config int BLUR_MOBILITY_BONUS;	 
+	var config int BLUR_MOBILITY_BONUS;
 	var config int BLADE_DAMAGE;
 	var config int BLADE_CRIT_DAMAGE;
 	var config int BLADE_DAMAGE_SPREAD;
@@ -48,8 +48,8 @@ static function array<X2DataTemplate> CreateTemplates()
 	local array<X2DataTemplate> Templates;
 
 	Templates.AddItem(BumpInTheNight());																							  // icon	// animation
-	Templates.AddItem(BumpInTheNightBloodlustListener());																			  
-	Templates.AddItem(BumpInTheNightStealthListener());																				  
+	Templates.AddItem(BumpInTheNightBloodlustListener());
+	Templates.AddItem(BumpInTheNightStealthListener());
 	Templates.AddItem(RTBerserkerKnifeAttack());																					  // icon
 	Templates.AddItem(PurePassive('RTAcidicBlade', "img:///RisingTidesContentPackage.PerkIcons.UIPerk_stim_knife", true));
 	Templates.AddItem(PurePassive('RTPsionicBlade', "img:///RisingTidesContentPackage.PerkIcons.UIPerk_psi_knife", true));
@@ -59,10 +59,10 @@ static function array<X2DataTemplate> CreateTemplates()
 	Templates.AddItem(RTBlur());																									  // icon
 	Templates.AddItem(RTPurge());																									  // icon	// animation
 	Templates.AddItem(RTMentor());																									  // icon	// animation
-	Templates.AddItem(RTReprobateWaltz());																							  
+	Templates.AddItem(RTReprobateWaltz());
 	Templates.AddItem(RTReprobateWaltzIcon());																						  // icon
 	Templates.AddItem(RTPyroclasticFlow());																							  // icon
-	Templates.AddItem(RTCreateFireTrailAbility());																					  
+	Templates.AddItem(RTCreateFireTrailAbility());
 	Templates.AddItem(RTPyroclasticSlash());																						  // icon
 	Templates.AddItem(RTContainedFuryMeldJoin());
 	Templates.AddItem(RTContainedFury());																							  // icon
@@ -71,12 +71,12 @@ static function array<X2DataTemplate> CreateTemplates()
 	Templates.AddItem(RTUnstableConduitBurst());																					  // icon
 	Templates.AddItem(RTPersistingImages());
 	Templates.AddItem(RTPersistingImagesIcon());																					  // icon
-	Templates.AddItem(RTGhostInTheShell());																							  
+	Templates.AddItem(RTGhostInTheShell());
 	Templates.AddItem(RTGhostInTheShellEffect());
-	Templates.AddItem(RTQueenOfBlades());																							  // icon	
+	Templates.AddItem(RTQueenOfBlades());																							  // icon
 	Templates.AddItem(RTShadowStrike());																							  // icon
 	Templates.AddItem(RTDashingStrike());
-	
+
 
 	return Templates;
 }
@@ -96,8 +96,8 @@ static function X2AbilityTemplate BumpInTheNight()
 	Template.eAbilityIconBehaviorHUD = EAbilityIconBehavior_NeverShow;
 	Template.Hostility = eHostility_Neutral;
 
-	// Apply perk at the start of the mission. 
-	Template.AbilityToHitCalc = default.DeadEye; 
+	// Apply perk at the start of the mission.
+	Template.AbilityToHitCalc = default.DeadEye;
 	Template.AbilityTargetStyle = default.SelfTarget;
 	Template.AbilityTriggers.AddItem(default.UnitPostBeginPlayTrigger);
 
@@ -115,7 +115,7 @@ static function X2AbilityTemplate BumpInTheNight()
 	Template.AdditionalAbilities.AddItem('LeaveMeld');
 	Template.AdditionalAbilities.AddItem('PsiOverload');
 	Template.AdditionalAbilities.AddItem('RTFeedback');
-	
+
 	// unique abilities for Bump In The Night
 	Template.AdditionalAbilities.AddItem('BumpInTheNightBloodlustListener');
 	Template.AdditionalAbilities.AddItem('BumpInTheNightStealthListener');
@@ -127,7 +127,7 @@ static function X2AbilityTemplate BumpInTheNight()
 	Template.AdditionalAbilities.AddItem('PsionicActivate');
 	Template.AdditionalAbilities.AddItem('RTHarbingerBonusDamage');
 
-	// Probably required 
+	// Probably required
 	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
 	//  NOTE: No visualization on purpose!
 
@@ -150,7 +150,7 @@ static function X2AbilityTemplate BumpInTheNightBloodlustListener()
 	Template.eAbilityIconBehaviorHUD = EAbilityIconBehavior_NeverShow;
 	Template.Hostility = eHostility_Neutral;
 
-	Template.AbilityToHitCalc = default.DeadEye; 
+	Template.AbilityToHitCalc = default.DeadEye;
 	Template.AbilityTargetStyle = default.SelfTarget;
 
 	BloodlustEffect = new class'RTEffect_Bloodlust';
@@ -161,7 +161,7 @@ static function X2AbilityTemplate BumpInTheNightBloodlustListener()
 	BloodlustEffect.SetDisplayInfo(ePerkBuff_Bonus, "Bloodlust", "Gain bonus melee crit chance and crit damage, but lose movement speed.", Template.IconImage, true,,Template.AbilitySourceName);
 	Template.AddTargetEffect(BloodlustEffect);
 
-	StealthEffect = class'RTEffectBuilder'.static.RTCreateStealthEffect(1, false, 1.0f, eGameRule_PlayerTurnBegin, Template.AbilitySourceName); 
+	StealthEffect = class'RTEffectBuilder'.static.RTCreateStealthEffect(1, false, 1.0f, eGameRule_PlayerTurnBegin, Template.AbilitySourceName);
 	Template.AddTargetEffect(StealthEffect);
 
 	Template.AddTargetEffect(class'X2Effect_Spotted'.static.CreateUnspottedEffect());
@@ -199,10 +199,10 @@ static function X2AbilityTemplate BumpInTheNightStealthListener()
 	Template.eAbilityIconBehaviorHUD = EAbilityIconBehavior_NeverShow;
 	Template.Hostility = eHostility_Neutral;
 
-	Template.AbilityToHitCalc = default.DeadEye; 
+	Template.AbilityToHitCalc = default.DeadEye;
 	Template.AbilityTargetStyle = default.SelfTarget;
 
-	StealthEffect = class'RTEffectBuilder'.static.RTCreateStealthEffect(1, false, 1.0f, eGameRule_PlayerTurnBegin, Template.AbilitySourceName); 
+	StealthEffect = class'RTEffectBuilder'.static.RTCreateStealthEffect(1, false, 1.0f, eGameRule_PlayerTurnBegin, Template.AbilitySourceName);
 	Template.AddTargetEffect(StealthEffect);
 
 	Template.AddTargetEffect(class'X2Effect_Spotted'.static.CreateUnspottedEffect());
@@ -255,7 +255,7 @@ static function X2AbilityTemplate RTBerserkerKnifeAttack()
 	ActionPointCost.iNumPoints = 1;
 	ActionPointCost.bConsumeAllPoints = true;
 	Template.AbilityCosts.AddItem(ActionPointCost);
-	
+
 	StandardMelee = new class'X2AbilityToHitCalc_StandardMelee';
 	Template.AbilityToHitCalc = StandardMelee;
 
@@ -271,7 +271,7 @@ static function X2AbilityTemplate RTBerserkerKnifeAttack()
 	//Template.AbilityTargetConditions.AddItem(default.MeleeVisibilityCondition);
 
 	PlayerVisibilityCondition = new class'RTCondition_VisibleToPlayer';
-	Template.AbilityTargetConditions.AddItem(PlayerVisibilityCondition); 
+	Template.AbilityTargetConditions.AddItem(PlayerVisibilityCondition);
 
 	// Shooter Conditions
 	//
@@ -281,7 +281,7 @@ static function X2AbilityTemplate RTBerserkerKnifeAttack()
 
 	// Damage Effect
 	//		var int iBaseBladeDamage, iBaseBladeCritDamage, iBaseBladeDamageSpread, iAcidicBladeShred;var float fHiddenBladeCritModifier;
-	WeaponDamageEffect = new class'RTEffect_BerserkerMeleeDamage';	 
+	WeaponDamageEffect = new class'RTEffect_BerserkerMeleeDamage';
 	WeaponDamageEffect.iBaseBladeDamage = default.BLADE_DAMAGE;
 	WeaponDamageEffect.iBaseBladeCritDamage = default.BLADE_CRIT_DAMAGE;
 	WeaponDamageEffect.iBaseBladeDamageSpread = default.BLADE_DAMAGE_SPREAD;
@@ -322,12 +322,12 @@ static function X2AbilityTemplate RTBerserkerKnifeAttack()
 
 	Template.bAllowBonusWeaponEffects = true;
 	Template.bSkipMoveStop = true;
-	
+
 	Template.AssociatedPassives.AddItem('RTAcidicBlade');
 	Template.AssociatedPassives.AddItem('RTPsionicBlade');
 	Template.AssociatedPassives.AddItem('RTHiddenBlade');
 	Template.AssociatedPassives.AddItem('RTSiphon');
-	
+
 	Template.PostActivationEvents.AddItem('RTBerserkerKnifeAttack');
 
 
@@ -356,12 +356,12 @@ static function X2AbilityTemplate RTBurst() {
 
     `CREATE_X2ABILITY_TEMPLATE(Template, 'RTBurst');
     Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_snipershot"; //TODO: Change this
-    Template.AbilitySourceName = 'eAbilitySource_Psionic';  
+    Template.AbilitySourceName = 'eAbilitySource_Psionic';
 	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_AlwaysShow;
 	Template.AbilityConfirmSound = "TacticalUI_ActivateAbility";
 	Template.Hostility = eHostility_Offensive;
 
-        
+
 	ActionPointCost = new class'X2AbilityCost_ActionPoints';
 	ActionPointCost.iNumPoints = 1;
 	ActionPointCost.bConsumeAllPoints = false;
@@ -394,19 +394,19 @@ static function X2AbilityTemplate RTBurst() {
 	WorldDamage.bApplyOnMiss = true;                                //obv
 	WorldDamage.bApplyToWorldOnHit = true;                          //obv
 	WorldDamage.bApplyToWorldOnMiss = true;                         //obv
-	WorldDamage.bHitAdjacentDestructibles = true;                   
+	WorldDamage.bHitAdjacentDestructibles = true;
 	WorldDamage.PlusNumZTiles = 2;                                 //determines how 'high' the world damage is applied
-	WorldDamage.bHitTargetTile = true;                              
+	WorldDamage.bHitTargetTile = true;
 	WorldDamage.ApplyChance = 100;
 	WorldDamage.bAllowDestructionOfDamageCauseCover = true;
-	Template.AddMultiTargetEffect(WorldDamage);                    
+	Template.AddMultiTargetEffect(WorldDamage);
 
-	WeaponDamageEffect = new class'X2Effect_ApplyWeaponDamage';   
-	WeaponDamageEffect.bIgnoreBaseDamage = true;	
-	WeaponDamageEffect.EffectDamageValue = default.BURST_DMG;			 
+	WeaponDamageEffect = new class'X2Effect_ApplyWeaponDamage';
+	WeaponDamageEffect.bIgnoreBaseDamage = true;
+	WeaponDamageEffect.EffectDamageValue = default.BURST_DMG;
 	WeaponDamageEffect.bApplyWorldEffectsForEachTargetLocation = true;
-	WeaponDamageEffect.EnvironmentalDamageAmount = 250;        
-	Template.AddMultiTargetEffect(WeaponDamageEffect);              
+	WeaponDamageEffect.EnvironmentalDamageAmount = 250;
+	Template.AddMultiTargetEffect(WeaponDamageEffect);
 
 	Template.PostActivationEvents.AddItem(default.UnitUsedPsionicAbilityEvent);
 
@@ -429,14 +429,14 @@ static function X2AbilityTemplate RTBurst() {
 static function X2AbilityTemplate RTBlur() {
 	local X2AbilityTemplate Template;
 	local X2Effect_PersistentStatChange BlurEffect;
-	
+
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'RTBlur');
 	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_snapshot";
-	
+
 	Template.AbilitySourceName = 'eAbilitySource_Perk';
 	Template.eAbilityIconBehaviorHUD = EAbilityIconBehavior_NeverShow;
 	Template.Hostility = eHostility_Neutral;
-	
+
 	// Apply perk at start of the mission.
 	Template.AbilityToHitCalc = default.DeadEye;
 	Template.AbilityTargetStyle = default.SelfTarget;
@@ -449,7 +449,7 @@ static function X2AbilityTemplate RTBlur() {
 	BlurEffect.AddPersistentStatChange(eStat_Dodge, default.BLUR_DODGE_BONUS);
 	BlurEffect.SetDisplayInfo(ePerkBuff_Passive, Template.LocFriendlyName, Template.LocLongDescription, Template.IconImage, true,,Template.AbilitySourceName);
 	Template.AddTargetEffect(BlurEffect);
-	
+
 	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
 	// NOTE: No visualization on purpose!
 
@@ -464,14 +464,14 @@ static function X2AbilityTemplate RTPurge() {
 	local X2Effect_RangerStealth StealthEffect;
 	local RTEffect_RemoveStacks	PurgeEffect;
 	local RTCondition_EffectStackCount	BloodlustCondition;
-	
+
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'RTPurge');
 	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_snapshot";
-	
+
 	Template.AbilitySourceName = 'eAbilitySource_Psionic';
 	Template.eAbilityIconBehaviorHUD = EAbilityIconBehavior_AlwaysShow;
 	Template.Hostility = eHostility_Neutral;
-	
+
 	// Deadeye to ensure
 	Template.AbilityToHitCalc = default.DeadEye;
 	Template.AbilityTargetStyle = default.SelfTarget;
@@ -496,9 +496,10 @@ static function X2AbilityTemplate RTPurge() {
 	Template.AddTargetEffect(class'X2Effect_Spotted'.static.CreateUnspottedEffect());
 
 	Template.PostActivationEvents.AddItem('RTBumpInTheNightStatCheck');
-	
+
 	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
 	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
+	Template.BuildInterruptGameStateFn = TypicalAbility_BuildInterruptGameState;
 
 	return Template;
 }
@@ -514,14 +515,14 @@ static function X2AbilityTemplate RTMentor() {
     local RTCondition_EffectStackCount      BloodlustCondition;
 	local X2AbilityCooldown					Cooldown;
 	local X2Effect_RemoveEffects			RemoveEffect;
-	
+
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'RTMentor');
     Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_snipershot"; //TODO: Change this
-    Template.AbilitySourceName = 'eAbilitySource_Psionic';  
+    Template.AbilitySourceName = 'eAbilitySource_Psionic';
 	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_AlwaysShow;
 	Template.AbilityConfirmSound = "TacticalUI_ActivateAbility";
 	Template.Hostility = eHostility_Offensive;
-        
+
 	ActionPointCost = new class'X2AbilityCost_ActionPoints';
 	ActionPointCost.iNumPoints = 1;
 	ActionPointCost.bConsumeAllPoints = false;
@@ -543,7 +544,7 @@ static function X2AbilityTemplate RTMentor() {
 	TargetUnitPropertyCondition.FailOnNonUnits = true;
 	Template.AbilityTargetConditions.AddItem(TargetUnitPropertyCondition);
 
-	RemoveEffect = new class'X2Effect_RemoveEffects';   
+	RemoveEffect = new class'X2Effect_RemoveEffects';
 	RemoveEffect.EffectNamesToRemove.AddItem(default.RTFeedbackEffectName);
 	RemoveEffect.EffectNamesToRemove.AddItem(default.RTFeedbackWillDebuffName);
 	Template.AddTargetEffect(RemoveEffect);
@@ -553,9 +554,9 @@ static function X2AbilityTemplate RTMentor() {
     MentorEffect.SetDisplayInfo(ePerkBuff_Bonus, Template.LocFriendlyName, Template.GetMyHelpText(), Template.IconImage, true, , Template.AbilitySourceName);
     MentorEffect.AddPersistentStatChange(eStat_Will, default.MENTOR_BONUS);
     MentorEffect.AddPersistentStatChange(eStat_PsiOffense, default.MENTOR_BONUS);
-    Template.AddTargetEffect(MentorEffect);     
-	
-	// melded  
+    Template.AddTargetEffect(MentorEffect);
+
+	// melded
     MeldCondition = new class'X2Condition_UnitEffects';
 	MeldCondition.AddRequireEffect('RTEffect_Meld', 'AA_UnitNotMelded');
 	Template.AbilityShooterConditions.AddItem(MeldCondition);
@@ -573,8 +574,9 @@ static function X2AbilityTemplate RTMentor() {
 
 	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
 	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
-        
-	
+	Template.BuildInterruptGameStateFn = TypicalAbility_BuildInterruptGameState;
+
+
 	return Template;
 }
 
@@ -612,7 +614,7 @@ static function X2AbilityTemplate RTReprobateWaltz()
 
 	// Damage Effect
 	//		var int iBaseBladeDamage, iBaseBladeCritDamage, iBaseBladeDamageSpread, iAcidicBladeShred;var float fHiddenBladeCritModifier;
-	WeaponDamageEffect = new class'RTEffect_BerserkerMeleeDamage';	 
+	WeaponDamageEffect = new class'RTEffect_BerserkerMeleeDamage';
 	WeaponDamageEffect.iBaseBladeDamage = default.BLADE_DAMAGE;
 	WeaponDamageEffect.iBaseBladeCritDamage = default.BLADE_CRIT_DAMAGE;
 	WeaponDamageEffect.iBaseBladeDamageSpread = default.BLADE_DAMAGE_SPREAD;
@@ -654,7 +656,7 @@ static function X2AbilityTemplate RTReprobateWaltz()
 
 	Template.bAllowBonusWeaponEffects = true;
 	Template.bSkipMoveStop = true;
-	
+
 	Template.AssociatedPassives.AddItem('RTAcidicBlade');
 	Template.AssociatedPassives.AddItem('RTPsionicBlade');
 	Template.AssociatedPassives.AddItem('RTHiddenBlade');
@@ -675,7 +677,8 @@ static function X2AbilityTemplate RTReprobateWaltz()
 
 	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
 	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
-	
+	Template.BuildInterruptGameStateFn = TypicalAbility_BuildInterruptGameState;
+
 
 	return Template;
 }
@@ -687,15 +690,15 @@ static function X2AbilityTemplate RTReprobateWaltzIcon()
 {
 	local X2AbilityTemplate		Template;
 	local RTEffect_ReprobateWaltz	Effect;
-	
+
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'RTReprobateWaltzIcon');
     Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_aim";	   // TODO: THIS
     Template.AbilitySourceName = 'eAbilitySource_Psionic';
     Template.eAbilityIconBehaviorHUD = EAbilityIconBehavior_NeverShow;
     Template.Hostility = eHostility_Neutral;
-	
-	// Apply perk at the start of the mission. 
-    Template.AbilityToHitCalc = default.DeadEye; 
+
+	// Apply perk at the start of the mission.
+    Template.AbilityToHitCalc = default.DeadEye;
     Template.AbilityTargetStyle = default.SelfTarget;
     Template.AbilityTriggers.AddItem(default.UnitPostBeginPlayTrigger);
 
@@ -705,8 +708,8 @@ static function X2AbilityTemplate RTReprobateWaltzIcon()
 	Effect.EffectName = 'RTReprobateWaltz';
     Effect.SetDisplayInfo(ePerkBuff_Passive, Template.LocFriendlyName, Template.LocLongDescription, Template.IconImage, true,,Template.AbilitySourceName);
     Template.AddTargetEffect(Effect);
-	
-    // Probably required 
+
+    // Probably required
     Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
     //  NOTE: No visualization on purpose!
 
@@ -742,7 +745,7 @@ static function X2AbilityTemplate RTPyroclasticFlow()
 	Template.AdditionalAbilities.AddItem('RTCreateFireTrailAbility');
 	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
 	// Note: no visualization on purpose!
-	
+
 	Template.bCrossClassEligible = false;
 
 	return Template;
@@ -785,7 +788,7 @@ function XComGameState Empty_BuildGameState( XComGameStateContext Context )
 static function EventListenerReturn BuildFireTrail_Self(Object EventData, Object EventSource, XComGameState GameState, Name EventID)
 {
 	local XComGameStateContext_Ability MoveContext;
-	local int TileIndex;	
+	local int TileIndex;
 	local XComGameState NewGameState;
 	local float AbilityRadius;
 	local XComWorldData WorldData;
@@ -812,18 +815,18 @@ static function EventListenerReturn BuildFireTrail_Self(Object EventData, Object
 	//Define how wide the Acid will spread
 	AbilityRadius = class'XComWorldData'.const.WORLD_StepSize * 0.5f;
 
-	//These branches define different situations for which we should generate tile effects. Our first step is to 
+	//These branches define different situations for which we should generate tile effects. Our first step is to
 	//see what tiles we will be affecting
 	if( MoveContext.InputContext.MovementPaths[0].MovementTiles.Length > 0 )
-	{		
+	{
 		//If this move was uninterrupted, or we do not have a resume
 		if( MoveContext.InterruptionStatus == eInterruptionStatus_None || MoveContext.ResumeHistoryIndex < 0 )
 		{
-			//Build the list of tiles that will be affected by the Acid and set it into our tile update game state object			
+			//Build the list of tiles that will be affected by the Acid and set it into our tile update game state object
 			for(TileIndex = 0; TileIndex < MoveContext.InputContext.MovementPaths[0].MovementTiles.Length; ++TileIndex)
 			{
 				MovementTile = MoveContext.InputContext.MovementPaths[0].MovementTiles[TileIndex];
-				TargetLocation = WorldData.GetPositionFromTileCoordinates(MovementTile);				
+				TargetLocation = WorldData.GetPositionFromTileCoordinates(MovementTile);
 				WorldData.CollectTilesInSphere( OutTiles, TargetLocation, AbilityRadius );
 			}
 		}
@@ -832,13 +835,13 @@ static function EventListenerReturn BuildFireTrail_Self(Object EventData, Object
 	{
 		//This may occur during teleports, spawning, or other instaneous modes of travel
 		UnitStateObject = XComGameState_Unit(History.GetGameStateForObjectID(MoveContext.InputContext.SourceObject.ObjectID));
-		
+
 		UnitStateObject.GetKeystoneVisibilityLocation(MovementTile);
-		TargetLocation = WorldData.GetPositionFromTileCoordinates(MovementTile);		
-		
+		TargetLocation = WorldData.GetPositionFromTileCoordinates(MovementTile);
+
 		WorldData.CollectTilesInSphere( OutTiles, TargetLocation, AbilityRadius );
 	}
-		
+
 	//If we will be adding Acid to any tiles, do the rest of the set up
 	if( OutTiles.Length > 0 )
 	{
@@ -852,7 +855,7 @@ static function EventListenerReturn BuildFireTrail_Self(Object EventData, Object
 		}
 		FireEffect = X2Effect_ApplyFireToWorld(class'Engine'.static.FindClassDefaultObject("X2Effect_ApplyFireToWorld"));
 		class'X2Effect_ApplyFireToWorld'.static.SharedApplyFireToTiles('X2Effect_ApplyFireToWorld', FireEffect, NewGameState, OutTiles, UnitStateObject, 1);
-	
+
 		//Submit the new game state to the rules engine
 		`GAMERULES.SubmitGameState(NewGameState);
 	}
@@ -893,7 +896,7 @@ static function X2AbilityTemplate RTPyroclasticSlash()
 	ActionPointCost.iNumPoints = 1;
 	ActionPointCost.bConsumeAllPoints = true;
 	Template.AbilityCosts.AddItem(ActionPointCost);
-	
+
 	StandardMelee = new class'X2AbilityToHitCalc_StandardMelee';
 	Template.AbilityToHitCalc = StandardMelee;
 
@@ -909,7 +912,7 @@ static function X2AbilityTemplate RTPyroclasticSlash()
 	Template.AbilityTargetConditions.AddItem(default.LivingHostileTargetProperty);
 	// can only target visible (to the player) enemies
 	PlayerVisibilityCondition = new class'RTCondition_VisibleToPlayer';
-	Template.AbilityTargetConditions.AddItem(PlayerVisibilityCondition); 
+	Template.AbilityTargetConditions.AddItem(PlayerVisibilityCondition);
 
 	// Shooter Conditions
 	//
@@ -920,7 +923,7 @@ static function X2AbilityTemplate RTPyroclasticSlash()
 
 	// Damage Effect
 	//		var int iBaseBladeDamage, iBaseBladeCritDamage, iBaseBladeDamageSpread, iAcidicBladeShred;var float fHiddenBladeCritModifier;
-	WeaponDamageEffect = new class'RTEffect_BerserkerMeleeDamage';	 
+	WeaponDamageEffect = new class'RTEffect_BerserkerMeleeDamage';
 	WeaponDamageEffect.iBaseBladeDamage = default.BLADE_DAMAGE;
 	WeaponDamageEffect.iBaseBladeCritDamage = default.BLADE_CRIT_DAMAGE;
 	WeaponDamageEffect.iBaseBladeDamageSpread = default.BLADE_DAMAGE_SPREAD;
@@ -961,12 +964,12 @@ static function X2AbilityTemplate RTPyroclasticSlash()
 
 	Template.bAllowBonusWeaponEffects = true;
 	Template.bSkipMoveStop = true;
-	
+
 	Template.AssociatedPassives.AddItem('RTAcidicBlade');
 	Template.AssociatedPassives.AddItem('RTPsionicBlade');
 	Template.AssociatedPassives.AddItem('RTHiddenBlade');
 	Template.AssociatedPassives.AddItem('RTSiphon');
-	
+
 	Template.OverrideAbilities.AddItem('RTBerserkerKnifeAttack');
 	Template.PostActivationEvents.AddItem('RTBerserkerKnifeAttack');
 
@@ -987,15 +990,15 @@ static function X2AbilityTemplate RTPyroclasticSlash()
 static function X2AbilityTemplate RTContainedFury() {
 	local X2AbilityTemplate 	Template;
     local X2Effect_Persistent	Effect;
-    
+
     `CREATE_X2ABILITY_TEMPLATE(Template, 'RTContainedFury');
     Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_aim";
     Template.AbilitySourceName = 'eAbilitySource_Perk';
     Template.eAbilityIconBehaviorHUD = EAbilityIconBehavior_NeverShow;
     Template.Hostility = eHostility_Neutral;
-	
-	// Apply perk at the start of the mission. 
-    Template.AbilityToHitCalc = default.DeadEye; 
+
+	// Apply perk at the start of the mission.
+    Template.AbilityToHitCalc = default.DeadEye;
     Template.AbilityTargetStyle = default.SelfTarget;
     Template.AbilityTriggers.AddItem(default.UnitPostBeginPlayTrigger);
 
@@ -1004,11 +1007,11 @@ static function X2AbilityTemplate RTContainedFury() {
     Effect.BuildPersistentEffect(1, true, true, true);
     Effect.SetDisplayInfo(ePerkBuff_Passive, Template.LocFriendlyName, Template.LocLongDescription, Template.IconImage, true,,Template.AbilitySourceName);
     Template.AddTargetEffect(Effect);
-	
-    // Probably required 
+
+    // Probably required
     Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
     //  NOTE: No visualization on purpose!
-	
+
 	Template.AdditionalAbilities.AddItem('RTContainedFuryMeldJoin');
 
     return Template;
@@ -1023,10 +1026,10 @@ static function X2AbilityTemplate RTContainedFuryMeldJoin()
 	local X2AbilityCooldown                 		Cooldown;
 	local X2Condition_UnitEffects				Condition;
 	local RTEffect_Meld					MeldEffect;
-	
+
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'RTContainedFuryMeldJoin');
 	Template.IconImage = "img:///RisingTidesContentPackage.PerkIcons.UIPerk_psi_circle";
-	
+
 	Template.AbilitySourceName = 'eAbilitySource_Psionic';
 	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_HideSpecificErrors;
 	Template.ShotHUDPriority = class'UIUtilities_Tactical'.const.CLASS_CORPORAL_PRIORITY;
@@ -1037,7 +1040,7 @@ static function X2AbilityTemplate RTContainedFuryMeldJoin()
 	Template.ConcealmentRule = eConceal_Always;
 
 	Template.AbilityCosts.AddItem(default.FreeActionCost);
-	
+
 	Cooldown = new class'X2AbilityCooldown';
 	Cooldown.iNumTurns = 1;
 	Template.AbilityCooldown = Cooldown;
@@ -1077,10 +1080,10 @@ static function X2AbilityTemplate RTUnstableConduit()
 	local X2AbilityTrigger_EventListener	Trigger;
 	local X2Effect_ImmediateMultiTargetAbilityActivation MultiActivateAbilityEffect;
 	local X2Effect_ImmediateAbilityActivation ActivateAbilityEffect;
-	
+
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'RTUnstableConduit');
 	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_adventpsiwitch_mindcontrol";
-	
+
 	Template.AbilitySourceName = 'eAbilitySource_Psionic';
 	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_NeverShow;
 	Template.Hostility = eHostility_Offensive;
@@ -1089,7 +1092,7 @@ static function X2AbilityTemplate RTUnstableConduit()
 
 
 	Template.AbilityShooterConditions.AddItem(default.LivingShooterProperty);
-	
+
 	Condition = new class'X2Condition_UnitEffects';
 	Condition.AddRequireEffect('RTEffect_Meld', 'AA_UnitNotMelded');
 	Template.AbilityShooterConditions.AddItem(Condition);
@@ -1110,7 +1113,7 @@ static function X2AbilityTemplate RTUnstableConduit()
 	// Template.AbilityMultiTargetStyle = MultiTarget;
 
 	// ActivateAbilityEffect = new class'X2Effect_ImmediateAbilityActivation';
-	// ActivateAbilityEffect.AbilityName = 'RTUnstableConduitBurst';	
+	// ActivateAbilityEffect.AbilityName = 'RTUnstableConduitBurst';
 	// Template.AddTargetEffect(ActivateAbilityEffect);
 
 	// MultiActivateAbilityEffect = new class'X2Effect_ImmediateMultiTargetAbilityActivation';
@@ -1133,15 +1136,15 @@ static function X2AbilityTemplate RTUnstableConduit()
 static function X2AbilityTemplate RTUnstableConduitIcon() {
 	local X2AbilityTemplate 	Template;
     local X2Effect_Persistent	Effect;
-    
+
     `CREATE_X2ABILITY_TEMPLATE(Template, 'RTUnstableConduitIcon');
     Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_aim";
     Template.AbilitySourceName = 'eAbilitySource_Psionic';
     Template.eAbilityIconBehaviorHUD = EAbilityIconBehavior_NeverShow;
     Template.Hostility = eHostility_Neutral;
-	
-	// Apply perk at the start of the mission. 
-    Template.AbilityToHitCalc = default.DeadEye; 
+
+	// Apply perk at the start of the mission.
+    Template.AbilityToHitCalc = default.DeadEye;
     Template.AbilityTargetStyle = default.SelfTarget;
     Template.AbilityTriggers.AddItem(default.UnitPostBeginPlayTrigger);
 
@@ -1151,11 +1154,11 @@ static function X2AbilityTemplate RTUnstableConduitIcon() {
     Effect.BuildPersistentEffect(1, true, true, true);
     Effect.SetDisplayInfo(ePerkBuff_Passive, Template.LocFriendlyName, Template.LocLongDescription, Template.IconImage, true,,Template.AbilitySourceName);
     Template.AddTargetEffect(Effect);
-	
-    // Probably required 
+
+    // Probably required
     Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
     //  NOTE: No visualization on purpose!
-	
+
     return Template;
 }
 
@@ -1176,7 +1179,7 @@ static function X2AbilityTemplate RTUnstableConduitBurst() {
 
     `CREATE_X2ABILITY_TEMPLATE(Template, 'RTUnstableConduitBurst');
     Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_snipershot"; //TODO: Change this
-    Template.AbilitySourceName = 'eAbilitySource_Psionic';  
+    Template.AbilitySourceName = 'eAbilitySource_Psionic';
 	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_NeverShow;
 	Template.AbilityConfirmSound = "TacticalUI_ActivateAbility";
 	Template.Hostility = eHostility_Neutral;
@@ -1220,19 +1223,19 @@ static function X2AbilityTemplate RTUnstableConduitBurst() {
 	WorldDamage.bApplyOnMiss = true;                                //obv
 	WorldDamage.bApplyToWorldOnHit = true;                          //obv
 	WorldDamage.bApplyToWorldOnMiss = true;                         //obv
-	WorldDamage.bHitAdjacentDestructibles = true;                   
+	WorldDamage.bHitAdjacentDestructibles = true;
 	WorldDamage.PlusNumZTiles = 2;                                 //determines how 'high' the world damage is applied
-	WorldDamage.bHitTargetTile = true;                              
+	WorldDamage.bHitTargetTile = true;
 	WorldDamage.ApplyChance = 100;
 	WorldDamage.bAllowDestructionOfDamageCauseCover = true;
-	Template.AddMultiTargetEffect(WorldDamage);                    
+	Template.AddMultiTargetEffect(WorldDamage);
 
-	WeaponDamageEffect = new class'X2Effect_ApplyWeaponDamage';   
-	WeaponDamageEffect.bIgnoreBaseDamage = true;	
-	WeaponDamageEffect.EffectDamageValue = default.BURST_DMG;			 
+	WeaponDamageEffect = new class'X2Effect_ApplyWeaponDamage';
+	WeaponDamageEffect.bIgnoreBaseDamage = true;
+	WeaponDamageEffect.EffectDamageValue = default.BURST_DMG;
 	WeaponDamageEffect.bApplyWorldEffectsForEachTargetLocation = true;
-	WeaponDamageEffect.EnvironmentalDamageAmount = 250;        
-	Template.AddMultiTargetEffect(WeaponDamageEffect);          
+	WeaponDamageEffect.EnvironmentalDamageAmount = 250;
+	Template.AddMultiTargetEffect(WeaponDamageEffect);
 
 	Template.bSkipFireAction = true;
 
@@ -1266,7 +1269,7 @@ static function X2AbilityTemplate RTPersistingImages()
 	Template.AbilityShooterConditions.AddItem(default.LivingShooterProperty);
 	Template.AddShooterEffectExclusions();
 
-	Template.AbilityToHitCalc = default.DeadEye; 
+	Template.AbilityToHitCalc = default.DeadEye;
     Template.AbilityTargetStyle = default.SelfTarget;
 
 	Trigger = new class'X2AbilityTrigger_EventListener';
@@ -1335,7 +1338,7 @@ simulated function Afterimage_BuildVisualization(XComGameState VisualizeGameStat
 
 	// Only one target effect and it is X2Effect_SpawnMimicBeacon
 	AfterEffect = RTEffect_GenerateAfterimage(Context.ResultContext.ShooterEffectResults.Effects[0]);
-	
+
 	if( AfterEffect == none )
 	{
 		`RedScreenOnce("Afterimage_BuildVisualization: Missing RTEffect_GenerateAfterimage -bp1 @gameplay");
@@ -1357,15 +1360,15 @@ simulated function Afterimage_BuildVisualization(XComGameState VisualizeGameStat
 static function X2AbilityTemplate RTPersistingImagesIcon() {
 	local X2AbilityTemplate 	Template;
     local X2Effect_Persistent	Effect;
-    
+
     `CREATE_X2ABILITY_TEMPLATE(Template, 'RTPersistingImagesIcon');
     Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_aim";	   // TODO: THIS
     Template.AbilitySourceName = 'eAbilitySource_Psionic';
     Template.eAbilityIconBehaviorHUD = EAbilityIconBehavior_NeverShow;
     Template.Hostility = eHostility_Neutral;
-	
-	// Apply perk at the start of the mission. 
-    Template.AbilityToHitCalc = default.DeadEye; 
+
+	// Apply perk at the start of the mission.
+    Template.AbilityToHitCalc = default.DeadEye;
     Template.AbilityTargetStyle = default.SelfTarget;
     Template.AbilityTriggers.AddItem(default.UnitPostBeginPlayTrigger);
 
@@ -1374,11 +1377,11 @@ static function X2AbilityTemplate RTPersistingImagesIcon() {
     Effect.BuildPersistentEffect(1, true, true, true);
     Effect.SetDisplayInfo(ePerkBuff_Passive, Template.LocFriendlyName, Template.LocLongDescription, Template.IconImage, true,,Template.AbilitySourceName);
     Template.AddTargetEffect(Effect);
-	
-    // Probably required 
+
+    // Probably required
     Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
     //  NOTE: No visualization on purpose!
-	
+
     return Template;
 }
 
@@ -1390,15 +1393,15 @@ static function X2AbilityTemplate RTGhostInTheShell()
 	local X2AbilityTemplate		Template;
 	local RTEffect_GhostInTheShell	Effect;
 	local X2Effect_StayConcealed PhantomEffect;
-	
+
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'RTGhostInTheShell');
     Template.IconImage = "img:///RisingTidesContentPackage.PerkIcons.rt_ghostintheshell";	   // TODO: THIS
     Template.AbilitySourceName = 'eAbilitySource_Psionic';
     Template.eAbilityIconBehaviorHUD = EAbilityIconBehavior_NeverShow;
     Template.Hostility = eHostility_Neutral;
-	
-	// Apply perk at the start of the mission. 
-    Template.AbilityToHitCalc = default.DeadEye; 
+
+	// Apply perk at the start of the mission.
+    Template.AbilityToHitCalc = default.DeadEye;
     Template.AbilityTargetStyle = default.SelfTarget;
     Template.AbilityTriggers.AddItem(default.UnitPostBeginPlayTrigger);
 
@@ -1412,8 +1415,8 @@ static function X2AbilityTemplate RTGhostInTheShell()
 	PhantomEffect = new class'X2Effect_StayConcealed';
 	PhantomEffect.BuildPersistentEffect(1, true, false);
 	Template.AddTargetEffect(PhantomEffect);
-	
-    // Probably required 
+
+    // Probably required
     Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
     //  NOTE: No visualization on purpose!
 
@@ -1431,24 +1434,24 @@ static function X2AbilityTemplate RTGhostInTheShellEffect()
 	local X2Effect_Persistent	Effect;
 	local RTEffect_Stealth StealthEffect;
 	local X2Effect_RangerStealth ConcealEffect;
-	
+
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'RTGhostInTheShellEffect');
     Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_aim";	   // TODO: THIS
     Template.AbilitySourceName = 'eAbilitySource_Psionic';
     Template.eAbilityIconBehaviorHUD = EAbilityIconBehavior_NeverShow;
     Template.Hostility = eHostility_Neutral;
-	
-	Template.AbilityToHitCalc = default.DeadEye; 
+
+	Template.AbilityToHitCalc = default.DeadEye;
 	Template.AbilityTargetStyle = default.SelfTarget;
 
 	ConcealEffect = new class'X2Effect_RangerStealth';
 	ConcealEffect.BuildPersistentEffect(1, true, true, false, eGameRule_PlayerTurnEnd);
 	ConcealEffect.bRemoveWhenTargetConcealmentBroken = true;
 	Template.AddTargetEffect(ConcealEffect);
-	
+
 	StealthEffect = class'RTEffectBuilder'.static.RTCreateStealthEffect(default.GITS_STEALTH_DURATION, false, 1.0f, eGameRule_PlayerTurnBegin, Template.AbilitySourceName);
 	Template.AddTargetEffect(StealthEffect);
-	
+
 	Template.AddTargetEffect(class'X2Effect_Spotted'.static.CreateUnspottedEffect());
 
 	// ability will be triggered through a custom event listener
@@ -1457,6 +1460,7 @@ static function X2AbilityTemplate RTGhostInTheShellEffect()
 	Template.bSkipFireAction = true;
 	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
 	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
+
 
 	return Template;
 }
@@ -1469,15 +1473,15 @@ static function X2AbilityTemplate RTQueenOfBlades()
 	local X2AbilityTemplate		Template;
 	local X2Effect_Persistent	Effect;
 	local X2Effect_StayConcealed PhantomEffect;
-	
+
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'RTQueenOfBlades');
     Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_aim";	   // TODO: THIS
     Template.AbilitySourceName = 'eAbilitySource_Psionic';
     Template.eAbilityIconBehaviorHUD = EAbilityIconBehavior_NeverShow;
     Template.Hostility = eHostility_Neutral;
-	
-	// Apply perk at the start of the mission. 
-    Template.AbilityToHitCalc = default.DeadEye; 
+
+	// Apply perk at the start of the mission.
+    Template.AbilityToHitCalc = default.DeadEye;
     Template.AbilityTargetStyle = default.SelfTarget;
     Template.AbilityTriggers.AddItem(default.UnitPostBeginPlayTrigger);
 
@@ -1487,8 +1491,8 @@ static function X2AbilityTemplate RTQueenOfBlades()
 	Effect.EffectName = 'RTQueenOfBlades';
     Effect.SetDisplayInfo(ePerkBuff_Passive, Template.LocFriendlyName, Template.LocLongDescription, Template.IconImage, true,,Template.AbilitySourceName);
     Template.AddTargetEffect(Effect);
-	
-    // Probably required 
+
+    // Probably required
     Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
     //  NOTE: No visualization on purpose!
 
@@ -1549,7 +1553,7 @@ static function X2DataTemplate RTShadowStrike()
 	AnimSets.BuildPersistentEffect(1, false, false, false);
 	AnimSets.EffectName = 'RTAdventAnimSet';
 	Template.AddShooterEffect(AnimSets);
-	
+
 	TargetVisibilityCondition = new class'X2Condition_Visibility';
 	TargetVisibilityCondition.bRequireGameplayVisible = true;
 	TargetVisibilityCondition.bAllowSquadsight = true;
@@ -1557,7 +1561,7 @@ static function X2DataTemplate RTShadowStrike()
 	//Template.AbilityTargetConditions.AddItem(TargetVisibilityCondition);
 
 	PlayerVisibilityCondition = new class'RTCondition_VisibleToPlayer';
-	Template.AbilityTargetConditions.AddItem(PlayerVisibilityCondition); 
+	Template.AbilityTargetConditions.AddItem(PlayerVisibilityCondition);
 
 	Template.AbilityTargetConditions.AddItem(default.LivingHostileTargetProperty);
 
@@ -1567,7 +1571,7 @@ static function X2DataTemplate RTShadowStrike()
 
 	// Damage Effect
 	//		var int iBaseBladeDamage, iBaseBladeCritDamage, iBaseBladeDamageSpread, iAcidicBladeShred;var float fHiddenBladeCritModifier;
-	WeaponDamageEffect = new class'RTEffect_BerserkerMeleeDamage';	 
+	WeaponDamageEffect = new class'RTEffect_BerserkerMeleeDamage';
 	WeaponDamageEffect.iBaseBladeDamage = default.BLADE_DAMAGE;
 	WeaponDamageEffect.iBaseBladeCritDamage = default.BLADE_CRIT_DAMAGE;
 	WeaponDamageEffect.iBaseBladeDamageSpread = default.BLADE_DAMAGE_SPREAD;
@@ -1616,6 +1620,7 @@ static function X2DataTemplate RTShadowStrike()
 	Template.ModifyNewContextFn = Teleport_ModifyActivatedAbilityContext;
 	Template.BuildNewGameStateFn = Teleport_BuildGameState;
 	Template.BuildVisualizationFn = Teleport_BuildVisualization;
+	Template.BuildInterruptGameStateFn = TypicalMoveEndAbility_BuildInterruptGameState;
 
 	return Template;
 }
@@ -1634,28 +1639,28 @@ static simulated function Teleport_ModifyActivatedAbilityContext(XComGameStateCo
 
 	History = `XCOMHISTORY;
 	World = `XWORLD;
-	
+
 	AbilityContext = XComGameStateContext_Ability(Context);
 	`assert(AbilityContext.InputContext.TargetLocations.Length > 0);
-	
+
 	UnitState = XComGameState_Unit(History.GetGameStateForObjectID(AbilityContext.InputContext.SourceObject.ObjectID));
-	
+
 	// Build the MovementData for the path
 	// First posiiton is the current location
 	InputData.MovementTiles.AddItem(UnitState.TileLocation);
-	
+
 	NextPoint.Position = World.GetPositionFromTileCoordinates(UnitState.TileLocation);
 	NextPoint.Traversal = eTraversal_Teleport;
 	//NextPoint.Traversal = eTraversal_Phasing;
-	
+
 	NextPoint.PathTileIndex = 0;
 	InputData.MovementData.AddItem(NextPoint);
-	
+
 	// Second posiiton is the cursor position
 	`assert(AbilityContext.InputContext.TargetLocations.Length == 1);
   	`PRES.GetTacticalHUD().GetTargetingMethod().GetPreAbilityPath(PathTiles);
 	NewTileLocation = PathTiles[PathTiles.Length - 1];
-	
+
 	NewLocation = World.FindClosestValidLocation(World.GetPositionFromTileCoordinates(NewTileLocation), false, true, false);
 
 
@@ -1665,7 +1670,7 @@ static simulated function Teleport_ModifyActivatedAbilityContext(XComGameStateCo
 	NextPoint.PathTileIndex = 1;
 	InputData.MovementData.AddItem(NextPoint);
 	InputData.MovementTiles.AddItem(NewTileLocation);
-	
+
     //Now add the path to the input context
 	InputData.MovingUnitRef = UnitState.GetReference();
 	AbilityContext.InputContext.MovementPaths.Length = 0;
@@ -1689,7 +1694,7 @@ static simulated function XComGameState Teleport_BuildGameState(XComGameStateCon
 	//Build the new game state frame
 	NewGameState = TypicalAbility_BuildGameState(Context);
 
-	AbilityContext = XComGameStateContext_Ability(NewGameState.GetContext());	
+	AbilityContext = XComGameStateContext_Ability(NewGameState.GetContext());
 	UnitState = XComGameState_Unit(NewGameState.CreateStateObject(class'XComGameState_Unit', AbilityContext.InputContext.SourceObject.ObjectID));
 
 	LastElementIndex = AbilityContext.InputContext.MovementPaths[0].MovementData.Length - 1;
@@ -1718,9 +1723,9 @@ simulated function Teleport_BuildVisualization(XComGameState VisualizeGameState,
 	local X2AbilityTemplate						AbilityTemplate;
 	local XComGameStateContext_Ability			Context;
 	local AbilityInputContext					AbilityContext;
-	local StateObjectReference					ShootingUnitRef;	
+	local StateObjectReference					ShootingUnitRef;
 	local X2Action								AddedAction;
-	local XComGameState_BaseObject				TargetStateObject;//Container for state objects within VisualizeGameState	
+	local XComGameState_BaseObject				TargetStateObject;//Container for state objects within VisualizeGameState
 	local XComGameState_Item					SourceWeapon;
 	local X2GrenadeTemplate						GrenadeTemplate;
 	local X2AmmoTemplate						AmmoTemplate;
@@ -1750,7 +1755,7 @@ simulated function Teleport_BuildVisualization(XComGameState VisualizeGameState,
 	local X2Action_ExitCover					ExitCoverAction;
 	local XComGameState_Unit					SourceUnitState;
 	local UnitValue								SilentMelee;
-			
+
 	History = `XCOMHISTORY;
 	Context = XComGameStateContext_Ability(VisualizeGameState.GetContext());
 	AbilityContext = Context.InputContext;
@@ -1824,7 +1829,7 @@ simulated function Teleport_BuildVisualization(XComGameState VisualizeGameState,
 
 		// move action
 		class'X2VisualizerHelpers'.static.ParsePath(Context, SourceTrack, OutVisualizationTracks, AbilityTemplate.bSkipMoveStop);
-		
+
 		// if this ability has a built in move, do it right before we do the fire action
 		if(Context.InputContext.MovementPaths.Length > 0)
 		{
@@ -1834,7 +1839,7 @@ simulated function Teleport_BuildVisualization(XComGameState VisualizeGameState,
 				// add our fire action
 				AddedAction = AbilityTemplate.ActionFireClass.static.AddToVisualizationTrack(SourceTrack, Context);
 			}
-			
+
 			if (!bInterruptPath)
 			{
 				// swap the fire action for the end move action, so that we trigger it just before the end. This sequences any moving fire action
@@ -1916,13 +1921,13 @@ simulated function Teleport_BuildVisualization(XComGameState VisualizeGameState,
 	//If there are effects added to the shooter, add the visualizer actions for them
 	for (EffectIndex = 0; EffectIndex < AbilityTemplate.AbilityShooterEffects.Length; ++EffectIndex)
 	{
-		AbilityTemplate.AbilityShooterEffects[EffectIndex].AddX2ActionsForVisualization(VisualizeGameState, SourceTrack, Context.FindShooterEffectApplyResult(AbilityTemplate.AbilityShooterEffects[EffectIndex]));		
+		AbilityTemplate.AbilityShooterEffects[EffectIndex].AddX2ActionsForVisualization(VisualizeGameState, SourceTrack, Context.FindShooterEffectApplyResult(AbilityTemplate.AbilityShooterEffects[EffectIndex]));
 	}
 	//****************************************************************************************
 
 	//Configure the visualization track for the target(s). This functionality uses the context primarily
 	//since the game state may not include state objects for misses.
-	//****************************************************************************************	
+	//****************************************************************************************
 	bSourceIsAlsoTarget = AbilityContext.PrimaryTarget.ObjectID == AbilityContext.SourceObject.ObjectID; //The shooter is the primary target
 	if (AbilityTemplate.AbilityTargetEffects.Length > 0 &&			//There are effects to apply
 		AbilityContext.PrimaryTarget.ObjectID > 0)				//There is a primary target
@@ -1944,7 +1949,7 @@ simulated function Teleport_BuildVisualization(XComGameState VisualizeGameState,
 		TargetStateObject = VisualizeGameState.GetGameStateForObjectID(AbilityContext.PrimaryTarget.ObjectID);
 		if( TargetStateObject != none )
 		{
-			History.GetCurrentAndPreviousGameStatesForObjectID(AbilityContext.PrimaryTarget.ObjectID, 
+			History.GetCurrentAndPreviousGameStatesForObjectID(AbilityContext.PrimaryTarget.ObjectID,
 															   BuildTrack.StateObject_OldState, BuildTrack.StateObject_NewState,
 															   eReturnType_Reference,
 															   VisualizeGameState.HistoryIndex);
@@ -1959,8 +1964,8 @@ simulated function Teleport_BuildVisualization(XComGameState VisualizeGameState,
 		}
 
 		// if this is a melee attack, make sure the target is facing the location he will be melee'd from
-		if(!AbilityTemplate.bSkipFireAction 
-			&& !bSourceIsAlsoTarget 
+		if(!AbilityTemplate.bSkipFireAction
+			&& !bSourceIsAlsoTarget
 			&& AbilityContext.MovementPaths.Length > 0
 			&& AbilityContext.MovementPaths[0].MovementData.Length > 0
 			&& XGUnit(TargetVisualizer) != none)
@@ -1976,9 +1981,9 @@ simulated function Teleport_BuildVisualization(XComGameState VisualizeGameState,
 		{
 			class'X2Action_WaitForAbilityEffect'.static.AddToVisualizationTrack(BuildTrack, Context);
 		}
-		
+
 		//Add any X2Actions that are specific to this effect being applied. These actions would typically be instantaneous, showing UI world messages
-		//playing any effect specific audio, starting effect specific effects, etc. However, they can also potentially perform animations on the 
+		//playing any effect specific audio, starting effect specific effects, etc. However, they can also potentially perform animations on the
 		//track actor, so the design of effect actions must consider how they will look/play in sequence with other effects.
 		for (EffectIndex = 0; EffectIndex < AbilityTemplate.AbilityTargetEffects.Length; ++EffectIndex)
 		{
@@ -2050,8 +2055,8 @@ simulated function Teleport_BuildVisualization(XComGameState VisualizeGameState,
 	//****************************************************************************************
 	if( !bSourceIsAlsoTarget && ShooterVisualizerInterface != none)
 	{
-		ShooterVisualizerInterface.BuildAbilityEffectsVisualization(VisualizeGameState, SourceTrack);				
-	}	
+		ShooterVisualizerInterface.BuildAbilityEffectsVisualization(VisualizeGameState, SourceTrack);
+	}
 
 	if (!AbilityTemplate.bSkipFireAction)
 	{
@@ -2059,9 +2064,9 @@ simulated function Teleport_BuildVisualization(XComGameState VisualizeGameState,
 		{
 			class'X2Action_EnterCover'.static.AddToVisualizationTrack(SourceTrack, Context);
 		}
-		
-		
-	}	
+
+
+	}
 
 	OutVisualizationTracks.AddItem(SourceTrack);
 
@@ -2085,7 +2090,7 @@ simulated function Teleport_BuildVisualization(XComGameState VisualizeGameState,
 
 		for (EffectIndex = 0; EffectIndex < AbilityTemplate.AbilityShooterEffects.Length; ++EffectIndex)
 		{
-			AbilityTemplate.AbilityShooterEffects[EffectIndex].AddX2ActionsForVisualization(VisualizeGameState, BuildTrack, 'AA_Success');		
+			AbilityTemplate.AbilityShooterEffects[EffectIndex].AddX2ActionsForVisualization(VisualizeGameState, BuildTrack, 'AA_Success');
 		}
 
 		for (EffectIndex = 0; EffectIndex < AbilityTemplate.AbilityTargetEffects.Length; ++EffectIndex)
@@ -2095,7 +2100,7 @@ simulated function Teleport_BuildVisualization(XComGameState VisualizeGameState,
 
 		for (EffectIndex = 0; EffectIndex < MultiTargetEffects.Length; ++EffectIndex)
 		{
-			MultiTargetEffects[EffectIndex].AddX2ActionsForVisualization(VisualizeGameState, BuildTrack, 'AA_Success');	
+			MultiTargetEffects[EffectIndex].AddX2ActionsForVisualization(VisualizeGameState, BuildTrack, 'AA_Success');
 		}
 
 		OutVisualizationTracks.AddItem(BuildTrack);
@@ -2114,7 +2119,7 @@ simulated function Teleport_BuildVisualization(XComGameState VisualizeGameState,
 
 		for (EffectIndex = 0; EffectIndex < AbilityTemplate.AbilityShooterEffects.Length; ++EffectIndex)
 		{
-			AbilityTemplate.AbilityShooterEffects[EffectIndex].AddX2ActionsForVisualization(VisualizeGameState, BuildTrack, 'AA_Success');		
+			AbilityTemplate.AbilityShooterEffects[EffectIndex].AddX2ActionsForVisualization(VisualizeGameState, BuildTrack, 'AA_Success');
 		}
 
 		for (EffectIndex = 0; EffectIndex < AbilityTemplate.AbilityTargetEffects.Length; ++EffectIndex)
@@ -2124,7 +2129,7 @@ simulated function Teleport_BuildVisualization(XComGameState VisualizeGameState,
 
 		for (EffectIndex = 0; EffectIndex < MultiTargetEffects.Length; ++EffectIndex)
 		{
-			MultiTargetEffects[EffectIndex].AddX2ActionsForVisualization(VisualizeGameState, BuildTrack, 'AA_Success');	
+			MultiTargetEffects[EffectIndex].AddX2ActionsForVisualization(VisualizeGameState, BuildTrack, 'AA_Success');
 		}
 
 		OutVisualizationTracks.AddItem(BuildTrack);
@@ -2227,7 +2232,7 @@ static function X2DataTemplate RTDashingStrike()
 
 	// Damage Effect
 	//		var int iBaseBladeDamage, iBaseBladeCritDamage, iBaseBladeDamageSpread, iAcidicBladeShred;var float fHiddenBladeCritModifier;
-	WeaponDamageEffect = new class'RTEffect_BerserkerMeleeDamage';	 
+	WeaponDamageEffect = new class'RTEffect_BerserkerMeleeDamage';
 	WeaponDamageEffect.iBaseBladeDamage = default.BLADE_DAMAGE;
 	WeaponDamageEffect.iBaseBladeCritDamage = default.BLADE_CRIT_DAMAGE;
 	WeaponDamageEffect.iBaseBladeDamageSpread = default.BLADE_DAMAGE_SPREAD;
@@ -2276,6 +2281,6 @@ static function X2DataTemplate RTDashingStrike()
 
 	//Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
 	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
-			  
+
 	return Template;
 }
