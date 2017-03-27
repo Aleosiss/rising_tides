@@ -46,7 +46,7 @@ event name CallAbilityMeetsCondition(XComGameState_Ability kAbility, XComGameSta
 
 	RetCode = CheckSubConditions();
 
-	// need to clear the cache if we're not going to hit the last call
+	// need to clear the cache
 
 	ClearConditionCache();
 
