@@ -314,7 +314,7 @@ static function X2AbilityTemplate JoinMeld()
 	Template.AbilityToHitCalc = default.DeadEye;
 	Template.AbilityTargetStyle = default.SelfTarget;
 
-	MeldEffect = class'RTEffectBuilder'.static.RTCreateMeldEffect(1, true) ;
+	MeldEffect = class'RTEffectBuilder'.static.RTCreateMeldEffect(1, true);
 	Template.AddTargetEffect(MeldEffect);
 
 

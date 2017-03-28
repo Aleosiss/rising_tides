@@ -10,8 +10,6 @@
 
 class RTAbility_GathererAbilitySet extends RTAbility_GhostAbilitySet config(RisingTides);
 
-
-
 	var config float OTS_RADIUS;
 	var config float OTS_RADIUS_SQ;
 	var config int OTS_ACTION_POINT_COST;
@@ -22,18 +20,13 @@ class RTAbility_GathererAbilitySet extends RTAbility_GhostAbilitySet config(Risi
 	var config int SIBYL_STRENGTH;
 	var config int GUILTY_BUILDUP_TURNS;
 	var config int GUARDIAN_ANGEL_HEAL_VALUE;
-
-
-
 	var config int MELD_INDUCTION_ACTION_POINT_COST;
 	var config int MELD_INDUCTION_COOLDOWN;
 	var config int MELD_INDUCTION_DURATION;
 	var config bool MELD_INDUCTION_INFINITE;
-
 	var config int EXTINCTION_EVENT_RADIUS_METERS;
 	var config int EXTINCTION_EVENT_ACTION_POINT_COST;
 	var config int EXTINCTION_EVENT_CHARGES;
-
 	var config WeaponDamageValue EXTINCTION_EVENT_DMG;
 	var config WeaponDamageValue RUDIMENTARY_CREATURES_DMG;
 	var config WeaponDamageValue UNWILL_DMG;
@@ -647,14 +640,13 @@ static function X2AbilityTemplate RTMeldInduction() {
 
 	NoMeldCondition = new class'X2Condition_UnitEffects';
 	NoMeldCondition.AddExcludeEffect('RTEffect_Meld', 'AA_UnitNotMelded');
-
 	Template.AbilityTargetConditions.AddItem(NoMeldCondition);
 
-    MeldEffect = new class'RTEffect_Meld';
-    MeldEffect.BuildPersistentEffect(default.MELD_INDUCTION_DURATION, default.MELD_INDUCTION_INFINITE, true, false);
-    MeldEffect.SetDisplayInfo(ePerkBuff_Bonus, default.MELD_TITLE,
-		default.MELD_DESC, Template.IconImage);
+	MeldEffect = class'RTEffectBuilder'.static.RTCreateMeldEffect(default.MELD_INDUCTION_DURATION, default.MELD_INDUCTION_INFINITE);
+	MeldEffect.bRemoveWhenSourceDies = true;
+	MeldEffect.bRemoveWhenTargetDies = true;
     Template.AddTargetEffect(MeldEffect);
+
 
 	Template.PostActivationEvents.AddItem(default.UnitUsedPsionicAbilityEvent);
 
@@ -1191,10 +1183,14 @@ static function X2AbilityTemplate RTGuiltyConscienceEvent() {
 
 
 static function X2AbilityTemplate RTLift() {
-	local X2AbilityTemplate 				Template;
-	local X2Effect_Stunned 					StunEffect;
-	local X2AbilityCost_ActionPoints		ActionPointCost;
-	local X2AbilityCooldown					Cooldown;
+	local X2AbilityTemplate 					Template;
+	local X2Effect_Stunned 						StunEffect;
+	local X2AbilityCost_ActionPoints			ActionPointCost;
+	local X2AbilityCooldown						Cooldown;
+	local RTCondition_UnitSize					UnitSizeCondition;
+	local X2AbilityTarget_Cursor				CursorTarget;
+	local X2AbilityMultiTarget_Radius			RadiusMultiTarget;
+	local X2Effect_PersistentTraversalChange	TraversalEffect;
 
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'RTLift');
 	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_swordSlash"; //TODO: Change this
@@ -1212,16 +1208,88 @@ static function X2AbilityTemplate RTLift() {
 	ActionPointCost.bConsumeAllPoints = default.LIFT_ENDTURN;
 	Template.AbilityCosts.AddItem(ActionPointCost);
 
+	Template.AbilityShooterConditions.AddItem(default.LivingShooterProperty);
+	Template.AddShooterEffectExclusions();
+
+	HeightCondition = new class'RTCondition_VerticalClearance';
+	HeightCondition.fVerticalSpaceRequirement = class'XComWorldData'.const.WORLD_FloorHeight * 2;
+
+	Template.AbilityMultiTargetConditions.AddItem(HeightCondition);
+	Template.AbilityMultiTargetConditions.AddItem(default.LivingHostileUnitOnlyProperty);
+	Template.AbilityMultiTargetConditions.AddItem(new class'RTCondition_UnitSize');
 
 
-	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
+	Template.AbilityTriggers.AddItem(default.PlayerInputTrigger);
+
+	CursorTarget = new class'X2AbilityTarget_Cursor';
+	CursorTarget.FixedAbilityRange = 24;            //  meters
+	Template.AbilityTargetStyle = CursorTarget;
+
+	RadiusMultiTarget = new class'X2AbilityMultiTarget_Radius';
+	RadiusMultiTarget.fTargetRadius = default.LIFT_RADIUS; // 2.5 default
+	Template.AbilityMultiTargetStyle = RadiusMultiTarget;
+
+
+	TraversalEffect = new class'X2Effect_PersistentTraversalChange';
+	TraversalEffect.AddTraversalChange(eTraversal_Launch, true);
+	TraversalEffect.AddTraversalChange(eTraversal_Flying, true);
+
+	Template.AddTargetEffect(TraversalEffect);
+	Template.AddTargetEffect(class'RTEffectBuilder'.static.RTCreateLiftEffect(default.LIFT_DURATION * 2));
+
+	Template.ModifyNewContextFn = RTLift_ModifyActivatedAbilityContext;
+	Template.BuildNewGameStateFn = RTLift_BuildGameState;
 	// TODO: Change this
-	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
+	Template.BuildVisualizationFn = RTLift_BuildVisualization;
 	Template.BuildInterruptGameStateFn = TypicalAbility_BuildInterruptGameState;
 
 	return Template;
 }
 
+simulated function RTLift_ModifyActivatedAbilityContext(XComGameStateContext Context) {
+	local XComGameState_Unit UnitState;
+	local XComGameStateContext_Ability AbilityContext;
+	local XComGameStateHistory History;
+	local vector EndLocation;
+	local TTile EndTileLocation;
+	local XComWorldData World;
+	local PathingInputData InputData;
+	local PathingResultData ResultData;
+	local int i;
+
+	History = `XCOMHISTORY;
+	World = `XWORLD;
+
+	AbilityContext = XComGameStateContext_Ability(Context);
+	for(i = 0; i < AbilityContext.InputContext.MultiTargets.Length; ++i) {
+		UnitState = XComGameState_Unit(History.GetGameStateForObjectID(AbilityContext.InputContext.MultiTargets[i].ObjectID));
+
+
+		EndTileLocation = UnitState.TileLocation;
+		EndTileLocation.Z = UnitState.TileLocation.Z + 2;
+
+		// solve the path to get it to the target location
+		class'X2PathSolver'.static.BuildPath(UnitState, UnitState.TileLocation, EndTileLocation, InputData.MovementTiles, false);
+
+		// get the path points
+		class'X2PathSolver'.static.GetPathPointsFromPath(UnitState, InputData.MovementTiles, InputData.MovementData);
+
+		// make the flight path nice and smooth
+		class'XComPath'.static.PerformStringPulling(XGUnitNativeBase(UnitState.GetVisualizer()), InputData.MovementData);
+
+		//Now add the path to the input context
+		InputData.MovingUnitRef = UnitState.GetReference();
+		AbilityContext.InputContext.MovementPaths.AddItem(InputData);
+
+		// Update the result context's PathTileData, without this the AI doesn't know it has been seen and will use the invisible teleport move action
+		class'X2TacticalVisibilityHelpers'.static.FillPathTileData(UnitState.ObjectID, InputData.MovementTiles, ResultData.PathTileData);
+		AbilityContext.ResultContext.PathResults.AddItem(ResultData);
+	}
+}
+
+simulated function XComGameState RTLift_BuildGameState(XComGameStateContext Context) {
+
+}
 
 
 defaultproperties

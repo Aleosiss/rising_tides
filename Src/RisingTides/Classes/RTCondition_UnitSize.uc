@@ -8,7 +8,7 @@ event name CallMeetsCondition(XComGameState_BaseObject kTarget) {
 	if(CheckTarget(kTarget)) {
 		return 'AA_Success';
 	}
-	return 'AA_NoTargets';
+	return 'AA_AbilityUnavailable';
 }
 
 
