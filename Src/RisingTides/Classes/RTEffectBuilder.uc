@@ -51,107 +51,130 @@ var config int AGONY_STRENGTH_TAKE_DAMAGE;
 var config int AGONY_STRENGTH_TAKE_ECHO;
 
 static function X2Action_PlayEffect BuildEffectParticle(XComGameState VisualizeGameState, out VisualizationTrack BuildTrack, string ParticleName, name SocketName, name SocketsArrayName, bool _AttachToUnit, bool _bStopEffect) {
-    local X2Action_PlayEffect EffectAction;
+	local X2Action_PlayEffect EffectAction;
 
-    EffectAction = X2Action_PlayEffect(class'X2Action_PlayEffect'.static.AddToVisualizationTrack(BuildTrack, VisualizeGameState.GetContext()));
-    EffectAction.EffectName = ParticleName;
-    EffectAction.AttachToSocketName = SocketName;
-    EffectAction.AttachToSocketsArrayName = SocketsArrayName;
-    EffectAction.AttachToUnit = _AttachToUnit;
-    EffectAction.bStopEffect = _bStopEffect;
+	EffectAction = X2Action_PlayEffect(class'X2Action_PlayEffect'.static.AddToVisualizationTrack(BuildTrack, VisualizeGameState.GetContext()));
+	EffectAction.EffectName = ParticleName;
+	EffectAction.AttachToSocketName = SocketName;
+	EffectAction.AttachToSocketsArrayName = SocketsArrayName;
+	EffectAction.AttachToUnit = _AttachToUnit;
+	EffectAction.bStopEffect = _bStopEffect;
 
-    return EffectAction;
+	return EffectAction;
 }
 
 private static function bool CheckSuccessfulUnitEffectApplication(XComGameState VisualizeGameState, out VisualizationTrack BuildTrack, const name EffectApplyResult) {
-  local XComGameState_Unit UnitState;
+	local XComGameState_Unit UnitState;
 
-  if(EffectApplyResult != 'AA_Success') {
-      return false;
-  }
-  UnitState = XComGameState_Unit(BuildTrack.StateObject_NewState);
-  if(UnitState == none) {
-      return false;
-  }
-  return true;
+	if(EffectApplyResult != 'AA_Success') {
+		return false;
+	}
+	UnitState = XComGameState_Unit(BuildTrack.StateObject_NewState);
+	if(UnitState == none) {
+		return false;
+	}
+	return true;
 }
 
 
-static function RTEffect_Stealth RTCreateStealthEffect(int iDuration = 1, optional bool bInfinite = false, optional float fModifier = 1.0f, 
+static function RTEffect_Stealth RTCreateStealthEffect(int iDuration = 1, optional bool bInfinite = false, optional float fModifier = 1.0f,
 				optional GameRuleStateChange WatchRule = eGameRule_PlayerTurnEnd, optional name AbilitySourceName = 'eAbilitySource_Psionic') {
-    local RTEffect_Stealth Effect;
+	local RTEffect_Stealth Effect;
 
-    Effect = new class'RTEffect_Stealth';
-    Effect.EffectName = default.StealthEffectName;
+	Effect = new class'RTEffect_Stealth';
+	Effect.EffectName = default.StealthEffectName;
 	Effect.fStealthModifier = fModifier;
-    Effect.DuplicateResponse = eDupe_Refresh;
+	Effect.DuplicateResponse = eDupe_Refresh;
 	Effect.BuildPersistentEffect(iDuration, bInfinite, true, false, WatchRule);
 	Effect.SetDisplayInfo(ePerkBuff_Bonus, default.StealthFriendlyName, default.StealthFriendlyDesc, default.StealthIconPath, true,, AbilitySourceName);
-    Effect.VisualizationFn = StealthVisualization;
-    Effect.EffectRemovedVisualizationFn = StealthRemovedVisualization;
+	Effect.VisualizationFn = StealthVisualization;
+	Effect.EffectRemovedVisualizationFn = StealthRemovedVisualization;
 
-    if (default.StealthStartParticleName != "" && !default.bUseEffectVisualizationOverride) {
-    		Effect.VFXTemplateName = default.StealthPersistentParticleName;
-    		Effect.VFXSocket = default.StealthSocketName;
-    		Effect.VFXSocketsArrayName = default.StealthSocketsArrayName;
-    }
+	if (default.StealthStartParticleName != "" && !default.bUseEffectVisualizationOverride) {
+			Effect.VFXTemplateName = default.StealthPersistentParticleName;
+			Effect.VFXSocket = default.StealthSocketName;
+			Effect.VFXSocketsArrayName = default.StealthSocketsArrayName;
+	}
 
-    return Effect;
+	return Effect;
 }
 
 static function StealthVisualization(XComGameState VisualizeGameState, out VisualizationTrack BuildTrack, const name EffectApplyResult) {
-    local X2Action_PlayEffect StartActionP1, StartActionP2, PersistentAction;
-    if(!CheckSuccessfulUnitEffectApplication(VisualizeGameState, BuildTrack, EffectApplyResult))
-        return;
+	local X2Action_PlayEffect StartActionP1, StartActionP2, PersistentAction;
+	if(!CheckSuccessfulUnitEffectApplication(VisualizeGameState, BuildTrack, EffectApplyResult))
+		return;
 
 	StartActionP1 = BuildEffectParticle(VisualizeGameState, BuildTrack, default.StealthStartParticleName, default.StealthSocketName, default.StealthSocketsArrayName, true, false);
 	//StartActionP2 = BuildEffectParticle(VisualizeGameState, BuildTrack, default.StealthStartParticleName, default.StealthSocketName, default.StealthSocketsArrayName, true, true);
-    
+
 	PersistentAction = BuildEffectParticle(VisualizeGameState, BuildTrack, default.StealthPersistentParticleName, default.StealthSocketName, default.StealthSocketsArrayName, true, false);
 
 }
 
 static function StealthRemovedVisualization(XComGameState VisualizeGameState, out VisualizationTrack BuildTrack, const name EffectApplyResult) {
-    local X2Action_PlayEffect StopActionP1, StopActionP2, PersistentAction;
-    if(!CheckSuccessfulUnitEffectApplication(VisualizeGameState, BuildTrack, EffectApplyResult))
-        return;
+	local X2Action_PlayEffect StopActionP1, StopActionP2, PersistentAction;
+	if(!CheckSuccessfulUnitEffectApplication(VisualizeGameState, BuildTrack, EffectApplyResult))
+		return;
 
-    PersistentAction = BuildEffectParticle(VisualizeGameState, BuildTrack, default.StealthPersistentParticleName, default.StealthSocketName, default.StealthSocketsArrayName, true, true);
+	PersistentAction = BuildEffectParticle(VisualizeGameState, BuildTrack, default.StealthPersistentParticleName, default.StealthSocketName, default.StealthSocketsArrayName, true, true);
 
-    StopActionP1 = BuildEffectParticle(VisualizeGameState, BuildTrack, default.StealthStopParticleName, default.StealthSocketName, default.StealthSocketsArrayName, true, false);
+	StopActionP1 = BuildEffectParticle(VisualizeGameState, BuildTrack, default.StealthStopParticleName, default.StealthSocketName, default.StealthSocketsArrayName, true, false);
 	//StopActionP2 = BuildEffectParticle(VisualizeGameState, BuildTrack, default.StealthStopParticleName, default.StealthSocketName, default.StealthSocketsArrayName, true, true);
 }
 
 static function RTEffect_Meld RTCreateMeldEffect(int iDuration = 1, optional bool bInfinite = true) {
-    local RTEffect_Meld Effect;
+	local RTEffect_Meld Effect;
 
-    Effect = new class'RTEffect_Meld';
-    Effect.EffectName = default.MeldEffectName;
-    Effect.DuplicateResponse = eDupe_Ignore;
-    Effect.BuildPersistentEffect(iDuration, bInfinite, true, false,  eGameRule_PlayerTurnEnd);
+	Effect = new class'RTEffect_Meld';
+	Effect.EffectName = default.MeldEffectName;
+	Effect.DuplicateResponse = eDupe_Ignore;
+	Effect.BuildPersistentEffect(iDuration, bInfinite, true, false,  eGameRule_PlayerTurnEnd);
 	Effect.SetDisplayInfo(ePerkBuff_Bonus, default.MeldFriendlyName, default.MeldFriendlyDesc, default.MeldIconPath, true,,'eAbilitySource_Psionic');
-    //Effect.VisualizationFn = MeldVisualization;
-    //Effect.EffectRemovedVisualizationFn = MeldRemovedVisualization;
+	//Effect.VisualizationFn = MeldVisualization;
+	//Effect.EffectRemovedVisualizationFn = MeldRemovedVisualization;
 
-    if (default.MeldParticleName != "") {
-    		Effect.VFXTemplateName = default.MeldParticleName;
-    		Effect.VFXSocket = default.MeldSocketName;
-    		Effect.VFXSocketsArrayName = default.MeldSocketsArrayName;
-    }
+	if (default.MeldParticleName != "") {
+			Effect.VFXTemplateName = default.MeldParticleName;
+			Effect.VFXSocket = default.MeldSocketName;
+			Effect.VFXSocketsArrayName = default.MeldSocketsArrayName;
+	}
 
-    return Effect;
+	return Effect;
 }
 
 static function RTEffect_Panicked RTCreateFeedbackEffect(int iDuration = 4) {
-    local RTEffect_Panicked Effect;
+	local RTEffect_Panicked Effect;
 
-    Effect = new class'RTEffect_Panicked';
-    Effect.EffectName = default.FeedbackEffectName;
-    Effect.DuplicateResponse = eDupe_Ignore;
-    Effect.BuildPersistentEffect(iDuration, false, true, false,  eGameRule_PlayerTurnBegin);
-    Effect.SetDisplayInfo(ePerkBuff_Penalty, default.FeedbackFriendlyName, default.FeedbackFriendlyDesc, default.FeedbackIconPath, true,,'eAbilitySource_Standard');
-    //Effect.VisualizationFn = FeedbackVisualization;
-    //Effect.EffectRemovedVisualizationFn = FeedbackRemovedVisualization;
+	Effect = new class'RTEffect_Panicked';
+	Effect.EffectName = default.FeedbackEffectName;
+	Effect.DuplicateResponse = eDupe_Ignore;
+	Effect.BuildPersistentEffect(iDuration, false, true, false,  eGameRule_PlayerTurnBegin);
+	Effect.SetDisplayInfo(ePerkBuff_Penalty, default.FeedbackFriendlyName, default.FeedbackFriendlyDesc, default.FeedbackIconPath, true,,'eAbilitySource_Standard');
+	//Effect.VisualizationFn = FeedbackVisualization;
+	//Effect.EffectRemovedVisualizationFn = FeedbackRemovedVisualization;
 
-    return Effect;
+	return Effect;
+}
+
+static function X2Effect_Stunned RTCreateLiftEffect(int StunLevel) {
+	local X2Effect_Stunned Effect;
+	local RTCondition_UnitSize Condition;
+
+	Effect = new class'X2Effect_Stunned';
+	Effect.BuildPersistentEffect(1, true, true, false, eGameRule_PlayerTurnBegin);
+	Effect.StunLevel = StunLevel;
+	Effect.bIsImpairing = true;
+	Effect.EffectHierarchyValue = default.STUNNED_HIERARCHY_VALUE + 1;
+	Effect.EffectName = default.LiftedName;
+	Effect.VisualizationFn = LiftVisualization;
+	Effect.EffectTickedVisualizationFn = LiftVisualizationTicked;
+	Effect.EffectRemovedVisualizationFn = LiftVisualizationRemoved;
+	Effect.bRemoveWhenTargetDies = true;
+	Effect.bCanTickEveryAction = false;
+
+	// Can't lift big stuff. FAT
+	Condition = new class'RTCondition_UnitSize';
+	Effect.TargetConditions.AddItem(Condition);
+
+	return Effect;
 }

@@ -1190,6 +1190,39 @@ static function X2AbilityTemplate RTGuiltyConscienceEvent() {
 }
 
 
+static function X2AbilityTemplate RTLift() {
+	local X2AbilityTemplate 				Template;
+	local X2Effect_Stunned 					StunEffect;
+	local X2AbilityCost_ActionPoints		ActionPointCost;
+	local X2AbilityCooldown					Cooldown;
+
+	`CREATE_X2ABILITY_TEMPLATE(Template, 'RTLift');
+	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_swordSlash"; //TODO: Change this
+	Template.AbilitySourceName = 'eAbilitySource_Psionic';
+	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_AlwaysShow;
+	Template.AbilityConfirmSound = "TacticalUI_ActivateAbility";
+	Template.Hostility = eHostility_Offensive;
+
+	Cooldown = new class'X2AbilityCooldown';
+	Cooldown.iNumTurns = default.LIFT_COOLDOWN;
+	Template.AbilityCooldown = Cooldown;
+
+	ActionPointCost = new class'X2AbilityCost_ActionPoints';
+	ActionPointCost.iNumPoints = default.LIFT_ACTIONS;
+	ActionPointCost.bConsumeAllPoints = default.LIFT_ENDTURN;
+	Template.AbilityCosts.AddItem(ActionPointCost);
+
+
+
+	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
+	// TODO: Change this
+	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
+	Template.BuildInterruptGameStateFn = TypicalAbility_BuildInterruptGameState;
+
+	return Template;
+}
+
+
 
 defaultproperties
 {

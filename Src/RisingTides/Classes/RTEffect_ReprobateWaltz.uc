@@ -1,7 +1,5 @@
 class RTEffect_ReprobateWaltz extends X2Effect_Persistent;
 
-
-
 function RegisterForEvents(XComGameState_Effect EffectGameState)
 {
 
@@ -11,7 +9,7 @@ function RegisterForEvents(XComGameState_Effect EffectGameState)
 
 	EventMgr = `XEVENTMGR;
     WaltzEffectState = RTGameState_Effect(EffectGameState);
-  
+
 	EffectObj = WaltzEffectState;
 	FilterObj = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(EffectGameState.ApplyEffectParameters.SourceStateObjectRef.ObjectID));
 
