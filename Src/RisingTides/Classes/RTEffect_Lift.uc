@@ -12,7 +12,7 @@ simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffe
 
 	TargetUnitState = XComGameState_Unit(kNewTargetState);
 	if(TargetUnitState == none) {
-		`RedScreenOnce("You fucked up");
+		`RedScreenOnce("You messed up");
 		return;
 	}
 
