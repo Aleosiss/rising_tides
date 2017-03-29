@@ -642,6 +642,8 @@ static function X2AbilityTemplate RTMeldInduction() {
 	NoMeldCondition.AddExcludeEffect('RTEffect_Meld', 'AA_UnitNotMelded');
 	Template.AbilityTargetConditions.AddItem(NoMeldCondition);
 
+	Template.AbilityTargetConditions.AddItem(default.GameplayVisibilityCondition);
+
 	MeldEffect = class'RTEffectBuilder'.static.RTCreateMeldEffect(default.MELD_INDUCTION_DURATION, default.MELD_INDUCTION_INFINITE);
 	MeldEffect.bRemoveWhenSourceDies = true;
 	MeldEffect.bRemoveWhenTargetDies = true;
