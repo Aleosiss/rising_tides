@@ -1240,7 +1240,7 @@ static function X2AbilityTemplate RTLift() {
 	Template.ModifyNewContextFn = RTLift_ModifyActivatedAbilityContext;
 	Template.BuildNewGameStateFn = RTLift_BuildGameState;
 	// TODO: Change this
-	Template.BuildVisualizationFn = RTLift_BuildVisualization;
+	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
 	Template.BuildInterruptGameStateFn = TypicalAbility_BuildInterruptGameState;
 
 	return Template;
@@ -1288,9 +1288,75 @@ simulated function RTLift_ModifyActivatedAbilityContext(XComGameStateContext Con
 }
 
 simulated function XComGameState RTLift_BuildGameState(XComGameStateContext Context) {
+	local XComGameState NewGameState;
+	local XComGameState_Unit UnitState;
+	local XComGameStateContext_Ability AbilityContext;
+	local vector NewLocation;
+	local TTile NewTileLocation;
+	local XComWorldData World;
+	local X2EventManager EventManager;
+	local int LastPathElement, i;
 
+	World = `XWORLD;
+	EventManager = `XEVENTMGR;
+
+	//Build the new game state frame
+	NewGameState = TypicalAbility_BuildGameState(Context);
+
+	AbilityContext = XComGameStateContext_Ability(NewGameState.GetContext());
+	for(i = 0; i < AbilityContext.InputContext.MultiTargets.Length; ++i) {
+		UnitState = XComGameState_Unit(NewGameState.CreateStateObject(class'XComGameState_Unit', AbilityContext.InputContext.MultiTargets[i].ObjectID));
+
+		LastPathElement = AbilityContext.InputContext.MovementPaths[i].MovementData.Length - 1;
+
+		// Move the unit vertically, set the unit's new location
+		// The last position in MovementData will be the end location
+		`assert(LastPathElement > 0);
+		NewLocation = AbilityContext.InputContext.MovementPaths[i].MovementData[LastPathElement].Position;
+		NewTileLocation = World.GetTileCoordinatesFromPosition(NewLocation);
+		UnitState.SetVisibilityLocation(NewTileLocation);
+
+		NewGameState.AddStateObject(UnitState);
+
+		AbilityContext.ResultContext.bPathCausesDestruction = MoveAbility_StepCausesDestruction(UnitState, AbilityContext.InputContext, 0, LastPathElement);
+		MoveAbility_AddTileStateObjects(NewGameState, UnitState, AbilityContext.InputContext, 0, LastPathElement);
+
+		EventManager.TriggerEvent('ObjectMoved', UnitState, UnitState, NewGameState);
+		EventManager.TriggerEvent('UnitMoveFinished', UnitState, UnitState, NewGameState);
+	}
+	//Return the game state we have created
+	return NewGameState;
 }
 
+simulated function RTLift_BuildVisualization(XComGameState VisualizeGameState, out array<VisualizationTrack> OutVisualizationTracks) {
+	local XComGameStateHistory History;
+	local XComGameStateContext_Ability  AbilityContext;
+	local StateObjectReference InteractingUnitRef;
+	local X2AbilityTemplate AbilityTemplate;
+	local VisualizationTrack EmptyTrack, BuildTrack;
+	local X2Action_PlaySoundAndFlyOver SoundAndFlyover;
+	local int i;
+	local X2Action_MoveTurn MoveTurnAction;
+	local X2Action_PlayAnimation PlayAnimation;
+
+	TypicalAbility_BuildVisualization(VisualizeGameState, OutVisualizationTracks);
+
+	History = class'XComGameStateHistory'.static.GetGameStateHistory();
+
+	AbilityContext = XComGameStateContext_Ability(VisualizeGameState.GetContext());
+
+	for(i = 0; i < AbilityContext.InputContext.MultiTargets.Length; ++i) {
+		InteractingUnitRef = AbilityContext.InputContext.MultiTargets[i];
+
+		BuildTrack = EmptyTrack;
+		BuildTrack.StateObject_OldState = History.GetGameStateForObjectID(InteractingUnitRef.ObjectID, eReturnType_Reference, VisualizeGameState.HistoryIndex - 1);
+		BuildTrack.StateObject_NewState = VisualizeGameState.GetGameStateForObjectID(InteractingUnitRef.ObjectID);
+		BuildTrack.TrackActor = History.GetVisualizer(InteractingUnitRef.ObjectID);
+
+		// Fly up actions
+		class'X2VisualizerHelpers'.static.ParsePath(AbilityContext, BuildTrack, OutVisualizationTracks);
+	}
+}
 
 defaultproperties
 {
