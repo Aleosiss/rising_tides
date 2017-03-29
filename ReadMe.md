@@ -44,4 +44,3 @@ This would be a bare-bones content mod. I also have the following content in min
 	- Verify that Echoed Agony works by logging the rolls
 	- Make extend effect duration happen on move for Aura Effects as well, possibly by breaking its logic out into a separate method that is called in either place
 	- Add Siphon to RTEffectBuilder
-	- Add BuildInterruptGameStateFn to all interruptable abilities
