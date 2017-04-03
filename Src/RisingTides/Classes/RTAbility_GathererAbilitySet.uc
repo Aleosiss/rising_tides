@@ -37,6 +37,7 @@ class RTAbility_GathererAbilitySet extends RTAbility_GhostAbilitySet config(Risi
 	var name EchoedAgonyEffectAbilityTemplateName;
 	var name GuiltyConscienceEventName;
 	var name GuiltyConscienceEffectName;
+	var name PostOverTheShoulderEventName;
 
 
 	var localized name GuardianAngelHealText;
@@ -105,6 +106,7 @@ static function X2AbilityTemplate OverTheShoulder()
 	Template.AdditionalAbilities.AddItem('PsionicActivate');
 	Template.AdditionalAbilities.AddItem('RTHarbingerBonusDamage');
 
+	Template.PostActivationEvents.AddItem(default.PostOverTheShoulderEventName);
 
 	return Template;
 }
@@ -310,6 +312,28 @@ static function X2AbilityTemplate OverTheShoulderVisibilityUpdate() {
 	return Template;
 }
 
+static function X2AbilityTemplate RTTriangulation() {
+	local X2AbilityTemplate Template;
+	local X2AbilityTrigger_EventListener Trigger;
+
+	`CREATE_X2TEMPLATE(class'RTAbilityTemplate', Template, 'RTTriangulation');
+	Template = CreateOverTheShoulderAbility(Template);
+
+	Template.AbilityTriggers.Length = 0;
+
+	Trigger = new class'X2AbilityTrigger_EventListener';
+	Trigger.ListenerData.Deferral = ELD_OnStateSubmitted;
+	Trigger.ListenerData.EventID = default.PostOverTheShoulderEventName;
+	Trigger.ListenerData.Filter = eFilter_Unit;
+	Trigger.ListenerData.EventFn = class'RTGameState_Ability'.static.TriangulationEvent;
+	Trigger.ListenerData.Priority = 50;
+	Template.AbilityTriggers.AddItem(Trigger);
+
+	Template.AbilityTargetStyle = default.SimpleSingleTarget;
+
+	return Template;
+
+}
 //---------------------------------------------------------------------------------------
 //---Forced Introversion-----------------------------------------------------------------
 //---------------------------------------------------------------------------------------
@@ -1372,4 +1396,5 @@ defaultproperties
 	EchoedAgonyEffectAbilityTemplateName = "EchoedAgonyEffect"
 	GuiltyConscienceEventName = "GuiltyConscienceEvent"
 	GuiltyConscienceEffectName = "GuiltyConscienceEffect"
+	PostOverTheShoulderEventName = "TriangulationEvent"
 }
