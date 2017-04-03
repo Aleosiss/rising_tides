@@ -85,6 +85,31 @@ static function array<X2DataTemplate> CreateTemplates()
 static function X2AbilityTemplate OverTheShoulder()
 {
 	local X2AbilityTemplate						Template;
+
+	`CREATE_X2TEMPLATE(class'RTAbilityTemplate', Template, 'OverTheShoulder');
+
+	Template = CreateOverTheShoulderAbility(Template);
+
+	Template.AdditionalAbilities.AddItem('OverTheShoulderVisibilityUpdate');
+
+	// standard ghost abilities
+	Template.AdditionalAbilities.AddItem('GhostPsiSuite');
+	Template.AdditionalAbilities.AddItem('JoinMeld');
+	Template.AdditionalAbilities.AddItem('LeaveMeld');
+	Template.AdditionalAbilities.AddItem('PsiOverload');
+	Template.AdditionalAbilities.AddItem('RTFeedback');
+
+	// special meld abilities
+	Template.AdditionalAbilities.AddItem('LIOverwatchShot');
+	Template.AdditionalAbilities.AddItem('RTUnstableConduitBurst');
+	Template.AdditionalAbilities.AddItem('PsionicActivate');
+	Template.AdditionalAbilities.AddItem('RTHarbingerBonusDamage');
+
+
+	return Template;
+}
+
+static function X2AbilityTemplate CreateOverTheShoulderAbility(X2AbilityTemplate Template) {
 	local X2AbilityCost_ActionPoints			ActionPoint;
 	local X2AbilityCooldown						Cooldown;
 	local X2AbilityMultiTarget_Radius			Radius;
@@ -95,7 +120,7 @@ static function X2AbilityTemplate OverTheShoulder()
 																// this will control the application and removal of aura effects within its range
 
 	// Over The Shoulder
-	local RTEffect_MobileSquadViewer			VisionEffect;	// this lifts a small amount of the FOG around the unit	and gives vision of it
+	local RTEffect_MobileSquadViewer			VisionEffect;	// this lifts a small amount of the FOW around the unit	and gives vision of it
 	local X2Effect_IncrementUnitValue			TagEffect;		// this tags the unit so certain OTS effects can only proc once per turn
 
 	// Unsettling Voices
@@ -109,10 +134,6 @@ static function X2AbilityTemplate OverTheShoulder()
 
 	local X2Effect_Persistent					SelfEffect, EnemyEffect, AllyEffect;
 
-
-
-
-	`CREATE_X2TEMPLATE(class'RTAbilityTemplate', Template, 'OverTheShoulder');
 	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_swordSlash";
 	Template.AbilitySourceName = 'eAbilitySource_Psionic';
 	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_AlwaysShow;
@@ -196,9 +217,6 @@ static function X2AbilityTemplate OverTheShoulder()
 	Template.AddMultiTargetEffect(GuiltyEffect);
 
 
-
-
-
 	// end enemy aura effects      ----------------------------------------
 
 	// begin ally aura effects	  -----------------------------------------
@@ -226,7 +244,7 @@ static function X2AbilityTemplate OverTheShoulder()
 	OTSEffect.BuildPersistentEffect(1,,,, eGameRule_PlayerTurnBegin);
 	OTSEffect.SetDisplayInfo(ePerkBuff_Bonus, default.OTS_TITLE, default.OTS_DESC_SELF, Template.IconImage, true,,Template.AbilitySourceName);
 	OTSEffect.DuplicateResponse = eDupe_Ignore;
-	Template.AddShooterEffect(OTSEffect);
+	Template.AddTargetEffect(OTSEffect);
 
 	// tag effect. add this last
 	TagEffect = new class'X2Effect_IncrementUnitValue';
@@ -240,27 +258,11 @@ static function X2AbilityTemplate OverTheShoulder()
 	Template.AbilityTargetStyle = default.SelfTarget;
 	Template.AbilityTriggers.AddItem(default.PlayerInputTrigger);
 
-	Template.AdditionalAbilities.AddItem('OverTheShoulderVisibilityUpdate');
-
 	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
 	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
 	Template.BuildInterruptGameStateFn = TypicalAbility_BuildInterruptGameState;
 	Template.bShowActivation = true;
 	Template.bSkipFireAction = true;
-
-	// standard ghost abilities
-	Template.AdditionalAbilities.AddItem('GhostPsiSuite');
-	Template.AdditionalAbilities.AddItem('JoinMeld');
-	Template.AdditionalAbilities.AddItem('LeaveMeld');
-	Template.AdditionalAbilities.AddItem('PsiOverload');
-	Template.AdditionalAbilities.AddItem('RTFeedback');
-
-	// special meld abilities
-	Template.AdditionalAbilities.AddItem('LIOverwatchShot');
-	Template.AdditionalAbilities.AddItem('RTUnstableConduitBurst');
-	Template.AdditionalAbilities.AddItem('PsionicActivate');
-	Template.AdditionalAbilities.AddItem('RTHarbingerBonusDamage');
-
 
 	return Template;
 }
@@ -348,6 +350,8 @@ static function X2AbilityTemplate RTForcedIntroversion() {
 
 	return Template;
 }
+
+
 
 //---------------------------------------------------------------------------------------
 //---Extinction Event--------------------------------------------------------------------
