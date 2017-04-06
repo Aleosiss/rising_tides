@@ -2,7 +2,7 @@
 
 class RTGameState_Ability extends XComGameState_Ability;
 
-// Get Bloodlust Stack Count  
+// Get Bloodlust Stack Count
 public static function int getBloodlustStackCount(XComGameState_Unit WaltzUnit) {
    local int iStackCount;
    local StateObjectReference IteratorObjRef;
@@ -27,7 +27,7 @@ public static function int getBloodlustStackCount(XComGameState_Unit WaltzUnit) 
 	return iStackCount;
 }
 
-// Reprobate Waltz	
+// Reprobate Waltz
 function EventListenerReturn ReprobateWaltzListener( Object EventData, Object EventSource, XComGameState GameState, Name EventID) {
 	local XComGameStateContext_Ability AbilityContext;
 	local XComGameState_Unit WaltzUnit;
@@ -40,11 +40,11 @@ function EventListenerReturn ReprobateWaltzListener( Object EventData, Object Ev
 	if(AbilityContext != none) {
 		iStackCount = getBloodlustStackCount(WaltzUnit);
 		fFinalPercentChance = 100 -  ( class'RTAbility_BerserkerAbilitySet'.default.REPROBATE_WALTZ_BASE_CHANCE + ( class'RTAbility_BerserkerAbilitySet'.default.REPROBATE_WALTZ_BLOODLUST_STACK_CHANCE * iStackCount ));
-		
+
 		if(`SYNC_RAND(100) <= int(fFinalPercentChance)) {
 			AbilityTriggerAgainstSingleTarget(AbilityContext.InputContext.PrimaryTarget, false);
-		}	
-	}	
+		}
+	}
 	return ELR_NoInterrupt;
 }
 
@@ -70,7 +70,7 @@ simulated function name GatherAbilityTargets(out array<AvailableTarget> Targets,
 		AvailableCode = m_Template.AbilityTargetStyle.GetPrimaryTargetOptions(self, Targets);
 		if (AvailableCode != 'AA_Success')
 			return AvailableCode;
-	
+
 		for (i = Targets.Length - 1; i >= 0; --i)
 		{
 			AvailableCode = m_Template.CheckTargetConditions(self, kOwner, History.GetGameStateForObjectID(Targets[i].PrimaryTarget.ObjectID));
@@ -163,23 +163,23 @@ function EventListenerReturn UnwillingConduitEvent(Object EventData, Object Even
 	local XComGameState_Unit					PreviousSourceUnitState, NewSourceUnitState, IteratorUnitState;
 	local int									iConduits;
 	local XComGameStateContext_Ability			AbilityContext;
-	
+
 	`LOG("Rising Tides: Starting Unwilling Conduit check!");
 
 	AbilityContext = XComGameStateContext_Ability(GameState.GetContext());
 	if (AbilityContext == none) {
 		`LOG("Rising Tides: Unwilling Conduit Event failed, no AbilityContext!");
 		`RedScreenOnce("Rising Tides: Unwilling Conduit Event failed, no AbilityContext!");
-  		return ELR_NoInterrupt;	
+		return ELR_NoInterrupt;
 	}
-	
+
 	History = `XCOMHISTORY;
 
 	// EventData = AbilityState to Channel
 	PreviousAbilityState = XComGameState_Ability(EventData);
 	// Event Source = UnitState of AbilityState
 	PreviousSourceUnitState = XComGameState_Unit(EventSource);
-															
+
 	if(PreviousAbilityState == none || PreviousSourceUnitState == none) {
 		`RedScreenOnce("Rising Tides: Unwilling Conduit Event failed, no previous AbilityState or SourceUnitState!");
 		return ELR_NoInterrupt;
@@ -195,7 +195,7 @@ function EventListenerReturn UnwillingConduitEvent(Object EventData, Object Even
 		if(IteratorUnitState.AffectedByEffectNames.Find(class'RTAbility_GathererAbilitySet'.default.OverTheShoulderEffectName) != INDEX_NONE) {
 			iConduits++;
 		}
-	}	
+	}
 
 	NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState(string(GetFuncName()));
 	NewSourceUnitState = XComGameState_Unit(NewGameState.CreateStateObject(class'XComGameState_Unit', PreviousSourceUnitState.ObjectID));
@@ -209,14 +209,14 @@ function EventListenerReturn UnwillingConduitEvent(Object EventData, Object Even
 
 	NewGameState.AddStateObject(NewAbilityState);
 	NewGameState.AddStateObject(NewSourceUnitState);
-  
+
 	XComGameStateContext_ChangeContainer(NewGameState.GetContext()).BuildVisualizationFn = ConduitVisualizationFn;
 
 	`LOG("Rising Tides: Finishing Unwilling Conduit check!");
 
 	`TACTICALRULES.SubmitGameState(NewGameState);
 
-	
+
 	AbilityTriggerAgainstSingleTarget(OwnerStateObject, false);
 	return ELR_NoInterrupt;
 }
@@ -261,73 +261,112 @@ function ConduitVisualizationFn(XComGameState VisualizeGameState, out array<Visu
 
 // Echoed Agony Listener
 function EventListenerReturn EchoedAgonyListener(Object EventData, Object EventSource, XComGameState GameState, Name EventID) {
-    local XComGameState_Ability AbilityState;
-    local XComGameState_Unit SourceUnitState;
-    local XComGameState NewGameState;
-    local XComGameStateContext_Ability AbilityContext;
-    local XComGameStateHistory History;
-    local int PanicStrength;
-    local GameRulesCache_Unit UnitCache;
+	local XComGameState_Ability AbilityState;
+	local XComGameState_Unit SourceUnitState;
+	local XComGameState NewGameState;
+	local XComGameStateContext_Ability AbilityContext;
+	local XComGameStateHistory History;
+	local int PanicStrength;
+	local GameRulesCache_Unit UnitCache;
 	local X2TacticalGameRuleset TacticalRules;
 	local int i;
 
 	local bool bDebug;
 
-    SourceUnitState = XComGameState_Unit(EventSource); // we are always the source
-    if(SourceUnitState.ObjectID != OwnerStateObject.ObjectID) {
-        `RedScreen("Rising Tides: Echoed Agony event had an invalid source!");
-    }
+	SourceUnitState = XComGameState_Unit(EventSource); // we are always the source
+	if(SourceUnitState.ObjectID != OwnerStateObject.ObjectID) {
+		`RedScreen("Rising Tides: Echoed Agony event had an invalid source!");
+	}
 
-    History = `XCOMHISTORY;
-    TacticalRules = `TACTICALRULES;
+	History = `XCOMHISTORY;
+	TacticalRules = `TACTICALRULES;
 
-    // determine correct panic value...
-    switch(EventID) {
-        case 'UnitTakeEffectDamage':
-            PanicStrength = class'RTEffectBuilder'.default.AGONY_STRENGTH_TAKE_DAMAGE;
-            break;
-        case 'RTFeedback':
-            PanicStrength = class'RTEffectBuilder'.default.AGONY_STRENGTH_TAKE_FEEDBACK;
-            break;
-        case 'UnitPanicked':
-            PanicStrength = class'RTEffectBuilder'.default.AGONY_STRENGTH_TAKE_ECHO;
-            break;
-        default:
+	// determine correct panic value...
+	switch(EventID) {
+		case 'UnitTakeEffectDamage':
+			PanicStrength = class'RTEffectBuilder'.default.AGONY_STRENGTH_TAKE_DAMAGE;
+			break;
+		case 'RTFeedback':
+			PanicStrength = class'RTEffectBuilder'.default.AGONY_STRENGTH_TAKE_FEEDBACK;
+			break;
+		case 'UnitPanicked':
+			PanicStrength = class'RTEffectBuilder'.default.AGONY_STRENGTH_TAKE_ECHO;
+			break;
+		default:
 			`LOG("Rising Tides: Echoed Agony had an invalid EventID: " @ EventID);
-            PanicStrength = class'RTEffectBuilder'.default.AGONY_STRENGTH_TAKE_FEEDBACK;
-    }
+			PanicStrength = class'RTEffectBuilder'.default.AGONY_STRENGTH_TAKE_FEEDBACK;
+	}
 
-    // this meaty block updates the panic event value and submits the change state
-    NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState(string(GetFuncName()));
+	// this meaty block updates the panic event value and submits the change state
+	NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState(string(GetFuncName()));
 	// oh boy
 	AbilityState = XComGameState_Ability(History.GetGameStateForObjectID(SourceUnitState.FindAbility(class'RTAbility_GathererAbilitySet'.default.EchoedAgonyEffectAbilityTemplateName).ObjectID));
-    AbilityState = XComGameState_Ability(NewGameState.CreateStateObject(class'XComGameState_Ability', AbilityState.ObjectID));
-    AbilityState.PanicEventValue = PanicStrength;
-    NewGameState.AddStateObject(AbilityState);
-    `TACTICALRULES.SubmitGameState(NewGameState);
+	AbilityState = XComGameState_Ability(NewGameState.CreateStateObject(class'XComGameState_Ability', AbilityState.ObjectID));
+	AbilityState.PanicEventValue = PanicStrength;
+	NewGameState.AddStateObject(AbilityState);
+	`TACTICALRULES.SubmitGameState(NewGameState);
 
 	//bDebug = false;
-    // finally, activate the ability with the updated panic strength
-    //TacticalRules.GetGameRulesCache_Unit(SourceUnitState.GetReference(), UnitCache);
-    //for(i = 0; i < UnitCache.AvailableActions.Length; i++) {
-        //AbilityState = XComGameState_Ability(History.GetGameStateForObjectID(UnitCache.AvailableActions[i].AbilityObjectRef.ObjectID));
-        //if(AbilityState.m_TemplateName == m_TemplateName) {     // found myself
-			//bDebug = true;											  
-            //if(UnitCache.AvailableActions[i].AvailableCode == 'AA_Success') {
-                //class'XComGameStateContext_Ability'.static.ActivateAbility(UnitCache.AvailableActions[i]);
-            //} else {
+	// finally, activate the ability with the updated panic strength
+	//TacticalRules.GetGameRulesCache_Unit(SourceUnitState.GetReference(), UnitCache);
+	//for(i = 0; i < UnitCache.AvailableActions.Length; i++) {
+		//AbilityState = XComGameState_Ability(History.GetGameStateForObjectID(UnitCache.AvailableActions[i].AbilityObjectRef.ObjectID));
+		//if(AbilityState.m_TemplateName == m_TemplateName) {     // found myself
+			//bDebug = true;
+			//if(UnitCache.AvailableActions[i].AvailableCode == 'AA_Success') {
+				//class'XComGameStateContext_Ability'.static.ActivateAbility(UnitCache.AvailableActions[i]);
+			//} else {
 				//`LOG("Rising Tides: Could not activate Echoed Agony!");
 			//}
-            //break;
-        //}
-    //}
+			//break;
+		//}
+	//}
 
 	AbilityTriggerAgainstSingleTarget(OwnerStateObject, false);
 
 	if(!bDebug) {
 		`LOG("Rising Tides: EchoedAgonyListener did not find Echoed Agony!");
 	}
-    return ELR_NoInterrupt;
+	return ELR_NoInterrupt;
+}
+
+function EventListenerReturn TriangulationListener(Object EventData, Object EventSource, XComGameState GameState, Name EventID) {
+	local XComGameState_Unit SourceUnitState, IteratorUnitState;
+	local XComGameStateHistory History;
+
+	History = `XCOMHISTORY;
+
+	SourceUnitState = XComGameState_Unit(EventSource);
+	if(SourceUnitState != XComGameState_Unit(History.GetGameStateForObjectID(OwnerStateObject.ObjectID)) {
+		return ELR_NoInterrupt;
+	}
+
+	if(!SourceUnitState.IsUnitAffectedByEffectName('RTEffect_Meld')) {
+		return ELR_NoInterrupt;
+	}
+
+	if(!SourceUnitState.IsUnitAffectedByEffectName(class'RTAbility_GathererAbilitySet'.default.OverTheShoulderSourceEffectName))
+
+	foreach History.IterateByClassType(class'XComGameState_Unit', IteratorUnitState) {
+		// don't target ourselves
+		if(IteratorUnitState.ObjectID == SourceUnitState.ObjectID) {
+			continue;
+		}
+		// only target melded units
+		if(!IteratorUnitState.IsUnitAffectedByEffectName('RTEffect_Meld')) {
+			continue;
+		}
+		// don't duplicate the effect
+		if(IteratorUnitState.IsUnitAffectedByEffectName(class'RTAbility_GathererAbilitySet'.default.OverTheShoulderSourceEffectName)) {
+			continue;
+		}
+		// hit it
+		AbilityTriggerAgainstSingleTarget(IteratorUnitState.ObjectID, false);
+	}
+
+	return ELR_NoInterrupt;
+
+
 }
 
 
