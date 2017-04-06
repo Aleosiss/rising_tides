@@ -18,21 +18,21 @@ class RTGameState_RisingTidesCommand extends XComGameState_BaseObject;
 
 struct RTKillCount
 {
-	var StateObjectReference      UnitRef;
-	var name                      UnitName;
-	var int                       KillCount;
+	var StateObjectReference      UnitRef;				// The owner of this kill count
+	var name                      UnitName;				// The name of the owner of this kill count
+	var int                       KillCount;			// the number of kills
 
 };
 
 struct RTDeathRecord
 {
-	var name                      CharacterTemplateName; // the type of unit that died
-	var int                       NumDeaths;              // number of times the unit has been killed by a friendly unit
-	var int                       NumCrits;               // number of times the unit has been critically hit
-	var array<RTKillCount>        IndividualKillCounts;   // per-unit kill counts ( worth more to VitalPointTargeting than other kills )
+	var name                      CharacterTemplateName;	// the type of unit that died
+	var int                       NumDeaths;              	// number of times the unit has been killed by a friendly unit
+	var int                       NumCrits;               	// number of times the unit has been critically hit
+	var array<RTKillCount>        IndividualKillCounts;   	// per-unit kill counts ( worth more to VitalPointTargeting than other kills ); the sum of these should always equal NumDeaths
 };
 
-var() array<RTDeathRecord> DeathRecordData;                  // GHOST Datavault contianing information on every kill made by deployed actor
+	var() array<RTDeathRecord> DeathRecordData;				// GHOST Datavault contianing information on every kill made by deployed actor
 
 /* END KILL RECORD   */
 
@@ -42,9 +42,9 @@ var() array<RTDeathRecord> DeathRecordData;                  // GHOST Datavault 
 
 /* BEGIN OPERATIVE RECORD */
 
-var() array<StateObjectReference> Ghosts;	// ghosts active
-var() array<StateObjectReference> Squad;	// ghosts that will be on the next mission
-var() int iOperativeLevel;					// all ghosts get level ups after a mission, even if they weren't on it. lorewise, they're constantly running missions; the player only sees a fraction of them
+var() array<StateObjectReference> Ghosts;					// ghosts active
+var() array<StateObjectReference> Squad;					// ghosts that will be on the next mission
+var() int iOperativeLevel;									// all ghosts get level ups after a mission, even if they weren't on it. lorewise, they're constantly running missions; the player only sees a fraction of them
 
 
 /* END OPERATIVE RECORD   */
