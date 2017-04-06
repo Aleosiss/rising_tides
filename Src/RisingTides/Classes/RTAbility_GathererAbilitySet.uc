@@ -34,6 +34,7 @@ class RTAbility_GathererAbilitySet extends RTAbility_GhostAbilitySet config(Risi
 	var name ExtinctionEventStageThreeEventName;
 	var name OverTheShoulderTagName;
 	var name OverTheShoulderEffectName;
+	var name OverTheShoulderSourceEffectName;
 	var name EchoedAgonyEffectAbilityTemplateName;
 	var name GuiltyConscienceEventName;
 	var name GuiltyConscienceEffectName;
@@ -246,6 +247,7 @@ static function X2AbilityTemplate CreateOverTheShoulderAbility(X2AbilityTemplate
 	OTSEffect.BuildPersistentEffect(1,,,, eGameRule_PlayerTurnBegin);
 	OTSEffect.SetDisplayInfo(ePerkBuff_Bonus, default.OTS_TITLE, default.OTS_DESC_SELF, Template.IconImage, true,,Template.AbilitySourceName);
 	OTSEffect.DuplicateResponse = eDupe_Ignore;
+	OTSEffect.EffectName = default.OverTheShoulderSourceEffectName;
 	Template.AddTargetEffect(OTSEffect);
 
 	// tag effect. add this last
@@ -1392,6 +1394,7 @@ defaultproperties
 {
 	ExtinctionEventStageThreeEventName = "RTExtinctionEventStageThree"
 	OverTheShoulderEffectName = "OverTheShoulderEffect"
+	OverTheShoulderSourceEffectName = "OverTheShoulderSourceEffect"
 	OverTheShoulderTagName = "OverTheShoulderTag"
 	EchoedAgonyEffectAbilityTemplateName = "EchoedAgonyEffect"
 	GuiltyConscienceEventName = "GuiltyConscienceEvent"
