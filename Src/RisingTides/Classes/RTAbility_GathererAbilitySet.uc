@@ -327,7 +327,7 @@ static function X2AbilityTemplate RTTriangulation() {
 	Trigger.ListenerData.Deferral = ELD_OnStateSubmitted;
 	Trigger.ListenerData.EventID = default.PostOverTheShoulderEventName;
 	Trigger.ListenerData.Filter = eFilter_Unit;
-	Trigger.ListenerData.EventFn = class'RTGameState_Ability'.static.TriangulationEvent;
+	Trigger.ListenerData.EventFn = class'RTGameState_Ability'.static.TriangulationListener;
 	Trigger.ListenerData.Priority = 50;
 	Template.AbilityTriggers.AddItem(Trigger);
 
