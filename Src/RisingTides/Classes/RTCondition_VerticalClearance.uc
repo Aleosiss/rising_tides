@@ -12,8 +12,11 @@ event name CallMeetsCondition(XComGameState_BaseObject kTarget) {
 
 private function bool CheckTarget(XComGameState_BaseObject kTarget) {
 	local XComGameState_Unit TargetUnitState;
-	local Vector InitialTargetUnitLocation
+	local Vector InitialTargetUnitLocation;
 	local float DesiredTargetUnitHeight;
+	local XComWorldData World;
+
+	World = `XWORLD;
 
 	TargetUnitState = XComGameState_Unit(kTarget);
 	if(TargetUnitState == none) {
@@ -21,10 +24,10 @@ private function bool CheckTarget(XComGameState_BaseObject kTarget) {
 	}
 
 
-	InitialTargetUnitLocation = `XWORLD.GetPositionFromTileCoordinates(TargetUnitState.TileLocation);
-	DesiredTargetUnitHeight = `XWORLD.GetFloorZForPosition(TargetUnitLocation) + fVerticalSpaceRequirement;
+	InitialTargetUnitLocation = World.GetPositionFromTileCoordinates(TargetUnitState.TileLocation);
+	DesiredTargetUnitHeight = World.GetFloorZForPosition(InitialTargetUnitLocation) + fVerticalSpaceRequirement;
 
-	if (!`XWORLD.HasOverheadClearance(InitialTargetUnitLocation, DesiredTargetUnitHeight)) {
+	if (!World.HasOverheadClearance(InitialTargetUnitLocation, DesiredTargetUnitHeight)) {
 			return false;
 	}
 

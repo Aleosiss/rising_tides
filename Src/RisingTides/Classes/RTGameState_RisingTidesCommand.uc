@@ -46,13 +46,14 @@ struct RTGhostOperative
 {
 	var name 						SoldierClassTemplateName;
 	var name						CharacterTemplateName;
+	var array<name>					WeaponUpgrades;
 
-	var StateObjectReference 		ObjectID
+	var StateObjectReference 		StateObjectRef;
 
 	var localized string			FirstName;
 	var localized string			NickName;
 	var localized string			LastName;
-}
+};
 
 var const config array<RTGhostOperative>	GhostTemplates;
 
@@ -83,7 +84,7 @@ static function SetUpRisingTidesCommand(XComGameState StartState)
 
 	StartState.AddStateObject(RTCom);
 	RTCom.CreateRTOperatives(StartState);
-	RTCom.CreateRTDeathRecord(StartState);
+	//RTCom.CreateRTDeathRecord(StartState);
 }
 
 function CreateRTOperatives(XComGameState NewGameState) {
@@ -109,7 +110,7 @@ function CreateRTOperatives(XComGameState NewGameState) {
 		NewGameState.AddStateObject(UnitState);
 
 		UnitState.SetCharacterName(IteratorGhost.FirstName, IteratorGhost.LastName, IteratorGhost.NickName);
-		UnitState.SetCountry(CharTemplate.DefaultAppearence.nmFlag);
+		UnitState.SetCountry(CharTemplate.DefaultAppearance.nmFlag);
 		UnitState.RankUpSoldier(NewGameState, IteratorGhost.SoldierClassTemplateName);
 		UnitState.ApplyInventoryLoadout(NewGameState, CharTemplate.DefaultLoadout);
 		UnitState.StartingRank = 1;
@@ -124,7 +125,7 @@ function CreateRTOperatives(XComGameState NewGameState) {
 		}
 
 		Ghost = IteratorGhost;
-		Ghost.ObjectID = UnitState.ObjectID;
+		Ghost.StateObjectRef = UnitState.GetReference();
 		Ghosts.AddItem(Ghost);
 	}
 }

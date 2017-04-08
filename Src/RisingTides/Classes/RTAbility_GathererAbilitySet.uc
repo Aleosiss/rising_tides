@@ -30,6 +30,9 @@ class RTAbility_GathererAbilitySet extends RTAbility_GhostAbilitySet config(Risi
 	var config WeaponDamageValue EXTINCTION_EVENT_DMG;
 	var config WeaponDamageValue RUDIMENTARY_CREATURES_DMG;
 	var config WeaponDamageValue UNWILL_DMG;
+	var config int LIFT_COOLDOWN;
+	var config int LIFT_DURATION;
+	var config float LIFT_RADIUS;
 
 	var name ExtinctionEventStageThreeEventName;
 	var name OverTheShoulderTagName;
@@ -1223,6 +1226,7 @@ static function X2AbilityTemplate RTLift() {
 	local X2AbilityTarget_Cursor				CursorTarget;
 	local X2AbilityMultiTarget_Radius			RadiusMultiTarget;
 	local X2Effect_PersistentTraversalChange	TraversalEffect;
+	local RTCondition_VerticalClearance			HeightCondition;
 
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'RTLift');
 	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_swordSlash"; //TODO: Change this
@@ -1236,8 +1240,8 @@ static function X2AbilityTemplate RTLift() {
 	Template.AbilityCooldown = Cooldown;
 
 	ActionPointCost = new class'X2AbilityCost_ActionPoints';
-	ActionPointCost.iNumPoints = default.LIFT_ACTIONS;
-	ActionPointCost.bConsumeAllPoints = default.LIFT_ENDTURN;
+	ActionPointCost.iNumPoints = 1;
+	ActionPointCost.bConsumeAllPoints = false;
 	Template.AbilityCosts.AddItem(ActionPointCost);
 
 	Template.AbilityShooterConditions.AddItem(default.LivingShooterProperty);

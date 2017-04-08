@@ -50,6 +50,8 @@ var config int AGONY_STRENGTH_TAKE_FEEDBACK;
 var config int AGONY_STRENGTH_TAKE_DAMAGE;
 var config int AGONY_STRENGTH_TAKE_ECHO;
 
+var config name LiftedName;
+
 static function X2Action_PlayEffect BuildEffectParticle(XComGameState VisualizeGameState, out VisualizationTrack BuildTrack, string ParticleName, name SocketName, name SocketsArrayName, bool _AttachToUnit, bool _bStopEffect) {
 	local X2Action_PlayEffect EffectAction;
 
@@ -166,9 +168,9 @@ static function X2Effect_Stunned RTCreateLiftEffect(int StunLevel) {
 	Effect.bIsImpairing = true;
 	Effect.EffectHierarchyValue = default.STUNNED_HIERARCHY_VALUE + 1;
 	Effect.EffectName = default.LiftedName;
-	Effect.VisualizationFn = LiftVisualization;
-	Effect.EffectTickedVisualizationFn = LiftVisualizationTicked;
-	Effect.EffectRemovedVisualizationFn = LiftVisualizationRemoved;
+	//Effect.VisualizationFn = LiftVisualization;
+	//Effect.EffectTickedVisualizationFn = LiftVisualizationTicked;
+	//Effect.EffectRemovedVisualizationFn = LiftVisualizationRemoved;
 	Effect.bRemoveWhenTargetDies = true;
 	Effect.bCanTickEveryAction = false;
 

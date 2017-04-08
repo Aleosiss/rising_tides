@@ -101,6 +101,12 @@
     <Content Include="Src\RisingTides\Classes\RTCondition_PsionicTarget.uc">
       <SubType>Content</SubType>
     </Content>
+    <Content Include="Src\RisingTides\Classes\RTCondition_UnitSize.uc">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Src\RisingTides\Classes\RTCondition_VerticalClearance.uc">
+      <SubType>Content</SubType>
+    </Content>
     <Content Include="Src\RisingTides\Classes\RTCondition_VisibleToPlayer.uc">
       <SubType>Content</SubType>
     </Content>

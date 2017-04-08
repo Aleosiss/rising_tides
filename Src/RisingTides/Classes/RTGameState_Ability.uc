@@ -337,7 +337,7 @@ function EventListenerReturn TriangulationListener(Object EventData, Object Even
 	History = `XCOMHISTORY;
 
 	SourceUnitState = XComGameState_Unit(EventSource);
-	if(SourceUnitState != XComGameState_Unit(History.GetGameStateForObjectID(OwnerStateObject.ObjectID)) {
+	if(SourceUnitState != XComGameState_Unit(History.GetGameStateForObjectID(OwnerStateObject.ObjectID))) {
 		return ELR_NoInterrupt;
 	}
 
@@ -361,7 +361,7 @@ function EventListenerReturn TriangulationListener(Object EventData, Object Even
 			continue;
 		}
 		// hit it
-		AbilityTriggerAgainstSingleTarget(IteratorUnitState.ObjectID, false);
+		AbilityTriggerAgainstSingleTarget(IteratorUnitState.GetReference(), false);
 	}
 
 	return ELR_NoInterrupt;
