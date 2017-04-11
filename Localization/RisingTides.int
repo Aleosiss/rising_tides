@@ -58,6 +58,13 @@ LocHelpText="This unit will echo panic attempts that affect to nearby enemies af
 LocFlyOverText="Echoed Agony"
 LocPromotionPopupText="<Bullet/> Only affects enemy units.<br/><Bullet/> Feedback is a panic effect and is much stronger than other sources of panic.<br/>"
 
+[RTTriangulation RTAbilityTemplate]
+LocFriendlyName="Triangulation"
+LocLongDescription="Melded allies will now serve as additional sources of Over the Shoulder's effect."
+LocHelpText="Melded allies will now serve as additional sources of Over the Shoulder's effect."
+LocFlyOverText="Triangulation"
+LocPromotionPopupText="<Bullet/> The effect last an entire turn, even if the meld is broken.<br/><Bullet/> This is one of the very few ways for the Gatherer to affect herself with powerful Over the Shoulder effects.<br/>"
+
 
 
 [RTAbility_GhostAbilitySet]

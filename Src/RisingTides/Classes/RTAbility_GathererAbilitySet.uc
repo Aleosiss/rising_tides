@@ -78,6 +78,7 @@ static function array<X2DataTemplate> CreateTemplates()
 	Templates.AddItem(RTCreateEchoedAgonyEffectAbility());
 	Templates.AddItem(RTGuiltyConscience());
 	Templates.AddItem(RTGuiltyConscienceEvent());
+	Templates.AddItem(RTTriangulation());
 
 
 	return Templates;
@@ -325,6 +326,8 @@ static function X2AbilityTemplate RTTriangulation() {
 	Template = CreateOverTheShoulderAbility(Template);
 
 	Template.AbilityTriggers.Length = 0;
+	Template.AbilityCosts.Length = 0;
+	Template.AbilityCooldown = none;
 
 	Trigger = new class'X2AbilityTrigger_EventListener';
 	Trigger.ListenerData.Deferral = ELD_OnStateSubmitted;
@@ -333,6 +336,24 @@ static function X2AbilityTemplate RTTriangulation() {
 	Trigger.ListenerData.EventFn = class'RTGameState_Ability'.static.TriangulationListener;
 	Trigger.ListenerData.Priority = 50;
 	Template.AbilityTriggers.AddItem(Trigger);
+
+	Trigger = new class'X2AbilityTrigger_EventListener';
+	Trigger.ListenerData.Deferral = ELD_OnStateSubmitted;
+	Trigger.ListenerData.EventID = 'UnitMoveFinished';
+	Trigger.ListenerData.Filter = eFilter_None;
+	Trigger.ListenerData.EventFn = class'RTGameState_Ability'.static.TriangulationListener;
+	Trigger.ListenerData.Priority = 50;
+	Template.AbilityTriggers.AddItem(Trigger);
+
+	Trigger = new class'X2AbilityTrigger_EventListener';
+	Trigger.ListenerData.Deferral = ELD_OnStateSubmitted;
+	Trigger.ListenerData.EventID = 'OnUnitBeginPlay';
+	Trigger.ListenerData.Filter = eFilter_None;
+	Trigger.ListenerData.EventFn = class'RTGameState_Ability'.static.TriangulationListener;
+	Trigger.ListenerData.Priority = 50;
+	Template.AbilityTriggers.AddItem(Trigger);
+
+	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_NeverShow;
 
 	Template.AbilityTargetStyle = default.SimpleSingleTarget;
 

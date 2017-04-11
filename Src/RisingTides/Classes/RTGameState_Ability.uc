@@ -331,36 +331,43 @@ function EventListenerReturn EchoedAgonyListener(Object EventData, Object EventS
 }
 
 function EventListenerReturn TriangulationListener(Object EventData, Object EventSource, XComGameState GameState, Name EventID) {
-	local XComGameState_Unit SourceUnitState, IteratorUnitState;
+	local XComGameState_Unit SourceUnitState, IteratorUnitState, OwnerUnitState;
 	local XComGameStateHistory History;
 
+	`LOG("Triangulation Triggered via EventID " @ EventID); 
 	History = `XCOMHISTORY;
 
 	SourceUnitState = XComGameState_Unit(EventSource);
-	if(SourceUnitState != XComGameState_Unit(History.GetGameStateForObjectID(OwnerStateObject.ObjectID))) {
+	OwnerUnitState = XComGameState_Unit(History.GetGameStateForObjectID(OwnerStateObject.ObjectID));
+
+	if(!SourceUnitState.IsUnitAffectedByEffectName('RTEffect_Meld') || !OwnerUnitState.IsUnitAffectedByEffectName('RTEffect_Meld')) {
+		`LOG("!SourceUnitState.IsUnitAffectedByEffectName('RTEffect_Meld')");
 		return ELR_NoInterrupt;
 	}
 
-	if(!SourceUnitState.IsUnitAffectedByEffectName('RTEffect_Meld')) {
+	if(!OwnerUnitState.IsUnitAffectedByEffectName(class'RTAbility_GathererAbilitySet'.default.OverTheShoulderSourceEffectName)){
+		`LOG("!SourceUnitState.IsUnitAffectedByEffectName(class'RTAbility_GathererAbilitySet'.default.OverTheShoulderSourceEffectName)");
 		return ELR_NoInterrupt;
 	}
-
-	if(!SourceUnitState.IsUnitAffectedByEffectName(class'RTAbility_GathererAbilitySet'.default.OverTheShoulderSourceEffectName))
 
 	foreach History.IterateByClassType(class'XComGameState_Unit', IteratorUnitState) {
 		// don't target ourselves
-		if(IteratorUnitState.ObjectID == SourceUnitState.ObjectID) {
+		if(IteratorUnitState.ObjectID == OwnerUnitState.ObjectID) {
+			`LOG("IteratorUnitState.ObjectID == SourceUnitState.ObjectID");
 			continue;
 		}
 		// only target melded units
 		if(!IteratorUnitState.IsUnitAffectedByEffectName('RTEffect_Meld')) {
+			`LOG("!IteratorUnitState.IsUnitAffectedByEffectName('RTEffect_Meld')");
 			continue;
 		}
 		// don't duplicate the effect
-		if(IteratorUnitState.IsUnitAffectedByEffectName(class'RTAbility_GathererAbilitySet'.default.OverTheShoulderSourceEffectName)) {
-			continue;
-		}
+		//if(IteratorUnitState.IsUnitAffectedByEffectName(class'RTAbility_GathererAbilitySet'.default.OverTheShoulderSourceEffectName)) {
+			//`LOG("IteratorUnitState.IsUnitAffectedByEffectName(class'RTAbility_GathererAbilitySet'.default.OverTheShoulderSourceEffectName)");
+			//continue;
+		//}
 		// hit it
+		`LOG("Triangulation triggering against " @ IteratorUnitState.GetFullName());
 		AbilityTriggerAgainstSingleTarget(IteratorUnitState.GetReference(), false);
 	}
 

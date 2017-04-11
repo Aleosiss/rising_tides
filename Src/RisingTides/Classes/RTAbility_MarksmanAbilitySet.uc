@@ -1394,7 +1394,16 @@ static function X2AbilityTemplate TimeStandsStill()
 	MultiTarget.bExcludeSelfAsTargetIfWithinRadius = true;
 	MultiTarget.bIgnoreBlockingCover = true;
 	Template.AbilityMultiTargetStyle = MultiTarget;
-	Template.AbilityMultiTargetConditions.Additem(default.LivingTargetUnitOnlyProperty);
+
+	// TODO: experiment with renabling this.
+	UnitPropertyCondition = new class'X2Condition_UnitProperty';
+	UnitPropertyCondition.FailOnNonUnits = true;
+	UnitPropertyCondition.ExcludeInStasis = false;
+	UnitPropertyCondition.ExcludeFriendlyToSource = false;
+	UnitPropertyCondition.ExcludeDead = false;
+	UnitPropertyCondition.ExcludeCosmetic = false;
+
+	Template.AbilityMultiTargetConditions.Additem(UnitPropertyCondition);
 
 	Template.ConcealmentRule = eConceal_Always;
 
@@ -1422,13 +1431,7 @@ static function X2AbilityTemplate TimeStandsStill()
 	TimeStopEffect.bCanTickEveryAction = true;
 	TimeStopEffect.EffectName = default.TimeStopEffectName;
 
-	// TODO: experiment with renabling this.
-	//UnitPropertyCondition = new class'X2Condition_UnitProperty';
-	//UnitPropertyCondition.FailOnNonUnits = true;
-	//UnitPropertyCondition.ExcludeInStasis = false;
-	//UnitPropertyCondition.ExcludeFriendlyToSource = false;
-	//UnitPropertyCondition.ExcludeDead = false;
-	//UnitPropertyCondition.ExcludeCosmetic = false;
+
 	//TimeStopEffect.TargetConditions.AddItem(UnitPropertyCondition);
 
 	Template.AddMultiTargetEffect(TimeStopEffect);
