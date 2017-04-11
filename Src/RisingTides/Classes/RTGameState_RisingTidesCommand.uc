@@ -12,16 +12,14 @@ class RTGameState_RisingTidesCommand extends XComGameState_BaseObject config(Ris
 // Additionally, whenever a critical hit is landed, it increments the NumCrits value.
 
 // required methods:
-// void AddDeathRecord(name CharacterTemplateName, StateObjectReference UnitState, bool bWasCrit)
-// void IncrementDeathRecord(name CharacterTemplateName, StateObjectReference UnitState, bool bWasCrit)
-// bool GetDeathRecord(name CharacterTemplateName, out RTDeathRecord DeathRecord)
+// void UpdateDeathRecordData(name CharacterTemplateName, StateObjectReference UnitRef, bool bWasCrit)
+// RTDeathRecord GetDeathRecord(name CharacterTemplateName)
+// RTKillCount GetKillCount(StateObjectReference UnitRef, name CharacterTemplateName)
 
 struct RTKillCount
 {
 	var StateObjectReference      UnitRef;				// The owner of this kill count
-	var name                      UnitName;				// The name of the owner of this kill count
 	var int                       KillCount;			// the number of kills
-
 };
 
 struct RTDeathRecord
@@ -32,7 +30,7 @@ struct RTDeathRecord
 	var array<RTKillCount>        IndividualKillCounts;   	// per-unit kill counts ( worth more to VitalPointTargeting than other kills ); the sum of these should always equal NumDeaths
 };
 
-	var() array<RTDeathRecord> DeathRecordData;				// GHOST Datavault contianing information on every kill made by deployed actor
+var() array<RTDeathRecord> DeathRecordData;					// GHOST Datavault contianing information on every kill made by deployed actor
 
 /* END KILL RECORD   */
 
@@ -127,5 +125,44 @@ function CreateRTOperatives(XComGameState NewGameState) {
 		Ghost = IteratorGhost;
 		Ghost.StateObjectRef = UnitState.GetReference();
 		Ghosts.AddItem(Ghost);
+	}
+}
+
+simulated function UpdateDeathRecordData(name CharacterTemplateName, StateObjectReference UnitRef, bool bWasCrit) {
+	local RTDeathRecord 	IteratorDeathRecord, NewDeathRecord;
+	local RTKillCount		IteratorKillCount, NewKillCount;
+	local bool				bFoundDeathRecord, bFoundKillCount;
+
+	foreach DeathRecordData(IteratorDeathRecord) {
+		if(IteratorDeathRecord.CharacterTemplateName == CharacterTemplateName) {
+			bFoundDeathRecord = true;
+			IteratorDeathRecord.NumDeaths++;
+			if(bWasCrit) {
+				IteratorDeathRecord.NumCrits++;
+			}
+			foreach IteratorDeathRecord.IndividualKillCounts(IteratorKillCount) {
+				if(IteratorKillCount.UnitRef.ObjectID == UnitRef.ObjectID) {
+					bFoundKillCount = true;
+					IteratorKillCount.NumKills++;
+				}
+			}
+			if(!bFoundKillCount) {
+				NewKillCount.UnitRef = UnitRef;
+				NewKillCount.KillCount = 1;
+				IteratorDeathRecord.IndividualKillCounts.AddItem(NewKillCount);
+			}
+		}
+	}
+	if(!bFoundDeathRecord) {
+		NewDeathRecord.CharacterTemplateName = CharacterTemplateName;
+		NewDeathRecord.NumDeaths = 1;
+		if(bWasCrit) {
+			NewDeathRecord.NumCrits = 1;
+		}
+
+		NewKillCount.UnitRef = UnitRef;
+		NewKillCount.KillCount = 1;
+		NewDeathRecord.IndividualKillCounts.AddItem(NewKillCount);
+		DeathRecordData.AddItem(NewDeathRecord);
 	}
 }
