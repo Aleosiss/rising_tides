@@ -25,13 +25,13 @@ var int BonusDamage;
 //
 	////if(XComGameState_Unit(TargetDamagable) != none) {
 		////if(ResearchedTemplates.Find(XComGameState_Unit(TargetDamagable).GetMyTemplateName()) != INDEX_NONE) {
-			////FinalDamage += BonusDamage; 
+			////FinalDamage += BonusDamage;
 		////}
 	////}
 //
 	//if(AppliedData.AbilityResultContext.HitResult == eHit_Crit || AppliedData.AbilityResultContext.HitResult == eHit_Success)
 		//return FinalDamage;
-//}	
+//}
 //
 //function int CalculateBonusTier(XComGameState_Unit SourceUnitState, Damageable TargetDamageable, bool bCheckCritTier = false) {
 //
@@ -71,11 +71,11 @@ var int BonusDamage;
 //
       //return LookupBonusTier(ReturnValue);
       //
-//}	
+//}
 //
 //function int LookupBonusTier(int InValue) {
 	//switch (InValue) {
-		//case InValue < 1: 
+		//case InValue < 1:
 			//return 1;
 		//case InValue = 1:
 			//return 2;

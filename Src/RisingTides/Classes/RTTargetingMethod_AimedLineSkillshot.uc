@@ -1,11 +1,11 @@
 //---------------------------------------------------------------------------------------
 //  FILE:    RTTargetingMethod_AimedLineSkillshot.uc
-//  AUTHOR:  Aleosiss  
+//  AUTHOR:  Aleosiss
 //  DATE:    18 March 2016
 //  PURPOSE: Targeting method that aims a line at a target.
-//           
+//
 //---------------------------------------------------------------------------------------
-// 
+//
 //---------------------------------------------------------------------------------------
 
 class RTTargetingMethod_AimedLineSkillshot extends X2TargetingMethod;
@@ -23,7 +23,7 @@ function Init(AvailableAction InAction)
 	local X2Camera_MidpointTimed LookAtMidpointCamera;
 	local X2AbilityTemplate AbilityTemplate;
 	local float TileLength;
-	
+
 	super.Init(InAction);
 
 	// Make sure we have targets of some kind.
@@ -149,14 +149,14 @@ function DirectSetTarget(int TargetIndex)
 
 	Pres = `PRES;
 	History = `XCOMHISTORY;
-	
+
 	NotifyTargetTargeted(false);
 
 	// advance the target counter
 	NewTarget = TargetIndex % Action.AvailableTargets.Length;
 	if(NewTarget < 0) NewTarget = Action.AvailableTargets.Length + NewTarget;
 	// put the targeting reticle on the new target
-	TacticalHud = Pres.GetTacticalHUD();    
+	TacticalHud = Pres.GetTacticalHUD();
 	if(NewTarget != LastTarget)
 	{
 		LastTarget = NewTarget;
@@ -178,7 +178,7 @@ function DirectSetTarget(int TargetIndex)
 	bGoodTarget = true;
 
 	GetTargetedActors(NewTargetLocation, CurrentlyMarkedTargets, Tiles);
-	CheckForFriendlyUnit(CurrentlyMarkedTargets);	
+	CheckForFriendlyUnit(CurrentlyMarkedTargets);
 	MarkTargetedActors(CurrentlyMarkedTargets, (!AbilityIsOffensive) ? FiringUnit.GetTeam() : eTeam_None );
 
 	DrawAOETiles(Tiles);
@@ -219,7 +219,7 @@ function DirectSetTarget(int TargetIndex)
 		`CAMERASTACK.AddCamera(MidpointCamera);
 	}
 
-	
+
 }
 
 private function NotifyTargetTargeted(bool Targeted)

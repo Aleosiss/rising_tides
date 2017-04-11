@@ -2,14 +2,14 @@
 //  FILE:    RTEffect_Stealth.uc
 //  AUTHOR:  Aleosiss
 //	DATE:	 7/14/16
-//  PURPOSE: True stealth ability, which is simply normal Ranger Stealth + 
+//  PURPOSE: True stealth ability, which is simply normal Ranger Stealth +
 //			 a DetectionModifier bump.
-//           
+//
 //---------------------------------------------------------------------------------------
-//  
+//
 //---------------------------------------------------------------------------------------
 class RTEffect_Stealth extends X2Effect_PersistentStatChange;
-	
+
 var float fStealthModifier;
 
 var name StealthPreviousUnitValName;
@@ -22,27 +22,27 @@ simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffe
 
 	UnitState = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(ApplyEffectParameters.SourceStateObjectRef.ObjectID));
 	fCurrentModifier = UnitState.GetCurrentStat(eStat_DetectionModifier);
-	fFinalModifier = fStealthModifier - fCurrentModifier; // newcurrentstat = currentstat + finalmodifier 
+	fFinalModifier = fStealthModifier - fCurrentModifier; // newcurrentstat = currentstat + finalmodifier
 
 	m_aStatChanges.Length = 0;
 	AddPersistentStatChange(eStat_DetectionModifier, fFinalModifier);
 	super.OnEffectAdded(ApplyEffectParameters, kNewTargetState, NewGameState, NewEffectState);
 
-	
+
 	bWasPreviouslyConcealed = UnitState.IsConcealed();
 	if(bWasPreviouslyConcealed) {
-		UnitState.SetUnitFloatValue(StealthPreviousUnitValName, 1, eCleanUp_BeginTactical);	
+		UnitState.SetUnitFloatValue(StealthPreviousUnitValName, 1, eCleanUp_BeginTactical);
 	} else {
 		UnitState.SetUnitFloatValue(StealthPreviousUnitValName, 0, eCleanUp_BeginTactical);
 	}
-	
+
 	if (UnitState != none && !bWasPreviouslyConcealed) {
 		// special stealth-only notification for abilities that trigger on stealth gain.
 		// in this block so that we don't have Persisting Images procing when ghosting
 		`XEVENTMGR.TriggerEvent('UnitEnteredRTSTealth', UnitState, UnitState, NewGameState);
 		`XEVENTMGR.TriggerEvent('EffectEnterUnitConcealment', UnitState, UnitState, NewGameState);
 	}
-	
+
 }
 
 simulated function OnEffectRemoved(const out EffectAppliedData ApplyEffectParameters, XComGameState NewGameState, bool bCleansed, XComGameState_Effect RemovedEffectState)
@@ -63,14 +63,14 @@ simulated function OnEffectRemoved(const out EffectAppliedData ApplyEffectParame
 
 	NewUnitState = XComGameState_Unit(NewGameState.CreateStateObject(class'XComGameState_Unit', OldUnitState.ObjectID));
 	NewUnitState.SetUnitFloatValue(StealthPreviousUnitValName, 0, eCleanUp_BeginTactical);
-	
+
 	// Stealth can wear off naturally and not break concealment
 	if (NewUnitState != none && !bWasPreviouslyConcealed && OldUnitState.IsConcealed()) {
 		`XEVENTMGR.TriggerEvent('EffectBreakUnitConcealment', NewUnitState, NewUnitState, NewGameState);
 	}
 
 	NewGameState.AddStateObject(NewUnitState);
-	
+
 }
 
 simulated function AddX2ActionsForVisualization(XComGameState VisualizeGameState, out VisualizationTrack BuildTrack, name EffectApplyResult)
@@ -84,12 +84,12 @@ simulated function AddX2ActionsForVisualization(XComGameState VisualizeGameState
 	local MaterialInstanceTimeVarying	MITV;
 
 	local RTAction_ApplyMITV	MITVAction;
-	
+
 	super.AddX2ActionsForVisualization(VisualizeGameState, BuildTrack, EffectApplyResult);
-	
+
 	MITVAction = RTAction_ApplyMITV(class'RTAction_ApplyMITV'.static.AddToVisualizationTrack(BuildTrack, VisualizeGameState.GetContext()));
 	MITVAction.MITVPath = "FX_Wraith_Armor.M_Wraith_Armor_Overlay_On_MITV";
-	
+
 	/*
 	History = `XCOMHISTORY;
 
@@ -101,7 +101,7 @@ simulated function AddX2ActionsForVisualization(XComGameState VisualizeGameState
 
 	UnitState = XComGameState_Unit(History.GetGameStateForObjectID(InteractingUnitRef.ObjectID));
 	UnitActor = XGUnit(UnitState.GetVisualizer());
-	UnitPawn = UnitActor.GetPawn();	
+	UnitPawn = UnitActor.GetPawn();
 	UnitPawn.ApplyMITV(MITV);
 	*/
 }
@@ -117,7 +117,7 @@ simulated function AddX2ActionsForVisualization_Removed(XComGameState VisualizeG
 	local XComGameState_Unit		UnitState;
 	local XComGameState_Effect		SilentMeleeEffect, EffectState;
 	local X2Action_StartStopSound	SoundAction;
-	
+
 	local RTAction_RemoveMITV		MITVAction;
 	local X2Action_Delay			DelayAction;
 
@@ -127,8 +127,8 @@ simulated function AddX2ActionsForVisualization_Removed(XComGameState VisualizeG
 	DelayAction = X2Action_Delay(class'X2Action_Delay'.static.AddToVisualizationTrack(BuildTrack, VisualizeGameState.GetContext()));
 	DelayAction.Duration = 0.33f;
 	DelayAction.bIgnoreZipMode = true;
-	
-	
+
+
 	/*
 	if (EffectApplyResult != 'AA_Success' || BuildTrack.TrackActor == none)
 	{
@@ -152,11 +152,11 @@ simulated function AddX2ActionsForVisualization_Removed(XComGameState VisualizeG
 	SoundAction.bStartPersistentSound = true;
 	SoundAction.bIsPositional = false;
 	SoundAction.vWorldPosition = SilentMeleeEffect.ApplyEffectParameters.AbilityInputContext.TargetLocations[0];
-	
+
 	UnitState = XComGameState_Unit(BuildTrack.StateObject_OldState);
 	CleanUpMITV(UnitState);
 	*/
-	
+
 }
 /*
 static function CleanUpMITV(XComGameState_Unit UnitState)

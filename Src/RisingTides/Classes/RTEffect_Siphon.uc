@@ -27,16 +27,16 @@ simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffe
 		SourceObjectID = ApplyEffectParameters.SourceStateObjectRef.ObjectID;
 		SourceUnit = XComGameState_Unit(History.GetGameStateForObjectID(SourceObjectID));
 		OldTargetUnit = XComGameState_Unit(History.GetGameStateForObjectID(TargetUnit.ObjectID));
-		
+
 		if( (SourceUnit != none) && (OldTargetUnit != none) )
 		{
 			LifeAmount = (OldTargetUnit.GetCurrentStat(eStat_HP) - TargetUnit.GetCurrentStat(eStat_HP));
 			LifeAmount = LifeAmount * (1 + SiphonAmountMultiplier);
-			
+
 			if(LifeAmount > SiphonMaxVal && SiphonMaxVal > -1) {
 				FinalLifeAmount = SiphonMaxVal;
 			} else {
-				FinalLifeAmount = max(LifeAmount, SiphonMinVal); 
+				FinalLifeAmount = max(LifeAmount, SiphonMinVal);
 			}
 
 			SourceUnit = XComGameState_Unit(NewGameState.CreateStateObject(class'XComGameState_Unit', SourceObjectID));
@@ -60,7 +60,7 @@ simulated function AddX2ActionsForVisualizationSource(XComGameState VisualizeGam
 	NewUnit = XComGameState_Unit(BuildTrack.StateObject_NewState);
 
 	Healed = NewUnit.GetCurrentStat(eStat_HP) - OldUnit.GetCurrentStat(eStat_HP);
-	
+
 	if( Healed > 0 )
 	{
 		SoundAndFlyOver = X2Action_PlaySoundAndFlyOver(class'X2Action_PlaySoundAndFlyOver'.static.AddToVisualizationTrack(BuildTrack, VisualizeGameState.GetContext()));

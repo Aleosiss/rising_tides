@@ -3,12 +3,12 @@ class RTEffect_HeatChannel extends X2Effect_Persistent;
 function RegisterForEvents(XComGameState_Effect EffectGameState)
 {
 	local X2EventManager EventMgr;
-    local RTGameState_Effect HeatEffectState;
+	local RTGameState_Effect HeatEffectState;
 	local Object EffectObj, FilterObj;
 
 	EventMgr = `XEVENTMGR;
-    HeatEffectState = RTGameState_Effect(EffectGameState);
-  
+	HeatEffectState = RTGameState_Effect(EffectGameState);
+
 	EffectObj = HeatEffectState;
 	FilterObj = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(EffectGameState.ApplyEffectParameters.SourceStateObjectRef.ObjectID));
 

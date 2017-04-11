@@ -1,11 +1,11 @@
 //---------------------------------------------------------------------------------------
 //  FILE:    RTEffect_Meld.uc
-//  AUTHOR:  Aleosiss  
+//  AUTHOR:  Aleosiss
 //  DATE:    18 March 2016
 //  PURPOSE: Meld effect
-//           
+//
 //---------------------------------------------------------------------------------------
-// 
+//
 //---------------------------------------------------------------------------------------
 
 class RTEffect_Meld extends X2Effect_PersistentStatChange config(RTGhost);
@@ -39,9 +39,9 @@ simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffe
 	EffectTargetUnit = XComGameState_Unit(kNewTargetState);
 	MeldEffectState = RTGameState_MeldEffect(NewEffectState);
 
-	
-		
-	EventMgr.TriggerEvent('RTAddToMeld', EffectTargetUnit, EffectTargetUnit, NewGameState); 
+
+
+	EventMgr.TriggerEvent('RTAddToMeld', EffectTargetUnit, EffectTargetUnit, NewGameState);
 
 	ListenerObj = MeldEffectState;
 	if(ListenerObj == none)
@@ -52,14 +52,14 @@ simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffe
 	EventMgr.RegisterForEvent(ListenerObj, 'RTAddToMeld', MeldEffectState.AddUnitToMeld, ELD_OnStateSubmitted,,,true);
 	EventMgr.RegisterForEvent(ListenerObj, 'RTRemoveFromMeld', MeldEffectState.RemoveUnitFromMeld, ELD_OnStateSubmitted,,,true);
 
-	 
-	EventMgr.RegisterForEvent(ListenerObj, 'RTFeedback', MeldEffectState.RemoveUnitFromMeld,ELD_OnStateSubmitted,,,true); 
-	
+
+	EventMgr.RegisterForEvent(ListenerObj, 'RTFeedback', MeldEffectState.RemoveUnitFromMeld,ELD_OnStateSubmitted,,,true);
+
 	EventMgr.RegisterForEvent(ListenerObj, 'TacticalGameEnd', MeldEffectState.OnTacticalGameEnd, ELD_OnStateSubmitted);
 
 
 	MeldEffectState.Initialize(EffectTargetUnit);
-	
+
 	m_aStatChanges.length = 0;
 	//MeldEffectState.StatChanges.Length = 0;
 
@@ -70,7 +70,7 @@ simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffe
 	AddPersistentStatChange(eStat_Will, MeldWill);
 	AddPersistentStatChange(eStat_Hacking, MeldHacking);
 	AddPersistentStatChange(eStat_PsiOffense, MeldPsiOff);
-	
+
 	MeldEffectState.StatChanges = m_aStatChanges;
 
 
@@ -82,9 +82,9 @@ simulated function OnEffectRemoved(const out EffectAppliedData ApplyEffectParame
 	local XComGameState_Unit EffectTargetUnit;
 
 	EffectTargetUnit = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(ApplyEffectParameters.TargetStateObjectRef.ObjectID));
-	`XEVENTMGR.TriggerEvent('RTRemoveFromMeld', EffectTargetUnit, EffectTargetUnit, NewGameState); 
+	`XEVENTMGR.TriggerEvent('RTRemoveFromMeld', EffectTargetUnit, EffectTargetUnit, NewGameState);
 	super.OnEffectRemoved(ApplyEffectParameters, NewGameState, bCleansed, RemovedEffectState);
-	
+
 }
 
 DefaultProperties

@@ -2,7 +2,7 @@
 //  FILE:    X2Action_DLC_Day60Freeze.uc
 //  AUTHOR:  Joshua Bouscher
 //  PURPOSE: Literally a copy-paste so that this shit compiles, please don't sue me
-//           
+//
 //---------------------------------------------------------------------------------------
 //  Copyright (c) 2016 Firaxis Games, Inc. All rights reserved.
 //---------------------------------------------------------------------------------------

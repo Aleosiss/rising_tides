@@ -57,7 +57,7 @@ private function DirectSelectNearestTarget()
 	}
 	else
 	{
-		// iterate over each target in the target list and select the closest one to the source 
+		// iterate over each target in the target list and select the closest one to the source
 		ClosestTargetIndex = -1;
 
 		History = `XCOMHISTORY;
@@ -189,7 +189,7 @@ function bool GetCurrentTargetFocus(out Vector Focus)
 		Focus = TargetUnit.GetShootAtLocation(eHit_Success, Shooter);
 		return true;
 	}
-	
+
 	return false;
 }
 

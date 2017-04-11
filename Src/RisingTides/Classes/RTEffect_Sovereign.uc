@@ -2,7 +2,7 @@
 //  FILE:    RTEffect_Sovereign.uc
 //  AUTHOR:  Aleosiss
 //  DATE:    11 March 2016
-//  PURPOSE: Tick panic on crit kills      
+//  PURPOSE: Tick panic on crit kills
 //---------------------------------------------------------------------------------------
 //	Tick Panic
 //---------------------------------------------------------------------------------------
@@ -35,7 +35,7 @@ function bool PostAbilityCostPaid(XComGameState_Effect EffectState, XComGameStat
 		bIsMindWrack = true;
 	if(EffectState.ApplyEffectParameters.AbilityResultContext.HitResult == eHit_Crit)
 		bIsCriticalHit = true;
-		
+
 	//  make sure we're getting a crit with a gun or using mind wrack
 	if (bIsStandardFire && bIsCriticalHit || bIsMindWrack)
 	{
@@ -59,8 +59,8 @@ function bool PostAbilityCostPaid(XComGameState_Effect EffectState, XComGameStat
 		}
 	}
 			//return true;
-		
-																							
+
+
 	return false;
 }
 */

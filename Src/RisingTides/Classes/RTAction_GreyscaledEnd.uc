@@ -12,7 +12,7 @@ simulated function UnFreezeActionUnit()
 	local CustomAnimParams AnimParams;
 
 	UnitPawn.GetAnimTreeController().SetAllowNewAnimations(true);
-	
+
 	AnimParams.AnimName = 'ADD_FreezeStop';
 	if( UnitPawn.GetAnimTreeController().CanPlayAnimation(AnimParams.AnimName) )
 	{

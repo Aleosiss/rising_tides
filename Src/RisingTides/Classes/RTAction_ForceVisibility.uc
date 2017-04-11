@@ -5,22 +5,22 @@ class RTAction_ForceVisibility extends X2Action;
 var EForceVisibilitySetting Visibility;
 
 event bool BlocksAbilityActivation() {
-    return false;
+	return false;
 }
 
 function Init(const out VisualizationTrack InTrack) {
-    super.Init(InTrack);
+	super.Init(InTrack);
 }
 
 simulated state Executing {
-    Begin:
-          Unit.SetForceVisibility(Visibility);
-          Unit.GetPawn().UpdatePawnVisibility();
+	Begin:
+			Unit.SetForceVisibility(Visibility);
+			Unit.GetPawn().UpdatePawnVisibility();
 
-          CompleteAction();
+			CompleteAction();
 }
 
 defaultproperties
 {
-    Visibility = eForceNone;
+	Visibility = eForceNone;
 }

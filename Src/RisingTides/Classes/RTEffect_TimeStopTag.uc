@@ -3,7 +3,7 @@
 //  AUTHOR:  Aleosiss
 //  DATE:    8 August 2016
 //  PURPOSE: Tracks damage preview/calcualtion for TimeStop
-//  NOTES: There is absolutely no reason this shouldn't just be a part of TimeStopMaster... except for no discernable reason, the effect will not work when attached there.  
+//  NOTES: There is absolutely no reason this shouldn't just be a part of TimeStopMaster... except for no discernable reason, the effect will not work when attached there.
 //			EDIT: Took me 8 months, but I figured out why it wouldn't work; unfortunately, i'm lazy as fuck and am not going to refactor.
 //---------------------------------------------------------------------------------------
 //	Time Stop tag effect
@@ -30,7 +30,7 @@ function int GetAttackingDamageModifier(XComGameState_Effect EffectState, XComGa
 						`LOG("Rising Tides: TimeStopEffectState Found, proceeding...");
 						break;
 					}
-				}	
+				}
 			}
 	}
 	// This is truly the darkest timeline...
@@ -40,10 +40,10 @@ function int GetAttackingDamageModifier(XComGameState_Effect EffectState, XComGa
 		TimeStopEffectState.iShouldRecordCounter = TimeStopEffectState.iShouldRecordCounter + 1; // 1 after the first pass, 2 after the second
 	}
 
-	return 0; 
+	return 0;
 }
 
-function int GetExtraArmorPiercing(XComGameState_Effect EffectState, XComGameState_Unit Attacker, Damageable TargetDamageable, XComGameState_Ability AbilityState, const out EffectAppliedData AppliedData) { 
+function int GetExtraArmorPiercing(XComGameState_Effect EffectState, XComGameState_Unit Attacker, Damageable TargetDamageable, XComGameState_Ability AbilityState, const out EffectAppliedData AppliedData) {
 	local RTGameState_TimeStopEffect	TimeStopEffectState;
 	local XComGameState_Effect			TempEffectState;
 	local StateObjectReference			EffectRef;
@@ -52,7 +52,7 @@ function int GetExtraArmorPiercing(XComGameState_Effect EffectState, XComGameSta
 	`LOG("Rising Tides: RTEffect_TimeStopMaster.GetExtraArmorPiercing called...");
 	TargetUnit = XComGameState_Unit(TargetDamageable);
 	if(TargetUnit != none) {
-		foreach TargetUnit.AffectedByEffects(EffectRef) 
+		foreach TargetUnit.AffectedByEffects(EffectRef)
 		{
 			TempEffectState = XComGameState_Effect(`XCOMHISTORY.GetGameStateForObjectID(EffectRef.ObjectID));
 			if(TempEffectState != none){
@@ -67,18 +67,18 @@ function int GetExtraArmorPiercing(XComGameState_Effect EffectState, XComGameSta
 	if(TimeStopEffectState != none) {
 		if(TimeStopEffectState.iShouldRecordCounter == 1) {
 			TimeStopEffectState.bShouldRecordDamageValue = true;
-			`LOG("Rising Tides: TimeStopEffectState should record the damage value!");	
-		} 
+			`LOG("Rising Tides: TimeStopEffectState should record the damage value!");
+		}
 		else {
 			if(TimeStopEffectState.iShouldRecordCounter == 2)
 				`LOG("Rising Tides: TimeStopEffectState detected a damage preview attempt and will not record a damage value.");
 			TimeStopEffectState.bShouldRecordDamageValue = false;
-			`LOG("Rising Tides: TimeStopEffectState.bShouldRecordDamageValue is incorrect: " @ TimeStopEffectState.iShouldRecordCounter);	
+			`LOG("Rising Tides: TimeStopEffectState.bShouldRecordDamageValue is incorrect: " @ TimeStopEffectState.iShouldRecordCounter);
 		}
 		TimeStopEffectState.iShouldRecordCounter = 0;
 	}
-	
-	return 0; 
+
+	return 0;
 }
 
 DefaultProperties

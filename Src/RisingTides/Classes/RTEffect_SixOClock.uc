@@ -48,7 +48,7 @@ function bool PostAbilityCostPaid(XComGameState_Effect EffectState, XComGameStat
 
 				Count.fValue = Count.fValue + 1;
 				SourceUnit.SetUnitFloatValue('SOCCounter', Count.fValue, eCleanup_BeginTurn);
-				 
+
 				EventMgr = `XEVENTMGR;
 				EventMgr.TriggerEvent('SixOClockTriggered', AbilityState, SourceUnit, NewGameState);
 

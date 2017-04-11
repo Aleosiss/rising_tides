@@ -1,9 +1,9 @@
 //---------------------------------------------------------------------------------------
 //  FILE:    RTAbilityCooldown.uc
 //
-//           
+//
 //---------------------------------------------------------------------------------------
-//  
+//
 //---------------------------------------------------------------------------------------
 class RTAbilityCooldown extends X2AbilityCooldown;
 
@@ -12,7 +12,6 @@ simulated function int GetNumTurns(XComGameState_Ability kAbility, XComGameState
 	if (XComGameState_Unit(AffectState).IsUnitAffectedByEffectName('RTEffect_PsionicSurge'))	  {
 		return 0;
 	}
-
 	return iNumTurns;
 }
 

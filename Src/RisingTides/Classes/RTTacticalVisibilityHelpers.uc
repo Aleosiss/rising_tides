@@ -1,27 +1,27 @@
 //---------------------------------------------------------------------------------------
 //  FILE:    RTTacticalVisibilityHelpers.uc
-//  AUTHOR:  Aleosiss  
+//  AUTHOR:  Aleosiss
 //  DATE:    6 March 2016
-//  PURPOSE: Container class that holds methods specific to tactical that help filter / 
+//  PURPOSE: Container class that holds methods specific to tactical that help filter /
 //           serve queries for tactical mechanics.
-//           
+//
 //---------------------------------------------------------------------------------------
-// 
+//
 //---------------------------------------------------------------------------------------
 class RTTacticalVisibilityHelpers extends X2TacticalVisibilityHelpers;
 
 // custom GetAllVisibleAlliesForUnit function
 /// <summary>
 /// Returns an out param, VisibleUnits, containing all the allied units that a given unit can see
-/// </summary> 
-simulated static function GetAllVisibleAlliesForUnit(int SourceStateObjectID, 
+/// </summary>
+simulated static function GetAllVisibleAlliesForUnit(int SourceStateObjectID,
 													  out array<StateObjectReference> VisibleUnits,
 													  optional array<X2Condition> RequiredConditions,
 													  int HistoryIndex = -1)
 {
 	local int Index;
 	local XComGameStateHistory History;
-	local X2GameRulesetVisibilityManager VisibilityMgr;	
+	local X2GameRulesetVisibilityManager VisibilityMgr;
 	local XComGameState_unit SourceState;
 
 	History = `XCOMHISTORY;
@@ -50,14 +50,14 @@ simulated static function GetAllVisibleAlliesForUnit(int SourceStateObjectID,
 /// <summary>
 /// Returns an out param, VisibleUnits, containing all the allied units that a given player can see
 /// </summary>
-static event GetAllVisibleAlliesForPlayer(int PlayerStateObjectID, 
+static event GetAllVisibleAlliesForPlayer(int PlayerStateObjectID,
 														out array<StateObjectReference> VisibleUnits,
 														int HistoryIndex = -1,
 														bool IncludeNonUnits = false)
 {
 	local int Index;
 	local XComGameState_Unit PlayerUnit;
-	local XComGameStateHistory History;	
+	local XComGameStateHistory History;
 
 	History = `XCOMHISTORY;
 
@@ -125,7 +125,7 @@ simulated static function GetAllSquadsightAlliedForUnit(int SourceStateObjectID,
 				{
 					if (VisInfo.bClearLOS)
 						VisibleUnits.AddItem(VisibleToPlayer[i]);
-				}				
+				}
 			}
 		}
 	}

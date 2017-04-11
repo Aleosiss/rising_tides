@@ -4,7 +4,7 @@
 //  DATE:    16 May 2016
 //  PURPOSE: Modified panic effect, should be similar to Long War (units simply do nothing)
 //---------------------------------------------------------------------------------------
-//	
+//
 //---------------------------------------------------------------------------------------
 
 class RTEffect_Panicked extends X2Effect_Panicked config(RTGhost);
@@ -15,7 +15,7 @@ simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffe
 	local Name PanicBehaviorTree;
 	local bool bCivilian;
 	local int Point;
-	
+
 	UnitState = XComGameState_Unit(kNewTargetState);
 	if (m_aStatChanges.Length > 0)
 	{
@@ -25,7 +25,7 @@ simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffe
 		super.OnEffectAdded(ApplyEffectParameters, kNewTargetState, NewGameState, NewEffectState);
 	}
 
-	// Add two standard action points for panicking actions.	
+	// Add two standard action points for panicking actions.
 	bCivilian = UnitState.GetTeam() == eTeam_Neutral;
 	if( !bCivilian )
 	{
@@ -60,7 +60,7 @@ simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffe
 		// Kick off panic behavior tree.
 		PanicBehaviorTree = Name(UnitState.GetMyTemplate().strPanicBT);
 
-		// Delayed behavior tree kick-off.  Points must be added and game state submitted before the behavior tree can 
+		// Delayed behavior tree kick-off.  Points must be added and game state submitted before the behavior tree can
 		// update, since it requires the ability cache to be refreshed with the new action points.
 		UnitState.AutoRunBehaviorTree(PanicBehaviorTree, 2, `XCOMHISTORY.GetCurrentHistoryIndex() + 1, true);
 	}

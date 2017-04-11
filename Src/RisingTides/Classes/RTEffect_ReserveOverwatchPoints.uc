@@ -2,7 +2,7 @@
 //  FILE:    RTEffect_ReserveActionPoints.uc
 //  AUTHOR:  Aleosiss
 //  DATE:    10 March 2016
-//  PURPOSE: Calculate the number of shots that Whisper can take on overwatc         
+//  PURPOSE: Calculate the number of shots that Whisper can take on overwatc
 //---------------------------------------------------------------------------------------
 //	Reserve Action Points
 //---------------------------------------------------------------------------------------
@@ -13,7 +13,7 @@ simulated protected function int GetNumPoints(XComGameState_Unit UnitState)
 {
 	if(UnitState.HasSoldierAbility('SixOClock'))
 	{
-	    return NumPoints;
+		return NumPoints;
 	}
 	else
 	{

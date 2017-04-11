@@ -7,7 +7,7 @@ simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffe
 	local XComGameState_Unit TargetUnit;
 
 	TargetUnit = XComGameState_Unit(kNewTargetState);
-	
+
 	// Could you, Madoka? Could you see me in my stopped time?
 	// Uh, no...
 	// Oh.
@@ -21,32 +21,32 @@ simulated function bool OnEffectTicked(const out EffectAppliedData ApplyEffectPa
 	DelayReinforcementSpawners(NewGameState);
 	DelayTimer(NewGameState);
 	return true;
-}	
+}
 
 simulated function OnEffectRemoved(const out EffectAppliedData ApplyEffectParameters, XComGameState NewGameState, bool bCleansed, XComGameState_Effect RemovedEffectState)
 {
 	//ModifyTimer(!bShouldPauseTimer);
-	
+
 	super.OnEffectRemoved(ApplyEffectParameters, NewGameState, bCleansed, RemovedEffectState);
 }
 
 simulated function DelayReinforcementSpawners(XComGameState NewGameState) {
 	local XComGameState_AIReinforcementSpawner OldSpawnerState, NewSpawnerState;
 	local XComGameStateHistory History;
-	
+
 	History = `XCOMHISTORY;
 	foreach History.IterateByClassType(class'XComGameState_AIReinforcementSpawner', OldSpawnerState) {
 		NewSpawnerState = XComGameState_AIReinforcementSpawner(NewGameState.CreateStateObject(OldSpawnerState.class, OldSpawnerState.ObjectID));
 		NewGameState.AddStateObject(NewSpawnerState);
 		NewSpawnerState.Countdown += 1;
 	}
-	
+
 }
 
 simulated function DelayTimer(XComGameState NewGameState) {
 	local XComGameState_UiTimer OldUiTimer, NewUiTimer;
 	local XComGameStateHistory History;
-	
+
 	History = `XCOMHISTORY;
 	//update the mission timer, if there is one
 	OldUiTimer = XComGameState_UITimer(History.GetSingleGameStateObjectForClass(class 'XComGameState_UITimer', true));
@@ -59,4 +59,3 @@ simulated function DelayTimer(XComGameState NewGameState) {
 			NewUiTimer.UiState = Normal_Blue;
 	}
 }
-

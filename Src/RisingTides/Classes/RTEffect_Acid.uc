@@ -1,9 +1,9 @@
 //---------------------------------------------------------------------------------------
 //  FILE:    RTEffect_Acid.uc
 //  AUTHOR:  Aleosiss  --  9/29/2016
-//  PURPOSE: Queen's acidic blades have unique rules when compared to burning: 
+//  PURPOSE: Queen's acidic blades have unique rules when compared to burning:
 //           Stacking duration and damage on re-apply, and shredding armor on tick.
-//           
+//
 //---------------------------------------------------------------------------------------
 
 class RTEffect_Acid extends X2Effect_Persistent;
@@ -18,12 +18,12 @@ function bool IsThisEffectBetterThanExistingEffect(const out XComGameState_Effec
 
 	ExistingAcidEffectTemplate = RTEffect_Acid(ExistingEffect.GetX2Effect());
 	`assert( ExistingAcidEffectTemplate != None );
-        
-        // increase the damage of the effect
-        GetAcidDamage().EffectDamageValue.Damage += ExistingAcidEffectTemplate.GetAcidDamage().EffectDamageValue.Damage;
-        GetAcidDamage().EffectDamageValue.Shred += ExistingAcidEffectTemplate.GetAcidDamage().EffectDamageValue.Shred;
-        // iStackCount = ExistingAcidEffectTemplate.iStackCount + 1;
-	
+
+		// increase the damage of the effect
+		GetAcidDamage().EffectDamageValue.Damage += ExistingAcidEffectTemplate.GetAcidDamage().EffectDamageValue.Damage;
+		GetAcidDamage().EffectDamageValue.Shred += ExistingAcidEffectTemplate.GetAcidDamage().EffectDamageValue.Shred;
+		// iStackCount = ExistingAcidEffectTemplate.iStackCount + 1;
+
 
 	return true; // the effect is always better
 }
@@ -35,9 +35,9 @@ simulated function SetAcidDamage(int Damage, int Spread, int Shred, name DamageT
 	AcidDamage= GetAcidDamage();
 	AcidDamage.EffectDamageValue.Damage = Damage;
 	AcidDamage.EffectDamageValue.Spread = Spread;
-    AcidDamage.EffectDamageValue.Shred = Shred;
+	AcidDamage.EffectDamageValue.Shred = Shred;
 	AcidDamage.EffectDamageValue.DamageType = DamageType;
-	AcidDamage.bIgnoreBaseDamage = true; 
+	AcidDamage.bIgnoreBaseDamage = true;
 }
 
 
@@ -83,7 +83,7 @@ DefaultProperties
 	DamageTypes(0)="Acid"
 	DuplicateResponse=eDupe_Refresh
 	bCanTickEveryAction= false // would probably be op
-    iStackCount = 1
+	iStackCount = 1
 
 	Begin Object Class=X2Effect_ApplyWeaponDamage Name=AcidDamage
 	End Object

@@ -1,11 +1,11 @@
 //---------------------------------------------------------------------------------------
 //  FILE:    RTAbilityMultiTarget_Line.uc
 //  AUTHOR:  Aleosiss
-//  DATE:    March 24 2016 
+//  DATE:    March 24 2016
 //
-//  PURPOSE: Implement GetMultiTargetOptions for Line target schema         
+//  PURPOSE: Implement GetMultiTargetOptions for Line target schema
 //---------------------------------------------------------------------------------------
-//  
+//
 //---------------------------------------------------------------------------------------
 class RTAbilityMultiTarget_TargetedLine extends X2AbilityMultiTarget_Line;
 
@@ -29,20 +29,20 @@ simulated function GetMultiTargetOptions(const XComGameState_Ability Ability, ou
 
 	// I have no idea how I would go about implementing this myself, so just hijack GetMultiTargetsForLocation
 	// Get the TargetUnitLocation from the primary target of the targets array, then save the primary target
-	// so it doesn't get overwritten 	 
-	
+	// so it doesn't get overwritten
+
 	for(i = 0; i < Targets.Length; i++)
 	{
 		// reset this array for each target, otherwise each shot hits every enemy that can be aimed at at once
 		Target.AdditionalTargets.Length = 0;
-		
+
 		TargetUnit = XComGameState_Unit(History.GetGameStateForObjectID(Targets[i].PrimaryTarget.ObjectID));
 		TargetUnitLocation = World.GetPositionFromTileCoordinates(TargetUnit.TileLocation);
-		
+
 		Target.PrimaryTarget = Targets[i].PrimaryTarget;
 		GetMultiTargetsForLocation(Ability, TargetUnitLocation, Target);
 
-		Targets[i] = Target; 
+		Targets[i] = Target;
 	}
 }
 

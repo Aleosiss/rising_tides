@@ -8,7 +8,7 @@ simulated function bool OnEffectTicked(const out EffectAppliedData ApplyEffectPa
 	local XComGameState_Unit TargetUnitState;
 	local XComGameState_Unit SourceUnitState;
 
-    
+
 	if(GuiltyConscienceEventName == '') {
 		`RedScreenOnce("Rising Tides: Someone forgot to set the GuiltyConscienceEventName...");
 	}
@@ -17,19 +17,19 @@ simulated function bool OnEffectTicked(const out EffectAppliedData ApplyEffectPa
 	SourceUnitState = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(ApplyEffectParameters.SourceStateObjectRef.ObjectID));
 
 	`LOG("Rising Tides: Guilty Conscience ticked" @ kNewEffectState.iStacks);
-    if(kNewEffectState.iStacks >= iTriggerThreshold) {
-        `LOG("Rising Tides: Guilty Conscience TRIGGERED on " @ TargetUnitState.GetFullName());
+	if(kNewEffectState.iStacks >= iTriggerThreshold) {
+		`LOG("Rising Tides: Guilty Conscience TRIGGERED on " @ TargetUnitState.GetFullName());
 		`XEVENTMGR.TriggerEvent(GuiltyConscienceEventName, TargetUnitState, SourceUnitState, NewGameState);
-        kNewEffectState.iStacks = 1;
-    } else {
+		kNewEffectState.iStacks = 1;
+	} else {
 		kNewEffectState.iStacks++;
 	}
 
-    return super.OnEffectTicked(ApplyEffectParameters, kNewEffectState, NewGameState, FirstApplication);
+	return super.OnEffectTicked(ApplyEffectParameters, kNewEffectState, NewGameState, FirstApplication);
 }
 
 defaultproperties
 {
-    GameStateEffectClass = class'RTGameState_Effect'
-    iTriggerThreshold = 10
+	GameStateEffectClass = class'RTGameState_Effect'
+	iTriggerThreshold = 10
 }

@@ -2,8 +2,8 @@
 //  FILE:    RTEffect_SlowIsSmooth.uc
 //  AUTHOR:  Aleosiss
 //  DATE:    11 March 2016
-//  PURPOSE: Count the number of turns until Whisper can reenter concealment (and enter it). 
-//           
+//  PURPOSE: Count the number of turns until Whisper can reenter concealment (and enter it).
+//
 //---------------------------------------------------------------------------------------
 //	Slow Is Smooth effect
 //---------------------------------------------------------------------------------------
@@ -34,7 +34,7 @@ simulated function bool OnEffectTicked(const out EffectAppliedData ApplyEffectPa
 	local XComGameState_Unit			EffectTargetUnit;
 	local UnitValue						Count;
 	local array<StateObjectReference>	VisibleUnits;
-	
+
 	EffectTargetUnit = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(ApplyEffectParameters.TargetStateObjectRef.ObjectID));
 	if(!EffectTargetUnit.GetUnitValue('SISCounter', Count))		   // If there somehow is no SISCounter, make one
 		EffectTargetUnit.SetUnitFloatValue('SISCounter', 0, eCleanup_BeginTactical);
@@ -45,17 +45,17 @@ simulated function bool OnEffectTicked(const out EffectAppliedData ApplyEffectPa
 		{
 			EffectTargetUnit.GetUnitValue('SISCounter', Count);
 			EffectTargetUnit.SetUnitFloatValue('SISCounter', (Count.fValue + 1), eCleanup_BeginTactical);
-			if(Count.fValue > CONCEALMENT_DELAY_TURNS - 1)								   // Four turns of this and we reenter concealment			
+			if(Count.fValue > CONCEALMENT_DELAY_TURNS - 1)								   // Four turns of this and we reenter concealment
 			{
 				//OnEffectAdded(ApplyEffectParameters, EffectTargetUnit, NewGameState, kNewEffectState);
 				`XEVENTMGR.TriggerEvent('EffectEnterUnitConcealment', EffectTargetUnit, EffectTargetUnit, NewGameState);
 				EffectTargetUnit.m_bSpotted = false;
-				EffectTargetUnit.SetUnitFloatValue('SISCounter', 0, eCleanup_BeginTactical);	
+				EffectTargetUnit.SetUnitFloatValue('SISCounter', 0, eCleanup_BeginTactical);
 			}
 		}
 		else
 		{
-		   EffectTargetUnit.SetUnitFloatValue('SISCounter', 0, eCleanup_BeginTactical);
+			EffectTargetUnit.SetUnitFloatValue('SISCounter', 0, eCleanup_BeginTactical);
 		}
 	}
 	return super.OnEffectTicked(ApplyEffectParameters, kNewEffectState, NewGameState, FirstApplication);
@@ -66,5 +66,5 @@ DefaultProperties
 	DuplicateResponse = eDupe_Ignore
 	EffectName = "SlowIsSmoothEffect"
 	CONCEALMENT_DELAY_TURNS = 4
-	
+
 }

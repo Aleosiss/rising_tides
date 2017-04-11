@@ -14,12 +14,12 @@ function RegisterForEvents(XComGameState_Effect EffectGameState)
 
 	// Check when anything moves. OnUpdateAuraCheck will handle a total update check as well as a single update check.
 	EventMgr.RegisterForEvent(EffectObj, 'UnitMoveFinished', RTEffectState.OnUpdateAuraCheck, ELD_OnStateSubmitted, 60);
-	
+
 	// Check when anything spawns.
 	EventMgr.RegisterForEvent(EffectObj, 'OnUnitBeginPlay', RTEffectState.OnUpdateAuraCheck, ELD_OnStateSubmitted, 40);
-	
+
 	// Clean up MobileSquadViewers. Shouldn't actually need this.
-	// TODO: Verify that this is extraneous and remove. 
+	// TODO: Verify that this is extraneous and remove.
 	EventMgr.RegisterForEvent(EffectObj, 'PlayerTurnBegun', RTEffectState.CleanupMobileSquadViewers, ELD_OnStateSubmitted, 50);
 }
 
@@ -31,13 +31,13 @@ protected function bool CheckAuraConditions(XComGameState_Unit SourceUnitState, 
 }
 
 protected function X2AbilityTemplate GetAuraTemplate(XComGameState_Unit SourceUnitState, XComGameState_Unit TargetUnitState, XComGameState_Effect SourceAuraEffectGameState, XComGameState NewGameState) {
-        local X2AbilityTemplate Template;
-        local XComGameState_Ability AbilityState;
+		local X2AbilityTemplate Template;
+		local XComGameState_Ability AbilityState;
 
 	AbilityState = XComGameState_Ability(`XCOMHISTORY.GetGameStateForObjectID(SourceAuraEffectGameState.ApplyEffectParameters.AbilityStateObjectRef.ObjectID));
 	Template = AbilityState.GetMyTemplate();
 
-        return Template;
+		return Template;
 }
 
 function UpdateBasedOnAuraTarget(XComGameState_Unit SourceUnitState, XComGameState_Unit TargetUnitState, XComGameState_Effect SourceAuraEffectGameState, XComGameState NewGameState)
@@ -80,7 +80,7 @@ function UpdateBasedOnAuraTarget(XComGameState_Unit SourceUnitState, XComGameSta
 
 	if(CheckAuraConditions(SourceUnitState, NewTargetState, SourceAuraEffectGameState, AbilityTemplate)) {
 
-		
+
 		for (i = 0; i < AbilityTemplate.AbilityMultiTargetEffects.Length; ++i)
 		{
 			// Apply each of the aura's effects to the target

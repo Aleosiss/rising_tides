@@ -6,7 +6,7 @@ function Init(AvailableAction InAction)
 {
 	local X2AbilityTemplate AbilityTemplate;
 	local float TileLength;
-	
+
 	super.Init(InAction);
 	WorldData = `XWORLD;
 
@@ -22,12 +22,12 @@ function Init(AvailableAction InAction)
 	{
 		// setup the targeting mesh
 		LineActor = `BATTLE.Spawn( class'X2Actor_LineTarget' );
-		
+
                  // get the length in tiles for comparison
                 TileLength = VSize(Cursor.Location - `XWORLD.GetPositionFromTileCoordinates(UnitState.TileLocation)) / class'XComWorldData'.const.WORLD_StepSize;
                 if(TileLength > LineLengthLimit) {
                         TileLength = LineLengthLimit;
-                } 
+                }
                 TileLength = TileLength * class'XComWorldData'.const.WORLD_METERS_TO_UNITS_MULTIPLIER;
 		if(AbilityIsOffensive)
 		{
@@ -80,7 +80,7 @@ function Update(float DeltaTime)
 	if (NewTargetLocation != CachedTargetLocation)
 	{
 		GetTargetedActors(NewTargetLocation, CurrentlyMarkedTargets, Tiles);
-		CheckForFriendlyUnit(CurrentlyMarkedTargets);	
+		CheckForFriendlyUnit(CurrentlyMarkedTargets);
 		MarkTargetedActors(CurrentlyMarkedTargets, (!AbilityIsOffensive) ? FiringUnit.GetTeam() : eTeam_None );
 
 		DrawAOETiles(Tiles);
@@ -90,7 +90,7 @@ function Update(float DeltaTime)
 			TileLength = VSize(Cursor.Location - `XWORLD.GetPositionFromTileCoordinates(UnitState.TileLocation)) / class'XComWorldData'.const.WORLD_StepSize;
 			if(TileLength > LineLengthLimit) {
 				TileLength = LineLengthLimit;
-			} 
+			}
             TileLength = TileLength * class'XComWorldData'.const.WORLD_METERS_TO_UNITS_MULTIPLIER;
 
             ShooterToTarget = NewTargetLocation - FiringLocation;

@@ -221,12 +221,12 @@ function Update(float DeltaTime)
 			}
 		}
 
-		CheckForFriendlyUnit(CurrentlyMarkedTargets);	
+		CheckForFriendlyUnit(CurrentlyMarkedTargets);
 		MarkTargetedActors(CurrentlyMarkedTargets, (!AbilityIsOffensive) ? FiringUnit.GetTeam() : eTeam_None );
 		DrawSplashRadius(NewTargetLocation);
-		
+
 		FinalTile = `XWORLD.GetTileCoordinatesFromPosition(NewTargetLocation);
-				
+
 		DrawAOETiles(Tiles);
 	}
 

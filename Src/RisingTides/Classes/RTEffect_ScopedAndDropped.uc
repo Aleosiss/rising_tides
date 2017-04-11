@@ -2,8 +2,8 @@
 //  FILE:    RTEffect_ScopedAndDropped.uc
 //  AUTHOR:  Aleosiss
 //  DATE:    29 February 2016
-//  PURPOSE: Defines the effect of Scoped And Dropped: Restore Action Points on 
-//           exposed kills, negate squadsight aim penalties, and count number of 
+//  PURPOSE: Defines the effect of Scoped And Dropped: Restore Action Points on
+//           exposed kills, negate squadsight aim penalties, and count number of
 //           kills per turn.
 //---------------------------------------------------------------------------------------
 //	Scoped And Dropped effect
@@ -14,21 +14,21 @@ var localized string RTFriendlyName;
 var localized string RTNotFriendlyName;
 var int iPanicChance;
 var int iDamageRequiredToActivate;
-	
+
 
 // Negate Squadsight distance penalty
 function GetToHitModifiers(XComGameState_Effect EffectState, XComGameState_Unit Attacker, XComGameState_Unit Target, XComGameState_Ability AbilityState, class<X2AbilityToHitCalc> ToHitType, bool bMelee, bool bFlanking, bool bIndirectFire, out array<ShotModifierInfo> ShotModifiers)
 {
 	local ShotModifierInfo ModInfoAim, ModInfoCrit;
-	local int Tiles, AimMod, CritMod; 
+	local int Tiles, AimMod, CritMod;
 	local UnitValue NumTimesScopedAndDropped;
-	
+
 	Tiles = Attacker.TileDistanceBetween(Target);
 	//  remove number of tiles within visible range (which is in meters, so convert to units, and divide that by tile size)
 	Tiles -= Attacker.GetVisibilityRadius() * class'XComWorldData'.const.WORLD_METERS_TO_UNITS_MULTIPLIER / class'XComWorldData'.const.WORLD_StepSize;
-	if (Tiles > 0)     //  pretty much should be since a squadsight target is by definition beyond sight range. but... 
+	if (Tiles > 0)     //  pretty much should be since a squadsight target is by definition beyond sight range. but...
 		AimMod = ((class'X2AbilityToHitCalc_StandardAim'.default.SQUADSIGHT_DISTANCE_MOD * Tiles) * -1);
-	
+
 	ModInfoAim.ModType = eHit_Success;
 	ModInfoAim.Reason = RTFriendlyName;
 	ModInfoAim.Value = AimMod;
@@ -42,10 +42,10 @@ function GetToHitModifiers(XComGameState_Effect EffectState, XComGameState_Unit 
 	ModInfoCrit.Value = -(CritMod);
 	ShotModifiers.AddItem(ModInfoCrit);
 
-	
+
 }
 // Shots cannot graze
-function bool ShotsCannotGraze() 
+function bool ShotsCannotGraze()
 {
 	return true;
 }
@@ -77,7 +77,7 @@ function bool PostAbilityCostPaid(XComGameState_Effect EffectState, XComGameStat
 	local bool								bIsStandardFire, bTesting, bHitTarget;
 
 
-	
+
 	bIsStandardFire = false;
 	bTesting = true;
 	if(kAbility.GetMyTemplateName() == 'RTStandardSniperShot' || kAbility.GetMyTemplateName() == 'DaybreakFlame' || kAbility.GetMyTemplateName() == 'RTPrecisionShot' || kAbility.GetMyTemplateName() == 'RTDisablingShot')
@@ -99,21 +99,21 @@ function bool PostAbilityCostPaid(XComGameState_Effect EffectState, XComGameStat
 				Attacker.GetUnitValue('ShockAndAweCounter', ShockCounter);
 
 				iTotalDamageDealt = int(DamageDealt.fValue) + int(ShockCounter.fValue);
-				
+
 				if(iTotalDamageDealt < iDamageRequiredToActivate) {
 					Attacker.SetUnitFloatValue('ShockAndAweCounter', iTotalDamageDealt, eCleanup_BeginTurn);
 				} else {
 					// t-t-t-t-triggered
-					EventMgr.TriggerEvent('ShockAndAweTrigger', TargetUnit, Attacker, NewGameState);	
+					EventMgr.TriggerEvent('ShockAndAweTrigger', TargetUnit, Attacker, NewGameState);
 					while(iTotalDamageDealt > iDamageRequiredToActivate) {
 						iTotalDamageDealt -= iDamageRequiredToActivate;
 					}
 					Attacker.SetUnitFloatValue('ShockAndAweCounter', iTotalDamageDealt, eCleanup_BeginTurn);
 				}
 			}
-			
+
 			if(TargetUnit.IsDead()) {
-				// Sovereign check 
+				// Sovereign check
 				if(Attacker.HasSoldierAbility('Sovereign')) {
 					TargetUnit.GetUnitValue('LastEffectDamage', DamageDealt);
 					if((int(DamageDealt.fValue) + 1) >= TargetUnit.GetMaxStat(eStat_HP)) {
@@ -141,7 +141,7 @@ function bool PostAbilityCostPaid(XComGameState_Effect EffectState, XComGameStat
 								{
 									Attacker.ActionPoints = PreCostActionPoints;
 									// If the UnitValue doesn't exist, make it, and start it at one since we just shot something
-									if(!Attacker.GetUnitValue('NumTimesScopedAndDropped', NumTimes)) 
+									if(!Attacker.GetUnitValue('NumTimesScopedAndDropped', NumTimes))
 									{
 										Attacker.SetUnitFloatValue('NumTimesScopedAndDropped', 1, eCleanup_BeginTurn);
 									}
@@ -152,22 +152,22 @@ function bool PostAbilityCostPaid(XComGameState_Effect EffectState, XComGameStat
 										NumTimes.fValue = NumTimes.fValue + 1;
 										Attacker.SetUnitFloatValue('NumTimesScopedAndDropped', NumTimes.fValue, eCleanup_BeginTurn);
 									}
-								
-								
+
+
 									// t-t-t-t-triggered
 									EventMgr.TriggerEvent('ScopedAndDropped', AbilityState, Attacker, NewGameState);
-									//`log("SND TargetUnit Location: " @ `XWORLD.GetPositionFromTileCoordinates(TargetUnit.TileLocation)); 
+									//`log("SND TargetUnit Location: " @ `XWORLD.GetPositionFromTileCoordinates(TargetUnit.TileLocation));
 									//`log("SND TargetUnit ObjectID: " @ TargetUnit.ObjectID);
-							
+
 								}
 							}
 						}
 					}
 				}
 
-			
+
 		}
-	}											  
+	}
 	return false;
 }
 

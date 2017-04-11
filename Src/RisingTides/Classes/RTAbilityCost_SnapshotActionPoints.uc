@@ -4,7 +4,7 @@
 //  DATE:    6 March 2016
 //  PURPOSE: Custom action point costs
 //---------------------------------------------------------------------------------------
-//	
+//
 //---------------------------------------------------------------------------------------
 
 class RTAbilityCost_SnapshotActionPoints extends X2AbilityCost_ActionPoints;

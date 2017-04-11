@@ -28,7 +28,7 @@ simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffe
 
 	if(UnitState != none)
 	{
-		// remove all action points... ZA WARUDO, TOKI YO, TOMARE! 
+		// remove all action points... ZA WARUDO, TOKI YO, TOMARE!
 		UnitState.ReserveActionPoints.Length = 0;
 		UnitState.ActionPoints.Length = 0;
 
@@ -52,9 +52,9 @@ simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffe
 		PreviousStunDuration = UnitState.StunnedActionPoints;
 		ExtendCooldownTimers(UnitState, NewGameState);
 		ExtendEffectDurations(UnitState, NewGameState);
-		
-	}																			
-	
+
+	}
+
 	// You can't see any changes to the world while time is stopped, and you can't move either... don't know why the immo tag isn't working
 	AddPersistentStatChange(eStat_SightRadius, 0, MODOP_PostMultiplication);
 	AddPersistentStatChange(eStat_Mobility, 0, MODOP_PostMultiplication);
@@ -75,7 +75,7 @@ function GetToHitAsTargetModifiers(XComGameState_Effect EffectState, XComGameSta
 	ModInfoCrit.ModType = eHit_Crit;
 	ModInfoCrit.Reason = TimeStopName;
 	ModInfoCrit.Value = 100;
-	ShotModifiers.AddItem(ModInfoCrit);							   					  
+	ShotModifiers.AddItem(ModInfoCrit);
 }
 
 function ModifyTurnStartActionPoints(XComGameState_Unit UnitState, out array<name> ActionPoints, XComGameState_Effect EffectState)
@@ -94,9 +94,9 @@ simulated function bool OnEffectTicked(const out EffectAppliedData ApplyEffectPa
 	if(TimeStoppedUnit != none) {
 		TimeStoppedUnit.ActionPoints.Length = 0;
 		TimeStoppedUnit.ReserveActionPoints.Length = 0;
-	
+
 		// extend cooldown/effect timers
-		ExtendCooldownTimers(TimeStoppedUnit, NewGameState); 
+		ExtendCooldownTimers(TimeStoppedUnit, NewGameState);
 		ExtendEffectDurations(TimeStoppedUnit, NewGameState);
 	}
 	return super.OnEffectTicked(ApplyEffectParameters, kNewEffectState, NewGameState, FirstApplication);
@@ -105,13 +105,13 @@ simulated function bool OnEffectTicked(const out EffectAppliedData ApplyEffectPa
 simulated function ExtendCooldownTimers(XComGameState_Unit TimeStoppedUnit, XComGameState NewGameState) {
 	local XComGameState_Ability AbilityState, NewAbilityState;
 	local int i;
-	
+
 	for(i = 0; i < TimeStoppedUnit.Abilities.Length; i++) {
 		AbilityState = XComGameState_Ability(`XCOMHISTORY.GetGameStateForObjectID(TimeStoppedUnit.Abilities[i].ObjectID));
 		if(AbilityState.IsCoolingDown()) {
 			NewAbilityState = XComGameState_Ability(NewGameState.CreateStateObject(AbilityState.class, AbilityState.ObjectID));
 			NewGameState.AddStateObject(NewAbilityState);
-			NewAbilityState.iCooldown += 1; // need to add to config	
+			NewAbilityState.iCooldown += 1; // need to add to config
 		}
 	}
 }
@@ -125,12 +125,12 @@ simulated function ExtendEffectDurations(XComGameState_Unit TimeStoppedUnit, XCo
 			if(!EffectState.GetX2Effect().bInfiniteDuration) {
 				NewEffectState = XComGameState_Effect(NewGameState.CreateStateObject(EffectState.class, EffectState.ObjectID));
 				NewGameState.AddStateObject(NewEffectState);
-				NewEffectState.iTurnsRemaining += 1;			   
+				NewEffectState.iTurnsRemaining += 1;
 				// need to somehow prevent these effects from doing damage/ticking while active... no idea how atm.
 			}
 		}
 	}
-}											 						
+}
 
 simulated function OnEffectRemoved(const out EffectAppliedData ApplyEffectParameters, XComGameState NewGameState, bool bCleansed, XComGameState_Effect RemovedEffectState)
 {
@@ -154,21 +154,21 @@ simulated function OnEffectRemoved(const out EffectAppliedData ApplyEffectParame
 		// Update immobility status
 		if(!bWasPreviouslyImmobilized) {
 			UnitState.ClearUnitValue(class'X2Ability_DefaultAbilitySet'.default.ImmobilizedValueName);
-		} 
+		}
 
 		// Reset stun timer, (if you're stunned while/before time is stopped, the duration should be unchanged)
 		UnitState.StunnedActionPoints = PreviousStunDuration;
-		
+
 		//// And thus, time resumes...
 		//TimeStopEffectState = RTGameState_TimeStopEffect(RemovedEffectState);
 
 
 		//UnitState.TakeDamage(NewGameState, TimeStopEffectState.GetFinalDamageValue().Damage, 0, 0, , TimeStopEffectState, TimeStopEffectState.ApplyEffectParameters.SourceStateObjectRef, TimeStopEffectState.bExplosive);
-		
+
 		NewGameState.AddStateObject(UnitState);
 	}
 
-	
+
 
 }
 
@@ -176,7 +176,7 @@ function bool TimeStopTicked(X2Effect_Persistent PersistentEffect, const out Eff
 {
 	/*
 	local XComGameState_Unit UnitState;
-	
+
 	UnitState = XComGameState_Unit(NewGameState.GetGameStateForObjectID(ApplyEffectParameters.TargetStateObjectRef.ObjectID));
 	if (UnitState == none)
 		UnitState = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(ApplyEffectParameters.TargetStateObjectRef.ObjectID));
@@ -203,12 +203,12 @@ function bool TimeStopTicked(X2Effect_Persistent PersistentEffect, const out Eff
 			NewGameState.AddStateObject(UnitState);
 		}
 
-		if (UnitState.StunnedActionPoints > 0) 
+		if (UnitState.StunnedActionPoints > 0)
 		{
 			return false;
 		}
-		else if (UnitState.StunnedActionPoints == 0 
-			&& UnitState.NumAllActionPoints() == 0 
+		else if (UnitState.StunnedActionPoints == 0
+			&& UnitState.NumAllActionPoints() == 0
 			&& !UnitState.GetMyTemplate().bCanTickEffectsEveryAction) // allow the stun to complete anytime if it is ticking per-action
 		{
 			return false;
@@ -218,12 +218,12 @@ function bool TimeStopTicked(X2Effect_Persistent PersistentEffect, const out Eff
 	*/
 	return false;
 
-	
+
 }
 
 
 
-function int GetDefendingDamageModifier(XComGameState_Effect EffectState, XComGameState_Unit Attacker, Damageable TargetDamageable, XComGameState_Ability AbilityState, const out EffectAppliedData AppliedData, const int CurrentDamage, X2Effect_ApplyWeaponDamage WeaponDamageEffect) { 
+function int GetDefendingDamageModifier(XComGameState_Effect EffectState, XComGameState_Unit Attacker, Damageable TargetDamageable, XComGameState_Ability AbilityState, const out EffectAppliedData AppliedData, const int CurrentDamage, X2Effect_ApplyWeaponDamage WeaponDamageEffect) {
 	local int DamageTaken, i;
 	local RTGameState_TimeStopEffect TimeStopEffectState;
 	local WeaponDamageValue TotalWeaponDamageValue, IteratorDamageValue;
@@ -232,12 +232,12 @@ function int GetDefendingDamageModifier(XComGameState_Effect EffectState, XComGa
 	if(CurrentDamage < 1)
 		return 0;
 	`LOG("Rising Tides: Current Damage greater than 0, proceeding...");
-	// You can't take damage during a time-stop. Negate and store the damage for when it ends. 
+	// You can't take damage during a time-stop. Negate and store the damage for when it ends.
 	// Let the damage from the Time Stop pass through
 	if(WeaponDamageEffect.DamageTag == 'TimeStopDamageEffect' || WeaponDamageEffect.IsA('RTEffect_TimeStopDamage')){
 		`LOG("Rising Tides: allowing TimeStopDamageEffect!");
 		return 0;
-		
+
 	}
 	// first check wasn't working...?
 	TimeStopDamageEffect = RTEffect_TimeStopDamage(WeaponDamageEffect);
@@ -245,20 +245,20 @@ function int GetDefendingDamageModifier(XComGameState_Effect EffectState, XComGa
 		`LOG("Rising Tides: TimeStopDamageEffect found, allowing");
 		return 0;
 	}
-	
+
 
 	TimeStopEffectState = RTGameState_TimeStopEffect(EffectState);
 	if(TimeStopEffectState == none) {
 		`LOG("Rising Tides: TimeStopEffectState not found!");
 		return 0;
 	}
-	
+
 
 	// damage over time effects are totally negated
-	// hack 
+	// hack
 	if(WeaponDamageEffect.EffectDamageValue.DamageType == 'fire' || WeaponDamageEffect.EffectDamageValue.DamageType == 'poison' || WeaponDamageEffect.EffectDamageValue.DamageType == 'acid' || WeaponDamageEffect.EffectDamageValue.DamageType == class'X2Item_DefaultDamageTypes'.default.ParthenogenicPoisonType)
 		return -(CurrentDamage);
-	
+
 	// record WeaponDamageValues
 	if(TimeStopEffectState.bShouldRecordDamageValue){
 		`LOG("Rising Tides: Recording Weapon Damage Value");
@@ -266,13 +266,13 @@ function int GetDefendingDamageModifier(XComGameState_Effect EffectState, XComGa
 		TotalWeaponDamageValue = SetTotalWeaponDamageValue(CurrentDamage, WeaponDamageEffect.EffectDamageValue);
 		TimeStopEffectState.PreventedDamageValues.AddItem(TotalWeaponDamageValue);
 
-		`LOG("Rising Tides: Logging,"); 
+		`LOG("Rising Tides: Logging,");
 		`LOG("PreventedDamageValues.Length = " @ TimeStopEffectState.PreventedDamageValues.Length);
 		for(i = 0; i < TimeStopEffectState.PreventedDamageValues.Length; i++) {
 			`LOG("TimeStopEffectState.PreventedDamageValues["@i@"].DamageType = " @ TimeStopEffectState.PreventedDamageValues[i].DamageType);
 		}
 		`LOG("Rising Tides: Time Stop has negated " @ TimeStopEffectState.GetFinalDamageValue().Damage @ " damage so far! This time, it was of type " @ TimeStopEffectState.PreventedDamageValues[TimeStopEffectState.PreventedDamageValues.length-1].DamageType @"!");
-		
+
 		// record crit //TODO: figure out how to force crit damage popup
 		if(AppliedData.AbilityResultContext.HitResult == eHit_Crit)
 			TimeStopEffectState.bCrit = true;
@@ -281,7 +281,7 @@ function int GetDefendingDamageModifier(XComGameState_Effect EffectState, XComGa
 		`LOG("Rising Tides: TimeStopEffectState.GetDefendingDamageModifier was told not to record a damage value.");
 		return 0;
 	}
-	return -(CurrentDamage); 
+	return -(CurrentDamage);
 }
 
 simulated function WeaponDamageValue SetTotalWeaponDamageValue(int CurrentDamage, WeaponDamageValue WeaponDamageValue) {
@@ -390,7 +390,7 @@ simulated function ModifyTracksVisualization(XComGameState VisualizeGameState, o
 	{
 		PlacementIndex = ModifyTrack.TrackActions.Length;
 	}
-	
+
 	// Put the TimeStop visualization in the right spot
 	if( TimeStopTrack.TrackActions.Length != 0 )
 	{
@@ -450,8 +450,8 @@ simulated function AddX2ActionsForVisualization_Removed(XComGameState VisualizeG
 			//class'X2StatusEffects'.static.AddEffectCameraPanToAffectedUnitToTrack(BuildTrack, VisualizeGameState.GetContext());
 			class'X2StatusEffects'.static.AddEffectSoundAndFlyOverToTrack(BuildTrack, VisualizeGameState.GetContext(), FlyoverText, '', eColor_Good, default.StatusIcon);
 			//class'X2StatusEffects'.static.AddEffectMessageToTrack(BuildTrack, default.TimeStopEffectRemovedString, VisualizeGameState.GetContext());
-			
-			
+
+
 		}
 		class'X2StatusEffects'.static.UpdateUnitFlag(BuildTrack, VisualizeGameState.GetContext());
 

@@ -8,8 +8,8 @@ function int GetDefendValue(XComGameState_Ability kAbility, StateObjectReference
 
 	UnitState = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(TargetRef.ObjectID));
 
-    if(UnitState.IsRobotic())
-        return UnitState.GetCurrentStat(eStat_HackDefense);
+	if(UnitState.IsRobotic())
+		return UnitState.GetCurrentStat(eStat_HackDefense);
 
 	return UnitState.GetCurrentStat(eStat_Will);
 }

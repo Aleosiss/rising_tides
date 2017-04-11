@@ -20,21 +20,21 @@ simulated function bool OnEffectTicked(const out EffectAppliedData ApplyEffectPa
 		`RedScreenOnce("Rising Tides: " @ EffectName @ " unable to find the CounterValue, aborting countdown...");
 		return super.OnEffectTicked(ApplyEffectParameters, kNewEffectState, NewGameState, FirstApplication);
 	}
-	CounterUnit.GetUnitValue(CounterUnitValName, UnitVal); 	// I still don't know if the above method actually populates the out param 
+	CounterUnit.GetUnitValue(CounterUnitValName, UnitVal); 	// I still don't know if the above method actually populates the out param
 															// in the if statement so this a fallback
-				
+
 	if(UnitVal.fValue < 0) {
 		// this is the case that the counter is done counting
 		return super.OnEffectTicked(ApplyEffectParameters, kNewEffectState, NewGameState, FirstApplication);
 	}
 
 	if(UnitVal.fValue == 0) {
-		if(bShouldTriggerEvent) { // sometimes the effect trigger looks for the counter instead of the other way around 
+		if(bShouldTriggerEvent) { // sometimes the effect trigger looks for the counter instead of the other way around
 			`XEVENTMGR.TriggerEvent(TriggerEventName, CounterUnit, CounterSourceUnit, NewGameState);
 			`LOG("Rising Tides: " @ TriggerEventName @ " Counter triggered!");
-		}	
+		}
 	}
-	
+
 	CounterUnit.SetUnitFloatValue(CounterUnitValName, UnitVal.fValue - 1, eCleanup_BeginTactical);
 	return super.OnEffectTicked(ApplyEffectParameters, kNewEffectState, NewGameState, FirstApplication);
 }

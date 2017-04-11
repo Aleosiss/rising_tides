@@ -16,7 +16,7 @@ function RegisterForEvents(XComGameState_Effect EffectGameState)
 	EffectObj = BITNEffectState;
 	UnitState = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(EffectGameState.ApplyEffectParameters.SourceStateObjectRef.ObjectID));
 	FilterObj = UnitState;
-	
+
 	EventMgr.RegisterForEvent(EffectObj, 'AbilityActivated', BITNEffectState.RTBumpInTheNight, ELD_OnStateSubmitted, 40, FilterObj);
 
 

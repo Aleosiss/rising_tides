@@ -2,7 +2,7 @@
 //  FILE:    RTEffect_DisablingShotDamage.uc
 //  AUTHOR:  Aleosiss
 //  DATE:    4 March 2016
-//  PURPOSE: Gives Disabling Shot its damage reduction      
+//  PURPOSE: Gives Disabling Shot its damage reduction
 //---------------------------------------------------------------------------------------
 //	Disabling Shot damage effect
 //---------------------------------------------------------------------------------------

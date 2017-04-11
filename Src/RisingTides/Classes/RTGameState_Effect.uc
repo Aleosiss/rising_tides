@@ -9,9 +9,9 @@ function EventListenerReturn OnTacticalGameEnd(Object EventData, Object EventSou
 {
 	local X2EventManager EventManager;
 	local Object ListenerObj;
-    local XComGameState NewGameState;
+	local XComGameState NewGameState;
 
-    //`LOG("Rising Tides: 'TacticalGameEnd' event listener delegate invoked.");
+	//`LOG("Rising Tides: 'TacticalGameEnd' event listener delegate invoked.");
 
 	EventManager = `XEVENTMGR;
 
@@ -20,7 +20,7 @@ function EventListenerReturn OnTacticalGameEnd(Object EventData, Object EventSou
 
 	EventManager.UnRegisterFromAllEvents(ListenerObj);
 
-    NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("RTGameState_Effect states cleanup");
+	NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("RTGameState_Effect states cleanup");
 	NewGameState.RemoveStateObject(ObjectID);
 	`GAMERULES.SubmitGameState(NewGameState);
 
@@ -93,83 +93,83 @@ function EffectAddedBuildVisualizationFn (XComGameState VisualizeGameState, out 
 
   for (i = 0; i < AddedEffects.Length; ++i)
   {
-    EffectState = XComGameState_Effect(History.GetGameStateForObjectID(AddedEffects[i].ObjectID));
-    if (EffectState != none)
-    {
-      EffectSource = History.GetGameStateForObjectID(EffectState.ApplyEffectParameters.SourceStateObjectRef.ObjectID);
-      EffectTarget = History.GetGameStateForObjectID(EffectState.ApplyEffectParameters.TargetStateObjectRef.ObjectID);
+	EffectState = XComGameState_Effect(History.GetGameStateForObjectID(AddedEffects[i].ObjectID));
+	if (EffectState != none)
+	{
+	  EffectSource = History.GetGameStateForObjectID(EffectState.ApplyEffectParameters.SourceStateObjectRef.ObjectID);
+	  EffectTarget = History.GetGameStateForObjectID(EffectState.ApplyEffectParameters.TargetStateObjectRef.ObjectID);
 
-      FoundSourceTrack = False;
-      FoundTargetTrack = False;
-      for (n = 0; n < VisualizationTracks.Length; ++n)
-      {
-        if (EffectSource.ObjectID == XGUnit(VisualizationTracks[n].TrackActor).ObjectID)
-        {
-          SourceTrack = VisualizationTracks[n];
-          FoundSourceTrack = true;
-          SourceTrackIndex = n;
-        }
+	  FoundSourceTrack = False;
+	  FoundTargetTrack = False;
+	  for (n = 0; n < VisualizationTracks.Length; ++n)
+	  {
+		if (EffectSource.ObjectID == XGUnit(VisualizationTracks[n].TrackActor).ObjectID)
+		{
+		  SourceTrack = VisualizationTracks[n];
+		  FoundSourceTrack = true;
+		  SourceTrackIndex = n;
+		}
 
-        if (EffectTarget.ObjectID == XGUnit(VisualizationTracks[n].TrackActor).ObjectID)
-        {
-          TargetTrack = VisualizationTracks[n];
-          FoundTargetTrack = true;
-          TargetTrackIndex = n;
-        }
-      }
+		if (EffectTarget.ObjectID == XGUnit(VisualizationTracks[n].TrackActor).ObjectID)
+		{
+		  TargetTrack = VisualizationTracks[n];
+		  FoundTargetTrack = true;
+		  TargetTrackIndex = n;
+		}
+	  }
 
-      if (EffectTarget != none)
-      {
-        TargetTrack.TrackActor = History.GetVisualizer(EffectTarget.ObjectID);
-        VisualizerInterface = X2VisualizerInterface(TargetTrack.TrackActor);
-        if (TargetTrack.TrackActor != none)
-        {
-          History.GetCurrentAndPreviousGameStatesForObjectID(EffectTarget.ObjectID, TargetTrack.StateObject_OldState, TargetTrack.StateObject_NewState, eReturnType_Reference, AssociatedState.HistoryIndex);
-          if (TargetTrack.StateObject_NewState == none)
-          TargetTrack.StateObject_NewState = TargetTrack.StateObject_OldState;
+	  if (EffectTarget != none)
+	  {
+		TargetTrack.TrackActor = History.GetVisualizer(EffectTarget.ObjectID);
+		VisualizerInterface = X2VisualizerInterface(TargetTrack.TrackActor);
+		if (TargetTrack.TrackActor != none)
+		{
+		  History.GetCurrentAndPreviousGameStatesForObjectID(EffectTarget.ObjectID, TargetTrack.StateObject_OldState, TargetTrack.StateObject_NewState, eReturnType_Reference, AssociatedState.HistoryIndex);
+		  if (TargetTrack.StateObject_NewState == none)
+		  TargetTrack.StateObject_NewState = TargetTrack.StateObject_OldState;
 
-          if (VisualizerInterface != none)
-          VisualizerInterface.BuildAbilityEffectsVisualization(AssociatedState, TargetTrack);
+		  if (VisualizerInterface != none)
+		  VisualizerInterface.BuildAbilityEffectsVisualization(AssociatedState, TargetTrack);
 
-          EffectTemplate = EffectState.GetX2Effect();
-          EffectTemplate.AddX2ActionsForVisualization(AssociatedState, TargetTrack, 'AA_Success');
-          if (FoundTargetTrack)
-          {
-            VisualizationTracks[TargetTrackIndex] = TargetTrack;
-          }
-          else
-          {
-            TargetTrackIndex = VisualizationTracks.AddItem(TargetTrack);
-          }
-        }
+		  EffectTemplate = EffectState.GetX2Effect();
+		  EffectTemplate.AddX2ActionsForVisualization(AssociatedState, TargetTrack, 'AA_Success');
+		  if (FoundTargetTrack)
+		  {
+			VisualizationTracks[TargetTrackIndex] = TargetTrack;
+		  }
+		  else
+		  {
+			TargetTrackIndex = VisualizationTracks.AddItem(TargetTrack);
+		  }
+		}
 
-        if (EffectTarget.ObjectID == EffectSource.ObjectID)
-        {
-          SourceTrack = TargetTrack;
-          FoundSourceTrack = True;
-          SourceTrackIndex = TargetTrackIndex;
-        }
+		if (EffectTarget.ObjectID == EffectSource.ObjectID)
+		{
+		  SourceTrack = TargetTrack;
+		  FoundSourceTrack = True;
+		  SourceTrackIndex = TargetTrackIndex;
+		}
 
-        SourceTrack.TrackActor = History.GetVisualizer(EffectSource.ObjectID);
-        if (SourceTrack.TrackActor != none)
-        {
-          History.GetCurrentAndPreviousGameStatesForObjectID(EffectSource.ObjectID, SourceTrack.StateObject_OldState, SourceTrack.StateObject_NewState, eReturnType_Reference, AssociatedState.HistoryIndex);
-          if (SourceTrack.StateObject_NewState == none)
-          SourceTrack.StateObject_NewState = SourceTrack.StateObject_OldState;
+		SourceTrack.TrackActor = History.GetVisualizer(EffectSource.ObjectID);
+		if (SourceTrack.TrackActor != none)
+		{
+		  History.GetCurrentAndPreviousGameStatesForObjectID(EffectSource.ObjectID, SourceTrack.StateObject_OldState, SourceTrack.StateObject_NewState, eReturnType_Reference, AssociatedState.HistoryIndex);
+		  if (SourceTrack.StateObject_NewState == none)
+		  SourceTrack.StateObject_NewState = SourceTrack.StateObject_OldState;
 
-          EffectTemplate.AddX2ActionsForVisualizationSource(AssociatedState, SourceTrack, 'AA_Success');
-          if (FoundSourceTrack)
-          {
-            VisualizationTracks[SourceTrackIndex] = SourceTrack;
-          }
-          else
-          {
-            SourceTrackIndex = VisualizationTracks.AddItem(SourceTrack);
-          }
-        }
+		  EffectTemplate.AddX2ActionsForVisualizationSource(AssociatedState, SourceTrack, 'AA_Success');
+		  if (FoundSourceTrack)
+		  {
+			VisualizationTracks[SourceTrackIndex] = SourceTrack;
+		  }
+		  else
+		  {
+			SourceTrackIndex = VisualizationTracks.AddItem(SourceTrack);
+		  }
+		}
 
-      }
-    }
+	  }
+	}
   }
 }
 
@@ -200,82 +200,82 @@ function EffectRemovedBuildVisualizationFn(XComGameState VisualizeGameState, out
 
   for (i = 0; i < RemovedEffects.Length; ++i)
   {
-    EffectState = XComGameState_Effect(History.GetGameStateForObjectID(RemovedEffects[i].ObjectID));
-    if (EffectState != none)
-    {
-      EffectSource = History.GetGameStateForObjectID(EffectState.ApplyEffectParameters.SourceStateObjectRef.ObjectID);
-      EffectTarget = History.GetGameStateForObjectID(EffectState.ApplyEffectParameters.TargetStateObjectRef.ObjectID);
+	EffectState = XComGameState_Effect(History.GetGameStateForObjectID(RemovedEffects[i].ObjectID));
+	if (EffectState != none)
+	{
+	  EffectSource = History.GetGameStateForObjectID(EffectState.ApplyEffectParameters.SourceStateObjectRef.ObjectID);
+	  EffectTarget = History.GetGameStateForObjectID(EffectState.ApplyEffectParameters.TargetStateObjectRef.ObjectID);
 
-      FoundSourceTrack = False;
-      FoundTargetTrack = False;
-      for (n = 0; n < VisualizationTracks.Length; ++n)
-      {
-        if (EffectSource.ObjectID == XGUnit(VisualizationTracks[n].TrackActor).ObjectID)
-        {
-          SourceTrack = VisualizationTracks[n];
-          FoundSourceTrack = true;
-          SourceTrackIndex = n;
-        }
+	  FoundSourceTrack = False;
+	  FoundTargetTrack = False;
+	  for (n = 0; n < VisualizationTracks.Length; ++n)
+	  {
+		if (EffectSource.ObjectID == XGUnit(VisualizationTracks[n].TrackActor).ObjectID)
+		{
+		  SourceTrack = VisualizationTracks[n];
+		  FoundSourceTrack = true;
+		  SourceTrackIndex = n;
+		}
 
-        if (EffectTarget.ObjectID == XGUnit(VisualizationTracks[n].TrackActor).ObjectID)
-        {
-          TargetTrack = VisualizationTracks[n];
-          FoundTargetTrack = true;
-          TargetTrackIndex = n;
-        }
-      }
+		if (EffectTarget.ObjectID == XGUnit(VisualizationTracks[n].TrackActor).ObjectID)
+		{
+		  TargetTrack = VisualizationTracks[n];
+		  FoundTargetTrack = true;
+		  TargetTrackIndex = n;
+		}
+	  }
 
-      if (EffectTarget != none)
-      {
-        TargetTrack.TrackActor = History.GetVisualizer(EffectTarget.ObjectID);
-        VisualizerInterface = X2VisualizerInterface(TargetTrack.TrackActor);
-        if (TargetTrack.TrackActor != none)
-        {
-          History.GetCurrentAndPreviousGameStatesForObjectID(EffectTarget.ObjectID, TargetTrack.StateObject_OldState, TargetTrack.StateObject_NewState, eReturnType_Reference, AssociatedState.HistoryIndex);
-          if (TargetTrack.StateObject_NewState == none)
-          TargetTrack.StateObject_NewState = TargetTrack.StateObject_OldState;
+	  if (EffectTarget != none)
+	  {
+		TargetTrack.TrackActor = History.GetVisualizer(EffectTarget.ObjectID);
+		VisualizerInterface = X2VisualizerInterface(TargetTrack.TrackActor);
+		if (TargetTrack.TrackActor != none)
+		{
+		  History.GetCurrentAndPreviousGameStatesForObjectID(EffectTarget.ObjectID, TargetTrack.StateObject_OldState, TargetTrack.StateObject_NewState, eReturnType_Reference, AssociatedState.HistoryIndex);
+		  if (TargetTrack.StateObject_NewState == none)
+		  TargetTrack.StateObject_NewState = TargetTrack.StateObject_OldState;
 
-          if (VisualizerInterface != none)
-          VisualizerInterface.BuildAbilityEffectsVisualization(AssociatedState, TargetTrack);
+		  if (VisualizerInterface != none)
+		  VisualizerInterface.BuildAbilityEffectsVisualization(AssociatedState, TargetTrack);
 
-          EffectTemplate = EffectState.GetX2Effect();
-          EffectTemplate.AddX2ActionsForVisualization_Removed(AssociatedState, TargetTrack, 'AA_Success', EffectState);
-          if (FoundTargetTrack)
-          {
-            VisualizationTracks[TargetTrackIndex] = TargetTrack;
-          }
-          else
-          {
-            TargetTrackIndex = VisualizationTracks.AddItem(TargetTrack);
-          }
-        }
+		  EffectTemplate = EffectState.GetX2Effect();
+		  EffectTemplate.AddX2ActionsForVisualization_Removed(AssociatedState, TargetTrack, 'AA_Success', EffectState);
+		  if (FoundTargetTrack)
+		  {
+			VisualizationTracks[TargetTrackIndex] = TargetTrack;
+		  }
+		  else
+		  {
+			TargetTrackIndex = VisualizationTracks.AddItem(TargetTrack);
+		  }
+		}
 
-        if (EffectTarget.ObjectID == EffectSource.ObjectID)
-        {
-          SourceTrack = TargetTrack;
-          FoundSourceTrack = True;
-          SourceTrackIndex = TargetTrackIndex;
-        }
+		if (EffectTarget.ObjectID == EffectSource.ObjectID)
+		{
+		  SourceTrack = TargetTrack;
+		  FoundSourceTrack = True;
+		  SourceTrackIndex = TargetTrackIndex;
+		}
 
-        SourceTrack.TrackActor = History.GetVisualizer(EffectSource.ObjectID);
-        if (SourceTrack.TrackActor != none)
-        {
-          History.GetCurrentAndPreviousGameStatesForObjectID(EffectSource.ObjectID, SourceTrack.StateObject_OldState, SourceTrack.StateObject_NewState, eReturnType_Reference, AssociatedState.HistoryIndex);
-          if (SourceTrack.StateObject_NewState == none)
-          SourceTrack.StateObject_NewState = SourceTrack.StateObject_OldState;
+		SourceTrack.TrackActor = History.GetVisualizer(EffectSource.ObjectID);
+		if (SourceTrack.TrackActor != none)
+		{
+		  History.GetCurrentAndPreviousGameStatesForObjectID(EffectSource.ObjectID, SourceTrack.StateObject_OldState, SourceTrack.StateObject_NewState, eReturnType_Reference, AssociatedState.HistoryIndex);
+		  if (SourceTrack.StateObject_NewState == none)
+		  SourceTrack.StateObject_NewState = SourceTrack.StateObject_OldState;
 
-          EffectTemplate.AddX2ActionsForVisualization_RemovedSource(AssociatedState, SourceTrack, 'AA_Success', EffectState);
-          if (FoundSourceTrack)
-          {
-            VisualizationTracks[SourceTrackIndex] = SourceTrack;
-          }
-          else
-          {
-            SourceTrackIndex = VisualizationTracks.AddItem(SourceTrack);
-          }
-        }
-      }
-    }
+		  EffectTemplate.AddX2ActionsForVisualization_RemovedSource(AssociatedState, SourceTrack, 'AA_Success', EffectState);
+		  if (FoundSourceTrack)
+		  {
+			VisualizationTracks[SourceTrackIndex] = SourceTrack;
+		  }
+		  else
+		  {
+			SourceTrackIndex = VisualizationTracks.AddItem(SourceTrack);
+		  }
+		}
+	  }
+	}
   }
 }
 
@@ -308,163 +308,163 @@ function EffectsModifiedBuildVisualizationFn(XComGameState VisualizeGameState, o
 
   // remove the effects...
   for (i = 0; i < RemovedEffects.Length; ++i) {
-    EffectState = XComGameState_Effect(History.GetGameStateForObjectID(RemovedEffects[i].ObjectID));
-    if (EffectState != none)
-    {
-      EffectSource = History.GetGameStateForObjectID(EffectState.ApplyEffectParameters.SourceStateObjectRef.ObjectID);
-      EffectTarget = History.GetGameStateForObjectID(EffectState.ApplyEffectParameters.TargetStateObjectRef.ObjectID);
+	EffectState = XComGameState_Effect(History.GetGameStateForObjectID(RemovedEffects[i].ObjectID));
+	if (EffectState != none)
+	{
+	  EffectSource = History.GetGameStateForObjectID(EffectState.ApplyEffectParameters.SourceStateObjectRef.ObjectID);
+	  EffectTarget = History.GetGameStateForObjectID(EffectState.ApplyEffectParameters.TargetStateObjectRef.ObjectID);
 
-      FoundSourceTrack = False;
-      FoundTargetTrack = False;
-      for (n = 0; n < VisualizationTracks.Length; ++n)
-      {
-        if (EffectSource.ObjectID == XGUnit(VisualizationTracks[n].TrackActor).ObjectID)
-        {
-          SourceTrack = VisualizationTracks[n];
-          FoundSourceTrack = true;
-          SourceTrackIndex = n;
-        }
+	  FoundSourceTrack = False;
+	  FoundTargetTrack = False;
+	  for (n = 0; n < VisualizationTracks.Length; ++n)
+	  {
+		if (EffectSource.ObjectID == XGUnit(VisualizationTracks[n].TrackActor).ObjectID)
+		{
+		  SourceTrack = VisualizationTracks[n];
+		  FoundSourceTrack = true;
+		  SourceTrackIndex = n;
+		}
 
-        if (EffectTarget.ObjectID == XGUnit(VisualizationTracks[n].TrackActor).ObjectID)
-        {
-          TargetTrack = VisualizationTracks[n];
-          FoundTargetTrack = true;
-          TargetTrackIndex = n;
-        }
-      }
+		if (EffectTarget.ObjectID == XGUnit(VisualizationTracks[n].TrackActor).ObjectID)
+		{
+		  TargetTrack = VisualizationTracks[n];
+		  FoundTargetTrack = true;
+		  TargetTrackIndex = n;
+		}
+	  }
 
-      if (EffectTarget != none)
-      {
-        TargetTrack.TrackActor = History.GetVisualizer(EffectTarget.ObjectID);
-        VisualizerInterface = X2VisualizerInterface(TargetTrack.TrackActor);
-        if (TargetTrack.TrackActor != none)
-        {
-          History.GetCurrentAndPreviousGameStatesForObjectID(EffectTarget.ObjectID, TargetTrack.StateObject_OldState, TargetTrack.StateObject_NewState, eReturnType_Reference, AssociatedState.HistoryIndex);
-          if (TargetTrack.StateObject_NewState == none)
-          TargetTrack.StateObject_NewState = TargetTrack.StateObject_OldState;
+	  if (EffectTarget != none)
+	  {
+		TargetTrack.TrackActor = History.GetVisualizer(EffectTarget.ObjectID);
+		VisualizerInterface = X2VisualizerInterface(TargetTrack.TrackActor);
+		if (TargetTrack.TrackActor != none)
+		{
+		  History.GetCurrentAndPreviousGameStatesForObjectID(EffectTarget.ObjectID, TargetTrack.StateObject_OldState, TargetTrack.StateObject_NewState, eReturnType_Reference, AssociatedState.HistoryIndex);
+		  if (TargetTrack.StateObject_NewState == none)
+		  TargetTrack.StateObject_NewState = TargetTrack.StateObject_OldState;
 
-          if (VisualizerInterface != none)
-          VisualizerInterface.BuildAbilityEffectsVisualization(AssociatedState, TargetTrack);
+		  if (VisualizerInterface != none)
+		  VisualizerInterface.BuildAbilityEffectsVisualization(AssociatedState, TargetTrack);
 
-          EffectTemplate = EffectState.GetX2Effect();
-          EffectTemplate.AddX2ActionsForVisualization_Removed(AssociatedState, TargetTrack, 'AA_Success', EffectState);
-          if (FoundTargetTrack)
-          {
-            VisualizationTracks[TargetTrackIndex] = TargetTrack;
-          }
-          else
-          {
-            TargetTrackIndex = VisualizationTracks.AddItem(TargetTrack);
-          }
-        }
+		  EffectTemplate = EffectState.GetX2Effect();
+		  EffectTemplate.AddX2ActionsForVisualization_Removed(AssociatedState, TargetTrack, 'AA_Success', EffectState);
+		  if (FoundTargetTrack)
+		  {
+			VisualizationTracks[TargetTrackIndex] = TargetTrack;
+		  }
+		  else
+		  {
+			TargetTrackIndex = VisualizationTracks.AddItem(TargetTrack);
+		  }
+		}
 
-        if (EffectTarget.ObjectID == EffectSource.ObjectID)
-        {
-          SourceTrack = TargetTrack;
-          FoundSourceTrack = True;
-          SourceTrackIndex = TargetTrackIndex;
-        }
+		if (EffectTarget.ObjectID == EffectSource.ObjectID)
+		{
+		  SourceTrack = TargetTrack;
+		  FoundSourceTrack = True;
+		  SourceTrackIndex = TargetTrackIndex;
+		}
 
-        SourceTrack.TrackActor = History.GetVisualizer(EffectSource.ObjectID);
-        if (SourceTrack.TrackActor != none)
-        {
-          History.GetCurrentAndPreviousGameStatesForObjectID(EffectSource.ObjectID, SourceTrack.StateObject_OldState, SourceTrack.StateObject_NewState, eReturnType_Reference, AssociatedState.HistoryIndex);
-          if (SourceTrack.StateObject_NewState == none)
-          SourceTrack.StateObject_NewState = SourceTrack.StateObject_OldState;
+		SourceTrack.TrackActor = History.GetVisualizer(EffectSource.ObjectID);
+		if (SourceTrack.TrackActor != none)
+		{
+		  History.GetCurrentAndPreviousGameStatesForObjectID(EffectSource.ObjectID, SourceTrack.StateObject_OldState, SourceTrack.StateObject_NewState, eReturnType_Reference, AssociatedState.HistoryIndex);
+		  if (SourceTrack.StateObject_NewState == none)
+		  SourceTrack.StateObject_NewState = SourceTrack.StateObject_OldState;
 
-          EffectTemplate.AddX2ActionsForVisualization_RemovedSource(AssociatedState, SourceTrack, 'AA_Success', EffectState);
-          if (FoundSourceTrack)
-          {
-            VisualizationTracks[SourceTrackIndex] = SourceTrack;
-          }
-          else
-          {
-            SourceTrackIndex = VisualizationTracks.AddItem(SourceTrack);
-          }
-        }
-      }
-    }
+		  EffectTemplate.AddX2ActionsForVisualization_RemovedSource(AssociatedState, SourceTrack, 'AA_Success', EffectState);
+		  if (FoundSourceTrack)
+		  {
+			VisualizationTracks[SourceTrackIndex] = SourceTrack;
+		  }
+		  else
+		  {
+			SourceTrackIndex = VisualizationTracks.AddItem(SourceTrack);
+		  }
+		}
+	  }
+	}
   } // end remove effects
   // add new effects...
   for (i = 0; i < AddedEffects.Length; ++i)
   {
-    EffectState = XComGameState_Effect(History.GetGameStateForObjectID(AddedEffects[i].ObjectID));
-    if (EffectState != none)
-    {
-      EffectSource = History.GetGameStateForObjectID(EffectState.ApplyEffectParameters.SourceStateObjectRef.ObjectID);
-      EffectTarget = History.GetGameStateForObjectID(EffectState.ApplyEffectParameters.TargetStateObjectRef.ObjectID);
+	EffectState = XComGameState_Effect(History.GetGameStateForObjectID(AddedEffects[i].ObjectID));
+	if (EffectState != none)
+	{
+	  EffectSource = History.GetGameStateForObjectID(EffectState.ApplyEffectParameters.SourceStateObjectRef.ObjectID);
+	  EffectTarget = History.GetGameStateForObjectID(EffectState.ApplyEffectParameters.TargetStateObjectRef.ObjectID);
 
-      FoundSourceTrack = False;
-      FoundTargetTrack = False;
-      for (n = 0; n < VisualizationTracks.Length; ++n)
-      {
-        if (EffectSource.ObjectID == XGUnit(VisualizationTracks[n].TrackActor).ObjectID)
-        {
-          SourceTrack = VisualizationTracks[n];
-          FoundSourceTrack = true;
-          SourceTrackIndex = n;
-        }
+	  FoundSourceTrack = False;
+	  FoundTargetTrack = False;
+	  for (n = 0; n < VisualizationTracks.Length; ++n)
+	  {
+		if (EffectSource.ObjectID == XGUnit(VisualizationTracks[n].TrackActor).ObjectID)
+		{
+		  SourceTrack = VisualizationTracks[n];
+		  FoundSourceTrack = true;
+		  SourceTrackIndex = n;
+		}
 
-        if (EffectTarget.ObjectID == XGUnit(VisualizationTracks[n].TrackActor).ObjectID)
-        {
-          TargetTrack = VisualizationTracks[n];
-          FoundTargetTrack = true;
-          TargetTrackIndex = n;
-        }
-      }
+		if (EffectTarget.ObjectID == XGUnit(VisualizationTracks[n].TrackActor).ObjectID)
+		{
+		  TargetTrack = VisualizationTracks[n];
+		  FoundTargetTrack = true;
+		  TargetTrackIndex = n;
+		}
+	  }
 
-      if (EffectTarget != none)
-      {
-        TargetTrack.TrackActor = History.GetVisualizer(EffectTarget.ObjectID);
-        VisualizerInterface = X2VisualizerInterface(TargetTrack.TrackActor);
-        if (TargetTrack.TrackActor != none)
-        {
-          History.GetCurrentAndPreviousGameStatesForObjectID(EffectTarget.ObjectID, TargetTrack.StateObject_OldState, TargetTrack.StateObject_NewState, eReturnType_Reference, AssociatedState.HistoryIndex);
-          if (TargetTrack.StateObject_NewState == none)
-          TargetTrack.StateObject_NewState = TargetTrack.StateObject_OldState;
+	  if (EffectTarget != none)
+	  {
+		TargetTrack.TrackActor = History.GetVisualizer(EffectTarget.ObjectID);
+		VisualizerInterface = X2VisualizerInterface(TargetTrack.TrackActor);
+		if (TargetTrack.TrackActor != none)
+		{
+		  History.GetCurrentAndPreviousGameStatesForObjectID(EffectTarget.ObjectID, TargetTrack.StateObject_OldState, TargetTrack.StateObject_NewState, eReturnType_Reference, AssociatedState.HistoryIndex);
+		  if (TargetTrack.StateObject_NewState == none)
+		  TargetTrack.StateObject_NewState = TargetTrack.StateObject_OldState;
 
-          if (VisualizerInterface != none)
-          VisualizerInterface.BuildAbilityEffectsVisualization(AssociatedState, TargetTrack);
+		  if (VisualizerInterface != none)
+		  VisualizerInterface.BuildAbilityEffectsVisualization(AssociatedState, TargetTrack);
 
-          EffectTemplate = EffectState.GetX2Effect();
-          EffectTemplate.AddX2ActionsForVisualization(AssociatedState, TargetTrack, 'AA_Success');
-          if (FoundTargetTrack)
-          {
-            VisualizationTracks[TargetTrackIndex] = TargetTrack;
-          }
-          else
-          {
-            TargetTrackIndex = VisualizationTracks.AddItem(TargetTrack);
-          }
-        }
+		  EffectTemplate = EffectState.GetX2Effect();
+		  EffectTemplate.AddX2ActionsForVisualization(AssociatedState, TargetTrack, 'AA_Success');
+		  if (FoundTargetTrack)
+		  {
+			VisualizationTracks[TargetTrackIndex] = TargetTrack;
+		  }
+		  else
+		  {
+			TargetTrackIndex = VisualizationTracks.AddItem(TargetTrack);
+		  }
+		}
 
-        if (EffectTarget.ObjectID == EffectSource.ObjectID)
-        {
-          SourceTrack = TargetTrack;
-          FoundSourceTrack = True;
-          SourceTrackIndex = TargetTrackIndex;
-        }
+		if (EffectTarget.ObjectID == EffectSource.ObjectID)
+		{
+		  SourceTrack = TargetTrack;
+		  FoundSourceTrack = True;
+		  SourceTrackIndex = TargetTrackIndex;
+		}
 
-        SourceTrack.TrackActor = History.GetVisualizer(EffectSource.ObjectID);
-        if (SourceTrack.TrackActor != none)
-        {
-          History.GetCurrentAndPreviousGameStatesForObjectID(EffectSource.ObjectID, SourceTrack.StateObject_OldState, SourceTrack.StateObject_NewState, eReturnType_Reference, AssociatedState.HistoryIndex);
-          if (SourceTrack.StateObject_NewState == none)
-          SourceTrack.StateObject_NewState = SourceTrack.StateObject_OldState;
+		SourceTrack.TrackActor = History.GetVisualizer(EffectSource.ObjectID);
+		if (SourceTrack.TrackActor != none)
+		{
+		  History.GetCurrentAndPreviousGameStatesForObjectID(EffectSource.ObjectID, SourceTrack.StateObject_OldState, SourceTrack.StateObject_NewState, eReturnType_Reference, AssociatedState.HistoryIndex);
+		  if (SourceTrack.StateObject_NewState == none)
+		  SourceTrack.StateObject_NewState = SourceTrack.StateObject_OldState;
 
-          EffectTemplate.AddX2ActionsForVisualizationSource(AssociatedState, SourceTrack, 'AA_Success');
-          if (FoundSourceTrack)
-          {
-            VisualizationTracks[SourceTrackIndex] = SourceTrack;
-          }
-          else
-          {
-            SourceTrackIndex = VisualizationTracks.AddItem(SourceTrack);
-          }
-        }
+		  EffectTemplate.AddX2ActionsForVisualizationSource(AssociatedState, SourceTrack, 'AA_Success');
+		  if (FoundSourceTrack)
+		  {
+			VisualizationTracks[SourceTrackIndex] = SourceTrack;
+		  }
+		  else
+		  {
+			SourceTrackIndex = VisualizationTracks.AddItem(SourceTrack);
+		  }
+		}
 
-      }
-    }
+	  }
+	}
   }	// end add effects
    ClearEffectLists();
 }
@@ -583,29 +583,29 @@ function EventListenerReturn OnTotalAuraCheck(Object EventData, Object EventSour
 
 // Overkill Damage Recorder (KillMail);
 function EventListenerReturn RTOverkillDamageRecorder(Object EventData, Object EventSource, XComGameState GameState, Name EventID) {
-    local XComGameState_Unit DeadUnitState, PreviousDeadUnitState, KillerUnitState, NewKillerUnitState;
-    local UnitValue LastEffectDamageValue;
-    local int iOverKillDamage, i, iHPValue;
-    local XComGameStateHistory History;
-    local XComGameState NewGameState;
+	local XComGameState_Unit DeadUnitState, PreviousDeadUnitState, KillerUnitState, NewKillerUnitState;
+	local UnitValue LastEffectDamageValue;
+	local int iOverKillDamage, i, iHPValue;
+	local XComGameStateHistory History;
+	local XComGameState NewGameState;
 	local XComGameState_BaseObject PreviousObject, CurrentObject;
 
-    History = `XCOMHISTORY;
+	History = `XCOMHISTORY;
 
-    DeadUnitState = XComGameState_Unit(EventData);
-    KillerUnitState = XComGameState_Unit(EventSource);
-    if(DeadUnitState == none || KillerUnitState == none) {
-        `RedScreenOnce("Rising Tides: OverkillDamageRecorder received invalid Killer or Dead Unit from KillMail");
-        return ELR_NoInterrupt;
-    }
+	DeadUnitState = XComGameState_Unit(EventData);
+	KillerUnitState = XComGameState_Unit(EventSource);
+	if(DeadUnitState == none || KillerUnitState == none) {
+		`RedScreenOnce("Rising Tides: OverkillDamageRecorder received invalid Killer or Dead Unit from KillMail");
+		return ELR_NoInterrupt;
+	}
 
-    if(KillerUnitState.ObjectID != ApplyEffectParameters.TargetStateObjectRef.ObjectID) {
-        // not me! (teehee)
-        return ELR_NoInterrupt;
-    }
+	if(KillerUnitState.ObjectID != ApplyEffectParameters.TargetStateObjectRef.ObjectID) {
+		// not me! (teehee)
+		return ELR_NoInterrupt;
+	}
 
-    DeadUnitState.GetUnitValue('LastEffectDamage', LastEffectDamageValue);
-    PreviousDeadUnitState = XComGameState_Unit(History.GetPreviousGameStateForObject(DeadUnitState));
+	DeadUnitState.GetUnitValue('LastEffectDamage', LastEffectDamageValue);
+	PreviousDeadUnitState = XComGameState_Unit(History.GetPreviousGameStateForObject(DeadUnitState));
 
 	while(iHPValue == 0 && i != 20) {
 		i++;
@@ -615,199 +615,199 @@ function EventListenerReturn RTOverkillDamageRecorder(Object EventData, Object E
 		`LOG("Rising Tides: iHPValue"@iHPValue);
 	}
 
-    iOverKillDamage = abs(PreviousDeadUnitState.GetCurrentStat( eStat_HP ) - LastEffectDamageValue.fValue);
+	iOverKillDamage = abs(PreviousDeadUnitState.GetCurrentStat( eStat_HP ) - LastEffectDamageValue.fValue);
 
-    NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("Rising Tides: Recording Overkill Damage!");
-    NewKillerUnitState = XComGameState_Unit(NewGameState.CreateStateObject(KillerUnitState.class, KillerUnitState.ObjectID));
-    NewKillerUnitState.SetUnitFloatValue('RTLastOverkillDamage', iOverKillDamage, eCleanup_BeginTactical);
+	NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("Rising Tides: Recording Overkill Damage!");
+	NewKillerUnitState = XComGameState_Unit(NewGameState.CreateStateObject(KillerUnitState.class, KillerUnitState.ObjectID));
+	NewKillerUnitState.SetUnitFloatValue('RTLastOverkillDamage', iOverKillDamage, eCleanup_BeginTactical);
 	// `LOG("Rising Tides: Logging overkill damage =" @iOverkillDamage);
-    NewGameState.AddStateObject(NewKillerUnitState);
-    SubmitNewGameState(NewGameState);
+	NewGameState.AddStateObject(NewKillerUnitState);
+	SubmitNewGameState(NewGameState);
 
-    return ELR_NoInterrupt;
+	return ELR_NoInterrupt;
 }
 
 // intended event id = AbilityActivated filter = none
 // intended EventData = Ability we're going to try to interrupt
 // intended EventSource = Unit we're going to try to interrupt
 function EventListenerReturn RTPsionicInterrupt(Object EventData, Object EventSource, XComGameState GameState, Name EventID) {
-    local XComGameStateHistory History;
-    local XComGameState_Ability AbilityState;
-    local XComGameState_Ability InterruptAbilityState;
-    local StateObjectReference AbilityRef;
-    local XComGameState_Unit TargetUnitState, SourceUnitState;
-    local XComGameStateContext AbilityContext;
+	local XComGameStateHistory History;
+	local XComGameState_Ability AbilityState;
+	local XComGameState_Ability InterruptAbilityState;
+	local StateObjectReference AbilityRef;
+	local XComGameState_Unit TargetUnitState, SourceUnitState;
+	local XComGameStateContext AbilityContext;
 
-    AbilityContext = GameState.GetContext();
-    if(AbilityContext == none) {
-        return ELR_NoInterrupt;
-    }
+	AbilityContext = GameState.GetContext();
+	if(AbilityContext == none) {
+		return ELR_NoInterrupt;
+	}
 
-    if (AbilityContext.InterruptionStatus != eInterruptionStatus_Interrupt) {
-    		return ELR_NoInterrupt;
-    }
+	if (AbilityContext.InterruptionStatus != eInterruptionStatus_Interrupt) {
+			return ELR_NoInterrupt;
+	}
 
-    History = `XCOMHISTORY;
-    AbilityState = XComGameState_Ability(EventData);
-    if(AbilityState == none) {
-        //`LOG("Rising Tides: " @ GetFuncName() @ " has invalid EventData!");
-        return ELR_NoInterrupt;
-    }
+	History = `XCOMHISTORY;
+	AbilityState = XComGameState_Ability(EventData);
+	if(AbilityState == none) {
+		//`LOG("Rising Tides: " @ GetFuncName() @ " has invalid EventData!");
+		return ELR_NoInterrupt;
+	}
 
-    TargetUnitState = XComGameState_Unit(EventSource);
-    if(TargetUnitState == none) {
-        //`LOG("Rising Tides: " @ GetFuncName() @ " has invalid EventSource!");
-        return ELR_NoInterrupt;
-    }
+	TargetUnitState = XComGameState_Unit(EventSource);
+	if(TargetUnitState == none) {
+		//`LOG("Rising Tides: " @ GetFuncName() @ " has invalid EventSource!");
+		return ELR_NoInterrupt;
+	}
 
-    SourceUnitState = XComGameState_Unit(History.GetGameStateForObjectID(ApplyEffectParameters.SourceStateObjectRef.ObjectID));
-    if(SourceUnitState == none) {
-        //`LOG("Rising Tides: " @ GetFuncName() @ " has no SourceUnit?! ");
-        return ELR_NoInterrupt;
+	SourceUnitState = XComGameState_Unit(History.GetGameStateForObjectID(ApplyEffectParameters.SourceStateObjectRef.ObjectID));
+	if(SourceUnitState == none) {
+		//`LOG("Rising Tides: " @ GetFuncName() @ " has no SourceUnit?! ");
+		return ELR_NoInterrupt;
 
-    }
-    if(TargetUnitState.AffectedByEffectNames.Find(class'RTAbility_GathererAbilitySet'.default.OverTheShoulderEffectName) == INDEX_NONE)
-        return ELR_NoInterrupt;
+	}
+	if(TargetUnitState.AffectedByEffectNames.Find(class'RTAbility_GathererAbilitySet'.default.OverTheShoulderEffectName) == INDEX_NONE)
+		return ELR_NoInterrupt;
 
 	if(!TargetUnitState.IsEnemyUnit(SourceUnitState)) {
 		return ELR_NoInterrupt;
 	}
 
-    if(class'RTHelpers'.static.CheckAbilityActivated(AbilityState.GetMyTemplateName(), eChecklist_PsionicAbilities)) {
-        InitializeAbilityForActivation(InterruptAbilityState, SourceUnitState, 'RTRudimentaryCreaturesEvent', History);
-        ActivateAbility(InterruptAbilityState, TargetUnitState.GetReference());
-        return ELR_InterruptEventAndListeners;
-    }
+	if(class'RTHelpers'.static.CheckAbilityActivated(AbilityState.GetMyTemplateName(), eChecklist_PsionicAbilities)) {
+		InitializeAbilityForActivation(InterruptAbilityState, SourceUnitState, 'RTRudimentaryCreaturesEvent', History);
+		ActivateAbility(InterruptAbilityState, TargetUnitState.GetReference());
+		return ELR_InterruptEventAndListeners;
+	}
 
-    return ELR_NoInterrupt;
+	return ELR_NoInterrupt;
 }
 
 // intended event id AbilityActivated filter = unit with Harbinger attached
 // intended EventData is the ability we're going to add bonus damage to
 // intended EventSource is the unit with Harbinger attached
 function EventListenerReturn RTHarbingerBonusDamage(Object EventData, Object EventSource, XComGameState GameState, Name EventID) {
-    local XComGameStateHistory History;
-    local XComGameState_Ability AbilityState, AdditionalDamageState;
-    local XComGameState_Unit TargetUnitState, SourceUnitState;
-    local XComGameStateContext Context;
+	local XComGameStateHistory History;
+	local XComGameState_Ability AbilityState, AdditionalDamageState;
+	local XComGameState_Unit TargetUnitState, SourceUnitState;
+	local XComGameStateContext Context;
 	local XComGameStateContext_Ability AbilityContext;
 
-    Context = GameState.GetContext();
-    if(Context == none) {
+	Context = GameState.GetContext();
+	if(Context == none) {
 		//`LOG("Rising Tides: No Context!");
-        return ELR_NoInterrupt;
-    }
+		return ELR_NoInterrupt;
+	}
 	AbilityContext = XComGameStateContext_Ability(Context);
 	if(AbilityContext == none) {
 		//`LOG("Rising Tides: No Ability Context!");
 		return ELR_NoInterrupt;
 	}
 
-    // we want to do the additional damage before, i think
-    if(AbilityContext.InterruptionStatus != eInterruptionStatus_Interrupt) {
+	// we want to do the additional damage before, i think
+	if(AbilityContext.InterruptionStatus != eInterruptionStatus_Interrupt) {
 		//`LOG("Rising Tides: only on interrupt stage!");
-        return ELR_NoInterrupt;
-    }
+		return ELR_NoInterrupt;
+	}
 
-    History = `XCOMHISTORY;
-    AbilityState = XComGameState_Ability(EventData);
-    if(AbilityState == none) {
-        //`LOG("Rising Tides: " @ GetFuncName() @ " has invalid EventData!");
-        return ELR_NoInterrupt;
-    }
+	History = `XCOMHISTORY;
+	AbilityState = XComGameState_Ability(EventData);
+	if(AbilityState == none) {
+		//`LOG("Rising Tides: " @ GetFuncName() @ " has invalid EventData!");
+		return ELR_NoInterrupt;
+	}
 
 	if(AbilityState.GetMyTemplateName() != 'DaybreakFlame') {
-    // don't add bonus damage to an attack that missed...
+	// don't add bonus damage to an attack that missed...
 		if(AbilityContext.ResultContext.HitResult != eHit_Success || AbilityContext.ResultContext.HitResult != eHit_Crit || AbilityContext.ResultContext.HitResult != eHit_Graze) {
 			//`LOG("Rising Tides: Shot didn't hit!");
 			return ELR_NoInterrupt;
 		}
 	}
 
-    SourceUnitState = XComGameState_Unit(EventSource);
-    if(SourceUnitState == none) {
-        //`LOG("Rising Tides: " @ GetFuncName() @ " has invalid EventSource!");
-        return ELR_NoInterrupt;
-    }
+	SourceUnitState = XComGameState_Unit(EventSource);
+	if(SourceUnitState == none) {
+		//`LOG("Rising Tides: " @ GetFuncName() @ " has invalid EventSource!");
+		return ELR_NoInterrupt;
+	}
 
-    TargetUnitState = XComGameState_Unit(History.GetGameStateForObjectID(AbilityContext.InputContext.PrimaryTarget.ObjectID));
-    if(TargetUnitState == none) {
-        //`LOG("Rising Tides: " @ GetFuncName() @ " has no TargetUnit?! ");
-        return ELR_NoInterrupt;
+	TargetUnitState = XComGameState_Unit(History.GetGameStateForObjectID(AbilityContext.InputContext.PrimaryTarget.ObjectID));
+	if(TargetUnitState == none) {
+		//`LOG("Rising Tides: " @ GetFuncName() @ " has no TargetUnit?! ");
+		return ELR_NoInterrupt;
 
-    }
+	}
 	//`LOG("Rising Tides: RTHarbingerBonusDamage is checking for the current ability to add damage to...");
-    if(class'RTHelpers'.static.CheckAbilityActivated(AbilityState.GetMyTemplateName(), eChecklist_SniperShots)   ||
-       class'RTHelpers'.static.CheckAbilityActivated(AbilityState.GetMyTemplateName(), eChecklist_StandardShots) ||
+	if(class'RTHelpers'.static.CheckAbilityActivated(AbilityState.GetMyTemplateName(), eChecklist_SniperShots)   ||
+	   class'RTHelpers'.static.CheckAbilityActivated(AbilityState.GetMyTemplateName(), eChecklist_StandardShots) ||
 	   class'RTHelpers'.static.CheckAbilityActivated(AbilityState.GetMyTemplateName(), eChecklist_MeleeAbilities) ) {
-        InitializeAbilityForActivation(AdditionalDamageState, SourceUnitState, 'RTHarbingerBonusDamage', History);
-        ActivateAbility(AdditionalDamageState, TargetUnitState.GetReference());
-        return ELR_NoInterrupt;
-    }
+		InitializeAbilityForActivation(AdditionalDamageState, SourceUnitState, 'RTHarbingerBonusDamage', History);
+		ActivateAbility(AdditionalDamageState, TargetUnitState.GetReference());
+		return ELR_NoInterrupt;
+	}
 
 	//`LOG("Rising Tides: RTHarbingerBonusDamage failed!");
 
-    return ELR_NoInterrupt;
+	return ELR_NoInterrupt;
 }
 
 // intended event id = AbilityActivated filter = Unit
 // intended EventData = Ability we're going to try to extend the effect of
 // intended EventSource = Unit casting the ability
 function EventListenerReturn ExtendEffectDuration(Object EventData, Object EventSource, XComGameState GameState, Name EventID) {
-    local XComGameStateHistory History;
-    local XComGameState_Effect IteratorEffectState;
-    local XComGameState_Unit TargetUnitState, SourceUnitState;
-    local XComGameState NewGameState;
-    local XComGameStateContext_Ability AbilityContext;
-    local RTEffect_ExtendEffectDuration EffectTemplate;
+	local XComGameStateHistory History;
+	local XComGameState_Effect IteratorEffectState;
+	local XComGameState_Unit TargetUnitState, SourceUnitState;
+	local XComGameState NewGameState;
+	local XComGameStateContext_Ability AbilityContext;
+	local RTEffect_ExtendEffectDuration EffectTemplate;
 	local Object IteratorObject;
 
-    local bool bDebug;
+	local bool bDebug;
 
-    EffectTemplate = RTEffect_ExtendEffectDuration(GetX2Effect());
-    if(EffectTemplate == none) {
-	    `LOG("Rising Tides: ExtendEffectDuration had no template!");
-      return ELR_NoInterrupt;
-    }
+	EffectTemplate = RTEffect_ExtendEffectDuration(GetX2Effect());
+	if(EffectTemplate == none) {
+		`LOG("Rising Tides: ExtendEffectDuration had no template!");
+	  return ELR_NoInterrupt;
+	}
 
 	//`LOG("Rising Tides: Extend Effect Duration activated on EVENTID: " @ EventID);
 
-    if(EventID == 'AbilityActivated') {
-        AbilityContext = XComGameStateContext_Ability(GameState.GetContext());
-        if(AbilityContext == none) {
-              //`LOG("Rising Tides: ExtendEffectDuration had no context!");
-              return ELR_NoInterrupt;
-        }
+	if(EventID == 'AbilityActivated') {
+		AbilityContext = XComGameStateContext_Ability(GameState.GetContext());
+		if(AbilityContext == none) {
+			  //`LOG("Rising Tides: ExtendEffectDuration had no context!");
+			  return ELR_NoInterrupt;
+		}
 
-        if(AbilityContext.InputContext.AbilityTemplateName != EffectTemplate.AbilityToExtendName) {
-           //`LOG("Rising Tides: ExtendEffectDuration had the wrong ability!");
-            return ELR_NoInterrupt;
-        }
-    }
+		if(AbilityContext.InputContext.AbilityTemplateName != EffectTemplate.AbilityToExtendName) {
+		   //`LOG("Rising Tides: ExtendEffectDuration had the wrong ability!");
+			return ELR_NoInterrupt;
+		}
+	}
 	bDebug = false;
-    foreach GameState.IterateByClassType(class'XComGameState_Effect', IteratorEffectState) {
+	foreach GameState.IterateByClassType(class'XComGameState_Effect', IteratorEffectState) {
 	  if(IteratorEffectState == none) {
 		  //`RedScreen("Rising Tides: What the heck, iterating through gamestate_effects returned a non-gamestate_effect object?");
 		  continue;
 	  }
 
-      bDebug = true;
-      if(IteratorEffectState.bRemoved) {
-          continue;
-      }
+	  bDebug = true;
+	  if(IteratorEffectState.bRemoved) {
+		  continue;
+	  }
 
-      if(IteratorEffectState.GetX2Effect().EffectName == EffectTemplate.EffectToExtendName) {
-          IteratorEffectState.iTurnsRemaining += EffectTemplate.iDurationExtension;
-      }
-    }
+	  if(IteratorEffectState.GetX2Effect().EffectName == EffectTemplate.EffectToExtendName) {
+		  IteratorEffectState.iTurnsRemaining += EffectTemplate.iDurationExtension;
+	  }
+	}
 
-    if(!bDebug) {
-      //`LOG("Rising Tides: ExtendEffectDuration fired on the right ability / event, but there was no effects on the gamestate?");
-    }
+	if(!bDebug) {
+	  //`LOG("Rising Tides: ExtendEffectDuration fired on the right ability / event, but there was no effects on the gamestate?");
+	}
 
-    //`LOG("Rising Tides: ExtendEffectDuration was successful!");
+	//`LOG("Rising Tides: ExtendEffectDuration was successful!");
 
-    return ELR_NoInterrupt;
+	return ELR_NoInterrupt;
 }
 
 // this check grants the mobility change described in for the "Bump In The Night" ability
@@ -961,11 +961,11 @@ function EventListenerReturn GhostInTheShellCheck(Object EventData, Object Event
 		return ELR_NoInterrupt;
 
 	if(AbilityState.GetMyTemplateName() == 'Interact_OpenChest' ||  AbilityState.GetMyTemplateName() == 'Interact_TakeVial' || AbilityState.GetMyTemplateName() == 'Interact_StasisTube')
-            bShouldTrigger = true;
+			bShouldTrigger = true;
 	if(AbilityState.GetMyTemplateName() == 'Interact' ||  AbilityState.GetMyTemplateName() == 'Interact_PlantBomb' /*|| AbilityState.GetMyTemplateName() == 'Interact_OpenDoor'*/)
-            bShouldTrigger = true;
+			bShouldTrigger = true;
 	if(AbilityState.GetMyTemplateName() == 'FinalizeHack' ||  AbilityState.GetMyTemplateName() == 'GatherEvidence' || AbilityState.GetMyTemplateName() == 'PlantExplosiveMissionDevice')
-            bShouldTrigger = true;
+			bShouldTrigger = true;
 
 	if(!bShouldTrigger) {
 		return ELR_NoInterrupt;
@@ -1094,36 +1094,36 @@ function EventListenerReturn HeatChannelCheck(Object EventData, Object EventSour
   // immediately return if the event did not originate from ourselves
   if(ApplyEffectParameters.SourceStateObjectRef.ObjectID != OldSourceUnit.ObjectID) {
 	`RedScreenOnce("Rising Tides: EventSource was not unit with Heat Channel!");
-    return ELR_NoInterrupt;
+	return ELR_NoInterrupt;
   }
   // check the cooldown on HeatChannel
   if(!OldSourceUnit.GetUnitValue('RTEffect_HeatChannel_Cooldown', HeatChannelValue)) {
-  	`RedScreenOnce("Rising Tides: No HeatChannel Cooldown found!");
-  	return ELR_NoInterrupt;
+	`RedScreenOnce("Rising Tides: No HeatChannel Cooldown found!");
+	return ELR_NoInterrupt;
   }
   OldSourceUnit.GetUnitValue('RTEffect_HeatChannel_Cooldown', HeatChannelValue);
   if(HeatChannelValue.fValue > 0) {
-  	// still on cooldown
-  	//`LOG("Rising Tides: Heat Channel was on cooldown! @" @ HeatChannelValue.fValue);
-  	return ELR_NoInterrupt;
+	// still on cooldown
+	//`LOG("Rising Tides: Heat Channel was on cooldown! @" @ HeatChannelValue.fValue);
+	return ELR_NoInterrupt;
   }
 
   History = `XCOMHISTORY;
   AbilityContext = XComGameStateContext_Ability(GameState.GetContext());
   if (AbilityContext == none) {
-  	return ELR_NoInterrupt;
+	return ELR_NoInterrupt;
   }
 
   OldWeaponState = OldSourceUnit.GetPrimaryWeapon();
 
   // return if there's no heat to be channeled
   if(OldWeaponState.Ammo == OldWeaponState.GetClipSize()) {
-    return ELR_NoInterrupt;
+	return ELR_NoInterrupt;
   }
 
   if(!OldAbilityState.IsCoolingDown()) {
-    `RedScreenOnce("Rising Tides: The ability was used but isn't on cooldown?");
-    return ELR_NoInterrupt;
+	`RedScreenOnce("Rising Tides: The ability was used but isn't on cooldown?");
+	return ELR_NoInterrupt;
   }
 
   NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState(string(GetFuncName()));
@@ -1137,9 +1137,9 @@ function EventListenerReturn HeatChannelCheck(Object EventData, Object EventSour
 
   // channel heat
   if(OldAbilityState.iCooldown < iHeatChanneled) {
-    NewAbilityState.iCooldown = 0;
+	NewAbilityState.iCooldown = 0;
   } else {
-    NewAbilityState.iCooldown -= iHeatChanneled;
+	NewAbilityState.iCooldown -= iHeatChanneled;
   }
 
   //  refill the weapon's ammo
@@ -1208,10 +1208,10 @@ function TriggerHeatChannelFlyoverVisualizationFn(XComGameState VisualizeGameSta
 }
 
 function EventListenerReturn LinkedFireCheck (Object EventData, Object EventSource, XComGameState GameState, Name EventID) {
-    local XComGameState_Unit TargetUnit, LinkedSourceUnit, LinkedUnit;
+	local XComGameState_Unit TargetUnit, LinkedSourceUnit, LinkedUnit;
 	local XComGameStateHistory History;
 	local RTEffect_LinkedIntelligence LinkedEffect;
-    local RTGameState_MeldEffect  MeldEffectState;
+	local RTGameState_MeldEffect  MeldEffectState;
 	local StateObjectReference AbilityRef;
 	local GameRulesCache_VisibilityInfo	VisInfo;
 	local XComGameState_Ability AbilityState, OriginalShot;
@@ -1286,7 +1286,7 @@ function EventListenerReturn LinkedFireCheck (Object EventData, Object EventSour
 		return ELR_NoInterrupt;
 	}
 
-    // only shoot enemy units
+	// only shoot enemy units
 	if (TargetUnit != none && TargetUnit.IsEnemyUnit(LinkedUnit)) {
 		// for some reason, standard target visibility conditions weren't preventing units from shooting
 		// 9 months later NOTE: I think this is because the activation method doesn't check conditions before activating. NICE
@@ -1435,10 +1435,10 @@ function EventListenerReturn ReprobateWaltzCheck( Object EventData, Object Event
 }
 
 function EventListenerReturn TwitchFireCheck (Object EventData, Object EventSource, XComGameState GameState, Name EventID) {
-    local XComGameState_Unit AttackingUnit, TwitchAttackingUnit, TwitchLinkedUnit;
+	local XComGameState_Unit AttackingUnit, TwitchAttackingUnit, TwitchLinkedUnit;
 	local XComGameStateHistory History;
 	local RTEffect_TwitchReaction TwitchEffect;
-    local RTGameState_MeldEffect  MeldEffectState;
+	local RTGameState_MeldEffect  MeldEffectState;
 	local StateObjectReference AbilityRef;
 	local XComGameState_Ability AbilityState, OriginalShot;
 	local XComGameStateContext_Ability AbilityContext;
@@ -1502,7 +1502,7 @@ function EventListenerReturn TwitchFireCheck (Object EventData, Object EventSour
 	}
 
 	`LOG("Rising Tides: Twitch Fire Check Stage 4");
-    // only shoot enemy units
+	// only shoot enemy units
 	if (AttackingUnit != none && AttackingUnit.IsEnemyUnit(TwitchAttackingUnit)) {
 		`LOG("Rising Tides: Twitch Fire Check Stage 5");
 		// break out if we can't shoot
@@ -1622,8 +1622,8 @@ function EventListenerReturn RTBumpInTheNight(Object EventData, Object EventSour
 
 	if(AbilityContext.InterruptionStatus == eInterruptionStatus_Interrupt) {
 		`LOG("Rising Tides: not on the interrupt stage!");
-        return ELR_NoInterrupt;
-    }
+		return ELR_NoInterrupt;
+	}
 
 	// Check if the source object was the source unit for this effect, and make sure the target was not
 	if (AbilityContext.InputContext.SourceObject.ObjectID != ApplyEffectParameters.SourceStateObjectRef.ObjectID ||
@@ -1635,7 +1635,7 @@ function EventListenerReturn RTBumpInTheNight(Object EventData, Object EventSour
 		return ELR_NoInterrupt;
 
 	if(AbilityState.GetMyTemplateName() == 'OverwatchShot' ||  AbilityState.GetMyTemplateName() == 'StandardShot' || AbilityState.GetMyTemplateName() == 'StandardGhostShot')
-            bShouldTriggerStandard = true;
+			bShouldTriggerStandard = true;
 	if(AbilityState.GetMyTemplateName() == 'RTBerserkerKnifeAttack' || AbilityState.GetMyTemplateName() == 'RTPyroclasticSlash' || AbilityState.GetMyTemplateName() == 'RTReprobateWaltz')
 			bShouldTriggerMelee = true;
 	if(AbilityState.GetMyTemplateName() == 'RTShadowStrike')

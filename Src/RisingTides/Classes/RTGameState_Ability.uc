@@ -4,9 +4,9 @@ class RTGameState_Ability extends XComGameState_Ability;
 
 // Get Bloodlust Stack Count
 public static function int getBloodlustStackCount(XComGameState_Unit WaltzUnit) {
-   local int iStackCount;
-   local StateObjectReference IteratorObjRef;
-   local RTGameState_Effect BloodlustEffectState;
+	local int iStackCount;
+	local StateObjectReference IteratorObjRef;
+	local RTGameState_Effect BloodlustEffectState;
 
    if (WaltzUnit != none) {
 		// get our stacking effect
@@ -334,7 +334,7 @@ function EventListenerReturn TriangulationListener(Object EventData, Object Even
 	local XComGameState_Unit SourceUnitState, IteratorUnitState, OwnerUnitState;
 	local XComGameStateHistory History;
 
-	`LOG("Triangulation Triggered via EventID " @ EventID); 
+	`LOG("Triangulation Triggered via EventID " @ EventID);
 	History = `XCOMHISTORY;
 
 	SourceUnitState = XComGameState_Unit(EventSource);

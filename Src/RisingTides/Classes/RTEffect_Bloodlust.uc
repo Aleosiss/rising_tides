@@ -25,13 +25,13 @@ function RegisterForEvents(XComGameState_Effect EffectGameState)
 
 simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffectParameters, XComGameState_BaseObject kNewTargetState, XComGameState NewGameState, XComGameState_Effect NewEffectState) {
 	local XComGameState_Unit UnitState;
- 
-  
+
+
 	if(UnitState.IsUnitAffectedByEffectName('RTEffect_QueenOfBlades'))
 		AddPersistentStatChange(eStat_Mobility, iMobilityMod);
 	else
 		AddPersistentStatChange(eStat_Mobility, -iMobilityMod);
-  
+
 
 	super.OnEffectAdded(ApplyEffectParameters, UnitState, NewGameState, NewEffectState);
 }
@@ -46,21 +46,21 @@ function GetToHitModifiers(XComGameState_Effect EffectState, XComGameState_Unit 
 	if(AbilityState.GetMyTemplateName() == 'RTBerserkerKnifeAttack' || AbilityState.GetMyTemplateName() == 'RTPyroclasticSlash' || AbilityState.GetMyTemplateName() == 'RTReprobateWaltz' || AbilityState.GetMyTemplateName() == 'RTShadowStrike') {
 		bValid = true;
 	}
-	
+
 	if(Attacker.HasSoldierAbility('RTContainedFury')) {
-		bValid = true;	
+		bValid = true;
 	}
-	   
+
 	if(!bValid)
    		return;
 
 	BumpEffect = RTGameState_Effect(EffectState);
-  
+
 	HitMod.ModType = eHit_Crit;
 	HitMod.Value = BumpEffect.iStacks * iMeleeHitChanceMod;
 	HitMod.Reason = "Bloodlust"; //TODO: FIX
 	ShotModifiers.AddItem(HitMod);
-  
+
 }
 
 function int GetAttackingDamageModifier(XComGameState_Effect EffectState, XComGameState_Unit Attacker, Damageable TargetDamageable, XComGameState_Ability AbilityState, const out EffectAppliedData AppliedData, const int CurrentDamage, optional XComGameState NewGameState) {
@@ -83,7 +83,7 @@ function int GetAttackingDamageModifier(XComGameState_Effect EffectState, XComGa
 	ExtraCritDamage = CurrentDamage * BumpEffect.iStacks * fCritDamageMod;
 	// only on crits...
 	if(AppliedData.AbilityResultContext.HitResult == eHit_Crit) {
-		return int(ExtraCritDamage);	
+		return int(ExtraCritDamage);
 	}
 
 	return 0;
