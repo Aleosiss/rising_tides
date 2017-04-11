@@ -1,7 +1,7 @@
 //---------------------------------------------------------------------------------------
 //  FILE:    RTEffect_EveryMomentMatters.uc
 //  AUTHOR:  Aleosiss
-//  DATE:    26 December 2016  
+//  DATE:    26 December 2016
 //---------------------------------------------------------------------------------------
 class RTEffect_EveryMomentMatters extends X2Effect_Persistent config(RisingTides);
 
@@ -22,7 +22,7 @@ function int GetAttackingDamageModifier(XComGameState_Effect EffectState, XComGa
 		WeaponState = AbilityState.GetSourceWeapon();
 		if(WeaponState != none) {
 			if(WeaponState.Ammo == 1) {
-				bLastShot = true;	
+				bLastShot = true;
 			}
 		}
 	}
@@ -39,11 +39,11 @@ function int GetAttackingDamageModifier(XComGameState_Effect EffectState, XComGa
 	iMissingHealth = TargetState.GetMaxStat(eStat_HP) - TargetState.GetCurrentStat(eStat_HP);
 	if(iMissingHealth > 0) {
 		ExtraDamage = iMissingHealth * BONUS_DAMAGE_PERCENT;
-	}	
-	
+	}
+
 	return int(ExtraDamage);
 }
-
+/*
 function GetToHitModifiers(XComGameState_Effect EffectState, XComGameState_Unit Attacker, XComGameState_Unit Target, XComGameState_Ability AbilityState, class<X2AbilityToHitCalc> ToHitType, bool bMelee, bool bFlanking, bool bIndirectFire, out array<ShotModifierInfo> ShotModifiers)
 {
 	local ShotModifierInfo ModInfo;
@@ -52,7 +52,7 @@ function GetToHitModifiers(XComGameState_Effect EffectState, XComGameState_Unit 
 
 
 	Value = 1000;
-	
+
 	SourceWeapon = AbilityState.GetSourceWeapon();
 	if (SourceWeapon != none)
 	{
@@ -74,6 +74,30 @@ function GetToHitModifiers(XComGameState_Effect EffectState, XComGameState_Unit 
 		}
 	}
 }
+*/
+
+function bool ChangeHitResultForAttacker(XComGameState_Unit Attacker, XComGameState_Unit TargetUnit, XComGameState_Ability AbilityState, const EAbilityHitResult CurrentResult, out EAbilityHitResult NewHitResult) {
+	local XComGameState_Item SourceWeapon, PrimaryWeapon;
+
+	SourceWeapon = AbilityState.GetSourceWeapon();
+	if (SourceWeapon != none)
+	{
+		if(SourceWeapon.Ammo == 1 ) {
+			NewHitResult = eHit_Crit;
+			return true;
+		}
+	} else {
+		PrimaryWeapon = Attacker.GetPrimaryWeapon();
+		if(PrimaryWeapon != none) {
+			if(PrimaryWeapon.Ammo == 1 ) {
+				NewHitResult = eHit_Crit;
+				return true;
+			}
+		}
+	}
+
+	return false;
+}
 
 function RegisterForEvents(XComGameState_Effect EffectGameState)
 {
@@ -88,7 +112,7 @@ function RegisterForEvents(XComGameState_Effect EffectGameState)
 
 	FilterObj = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(EMMGameState.ApplyEffectParameters.SourceStateObjectRef.ObjectID));
 	EventMgr.RegisterForEvent(EffectObj, 'AbilityActivated', EMMGameState.EveryMomentMattersCheck, ELD_OnStateSubmitted,,FilterObj);
-}												  
+}
 
 DefaultProperties
 {
