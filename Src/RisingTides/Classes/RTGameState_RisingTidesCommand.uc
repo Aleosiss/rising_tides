@@ -134,24 +134,29 @@ simulated function UpdateDeathRecordData(name CharacterTemplateName, StateObject
 	local bool				bFoundDeathRecord, bFoundKillCount;
 
 	foreach DeathRecordData(IteratorDeathRecord) {
-		if(IteratorDeathRecord.CharacterTemplateName == CharacterTemplateName) {
-			bFoundDeathRecord = true;
-			IteratorDeathRecord.NumDeaths++;
-			if(bWasCrit) {
-				IteratorDeathRecord.NumCrits++;
-			}
-			foreach IteratorDeathRecord.IndividualKillCounts(IteratorKillCount) {
-				if(IteratorKillCount.UnitRef.ObjectID == UnitRef.ObjectID) {
-					bFoundKillCount = true;
-					IteratorKillCount.NumKills++;
-				}
-			}
-			if(!bFoundKillCount) {
-				NewKillCount.UnitRef = UnitRef;
-				NewKillCount.KillCount = 1;
-				IteratorDeathRecord.IndividualKillCounts.AddItem(NewKillCount);
+		if(IteratorDeathRecord.CharacterTemplateName != CharacterTemplateName) {
+			continue;
+		}
+
+		bFoundDeathRecord = true;
+		IteratorDeathRecord.NumDeaths++;
+		if(bWasCrit) {
+			IteratorDeathRecord.NumCrits++;
+		}
+
+		foreach IteratorDeathRecord.IndividualKillCounts(IteratorKillCount) {
+			if(IteratorKillCount.UnitRef.ObjectID == UnitRef.ObjectID) {
+				bFoundKillCount = true;
+				IteratorKillCount.NumKills++;
 			}
 		}
+
+		if(!bFoundKillCount) {
+			NewKillCount.UnitRef = UnitRef;
+			NewKillCount.KillCount = 1;
+			IteratorDeathRecord.IndividualKillCounts.AddItem(NewKillCount);
+		}
+
 	}
 	if(!bFoundDeathRecord) {
 		NewDeathRecord.CharacterTemplateName = CharacterTemplateName;

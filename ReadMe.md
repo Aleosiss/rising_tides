@@ -31,6 +31,7 @@ This would be a bare-bones content mod. I also have the following content in min
 		- Animations/Visuals
 		- Add x2/lw abilities to PsionicAbilityList
 		- Reflection
+		- Mind Control
 
 ###### Current Table:
 	- Shatter The Line: If this unit kills an enemy within X tiles, it triggers a flush effect on other enemies within X tiles. 2/3 turn cooldown. credits to /u/PostOfficeBuddy
@@ -41,6 +42,7 @@ This would be a bare-bones content mod. I also have the following content in min
 ###### Current Bugs:
 	- Time Stop damage calculation isn't visualized properly
 	- Time Stop doesn't work on Stasis'd units (despite this making no sense whatsoever) because it's hard-coded
+	- Time Stop damage calculation is fucked, use code from X2Effect_DLC_3AbsorptionField.uc to rewrite
 
 ###### Current Sprint Goals:
 	- Make extend effect duration happen on move for Aura Effects as well, possibly by breaking its logic out into a separate method that is called in either place
