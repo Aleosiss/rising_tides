@@ -22,17 +22,19 @@ This would be a bare-bones content mod. I also have the following content in min
 		- nothing
 	- Gatherer:
 		- Redo Guardian Angel
-		- Triangulation
+		- Lift
+		- Pull
 		- Verify that Over The Shoulder works against burrowed/concealed units
 		- Add Over the Shoulder exception for civilians that are actually faceless
 		- Rework Assuming Direct Control to enable bonus abilities instead of bonus damage
 	- General:
 		- Animations/Visuals
 		- Add x2/lw abilities to PsionicAbilityList
+		- Reflection
 
 ###### Current Table:
 	- Shatter The Line: If this unit kills an enemy within X tiles, it triggers a flush effect on other enemies within X tiles. 2/3 turn cooldown. credits to /u/PostOfficeBuddy
-	- Orpheus Warp: "…the hero of the broken moon. A pawn played by a negligent deity, a marionette manuvered by an... epileptic..."
+	- Orpheus Warp: "…the hero of the broken moon. A pawn played by a negligent deity, a marionette maneuvered by an... epileptic..."
       		- Gain Stealth while preparing a massive psionic rift. On the following turn, the Stealth is broken and a rift is formed. Friendly units can use the rift to evac from the mission. The rift will persist for an additional two turns, or if this unit enters it.
 
 
@@ -41,8 +43,6 @@ This would be a bare-bones content mod. I also have the following content in min
 	- Time Stop doesn't work on Stasis'd units (despite this making no sense whatsoever) because it's hard-coded
 
 ###### Current Sprint Goals:
-	- Verify that Echoed Agony works by logging the rolls
 	- Make extend effect duration happen on move for Aura Effects as well, possibly by breaking its logic out into a separate method that is called in either place
 	- Add Siphon to RTEffectBuilder
-	- Verify that Linked Minds works
-	- Verify that Triangulation works
+	- Verify that Networked OI works with CCS
