@@ -79,6 +79,7 @@ static function array<X2DataTemplate> CreateTemplates()
 	Templates.AddItem(RTGuiltyConscience());
 	Templates.AddItem(RTGuiltyConscienceEvent());
 	Templates.AddItem(RTTriangulation());
+	Templates.AddItem(RTTriangulationIcon());
 
 
 	return Templates;
@@ -354,12 +355,23 @@ static function X2AbilityTemplate RTTriangulation() {
 	Template.AbilityTriggers.AddItem(Trigger);
 
 	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_NeverShow;
+	Templates.AdditionalAbilities.AddItem('RTTriangulationIcon');
 
 	Template.AbilityTargetStyle = default.SimpleSingleTarget;
 
 	return Template;
 
 }
+
+static function X2AbilityTemplate RTTriangulationIcon() {
+	local X2AbilityTemplate Template;
+
+	Template = PurePassive('RTTriangulationIcon', "img:///UILibrary_PerkIcons.UIPerk_swordSlash", true));
+	Template.AbilitySourceName = 'eAbilitySource_Psionic';
+
+	return Template;
+}
+
 //---------------------------------------------------------------------------------------
 //---Forced Introversion-----------------------------------------------------------------
 //---------------------------------------------------------------------------------------

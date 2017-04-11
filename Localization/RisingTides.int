@@ -63,7 +63,7 @@ LocFriendlyName="Triangulation"
 LocLongDescription="Melded allies will now serve as additional sources of Over the Shoulder's effect."
 LocHelpText="Melded allies will now serve as additional sources of Over the Shoulder's effect."
 LocFlyOverText="Triangulation"
-LocPromotionPopupText="<Bullet/> The effect last an entire turn, even if the meld is broken.<br/><Bullet/> This is one of the very few ways for the Gatherer to affect itself with powerful Over the Shoulder effects.<br/>"
+LocPromotionPopupText="<Bullet/> The effect lasts an entire turn, even if the meld is broken.<br/><Bullet/> This is one of the very few ways for the Gatherer to affect itself with powerful Over the Shoulder effects.<br/>"
 
 [RTAbility_GhostAbilitySet]
 FEEDBACK_NAME="AGugHGGHGH"
