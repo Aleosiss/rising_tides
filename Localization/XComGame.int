@@ -523,7 +523,7 @@ LocFriendlyName="Meld Induction"
 LocLongDescription="Force a unit into the Meld."
 LocHelpText="Force a unit into the Meld."
 LocFlyOverText="Meld Induction"
-LocPromotionPopupText="<Bullet/> Force a unit into the Meld.<br/><Bullet/> This cannot be done if the unit using Meld Inudction is not in the meld itself.<br/>"
+LocPromotionPopupText="<Bullet/> Force a unit into the Meld.<br/><Bullet/> This cannot be done if the unit using Meld Induction is not in the meld itself.<br/>"
 
 [RTUnsettlingVoices X2AbilityTemplate]
 LocFriendlyName="Unsettling Voices"
@@ -534,8 +534,8 @@ LocPromotionPopupText="<Bullet/> Enemy units affected by Over The Shoulder suffe
 
 [RTGuardianAngel X2AbilityTemplate]
 LocFriendlyName="Guardian Angel"
-LocLongDescription="Grant an effect to allied units affected by Over the Shoulder which cleanses mental debuffs, slowly heals, and stablizes them."
-LocHelpText="Grant an effect to allied units affected by Over the Shoulder which cleanses mental debuffs, slowly heals, and stablizes them."
+LocLongDescription="Grant an effect to allied units affected by Over the Shoulder which cleanses mental debuffs, slowly heals, and stabilizes them."
+LocHelpText="Grant an effect to allied units affected by Over the Shoulder which cleanses mental debuffs, slowly heals, and stabilizes them."
 LocFlyOverText="Guardian Angel"
 LocPromotionPopupText="<Bullet/> Grant an effect to allied units affected by Over the Shoulder which cleanses mental debuffs, slowly heals, and stablizes them.<br/><Bullet/> The healing effect can only happen once per turn.<br/>"
 

@@ -17,7 +17,7 @@ function int GetAttackingDamageModifier(XComGameState_Effect EffectState, XComGa
 	local int iMissingHealth;
 
 	// Check for hit
-	if (AppliedData.AbilityResultContext.HitResult == eHit_Success) {
+	if (AppliedData.AbilityResultContext.HitResult == eHit_Success || AppliedData.AbilityResultContext.HitResult == eHit_Crit) {
 		// Check for last bullet in the magazine
 		WeaponState = AbilityState.GetSourceWeapon();
 		if(WeaponState != none) {
