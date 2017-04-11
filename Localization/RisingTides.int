@@ -35,14 +35,14 @@ LargeUnitTimeStopLostFlyover="Time Stop Ended!"
 [DaybreakFlame RTAbilityTemplate]
 LocFriendlyName="Fire Sniper Rifle (Daybreak Flame)"
 LocHelpText="Fire your sniper rifle at a target."
-LocLongDescription="<Bullet/> The sniper rifle is powerful and accurate at long range, but usually requires two actions to fire<br><Bullet/>Firing the primary weapon always ends a soldier's turn<br>"
+LocLongDescription="<Bullet/> The sniper rifle is powerful and accurate at long range, but usually requires two actions to fire.<br><Bullet/> Firing the primary weapon always ends a soldier's turn.<br>"
 
 [OverTheShoulder RTAbilityTemplate]
 LocFriendlyName="Over The Shoulder"
-LocLongDescription="Peer over the shoulder of enemy units, seeing what they see."
+LocLongDescription="Peer over the shoulder of enemy units in a large radius, seeing what they see."
 LocHelpText="Peer over the shoulder of enemy units, seeing what they see."
 LocFlyOverText="Over The Shoulder"
-LocPromotionPopupText="<Bullet/> Peer over the shoulder of enemy units, seeing what they see.<br/>"
+LocPromotionPopupText="<Bullet/> Over the Shoulder grants vision of enemy units, but only certain abilities will be able to target them without direct line of sight.<br/>"
 
 [RTUnwillingConduits RTAbilityTemplate]
 LocFriendlyName="Unwilling Conduits"
@@ -56,16 +56,14 @@ LocFriendlyName="Echoed Agony"
 LocLongDescription="This unit will echo panic attempts that affect to nearby enemies affected by Over the Shoulder."
 LocHelpText="This unit will echo panic attempts that affect to nearby enemies affected by Over the Shoulder."
 LocFlyOverText="Echoed Agony"
-LocPromotionPopupText="<Bullet/> Only affects enemy units.<br/><Bullet/> Feedback is a panic effect and is much stronger than other sources of panic.<br/>"
+LocPromotionPopupText="<Bullet/> Only affects enemy units.<br/><Bullet/> Feedback counts as a panic source and is much stronger than other sources of panic.<br/>"
 
 [RTTriangulation RTAbilityTemplate]
 LocFriendlyName="Triangulation"
 LocLongDescription="Melded allies will now serve as additional sources of Over the Shoulder's effect."
 LocHelpText="Melded allies will now serve as additional sources of Over the Shoulder's effect."
 LocFlyOverText="Triangulation"
-LocPromotionPopupText="<Bullet/> The effect last an entire turn, even if the meld is broken.<br/><Bullet/> This is one of the very few ways for the Gatherer to affect herself with powerful Over the Shoulder effects.<br/>"
-
-
+LocPromotionPopupText="<Bullet/> The effect last an entire turn, even if the meld is broken.<br/><Bullet/> This is one of the very few ways for the Gatherer to affect itself with powerful Over the Shoulder effects.<br/>"
 
 [RTAbility_GhostAbilitySet]
 FEEDBACK_NAME="AGugHGGHGH"
@@ -79,7 +77,7 @@ BLOODLUST_DESC="<todo>"
 STEALTH_TITLE="Stealth"
 STEALTH_DESC="This unit is invisible, and cannot be seen by most units."
 MELD_TITLE="Mind Meld"
-MELD_DESC="This unit has joined the Meld, and is recieving and delivering psionic support."
+MELD_DESC="This unit has joined the Meld, receiving and delivering psionic support."
 FADE_COOLDOWN_TITLE="Fade"
 FADE_COOLDOWN_DESC="Fade is on cooldown."
 UV_TITLE="Unsettling Voices"
@@ -100,6 +98,4 @@ StealthFriendlyDesc="This unit is invisible, and cannot be seen by most units."
 FeedbackFriendlyName="AGugHGGHGH"
 FeedbackFriendlyDesc="This unit is suffering from psionic feedback! Protect them while they recover."
 MeldFriendlyName="Mind Meld"
-MeldFriendlyDesc="This unit has joined the Meld, and is recieving and delivering psionic support."
-
-
+MeldFriendlyDesc="This unit has joined the Meld, receiving and delivering psionic support."

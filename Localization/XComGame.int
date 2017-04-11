@@ -24,14 +24,14 @@ LocFriendlyName="Scoped And Dropped"
 LocLongDescription="Enhanced Squadsight. Killing a flanked or uncovered target with a sniper rifle does not cost an action."
 LocHelpText="Killing a flanked or uncovered target with a sniper rifle does not cost an action."
 LocFlyOverText="Scoped And Dropped"
-LocPromotionPopupText="<Bullet/> This unit does not suffer from squadsight penalties and requires little effort to line up easy shots on exposed units.<br/>"
+LocPromotionPopupText="<Bullet/> This unit does not suffer from squadsight penalties.<br/><Bullet/> Additional shots taken via this ability will suffer reduced chance to critically hit.<br/>"
 
 [RTOverflowBarrier X2AbilityTemplate]
 LocFriendlyName="Overflow Barrier"
 LocLongDescription="When this unit deals overkill damage, it converts it into shielding for itself and its melded allies."
 LocHelpText="When this unit deals overkill damage, it converts it into shielding for itself and its melded allies."
 LocFlyOverText="Overflow Barrier"
-LocPromotionPopupText="<Bullet/> When this unit deals overkill damage, it converts it into shielding for itself and its melded allies.<br/><Bullet/> Minimum of 1 Shield HP if overkill damage is dealt.<br/><Bullet/> The unit with Overflow Barrier must be melded to generate any shielding.<br/><Bullet/> Shields persist even if the meld is lost.<br/>"
+LocPromotionPopupText="<Bullet/> Try to use in combination with powerful damage abilities.<br/><Bullet/> Minimum of 1 Shield HP if overkill damage is dealt.<br/><Bullet/> The unit with Overflow Barrier must be melded to generate any shielding.<br/><Bullet/> Shields persist even if the meld is lost.<br/>"
 
 [RTOverflowBarrierEvent X2AbilityTemplate]
 LocFriendlyName="Overflow Barrier"
@@ -59,14 +59,14 @@ LocFriendlyName="Knock Them Down"
 LocLongDescription="Gain +1 Damage for each consecutive shot this unit takes."
 LocHelpText="Gain +1 Damage for each consecutive shot this unit takes."
 LocFlyOverText="Knock Them Down"
-LocPromotionPopupText="<Bullet/> Gain +1 Damage for each consecutive shot this unit takes.<br/>"
+LocPromotionPopupText="<Bullet/> Gain +1 Damage for each consecutive shot this unit takes.<br/><Bullet/> Certain passive actions will not break a Knock Them Down chain, such as a free reload.<br/>"
 
 [RTDisablingShot X2AbilityTemplate]
 LocFriendlyName="Disabling Shot"
 LocLongDescription="A carefully aimed shot, suffering decreased aim and damage but forcing the target to reload their primary weapon."
 LocHelpText="Weak and hard-to-hit shot that disables target enemy weapon for a turn."
 LocFlyOverText="Disabling Shot"
-LocPromotionPopupText="<Bullet/> A carefully aimed shot, suffering decreased aim and damage but forcing the target to reload their primary weapon.<br/>"
+LocPromotionPopupText="<Bullet/> Disabling Shot also removes one action point from the target.<br/>"
 
 [RTSnapshot X2AbilityTemplate]
 LocFriendlyName="Snapshot"
@@ -78,7 +78,7 @@ LocPromotionPopupText="<Bullet/> Use primary weapon with only a single action po
 [RTStandardSniperShot X2AbilityTemplate]
 LocFriendlyName="Fire Sniper Rifle"
 LocHelpText="Fire your sniper rifle at a target."
-LocLongDescription="<Bullet/> The sniper rifle is powerful and accurate at long range, but usually requires two actions to fire<br><Bullet/>Firing the primary weapon always ends a soldier's turn<br>"
+LocLongDescription="<Bullet/> The sniper rifle is powerful and accurate at long range, but usually requires two actions to fire<br/><Bullet/>Firing the primary weapon always ends a soldier's turn<br/>"
 
 [RTOverwatch X2AbilityTemplate]
 LocFriendlyName="Overwatch"
@@ -95,21 +95,21 @@ LocFriendlyName="Six O'Clock"
 LocLongDescription="Allies that can see your overwatch gain bonuses to defense, psi, and will."
 LocHelpText=" "
 LocFlyOverText="Six O'Clock"
-LocPromotionPopupText="<Bullet/> Allies that can see your overwatch gain bonuses to defense, psi, and will.<br/>"
+LocPromotionPopupText="<Bullet/> This also affects units that do not have direct line of sight to the the overwatching unit.<br/>"
 
 [SixOClockEffect X2AbilityTemplate]
 LocFriendlyName="Six O'Clock Effect"
 LocLongDescription="Allies that can see your overwatch gain bonuses to defense, psi, and will."
 LocHelpText=" "
 LocFlyOverText="Six O'Clock Effect"
-LocPromotionPopupText="<Bullet/> Allies that can see your overwatch gain bonuses to defense, psi, and will.<br/>"
+LocPromotionPopupText="<Bullet/> This also affects units that do not have direct line of sight to the the overwatching unit.<br/>"
 
 [RTVitalPointTargeting X2AbilityTemplate]
 LocFriendlyName="Vital Point Targeting"
-LocLongDescription="Knowledge of target vital points gives a damage increase of +2."
+LocLongDescription="Knowledge of enemy vital points aids in targeting."
 LocHelpText=" "
 LocFlyOverText="Vital Point Targeting"
-LocPromotionPopupText="<Bullet/>Knowledge of target vital points gives a damage increase of +2.<br/>"
+LocPromotionPopupText="<Bullet/> Grants a damage and critical strike chance bonus.<br/><Bullet/> This bonus is different for each individual with the ability and the targeted enemy type.<br/><Bullet/> This bonus is generated by killing enemy units over the course of a campaign.<br/>"
 
 [RTDamnGoodGround X2AbilityTemplate]
 LocFriendlyName="Damn Good Ground"
@@ -142,14 +142,14 @@ LocPromotionPopupText="<Bullet/>Kill shots have a small chance to inflict panic 
 [DaybreakFlame X2AbilityTemplate]
 LocFriendlyName="Fire Sniper Rifle (Daybreak Flame)"
 LocHelpText="Fire your sniper rifle at a target."
-LocLongDescription="<Bullet/> The sniper rifle is powerful and accurate at long range, but usually requires two actions to fire<br><Bullet/>Firing the primary weapon always ends a soldier's turn<br>"
+LocLongDescription="<Bullet/> The sniper rifle is powerful and accurate at long range, but usually requires two actions to fire<br/><Bullet/>Firing the primary weapon always ends a soldier's turn<br/>"
 
 [DaybreakFlameIcon X2AbilityTemplate]
 LocFriendlyName="Daybreak Flame"
 LocLongDescription="Pyrokinetically-enhanced rounds punch through cover, shredding armor, and ignoring line of sight."
 LocHelpText="Pyrokinetically-enhanced rounds punch through cover, shredding armor, and ignoring line of sight."
 LocFlyOverText="Daybreak Flame"
-LocPromotionPopupText="<Bullet/>Pyrokinetically-enhanced rounds punch through cover, shredding armor, and ignoring line of sight.<br/><Bullet/>This ability only replaces standard sniper shots and does not add additional effects to other shots.<br/>"
+LocPromotionPopupText="<Bullet/>Pyrokinetically-enhanced rounds punch through cover, shredding armor, and ignoring line of sight.<br/><Bullet/>This ability only augments standard sniper shots and does not add additional effects to other shots.<br/>"
 
 [YourHandsMyEyes X2AbilityTemplate]
 LocFriendlyName="Your Hands, My Eyes"
@@ -188,31 +188,31 @@ LocPromotionPopupText="<Bullet/> Overload an organic unit's brain with pure psio
 
 [LinkedIntelligence X2AbilityTemplate]
 LocFriendlyName="Networked OI"
-LocLongDescription="Units within the meld can react instanteously to fire commands. When a unit in the Meld takes a reaction shot, all melded units attempt to fire against the target."
+LocLongDescription="Units within the meld can react instantaneously to fire commands. When a unit in the Meld takes a reaction shot, all melded units attempt to fire against the target."
 LocHelpText="When a unit in the Meld takes a reaction shot, all melded units attempt to fire against the target."
 LocFlyOverText="Networked OI"
-LocPromotionPopupText="<Bullet/> Units within the meld can react instanteously to fire commands. When a unit in the Meld takes a reaction shot, all melded units attempt to fire against the target.<br/>"
+LocPromotionPopupText="<Bullet/> Networked OI will trigger at squadsight range.<br/><Bullet/> Units will not break concealment in order to fire.<br/>"
 
 [TwitchReaction X2AbilityTemplate]
 LocFriendlyName="Twitch Reaction"
-LocLongDescription="This unit can spontaenously take covering fire reaction shots at units attacking fellow melded allies."
+LocLongDescription="This unit can spontaneously take covering fire reaction shots at units attacking fellow melded allies."
 LocHelpText="Take an instant reaction shot when a melded ally is attacked."
 LocFlyOverText="Twitch Reaction"
-LocPromotionPopupText="<Bullet/> This unit can spontaenously take covering fire reaction shots at units attacking fellow melded allies.<br/>"
+LocPromotionPopupText="<Bullet/> This unit can spontaneously take covering fire reaction shots at units attacking fellow melded allies.<br/>"
 
 [TimeStandsStill X2AbilityTemplate]
 LocFriendlyName="Time Stands Still"
-LocLongDescription="Throw a wrench in the gears of the universe for a brief moment. Allies and Enemies alike become Greyscaled, losing their ability to affect or percieve the world around them."
+LocLongDescription="Throw a wrench in the gears of the universe for a brief moment. Allies and Enemies alike become Greyscaled, losing their ability to affect or perceive the world around them."
 LocHelpText="The World! Stop Time!"
 LocFlyOverText="Time Stands Still"
-LocPromotionPopupText="<Bullet/> Throw a wrench in the gears of the universe for a brief moment.<br/><Bullet/> Allies and Enemies alike become Greyscaled, losing their ability to affect or percieve the world around them.<br/><Bullet/> Greyscaled units are easy to hit and critically hit.<br/>"
+LocPromotionPopupText="<Bullet/> Timers and Reinforcements will be delayed while time is stopped.<br/><Bullet/> Greyscaled units are easy to hit and critically hit.<br/>"
 
 [PsionicSurge X2AbilityTemplate]
 LocFriendlyName="Psionic Surge"
 LocLongDescription="Empower this unit's weapon with psionic energy, increasing its fire rate and energy throughput."
 LocHelpText="Empower this unit's weapon with psionic energy."
 LocFlyOverText="Psionic Surge"
-LocPromotionPopupText="<Bullet/> Empower this unit's weapon with psionic energy, increasing its fire rate and energy throughput.<br/><Bullet/> Standard shots do not end turn and cost one AP. Special shots do not have cooldowns while this effect is active.<br/>"
+LocPromotionPopupText="<Bullet/> Standard shots do not end turn and cost one AP.<br/><Bullet/> Special shots do not have cooldowns while this effect is active.<br/>"
 
 [FadeIcon X2AbilityTemplate]
 LocFriendlyName="Fade"
@@ -287,10 +287,10 @@ LocFriendlyNameWhenConcealed="Psionic Killzone (Concealed)"
 
 [RTEveryMomentMatters X2AbilityTemplate]
 LocFriendlyName="Every Moment Matters"
-LocLongDescription="The last bullet in this unit's magazine is guarenteed to Critically Hit and deals bonus damage based on the target's missing health."
-LocHelpText="The last bullet in this unit's magazine is guarenteed to Critically Hit and deals bonus damage based on the target's missing health."
+LocLongDescription="The last bullet in this unit's magazine is guaranteed to Critically Hit and deals bonus damage based on the target's missing health."
+LocHelpText="The last bullet in this unit's magazine is guaranteed to Critically Hit and deals bonus damage based on the target's missing health."
 LocFlyOverText="Every Moment Matters"
-LocPromotionPopupText="<Bullet/> The last bullet in this unit's magazine is guarenteed to Critically Hit and deals bonus damage based on the target's missing health.<br/><Bullet/> Shooting the last bullet additionally grants a movement-only action point.<br/>"
+LocPromotionPopupText="<Bullet/> Bonus damage is equal to 35% of the target's missing HP.<br/><Bullet/> Shooting the last bullet additionally grants a movement-only action point.<br/>"
 
 ; <Bullet/><br/>
 
@@ -330,17 +330,17 @@ LocPromotionPopupText="<Bullet/> You can trigger the Slash ability by placing th
 
 [RTSiphon X2AbilityTemplate]
 LocFriendlyName="Siphon"
-LocLongDescription="This unit will siphon hitpoints from organic enemies based on the damage it deals to them."
-LocHelpText="This unit will siphon hitpoints from organic enemies based on the damage it deals to them."
+LocLongDescription="This unit will siphon health from organic enemies based on the damage it deals to them."
+LocHelpText="This unit will siphon health from organic enemies based on the damage it deals to them."
 LocFlyOverText="Bump In The Night"
-LocPromotionPopupText="<Bullet/> This unit will siphon hitpoints from organic enemies based on the damage it deals to them. <br/><Bullet/> Minimum health gain per attack is 2. <br/>"
+LocPromotionPopupText="<Bullet/> This unit will siphon health from organic enemies based on the damage it deals to them. <br/><Bullet/> Minimum health gain per attack is 2. <br/>"
 
 [RTAcidicBlade X2AbilityTemplate]
 LocFriendlyName="Acid Blade"
-LocLongDescription="This unit's blade is covered in a classified acidic compound. It shreds armor and applies this compound to the target."
+LocLongDescription="This unit's blade is covered in a classified acidic solution. It shreds armor and applies this solution to the target."
 LocHelpText="This unit's melee attacks deal additional acid damage."
 LocFlyOverText="Acid Blade"
-LocPromotionPopupText="<Bullet/> This unit's blade is covered in a classified acidic compound. It shreds armor and applies this compound to the target.<br/><Bullet/> Acid shreds additional armor and does damage per turn.<br/><Bullet/> Consecutive melee attacks will refresh the duration of the acid and increase its potency, stacking the damage effect.<br/>"
+LocPromotionPopupText="<Bullet/> This unit's blade is covered in a classified acidic solution. It shreds armor and applies this solution to the target.<br/><Bullet/> Acid shreds additional armor and does damage per turn.<br/><Bullet/> Consecutive melee attacks will refresh the duration of the acid and increase its potency, stacking the damage effect.<br/>"
 
 [RTPsionicBlade X2AbilityTemplate]
 LocFriendlyName="Psiblade"
@@ -400,10 +400,10 @@ LocPromotionPopupText="<Bullet/> Whenever this unit uses a melee attack, there i
 
 [RTPyroclasticFlow X2AbilityTemplate]
 LocFriendlyName="Pyroclastic Flow"
-LocLongDescription="When this unit is affected by burning, it gains additional movement speed, and its melee attacks gain additional fire damage."
-LocHelpText="When this unit is affected by burning, it gains additional movement speed, and its melee attacks gain additional fire damage."
+LocLongDescription="This unit can now melee while it is burning, and while burning, it leaves a devastating trail of fire in its wake."
+LocHelpText="This unit can now melee while it is burning, and while burning, it leaves a devastating trail of fire in its wake."
 LocFlyOverText="Pyroclastic Flow"
-LocPromotionPopupText="<Bullet/> When this unit is affected by burning, it gains additional movement speed, and its melee attacks gain additional fire damage.<br/>"
+LocPromotionPopupText="<Bullet/> This unit can now melee while it is burning, and while burning, it leaves a devastating trail of fire in its wake.<br/>"
 
 [RTPyroclasticSlash X2AbilityTemplate]
 LocFriendlyName="Slash (Pyroclastic)"
@@ -430,14 +430,14 @@ LocFriendlyName="Unstable Tempest"
 LocLongDescription="Whenever this unit uses a psionic ability, it triggers a Burst around it and all melded allies."
 LocHelpText="Whenever this unit uses a psionic ability, it triggers a Burst around it and all melded allies."
 LocFlyOverText="Unstable Tempest"
-LocPromotionPopupText="<Bullet/> Whenever this unit uses a psionic ability, it triggers a Burst around it and all melded allies.<br/><Bullet/>Certain abilities are not considered to be Psionic for the purposes of this ability, like Join Meld and Leave Meld.<br/>"
+LocPromotionPopupText="<Bullet/> Whenever this unit uses a psionic ability, it triggers a Burst around it and all melded allies.<br/><Bullet/> Certain abilities are not considered to be Psionic for the purposes of this ability, like Join Meld and Leave Meld.<br/>"
 
 [RTUnstableConduitBurst X2AbilityTemplate]
 LocFriendlyName="Burst"
 LocLongDescription="Unleash a burst of psionic energy, damaging surrounding enemies and tiles."
 LocHelpText="Unleash a burst of psionic energy, damaging surrounding enemies and tiles."
 LocFlyOverText="Burst"
-LocPromotionPopupText="<Bullet/> Unleash a burst of psionic energy, damaging surrounding enemies and tiles.<br/>"
+LocPromotionPopupText="<Bullet/> Unleash a burst of psionic energy, damaging surrounding units and tiles.<br/>"
 
 [RTPersistingImages X2AbilityTemplate]
 LocFriendlyName="Persisting Images"
@@ -472,7 +472,7 @@ LocFriendlyName="Ghost In The Shell"
 LocLongDescription="When this unit interacts with objectives, it is not unconcealed."
 LocHelpText="When this unit interacts with objectives, it is not unconcealed."
 LocFlyOverText="Ghost In The Shell"
-LocPromotionPopupText="<Bullet/> When this unit interacts with objectives, it is not unconcealed.<br/>"
+LocPromotionPopupText="<Bullet/> When this unit interacts with objectives, it gains short burst of Stealth.<br/>"
 
 [RTQueenOfBlades X2AbilityTemplate]
 LocFriendlyName="The Queen of Blades"
@@ -516,7 +516,7 @@ LocFriendlyName="The Six Paths of Pain"
 LocLongDescription="Automatically cast Over the Shoulder for free at the start of each turn."
 LocHelpText="Automatically cast Over the Shoulder for free at the start of each turn."
 LocFlyOverText="The Six Paths of Pain"
-LocPromotionPopupText="<Bullet/> Automatically cast Over the Shoulder for free at the start of each turn.<br/>"
+LocPromotionPopupText="<Bullet/> Will not trigger if the unit can't cast Over the Shoulder.<br/>"
 
 [RTMeldInduction X2AbilityTemplate]
 LocFriendlyName="Meld Induction"
