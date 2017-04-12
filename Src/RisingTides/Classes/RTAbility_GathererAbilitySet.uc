@@ -338,7 +338,7 @@ static function X2AbilityTemplate RTTriangulation() {
 	Trigger.ListenerData.Priority = 50;
 	Template.AbilityTriggers.AddItem(Trigger);
 
-	Trigger = new class'X2AbilityTrigger_EventListener';
+/*	Trigger = new class'X2AbilityTrigger_EventListener';
 	Trigger.ListenerData.Deferral = ELD_OnStateSubmitted;
 	Trigger.ListenerData.EventID = 'UnitMoveFinished';
 	Trigger.ListenerData.Filter = eFilter_None;
@@ -352,7 +352,7 @@ static function X2AbilityTemplate RTTriangulation() {
 	Trigger.ListenerData.Filter = eFilter_None;
 	Trigger.ListenerData.EventFn = class'RTGameState_Ability'.static.TriangulationListener;
 	Trigger.ListenerData.Priority = 50;
-	Template.AbilityTriggers.AddItem(Trigger);
+	Template.AbilityTriggers.AddItem(Trigger);*/
 
 	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_NeverShow;
 	Template.AdditionalAbilities.AddItem('RTTriangulationIcon');

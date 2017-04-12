@@ -521,7 +521,7 @@ function EventListenerReturn OnUpdateAuraCheck(Object EventData, Object EventSou
 		History = `XCOMHISTORY;
 		ThisEffect = self;
 
-		AuraSourceUnitState = XComGameState_Unit(History.GetGameStateForObjectID(ApplyEffectParameters.SourceStateObjectRef.ObjectID));
+		AuraSourceUnitState = XComGameState_Unit(History.GetGameStateForObjectID(ApplyEffectParameters.TargetStateObjectRef.ObjectID));
 		`assert(AuraSourceUnitState != none);
 
 		AuraTemplate = X2Effect_AuraSource(GetX2Effect());
@@ -555,7 +555,7 @@ function EventListenerReturn OnTotalAuraCheck(Object EventData, Object EventSour
 
 	History = `XCOMHISTORY;
 
-	AuraSourceUnitState = XComGameState_Unit(History.GetGameStateForObjectID(ApplyEffectParameters.SourceStateObjectRef.ObjectID));
+	AuraSourceUnitState = XComGameState_Unit(History.GetGameStateForObjectID(ApplyEffectParameters.TargetStateObjectRef.ObjectID));
 	`assert(AuraSourceUnitState != none);
 
 	AuraTemplate = X2Effect_AuraSource(GetX2Effect());
