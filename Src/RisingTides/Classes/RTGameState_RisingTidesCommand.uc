@@ -147,7 +147,7 @@ simulated function UpdateDeathRecordData(name CharacterTemplateName, StateObject
 		foreach IteratorDeathRecord.IndividualKillCounts(IteratorKillCount) {
 			if(IteratorKillCount.UnitRef.ObjectID == UnitRef.ObjectID) {
 				bFoundKillCount = true;
-				IteratorKillCount.NumKills++;
+				IteratorKillCount.KillCount++;
 			}
 		}
 

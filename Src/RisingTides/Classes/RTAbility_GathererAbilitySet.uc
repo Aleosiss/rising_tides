@@ -355,7 +355,7 @@ static function X2AbilityTemplate RTTriangulation() {
 	Template.AbilityTriggers.AddItem(Trigger);
 
 	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_NeverShow;
-	Templates.AdditionalAbilities.AddItem('RTTriangulationIcon');
+	Template.AdditionalAbilities.AddItem('RTTriangulationIcon');
 
 	Template.AbilityTargetStyle = default.SimpleSingleTarget;
 
@@ -366,7 +366,7 @@ static function X2AbilityTemplate RTTriangulation() {
 static function X2AbilityTemplate RTTriangulationIcon() {
 	local X2AbilityTemplate Template;
 
-	Template = PurePassive('RTTriangulationIcon', "img:///UILibrary_PerkIcons.UIPerk_swordSlash", true));
+	Template = PurePassive('RTTriangulationIcon', "img:///UILibrary_PerkIcons.UIPerk_swordSlash", true);
 	Template.AbilitySourceName = 'eAbilitySource_Psionic';
 
 	return Template;
