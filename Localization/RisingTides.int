@@ -32,6 +32,11 @@ TimeStopEffectRemovedString="Time Stop Ended!"
 TimeStopLostFlyover="Time Stop Ended!"
 LargeUnitTimeStopLostFlyover="Time Stop Ended!"
 
+[RTGameState_MeldEffect]
+MeldLeftText="Left the meld!"
+MeldJoinedText="Joined the meld!"
+
+
 [DaybreakFlame RTAbilityTemplate]
 LocFriendlyName="Fire Sniper Rifle (Daybreak Flame)"
 LocHelpText="Fire your sniper rifle at a target."

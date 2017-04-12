@@ -13,6 +13,9 @@ var float CombinedWill, SharedHack, MeldStrength;
 var bool bHasYourHandsMyEyes;
 var ECharStatType MeldStrengthStatType;
 
+var localized string MeldLeftText;
+var localized string MeldJoinedText;
+
 // Initialize(XComGameState_Unit MeldMaker)
 function RTGameState_MeldEffect Initialize(XComGameState_Unit MeldMaker)
 {
@@ -419,7 +422,7 @@ function TriggerJoinMeldFlyoverVisualizationFn(XComGameState VisualizeGameState,
 	BuildTrack.TrackActor = UnitState.GetVisualizer();
 
 	SoundAndFlyOver = X2Action_PlaySoundAndFlyOver(class'X2Action_PlaySoundAndFlyOver'.static.AddToVisualizationTrack(BuildTrack, VisualizeGameState.GetContext()));
-	SoundAndFlyOver.SetSoundAndFlyOverParameters(None, "Joined the meld!", '', eColor_Attention, "img:///UILibrary_PerkIcons.UIPerk_reload");
+	SoundAndFlyOver.SetSoundAndFlyOverParameters(None, default.MeldJoinedText, '', eColor_Attention, "img:///UILibrary_PerkIcons.UIPerk_reload");
 	OutVisualizationTracks.AddItem(BuildTrack);
 }
 
@@ -443,7 +446,7 @@ function TriggerLeaveMeldFlyoverVisualizationFn(XComGameState VisualizeGameState
 	BuildTrack.TrackActor = UnitState.GetVisualizer();
 
 	SoundAndFlyOver = X2Action_PlaySoundAndFlyOver(class'X2Action_PlaySoundAndFlyOver'.static.AddToVisualizationTrack(BuildTrack, VisualizeGameState.GetContext()));
-	SoundAndFlyOver.SetSoundAndFlyOverParameters(None, "Left the meld!", '', eColor_Attention, "img:///UILibrary_PerkIcons.UIPerk_reload");
+	SoundAndFlyOver.SetSoundAndFlyOverParameters(None, default.MeldLeftText, '', eColor_Attention, "img:///UILibrary_PerkIcons.UIPerk_reload");
 	OutVisualizationTracks.AddItem(BuildTrack);
 
 

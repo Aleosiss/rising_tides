@@ -24,6 +24,7 @@ This would be a bare-bones content mod. I also have the following content in min
 		- Redo Guardian Angel
 		- Lift
 		- Pull
+		- Psionic Storm
 		- Verify that Over The Shoulder works against burrowed/concealed units
 		- Add Over the Shoulder exception for civilians that are actually faceless
 		- Rework Assuming Direct Control to enable bonus abilities instead of bonus damage
@@ -48,3 +49,4 @@ This would be a bare-bones content mod. I also have the following content in min
 	- Make extend effect duration happen on move for Aura Effects as well, possibly by breaking its logic out into a separate method that is called in either place
 	- Add Siphon to RTEffectBuilder
 	- Verify that Networked OI works with CCS
+	- Verify that Mind Meld still works properly with the changes to GetMeldStrength()
