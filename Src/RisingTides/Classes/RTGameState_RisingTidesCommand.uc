@@ -156,6 +156,9 @@ simulated function UpdateNumDeaths(name CharacterTemplateName, StateObjectRefere
 		}
 
 	}
+
+	// new character. make a new death record and increment the number of deaths.
+	// also, create a new kill count and increment the number of kills.
 	if(!bFoundDeathRecord) {
 		NewDeathRecord.CharacterTemplateName = CharacterTemplateName;
 		NewDeathRecord.NumDeaths = 1;
@@ -165,6 +168,28 @@ simulated function UpdateNumDeaths(name CharacterTemplateName, StateObjectRefere
 		NewDeathRecord.IndividualKillCounts.AddItem(NewKillCount);
 		DeathRecordData.AddItem(NewDeathRecord);
 	}
+}
+
+simulated function UpdateNumCrits(name CharacterTemplateName) {
+	local RTDeathRecord 	IteratorDeathRecord, NewDeathRecord;
+	local bool				bFoundDeathRecord;
+
+	foreach DeathRecordData(IteratorDeathRecord) {
+		if(IteratorDeathRecord.CharacterTemplateName != CharacterTemplateName) {
+			continue;
+		}
+
+		bFoundDeathRecord = true;
+		IteratorDeathRecord.NumCrits++;
+	}
+
+	// new character. make a new death record and increment the number of crits.
+	if(!bFoundDeathRecord) {
+		NewDeathRecord.CharacterTemplateName = CharacterTemplateName;
+		NewDeathRecord.NumCrits = 1;
+		DeathRecordData.AddItem(NewDeathRecord);
+	}
+
 }
 
 // Creates the killtracker object if it doesn't exist
@@ -204,7 +229,7 @@ function InitListeners() {
 	EventMgr.UnregisterFromAllEvents(ThisObj); // clear all old listeners to clear out old stuff before re-registering
 
 	EventMgr.RegisterForEvent(ThisObj, 'KillMail', OnKillMail, ELD_OnStateSubmitted,,, true);
-	EventMgr.RegisterForEvent(ThisObj, 'UnitTakeEffectDamage', OnTakeDamage, ELD_OnStateSubmitted,,, true);
+	EventMgr.RegisterForEvent(ThisObj, 'UnitAttacked', OnUnitAttacked, ELD_OnStateSubmitted,,, true);
 }
 
 // EventData = DeadUnitState
@@ -229,13 +254,36 @@ function EventListenerReturn OnKillMail(Object EventData, Object EventSource, XC
 	NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("Rising Tides: UpdateDeathRecordData");
 	RTCom = RTGameState_RisingTidesCommand(NewGameState.CreateStateObject(class'RTGameState_RisingTidesCommand', self.ObjectID));
 	NewGameState.AddStateObject(RTCom);
-	RTCom.UpdateDeathRecordData(DeadUnitState.GetMyTemplateName(), KillerUnitState.GetReference());
+	RTCom.UpdateDeathRecordData(DeadUnitState.GetMyTemplate().CharacterGroupName, KillerUnitState.GetReference());
 	`GAMERULES.SubmitGameState(NewGameState);
 
 	return ELR_NoInterrupt;
 }
 
 //
-function EventListenerReturn OnTakeDamage(Object EventData, Object EventSource, XComGameState GameState, Name InEventID) {
+function EventListenerReturn OnUnitAttacked(Object EventData, Object EventSource, XComGameState GameState, Name InEventID) {
+	local XComGameStateContext_Ability AbilityContext;
+	local XComGameState_Unit AttackedUnitState;
+	local bool bWasCrit;
 
+	AbilityContext = XComGameStateContext_Ability(GameState.GetContext());
+	if(AbilityContext == none) {
+		return ELR_NoInterrupt;
+	}
+
+	AttackedUnitState = XComGameState_Unit(EventData);
+	if(AttackedUnitState == none) {
+		AttackedUnitState = XComGameState_Unit(EventSource);
+		if(AttackedUnitState == none) {
+			return ELR_NoInterrupt;
+		}
+	}
+
+
+	if(AbilityContext.ResultContext.HitResult == eHit_Crit) {
+		UpdateNumCrits(AttackedUnitState.GetMyTemplate().CharacterGroupName);
+	}
+
+
+	return ELR_NoInterrupt;
 }
