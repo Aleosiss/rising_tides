@@ -168,8 +168,7 @@ simulated function UpdateNumDeaths(name CharacterTemplateName, StateObjectRefere
 }
 
 // Creates the killtracker object if it doesn't exist
-static function RTGameState_RisingTidesCommand GetRTCommand()
-{
+static function RTGameState_RisingTidesCommand GetRTCommand() {
 	local XComGameStateHistory History;
 	local RTGameState_RisingTidesCommand RTCom;
 	local XComGameState NewGameState;
@@ -189,16 +188,14 @@ static function RTGameState_RisingTidesCommand GetRTCommand()
 	}
 }
 
-static function RefreshListeners()
-{
+static function RefreshListeners() {
 	local RTGameState_RisingTidesCommand RTCom;
 
 	RTCom = GetRTCommand();
 	RTCom.InitListeners();
 }
 
-function InitListeners()
-{
+function InitListeners() {
 	local X2EventManager EventMgr;
 	local Object ThisObj;
 
@@ -207,11 +204,12 @@ function InitListeners()
 	EventMgr.UnregisterFromAllEvents(ThisObj); // clear all old listeners to clear out old stuff before re-registering
 
 	EventMgr.RegisterForEvent(ThisObj, 'KillMail', OnKillMail, ELD_OnStateSubmitted,,, true);
+	EventMgr.RegisterForEvent(ThisObj, 'UnitTakeEffectDamage', OnTakeDamage, ELD_OnStateSubmitted,,, true);
 }
 
-
-function EventListenerReturn OnKillMail(Object EventData, Object EventSource, XComGameState GameState, Name InEventID)
-{
+// EventData = DeadUnitState
+// EventSource = KillerUnitState
+function EventListenerReturn OnKillMail(Object EventData, Object EventSource, XComGameState GameState, Name InEventID) {
 	local XComGameState_Unit KillerUnitState, DeadUnitState;
 	local RTGameState_RisingTidesCommand RTCom;
 	local XComGameState NewGameState;
@@ -235,4 +233,9 @@ function EventListenerReturn OnKillMail(Object EventData, Object EventSource, XC
 	`GAMERULES.SubmitGameState(NewGameState);
 
 	return ELR_NoInterrupt;
+}
+
+//
+function EventListenerReturn OnTakeDamage(Object EventData, Object EventSource, XComGameState GameState, Name InEventID) {
+
 }
