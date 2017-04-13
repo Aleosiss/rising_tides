@@ -259,8 +259,13 @@ function EventListenerReturn OnKillMail(Object EventData, Object EventSource, XC
 
 	return ELR_NoInterrupt;
 }
-
-//
+// EventID = AbilityActivated
+// EventData = AbilityState
+// EventSource = UnitWhoUsedAbilityStateState
+// or...
+// EventID = UnitAttacked
+// EventData = UnitState
+// EventSource = UnitState
 function EventListenerReturn OnUnitAttacked(Object EventData, Object EventSource, XComGameState GameState, Name InEventID) {
 	local XComGameStateContext_Ability AbilityContext;
 	local XComGameState_Unit AttackedUnitState;
