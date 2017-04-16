@@ -33,6 +33,8 @@ class RTAbility_GathererAbilitySet extends RTAbility_GhostAbilitySet config(Risi
 	var config int LIFT_COOLDOWN;
 	var config int LIFT_DURATION;
 	var config float LIFT_RADIUS;
+	var config int KNOWLEDGE_IS_POWER_STACK_CAP;
+	var config float KNOWLEDGE_IS_POWER_CRIT_PER_STACK;
 
 	var name ExtinctionEventStageThreeEventName;
 	var name OverTheShoulderTagName;
@@ -42,9 +44,13 @@ class RTAbility_GathererAbilitySet extends RTAbility_GhostAbilitySet config(Risi
 	var name GuiltyConscienceEventName;
 	var name GuiltyConscienceEffectName;
 	var name PostOverTheShoulderEventName;
-
+    var name KnowledgeIsPowerEffectName;
 
 	var localized name GuardianAngelHealText;
+	var localized string KIPFriendlyName;
+	var localized string KIPFriendlyDesc;
+	
+	var config string KIPIconPath;
 
 //---------------------------------------------------------------------------------------
 //---CreateTemplates---------------------------------------------------------------------
@@ -58,7 +64,7 @@ static function array<X2DataTemplate> CreateTemplates()
 	Templates.AddItem(OverTheShoulderVisibilityUpdate());
 
 	Templates.AddItem(RTForcedIntroversion());
-	Templates.AddItem(PurePassive('RTUnsettlingVoices', "img:///UILibrary_PerkIcons.UIPerk_swordSlash", true));
+	Templates.AddItem(PurePassive('RTUnsettlingVoices', "img:///UILibrary_PerkIcons.UIPerk_swordSlash", false, 'eAbilitySource_Psionic'));
 	Templates.AddItem(RTTheSixPathsOfPain());
 	Templates.AddItem(RTTheSixPathsOfPainIcon());
 	Templates.AddItem(RTMeldInduction());
@@ -69,17 +75,18 @@ static function array<X2DataTemplate> CreateTemplates()
 	Templates.AddItem(RTExtinctionEventPartTwo());
 	Templates.AddItem(RTExtinctionEventPartThree());
 	Templates.AddItem(RTUnwillingConduits());
-	Templates.AddItem(PurePassive('RTUnwillingConduitsIcon', "img://UILibrary_PerkIcons.UIPerk_swordSlash", true));
+	Templates.AddItem(PurePassive('RTUnwillingConduitsIcon', "img://UILibrary_PerkIcons.UIPerk_swordSlash", false, 'eAbilitySource_Psionic'));
 	Templates.AddItem(RTDomination());
 	Templates.AddItem(RTTechnopathy());
 	Templates.AddItem(RTSibyl());
 	Templates.AddItem(RTEchoedAgony());
-	Templates.AddItem(PurePassive('RTEchoedAgonyIcon', "img://UILibrary_PerkIcons.UIPerk_swordSlash", true));
+	Templates.AddItem(PurePassive('RTEchoedAgonyIcon', "img://UILibrary_PerkIcons.UIPerk_swordSlash", false, 'eAbilitySource_Psionic'));
 	Templates.AddItem(RTCreateEchoedAgonyEffectAbility());
 	Templates.AddItem(RTGuiltyConscience());
 	Templates.AddItem(RTGuiltyConscienceEvent());
 	Templates.AddItem(RTTriangulation());
 	Templates.AddItem(RTTriangulationIcon());
+	Templates.AddItem(RTKnowledgeIsPower());
 
 
 	return Templates;
@@ -139,6 +146,9 @@ static function X2AbilityTemplate CreateOverTheShoulderAbility(X2AbilityTemplate
 
 	// Guilty Conscience
 	local RTEffect_GuiltyConscience				GuiltyEffect;
+
+	// Knowledge is Power
+	local RTEffect_KnowledgeIsPower				KIPEffect;
 
 	local X2Effect_Persistent					SelfEffect, EnemyEffect, AllyEffect;
 
@@ -223,6 +233,10 @@ static function X2AbilityTemplate CreateOverTheShoulderAbility(X2AbilityTemplate
 	// Guilty Conscience
 	GuiltyEffect = CreateGuiltyConscienceEffect(default.GUILTY_BUILDUP_TURNS);
 	Template.AddMultiTargetEffect(GuiltyEffect);
+
+	// Knowledge is Power
+	KIPEffect = CreateKnowledgeIsPowerEffect(default.KNOWLEDGE_IS_POWER_STACK_CAP, default.KNOWLEDGE_IS_POWER_CRIT_PER_STACK);
+	Template.AddMultiTargetEffect(KIPEffect);
 
 
 	// end enemy aura effects      ----------------------------------------
@@ -337,22 +351,6 @@ static function X2AbilityTemplate RTTriangulation() {
 	Trigger.ListenerData.EventFn = class'RTGameState_Ability'.static.TriangulationListener;
 	Trigger.ListenerData.Priority = 50;
 	Template.AbilityTriggers.AddItem(Trigger);
-
-/*	Trigger = new class'X2AbilityTrigger_EventListener';
-	Trigger.ListenerData.Deferral = ELD_OnStateSubmitted;
-	Trigger.ListenerData.EventID = 'UnitMoveFinished';
-	Trigger.ListenerData.Filter = eFilter_None;
-	Trigger.ListenerData.EventFn = class'RTGameState_Ability'.static.TriangulationListener;
-	Trigger.ListenerData.Priority = 50;
-	Template.AbilityTriggers.AddItem(Trigger);
-
-	Trigger = new class'X2AbilityTrigger_EventListener';
-	Trigger.ListenerData.Deferral = ELD_OnStateSubmitted;
-	Trigger.ListenerData.EventID = 'OnUnitBeginPlay';
-	Trigger.ListenerData.Filter = eFilter_None;
-	Trigger.ListenerData.EventFn = class'RTGameState_Ability'.static.TriangulationListener;
-	Trigger.ListenerData.Priority = 50;
-	Template.AbilityTriggers.AddItem(Trigger);*/
 
 	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_NeverShow;
 	Template.AdditionalAbilities.AddItem('RTTriangulationIcon');
@@ -1076,7 +1074,7 @@ static function X2AbilityTemplate RTEchoedAgony() {
 
     `CREATE_X2TEMPLATE(class'RTAbilityTemplate', Template, 'RTEchoedAgony');
 
-    Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_AlwaysShow;
+    Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_NeverShow;
     Template.Hostility = eHostility_Neutral;
     Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_swordSlash";
     Template.AbilitySourceName = 'eAbilitySource_Psionic';
@@ -1191,7 +1189,7 @@ static function X2AbilityTemplate RTCreateEchoedAgonyEffectAbility()
 //---Guilty Conscience-------------------------------------------------------------------
 //---------------------------------------------------------------------------------------
 static function X2AbilityTemplate RTGuiltyConscience() {
-	return PurePassive('RTGuiltyConscience', "img:///UILibrary_PerkIcons.UIPerk_swordSlash", true);
+	return PurePassive('RTGuiltyConscience', "img:///UILibrary_PerkIcons.UIPerk_swordSlash", false, 'eAbilitySource_Psionic');
 }
 
 static function RTEffect_GuiltyConscience CreateGuiltyConscienceEffect(int TriggerThreshold) {
@@ -1249,7 +1247,9 @@ static function X2AbilityTemplate RTGuiltyConscienceEvent() {
 	return Template;
 }
 
-
+//---------------------------------------------------------------------------------------
+//---Lift--------------------------------------------------------------------------------
+//---------------------------------------------------------------------------------------
 static function X2AbilityTemplate RTLift() {
 	local X2AbilityTemplate 					Template;
 	local X2Effect_Stunned 						StunEffect;
@@ -1427,6 +1427,37 @@ simulated function RTLift_BuildVisualization(XComGameState VisualizeGameState, o
 	}
 }
 
+//---------------------------------------------------------------------------------------
+//---Knowledge is Power------------------------------------------------------------------
+//---------------------------------------------------------------------------------------
+static function X2AbilityTemplate RTKnowledgeIsPower() {
+	return PurePassive('RTKnowledgeIsPower', "img:///UILibrary_PerkIcons.UIPerk_swordSlash", false, 'eAbilitySource_Psionic');
+}
+
+
+static function RTEffect_KnowledgeIsPower CreateKnowledgeIsPowerEffect(int _StackCap, float _CritChancePerStack) {
+	local RTEffect_KnowledgeIsPower Effect;
+	local X2Condition_AbilityProperty Condition;
+
+	Effect = new class'RTEffect_KnowledgeIsPower';
+	Effect.BuildPersistentEffect(2, false, true, false, eGameRule_PlayerTurnEnd);
+	Effect.TargetConditions.AddItem(class'RTAbility_GhostAbilitySet'.default.PsionicTargetingProperty);
+	Effect.DuplicateResponse = eDupe_Refresh;
+	Effect.bRemoveWhenTargetDies = true;
+	Effect.bRemoveWhenSourceDies = true;
+	Effect.SetDisplayInfo(ePerkBuff_Penalty, default.KIPFriendlyName, default.KIPFriendlyDesc, default.KIPIconPath, true,,'eAbilitySource_Psionic');
+	Effect.StackCap = _StackCap;
+	Effect.CritChancePerStack = _CritChancePerStack;
+	Effect.EffectName = default.KnowledgeIsPowerEffectName;
+
+
+	Condition = new class'X2Condition_AbilityProperty';
+	Condition.OwnerHasSoldierAbilities.AddItem('RTKnowledgeIsPower');
+	Effect.TargetConditions.AddItem(Condition);
+
+	return Effect;
+}
+
 defaultproperties
 {
 	ExtinctionEventStageThreeEventName = "RTExtinctionEventStageThree"
@@ -1437,4 +1468,5 @@ defaultproperties
 	GuiltyConscienceEventName = "GuiltyConscienceEvent"
 	GuiltyConscienceEffectName = "GuiltyConscienceEffect"
 	PostOverTheShoulderEventName = "TriangulationEvent"
+	KnowledgeIsPowerEffectName = "KnowledgeIsPowerEffectName"
 }

@@ -334,31 +334,31 @@ function EventListenerReturn TriangulationListener(Object EventData, Object Even
 	local XComGameState_Unit SourceUnitState, IteratorUnitState, OwnerUnitState;
 	local XComGameStateHistory History;
 
-	`LOG("Triangulation Triggered via EventID " @ EventID);
+	//`LOG("Triangulation Triggered via EventID " @ EventID);
 	History = `XCOMHISTORY;
 
 	SourceUnitState = XComGameState_Unit(EventSource);
 	OwnerUnitState = XComGameState_Unit(History.GetGameStateForObjectID(OwnerStateObject.ObjectID));
 
 	if(!SourceUnitState.IsUnitAffectedByEffectName('RTEffect_Meld') || !OwnerUnitState.IsUnitAffectedByEffectName('RTEffect_Meld')) {
-		`LOG("!SourceUnitState.IsUnitAffectedByEffectName('RTEffect_Meld')");
+		//`LOG("!SourceUnitState.IsUnitAffectedByEffectName('RTEffect_Meld')");
 		return ELR_NoInterrupt;
 	}
 
 	if(!OwnerUnitState.IsUnitAffectedByEffectName(class'RTAbility_GathererAbilitySet'.default.OverTheShoulderSourceEffectName)){
-		`LOG("!SourceUnitState.IsUnitAffectedByEffectName(class'RTAbility_GathererAbilitySet'.default.OverTheShoulderSourceEffectName)");
+		//`LOG("!SourceUnitState.IsUnitAffectedByEffectName(class'RTAbility_GathererAbilitySet'.default.OverTheShoulderSourceEffectName)");
 		return ELR_NoInterrupt;
 	}
 
 	foreach History.IterateByClassType(class'XComGameState_Unit', IteratorUnitState) {
 		// don't target ourselves
 		if(IteratorUnitState.ObjectID == OwnerUnitState.ObjectID) {
-			`LOG("IteratorUnitState.ObjectID == SourceUnitState.ObjectID");
+			//`LOG("IteratorUnitState.ObjectID == SourceUnitState.ObjectID");
 			continue;
 		}
 		// only target melded units
 		if(!IteratorUnitState.IsUnitAffectedByEffectName('RTEffect_Meld')) {
-			`LOG("!IteratorUnitState.IsUnitAffectedByEffectName('RTEffect_Meld')");
+			//`LOG("!IteratorUnitState.IsUnitAffectedByEffectName('RTEffect_Meld')");
 			continue;
 		}
 		// don't duplicate the effect
@@ -367,7 +367,7 @@ function EventListenerReturn TriangulationListener(Object EventData, Object Even
 			//continue;
 		//}
 		// hit it
-		`LOG("Triangulation triggering against " @ IteratorUnitState.GetFullName());
+		//`LOG("Triangulation triggering against " @ IteratorUnitState.GetFullName());
 		AbilityTriggerAgainstSingleTarget(IteratorUnitState.GetReference(), false);
 	}
 

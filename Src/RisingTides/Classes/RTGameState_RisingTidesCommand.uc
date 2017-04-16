@@ -208,7 +208,7 @@ static function RTGameState_RisingTidesCommand GetRTCommand() {
 	if (RTCom != none) {
 		return RTCom;
 	} else {
-		`RedScreen("RTCom does not exist! Returning null!")
+		`RedScreen("RTCom does not exist! Returning null!");
 		return none;
 	}
 }
@@ -254,7 +254,7 @@ function EventListenerReturn OnKillMail(Object EventData, Object EventSource, XC
 	NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("Rising Tides: UpdateDeathRecordData");
 	RTCom = RTGameState_RisingTidesCommand(NewGameState.CreateStateObject(class'RTGameState_RisingTidesCommand', self.ObjectID));
 	NewGameState.AddStateObject(RTCom);
-	RTCom.UpdateDeathRecordData(DeadUnitState.GetMyTemplate().CharacterGroupName, KillerUnitState.GetReference());
+	RTCom.UpdateNumDeaths(DeadUnitState.GetMyTemplate().CharacterGroupName, KillerUnitState.GetReference());
 	`GAMERULES.SubmitGameState(NewGameState);
 
 	return ELR_NoInterrupt;

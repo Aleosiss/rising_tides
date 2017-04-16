@@ -96,6 +96,8 @@ OVERFLOW_READOUT="Overflow"
 
 [RTAbility_GathererAbilitySet]
 GuardianAngelHealText="Guardian Angel"
+KIPFriendlyName="Knowledge Is Power"
+KIPFriendlyDesc="I'm onto you..."
 
 [RTEffectBuilder]
 StealthFriendlyName="Stealth"
@@ -104,3 +106,4 @@ FeedbackFriendlyName="AGugHGGHGH"
 FeedbackFriendlyDesc="This unit is suffering from psionic feedback! Protect them while they recover."
 MeldFriendlyName="Mind Meld"
 MeldFriendlyDesc="This unit has joined the Meld, receiving and delivering psionic support."
+

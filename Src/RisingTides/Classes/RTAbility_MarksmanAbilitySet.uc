@@ -1502,6 +1502,7 @@ static function X2AbilityTemplate TimeStandsStillEndListener()
 	RemoveMultiEffect = new class'X2Effect_RemoveEffects';
 	RemoveMultiEffect.EffectNamesToRemove.AddItem(default.TimeStopEffectName);
 	RemoveMultiEffect.bCheckSource = false;
+	RemoveMultiEffect.bApplyOnMiss = true;
 
 	KnockbackEffect = new class'X2Effect_Knockback';
 	KnockbackEffect.KnockbackDistance = 2;

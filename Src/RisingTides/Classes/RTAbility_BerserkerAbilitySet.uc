@@ -51,10 +51,10 @@ static function array<X2DataTemplate> CreateTemplates()
 	Templates.AddItem(BumpInTheNightBloodlustListener());
 	Templates.AddItem(BumpInTheNightStealthListener());
 	Templates.AddItem(RTBerserkerKnifeAttack());																					  // icon
-	Templates.AddItem(PurePassive('RTAcidicBlade', "img:///RisingTidesContentPackage.PerkIcons.UIPerk_stim_knife", true));
-	Templates.AddItem(PurePassive('RTPsionicBlade', "img:///RisingTidesContentPackage.PerkIcons.UIPerk_psi_knife", true));
-	Templates.AddItem(PurePassive('RTHiddenBlade', "img:///RisingTidesContentPackage.PerkIcons.UIPerk_stealth_knife", true));
-	Templates.AddItem(PurePassive('RTSiphon', "img:///UILibrary_PerkIcons.UIPerk_salvo", true));									  // icon
+	Templates.AddItem(PurePassive('RTAcidicBlade', "img:///RisingTidesContentPackage.PerkIcons.UIPerk_stim_knife", false, 'eAbilitySource_Perk'));
+	Templates.AddItem(PurePassive('RTPsionicBlade', "img:///RisingTidesContentPackage.PerkIcons.UIPerk_psi_knife", false, 'eAbilitySource_Psionic'));
+	Templates.AddItem(PurePassive('RTHiddenBlade', "img:///RisingTidesContentPackage.PerkIcons.UIPerk_stealth_knife", false, 'eAbilitySource_Perk'));
+	Templates.AddItem(PurePassive('RTSiphon', "img:///UILibrary_PerkIcons.UIPerk_salvo", false, 'eAbilitySource_Psionic'));			  // icon
 	Templates.AddItem(RTBurst());																									  // icon	// animation
 	Templates.AddItem(RTBlur());																									  // icon
 	Templates.AddItem(RTPurge());																									  // icon	// animation

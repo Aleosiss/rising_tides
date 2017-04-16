@@ -630,12 +630,19 @@ LocHelpText="Enemies that are forced to suffer this unit's mental presence for t
 LocFlyOverText="Guilty Conscience"
 LocPromotionPopupText="<Bullet/> Enemy units that are affected by Over the Shoulder multiple turns in a row will be disoriented.<br/>"
 
-[RTTriangulationIcon RTAbilityTemplate]
+[RTTriangulationIcon X2AbilityTemplate]
 LocFriendlyName="Triangulation"
 LocLongDescription="Melded allies will now serve as additional sources of Over the Shoulder's effect."
 LocHelpText="Melded allies will now serve as additional sources of Over the Shoulder's effect."
 LocFlyOverText="Triangulation"
 LocPromotionPopupText="<Bullet/> The effect lasts an entire turn, even if the meld is broken.<br/><Bullet/> This is one of the very few ways for the Gatherer to affect itself with powerful Over the Shoulder effects.<br/>"
+
+[RTKnowledgeIsPower X2AbilityTemplate]
+LocFriendlyName="Knowledge is Power"
+LocLongDescription="Gain increasing damage and critical strike chance against units that endure Over the Shoulder for multiple turns."
+LocHelpText="Gain increasing damage and critical strike chance against units that endure Over the Shoulder for multiple turns."
+LocFlyOverText="Knowledge is Power"
+LocPromotionPopupText="<Bullet/> The effects of this ability build for up to four turns.<br/>"
 
 
 ;----------------------------------------------------------------------------------------------------------------------------

@@ -4,8 +4,7 @@ var int StackCap;
 var float CritChancePerStack;
 
 
-// Every turn this effect is sustained on a target, you gain increased damage and critical chance against it.
-
+// Every turn this effect is sustained on a target, you gain increased damage and critical strike chance against it.
 
 function GetToHitAsTargetModifiers(XComGameState_Effect EffectState, XComGameState_Unit Attacker, XComGameState_Unit Target, XComGameState_Ability AbilityState, class<X2AbilityToHitCalc> ToHitType, bool bMelee, bool bFlanking, bool bIndirectFire, out array<ShotModifierInfo> ShotModifiers) {
 	local ShotModifierInfo ModInfo;
@@ -16,9 +15,9 @@ function GetToHitAsTargetModifiers(XComGameState_Effect EffectState, XComGameSta
 	}
 
 	if(EffectState.iStacks > StackCap) {
-		CritChance = (StackCap + 1) * CritChancePerStack;
+		CritChance = (StackCap) * CritChancePerStack;
 	} else {
-		CritChance = (EffectState.iStacks + 1) * CritChancePerStack;
+		CritChance = (EffectState.iStacks) * CritChancePerStack;
 	}
 
 	ModInfo.ModType = eHit_Crit;
@@ -49,8 +48,8 @@ function int GetDefendingDamageModifier(XComGameState_Effect EffectState, XComGa
 		return 0;
 	}
 
-	DamageCap = StackCap + 1;
-	BonusDamage = EffectState.iStacks + 1;
+	DamageCap = StackCap;
+	BonusDamage = EffectState.iStacks;
 
 	if(BonusDamage > DamageCap) {
 		BonusDamage = DamageCap;
