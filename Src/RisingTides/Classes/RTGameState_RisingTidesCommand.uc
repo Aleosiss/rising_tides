@@ -86,6 +86,7 @@ static function SetUpRisingTidesCommand(XComGameState StartState)
 	//RTCom.CreateRTDeathRecord(StartState);
 }
 
+// CreateRTOperatives(XComGameState NewGameState)
 function CreateRTOperatives(XComGameState NewGameState) {
 	local XComGameState_Unit UnitState;
 	local X2ItemTemplateManager ItemTemplateMgr;
@@ -129,6 +130,7 @@ function CreateRTOperatives(XComGameState NewGameState) {
 	}
 }
 
+// UpdateNumDeaths(name CharacterTemplateName, StateObjectReference UnitRef)
 simulated function UpdateNumDeaths(name CharacterTemplateName, StateObjectReference UnitRef) {
 	local RTDeathRecord 	IteratorDeathRecord, NewDeathRecord;
 	local RTKillCount		IteratorKillCount, NewKillCount;
@@ -170,6 +172,7 @@ simulated function UpdateNumDeaths(name CharacterTemplateName, StateObjectRefere
 	}
 }
 
+// UpdateNumCrits(name CharacterTemplateName)
 simulated function UpdateNumCrits(name CharacterTemplateName) {
 	local RTDeathRecord 	IteratorDeathRecord, NewDeathRecord;
 	local bool				bFoundDeathRecord;
@@ -193,6 +196,7 @@ simulated function UpdateNumCrits(name CharacterTemplateName) {
 }
 
 // Creates the killtracker object if it doesn't exist
+// RTGameState_RisingTidesCommand GetRTCommand()
 static function RTGameState_RisingTidesCommand GetRTCommand() {
 	local XComGameStateHistory History;
 	local RTGameState_RisingTidesCommand RTCom;
@@ -213,6 +217,7 @@ static function RTGameState_RisingTidesCommand GetRTCommand() {
 	}
 }
 
+// RefreshListeners()
 static function RefreshListeners() {
 	local RTGameState_RisingTidesCommand RTCom;
 
@@ -220,6 +225,7 @@ static function RefreshListeners() {
 	RTCom.InitListeners();
 }
 
+// InitListeners()
 function InitListeners() {
 	local X2EventManager EventMgr;
 	local Object ThisObj;
