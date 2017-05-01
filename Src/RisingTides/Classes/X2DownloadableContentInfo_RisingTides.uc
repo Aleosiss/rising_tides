@@ -23,3 +23,9 @@ static event OnLoadedSavedGame()
 /// </summary>
 static event InstallNewCampaign(XComGameState StartState)
 {}
+
+
+exec function ToggleIASMText()
+{
+    class'UIDebugStateMachines'.static.GetThisScreen().ToggleVisible();
+}
