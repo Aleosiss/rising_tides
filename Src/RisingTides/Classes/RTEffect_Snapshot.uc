@@ -8,7 +8,7 @@
 //	Snapshot aim penalty
 //---------------------------------------------------------------------------------------
 
-class RTEffect_SnapshotEffect extends X2Effect_Persistent config(RisingTides);
+class RTEffect_Snapshot extends X2Effect_Persistent config(RisingTides);
 
 var int SNAPSHOT_AIM_PENALTY;
 var localized string RTFriendlyName;
