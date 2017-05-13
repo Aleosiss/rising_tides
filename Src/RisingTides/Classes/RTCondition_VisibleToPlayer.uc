@@ -38,7 +38,7 @@ simulated static function bool IsTargetVisibleToLocalPlayer(StateObjectReference
 
 		// Check if enemy can see this unit.
 		return class'X2TacticalVisibilityHelpers'.static.GetNumEnemyViewersOfTarget(TargetUnitRef.ObjectID) > 0;
-	} else { // the target was not a unit. in this case, all we can do a general target check
+	} else { // the target was not a unit. in this case, all we can do is a general target check
 		 // because interactive objects and destructables are always technically visible to the player through the FOW
 		if(SourceUnitObjectID != -2) {
 			class'X2TacticalVisibilityHelpers'.static.GetAllVisibleEnemyTargetsForUnit( SourceUnitObjectID, VisibleTargets );

@@ -87,6 +87,8 @@ static function array<X2DataTemplate> CreateTemplates()
 	Templates.AddItem(RTTriangulation());
 	Templates.AddItem(RTTriangulationIcon());
 	Templates.AddItem(RTKnowledgeIsPower());
+	Templates.AddItem(RTLift());
+	Templates.AddItem(RTCrushingGrasp());
 
 
 	return Templates;
@@ -1057,7 +1059,16 @@ static function X2AbilityTemplate RTSibyl() {
     Effect.AbilityToExtendName = 'OverTheShoulder';
     Effect.EffectToExtendName = default.OverTheShoulderEffectName;
     Effect.iDurationExtension = default.SIBYL_STRENGTH;
+    Template.AddTargetEffect(Effect);
 
+	Effect = new class'RTEffect_ExtendEffectDuration';
+    Effect.BuildPersistentEffect(1, true, true, false);
+    Effect.SetDisplayInfo(ePerkBuff_Passive, Template.LocFriendlyName, Template.LocLongDescription, Template.IconImage, true,, Template.AbilitySourceName);
+    Effect.bSelfBuff = true;
+    Effect.AdditionalEvents.AddItem('UnitMoveFinished');
+    Effect.AbilityToExtendName = 'RTTriangulation';
+    Effect.EffectToExtendName = default.OverTheShoulderEffectName;
+    Effect.iDurationExtension = default.SIBYL_STRENGTH;
     Template.AddTargetEffect(Effect);
 
     return Template;
@@ -1285,7 +1296,6 @@ static function X2AbilityTemplate RTLift() {
 
 	Template.AbilityMultiTargetConditions.AddItem(HeightCondition);
 	Template.AbilityMultiTargetConditions.AddItem(default.LivingHostileUnitOnlyProperty);
-	Template.AbilityMultiTargetConditions.AddItem(new class'RTCondition_UnitSize');
 
 
 	Template.AbilityTriggers.AddItem(default.PlayerInputTrigger);
@@ -1296,20 +1306,26 @@ static function X2AbilityTemplate RTLift() {
 
 	RadiusMultiTarget = new class'X2AbilityMultiTarget_Radius';
 	RadiusMultiTarget.fTargetRadius = default.LIFT_RADIUS; // 2.5 default
+	RadiusMultiTarget.bAddPrimaryTargetAsMultiTarget = true;
 	Template.AbilityMultiTargetStyle = RadiusMultiTarget;
 
+	Template.TargetingMethod = class'X2TargetingMethod_GremlinAOE';
 
 	TraversalEffect = new class'X2Effect_PersistentTraversalChange';
 	TraversalEffect.AddTraversalChange(eTraversal_Launch, true);
 	TraversalEffect.AddTraversalChange(eTraversal_Flying, true);
 
-	Template.AddTargetEffect(TraversalEffect);
-	Template.AddTargetEffect(class'RTEffectBuilder'.static.RTCreateLiftEffect(default.LIFT_DURATION * 2));
+	Template.AddMultiTargetEffect(TraversalEffect);
+	Template.AddMultiTargetEffect(class'RTEffectBuilder'.static.RTCreateLiftEffect(default.LIFT_DURATION * 2));
 
 	Template.ModifyNewContextFn = RTLift_ModifyActivatedAbilityContext;
 	Template.BuildNewGameStateFn = RTLift_BuildGameState;
+
 	// TODO: Change this
-	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
+	Template.bSkipFireAction = true;
+	Template.BuildVisualizationFn = RTLift_BuildVisualization;
+
+	// This ability is 'offensive' and can be interrupted!
 	Template.BuildInterruptGameStateFn = TypicalAbility_BuildInterruptGameState;
 
 	return Template;
@@ -1322,15 +1338,19 @@ simulated function RTLift_ModifyActivatedAbilityContext(XComGameStateContext Con
 	local vector EndLocation;
 	local TTile EndTileLocation;
 	local XComWorldData World;
-	local PathingInputData InputData;
-	local PathingResultData ResultData;
+	local PathingInputData InputData, EmptyInput;
+	local PathingResultData ResultData, EmptyResult;
 	local int i;
 
 	History = `XCOMHISTORY;
 	World = `XWORLD;
 
 	AbilityContext = XComGameStateContext_Ability(Context);
-	for(i = 0; i < AbilityContext.InputContext.MultiTargets.Length; ++i) {
+	for(i = 0; i < AbilityContext.InputContext.MultiTargets.Length; i++) {
+
+		InputData = EmptyInput;
+		ResultData = EmptyResult;
+
 		UnitState = XComGameState_Unit(History.GetGameStateForObjectID(AbilityContext.InputContext.MultiTargets[i].ObjectID));
 
 
@@ -1371,28 +1391,24 @@ simulated function XComGameState RTLift_BuildGameState(XComGameStateContext Cont
 
 	//Build the new game state frame
 	NewGameState = TypicalAbility_BuildGameState(Context);
-
+		
 	AbilityContext = XComGameStateContext_Ability(NewGameState.GetContext());
-	for(i = 0; i < AbilityContext.InputContext.MultiTargets.Length; ++i) {
+	for(i = 0; i < AbilityContext.InputContext.MultiTargets.Length; i++) {
 		UnitState = XComGameState_Unit(NewGameState.CreateStateObject(class'XComGameState_Unit', AbilityContext.InputContext.MultiTargets[i].ObjectID));
 
-		LastPathElement = AbilityContext.InputContext.MovementPaths[i].MovementData.Length - 1;
-
-		// Move the unit vertically, set the unit's new location
-		// The last position in MovementData will be the end location
-		`assert(LastPathElement > 0);
-		NewLocation = AbilityContext.InputContext.MovementPaths[i].MovementData[LastPathElement].Position;
-		NewTileLocation = World.GetTileCoordinatesFromPosition(NewLocation);
+		NewTileLocation = UnitState.TileLocation;
+		NewTileLocation.Z += 2;
 		UnitState.SetVisibilityLocation(NewTileLocation);
 
 		NewGameState.AddStateObject(UnitState);
 
-		AbilityContext.ResultContext.bPathCausesDestruction = MoveAbility_StepCausesDestruction(UnitState, AbilityContext.InputContext, 0, LastPathElement);
-		MoveAbility_AddTileStateObjects(NewGameState, UnitState, AbilityContext.InputContext, 0, LastPathElement);
-
+		
 		EventManager.TriggerEvent('ObjectMoved', UnitState, UnitState, NewGameState);
 		EventManager.TriggerEvent('UnitMoveFinished', UnitState, UnitState, NewGameState);
 	}
+
+
+
 	//Return the game state we have created
 	return NewGameState;
 }
@@ -1414,7 +1430,7 @@ simulated function RTLift_BuildVisualization(XComGameState VisualizeGameState, o
 
 	AbilityContext = XComGameStateContext_Ability(VisualizeGameState.GetContext());
 
-	for(i = 0; i < AbilityContext.InputContext.MultiTargets.Length; ++i) {
+	for(i = 0; i < AbilityContext.InputContext.MultiTargets.Length; i++) {
 		InteractingUnitRef = AbilityContext.InputContext.MultiTargets[i];
 
 		BuildTrack = EmptyTrack;
@@ -1458,6 +1474,86 @@ static function RTEffect_KnowledgeIsPower CreateKnowledgeIsPowerEffect(int _Stac
 	return Effect;
 }
 
+//---------------------------------------------------------------------------------------
+//---Crushing Grasp----------------------------------------------------------------------
+//---------------------------------------------------------------------------------------
+static function X2AbilityTemplate RTCrushingGrasp() {
+	local X2AbilityTemplate 					Template;
+	local X2Effect_Stunned 						StunEffect;
+	local X2AbilityCost_ActionPoints			ActionPointCost;
+	local X2AbilityCooldown						Cooldown;
+	local X2AbilityTarget_Cursor				CursorTarget;
+	local X2AbilityMultiTarget_Radius			RadiusMultiTarget;
+	local X2Effect_ApplyDirectionalWorldDamage  WorldDamage;
+	local X2Effect_Stunned						StunnedEffect;
+	
+
+	`CREATE_X2ABILITY_TEMPLATE(Template, 'RTCrushingGrasp');
+	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_swordSlash"; //TODO: Change this
+	Template.AbilitySourceName = 'eAbilitySource_Psionic';
+	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_AlwaysShow;
+	Template.AbilityConfirmSound = "TacticalUI_ActivateAbility";
+	Template.Hostility = eHostility_Offensive;
+
+	Cooldown = new class'X2AbilityCooldown';
+	Cooldown.iNumTurns = default.LIFT_COOLDOWN;
+	Template.AbilityCooldown = Cooldown;
+
+	ActionPointCost = new class'X2AbilityCost_ActionPoints';
+	ActionPointCost.iNumPoints = 1;
+	ActionPointCost.bConsumeAllPoints = false;
+	Template.AbilityCosts.AddItem(ActionPointCost);
+
+	Template.AbilityShooterConditions.AddItem(default.LivingShooterProperty);
+	Template.AddShooterEffectExclusions();
+
+	Template.AbilityMultiTargetConditions.AddItem(default.LivingHostileUnitOnlyProperty);
+	Template.AbilityMultiTargetConditions.AddItem(default.StandardSizeProperty);
+
+	Template.AbilityTriggers.AddItem(default.PlayerInputTrigger);
+
+	CursorTarget = new class'X2AbilityTarget_Cursor';
+	CursorTarget.FixedAbilityRange = 24;            //  meters
+	
+	RadiusMultiTarget = new class'X2AbilityMultiTarget_Radius';
+	RadiusMultiTarget.fTargetRadius = default.LIFT_RADIUS; // 2.5 default
+	RadiusMultiTarget.bAddPrimaryTargetAsMultiTarget = true;
+	
+	Template.AbilityTargetStyle = CursorTarget;
+	Template.AbilityMultiTargetStyle = RadiusMultiTarget;
+	Template.TargetingMethod = class'X2TargetingMethod_GremlinAOE';
+
+	
+	WorldDamage = new class'X2Effect_ApplyDirectionalWorldDamage';
+	WorldDamage.bUseWeaponDamageType = false;
+	WorldDamage.bUseWeaponEnvironmentalDamage = false;
+	WorldDamage.EnvironmentalDamageAmount = 50;
+	WorldDamage.bApplyOnHit = true;
+	WorldDamage.bApplyOnMiss = true;
+	WorldDamage.bApplyToWorldOnHit = true;
+	WorldDamage.bApplyToWorldOnMiss = true;
+	WorldDamage.bHitAdjacentDestructibles = true;
+	WorldDamage.PlusNumZTiles = 2;
+	WorldDamage.bHitTargetTile = true;
+	Template.AddMultiTargetEffect(WorldDamage);
+
+	StunnedEffect = class'X2StatusEffects'.static.CreateStunnedStatusEffect(default.LIFT_DURATION * 2, 100, false);
+	StunnedEffect.SetDisplayInfo(ePerkBuff_Penalty, "STUNNED","STUNNED", Template.IconImage, true,,Template.AbilitySourceName);
+	Template.AddMultiTargetEffect(StunnedEffect);
+
+	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
+
+	// TODO: Change this
+	Template.bSkipFireAction = true;
+	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
+
+	// This ability is 'offensive' and can be interrupted!
+	Template.BuildInterruptGameStateFn = TypicalAbility_BuildInterruptGameState;
+
+	return Template;
+
+
+}																		  
 defaultproperties
 {
 	ExtinctionEventStageThreeEventName = "RTExtinctionEventStageThree"

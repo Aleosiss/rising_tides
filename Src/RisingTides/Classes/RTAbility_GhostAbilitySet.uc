@@ -17,6 +17,7 @@ class RTAbility_GhostAbilitySet extends X2Ability
 	var protected X2Condition_UnitEffectsWithAbilitySource		OverTheShoulderProperty;
 	var protected X2Condition_UnitProperty						LivingHostileUnitOnlyNonRoboticProperty;
 	var protected RTCondition_PsionicTarget						PsionicTargetingProperty;
+	var protected RTCondition_UnitSize							StandardSizeProperty;
 	var protected EffectReason									TagReason;
 
 
@@ -969,6 +970,10 @@ defaultproperties
 		bTargetCivilians=false
 	End Object
 	PsionicTargetingProperty = DefaultPsionicTargetingProperty
+
+	Begin Object Class=RTCondition_UnitSize Name=DefaultStandardSizeProperty
+	End Object
+	StandardSizeProperty = DefaultStandardSizeProperty
 
 
 

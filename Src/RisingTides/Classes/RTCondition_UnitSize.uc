@@ -8,6 +8,8 @@ event name CallMeetsCondition(XComGameState_BaseObject kTarget) {
 	if(CheckTarget(kTarget)) {
 		return 'AA_Success';
 	}
+
+	`LOG("Rising Tides: Target invalid size!");
 	return 'AA_AbilityUnavailable';
 }
 

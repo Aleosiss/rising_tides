@@ -164,6 +164,7 @@ static function X2Effect_Stunned RTCreateLiftEffect(int StunLevel) {
 
 	Effect = new class'X2Effect_Stunned';
 	Effect.BuildPersistentEffect(1, true, true, false, eGameRule_PlayerTurnBegin);
+	Effect.SetDisplayInfo(ePerkBuff_Penalty, "Lifted", "Embrace eternity.", default.FeedbackIconPath, true,,'eAbilitySource_Standard');
 	Effect.StunLevel = StunLevel;
 	Effect.bIsImpairing = true;
 	Effect.EffectHierarchyValue = default.STUNNED_HIERARCHY_VALUE + 1;

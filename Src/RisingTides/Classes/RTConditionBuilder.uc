@@ -1,6 +1,6 @@
 // This is an Unreal Script
 
-class RTConditionBuilder extends RTAbility_GhostAbilitySet config(RisingTides);
+class RTConditionBuilder extends Object config(RisingTides);
 
 
 defaultproperties 

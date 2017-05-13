@@ -731,7 +731,7 @@ static function X2AbilityTemplate RTSnapshot()
 	Template.AbilityTargetStyle = default.SelfTarget;
 	Template.AbilityTriggers.AddItem(default.UnitPostBeginPlayTrigger);
 
-	SnapshotEffect = new class'RTEffect_SnapshotEffect';
+	SnapshotEffect = new class'RTEffect_Snapshot';
 	SnapshotEffect.SNAPSHOT_AIM_PENALTY = default.SNAPSHOT_AIM_PENALTY;
 	SnapshotEffect.BuildPersistentEffect(1, true, true, true);
 	SnapshotEffect.SetDisplayInfo(ePerkBuff_Passive, Template.LocFriendlyName, Template.LocLongDescription, Template.IconImage, true,,Template.AbilitySourceName);

@@ -227,7 +227,7 @@
     <Content Include="Src\RisingTides\Classes\RTEffect_SlowIsSmooth.uc">
       <SubType>Content</SubType>
     </Content>
-    <Content Include="Src\RisingTides\Classes\RTEffect_SnapshotEffect.uc">
+    <Content Include="Src\RisingTides\Classes\RTEffect_Snapshot.uc">
       <SubType>Content</SubType>
     </Content>
     <Content Include="Src\RisingTides\Classes\RTEffect_Sovereign.uc">
@@ -272,6 +272,9 @@
     <Content Include="Src\RisingTides\Classes\RTGameState_MeldEffect.uc">
       <SubType>Content</SubType>
     </Content>
+    <Content Include="Src\RisingTides\Classes\RTGameState_PsiStormTrackerEffect.uc">
+      <SubType>Content</SubType>
+    </Content>
     <Content Include="Src\RisingTides\Classes\RTGameState_RisingTidesCommand.uc">
       <SubType>Content</SubType>
     </Content>
@@ -300,6 +303,9 @@
       <SubType>Content</SubType>
     </Content>
     <Content Include="Src\RisingTides\Classes\RTTargetingMethod_TargetedMeleeTeleport.uc">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Src\RisingTides\Classes\UIDebugStateMachines.uc">
       <SubType>Content</SubType>
     </Content>
     <Content Include="Src\RisingTides\Classes\X2DownloadableContentInfo_RisingTides.uc">

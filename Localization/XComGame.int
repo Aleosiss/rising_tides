@@ -644,6 +644,20 @@ LocHelpText="Gain increasing damage and critical strike chance against units tha
 LocFlyOverText="Knowledge is Power"
 LocPromotionPopupText="<Bullet/> The effects of this ability build for up to four turns.<br/>"
 
+[RTLift X2AbilityTemplate]
+LocFriendlyName="Lift"
+LocLongDescription="Lift small enemies into the air in a small area of effect."
+LocHelpText="Lift small enemies into the air in a small area of effect."
+LocFlyOverText="Lift"
+LocPromotionPopupText="<Bullet/> Lift is useful for gaining additional flanking bonuses and controlling enemies, but melee attacks will often be unavailable.<br/>"
+
+[RTCrushingGrasp X2AbilityTemplate]
+LocFriendlyName="Crushing Grasp"
+LocLongDescription="Telekinetically grip a small area, stunning enemy units and destroying their cover."
+LocHelpText="Telekinetically grip a small area, stunning enemy units and destroying their cover."
+LocFlyOverText="Crushing Grasp"
+LocPromotionPopupText="<Bullet/> Crushing Grasp should be used liberally to enable Whisper's Scoped and Dropped and to create flanking paths for Queen's Bump in the Night.<br/>"
+
 
 ;----------------------------------------------------------------------------------------------------------------------------
 
