@@ -89,6 +89,7 @@ static function array<X2DataTemplate> CreateTemplates()
 	Templates.AddItem(RTKnowledgeIsPower());
 	Templates.AddItem(RTLift());
 	Templates.AddItem(RTCrushingGrasp());
+	Templates.AddItem(RTPsionicStorm());
 
 
 	return Templates;
@@ -1553,7 +1554,203 @@ static function X2AbilityTemplate RTCrushingGrasp() {
 	return Template;
 
 
-}																		  
+}	
+
+//---------------------------------------------------------------------------------------
+//---Psionic Storm-----------------------------------------------------------------------
+//---------------------------------------------------------------------------------------
+
+// place storm ability
+// mark tiles
+// add delayed damage activation effect	to shooter
+// damage effect immediately activates (against unmarked enemies)
+// mark units hit (PsionicStormMark, removed PlayerEndTurn)
+// use charges
+
+// sustained damage ability
+// next turn (PlayerBeginTurn), damage effect activates on all marked tiles (against unmarked enemies), it also adds the delayed damage activation effect to shooter
+// remark all tiles
+// mark units hit (PsionicStormMark, removed PlayerEndTurn)
+
+// while the shooter is affected by the delayed damage activation effect
+// enemy units that start a move outside of the marked tiles and passes through them are hit by the sustained damage ability
+
+// end storms ability
+// unmark all tiles
+// remove all delayed damage activation effects
+// deal final damage and perk fx
+// restore place storm ability charges
+
+static function X2AbilityTemplate RTPsionicStorm() {
+	local X2AbilityTemplate 						Template;
+	local X2AbilityCost_ActionPoints				ActionPointCost;
+	local X2AbilityCost_Charges						Charges;		   
+	local X2AbilityCooldown							Cooldown;		   
+	local X2AbilityTarget_Cursor					CursorTarget;		  
+	local X2AbilityMultiTarget_Radius				RadiusMultiTarget;	  
+	local X2Effect_ApplyWeaponDamage				ImmediateDamageEffect;  
+	local X2Effect_DelayedAbilityActivation			SustainedDamageEffect;  
+	local RTEffect_MarkValidActivationTiles			MarkTilesEffect;	   
+	local X2Effect_Persistent						MarkEffect; 
+	local X2Condition_UnitEffectsWithAbilitySource	MarkCondition;
+
+
+	`CREATE_X2ABILITY_TEMPLATE(Template, 'RTPsionicStorm');
+	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_swordSlash"; //TODO: Change this
+	Template.AbilitySourceName = 'eAbilitySource_Psionic';
+	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_AlwaysShow;
+	Template.AbilityConfirmSound = "TacticalUI_ActivateAbility";
+	Template.Hostility = eHostility_Offensive;
+
+	Cooldown = new class'X2AbilityCooldown';
+	Cooldown.iNumTurns = default.PSIONICSTORM_COOLDOWN;
+	Template.AbilityCooldown = Cooldown;
+
+	Charges = new class'X2AbilityCost_Charges';
+	Charges.NumCharges = default.PSIONICSTORM_NUMSTORMS;
+	Template.AbilityCosts.AddItem(Charges);
+
+	ActionPointCost = new class'X2AbilityCost_ActionPoints';
+	ActionPointCost.iNumPoints = 1;
+	ActionPointCost.bConsumeAllPoints = true;
+	Template.AbilityCosts.AddItem(ActionPointCost);
+
+	Template.AbilityShooterConditions.AddItem(default.LivingShooterProperty);
+	Template.AddShooterEffectExclusions();
+
+	Template.AbilityTriggers.AddItem(default.PlayerInputTrigger);
+
+	CursorTarget = new class'X2AbilityTarget_Cursor';
+	CursorTarget.FixedAbilityRange = 24;            //  meters
+	
+	RadiusMultiTarget = new class'X2AbilityMultiTarget_Radius';
+	RadiusMultiTarget.fTargetRadius = 7.5; // 7.5 default
+	RadiusMultiTarget.bAddPrimaryTargetAsMultiTarget = true;
+
+	Template.AbilityTargetStyle = CursorTarget;
+	Template.AbilityMultiTargetStyle = RadiusMultiTarget;
+	Template.TargetingMethod = class'X2TargetingMethod_VoidRift';
+
+	MarkTilesEffect = new class'RTEffect_MarkValidActivationTiles';
+	MarkTilesEffect.AbilityToMark = 'RTPsionicStormSustained';
+	MarkTilesEffect.OnlyUseTargetLocation = true;
+	MarkTilesEffect.bResetMarkedTiles = false;
+	Template.AddShooterEffect(MarkTilesEffect);
+
+	SustainedDamageEffect = new class 'X2Effect_DelayedAbilityActivation';
+	SustainedDamageEffect.BuildPersistentEffect(1, false, false, , eGameRule_PlayerTurnBegin);
+	SustainedDamageEffect.EffectName = default.PsionicStormSustainedActivationEffectName;
+	SustainedDamageEffect.TriggerEventName = default.PsionicStormSustainedDamageEvent;
+	SustainedDamageEffect.DuplicateResponse = eDupe_Ignore;
+	// SustainedDamageEffect.SetDisplayInfo(ePerkBuff_Passive, Template.LocFriendlyName, Template.GetMyLongDescription(), Template.IconImage, true, , Template.AbilitySourceName);
+	Template.AddShooterEffect(SustainedDamageEffect);
+
+	ImmediateDamageEffect = new class'X2Effect_ApplyWeaponDamage';
+	ImmediateDamageEffect.bIgnoreBaseDamage = true;
+	ImmediateDamageEffect.DamageTag = 'PsionicStormImmediate';
+	ImmediateDamageEffect.bIgnoreArmor = true;
+	ImmediateDamageEffect.EffectDamageValue = default.PSISTORM_DMG;
+	ImmediateDamageEffect.TargetConditions.AddItem(default.LivingShooterProperty);
+
+	//  Do not shoot targets that were already hit by this unit this turn with this ability
+	MarkCondition = new class'X2Condition_UnitEffectsWithAbilitySource';
+	MarkCondition.AddExcludeEffect(default.PsistormMarkedEffectName, 'AA_UnitIsImmune');
+	ImmediateDamageEffect.TargetConditions.AddItem(MarkCondition);
+
+	Template.AddMultiTargetEffect(ImmediateDamageEffect);
+
+	//  Mark the target as shot by this unit so it cannot be shot again this turn
+	MarkEffect = new class'X2Effect_Persistent';
+	MarkEffect.EffectName = default.PsistormMarkedEffectName;
+	MarkEffect.BuildPersistentEffect(1, false, false, false, eGameRule_PlayerTurnEnd);
+	MarkEffect.SetupEffectOnShotContextResult(true, true);      //  mark them regardless of whether the shot hit or missed
+	Template.AddMultiTargetEffect(MarkEffect);
+
+	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
+
+	// TODO: Change this
+	Template.bSkipFireAction = true;
+	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
+
+	// This ability is 'offensive' and can be interrupted!
+	Template.BuildInterruptGameStateFn = TypicalAbility_BuildInterruptGameState;
+
+	return Template;
+}	
+
+static function X2AbilityTemplate RTPsionicStormSustained() {
+	local X2AbilityTemplate								Template;
+	local X2AbilityTrigger_EventListener				Trigger;
+	local X2Effect_DelayedAbilityActivation				SustainedDamageEffect;
+	local X2Effect_ApplyWeaponDamage					ImmediateDamageEffect;
+	local X2Condition_UnitEffectsWithAbilitySource		MarkCondition;
+	local X2Effect_Persistent							MarkEffect;
+
+	`CREATE_X2ABILITY_TEMPLATE(Template, 'RTPsionicStormSustained');
+	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_swordSlash"; //TODO: Change this
+	Template.AbilitySourceName = 'eAbilitySource_Psionic';
+	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_NeverShow;
+	Template.Hostility = eHostility_Neutral;
+
+	Template.AbilityShooterConditions.AddItem(default.LivingShooterProperty);
+	
+	// TODO: This doesn't actually target self but needs an AbilityTargetStyle
+	Template.AbilityTargetStyle = default.SelfTarget;
+	Template.AbilityMultiTargetStyle = new class'X2AbilityMultiTarget_AllUnits';
+	
+	Trigger = new class'X2AbilityTrigger_EventListener';
+	Trigger.ListenerData.Deferral = ELD_OnStateSubmitted;
+	Trigger.ListenerData.EventID = default.PsionicStormSustainedDamageEvent;
+	Trigger.ListenerData.Filter = eFilter_Unit;
+	Trigger.ListenerData.EventFn = class'XComGameState_Ability'.static.AbilityTriggerEventListener_ValidAbilityLocation;
+	Template.AbilityTriggers.AddItem(Trigger);
+
+	SustainedDamageEffect = new class 'X2Effect_DelayedAbilityActivation';
+	SustainedDamageEffect.BuildPersistentEffect(1, false, false, , eGameRule_PlayerTurnBegin);
+	SustainedDamageEffect.EffectName = default.PsionicStormSustainedActivationEffectName;
+	SustainedDamageEffect.TriggerEventName = default.PsionicStormSustainedDamageEvent;
+	SustainedDamageEffect.DuplicateResponse = eDupe_Ignore;
+	// SustainedDamageEffect.SetDisplayInfo(ePerkBuff_Passive, Template.LocFriendlyName, Template.GetMyLongDescription(), Template.IconImage, true, , Template.AbilitySourceName);
+	Template.AddShooterEffect(SustainedDamageEffect);
+																									
+	ImmediateDamageEffect = new class'X2Effect_ApplyWeaponDamage';
+	ImmediateDamageEffect.bIgnoreBaseDamage = true;
+	ImmediateDamageEffect.DamageTag = 'PsionicStormSustained';
+	ImmediateDamageEffect.bIgnoreArmor = true;
+	ImmediateDamageEffect.EffectDamageValue = default.PSISTORM_DMG;
+	ImmediateDamageEffect.TargetConditions.AddItem(default.LivingShooterProperty);
+
+	//  Do not shoot targets that were already hit by this unit this turn with this ability
+	MarkCondition = new class'X2Condition_UnitEffectsWithAbilitySource';
+	MarkCondition.AddExcludeEffect(default.PsistormMarkedEffectName, 'AA_UnitIsImmune');
+	ImmediateDamageEffect.TargetConditions.AddItem(MarkCondition);
+
+	Template.AddMultiTargetEffect(ImmediateDamageEffect);
+
+	//  Mark the target as shot by this unit so it cannot be shot again this turn
+	MarkEffect = new class'X2Effect_Persistent';
+	MarkEffect.EffectName = default.PsistormMarkedEffectName;
+	MarkEffect.BuildPersistentEffect(1, false, false, false, eGameRule_PlayerTurnEnd);
+	MarkEffect.SetupEffectOnShotContextResult(true, true);      //  mark them regardless of whether the shot hit or missed
+	Template.AddMultiTargetEffect(MarkEffect);
+
+	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
+
+	// TODO: Change this
+	Template.bSkipFireAction = true;
+	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
+
+	return Template;
+}
+
+static function X2AbilityTemplate RTEndPsistorms() {
+
+}
+
+
+
+
+																	  
 defaultproperties
 {
 	ExtinctionEventStageThreeEventName = "RTExtinctionEventStageThree"
