@@ -1629,6 +1629,7 @@ static function X2AbilityTemplate RTPsionicStorm() {
 
 	Template.AbilityShooterConditions.AddItem(default.LivingShooterProperty);
 	Template.AddShooterEffectExclusions();
+	Template.AbilityToHitCalc = default.DeadEye;
 
 	Template.AbilityTriggers.AddItem(default.PlayerInputTrigger);
 
@@ -1655,7 +1656,7 @@ static function X2AbilityTemplate RTPsionicStorm() {
 	SustainedDamageEffect.EffectName = default.PsionicStormSustainedActivationEffectName;
 	SustainedDamageEffect.TriggerEventName = default.PsionicStormSustainedDamageEvent;
 	SustainedDamageEffect.DuplicateResponse = eDupe_Ignore;
-	// SustainedDamageEffect.SetDisplayInfo(ePerkBuff_Passive, Template.LocFriendlyName, Template.GetMyLongDescription(), Template.IconImage, true, , Template.AbilitySourceName);
+	SustainedDamageEffect.SetDisplayInfo(ePerkBuff_Bonus, Template.LocFriendlyName, Template.GetMyLongDescription(), Template.IconImage, true, , Template.AbilitySourceName);
 	Template.AddShooterEffect(SustainedDamageEffect);
 
 	ImmediateDamageEffect = new class'X2Effect_ApplyWeaponDamage';
@@ -1663,7 +1664,6 @@ static function X2AbilityTemplate RTPsionicStorm() {
 	ImmediateDamageEffect.DamageTag = 'PsionicStormImmediate';
 	ImmediateDamageEffect.bIgnoreArmor = true;
 	ImmediateDamageEffect.EffectDamageValue = default.PSISTORM_DMG;
-	ImmediateDamageEffect.TargetConditions.AddItem(default.LivingShooterProperty);
 
 	//  Do not shoot targets that were already hit by this unit this turn with this ability
 	MarkCondition = new class'X2Condition_UnitEffectsWithAbilitySource';
@@ -1714,7 +1714,7 @@ static function X2AbilityTemplate RTPsionicStormSustained() {
 	
 	// TODO: This doesn't actually target self but needs an AbilityTargetStyle
 	Template.AbilityTargetStyle = default.SelfTarget;
-	
+	Template.AbilityToHitCalc = default.DeadEye;
 
 	RadiusMultiTarget = new class'X2AbilityMultiTarget_Radius';
 	RadiusMultiTarget.fTargetRadius = default.PSIONICSTORM_RADIUS;
@@ -1733,7 +1733,7 @@ static function X2AbilityTemplate RTPsionicStormSustained() {
 	SustainedDamageEffect.EffectName = default.PsionicStormSustainedActivationEffectName;
 	SustainedDamageEffect.TriggerEventName = default.PsionicStormSustainedDamageEvent;
 	SustainedDamageEffect.DuplicateResponse = eDupe_Ignore;
-	// SustainedDamageEffect.SetDisplayInfo(ePerkBuff_Passive, Template.LocFriendlyName, Template.GetMyLongDescription(), Template.IconImage, true, , Template.AbilitySourceName);
+	SustainedDamageEffect.SetDisplayInfo(ePerkBuff_Bonus, Template.LocFriendlyName, Template.GetMyLongDescription(), Template.IconImage, true, , Template.AbilitySourceName);
 	Template.AddShooterEffect(SustainedDamageEffect);
 																									
 	ImmediateDamageEffect = new class'X2Effect_ApplyWeaponDamage';
@@ -1741,7 +1741,6 @@ static function X2AbilityTemplate RTPsionicStormSustained() {
 	ImmediateDamageEffect.DamageTag = 'PsionicStormSustained';
 	ImmediateDamageEffect.bIgnoreArmor = true;
 	ImmediateDamageEffect.EffectDamageValue = default.PSISTORM_DMG;
-	ImmediateDamageEffect.TargetConditions.AddItem(default.LivingShooterProperty);
 
 	//  Do not shoot targets that were already hit by this unit this turn with this ability
 	MarkCondition = new class'X2Condition_UnitEffectsWithAbilitySource';
@@ -1782,6 +1781,7 @@ static function X2AbilityTemplate RTEndPsistorms() {
 
 	Template.AbilityTargetStyle = default.SelfTarget;
 	Template.AbilityTriggers.AddItem(default.PlayerInputTrigger);
+	Template.AbilityToHitCalc = default.DeadEye;
 	
 	EffectCondition = new class'X2Condition_UnitEffects';
 	EffectCondition.AddRequireEffect(default.PsionicStormSustainedActivationEffectName, 'AA_UnitIsImmune');
