@@ -6,6 +6,7 @@ var int UV_AIM_PENALTY, UV_DEFENSE_PENALTY, UV_WILL_PENALTY;
 
 simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffectParameters, XComGameState_BaseObject kNewTargetState, XComGameState NewGameState, XComGameState_Effect NewEffectState)
 {
+	m_aStatChanges.Length = 0;
 	AddPersistentStatChange(eStat_Will, -(UV_WILL_PENALTY));
 	super.OnEffectAdded(ApplyEffectParameters, kNewTargetState, NewGameState, NewEffectState);
 }
