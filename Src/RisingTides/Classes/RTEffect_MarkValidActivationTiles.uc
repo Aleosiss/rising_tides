@@ -16,7 +16,7 @@ simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffe
 	local X2AbilityTemplate AbilityTemplate;
 	local vector TargetLoc;
 	local TTile TargetTile;
-//	local TTile DebugTile;        //  used for debug visualization
+	local TTile DebugTile;        //  used for debug visualization
 
 	UnitState = XComGameState_Unit(kNewTargetState);
 	`assert(UnitState != none);
@@ -83,11 +83,11 @@ simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffe
 	}
 
 	//  Debug visualization for marked tiles.
-	/*foreach AbilityState.ValidActivationTiles(DebugTile)
+	foreach AbilityState.ValidActivationTiles(DebugTile)
 	{
 		TargetLoc = `XWORLD.GetPositionFromTileCoordinates(DebugTile);
 		`SHAPEMGR.DrawSphere(TargetLoc, vect(15,15,15), MakeLinearColor(0,0,1,1), true);
-	}*/
+	}
 }
 
 defaultproperties

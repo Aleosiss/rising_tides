@@ -658,6 +658,25 @@ LocHelpText="Telekinetically grip a small area, stunning enemy units and destroy
 LocFlyOverText="Crushing Grasp"
 LocPromotionPopupText="<Bullet/> Crushing Grasp should be used liberally to enable Whisper's Scoped and Dropped and to create flanking paths for Queen's Bump in the Night.<br/>"
 
+[RTPsionicStorm X2AbilityTemplate]
+LocFriendlyName="Psionic Storm"
+LocLongDescription="Create a damaging psionic storm that ravages a moderate area indefinitely."
+LocHelpText="Cast a psionic storm."
+LocFlyOverText="Psionic Storm"
+LocPromotionPopupText="<Bullet/> The unit can sustain three separate psionic storms at once.<br/><Bullet/> Stacking psionic storms does not increase their damage.<br/><Bullet/> Psionic storms must be manually canceled.<br/>"
+
+[RTPsionicStormSustained X2AbilityTemplate]
+LocFriendlyName="Psionic Storm Sustained"
+LocLongDescription="You shouldn't be able to see this"
+LocHelpText="Cast a psionic storm."
+LocFlyOverText="Psionic Storm"
+LocPromotionPopupText="<Bullet/> The unit can sustain three separate psionic storms at once.<br/><Bullet/> Stacking psionic storms does not increase their damage.<br/><Bullet/> Psionic storms must be manually canceled.<br/>"
+
+[RTEndPsistorms X2AbilityTemplate]
+LocFriendlyName="End Psionic Storms"
+LocLongDescription="End all psionic storms."
+LocHelpText="End all psionic storms"
+LocFlyOverText="End Psionic Storms"
 
 ;----------------------------------------------------------------------------------------------------------------------------
 

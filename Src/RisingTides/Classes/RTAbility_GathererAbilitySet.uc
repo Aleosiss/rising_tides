@@ -30,11 +30,15 @@ class RTAbility_GathererAbilitySet extends RTAbility_GhostAbilitySet config(Risi
 	var config WeaponDamageValue EXTINCTION_EVENT_DMG;
 	var config WeaponDamageValue RUDIMENTARY_CREATURES_DMG;
 	var config WeaponDamageValue UNWILL_DMG;
+	var config WeaponDamageValue PSISTORM_DMG;
 	var config int LIFT_COOLDOWN;
 	var config int LIFT_DURATION;
 	var config float LIFT_RADIUS;
 	var config int KNOWLEDGE_IS_POWER_STACK_CAP;
 	var config float KNOWLEDGE_IS_POWER_CRIT_PER_STACK;
+	var config int PSIONICSTORM_COOLDOWN;
+	var config int PSIONICSTORM_NUMSTORMS;
+	var int PSIONICSTORM_RADIUS;
 
 	var name ExtinctionEventStageThreeEventName;
 	var name OverTheShoulderTagName;
@@ -45,6 +49,11 @@ class RTAbility_GathererAbilitySet extends RTAbility_GhostAbilitySet config(Risi
 	var name GuiltyConscienceEffectName;
 	var name PostOverTheShoulderEventName;
     var name KnowledgeIsPowerEffectName;
+
+	var name PsionicStormSustainedActivationEffectName;
+	var name PsionicStormSustainedDamageEvent;
+	var name PsistormMarkedEffectName;
+	
 
 	var localized name GuardianAngelHealText;
 	var localized string KIPFriendlyName;
@@ -90,6 +99,9 @@ static function array<X2DataTemplate> CreateTemplates()
 	Templates.AddItem(RTLift());
 	Templates.AddItem(RTCrushingGrasp());
 	Templates.AddItem(RTPsionicStorm());
+	Templates.AddItem(RTPsionicStormSustained());
+	Templates.AddItem(RTEndPsistorms());
+	Templates.AddItem(RTSetPsistormCharges());
 
 
 	return Templates;
@@ -1607,7 +1619,7 @@ static function X2AbilityTemplate RTPsionicStorm() {
 	Template.AbilityCooldown = Cooldown;
 
 	Charges = new class'X2AbilityCost_Charges';
-	Charges.NumCharges = default.PSIONICSTORM_NUMSTORMS;
+	Charges.NumCharges = 1;
 	Template.AbilityCosts.AddItem(Charges);
 
 	ActionPointCost = new class'X2AbilityCost_ActionPoints';
@@ -1624,8 +1636,9 @@ static function X2AbilityTemplate RTPsionicStorm() {
 	CursorTarget.FixedAbilityRange = 24;            //  meters
 	
 	RadiusMultiTarget = new class'X2AbilityMultiTarget_Radius';
-	RadiusMultiTarget.fTargetRadius = 7.5; // 7.5 default
+	RadiusMultiTarget.fTargetRadius = default.PSIONICSTORM_RADIUS; // 7.5 default
 	RadiusMultiTarget.bAddPrimaryTargetAsMultiTarget = true;
+	RadiusMultiTarget.bIgnoreBlockingCover = true;
 
 	Template.AbilityTargetStyle = CursorTarget;
 	Template.AbilityMultiTargetStyle = RadiusMultiTarget;
@@ -1675,6 +1688,10 @@ static function X2AbilityTemplate RTPsionicStorm() {
 	// This ability is 'offensive' and can be interrupted!
 	Template.BuildInterruptGameStateFn = TypicalAbility_BuildInterruptGameState;
 
+	Template.AdditionalAbilities.AddItem('RTPsionicStormSustained');
+	Template.AdditionalAbilities.AddItem('RTEndPsistorms');
+	Template.AdditionalAbilities.AddItem('RTSetPsistormCharges');
+
 	return Template;
 }	
 
@@ -1685,6 +1702,7 @@ static function X2AbilityTemplate RTPsionicStormSustained() {
 	local X2Effect_ApplyWeaponDamage					ImmediateDamageEffect;
 	local X2Condition_UnitEffectsWithAbilitySource		MarkCondition;
 	local X2Effect_Persistent							MarkEffect;
+	local X2AbilityMultiTarget_Radius					RadiusMultiTarget;
 
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'RTPsionicStormSustained');
 	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_swordSlash"; //TODO: Change this
@@ -1696,7 +1714,12 @@ static function X2AbilityTemplate RTPsionicStormSustained() {
 	
 	// TODO: This doesn't actually target self but needs an AbilityTargetStyle
 	Template.AbilityTargetStyle = default.SelfTarget;
-	Template.AbilityMultiTargetStyle = new class'X2AbilityMultiTarget_AllUnits';
+	
+
+	RadiusMultiTarget = new class'X2AbilityMultiTarget_Radius';
+	RadiusMultiTarget.fTargetRadius = default.PSIONICSTORM_RADIUS;
+	RadiusMultiTarget.bIgnoreBlockingCover = true;
+	Template.AbilityMultiTargetStyle = RadiusMultiTarget;
 	
 	Trigger = new class'X2AbilityTrigger_EventListener';
 	Trigger.ListenerData.Deferral = ELD_OnStateSubmitted;
@@ -1744,7 +1767,94 @@ static function X2AbilityTemplate RTPsionicStormSustained() {
 }
 
 static function X2AbilityTemplate RTEndPsistorms() {
+	local X2AbilityTemplate Template;
+	local X2AbilityTrigger_EventListener Trigger;
+	local X2Effect_RemoveEffects		RemoveEffect;
+	local X2Condition_UnitEffects		EffectCondition;
+	local RTEffect_RemoveValidActivationTiles RemoveTargetedAreaEffect;
+	local RTEffect_ResetCharges					ResetChargesEffect;
 
+	`CREATE_X2ABILITY_TEMPLATE(Template, 'RTEndPsistorms');
+	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_swordSlash"; //TODO: Change this
+	Template.AbilitySourceName = 'eAbilitySource_Psionic';
+	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_AlwaysShow;
+	Template.Hostility = eHostility_Neutral;
+
+	Template.AbilityTargetStyle = default.SelfTarget;
+	Template.AbilityTriggers.AddItem(default.PlayerInputTrigger);
+	
+	EffectCondition = new class'X2Condition_UnitEffects';
+	EffectCondition.AddRequireEffect(default.PsionicStormSustainedActivationEffectName, 'AA_UnitIsImmune');
+	Template.AbilityShooterConditions.AddItem(EffectCondition);
+
+	Trigger = new class'X2AbilityTrigger_EventListener';
+	Trigger.ListenerData.EventID = 'UnitDied';
+	Trigger.ListenerData.EventFn = class'XComGameState_Ability'.static.AbilityTriggerEventListener_Self;
+	Trigger.ListenerData.Filter  = eFilter_Unit;
+	Trigger.ListenerData.Deferral = ELD_OnStateSubmitted;
+	Template.AbilityTriggers.AddItem(Trigger);
+
+	RemoveEffect = new class'X2Effect_RemoveEffects';
+	RemoveEffect.EffectNamesToRemove.AddItem(default.PsionicStormSustainedActivationEffectName);
+	Template.AddShooterEffect(RemoveEffect);
+
+	ResetChargesEffect = new class'RTEffect_ResetCharges';
+	ResetChargesEffect.BaseCharges = default.PSIONICSTORM_NUMSTORMS;
+	ResetChargesEffect.AbilityToReset = 'RTPsionicStorm';
+	Template.AddShooterEffect(ResetChargesEffect);
+
+	RemoveTargetedAreaEffect = new class'RTEffect_RemoveValidActivationTiles';
+	RemoveTargetedAreaEffect.AbilityToUnmark = 'RTPsionicStormSustained';
+	Template.AddShooterEffect(RemoveTargetedAreaEffect);
+
+	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
+
+	// TODO:
+	Template.bSkipFireAction = true;
+	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
+
+
+	return Template;
+}
+
+
+static function X2AbilityTemplate RTSetPsistormCharges() {
+	local X2AbilityTemplate Template;
+	local X2AbilityTrigger_EventListener Trigger;
+	local X2Effect_RemoveEffects		RemoveEffect;
+	local X2Condition_UnitEffects		EffectCondition;
+	local RTEffect_RemoveValidActivationTiles RemoveTargetedAreaEffect;
+	local RTEffect_ResetCharges					ResetChargesEffect;
+
+	`CREATE_X2ABILITY_TEMPLATE(Template, 'RTSetPsistormCharges');
+	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_swordSlash"; //TODO: Change this
+	Template.AbilitySourceName = 'eAbilitySource_Psionic';
+	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_NeverShow;
+	Template.Hostility = eHostility_Neutral;
+
+	Template.AbilityTargetStyle = default.SelfTarget;
+	Template.AbilityTriggers.AddItem(default.UnitPostBeginPlayTrigger);
+
+	RemoveEffect = new class'X2Effect_RemoveEffects';
+	RemoveEffect.EffectNamesToRemove.AddItem(default.PsionicStormSustainedActivationEffectName);
+	Template.AddShooterEffect(RemoveEffect);
+
+	ResetChargesEffect = new class'RTEffect_ResetCharges';
+	ResetChargesEffect.BaseCharges = default.PSIONICSTORM_NUMSTORMS;
+	ResetChargesEffect.AbilityToReset = 'RTPsionicStorm';
+	Template.AddShooterEffect(ResetChargesEffect);
+
+	RemoveTargetedAreaEffect = new class'RTEffect_RemoveValidActivationTiles';
+	RemoveTargetedAreaEffect.AbilityToUnmark = 'RTPsionicStormSustained';
+	Template.AddShooterEffect(RemoveTargetedAreaEffect);
+
+	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
+
+	// TODO:
+	Template.bSkipFireAction = true;
+	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
+
+	return Template;
 }
 
 
@@ -1762,4 +1872,10 @@ defaultproperties
 	GuiltyConscienceEffectName = "GuiltyConscienceEffect"
 	PostOverTheShoulderEventName = "TriangulationEvent"
 	KnowledgeIsPowerEffectName = "KnowledgeIsPowerEffectName"
+
+	PsionicStormSustainedActivationEffectName = "PsionicStormSustainedDamageEffectName"
+	PsionicStormSustainedDamageEvent = "PsionicStormSustainedDamageEventName"
+	PsistormMarkedEffectName = "PsionicStormDamageMarkName"
+
+	PSIONICSTORM_RADIUS = 7.5
 }

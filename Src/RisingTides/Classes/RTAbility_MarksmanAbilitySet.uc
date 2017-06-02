@@ -716,7 +716,7 @@ static function X2AbilityTemplate RTDisablingShotDamage()
 static function X2AbilityTemplate RTSnapshot()
 {
 	local X2AbilityTemplate						Template;
-	local RTEffect_SnapshotEffect		  SnapshotEffect;
+	local RTEffect_Snapshot						SnapshotEffect;
 
 	// Icon Properties
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'RTSnapshot');

@@ -203,10 +203,16 @@
     <Content Include="Src\RisingTides\Classes\RTEffect_RemoveStacks.uc">
       <SubType>Content</SubType>
     </Content>
+    <Content Include="Src\RisingTides\Classes\RTEffect_RemoveValidActivationTiles.uc">
+      <SubType>Content</SubType>
+    </Content>
     <Content Include="Src\RisingTides\Classes\RTEffect_ReprobateWaltz.uc">
       <SubType>Content</SubType>
     </Content>
     <Content Include="Src\RisingTides\Classes\RTEffect_ReserveOverwatchPoints.uc">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Src\RisingTides\Classes\RTEffect_ResetCharges.uc">
       <SubType>Content</SubType>
     </Content>
     <Content Include="Src\RisingTides\Classes\RTEffect_Rudimentary.uc">
