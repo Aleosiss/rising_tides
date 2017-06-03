@@ -372,8 +372,57 @@ function EventListenerReturn TriangulationListener(Object EventData, Object Even
 	}
 
 	return ELR_NoInterrupt;
+}
 
 
+function EventListenerReturn RTAbilityTriggerEventListener_ValidAbilityLocations(Object EventData, Object EventSource, XComGameState GameState, Name EventID)
+{
+	local XComWorldData World;
+	local XComGameStateHistory History;
+	local AvailableAction CurrentAvailableAction;
+	local AvailableTarget Targets;
+	local XComGameState_Unit SourceUnit;
+	local TTile ValidTile;
+	local vector ValidActiviationLocation;
+	local array<vector> TargetLocations;
+	local AvailableTarget EmptyTarget;
+	local int i;
+
+	`LOG("IT'S WORKING, IT'S WORKING !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+	History = `XCOMHISTORY;
+	
+	SourceUnit = XComGameState_Unit(History.GetGameStateForObjectID(OwnerStateObject.ObjectID));
+
+	CurrentAvailableAction.AvailableCode = CanActivateAbility(SourceUnit);
+
+	if (CurrentAvailableAction.AvailableCode == 'AA_Success' && ValidActivationTiles.Length > 0)
+	{
+		World = `XWORLD;
+		CurrentAvailableAction.AbilityObjectRef = GetReference();
+		i = 0;
+		`LOG("Listing X Coords of ValidTiles");
+		foreach ValidActivationTiles(ValidTile) {
+			`LOG("" @ ValidTile.X);
+			// reset targets each loop
+			Targets = EmptyTarget;
+
+			ValidActiviationLocation = World.GetPositionFromTileCoordinates(ValidTile);
+			GatherAdditionalAbilityTargetsForLocation(ValidActiviationLocation, Targets);
+
+			// Set up the available action
+			CurrentAvailableAction.AvailableTargets.AddItem(Targets);
+			
+			
+			// The ValidTile is also the Target location which needs to be passed when activating the ability
+			TargetLocations.AddItem(ValidActiviationLocation);
+			class'XComGameStateContext_Ability'.static.ActivateAbility(CurrentAvailableAction, i, TargetLocations);
+			i++;
+		}
+
+		
+	}
+
+	return ELR_NoInterrupt;
 }
 
 

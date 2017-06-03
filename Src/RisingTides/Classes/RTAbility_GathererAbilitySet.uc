@@ -1691,6 +1691,7 @@ static function X2AbilityTemplate RTPsionicStorm() {
 	Template.AdditionalAbilities.AddItem('RTPsionicStormSustained');
 	Template.AdditionalAbilities.AddItem('RTEndPsistorms');
 	Template.AdditionalAbilities.AddItem('RTSetPsistormCharges');
+	Template.PostActivationEvents.AddItem(default.UnitUsedPsionicAbilityEvent);
 
 	return Template;
 }	
@@ -1704,7 +1705,8 @@ static function X2AbilityTemplate RTPsionicStormSustained() {
 	local X2Effect_Persistent							MarkEffect;
 	local X2AbilityMultiTarget_Radius					RadiusMultiTarget;
 
-	`CREATE_X2ABILITY_TEMPLATE(Template, 'RTPsionicStormSustained');
+	`CREATE_X2TEMPLATE(class'RTAbilityTemplate', Template, 'RTPsionicStormSustained');
+
 	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_swordSlash"; //TODO: Change this
 	Template.AbilitySourceName = 'eAbilitySource_Psionic';
 	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_NeverShow;
@@ -1725,7 +1727,7 @@ static function X2AbilityTemplate RTPsionicStormSustained() {
 	Trigger.ListenerData.Deferral = ELD_OnStateSubmitted;
 	Trigger.ListenerData.EventID = default.PsionicStormSustainedDamageEvent;
 	Trigger.ListenerData.Filter = eFilter_Unit;
-	Trigger.ListenerData.EventFn = class'XComGameState_Ability'.static.AbilityTriggerEventListener_ValidAbilityLocation;
+	Trigger.ListenerData.EventFn = class'RTGameState_Ability'.static.RTAbilityTriggerEventListener_ValidAbilityLocations;
 	Template.AbilityTriggers.AddItem(Trigger);
 
 	SustainedDamageEffect = new class 'X2Effect_DelayedAbilityActivation';
