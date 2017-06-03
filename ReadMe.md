@@ -42,7 +42,6 @@ This would be a bare-bones content mod. I also have the following content in min
 
 ###### Current Bugs:
 	- Time Stop damage calculation isn't visualized properly
-	- Time Stop doesn't work on Stasis'd units (despite this making no sense whatsoever) because it's hard-coded
 	- Time Stop damage calculation is fucked, use code from X2Effect_DLC_3AbsorptionField.uc to rewrite
 
 ###### Current Sprint Goals:
@@ -50,3 +49,4 @@ This would be a bare-bones content mod. I also have the following content in min
 	- Add Siphon to RTEffectBuilder
 	- Verify that Networked OI works with CCS
 	- Verify that Mind Meld still works properly with the changes to GetMeldStrength()
+	- Determine cause of Rupturing effect
