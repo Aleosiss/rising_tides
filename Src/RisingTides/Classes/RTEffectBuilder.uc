@@ -181,3 +181,31 @@ static function X2Effect_Stunned RTCreateLiftEffect(int StunLevel) {
 
 	return Effect;
 }
+
+static function RTEffect_Siphon RTCreateSiphonEffect(float fMultiplier, int iMinVal, int iMaxVal) {
+	local RTEffect_Siphon SiphonEffect;
+	local X2Condition_UnitProperty TargetUnitPropertyCondition;
+	local X2Condition_AbilityProperty SiphonCondition;
+
+	// Siphon Effect
+	SiphonEffect = new class'RTEffect_Siphon';
+	SiphonEffect.SiphonAmountMultiplier = fMultiplier;
+	SiphonEffect.SiphonMinVal = iMinVal;
+	SiphonEffect.SiphonMaxVal = iMaxVal;
+	SiphonEffect.DamageTypes.AddItem('Psi');
+
+	TargetUnitPropertyCondition = new class'X2Condition_UnitProperty';
+	TargetUnitPropertyCondition.ExcludeDead = false;
+	TargetUnitPropertyCondition.ExcludeRobotic = true;
+	TargetUnitPropertyCondition.ExcludeFriendlyToSource = false;
+	TargetUnitPropertyCondition.ExcludeHostileToSource = false;
+	TargetUnitPropertyCondition.FailOnNonUnits = true;
+
+	SiphonCondition = new class'X2Condition_AbilityProperty';
+	SiphonCondition.OwnerHasSoldierAbilities.AddItem('RTSiphon');
+
+	SiphonEffect.TargetConditions.AddItem(SiphonCondition);
+	SiphonEffect.TargetConditions.AddItem(TargetUnitPropertyCondition);
+
+	return SiphonEffect;
+}
