@@ -5,8 +5,7 @@ var array<StateObjectReference> EffectsRemovedList;
 var bool bCanTrigger;
 
 // OnTacticalGameEnd (Don't need this anymore)
-function EventListenerReturn OnTacticalGameEnd(Object EventData, Object EventSource, XComGameState GameState, Name EventID)
-{
+function EventListenerReturn OnTacticalGameEnd(Object EventData, Object EventSource, XComGameState GameState, Name EventID) {
 	local X2EventManager EventManager;
 	local Object ListenerObj;
 	local XComGameState NewGameState;
@@ -493,15 +492,11 @@ function EventListenerReturn CleanupMobileSquadViewers(Object EventData, Object 
 	}
 
 	SubmitNewGameState(NewGameState);
-
-
-
 	return ELR_NoInterrupt;
 }
 
 // OnUpdateAuraCheck
-function EventListenerReturn OnUpdateAuraCheck(Object EventData, Object EventSource, XComGameState GameState, Name EventID)
-{
+function EventListenerReturn OnUpdateAuraCheck(Object EventData, Object EventSource, XComGameState GameState, Name EventID) {
 	local X2Effect_AuraSource AuraTemplate;
 	local XComGameState_Unit UpdatedUnitState, AuraSourceUnitState;
 	local XComGameStateHistory History;
@@ -545,8 +540,7 @@ function EventListenerReturn OnUpdateAuraCheck(Object EventData, Object EventSou
 }
 
 // OnTotalAuraCheck
-function EventListenerReturn OnTotalAuraCheck(Object EventData, Object EventSource, XComGameState GameState, Name EventID)
-{
+function EventListenerReturn OnTotalAuraCheck(Object EventData, Object EventSource, XComGameState GameState, Name EventID) {
 	local X2Effect_AuraSource AuraTemplate;
 	local XComGameState_Unit TargetUnitState, AuraSourceUnitState;
 	local XComGameStateHistory History;
@@ -858,8 +852,7 @@ local XComGameStateContext_Ability AbilityContext;
 }
 
 // AddPersistentStatChange(out array<StatChange> m_aStatChanges, ECharStatType StatType, float StatAmount, optional EStatModOp InModOp=MODOP_Addition )
-simulated function AddPersistentStatChange(out array<StatChange> m_aStatChanges, ECharStatType StatType, float StatAmount, optional EStatModOp InModOp=MODOP_Addition )
-{
+simulated function AddPersistentStatChange(out array<StatChange> m_aStatChanges, ECharStatType StatType, float StatAmount, optional EStatModOp InModOp=MODOP_Addition ) {
 	local StatChange NewChange;
 
 	NewChange.StatType = StatType;
@@ -869,8 +862,7 @@ simulated function AddPersistentStatChange(out array<StatChange> m_aStatChanges,
 	m_aStatChanges.AddItem(NewChange);
 }
 
-function EventListenerReturn EveryMomentMattersCheck(Object EventData, Object EventSource, XComGameState GameState, Name EventID)
-{
+function EventListenerReturn EveryMomentMattersCheck(Object EventData, Object EventSource, XComGameState GameState, Name EventID) {
 	local XComGameStateContext_Ability AbilityContext;
 	local XComGameState NewGameState;
 	local XComGameState_Unit SourceUnit;
@@ -905,8 +897,7 @@ function EventListenerReturn EveryMomentMattersCheck(Object EventData, Object Ev
 	return ELR_NoInterrupt;
 }
 
-function EveryMomentMattersVisualizationFn(XComGameState VisualizeGameState, out array<VisualizationTrack> OutVisualizationTracks)
-{
+function EveryMomentMattersVisualizationFn(XComGameState VisualizeGameState, out array<VisualizationTrack> OutVisualizationTracks) {
 	local XComGameState_Unit UnitState;
 	local X2Action_PlaySoundAndFlyOver SoundAndFlyOver;
 	local VisualizationTrack BuildTrack;
@@ -934,8 +925,7 @@ function EveryMomentMattersVisualizationFn(XComGameState VisualizeGameState, out
 	}
 }
 
-function EventListenerReturn GhostInTheShellCheck(Object EventData, Object EventSource, XComGameState GameState, Name EventID)
-{
+function EventListenerReturn GhostInTheShellCheck(Object EventData, Object EventSource, XComGameState GameState, Name EventID) {
 	local XComGameStateHistory History;
 	local XComGameStateContext_Ability AbilityContext;
 	local StateObjectReference AbilityRef;
@@ -991,8 +981,7 @@ function EventListenerReturn GhostInTheShellCheck(Object EventData, Object Event
 	return ELR_NoInterrupt;
 }
 
-function TriggerGhostInTheShellFlyoverVisualizationFn(XComGameState VisualizeGameState, out array<VisualizationTrack> OutVisualizationTracks)
-{
+function TriggerGhostInTheShellFlyoverVisualizationFn(XComGameState VisualizeGameState, out array<VisualizationTrack> OutVisualizationTracks) {
 	local XComGameState_Unit UnitState;
 	local X2Action_PlaySoundAndFlyOver SoundAndFlyOver;
 	local VisualizationTrack BuildTrack;
@@ -1030,8 +1019,7 @@ function TriggerGhostInTheShellFlyoverVisualizationFn(XComGameState VisualizeGam
 	}
 }
 
-function EventListenerReturn RemoveHarbingerEffect(Object EventData, Object EventSource, XComGameState GameState, Name EventID)
-{
+function EventListenerReturn RemoveHarbingerEffect(Object EventData, Object EventSource, XComGameState GameState, Name EventID) {
 	local XComGameStateContext_EffectRemoved RemoveContext;
 	local XComGameState_Effect EffectState, NewEffectState;
 	local StateObjectReference EffectRef;
@@ -1169,8 +1157,7 @@ function EventListenerReturn HeatChannelCheck(Object EventData, Object EventSour
   return ELR_NoInterrupt;
 }
 
-function TriggerHeatChannelFlyoverVisualizationFn(XComGameState VisualizeGameState, out array<VisualizationTrack> OutVisualizationTracks)
-{
+function TriggerHeatChannelFlyoverVisualizationFn(XComGameState VisualizeGameState, out array<VisualizationTrack> OutVisualizationTracks) {
 	local XComGameState_Unit UnitState;
 	local X2Action_PlaySoundAndFlyOver SoundAndFlyOver;
 	local VisualizationTrack BuildTrack;
@@ -1365,13 +1352,9 @@ function EventListenerReturn LinkedFireCheck (Object EventData, Object EventSour
 	}
 	bCanTrigger = true;
 	return ELR_NoInterrupt;
-
-
-
 }
 
-function TriggerLinkedEffectFlyoverVisualizationFn(XComGameState VisualizeGameState, out array<VisualizationTrack> OutVisualizationTracks)
-{
+function TriggerLinkedEffectFlyoverVisualizationFn(XComGameState VisualizeGameState, out array<VisualizationTrack> OutVisualizationTracks) {
 	local XComGameState_Unit UnitState;
 	local X2Action_PlaySoundAndFlyOver SoundAndFlyOver;
 	local VisualizationTrack BuildTrack;
@@ -1573,13 +1556,9 @@ function EventListenerReturn TwitchFireCheck (Object EventData, Object EventSour
 	}
 
 	return ELR_NoInterrupt;
-
-
-
 }
 
-private function SubmitNewGameState(out XComGameState NewGameState)
-{
+private function SubmitNewGameState(out XComGameState NewGameState) {
 	local X2TacticalGameRuleset TacticalRules;
 	local XComGameStateHistory History;
 
@@ -1597,8 +1576,7 @@ private function SubmitNewGameState(out XComGameState NewGameState)
 	}
 }
 
-function EventListenerReturn RTBumpInTheNight(Object EventData, Object EventSource, XComGameState GameState, Name EventID)
-{
+function EventListenerReturn RTBumpInTheNight(Object EventData, Object EventSource, XComGameState GameState, Name EventID) {
 	local XComGameStateHistory History;
 	local XComGameStateContext_Ability AbilityContext;
 	local StateObjectReference AbilityRef;
@@ -1740,9 +1718,7 @@ function EventListenerReturn RTBumpInTheNight(Object EventData, Object EventSour
 	return ELR_NoInterrupt;
 }
 
-
-function TriggerBumpInTheNightFlyoverVisualizationFn(XComGameState VisualizeGameState, out array<VisualizationTrack> OutVisualizationTracks)
-{
+function TriggerBumpInTheNightFlyoverVisualizationFn(XComGameState VisualizeGameState, out array<VisualizationTrack> OutVisualizationTracks) {
 	local XComGameState_Unit UnitState;
 	local X2Action_PlaySoundAndFlyOver SoundAndFlyOver;
 	local VisualizationTrack BuildTrack;
@@ -1779,7 +1755,6 @@ function TriggerBumpInTheNightFlyoverVisualizationFn(XComGameState VisualizeGame
 		break;
 	}
 }
-
 
 defaultproperties
 {

@@ -52,8 +52,7 @@ function EventListenerReturn ReprobateWaltzListener( Object EventData, Object Ev
 
 //This function is native for performance reasons, the script code below describes its function
 // NO LONGER AM I SHACKLED BY NATIVE CODE
-simulated function name GatherAbilityTargets(out array<AvailableTarget> Targets, optional XComGameState_Unit OverrideOwnerState)
-{
+simulated function name GatherAbilityTargets(out array<AvailableTarget> Targets, optional XComGameState_Unit OverrideOwnerState) {
 	local int i, j;
 	local XComGameState_Unit kOwner;
 	local name AvailableCode;
@@ -111,8 +110,7 @@ simulated function name GatherAbilityTargets(out array<AvailableTarget> Targets,
 	return 'AA_Success';
 }
 
-simulated function int SortAvailableTargets(AvailableTarget TargetA, AvailableTarget TargetB)
-{
+simulated function int SortAvailableTargets(AvailableTarget TargetA, AvailableTarget TargetB) {
 	local XComGameStateHistory History;
 	local XComGameState_Destructible DestructibleA, DestructibleB;
 	local int HitChanceA, HitChanceB;
@@ -221,8 +219,7 @@ function EventListenerReturn UnwillingConduitEvent(Object EventData, Object Even
 	return ELR_NoInterrupt;
 }
 
-function ConduitVisualizationFn(XComGameState VisualizeGameState, out array<VisualizationTrack> OutVisualizationTracks)
-{
+function ConduitVisualizationFn(XComGameState VisualizeGameState, out array<VisualizationTrack> OutVisualizationTracks) {
 	local XComGameState_Unit UnitState;
 	local X2Action_PlaySoundAndFlyOver SoundAndFlyOver;
 	local VisualizationTrack BuildTrack;
@@ -374,9 +371,7 @@ function EventListenerReturn TriangulationListener(Object EventData, Object Even
 	return ELR_NoInterrupt;
 }
 
-
-function EventListenerReturn RTAbilityTriggerEventListener_ValidAbilityLocations(Object EventData, Object EventSource, XComGameState GameState, Name EventID)
-{
+function EventListenerReturn RTAbilityTriggerEventListener_ValidAbilityLocations(Object EventData, Object EventSource, XComGameState GameState, Name EventID) {
 	local XComWorldData World;
 	local XComGameStateHistory History;
 	local AvailableAction CurrentAvailableAction;
@@ -390,7 +385,7 @@ function EventListenerReturn RTAbilityTriggerEventListener_ValidAbilityLocations
 
 	`LOG("IT'S WORKING, IT'S WORKING !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
 	History = `XCOMHISTORY;
-	
+
 	SourceUnit = XComGameState_Unit(History.GetGameStateForObjectID(OwnerStateObject.ObjectID));
 
 	CurrentAvailableAction.AvailableCode = CanActivateAbility(SourceUnit);
@@ -411,22 +406,19 @@ function EventListenerReturn RTAbilityTriggerEventListener_ValidAbilityLocations
 
 			// Set up the available action
 			CurrentAvailableAction.AvailableTargets.AddItem(Targets);
-			
-			
+
+
 			// The ValidTile is also the Target location which needs to be passed when activating the ability
 			TargetLocations.AddItem(ValidActiviationLocation);
 			class'XComGameStateContext_Ability'.static.ActivateAbility(CurrentAvailableAction, i, TargetLocations);
 			i++;
 		}
 
-		
+
 	}
 
 	return ELR_NoInterrupt;
 }
-
-
-
 
 defaultproperties
 {
