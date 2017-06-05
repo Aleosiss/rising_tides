@@ -1683,7 +1683,11 @@ static function X2AbilityTemplate RTPsionicStorm() {
 
 	// TODO: Change this
 	Template.bSkipFireAction = true;
-	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
+	Template.BuildVisualizationFn = DimensionalRiftStage1_BuildVisualization;
+	Template.BuildAffectedVisualizationSyncFn = DimensionalRigt1_BuildAffectedVisualization;
+	Template.CinescriptCameraType = "Psionic_FireAtLocation";
+
+
 
 	// This ability is 'offensive' and can be interrupted!
 	Template.BuildInterruptGameStateFn = TypicalAbility_BuildInterruptGameState;
@@ -1695,6 +1699,170 @@ static function X2AbilityTemplate RTPsionicStorm() {
 
 	return Template;
 }	
+
+simulated function DimensionalRiftStage1_BuildVisualization(XComGameState VisualizeGameState, out array<VisualizationTrack> OutVisualizationTracks)
+{
+	local XComGameStateHistory History;
+	local XComGameStateContext_Ability Context;
+	local StateObjectReference InteractingUnitRef;
+	local X2VisualizerInterface Visualizer;
+	local VisualizationTrack BuildTrack, AvatarBuildTrack;
+	local X2Action_PlayEffect EffectAction;
+	local X2Action_StartStopSound SoundAction;
+	local XComGameState_Unit AvatarUnit;
+	local XComWorldData World;
+	local vector TargetLocation;
+	local TTile TargetTile;
+	local X2Action_TimedWait WaitAction;
+	local X2Action_PlaySoundAndFlyOver SoundCueAction;
+	local int i, j;
+	local VisualizationTrack EmptyTrack;
+	local X2VisualizerInterface TargetVisualizerInterface;
+
+	History = `XCOMHISTORY;
+
+	Context = XComGameStateContext_Ability(VisualizeGameState.GetContext());
+
+	//Configure the visualization track for the shooter
+	//****************************************************************************************
+	InteractingUnitRef = Context.InputContext.SourceObject;
+	AvatarBuildTrack.StateObject_OldState = History.GetGameStateForObjectID(InteractingUnitRef.ObjectID, eReturnType_Reference, VisualizeGameState.HistoryIndex - 1);
+	AvatarBuildTrack.StateObject_NewState = VisualizeGameState.GetGameStateForObjectID(InteractingUnitRef.ObjectID);
+	AvatarBuildTrack.TrackActor = History.GetVisualizer(InteractingUnitRef.ObjectID);
+
+	AvatarUnit = XComGameState_Unit(AvatarBuildTrack.StateObject_NewState);
+
+	if( AvatarUnit != none )
+	{
+		World = `XWORLD;
+
+		// Exit cover
+		class'X2Action_ExitCover'.static.AddToVisualizationTrack(AvatarBuildTrack, Context);
+
+		// class'X2Action_Fire_OpenUnfinishedAnim'.static.AddToVisualizationTrack(AvatarBuildTrack, Context);
+
+		// Wait to time the start of the warning FX
+		WaitAction = X2Action_TimedWait(class'X2Action_TimedWait'.static.AddToVisualizationTrack(AvatarBuildTrack, Context));
+		WaitAction.DelayTimeSec = class'X2Ability_PsiWitch'.default.DIMENSIONAL_RIFT_STAGE1_START_WARNING_FX_SEC;
+
+		// Display the Warning FX (covert to tile and back to vector because stage 2 is at the GetPositionFromTileCoordinates coord
+		EffectAction = X2Action_PlayEffect(class'X2Action_PlayEffect'.static.AddToVisualizationTrack(AvatarBuildTrack, Context));
+		EffectAction.EffectName = "FX_Psi_Dimensional_Rift.P_Psi_Dimensional_Rift_Warning";
+
+		TargetLocation = Context.InputContext.TargetLocations[0];
+		TargetTile = World.GetTileCoordinatesFromPosition(TargetLocation);
+
+		EffectAction.EffectLocation = World.GetPositionFromTileCoordinates(TargetTile);
+
+		// Play Target audio
+		SoundAction = X2Action_StartStopSound(class'X2Action_StartStopSound'.static.AddToVisualizationTrack(AvatarBuildTrack, Context));
+		SoundAction.Sound = new class'SoundCue';
+		SoundAction.Sound.AkEventOverride = AkEvent'SoundX2AvatarFX.Avatar_Ability_Dimensional_Rift_Target_Activate';
+		SoundAction.iAssociatedGameStateObjectId = AvatarUnit.ObjectID;
+		SoundAction.bStartPersistentSound = true;
+		SoundAction.bIsPositional = true;
+		SoundAction.vWorldPosition = EffectAction.EffectLocation;
+
+		// Play the sound cue
+		SoundCueAction = X2Action_PlaySoundAndFlyOver(class'X2Action_PlaySoundAndFlyOver'.static.AddToVisualizationTrack(AvatarBuildTrack, Context));
+		SoundCueAction.SetSoundAndFlyOverParameters(SoundCue'SoundX2AvatarFX.Avatar_Ability_Dimensional_Rift_Target_Activate_Cue', "", '', eColor_Good);
+
+		// class'X2Action_Fire_CloseUnfinishedAnim'.static.AddToVisualizationTrack(AvatarBuildTrack, Context);
+
+		Visualizer = X2VisualizerInterface(AvatarBuildTrack.TrackActor);
+		if( Visualizer != none )
+		{
+			Visualizer.BuildAbilityEffectsVisualization(VisualizeGameState, AvatarBuildTrack);
+		}
+
+		class'X2Action_EnterCover'.static.AddToVisualizationTrack(AvatarBuildTrack, Context);
+	}
+	//****************************************************************************************
+
+	//****************************************************************************************
+	//Configure the visualization track for the targets
+	//****************************************************************************************
+	for (i = 0; i < Context.InputContext.MultiTargets.Length; ++i)
+	{
+		InteractingUnitRef = Context.InputContext.MultiTargets[i];
+
+		if( InteractingUnitRef == AvatarUnit.GetReference() )
+		{
+			BuildTrack = AvatarBuildTrack;
+		}
+		else
+		{
+			BuildTrack = EmptyTrack;
+			BuildTrack.StateObject_OldState = History.GetGameStateForObjectID(InteractingUnitRef.ObjectID, eReturnType_Reference, VisualizeGameState.HistoryIndex - 1);
+			BuildTrack.StateObject_NewState = VisualizeGameState.GetGameStateForObjectID(InteractingUnitRef.ObjectID);
+			BuildTrack.TrackActor = History.GetVisualizer(InteractingUnitRef.ObjectID);
+
+			class'X2Action_WaitForAbilityEffect'.static.AddToVisualizationTrack(BuildTrack, Context);
+		}						 
+		for( j = 0; j < Context.ResultContext.MultiTargetEffectResults[i].Effects.Length; ++j )
+		{
+			Context.ResultContext.MultiTargetEffectResults[i].Effects[j].AddX2ActionsForVisualization(VisualizeGameState, BuildTrack, Context.ResultContext.MultiTargetEffectResults[i].ApplyResults[j]);
+		}
+
+		TargetVisualizerInterface = X2VisualizerInterface(BuildTrack.TrackActor);
+		if( TargetVisualizerInterface != none )
+		{
+			//Allow the visualizer to do any custom processing based on the new game state. For example, units will create a death action when they reach 0 HP.
+			TargetVisualizerInterface.BuildAbilityEffectsVisualization(VisualizeGameState, BuildTrack);
+		}
+
+		if (BuildTrack.TrackActions.Length > 0)
+		{
+			OutVisualizationTracks.AddItem(BuildTrack);
+		}
+	}
+
+	OutVisualizationTracks.AddItem(AvatarBuildTrack);
+
+	TypicalAbility_AddEffectRedirects(VisualizeGameState, OutVisualizationTracks, AvatarBuildTrack);
+}
+
+simulated function DimensionalRigt1_BuildAffectedVisualization(name EffectName, XComGameState VisualizeGameState, out VisualizationTrack BuildTrack )
+{
+	local XComGameStateContext_Ability Context;
+	local X2Action_PlayEffect EffectAction;
+	local X2Action_StartStopSound SoundAction;
+	local XComGameState_Unit AvatarUnit;
+	local XComWorldData World;
+	local vector TargetLocation;
+	local TTile TargetTile;
+	
+	if( !`XENGINE.IsMultiplayerGame() && EffectName == 'RTPsionicStorm')
+	{
+		Context = XComGameStateContext_Ability(VisualizeGameState.GetContext());
+		AvatarUnit = XComGameState_Unit(BuildTrack.StateObject_NewState);
+
+		if( (Context == none) || (AvatarUnit == none) )
+		{
+			return;
+		}
+
+		World = `XWORLD;
+
+		// Display the Warning FX (convert to tile and back to vector because stage 2 is at the GetPositionFromTileCoordinates coord
+		EffectAction = X2Action_PlayEffect(class'X2Action_PlayEffect'.static.AddToVisualizationTrack(BuildTrack, Context));
+		EffectAction.EffectName = "FX_Psi_Dimensional_Rift.P_Psi_Dimensional_Rift_Warning";
+
+		TargetLocation = Context.InputContext.TargetLocations[0];
+		TargetTile = World.GetTileCoordinatesFromPosition(TargetLocation);
+
+		EffectAction.EffectLocation = World.GetPositionFromTileCoordinates(TargetTile);
+
+		// Play Target Activate Sound
+		SoundAction = X2Action_StartStopSound(class'X2Action_StartStopSound'.static.AddToVisualizationTrack(BuildTrack, Context));
+		SoundAction.Sound = new class'SoundCue';
+		SoundAction.Sound.AkEventOverride = AkEvent'SoundX2AvatarFX.Avatar_Ability_Dimensional_Rift_Target_Activate';
+		SoundAction.iAssociatedGameStateObjectId = AvatarUnit.ObjectID;
+		SoundAction.bStartPersistentSound = true;
+		SoundAction.bIsPositional = true;
+		SoundAction.vWorldPosition = EffectAction.EffectLocation;
+	}
+}
 
 static function X2AbilityTemplate RTPsionicStormSustained() {
 	local X2AbilityTemplate								Template;
@@ -1813,11 +1981,196 @@ static function X2AbilityTemplate RTEndPsistorms() {
 
 	// TODO:
 	Template.bSkipFireAction = true;
-	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
+	Template.BuildVisualizationFn = DimensionalRiftStage2_BuildVisualization;
 
 
 	return Template;
 }
+
+simulated function DimensionalRiftStage2_BuildVisualization(XComGameState VisualizeGameState, out array<VisualizationTrack> OutVisualizationTracks)
+{
+	local XComGameStateHistory History;
+	local XComGameStateContext_Ability  Context;
+	local StateObjectReference InteractingUnitRef;
+	local X2AbilityTemplate AbilityTemplate;
+	local VisualizationTrack EmptyTrack;
+	local VisualizationTrack AvatarBuildTrack, BuildTrack;
+	local int i, j;
+	local X2VisualizerInterface TargetVisualizerInterface;
+	local XComGameState_EnvironmentDamage EnvironmentDamageEvent;
+	local XComGameState_WorldEffectTileData WorldDataUpdate;
+	local XComGameState_InteractiveObject InteractiveObject;
+	local X2Action_PlayEffect EffectAction;
+	local X2Action_StartStopSound SoundAction;
+	local XComGameState_Unit AvatarUnit;
+	local X2Action_TimedInterTrackMessageAllMultiTargets MultiTargetMessageAction;
+	local X2Action_TimedWait WaitAction;
+
+	local XComGameState_BaseObject Placeholder_old, Placeholder_new;
+	local XComGameState_Ability SustainedAbility;
+	local TTile					Tile;
+	local vector				Location;
+
+	History = `XCOMHISTORY;
+
+	Context = XComGameStateContext_Ability(VisualizeGameState.GetContext());
+	InteractingUnitRef = Context.InputContext.SourceObject;
+
+	AbilityTemplate = class'XComGameState_Ability'.static.GetMyTemplateManager().FindAbilityTemplate(Context.InputContext.AbilityTemplateName);
+
+	//****************************************************************************************
+	//Configure the visualization track for the source
+	//****************************************************************************************
+	AvatarBuildTrack = EmptyTrack;
+	History.GetCurrentAndPreviousGameStatesForObjectID(InteractingUnitRef.ObjectID,
+													   AvatarBuildTrack.StateObject_OldState, AvatarBuildTrack.StateObject_NewState,
+													   eReturnType_Reference,
+													   VisualizeGameState.HistoryIndex);
+	AvatarBuildTrack.TrackActor = History.GetVisualizer(InteractingUnitRef.ObjectID);
+
+	AvatarUnit = XComGameState_Unit(AvatarBuildTrack.StateObject_OldState);
+	History.GetCurrentAndPreviousGameStatesForObjectID(AvatarUnit.FindAbility('RTPsionicStormSustained').ObjectID,
+													   Placeholder_old, Placeholder_new,
+													   eReturnType_Reference,
+													   VisualizeGameState.HistoryIndex);
+
+	SustainedAbility = XComGameState_Ability(Placeholder_old);
+	if(SustainedAbility.ValidActivationTiles.Length < 1)
+		`RedScreenOnce("No Valid Activation Tiles remaining! You will have to find another way.");
+
+	if( AvatarUnit != none )
+	{
+		foreach SustainedAbility.ValidActivationTiles(Tile) {
+			Location = `XWORLD.GetPositionFromTileCoordinates(Tile);
+
+			// Stop the Loop audio
+			SoundAction = X2Action_StartStopSound(class'X2Action_StartStopSound'.static.AddToVisualizationTrack(AvatarBuildTrack, Context));
+			SoundAction.Sound = new class'SoundCue';
+			SoundAction.Sound.AkEventOverride = AkEvent'SoundX2AvatarFX.Stop_AvatarDimensionalRiftLoop';
+			SoundAction.iAssociatedGameStateObjectId = AvatarUnit.ObjectID;
+			SoundAction.bIsPositional = true;
+			SoundAction.bStopPersistentSound = true;
+			// SoundAction.vWorldPosition = Location;
+
+			// Stop the Warning FX
+			EffectAction = X2Action_PlayEffect(class'X2Action_PlayEffect'.static.AddToVisualizationTrack(AvatarBuildTrack, Context));
+			EffectAction.EffectName = "FX_Psi_Dimensional_Rift.P_Psi_Dimensional_Rift_Warning";
+			EffectAction.EffectLocation = Location;
+			EffectAction.bStopEffect = true;
+
+		}
+
+		// Notify multi targets of explosion
+		MultiTargetMessageAction = X2Action_TimedInterTrackMessageAllMultiTargets(class'X2Action_TimedInterTrackMessageAllMultiTargets'.static.AddToVisualizationTrack(AvatarBuildTrack, Context));
+		MultiTargetMessageAction.SendMessagesAfterSec = class'X2Ability_PsiWitch'.default.DIMENSIONAL_RIFT_STAGE2_NOTIFY_TARGETS_SEC;
+	}
+	//****************************************************************************************
+
+	//****************************************************************************************
+	//Configure the visualization track for the targets
+	//****************************************************************************************
+	for (i = 0; i < Context.InputContext.MultiTargets.Length; ++i)
+	{
+		InteractingUnitRef = Context.InputContext.MultiTargets[i];
+
+		if( InteractingUnitRef == AvatarUnit.GetReference() )
+		{
+			BuildTrack = AvatarBuildTrack;
+
+			WaitAction = X2Action_TimedWait(class'X2Action_TimedWait'.static.AddToVisualizationTrack(AvatarBuildTrack, Context));
+			WaitAction.DelayTimeSec = class'X2Ability_PsiWitch'.default.DIMENSIONAL_RIFT_STAGE2_NOTIFY_TARGETS_SEC;
+		}
+		else
+		{
+			BuildTrack = EmptyTrack;
+			BuildTrack.StateObject_OldState = History.GetGameStateForObjectID(InteractingUnitRef.ObjectID, eReturnType_Reference, VisualizeGameState.HistoryIndex - 1);
+			BuildTrack.StateObject_NewState = VisualizeGameState.GetGameStateForObjectID(InteractingUnitRef.ObjectID);
+			BuildTrack.TrackActor = History.GetVisualizer(InteractingUnitRef.ObjectID);
+
+			class'X2Action_WaitForAbilityEffect'.static.AddToVisualizationTrack(BuildTrack, Context);
+		}
+
+		for( j = 0; j < Context.ResultContext.MultiTargetEffectResults[i].Effects.Length; ++j )
+		{
+			Context.ResultContext.MultiTargetEffectResults[i].Effects[j].AddX2ActionsForVisualization(VisualizeGameState, BuildTrack, Context.ResultContext.MultiTargetEffectResults[i].ApplyResults[j]);
+		}
+
+		TargetVisualizerInterface = X2VisualizerInterface(BuildTrack.TrackActor);
+		if( TargetVisualizerInterface != none )
+		{
+			//Allow the visualizer to do any custom processing based on the new game state. For example, units will create a death action when they reach 0 HP.
+			TargetVisualizerInterface.BuildAbilityEffectsVisualization(VisualizeGameState, BuildTrack);
+		}
+
+		if (BuildTrack.TrackActions.Length > 0)
+		{
+			OutVisualizationTracks.AddItem(BuildTrack);
+		}
+	}
+
+	OutVisualizationTracks.AddItem(AvatarBuildTrack);
+
+	//****************************************************************************************
+	//Configure the visualization tracks for the environment
+	//****************************************************************************************
+	foreach VisualizeGameState.IterateByClassType(class'XComGameState_EnvironmentDamage', EnvironmentDamageEvent)
+	{
+		BuildTrack = EmptyTrack;
+		BuildTrack.TrackActor = none;
+		BuildTrack.StateObject_NewState = EnvironmentDamageEvent;
+		BuildTrack.StateObject_OldState = EnvironmentDamageEvent;
+
+		//Wait until signaled by the shooter that the projectiles are hitting
+		class'X2Action_WaitForAbilityEffect'.static.AddToVisualizationTrack(BuildTrack, Context);
+
+		for( i = 0; i < AbilityTemplate.AbilityMultiTargetEffects.Length; ++i )
+		{
+			AbilityTemplate.AbilityMultiTargetEffects[i].AddX2ActionsForVisualization(VisualizeGameState, BuildTrack, 'AA_Success');	
+		}
+
+		OutVisualizationTracks.AddItem(BuildTrack);
+	}
+
+	foreach VisualizeGameState.IterateByClassType(class'XComGameState_WorldEffectTileData', WorldDataUpdate)
+	{
+		BuildTrack = EmptyTrack;
+		BuildTrack.TrackActor = none;
+		BuildTrack.StateObject_NewState = WorldDataUpdate;
+		BuildTrack.StateObject_OldState = WorldDataUpdate;
+
+		//Wait until signaled by the shooter that the projectiles are hitting
+		class'X2Action_WaitForAbilityEffect'.static.AddToVisualizationTrack(BuildTrack, Context);
+
+		for( i = 0; i < AbilityTemplate.AbilityMultiTargetEffects.Length; ++i )
+		{
+			AbilityTemplate.AbilityMultiTargetEffects[i].AddX2ActionsForVisualization(VisualizeGameState, BuildTrack, 'AA_Success');	
+		}
+
+		OutVisualizationTracks.AddItem(BuildTrack);
+	}
+	//****************************************************************************************
+
+	//Process any interactions with interactive objects
+	foreach VisualizeGameState.IterateByClassType(class'XComGameState_InteractiveObject', InteractiveObject)
+	{
+		// Add any doors that need to listen for notification
+		if( InteractiveObject.IsDoor() && InteractiveObject.HasDestroyAnim() && InteractiveObject.InteractionCount % 2 != 0 ) //Is this a closed door?
+		{
+			BuildTrack = EmptyTrack;
+			//Don't necessarily have a previous state, so just use the one we know about
+			BuildTrack.StateObject_OldState = InteractiveObject;
+			BuildTrack.StateObject_NewState = InteractiveObject;
+			BuildTrack.TrackActor = History.GetVisualizer(InteractiveObject.ObjectID);
+			class'X2Action_WaitForAbilityEffect'.static.AddToVisualizationTrack(BuildTrack, Context);
+			class'X2Action_BreakInteractActor'.static.AddToVisualizationTrack(BuildTrack, Context);
+
+			OutVisualizationTracks.AddItem(BuildTrack);
+		}
+	}
+
+	TypicalAbility_AddEffectRedirects(VisualizeGameState, OutVisualizationTracks, AvatarBuildTrack);
+}
+
 
 
 static function X2AbilityTemplate RTSetPsistormCharges() {
