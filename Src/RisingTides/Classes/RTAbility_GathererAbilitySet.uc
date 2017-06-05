@@ -53,12 +53,12 @@ class RTAbility_GathererAbilitySet extends RTAbility_GhostAbilitySet config(Risi
 	var name PsionicStormSustainedActivationEffectName;
 	var name PsionicStormSustainedDamageEvent;
 	var name PsistormMarkedEffectName;
-	
+
 
 	var localized name GuardianAngelHealText;
 	var localized string KIPFriendlyName;
 	var localized string KIPFriendlyDesc;
-	
+
 	var config string KIPIconPath;
 
 //---------------------------------------------------------------------------------------
@@ -1404,7 +1404,7 @@ simulated function XComGameState RTLift_BuildGameState(XComGameStateContext Cont
 
 	//Build the new game state frame
 	NewGameState = TypicalAbility_BuildGameState(Context);
-		
+
 	AbilityContext = XComGameStateContext_Ability(NewGameState.GetContext());
 	for(i = 0; i < AbilityContext.InputContext.MultiTargets.Length; i++) {
 		UnitState = XComGameState_Unit(NewGameState.CreateStateObject(class'XComGameState_Unit', AbilityContext.InputContext.MultiTargets[i].ObjectID));
@@ -1415,7 +1415,7 @@ simulated function XComGameState RTLift_BuildGameState(XComGameStateContext Cont
 
 		NewGameState.AddStateObject(UnitState);
 
-		
+
 		EventManager.TriggerEvent('ObjectMoved', UnitState, UnitState, NewGameState);
 		EventManager.TriggerEvent('UnitMoveFinished', UnitState, UnitState, NewGameState);
 	}
@@ -1499,7 +1499,7 @@ static function X2AbilityTemplate RTCrushingGrasp() {
 	local X2AbilityMultiTarget_Radius			RadiusMultiTarget;
 	local X2Effect_ApplyDirectionalWorldDamage  WorldDamage;
 	local X2Effect_Stunned						StunnedEffect;
-	
+
 
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'RTCrushingGrasp');
 	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_swordSlash"; //TODO: Change this
@@ -1527,16 +1527,16 @@ static function X2AbilityTemplate RTCrushingGrasp() {
 
 	CursorTarget = new class'X2AbilityTarget_Cursor';
 	CursorTarget.FixedAbilityRange = 24;            //  meters
-	
+
 	RadiusMultiTarget = new class'X2AbilityMultiTarget_Radius';
 	RadiusMultiTarget.fTargetRadius = default.LIFT_RADIUS; // 2.5 default
 	RadiusMultiTarget.bAddPrimaryTargetAsMultiTarget = true;
-	
+
 	Template.AbilityTargetStyle = CursorTarget;
 	Template.AbilityMultiTargetStyle = RadiusMultiTarget;
 	Template.TargetingMethod = class'X2TargetingMethod_GremlinAOE';
 
-	
+
 	WorldDamage = new class'X2Effect_ApplyDirectionalWorldDamage';
 	WorldDamage.bUseWeaponDamageType = false;
 	WorldDamage.bUseWeaponEnvironmentalDamage = false;
@@ -1566,7 +1566,7 @@ static function X2AbilityTemplate RTCrushingGrasp() {
 	return Template;
 
 
-}	
+}
 
 //---------------------------------------------------------------------------------------
 //---Psionic Storm-----------------------------------------------------------------------
@@ -1596,14 +1596,14 @@ static function X2AbilityTemplate RTCrushingGrasp() {
 static function X2AbilityTemplate RTPsionicStorm() {
 	local X2AbilityTemplate 						Template;
 	local X2AbilityCost_ActionPoints				ActionPointCost;
-	local X2AbilityCost_Charges						Charges;		   
-	local X2AbilityCooldown							Cooldown;		   
-	local X2AbilityTarget_Cursor					CursorTarget;		  
-	local X2AbilityMultiTarget_Radius				RadiusMultiTarget;	  
-	local X2Effect_ApplyWeaponDamage				ImmediateDamageEffect;  
-	local X2Effect_DelayedAbilityActivation			SustainedDamageEffect;  
-	local RTEffect_MarkValidActivationTiles			MarkTilesEffect;	   
-	local X2Effect_Persistent						MarkEffect; 
+	local X2AbilityCost_Charges						Charges;
+	local X2AbilityCooldown							Cooldown;
+	local X2AbilityTarget_Cursor					CursorTarget;
+	local X2AbilityMultiTarget_Radius				RadiusMultiTarget;
+	local X2Effect_ApplyWeaponDamage				ImmediateDamageEffect;
+	local X2Effect_DelayedAbilityActivation			SustainedDamageEffect;
+	local RTEffect_MarkValidActivationTiles			MarkTilesEffect;
+	local X2Effect_Persistent						MarkEffect;
 	local X2Condition_UnitEffectsWithAbilitySource	MarkCondition;
 
 
@@ -1635,7 +1635,7 @@ static function X2AbilityTemplate RTPsionicStorm() {
 
 	CursorTarget = new class'X2AbilityTarget_Cursor';
 	CursorTarget.FixedAbilityRange = 24;            //  meters
-	
+
 	RadiusMultiTarget = new class'X2AbilityMultiTarget_Radius';
 	RadiusMultiTarget.fTargetRadius = default.PSIONICSTORM_RADIUS; // 7.5 default
 	RadiusMultiTarget.bAddPrimaryTargetAsMultiTarget = true;
@@ -1698,7 +1698,7 @@ static function X2AbilityTemplate RTPsionicStorm() {
 	Template.PostActivationEvents.AddItem(default.UnitUsedPsionicAbilityEvent);
 
 	return Template;
-}	
+}
 
 simulated function DimensionalRiftStage1_BuildVisualization(XComGameState VisualizeGameState, out array<VisualizationTrack> OutVisualizationTracks)
 {
@@ -1719,6 +1719,11 @@ simulated function DimensionalRiftStage1_BuildVisualization(XComGameState Visual
 	local VisualizationTrack EmptyTrack;
 	local X2VisualizerInterface TargetVisualizerInterface;
 
+	local XComGameState_BaseObject Placeholder_old, Placeholder_new;
+	local XComGameState_Ability SustainedAbility;
+	local TTile					Tile;
+	local vector				Location;
+
 	History = `XCOMHISTORY;
 
 	Context = XComGameStateContext_Ability(VisualizeGameState.GetContext());
@@ -1731,7 +1736,13 @@ simulated function DimensionalRiftStage1_BuildVisualization(XComGameState Visual
 	AvatarBuildTrack.TrackActor = History.GetVisualizer(InteractingUnitRef.ObjectID);
 
 	AvatarUnit = XComGameState_Unit(AvatarBuildTrack.StateObject_NewState);
+	History.GetCurrentAndPreviousGameStatesForObjectID(AvatarUnit.FindAbility('RTPsionicStormSustained').ObjectID,
+														 Placeholder_old, Placeholder_new,
+														 eReturnType_Reference,
+														 VisualizeGameState.HistoryIndex);
 
+	SustainedAbility = XComGameState_Ability(Placeholder_new);
+	
 	if( AvatarUnit != none )
 	{
 		World = `XWORLD;
@@ -1754,19 +1765,21 @@ simulated function DimensionalRiftStage1_BuildVisualization(XComGameState Visual
 
 		EffectAction.EffectLocation = World.GetPositionFromTileCoordinates(TargetTile);
 
-		// Play Target audio
-		SoundAction = X2Action_StartStopSound(class'X2Action_StartStopSound'.static.AddToVisualizationTrack(AvatarBuildTrack, Context));
-		SoundAction.Sound = new class'SoundCue';
-		SoundAction.Sound.AkEventOverride = AkEvent'SoundX2AvatarFX.Avatar_Ability_Dimensional_Rift_Target_Activate';
-		SoundAction.iAssociatedGameStateObjectId = AvatarUnit.ObjectID;
-		SoundAction.bStartPersistentSound = true;
-		SoundAction.bIsPositional = true;
-		SoundAction.vWorldPosition = EffectAction.EffectLocation;
+		if(SustainedAbility.ValidActivationTiles.Length < 1) {
+			`RedScreenOnce("Playing SoundFX!");
+			// Play Target audio
+			SoundAction = X2Action_StartStopSound(class'X2Action_StartStopSound'.static.AddToVisualizationTrack(AvatarBuildTrack, Context));
+			SoundAction.Sound = new class'SoundCue';
+			SoundAction.Sound.AkEventOverride = AkEvent'SoundX2AvatarFX.Avatar_Ability_Dimensional_Rift_Target_Activate';
+			SoundAction.iAssociatedGameStateObjectId = AvatarUnit.ObjectID;
+			SoundAction.bStartPersistentSound = true;
+			SoundAction.bIsPositional = true;
+			SoundAction.vWorldPosition = EffectAction.EffectLocation;
 
-		// Play the sound cue
-		SoundCueAction = X2Action_PlaySoundAndFlyOver(class'X2Action_PlaySoundAndFlyOver'.static.AddToVisualizationTrack(AvatarBuildTrack, Context));
-		SoundCueAction.SetSoundAndFlyOverParameters(SoundCue'SoundX2AvatarFX.Avatar_Ability_Dimensional_Rift_Target_Activate_Cue', "", '', eColor_Good);
-
+			// Play the sound cue
+			SoundCueAction = X2Action_PlaySoundAndFlyOver(class'X2Action_PlaySoundAndFlyOver'.static.AddToVisualizationTrack(AvatarBuildTrack, Context));
+			SoundCueAction.SetSoundAndFlyOverParameters(SoundCue'SoundX2AvatarFX.Avatar_Ability_Dimensional_Rift_Target_Activate_Cue', "", '', eColor_Good);
+		}
 		// class'X2Action_Fire_CloseUnfinishedAnim'.static.AddToVisualizationTrack(AvatarBuildTrack, Context);
 
 		Visualizer = X2VisualizerInterface(AvatarBuildTrack.TrackActor);
@@ -1798,7 +1811,7 @@ simulated function DimensionalRiftStage1_BuildVisualization(XComGameState Visual
 			BuildTrack.TrackActor = History.GetVisualizer(InteractingUnitRef.ObjectID);
 
 			class'X2Action_WaitForAbilityEffect'.static.AddToVisualizationTrack(BuildTrack, Context);
-		}						 
+		}
 		for( j = 0; j < Context.ResultContext.MultiTargetEffectResults[i].Effects.Length; ++j )
 		{
 			Context.ResultContext.MultiTargetEffectResults[i].Effects[j].AddX2ActionsForVisualization(VisualizeGameState, BuildTrack, Context.ResultContext.MultiTargetEffectResults[i].ApplyResults[j]);
@@ -1831,7 +1844,7 @@ simulated function DimensionalRigt1_BuildAffectedVisualization(name EffectName, 
 	local XComWorldData World;
 	local vector TargetLocation;
 	local TTile TargetTile;
-	
+
 	if( !`XENGINE.IsMultiplayerGame() && EffectName == 'RTPsionicStorm')
 	{
 		Context = XComGameStateContext_Ability(VisualizeGameState.GetContext());
@@ -1881,7 +1894,7 @@ static function X2AbilityTemplate RTPsionicStormSustained() {
 	Template.Hostility = eHostility_Neutral;
 
 	Template.AbilityShooterConditions.AddItem(default.LivingShooterProperty);
-	
+
 	// TODO: This doesn't actually target self but needs an AbilityTargetStyle
 	Template.AbilityTargetStyle = default.SelfTarget;
 	Template.AbilityToHitCalc = default.DeadEye;
@@ -1890,7 +1903,7 @@ static function X2AbilityTemplate RTPsionicStormSustained() {
 	RadiusMultiTarget.fTargetRadius = default.PSIONICSTORM_RADIUS;
 	RadiusMultiTarget.bIgnoreBlockingCover = true;
 	Template.AbilityMultiTargetStyle = RadiusMultiTarget;
-	
+
 	Trigger = new class'X2AbilityTrigger_EventListener';
 	Trigger.ListenerData.Deferral = ELD_OnStateSubmitted;
 	Trigger.ListenerData.EventID = default.PsionicStormSustainedDamageEvent;
@@ -1905,7 +1918,7 @@ static function X2AbilityTemplate RTPsionicStormSustained() {
 	SustainedDamageEffect.DuplicateResponse = eDupe_Ignore;
 	SustainedDamageEffect.SetDisplayInfo(ePerkBuff_Bonus, Template.LocFriendlyName, Template.GetMyLongDescription(), Template.IconImage, true, , Template.AbilitySourceName);
 	Template.AddShooterEffect(SustainedDamageEffect);
-																									
+
 	ImmediateDamageEffect = new class'X2Effect_ApplyWeaponDamage';
 	ImmediateDamageEffect.bIgnoreBaseDamage = true;
 	ImmediateDamageEffect.DamageTag = 'PsionicStormSustained';
@@ -1952,7 +1965,7 @@ static function X2AbilityTemplate RTEndPsistorms() {
 	Template.AbilityTargetStyle = default.SelfTarget;
 	Template.AbilityTriggers.AddItem(default.PlayerInputTrigger);
 	Template.AbilityToHitCalc = default.DeadEye;
-	
+
 	EffectCondition = new class'X2Condition_UnitEffects';
 	EffectCondition.AddRequireEffect(default.PsionicStormSustainedActivationEffectName, 'AA_UnitIsImmune');
 	Template.AbilityShooterConditions.AddItem(EffectCondition);
@@ -2125,7 +2138,7 @@ simulated function DimensionalRiftStage2_BuildVisualization(XComGameState Visual
 
 		for( i = 0; i < AbilityTemplate.AbilityMultiTargetEffects.Length; ++i )
 		{
-			AbilityTemplate.AbilityMultiTargetEffects[i].AddX2ActionsForVisualization(VisualizeGameState, BuildTrack, 'AA_Success');	
+			AbilityTemplate.AbilityMultiTargetEffects[i].AddX2ActionsForVisualization(VisualizeGameState, BuildTrack, 'AA_Success');
 		}
 
 		OutVisualizationTracks.AddItem(BuildTrack);
@@ -2143,7 +2156,7 @@ simulated function DimensionalRiftStage2_BuildVisualization(XComGameState Visual
 
 		for( i = 0; i < AbilityTemplate.AbilityMultiTargetEffects.Length; ++i )
 		{
-			AbilityTemplate.AbilityMultiTargetEffects[i].AddX2ActionsForVisualization(VisualizeGameState, BuildTrack, 'AA_Success');	
+			AbilityTemplate.AbilityMultiTargetEffects[i].AddX2ActionsForVisualization(VisualizeGameState, BuildTrack, 'AA_Success');
 		}
 
 		OutVisualizationTracks.AddItem(BuildTrack);
@@ -2215,7 +2228,7 @@ static function X2AbilityTemplate RTSetPsistormCharges() {
 
 
 
-																	  
+
 defaultproperties
 {
 	ExtinctionEventStageThreeEventName = "RTExtinctionEventStageThree"

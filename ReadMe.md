@@ -22,7 +22,6 @@ This would be a bare-bones content mod. I also have the following content in min
 		- nothing
 	- Gatherer:
 		- Redo Guardian Angel
-		- Lift
 		- Pull
 		- Psionic Storm
 		- Verify that Over The Shoulder works against burrowed/concealed units
