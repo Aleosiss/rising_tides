@@ -98,6 +98,9 @@
     <Content Include="Src\RisingTides\Classes\RTCondition_EffectStackCount.uc">
       <SubType>Content</SubType>
     </Content>
+    <Content Include="Src\RisingTides\Classes\RTCondition_HackingTarget.uc">
+      <SubType>Content</SubType>
+    </Content>
     <Content Include="Src\RisingTides\Classes\RTCondition_PsionicTarget.uc">
       <SubType>Content</SubType>
     </Content>
