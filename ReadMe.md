@@ -37,7 +37,7 @@ This would be a bare-bones content mod. I also have the following content in min
 	- Shatter The Line: If this unit kills an enemy within X tiles, it triggers a flush effect on other enemies within X tiles. 2/3 turn cooldown. credits to /u/PostOfficeBuddy
 	- Orpheus Warp: "…the hero of the broken moon. A pawn played by a negligent deity, a marionette maneuvered by an... epileptic..."
       		- Gain Stealth while preparing a massive psionic rift. On the following turn, the Stealth is broken and a rift is formed. Friendly units can use the rift to evac from the mission. The rift will persist for an additional two turns, or if this unit enters it.
-
+	- RTEffect_ExtendEffectDuration: change to use PreStateSubmitted
 
 ###### Current Bugs:
 	- Time Stop damage calculation isn't visualized properly

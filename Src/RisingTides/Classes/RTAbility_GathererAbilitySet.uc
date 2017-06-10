@@ -7,7 +7,6 @@
 //---------------------------------------------------------------------------------------
 //	Nova's perks.
 //---------------------------------------------------------------------------------------
-
 class RTAbility_GathererAbilitySet extends RTAbility_GhostAbilitySet config(RisingTides);
 
 	var config float OTS_RADIUS;
@@ -1033,7 +1032,9 @@ static function X2AbilityTemplate RTTechnopathy() {
 	local X2AbilityTemplate Template;
 
 	Template = PurePassive(default.RTTechnopathyTemplateName, "img:///UILibrary_PerkIcons.UIPerk_swordSlash", true);
-
+	 
+	Template.AdditionalAbilities.AddItem('FinalizeTechnopathyHack');
+	Template.AdditionalAbilities.AddItem('CancelTechnopathyHack');
 
 
 
@@ -1551,7 +1552,6 @@ static function X2AbilityTemplate RTCrushingGrasp() {
 	Template.AddMultiTargetEffect(WorldDamage);
 
 	StunnedEffect = class'X2StatusEffects'.static.CreateStunnedStatusEffect(default.LIFT_DURATION * 2, 100, false);
-	StunnedEffect.SetDisplayInfo(ePerkBuff_Penalty, "STUNNED","STUNNED", Template.IconImage, true,,Template.AbilitySourceName);
 	Template.AddMultiTargetEffect(StunnedEffect);
 
 	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
@@ -1754,7 +1754,7 @@ simulated function DimensionalRiftStage1_BuildVisualization(XComGameState Visual
 
 		// Wait to time the start of the warning FX
 		WaitAction = X2Action_TimedWait(class'X2Action_TimedWait'.static.AddToVisualizationTrack(AvatarBuildTrack, Context));
-		WaitAction.DelayTimeSec = class'X2Ability_PsiWitch'.default.DIMENSIONAL_RIFT_STAGE1_START_WARNING_FX_SEC;
+		WaitAction.DelayTimeSec = class'X2Ability_PsiWitch'.default.DIMENSIONAL_RIFT_STAGE1_START_WARNING_FX_SEC / 10;
 
 		// Display the Warning FX (covert to tile and back to vector because stage 2 is at the GetPositionFromTileCoordinates coord
 		EffectAction = X2Action_PlayEffect(class'X2Action_PlayEffect'.static.AddToVisualizationTrack(AvatarBuildTrack, Context));
@@ -1765,21 +1765,20 @@ simulated function DimensionalRiftStage1_BuildVisualization(XComGameState Visual
 
 		EffectAction.EffectLocation = World.GetPositionFromTileCoordinates(TargetTile);
 
-		if(SustainedAbility.ValidActivationTiles.Length < 1) {
-			`RedScreenOnce("Playing SoundFX!");
-			// Play Target audio
-			SoundAction = X2Action_StartStopSound(class'X2Action_StartStopSound'.static.AddToVisualizationTrack(AvatarBuildTrack, Context));
-			SoundAction.Sound = new class'SoundCue';
-			SoundAction.Sound.AkEventOverride = AkEvent'SoundX2AvatarFX.Avatar_Ability_Dimensional_Rift_Target_Activate';
-			SoundAction.iAssociatedGameStateObjectId = AvatarUnit.ObjectID;
-			SoundAction.bStartPersistentSound = true;
-			SoundAction.bIsPositional = true;
-			SoundAction.vWorldPosition = EffectAction.EffectLocation;
+		`LOG("Beginnning AvatarUnit.ObjectID = " @ AvatarUnit.ObjectID);
 
-			// Play the sound cue
-			SoundCueAction = X2Action_PlaySoundAndFlyOver(class'X2Action_PlaySoundAndFlyOver'.static.AddToVisualizationTrack(AvatarBuildTrack, Context));
-			SoundCueAction.SetSoundAndFlyOverParameters(SoundCue'SoundX2AvatarFX.Avatar_Ability_Dimensional_Rift_Target_Activate_Cue', "", '', eColor_Good);
-		}
+		SoundAction = X2Action_StartStopSound(class'X2Action_StartStopSound'.static.AddToVisualizationTrack(AvatarBuildTrack, Context));
+		SoundAction.Sound = new class'SoundCue';
+		SoundAction.Sound.AkEventOverride = AkEvent'SoundX2AvatarFX.Avatar_Ability_Dimensional_Rift_Target_Activate';
+		SoundAction.iAssociatedGameStateObjectId = AvatarUnit.ObjectID;
+		SoundAction.bStartPersistentSound = true;
+		SoundAction.bIsPositional = true;
+		SoundAction.vWorldPosition = EffectAction.EffectLocation;	 
+		
+		// Play the sound cue
+		//SoundCueAction = X2Action_PlaySoundAndFlyOver(class'X2Action_PlaySoundAndFlyOver'.static.AddToVisualizationTrack(AvatarBuildTrack, Context));
+		//SoundCueAction.SetSoundAndFlyOverParameters(SoundCue'SoundX2AvatarFX.Avatar_Ability_Dimensional_Rift_Target_Activate_Cue', "", '', eColor_Good);
+		
 		// class'X2Action_Fire_CloseUnfinishedAnim'.static.AddToVisualizationTrack(AvatarBuildTrack, Context);
 
 		Visualizer = X2VisualizerInterface(AvatarBuildTrack.TrackActor);
@@ -1867,7 +1866,7 @@ simulated function DimensionalRigt1_BuildAffectedVisualization(name EffectName, 
 		EffectAction.EffectLocation = World.GetPositionFromTileCoordinates(TargetTile);
 
 		// Play Target Activate Sound
-		SoundAction = X2Action_StartStopSound(class'X2Action_StartStopSound'.static.AddToVisualizationTrack(BuildTrack, Context));
+		// SoundAction = X2Action_StartStopSound(class'X2Action_StartStopSound'.static.AddToVisualizationTrack(BuildTrack, Context));
 		SoundAction.Sound = new class'SoundCue';
 		SoundAction.Sound.AkEventOverride = AkEvent'SoundX2AvatarFX.Avatar_Ability_Dimensional_Rift_Target_Activate';
 		SoundAction.iAssociatedGameStateObjectId = AvatarUnit.ObjectID;
@@ -2018,6 +2017,7 @@ simulated function DimensionalRiftStage2_BuildVisualization(XComGameState Visual
 	local XComGameState_Unit AvatarUnit;
 	local X2Action_TimedInterTrackMessageAllMultiTargets MultiTargetMessageAction;
 	local X2Action_TimedWait WaitAction;
+	
 
 	local XComGameState_BaseObject Placeholder_old, Placeholder_new;
 	local XComGameState_Ability SustainedAbility;
@@ -2051,26 +2051,31 @@ simulated function DimensionalRiftStage2_BuildVisualization(XComGameState Visual
 	if(SustainedAbility.ValidActivationTiles.Length < 1)
 		`RedScreenOnce("No Valid Activation Tiles remaining! You will have to find another way.");
 
+
+
 	if( AvatarUnit != none )
 	{
-		foreach SustainedAbility.ValidActivationTiles(Tile) {
-			Location = `XWORLD.GetPositionFromTileCoordinates(Tile);
+		// Wait to time the start of the warning FX
+		WaitAction = X2Action_TimedWait(class'X2Action_TimedWait'.static.AddToVisualizationTrack(AvatarBuildTrack, Context));
+		WaitAction.DelayTimeSec = class'X2Ability_PsiWitch'.default.DIMENSIONAL_RIFT_STAGE1_START_WARNING_FX_SEC / 10;
 
-			// Stop the Loop audio
+		`LOG("Ending AvatarUnit.ObjectID = " @ AvatarUnit.ObjectID);
+
+		foreach SustainedAbility.ValidActivationTiles(Tile) {
+	
 			SoundAction = X2Action_StartStopSound(class'X2Action_StartStopSound'.static.AddToVisualizationTrack(AvatarBuildTrack, Context));
 			SoundAction.Sound = new class'SoundCue';
 			SoundAction.Sound.AkEventOverride = AkEvent'SoundX2AvatarFX.Stop_AvatarDimensionalRiftLoop';
 			SoundAction.iAssociatedGameStateObjectId = AvatarUnit.ObjectID;
 			SoundAction.bIsPositional = true;
 			SoundAction.bStopPersistentSound = true;
-			// SoundAction.vWorldPosition = Location;
 
+			Location = `XWORLD.GetPositionFromTileCoordinates(Tile);
 			// Stop the Warning FX
 			EffectAction = X2Action_PlayEffect(class'X2Action_PlayEffect'.static.AddToVisualizationTrack(AvatarBuildTrack, Context));
 			EffectAction.EffectName = "FX_Psi_Dimensional_Rift.P_Psi_Dimensional_Rift_Warning";
 			EffectAction.EffectLocation = Location;
 			EffectAction.bStopEffect = true;
-
 		}
 
 		// Notify multi targets of explosion
@@ -2184,8 +2189,6 @@ simulated function DimensionalRiftStage2_BuildVisualization(XComGameState Visual
 	TypicalAbility_AddEffectRedirects(VisualizeGameState, OutVisualizationTracks, AvatarBuildTrack);
 }
 
-
-
 static function X2AbilityTemplate RTSetPsistormCharges() {
 	local X2AbilityTemplate Template;
 	local X2AbilityTrigger_EventListener Trigger;
@@ -2218,12 +2221,74 @@ static function X2AbilityTemplate RTSetPsistormCharges() {
 
 	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
 
-	// TODO:
 	Template.bSkipFireAction = true;
 	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
 
 	return Template;
 }
+
+static function X2AbilityTemplate ConstructTechnopathyHack(name TemplateName, optional name OverrideTemplateName = 'Hack', optional bool bHaywireProtocol = false)
+{
+	local X2AbilityTemplate					Template;		
+	local X2AbilityCost_ActionPoints        ActionPointCost;	
+	local X2AbilityTarget_Single            SingleTarget;
+	local RTCondition_HackingTarget         HackingTargetCondition;
+
+	`CREATE_X2ABILITY_TEMPLATE(Template, TemplateName);
+
+	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_comm_hack";
+	Template.bDisplayInUITooltip = false;
+	Template.bLimitTargetIcons = true;
+	Template.bStationaryWeapon = true;
+	if(OverrideTemplateName != 'Hack')
+	{
+		Template.ShotHUDPriority = class'UIUtilities_Tactical'.const.OBJECTIVE_INTERACT_PRIORITY;
+		Template.AbilitySourceName = 'eAbilitySource_Commander';
+	}
+	else
+	{
+		Template.ShotHUDPriority = class'UIUtilities_Tactical'.const.CLASS_SERGEANT_PRIORITY;
+		Template.AbilitySourceName = 'eAbilitySource_Perk';
+	}
+	Template.Hostility = eHostility_Neutral;
+
+	ActionPointCost = new class'X2AbilityCost_ActionPoints';
+	ActionPointCost.iNumPoints = 1;
+	ActionPointCost.bFreeCost = true;                   //  the FinalizeIntrusion ability will consume the action point
+	Template.AbilityCosts.AddItem(ActionPointCost);
+
+	Template.AbilityToHitCalc = default.DeadEye;
+	Template.AbilityShooterConditions.AddItem(default.LivingShooterProperty);
+
+	HackingTargetCondition = new class'RTCondition_HackingTarget';
+	HackingTargetCondition.RequiredAbilityName = OverrideTemplateName; // filter based on the "normal" hacking ability we are replacing
+	Template.AbilityTargetConditions.AddItem(HackingTargetCondition);
+	Template.AddShooterEffectExclusions();
+	Template.AbilityTriggers.AddItem(default.PlayerInputTrigger);
+
+	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_ShowIfAvailable;
+
+	SingleTarget = new class'X2AbilityTarget_Single';
+	SingleTarget.bAllowInteractiveObjects = true;
+	Template.AbilityTargetStyle = SingleTarget;
+
+	Template.FinalizeAbilityName = 'FinalizeTechnopathyHack';
+	Template.CancelAbilityName = 'CancelTechnopathyHack';
+
+	
+	Template.ActivationSpeech = 'AttemptingHack';  // This seems to have the most appropriate lines, mdomowicz 2015_07_09
+
+	Template.CinescriptCameraType = "Hack";
+
+	Template.BuildNewGameStateFn = class'X2Ability_DefaultAbilitySet'.static.HackAbility_BuildGameState;
+	Template.BuildVisualizationFn = class'X2Ability_DefaultAbilitySet'.static.HackAbility_BuildVisualization;
+
+	Template.OverrideAbilities.AddItem( OverrideTemplateName );	   
+
+	return Template;
+}
+
+
 
 
 
