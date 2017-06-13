@@ -83,6 +83,9 @@
     <Content Include="Src\RisingTides\Classes\RTAction_GreyscaledEnd.uc">
       <SubType>Content</SubType>
     </Content>
+    <Content Include="Src\RisingTides\Classes\RTAction_PsionicGetOverHere.uc">
+      <SubType>Content</SubType>
+    </Content>
     <Content Include="Src\RisingTides\Classes\RTAction_PsionicGetOverHereTarget.uc">
       <SubType>Content</SubType>
     </Content>
