@@ -1,19 +1,32 @@
-// This is an Unreal Script																			   
+// This is an Unreal Script
 class RTCondition_VisibleToPlayer extends X2Condition;
 
+local bRequireLOS;
+
 event name CallMeetsCondition(XComGameState_BaseObject kTarget) {
-	if(IsTargetVisibleToLocalPlayer(kTarget.GetReference())) {
-		return 'AA_Success';
-	} else {
-		return 'AA_NotVisible';
-	}
+	return 'AA_Success';
 }
 event name CallMeetsConditionWithSource(XComGameState_BaseObject kTarget, XComGameState_BaseObject kSource) {
 	if(IsTargetVisibleToLocalPlayer(kTarget.GetReference(), kSource.ObjectID)) {
-		return 'AA_Success';
-	} else {
-		return 'AA_NotVisible';
+		if(!bRequireLOS) {
+			return 'AA_Success';
+		} else {
+			if(DoesSourceHaveLOS(kTarget, kSource))
+				return 'AA_Success';
+		}
 	}
+
+	return 'AA_NotVisible';
+}
+
+simulated static function bool DoesSourceHaveLOS(XComGameState_BaseObject kTarget, XComGameState_BaseObject kSource) {
+	local GameRulesCache_VisibilityInfo VisInfo;
+	if (`TACTICALRULES.VisibilityMgr.GetVisibilityInfo(kSource.ObjectID, kTarget.ObjectID, VisInfo)) {
+		if(VisInfo.bClearLOS)  {
+			return true;
+		}
+	}
+	return false;
 }
 
 simulated static function bool IsTargetVisibleToLocalPlayer(StateObjectReference TargetUnitRef, optional int SourceUnitObjectID = -2)
