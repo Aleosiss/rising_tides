@@ -675,9 +675,34 @@ LocPromotionPopupText="<Bullet/> The unit can sustain three separate psionic sto
 [RTEndPsistorms X2AbilityTemplate]
 LocFriendlyName="End Psionic Storms"
 LocLongDescription="End all psionic storms."
-LocHelpText="End all psionic storms"
-LocFlyOverText="End Psionic Storms"
+LocHelpText="End all active psionic storms."
+LocFlyOverText="End active Psionic Storms."
 
+RTTechnopathy_Hack
+
+[RTTechnopathy_Hack X2AbilityTemplate]
+LocFriendlyName="Hack (Psionic)"
+LocLongDescription="Hack a target psionically from a distance."
+LocHelpText="Hack a target psionically from a distance."
+LocFlyOverText="Hack (Psionic)"
+
+[RTTechnopathy_Chest X2AbilityTemplate]
+LocFriendlyName="Hack (Psionic)"
+LocLongDescription="Hack a target psionically from a distance."
+LocHelpText="Hack a target psionically from a distance."
+LocFlyOverText="Hack (Psionic)"
+
+[RTTechnopathy_Workstation X2AbilityTemplate]
+LocFriendlyName="Hack (Psionic)"
+LocLongDescription="Hack a target psionically from a distance."
+LocHelpText="Hack a target psionically from a distance."
+LocFlyOverText="Hack (Psionic)"
+
+[RTTechnopathy_ObjectiveChest X2AbilityTemplate]
+LocFriendlyName="Hack (Psionic)"
+LocLongDescription="Hack a target psionically from a distance."
+LocHelpText="Hack a target psionically from a distance."
+LocFlyOverText="Hack (Psionic)"
 ;----------------------------------------------------------------------------------------------------------------------------
 
 ; +AbilityAvailabilityCodes="AA_UnitNotMelded"

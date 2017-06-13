@@ -86,6 +86,12 @@ static function array<X2DataTemplate> CreateTemplates()
 	Templates.AddItem(PurePassive('RTUnwillingConduitsIcon', "img://UILibrary_PerkIcons.UIPerk_swordSlash", false, 'eAbilitySource_Psionic'));
 	Templates.AddItem(RTDomination());
 	Templates.AddItem(RTTechnopathy());
+	Templates.AddItem(RTConstructTechnopathyHack('RTTechnopathy_Hack'));
+	Templates.AddItem(RTConstructTechnopathyHack('RTTechnopathy_Chest', 'Hack_Chest'));
+	Templates.AddItem(RTConstructTechnopathyHack('RTTechnopathy_Workstation', 'Hack_Workstation'));
+	Templates.AddItem(RTConstructTechnopathyHack('RTTechnopathy_ObjectiveChest', 'Hack_ObjectiveChest'));
+	Templates.AddItem(RTFinalizeTechnopathyHack());
+	Templates.AddItem(RTCancelTechnopathyHack());
 	Templates.AddItem(RTSibyl());
 	Templates.AddItem(RTEchoedAgony());
 	Templates.AddItem(PurePassive('RTEchoedAgonyIcon', "img://UILibrary_PerkIcons.UIPerk_swordSlash", false, 'eAbilitySource_Psionic'));
@@ -1033,10 +1039,12 @@ static function X2AbilityTemplate RTTechnopathy() {
 
 	Template = PurePassive(default.RTTechnopathyTemplateName, "img:///UILibrary_PerkIcons.UIPerk_swordSlash", true);
 	 
-	Template.AdditionalAbilities.AddItem('FinalizeTechnopathyHack');
-	Template.AdditionalAbilities.AddItem('CancelTechnopathyHack');
-
-
+	Template.AdditionalAbilities.AddItem('RTFinalizeTechnopathyHack');
+	Template.AdditionalAbilities.AddItem('RTCancelTechnopathyHack');
+	Template.AdditionalAbilities.AddItem('RTTechnopathy_Hack');
+	Template.AdditionalAbilities.AddItem('RTTechnopathy_Chest');
+	Template.AdditionalAbilities.AddItem('RTTechnopathy_Workstation');
+	Template.AdditionalAbilities.AddItem('RTTechnopathy_ObjectiveChest');
 
 	return Template;
 }
@@ -2225,9 +2233,88 @@ static function X2AbilityTemplate RTSetPsistormCharges() {
 	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
 
 	return Template;
+
+
 }
 
-static function X2AbilityTemplate ConstructTechnopathyHack(name TemplateName, optional name OverrideTemplateName = 'Hack', optional bool bHaywireProtocol = false)
+
+static function X2AbilityTemplate RTFinalizeTechnopathyHack(name FinalizeName = 'RTFinalizeTechnopathyHack')
+{
+	local X2AbilityTemplate                 Template;		
+	local X2AbilityCost_ActionPoints        ActionPointCost;	
+	local X2AbilityTarget_Single            SingleTarget;
+
+	`CREATE_X2ABILITY_TEMPLATE(Template, FinalizeName);
+	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_intrusionprotocol";
+	Template.bDisplayInUITooltip = false;
+	Template.bLimitTargetIcons = true;
+	Template.ShotHUDPriority = class'UIUtilities_Tactical'.const.CLASS_SERGEANT_PRIORITY;
+	Template.AbilitySourceName = 'eAbilitySource_Perk';
+	Template.Hostility = eHostility_Neutral;
+
+	// successfully completing the hack requires and costs an action point
+	ActionPointCost = new class'X2AbilityCost_ActionPoints';
+	ActionPointCost.iNumPoints = 1;
+	ActionPointCost.bConsumeAllPoints = false;
+	Template.AbilityCosts.AddItem(ActionPointCost);
+
+	Template.AbilityToHitCalc = new class'X2AbilityToHitCalc_Hacking';
+	Template.AbilityShooterConditions.AddItem(default.LivingShooterProperty);
+
+	Template.AddShooterEffectExclusions();
+	Template.AbilityTriggers.AddItem(new class'X2AbilityTrigger_Placeholder');
+
+	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_NeverShow;
+
+	SingleTarget = new class'X2AbilityTarget_Single';
+	SingleTarget.bAllowInteractiveObjects = true;
+	Template.AbilityTargetStyle = SingleTarget;
+
+	Template.CinescriptCameraType = "Hack";
+
+	Template.BuildNewGameStateFn = class'X2Ability_DefaultAbilitySet'.static.FinalizeHackAbility_BuildGameState;
+	Template.BuildVisualizationFn = class'X2Ability_DefaultAbilitySet'.static.FinalizeHackAbility_BuildVisualization;
+
+	Template.OverrideAbilities.AddItem( 'FinalizeHack' );
+
+	return Template;
+}
+
+static function X2AbilityTemplate RTCancelTechnopathyHack(Name TemplateName = 'RTCancelTechnopathyHack')
+{
+	local X2AbilityTemplate                 Template;
+	local X2AbilityTarget_Single            SingleTarget;
+
+	`CREATE_X2ABILITY_TEMPLATE(Template, TemplateName);
+	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_intrusionprotocol";
+	Template.bDisplayInUITooltip = false;
+	Template.bLimitTargetIcons = true;
+	Template.ShotHUDPriority = class'UIUtilities_Tactical'.const.CLASS_SERGEANT_PRIORITY;
+	Template.AbilitySourceName = 'eAbilitySource_Perk';
+	Template.Hostility = eHostility_Neutral;
+
+	Template.AbilityToHitCalc = default.DeadEye;
+	Template.AbilityShooterConditions.AddItem(default.LivingShooterProperty);
+	Template.AddShooterEffectExclusions();
+	Template.AbilityTriggers.AddItem(new class'X2AbilityTrigger_Placeholder');
+
+	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_NeverShow;
+
+	SingleTarget = new class'X2AbilityTarget_Single';
+	SingleTarget.bAllowInteractiveObjects = true;
+	Template.AbilityTargetStyle = SingleTarget;
+
+	Template.CinescriptCameraType = "Hack";
+
+	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
+	Template.BuildVisualizationFn = None;
+
+	Template.OverrideAbilities.AddItem( 'CancelHack' );
+
+	return Template;
+}
+
+static function X2AbilityTemplate RTConstructTechnopathyHack(name TemplateName, optional name OverrideTemplateName = 'Hack')
 {
 	local X2AbilityTemplate					Template;		
 	local X2AbilityCost_ActionPoints        ActionPointCost;	
@@ -2243,12 +2330,12 @@ static function X2AbilityTemplate ConstructTechnopathyHack(name TemplateName, op
 	if(OverrideTemplateName != 'Hack')
 	{
 		Template.ShotHUDPriority = class'UIUtilities_Tactical'.const.OBJECTIVE_INTERACT_PRIORITY;
-		Template.AbilitySourceName = 'eAbilitySource_Commander';
+		Template.AbilitySourceName = 'eAbilitySource_Psionic';
 	}
 	else
 	{
 		Template.ShotHUDPriority = class'UIUtilities_Tactical'.const.CLASS_SERGEANT_PRIORITY;
-		Template.AbilitySourceName = 'eAbilitySource_Perk';
+		Template.AbilitySourceName = 'eAbilitySource_Psionic';
 	}
 	Template.Hostility = eHostility_Neutral;
 
@@ -2267,13 +2354,14 @@ static function X2AbilityTemplate ConstructTechnopathyHack(name TemplateName, op
 	Template.AbilityTriggers.AddItem(default.PlayerInputTrigger);
 
 	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_ShowIfAvailable;
+	
 
 	SingleTarget = new class'X2AbilityTarget_Single';
 	SingleTarget.bAllowInteractiveObjects = true;
 	Template.AbilityTargetStyle = SingleTarget;
 
-	Template.FinalizeAbilityName = 'FinalizeTechnopathyHack';
-	Template.CancelAbilityName = 'CancelTechnopathyHack';
+	Template.FinalizeAbilityName = 'RTFinalizeTechnopathyHack';
+	Template.CancelAbilityName = 'RTCancelTechnopathyHack';
 
 	
 	Template.ActivationSpeech = 'AttemptingHack';  // This seems to have the most appropriate lines, mdomowicz 2015_07_09
