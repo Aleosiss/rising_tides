@@ -17,9 +17,4 @@ simulated function AddX2ActionsForVisualization(XComGameState VisualizeGameState
 		NewUnitLoc = `XWORLD.GetPositionFromTileCoordinates(TargetUnitState.TileLocation);
 		GetOverHereTarget.SetDesiredLocation(NewUnitLoc, XGUnit(BuildTrack.TrackActor));
 	}
-	else
-	{
-		UnitAction = X2Action_ApplyWeaponDamageToUnit(class'X2Action_ApplyWeaponDamageToUnit'.static.AddToVisualizationTrack(BuildTrack, VisualizeGameState.GetContext()));
-		UnitAction.OriginatingEffect = self;
-	}
 }

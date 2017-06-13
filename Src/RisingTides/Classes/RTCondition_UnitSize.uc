@@ -13,7 +13,6 @@ event name CallMeetsCondition(XComGameState_BaseObject kTarget) {
 	return 'AA_AbilityUnavailable';
 }
 
-
 private function bool CheckTarget(XComGameState_BaseObject kTarget) {
 	local XComGameState_Unit    TargetUnitState;
 	local int 					iTargetUnitSize;

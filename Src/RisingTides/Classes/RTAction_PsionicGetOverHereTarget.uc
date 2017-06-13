@@ -3,6 +3,8 @@
 //-----------------------------------------------------------
 class RTAction_PsionicGetOverHereTarget extends X2Action;
 
+//Cached info for the unit performing the action
+//*************************************
 var private XComGameStateContext_Ability AbilityContext;
 var private CustomAnimParams	Params;
 var private Vector				DesiredLocation;
@@ -34,16 +36,16 @@ simulated state Executing
 {
 Begin:
 	//Wait for our turn to complete... and then set our rotation to face the destination exactly
-	while(UnitPawn.m_kGameUnit.IdleStateMachine.IsEvaluatingStance())
+	while( UnitPawn.m_kGameUnit.IdleStateMachine.IsEvaluatingStance() )
 	{
 		Sleep(0.01f);
 	}
 
-	UnitPawn.EnableRMA(true,true);
+	UnitPawn.EnableRMA(true, true);
 	UnitPawn.EnableRMAInteractPhysics(true);
 	UnitPawn.bSkipIK = true;
 
-	Params.AnimName = 'NO_StrangleStart'; //TODO:: CHANGE THIS!!!
+	Params.AnimName = 'NO_StrangleStart';
 	DesiredRotation = Rotator(Normal(DesiredLocation - UnitPawn.Location));
 	StartingAtom.Rotation = QuatFromRotator(DesiredRotation);
 	StartingAtom.Translation = UnitPawn.Location;
@@ -55,13 +57,13 @@ Begin:
 	Unit.SetDiscState(eDS_None);
 
 	DistanceToTargetSquared = VSizeSq(DesiredLocation - UnitPawn.Location);
-	while(DistanceToTargetSquared > Square(UnitPawn.fStrangleStopDistance))
+	while( DistanceToTargetSquared > Square(UnitPawn.fStrangleStopDistance) )
 	{
 		Sleep(0.0f);
 		DistanceToTargetSquared = VSizeSq(DesiredLocation - UnitPawn.Location);
 	}
 
-	UnitPawn.bSkipIK = false;          //TODO:: CHANGE THIS!!!
+	UnitPawn.bSkipIK = false;
 	Params.AnimName = 'NO_StrangleStop';
 	Params.HasDesiredEndingAtom = true;
 	Params.DesiredEndingAtom.Scale = 1.0f;
@@ -74,6 +76,12 @@ Begin:
 
 	CompleteAction();
 }
+
+event bool BlocksAbilityActivation()
+{
+	return true;
+}
+
 
 DefaultProperties
 {

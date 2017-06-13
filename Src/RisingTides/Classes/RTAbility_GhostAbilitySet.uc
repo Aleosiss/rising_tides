@@ -11,15 +11,12 @@
 class RTAbility_GhostAbilitySet extends X2Ability
 	config(RisingTides);
 
-
-
 	var protected X2Condition_UnitProperty						LivingFriendlyUnitOnlyProperty;
 	var protected X2Condition_UnitEffectsWithAbilitySource		OverTheShoulderProperty;
 	var protected X2Condition_UnitProperty						LivingHostileUnitOnlyNonRoboticProperty;
 	var protected RTCondition_PsionicTarget						PsionicTargetingProperty;
 	var protected RTCondition_UnitSize							StandardSizeProperty;
 	var protected EffectReason									TagReason;
-
 
 	var localized string FEEDBACK_TITLE;
 	var localized string FEEDBACK_DESC;
@@ -65,11 +62,8 @@ class RTAbility_GhostAbilitySet extends X2Ability
 	var name RTMindControlTemplateName;
 	var name RTTechnopathyTemplateName;
 
-
 	var name UnitUsedPsionicAbilityEvent;
 	var name ForcePsionicAbilityEvent;
-
-
 
 	var config string BurstParticleString;
 	var config name BurstSocketName;

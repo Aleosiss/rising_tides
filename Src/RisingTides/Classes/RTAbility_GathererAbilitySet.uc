@@ -1038,7 +1038,7 @@ static function X2AbilityTemplate RTTechnopathy() {
 	local X2AbilityTemplate Template;
 
 	Template = PurePassive(default.RTTechnopathyTemplateName, "img:///UILibrary_PerkIcons.UIPerk_swordSlash", true);
-	 
+
 	Template.AdditionalAbilities.AddItem('RTFinalizeTechnopathyHack');
 	Template.AdditionalAbilities.AddItem('RTCancelTechnopathyHack');
 	Template.AdditionalAbilities.AddItem('RTTechnopathy_Hack');
@@ -1750,7 +1750,7 @@ simulated function DimensionalRiftStage1_BuildVisualization(XComGameState Visual
 														 VisualizeGameState.HistoryIndex);
 
 	SustainedAbility = XComGameState_Ability(Placeholder_new);
-	
+
 	if( AvatarUnit != none )
 	{
 		World = `XWORLD;
@@ -1781,12 +1781,12 @@ simulated function DimensionalRiftStage1_BuildVisualization(XComGameState Visual
 		SoundAction.iAssociatedGameStateObjectId = AvatarUnit.ObjectID;
 		SoundAction.bStartPersistentSound = true;
 		SoundAction.bIsPositional = true;
-		SoundAction.vWorldPosition = EffectAction.EffectLocation;	 
-		
+		SoundAction.vWorldPosition = EffectAction.EffectLocation;
+
 		// Play the sound cue
 		//SoundCueAction = X2Action_PlaySoundAndFlyOver(class'X2Action_PlaySoundAndFlyOver'.static.AddToVisualizationTrack(AvatarBuildTrack, Context));
 		//SoundCueAction.SetSoundAndFlyOverParameters(SoundCue'SoundX2AvatarFX.Avatar_Ability_Dimensional_Rift_Target_Activate_Cue', "", '', eColor_Good);
-		
+
 		// class'X2Action_Fire_CloseUnfinishedAnim'.static.AddToVisualizationTrack(AvatarBuildTrack, Context);
 
 		Visualizer = X2VisualizerInterface(AvatarBuildTrack.TrackActor);
@@ -2025,7 +2025,7 @@ simulated function DimensionalRiftStage2_BuildVisualization(XComGameState Visual
 	local XComGameState_Unit AvatarUnit;
 	local X2Action_TimedInterTrackMessageAllMultiTargets MultiTargetMessageAction;
 	local X2Action_TimedWait WaitAction;
-	
+
 
 	local XComGameState_BaseObject Placeholder_old, Placeholder_new;
 	local XComGameState_Ability SustainedAbility;
@@ -2070,7 +2070,7 @@ simulated function DimensionalRiftStage2_BuildVisualization(XComGameState Visual
 		`LOG("Ending AvatarUnit.ObjectID = " @ AvatarUnit.ObjectID);
 
 		foreach SustainedAbility.ValidActivationTiles(Tile) {
-	
+
 			SoundAction = X2Action_StartStopSound(class'X2Action_StartStopSound'.static.AddToVisualizationTrack(AvatarBuildTrack, Context));
 			SoundAction.Sound = new class'SoundCue';
 			SoundAction.Sound.AkEventOverride = AkEvent'SoundX2AvatarFX.Stop_AvatarDimensionalRiftLoop';
@@ -2240,8 +2240,8 @@ static function X2AbilityTemplate RTSetPsistormCharges() {
 
 static function X2AbilityTemplate RTFinalizeTechnopathyHack(name FinalizeName = 'RTFinalizeTechnopathyHack')
 {
-	local X2AbilityTemplate                 Template;		
-	local X2AbilityCost_ActionPoints        ActionPointCost;	
+	local X2AbilityTemplate                 Template;
+	local X2AbilityCost_ActionPoints        ActionPointCost;
 	local X2AbilityTarget_Single            SingleTarget;
 
 	`CREATE_X2ABILITY_TEMPLATE(Template, FinalizeName);
@@ -2316,8 +2316,8 @@ static function X2AbilityTemplate RTCancelTechnopathyHack(Name TemplateName = 'R
 
 static function X2AbilityTemplate RTConstructTechnopathyHack(name TemplateName, optional name OverrideTemplateName = 'Hack')
 {
-	local X2AbilityTemplate					Template;		
-	local X2AbilityCost_ActionPoints        ActionPointCost;	
+	local X2AbilityTemplate					Template;
+	local X2AbilityCost_ActionPoints        ActionPointCost;
 	local X2AbilityTarget_Single            SingleTarget;
 	local RTCondition_HackingTarget         HackingTargetCondition;
 
@@ -2354,7 +2354,7 @@ static function X2AbilityTemplate RTConstructTechnopathyHack(name TemplateName, 
 	Template.AbilityTriggers.AddItem(default.PlayerInputTrigger);
 
 	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_ShowIfAvailable;
-	
+
 
 	SingleTarget = new class'X2AbilityTarget_Single';
 	SingleTarget.bAllowInteractiveObjects = true;
@@ -2363,7 +2363,7 @@ static function X2AbilityTemplate RTConstructTechnopathyHack(name TemplateName, 
 	Template.FinalizeAbilityName = 'RTFinalizeTechnopathyHack';
 	Template.CancelAbilityName = 'RTCancelTechnopathyHack';
 
-	
+
 	Template.ActivationSpeech = 'AttemptingHack';  // This seems to have the most appropriate lines, mdomowicz 2015_07_09
 
 	Template.CinescriptCameraType = "Hack";
@@ -2371,13 +2371,152 @@ static function X2AbilityTemplate RTConstructTechnopathyHack(name TemplateName, 
 	Template.BuildNewGameStateFn = class'X2Ability_DefaultAbilitySet'.static.HackAbility_BuildGameState;
 	Template.BuildVisualizationFn = class'X2Ability_DefaultAbilitySet'.static.HackAbility_BuildVisualization;
 
-	Template.OverrideAbilities.AddItem( OverrideTemplateName );	   
+	Template.OverrideAbilities.AddItem( OverrideTemplateName );
 
 	return Template;
 }
 
+static function X2AbilityTemplate RTPsionicLash() {
+	local X2AbilityTemplate Template;
+	local RTEffect_PsionicLash	LashEffect;
+	local X2AbilityCooldown Cooldown;
+	local X2AbilityCost_ActionPoints ActionPointCost;
+	local X2AbilityToHitCalc_StatCheck_UnitVsUnit HitCalc;
+	local X2Condition_UnblockedNeighborTile UnblockedNeighborTileCondition;
+
+	`CREATE_X2ABILITY_TEMPLATE(Template, 'RTCrushingGrasp');
+	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_swordSlash"; //TODO: Change this
+	Template.AbilitySourceName = 'eAbilitySource_Psionic';
+	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_AlwaysShow;
+	Template.AbilityConfirmSound = "TacticalUI_ActivateAbility";
+	Template.Hostility = eHostility_Offensive;
+
+	Cooldown = new class'X2AbilityCooldown';
+	Cooldown.iNumTurns = default.LASH_COOLDOWN;
+	Template.AbilityCooldown = Cooldown;
+
+	ActionPointCost = new class'X2AbilityCost_ActionPoints';
+	ActionPointCost.iNumPoints = 1;
+	ActionPointCost.bConsumeAllPoints = false;
+	Template.AbilityCosts.AddItem(ActionPointCost);
+
+	UnblockedNeighborTileCondition = new class'X2Condition_UnblockedNeighborTile';
+	Template.AbilityShooterConditions.AddItem(UnblockedNeighborTileCondition);
+	Template.AbilityShooterConditions.AddItem(default.LivingShooterProperty);
+	Template.AddShooterEffectExclusions();
+
+	Template.AbilityMultiTargetConditions.AddItem(default.StandardSizeProperty);
+
+	Template.AbilityTargetStyle = new class'X2AbilityTarget_Single';
+
+	HitCalc = new class'X2AbilityToHitCalc_StatCheck_UnitVsUnit';
+	HitCalc.AttackerStat = eStat_Will;
+	HitCalc.DefenderStat = eStat_Will;
+	Template.AbilityToHitCalc = HitCalc;
+
+	Template.AbilityTriggers.AddItem(default.PlayerInputTrigger);
+
+	LashEffect = new class'RTEffect_PsionicLash';
+	Template.AddTargetEffect(LashEffect);
+
+	Template.BuildVisualizationFn = PsionicLash_BuildVisualization;
+	Template.CinescriptCameraType = "Viper_StranglePull";
+	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
+
+	// This ability is 'offensive' and can be interrupted!
+	Template.BuildInterruptGameStateFn = TypicalAbility_BuildInterruptGameState;
 
 
+	Template.PostActivationEvents.AddItem(default.UnitUsedPsionicAbilityEvent);
+
+	return Template;
+}
+
+static simulated function PsionicLash_BuildVisualization(XComGameState VisualizeGameState, out array<VisualizationTrack> OutVisualizationTracks) {
+	local XComGameStateHistory			History;
+	local XComGameStateContext_Ability  Context;
+	local X2AbilityTemplate             AbilityTemplate, BindAbilityTemplate;
+	local StateObjectReference          InteractingUnitRef;
+	local X2Action_ViperGetOverHere		GetOverHereAction;
+	local X2Action_PlaySoundAndFlyOver	SoundAndFlyover;
+	local X2VisualizerInterface			Visualizer;
+	local XComGameState_Unit            TargetUnit;
+
+	local VisualizationTrack        EmptyTrack;
+	local VisualizationTrack        BuildTrack;
+
+	local int							EffectIndex;
+
+	//Support for finding and visualizing a bind attack that is part of the grab attack
+	local int							SearchHistoryIndex;
+	local XComGameState					ApplyBindState;
+	local XComGameStateContext_Ability	BindAbilityContext;
+	local bool							bGrabWasHit;
+	local bool							bBindWasHit;
+	local bool                          bDoBindVisuals;
+
+	History = `XCOMHISTORY;
+
+	Context = XComGameStateContext_Ability(VisualizeGameState.GetContext());
+	AbilityTemplate = class'XComGameState_Ability'.static.GetMyTemplateManager().FindAbilityTemplate(Context.InputContext.AbilityTemplateName);
+
+	bGrabWasHit = class'XComGameStateContext_Ability'.static.IsHitResultHit(Context.ResultContext.HitResult);
+
+	//Configure the visualization track for the shooter
+	//****************************************************************************************
+	InteractingUnitRef = Context.InputContext.SourceObject;
+	BuildTrack = EmptyTrack;
+	BuildTrack.StateObject_OldState = History.GetGameStateForObjectID(InteractingUnitRef.ObjectID, eReturnType_Reference, VisualizeGameState.HistoryIndex - 1);
+	BuildTrack.StateObject_NewState = VisualizeGameState.GetGameStateForObjectID(InteractingUnitRef.ObjectID);
+	BuildTrack.TrackActor = History.GetVisualizer(InteractingUnitRef.ObjectID);
+
+	class'X2Action_ExitCover'.static.AddToVisualizationTrack(BuildTrack, Context);
+	GetOverHereAction = RTAction_PsionicGetOverHere(class'RTAction_PsionicGetOverHere'.static.AddToVisualizationTrack(BuildTrack, Context));
+	GetOverHereAction.SetFireParameters(Context.IsResultContextHit());
+
+
+	Visualizer = X2VisualizerInterface(BuildTrack.TrackActor);
+	if(Visualizer != none)
+	{
+		Visualizer.BuildAbilityEffectsVisualization(VisualizeGameState, BuildTrack);
+	}
+
+	class'X2Action_EnterCover'.static.AddToVisualizationTrack(BuildTrack, Context);
+
+
+	OutVisualizationTracks.AddItem(BuildTrack);
+	//****************************************************************************************
+
+	//Configure the visualization track for the target
+	//****************************************************************************************
+	InteractingUnitRef = Context.InputContext.PrimaryTarget;
+	BuildTrack = EmptyTrack;
+	BuildTrack.StateObject_OldState = History.GetGameStateForObjectID(InteractingUnitRef.ObjectID, eReturnType_Reference, VisualizeGameState.HistoryIndex - 1);
+	BuildTrack.StateObject_NewState = VisualizeGameState.GetGameStateForObjectID(InteractingUnitRef.ObjectID);
+	BuildTrack.TrackActor = History.GetVisualizer(InteractingUnitRef.ObjectID);
+
+	TargetUnit = XComGameState_Unit(BuildTrack.StateObject_OldState);
+	if( (TargetUnit != none) && (TargetUnit.IsUnitApplyingEffectName('Suppression')))
+	{
+		class'X2Action_StopSuppression'.static.AddToVisualizationTrack(BuildTrack, Context);
+	}
+
+	class'X2Action_WaitForAbilityEffect'.static.AddToVisualizationTrack(BuildTrack, Context);
+
+	for (EffectIndex = 0; EffectIndex < AbilityTemplate.AbilityTargetEffects.Length; ++EffectIndex)
+	{
+		AbilityTemplate.AbilityTargetEffects[EffectIndex].AddX2ActionsForVisualization(VisualizeGameState, BuildTrack, Context.FindTargetEffectApplyResult(AbilityTemplate.AbilityTargetEffects[EffectIndex]));
+	}
+
+	if (Context.IsResultContextMiss() && AbilityTemplate.LocMissMessage != "")
+	{
+		SoundAndFlyOver = X2Action_PlaySoundAndFlyOver(class'X2Action_PlaySoundAndFlyover'.static.AddToVisualizationTrack(BuildTrack, Context));
+		SoundAndFlyOver.SetSoundAndFlyOverParameters(None, AbilityTemplate.LocMissMessage, '', eColor_Bad);
+	}
+
+	OutVisualizationTracks.AddItem(BuildTrack);
+	//****************************************************************************************
+}
 
 
 
