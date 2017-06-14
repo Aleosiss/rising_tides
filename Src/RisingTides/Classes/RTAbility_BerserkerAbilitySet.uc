@@ -88,6 +88,7 @@ static function X2AbilityTemplate BumpInTheNight()
 {
 	local X2AbilityTemplate                 Template;
 	local RTEffect_BumpInTheNight			BumpEffect;
+    local X2Effect_AdditionalAnimSets		AnimSets;
 
 	// Icon Properties
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'BumpInTheNight');
@@ -108,6 +109,12 @@ static function X2AbilityTemplate BumpInTheNight()
 	BumpEffect.iTileDistanceToActivate = default.BITN_TILEDISTANCE;
 	BumpEffect.DEFENSE_BONUS = default.BITN_DEFENSE_BONUS;
 	Template.AddTargetEffect(BumpEffect);
+
+	AnimSets = new class'X2Effect_AdditionalAnimSets';
+	AnimSets.AddAnimSetWithPath("RisingTidesContentPackage.Anims.AS_Queen");
+	AnimSets.BuildPersistentEffect(1, true, false, false);
+	AnimSets.EffectName = 'RTQueenAnimSet';
+	Template.AddShooterEffect(AnimSets);
 
 	// standard ghost abilities
 	Template.AdditionalAbilities.AddItem('GhostPsiSuite');
@@ -1548,12 +1555,6 @@ static function X2DataTemplate RTShadowStrike()
 	Template.AbilityTargetStyle = TargetStyle;
 	Template.TargetingMethod =  class'RTTargetingMethod_TargetedMeleeTeleport';
 
-	AnimSets = new class'X2Effect_AdditionalAnimSets';
-	AnimSets.AddAnimSetWithPath("Advent_ANIM.Anims.AS_Advent");
-	AnimSets.BuildPersistentEffect(1, false, false, false);
-	AnimSets.EffectName = 'RTAdventAnimSet';
-	Template.AddShooterEffect(AnimSets);
-
 	TargetVisibilityCondition = new class'X2Condition_Visibility';
 	TargetVisibilityCondition.bRequireGameplayVisible = true;
 	TargetVisibilityCondition.bAllowSquadsight = true;
@@ -1613,8 +1614,6 @@ static function X2DataTemplate RTShadowStrike()
 	Template.bAllowBonusWeaponEffects = true;
 	//// Damage Effect
 	Template.AbilityMultiTargetConditions.AddItem(default.LivingTargetUnitOnlyProperty);
-	Template.PostActivationEvents.AddItem('RTRemoveAnimSets');
-	Template.AdditionalAbilities.AddItem('RTRemoveAdditionalAnimSets');
 	Template.PostActivationEvents.AddItem('RTBerserkerKnifeAttack');
 
 	Template.ModifyNewContextFn = Teleport_ModifyActivatedAbilityContext;

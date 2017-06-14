@@ -2400,14 +2400,17 @@ static function X2AbilityTemplate RTOverflowBarrier()
 	RTEffect.BuildPersistentEffect(1, false, true, false,  eGameRule_PlayerTurnBegin);
 	//RTEffect.SetDisplayInfo(ePerkBuff_Bonus, Template.LocFriendlyName, Template.LocLongDescription, Template.IconImage, true,, Template.AbilitySourceName);
 	RTEffect.EffectRemovedVisualizationFn = OnShieldRemoved_BuildVisualization;
+	RTEffect.EffectName = 'OverflowBarrierShield';
 	Template.AddTargetEffect(RTEffect);
 	Template.AddMultiTargetEffect(RTEffect);
 
 	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
 	//Template.BuildVisualizationFn = Shielded_BuildVisualization;
-	Template.BuildVisualizationFn = OverflowShielded_BuildVisualization;
-	//Template.CinescriptCameraType = "AdvShieldBearer_EnergyShieldArmor";
 	Template.bSkipFireAction = true;
+   	Template.bShowActivation = true;
+
+	Template.BuildVisualizationFn = OverflowShielded_BuildVisualization;
+	Template.CinescriptCameraType = "AdvShieldBearer_EnergyShieldArmor";
 
 	Template.AdditionalAbilities.AddItem('RTOverflowBarrierEvent');
 
@@ -2447,7 +2450,7 @@ simulated function OnShieldRemoved_BuildVisualization(XComGameState VisualizeGam
 	if (XGUnit(BuildTrack.TrackActor).IsAlive())
 	{
 		SoundAndFlyOver = X2Action_PlaySoundAndFlyOver(class'X2Action_PlaySoundAndFlyOver'.static.AddToVisualizationTrack(BuildTrack, VisualizeGameState.GetContext()));
-		SoundAndFlyOver.SetSoundAndFlyOverParameters(None, class'XLocalizedData'.default.ShieldRemovedMsg, '', eColor_Bad, , 0.75, true);
+		SoundAndFlyOver.SetSoundAndFlyOverParameters(None, class'XLocalizedData'.default.ShieldRemovedMsg, '', eColor_Bad, , , true);
 	}
 }
 
@@ -2460,6 +2463,7 @@ simulated function OverflowShielded_BuildVisualization(XComGameState VisualizeGa
 	local VisualizationTrack BuildTrack;
 	local X2Action_PlayAnimation PlayAnimationAction;
 	local X2Action_PlaySoundAndFlyOver SoundAndFlyOver;
+	local XComGameState_Unit	UnitState;
 
 	History = `XCOMHISTORY;
 
@@ -2473,16 +2477,11 @@ simulated function OverflowShielded_BuildVisualization(XComGameState VisualizeGa
 	BuildTrack.StateObject_NewState = VisualizeGameState.GetGameStateForObjectID(InteractingUnitRef.ObjectID);
 	BuildTrack.TrackActor = History.GetVisualizer(InteractingUnitRef.ObjectID);
 
-	PlayAnimationAction = X2Action_PlayAnimation(class'X2Action_PlayAnimation'.static.AddToVisualizationTrack(BuildTrack, Context));
-	PlayAnimationAction.Params.AnimName = 'HL_EnergyShield';
+	UnitState = XComGameState_Unit(BuildTrack.StateObject_OldState);
 
-	SoundAndFlyOver = X2Action_PlaySoundAndFlyOver(class'X2Action_PlaySoundAndFlyOver'.static.AddToVisualizationTrack(BuildTrack, VisualizeGameState.GetContext()));
-	SoundAndFlyOver.SetSoundAndFlyOverParameters(None, default.OVERFLOW_READOUT, '', eColor_Good, , 0.75, true);
-
-
-	OutVisualizationTracks.AddItem(BuildTrack);
-
-
+	if(UnitState.AffectedByEffectNames.Find('OverflowBarrierShield') ==  INDEX_NONE) {
+		TypicalAbility_BuildVisualization(VisualizeGameState, OutVisualizationTracks);
+	}
 }
 
 defaultproperties

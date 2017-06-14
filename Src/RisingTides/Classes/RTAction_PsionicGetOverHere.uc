@@ -1,7 +1,7 @@
 //-----------------------------------------------------------
 // Used by the visualizer system to control a Visualization Actor
 //-----------------------------------------------------------
-class RTAction_PsionicGetOverHere extends X2Action;
+class RTAction_PsionicGetOverHere extends X2Action_Fire;
 
 //Cached info for the unit performing the action
 //*************************************

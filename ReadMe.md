@@ -41,9 +41,8 @@ This would be a bare-bones content mod. I also have the following content in min
 ###### Current Bugs:
 	- Time Stop damage calculation isn't visualized properly
 	- Time Stop damage calculation is fucked, use code from X2Effect_DLC_3AbsorptionField.uc to rewrite
+	- Make extend effect duration happen on move for Aura Effects as well, possibly by breaking its logic out into a separate method that is called in either place
 
 ###### Current Sprint Goals:
-	- Make extend effect duration happen on move for Aura Effects as well, possibly by breaking its logic out into a separate method that is called in either place
 	- Verify that Networked OI works with CCS
-	- Figure out why teleport animations aren't working on Shadow Strike
 	- Fix Shadow Strike so that it has an unbound targeting style

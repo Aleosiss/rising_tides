@@ -38,6 +38,7 @@ class RTAbility_GathererAbilitySet extends RTAbility_GhostAbilitySet config(Risi
 	var config int PSIONICSTORM_COOLDOWN;
 	var config int PSIONICSTORM_NUMSTORMS;
 	var int PSIONICSTORM_RADIUS;
+	var config int LASH_COOLDOWN;
 
 	var name ExtinctionEventStageThreeEventName;
 	var name OverTheShoulderTagName;
@@ -2437,7 +2438,7 @@ static simulated function PsionicLash_BuildVisualization(XComGameState Visualize
 	local XComGameStateContext_Ability  Context;
 	local X2AbilityTemplate             AbilityTemplate, BindAbilityTemplate;
 	local StateObjectReference          InteractingUnitRef;
-	local X2Action_ViperGetOverHere		GetOverHereAction;
+	local RTAction_PsionicGetOverHere	GetOverHereAction;
 	local X2Action_PlaySoundAndFlyOver	SoundAndFlyover;
 	local X2VisualizerInterface			Visualizer;
 	local XComGameState_Unit            TargetUnit;

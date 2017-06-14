@@ -678,8 +678,6 @@ LocLongDescription="End all psionic storms."
 LocHelpText="End all active psionic storms."
 LocFlyOverText="End active Psionic Storms."
 
-RTTechnopathy_Hack
-
 [RTTechnopathy_Hack X2AbilityTemplate]
 LocFriendlyName="Hack (Psionic)"
 LocLongDescription="Hack a target psionically from a distance."
