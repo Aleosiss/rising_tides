@@ -1,7 +1,7 @@
 // This is an Unreal Script
 class RTCondition_VisibleToPlayer extends X2Condition;
 
-local bRequireLOS;
+var bool bRequireLOS;
 
 event name CallMeetsCondition(XComGameState_BaseObject kTarget) {
 	return 'AA_Success';
