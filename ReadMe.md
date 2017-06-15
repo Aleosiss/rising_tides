@@ -17,13 +17,12 @@ This would be a bare-bones content mod. I also have the following content in min
 
 ###### Current TODOs:
 	- Berserker:
-		- Shadow Strike unbound targeting style
-	- Marksman:
 		- nothing
+	- Marksman:
+		- nothing (Maybe rework time stop to only take place over 1 turn)
 	- Gatherer:
 		- Redo Guardian Angel
-		- Pull
-		- Verify that Over The Shoulder works against burrowed/concealed units
+		- Psionic Lash
 		- Add Over the Shoulder exception for civilians that are actually faceless
 		- Rework Assuming Direct Control to enable bonus abilities instead of bonus damage
 	- General:
@@ -37,6 +36,8 @@ This would be a bare-bones content mod. I also have the following content in min
 	- Orpheus Warp: "…the hero of the broken moon. A pawn played by a negligent deity, a marionette maneuvered by an... epileptic..."
       		- Gain Stealth while preparing a massive psionic rift. On the following turn, the Stealth is broken and a rift is formed. Friendly units can use the rift to evac from the mission. The rift will persist for an additional two turns, or if this unit enters it.
 	- RTEffect_ExtendEffectDuration: change to use PreStateSubmitted
+	- Come up with a better solution for Over The Shoulder vs. concealed units
+		
 
 ###### Current Bugs:
 	- Time Stop damage calculation isn't visualized properly
@@ -45,6 +46,5 @@ This would be a bare-bones content mod. I also have the following content in min
 
 ###### Current Sprint Goals:
 	- Verify that Networked OI works with CCS
-	- Fix Shadow Strike so that it has an unbound targeting style
-
+	
 ###### Current Overrides: X2MeleePathingPawn

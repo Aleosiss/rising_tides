@@ -38,14 +38,12 @@ simulated static function bool IsTargetVisibleToLocalPlayer(StateObjectReference
 
 	History = `XCOMHISTORY;
 	UnitState = XComGameState_Unit(History.GetGameStateForObjectID(TargetUnitRef.ObjectID));
-	if( UnitState != None ) {
+	if( UnitState != none ) {
 		ForceVisibleSetting = UnitState.ForceModelVisible(); // Checks if local player, among other things.
-		if( ForceVisibleSetting == eForceVisible )
-		{
+		if( ForceVisibleSetting == eForceVisible ) {
 			return true;
 		}
-		else if( ForceVisibleSetting == eForceNotVisible || UnitState.IsConcealed() )
-		{
+		else if( ForceVisibleSetting == eForceNotVisible || UnitState.IsConcealed() ) { // Have to find a better way, because we might want to shoot things only visible through OverTheShoulder
 			return false;
 		}
 

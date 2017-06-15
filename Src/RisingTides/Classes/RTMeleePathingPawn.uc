@@ -200,7 +200,6 @@ simulated event Tick(float DeltaTime)
 			if(ClosestTile != LastDestinationTile)
 			{
 				AbilityTemplate = AbilityState.GetMyTemplate();
-				// RebuildPathingInformation(ClosestTile, TargetVisualizer, AbilityTemplate, InvalidTile);
 				DoUpdatePuckVisuals(ClosestTile, TargetVisualizer, AbilityTemplate);
 				LastDestinationTile = ClosestTile;
 			}
@@ -218,7 +217,6 @@ simulated event Tick(float DeltaTime)
 				if(PossibleTile == CursorTile)
 				{
 					AbilityTemplate = AbilityState.GetMyTemplate();
-					// RebuildPathingInformation(CursorTile, TargetVisualizer, AbilityTemplate, InvalidTile);
 					DoUpdatePuckVisuals(CursorTile, TargetVisualizer, AbilityTemplate);
 					LastDestinationTile = CursorTile;
 					break;
