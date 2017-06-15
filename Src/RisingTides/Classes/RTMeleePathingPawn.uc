@@ -87,8 +87,143 @@ simulated protected function RebuildPathingInformation(TTile PathDestination, Ac
 
 }
 
-
-
 simulated function HideRenderablePath(bool bShouldHidePath) {
 	RenderablePath.SetHidden(bShouldHidePath);
+}
+
+function GetTargetMeleePath(out array<TTile> OutPathTiles)
+{
+	OutPathTiles.Length = 0;
+
+	OutPathTiles.AddItem(LastDestinationTile);
+}
+
+
+simulated function UpdateMeleeTarget(XComGameState_BaseObject Target)
+{
+	local X2AbilityTemplate AbilityTemplate;
+	local vector TileLocation;
+
+	//<workshop> Francois' Smooth Cursor AMS 2016/04/07
+	//INS:
+	local TTile InvalidTile;
+	InvalidTile.X = -1;
+	InvalidTile.Y = -1;
+	InvalidTile.Z = -1;
+	//</workshop>
+
+	if(Target == none)
+	{
+		`Redscreen("X2MeleePathingPawn::UpdateMeleeTarget: Target is none!");
+		return;
+	}
+
+	TargetVisualizer = Target.GetVisualizer();
+	AbilityTemplate = AbilityState.GetMyTemplate();
+
+	PossibleTiles.Length = 0;
+
+	if(class'RTAbilityTarget_TeleportMelee'.static.SelectAttackTile(UnitState, Target, AbilityTemplate, PossibleTiles))
+	{
+		// build a path to the default (best) tile
+		//<workshop> Francois' Smooth Cursor AMS 2016/04/07
+		//WAS:
+		//RebuildPathingInformation(PossibleTiles[0], TargetVisualizer, AbilityTemplate);	
+		//RebuildPathingInformation(PossibleTiles[0], TargetVisualizer, AbilityTemplate, InvalidTile);
+		//</workshop>
+
+		// and update the tiles to reflect the new target options
+		UpdatePossibleTilesVisuals();
+
+		if(`ISCONTROLLERACTIVE)
+		{
+			// move the 3D cursor to the new target
+			if(`XWORLD.GetFloorPositionForTile(PossibleTiles[0], TileLocation))
+			{
+				`CURSOR.CursorSetLocation(TileLocation, true, true);
+			}
+		}
+	}
+	//<workshop> TACTICAL_CURSOR_PROTOTYPING AMS 2015/12/07
+	//INS:
+	DoUpdatePuckVisuals(PossibleTiles[0], Target.GetVisualizer(), AbilityTemplate);
+	//</workshop>
+}
+
+
+simulated event Tick(float DeltaTime)
+{
+	local XCom3DCursor Cursor;
+	local XComWorldData WorldData;
+	local vector CursorLocation;
+	local TTile PossibleTile;
+	local TTile CursorTile;
+	local TTile ClosestTile;
+	local X2AbilityTemplate AbilityTemplate;
+	local float ClosestTileDistance;
+	local float TileDistance;
+
+	local TTile InvalidTile;
+	InvalidTile.X = -1;
+	InvalidTile.Y = -1;
+	InvalidTile.Z = -1;
+	
+	if(TargetVisualizer == none) 
+	{
+		return;
+	}
+
+	Cursor = `CURSOR;
+	WorldData = `XWORLD;
+
+	CursorLocation = Cursor.GetCursorFeetLocation();
+	CursorTile = WorldData.GetTileCoordinatesFromPosition(CursorLocation);
+
+	// mouse needs to actually highlight a specific tile, controller tabs through them
+	if(`ISCONTROLLERACTIVE)
+	{
+		ClosestTileDistance = -1;
+
+		if(VSizeSq2D(CursorLocation - TargetVisualizer.Location) > 0.1f)
+		{
+			CursorLocation = TargetVisualizer.Location + (Normal(Cursor.Location - TargetVisualizer.Location) * class'XComWorldData'.const.WORLD_StepSize);
+			foreach PossibleTiles(PossibleTile)
+			{
+				TileDistance = VSizeSq(WorldData.GetPositionFromTileCoordinates(PossibleTile) - CursorLocation);
+				if(ClosestTileDistance < 0 || TileDistance < ClosestTileDistance)
+				{
+					ClosestTile = PossibleTile;
+					ClosestTileDistance = TileDistance;
+				}
+			}
+
+			if(ClosestTile != LastDestinationTile)
+			{
+				AbilityTemplate = AbilityState.GetMyTemplate();
+				// RebuildPathingInformation(ClosestTile, TargetVisualizer, AbilityTemplate, InvalidTile);
+				DoUpdatePuckVisuals(ClosestTile, TargetVisualizer, AbilityTemplate);
+				LastDestinationTile = ClosestTile;
+			}
+
+			// put the cursor back on the unit
+			Cursor.CursorSetLocation(TargetVisualizer.Location, true);
+		}
+	}
+	else
+	{
+		if(CursorTile != LastDestinationTile)
+		{
+			foreach PossibleTiles(PossibleTile)
+			{
+				if(PossibleTile == CursorTile)
+				{
+					AbilityTemplate = AbilityState.GetMyTemplate();
+					// RebuildPathingInformation(CursorTile, TargetVisualizer, AbilityTemplate, InvalidTile);
+					DoUpdatePuckVisuals(CursorTile, TargetVisualizer, AbilityTemplate);
+					LastDestinationTile = CursorTile;
+					break;
+				}
+			}
+		}
+	}
 }

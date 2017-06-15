@@ -36,6 +36,12 @@ LargeUnitTimeStopLostFlyover="Time Stop Ended!"
 MeldLeftText="Left the meld!"
 MeldJoinedText="Joined the meld!"
 
+[RTShadowStrike RTAbilityTemplate]
+LocFriendlyName="Shadow Strike"
+LocLongDescription="Leap through shadows to strike at a target."
+LocHelpText="Leap through shadows to strike at a target."
+LocFlyOverText="Shadow Strike"
+LocPromotionPopupText="<Bullet/> Leap through shadows to strike at a target.<br/><Bullet/> Squadsight range, direct path to target not required.<br/>"
 
 [DaybreakFlame RTAbilityTemplate]
 LocFriendlyName="Fire Sniper Rifle (Daybreak Flame)"

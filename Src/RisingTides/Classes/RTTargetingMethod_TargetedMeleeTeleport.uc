@@ -176,7 +176,7 @@ function int GetTargetIndex()
 function bool GetPreAbilityPath(out array<TTile> PathTiles)
 {
 	PathingPawn.GetTargetMeleePath(PathTiles);
-	return PathTiles.Length > 1;
+	return PathTiles.Length > 0;
 }
 
 function bool GetCurrentTargetFocus(out Vector Focus)
@@ -195,5 +195,5 @@ function bool GetCurrentTargetFocus(out Vector Focus)
 
 defaultproperties
 {
-	ProvidesPath=false
+	ProvidesPath = false
 }

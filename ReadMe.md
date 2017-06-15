@@ -46,3 +46,5 @@ This would be a bare-bones content mod. I also have the following content in min
 ###### Current Sprint Goals:
 	- Verify that Networked OI works with CCS
 	- Fix Shadow Strike so that it has an unbound targeting style
+
+###### Current Overrides: X2MeleePathingPawn

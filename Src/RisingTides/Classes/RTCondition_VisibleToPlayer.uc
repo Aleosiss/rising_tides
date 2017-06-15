@@ -16,7 +16,7 @@ event name CallMeetsConditionWithSource(XComGameState_BaseObject kTarget, XComGa
 		}
 	}
 
-	return 'AA_NotVisible';
+	return 'AA_NotVisibleToPlayer';
 }
 
 simulated static function bool DoesSourceHaveLOS(XComGameState_BaseObject kTarget, XComGameState_BaseObject kSource) {

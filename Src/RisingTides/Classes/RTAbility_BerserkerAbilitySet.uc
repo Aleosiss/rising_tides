@@ -1529,7 +1529,7 @@ static function X2DataTemplate RTShadowStrike()
 	local X2Effect_AdditionalAnimSets AnimSets;
 	local RTCondition_VisibleToPlayer PlayerVisibilityCondition;
 
-	`CREATE_X2ABILITY_TEMPLATE(Template, 'RTShadowStrike');
+	`CREATE_X2TEMPLATE(class'RTAbilityTemplate', Template, 'RTShadowStrike');
 
 	Template.AbilitySourceName = 'eAbilitySource_Psionic';
 	Template.eAbilityIconBehaviorHUD = EAbilityIconBehavior_AlwaysShow;
@@ -1550,16 +1550,9 @@ static function X2DataTemplate RTShadowStrike()
 	StandardMelee = new class'X2AbilityToHitCalc_StandardMelee';
 	Template.AbilityToHitCalc = StandardMelee;
 
-	TargetStyle = new class'X2AbilityTarget_MovingMelee';
-	TargetStyle.MovementRangeAdjustment = -9999;
+	TargetStyle = new class'RTAbilityTarget_TeleportMelee';
 	Template.AbilityTargetStyle = TargetStyle;
 	Template.TargetingMethod =  class'RTTargetingMethod_TargetedMeleeTeleport';
-
-	TargetVisibilityCondition = new class'X2Condition_Visibility';
-	TargetVisibilityCondition.bRequireGameplayVisible = true;
-	TargetVisibilityCondition.bAllowSquadsight = true;
-	TargetVisibilityCondition.bVisibleToAnyAlly = true;
-	//Template.AbilityTargetConditions.AddItem(TargetVisibilityCondition);
 
 	PlayerVisibilityCondition = new class'RTCondition_VisibleToPlayer';
 	Template.AbilityTargetConditions.AddItem(PlayerVisibilityCondition);

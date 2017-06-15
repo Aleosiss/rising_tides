@@ -57,6 +57,7 @@ simulated function name GatherAbilityTargets(out array<AvailableTarget> Targets,
 	local XComGameState_Unit kOwner;
 	local name AvailableCode;
 	local XComGameStateHistory History;
+	local bool bDebug;
 
 	GetMyTemplate();
 	History = `XCOMHISTORY;
@@ -66,15 +67,27 @@ simulated function name GatherAbilityTargets(out array<AvailableTarget> Targets,
 
 	if (m_Template != None)
 	{
+		if(m_TemplateName == 'RTShadowStrike')
+			bDebug = false;
+		
 		AvailableCode = m_Template.AbilityTargetStyle.GetPrimaryTargetOptions(self, Targets);
-		if (AvailableCode != 'AA_Success')
+		if (AvailableCode != 'AA_Success') {
+			if(bDebug)
+				`LOG("Rising Tides: ShadowStrike failed, here's why " @ AvailableCode);
 			return AvailableCode;
-
+		}
 		for (i = Targets.Length - 1; i >= 0; --i)
 		{
 			AvailableCode = m_Template.CheckTargetConditions(self, kOwner, History.GetGameStateForObjectID(Targets[i].PrimaryTarget.ObjectID));
+			if(bDebug) {
+				`LOG("Rising Tides: ShadowStrike checking target " @  XComGameState_Unit(History.GetGameStateForObjectID(Targets[i].PrimaryTarget.ObjectID)).GetFullName());
+			}
+
+
 			if (AvailableCode != 'AA_Success')
 			{
+				if(bDebug)
+					`LOG("Rising Tides: ShadowStrike failed, here's why " @ AvailableCode);
 				Targets.Remove(i, 1);
 			}
 		}

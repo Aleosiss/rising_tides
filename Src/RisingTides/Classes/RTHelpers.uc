@@ -114,3 +114,22 @@ static function bool MultiCatCheckAbilityActivated (name AbilityTemplateName, ar
 
 	return b;
 }
+
+
+static function GetAdjacentTiles(TTile TargetTile, out array<TTile> AdjacentTiles) {
+	local int x, y;
+	local TTile Tile;
+
+	for(x = -1; x <= 1; x++) {
+		for(y = -1; y <= 1; y++) {
+			Tile = TargetTile;
+			Tile.X += x;
+			Tile.Y += y;
+			if(x == 0 && y == 0)
+				continue;
+			
+			AdjacentTiles.AddItem(Tile);
+		}
+	}
+
+}

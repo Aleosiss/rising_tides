@@ -53,6 +53,9 @@
     <Content Include="Src\RisingTides\Classes\RTAbilityMultiTarget_TargetedLine.uc">
       <SubType>Content</SubType>
     </Content>
+    <Content Include="Src\RisingTides\Classes\RTAbilityTarget_TeleportMelee.uc">
+      <SubType>Content</SubType>
+    </Content>
     <Content Include="Src\RisingTides\Classes\RTAbilityTemplate.uc">
       <SubType>Content</SubType>
     </Content>
