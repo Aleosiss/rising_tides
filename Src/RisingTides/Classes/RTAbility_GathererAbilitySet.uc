@@ -108,6 +108,8 @@ static function array<X2DataTemplate> CreateTemplates()
 	Templates.AddItem(RTPsionicStormSustained());
 	Templates.AddItem(RTEndPsistorms());
 	Templates.AddItem(RTSetPsistormCharges());
+	Templates.AddItem(RTPsionicLash());
+	Templates.AddItem(RTPsionicLashAnims());
 
 
 	return Templates;
@@ -948,6 +950,7 @@ static function X2AbilityTemplate RTUnwillingConduits() {
 	local X2AbilityTrigger_EventListener			Trigger;
 	local X2AbilityMultiTarget_AllUnits				MultiTarget;
 	local X2Condition_UnitEffects					UnitEffectCondition;
+	local X2Condition_UnitProperty					UnitPropertyCondition;
 
 	`CREATE_X2TEMPLATE(class'RTAbilityTemplate', Template, 'RTUnwillingConduits');
 
@@ -971,7 +974,12 @@ static function X2AbilityTemplate RTUnwillingConduits() {
 
 	UnitEffectCondition = new class'X2Condition_UnitEffects';
 	UnitEffectCondition.AddRequireEffect(default.OverTheShoulderEffectName, 'AA_NotAUnit');
+	UnitPropertyCondition = new class'X2Condition_UnitProperty';
+	UnitPropertyCondition.RequireWithinRange = true;
+	UnitPropertyCondition.WithinRange = default.OTS_RADIUS * class'XComWorldData'.const.WORLD_StepSize; // unreal units 
+
 	Template.AbilityMultiTargetConditions.AddItem(UnitEffectCondition);
+	Template.AbilityMultiTargetConditions.AddItem(UnitPropertyCondition);
 
 	Template.AbilityShooterConditions.AddItem(default.LivingShooterProperty);
 
@@ -2382,10 +2390,12 @@ static function X2AbilityTemplate RTPsionicLash() {
 	local RTEffect_PsionicLash	LashEffect;
 	local X2AbilityCooldown Cooldown;
 	local X2AbilityCost_ActionPoints ActionPointCost;
-	local X2AbilityToHitCalc_StatCheck_UnitVsUnit HitCalc;
+	local RTAbilityToHitCalc_StatCheck_UnitVsUnit HitCalc;
 	local X2Condition_UnblockedNeighborTile UnblockedNeighborTileCondition;
+	local X2Condition_Visibility TargetVisibilityCondition;
+	local X2Condition_UnitProperty UnitPropertyCondition;
 
-	`CREATE_X2ABILITY_TEMPLATE(Template, 'RTCrushingGrasp');
+	`CREATE_X2ABILITY_TEMPLATE(Template, 'RTPsionicLash');
 	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_swordSlash"; //TODO: Change this
 	Template.AbilitySourceName = 'eAbilitySource_Psionic';
 	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_AlwaysShow;
@@ -2406,13 +2416,21 @@ static function X2AbilityTemplate RTPsionicLash() {
 	Template.AbilityShooterConditions.AddItem(default.LivingShooterProperty);
 	Template.AddShooterEffectExclusions();
 
-	Template.AbilityMultiTargetConditions.AddItem(default.StandardSizeProperty);
+	UnitPropertyCondition = new class'X2Condition_UnitProperty';
+	UnitPropertyCondition.ExcludeDead = true;
+	UnitPropertyCondition.FailOnNonUnits = true;
+	UnitPropertyCondition.ExcludeFriendlyToSource = false;
+	UnitPropertyCondition.ExcludeHostileToSource = false;
+	Template.AbilityTargetConditions.AddItem(UnitPropertyCondition);
+
+	TargetVisibilityCondition = new class'X2Condition_Visibility';
+	TargetVisibilityCondition.bRequireGameplayVisible = true;
+	Template.AbilityTargetConditions.AddItem(TargetVisibilityCondition);
+	Template.AbilityTargetConditions.AddItem(default.StandardSizeProperty);
 
 	Template.AbilityTargetStyle = new class'X2AbilityTarget_Single';
 
-	HitCalc = new class'X2AbilityToHitCalc_StatCheck_UnitVsUnit';
-	HitCalc.AttackerStat = eStat_Will;
-	HitCalc.DefenderStat = eStat_Will;
+	HitCalc = new class'RTAbilityToHitCalc_StatCheck_UnitVsUnit';
 	Template.AbilityToHitCalc = HitCalc;
 
 	Template.AbilityTriggers.AddItem(default.PlayerInputTrigger);
@@ -2426,9 +2444,40 @@ static function X2AbilityTemplate RTPsionicLash() {
 
 	// This ability is 'offensive' and can be interrupted!
 	Template.BuildInterruptGameStateFn = TypicalAbility_BuildInterruptGameState;
+	Template.AdditionalAbilities.AddItem('RTPsionicLashAnims');
 
 
 	Template.PostActivationEvents.AddItem(default.UnitUsedPsionicAbilityEvent);
+
+	return Template;
+}
+
+static function X2AbilityTemplate RTPsionicLashAnims()
+{
+	local X2AbilityTemplate						Template;
+    local X2Effect_AdditionalAnimSets	AnimSets;
+
+	//Icon Properties
+	`CREATE_X2ABILITY_TEMPLATE(Template, 'RTPsionicLashAnims');
+	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_aggression";
+
+	Template.AbilitySourceName = 'eAbilitySource_Perk';
+	Template.eAbilityIconBehaviorHUD = EAbilityIconBehavior_NeverShow;
+	Template.Hostility = eHostility_Neutral;
+
+	//Apply perk at the start of the mission.
+	Template.AbilityToHitCalc = default.DeadEye;
+	Template.AbilityTargetStyle = default.SelfTarget;
+	Template.AbilityTriggers.AddItem(default.UnitPostBeginPlayTrigger);
+
+	AnimSets = new class'X2Effect_AdditionalAnimSets';
+	AnimSets.AddAnimSetWithPath("DLC_60_ViperSuit.Anims.AS_ViperSuit_F");
+	AnimSets.BuildPersistentEffect(1, true, false, false);
+	AnimSets.EffectName = 'RTNovaAnimSet';
+	Template.AddShooterEffect(AnimSets);
+
+	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
+	//  NOTE: No visualization on purpose!
 
 	return Template;
 }

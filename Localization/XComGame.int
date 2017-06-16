@@ -703,6 +703,14 @@ LocFriendlyName="Hack (Psionic)"
 LocLongDescription="Hack a target psionically from a distance."
 LocHelpText="Hack a target psionically from a distance."
 LocFlyOverText="Hack (Psionic)"
+
+[RTPsionicLash X2AbilityTemplate]
+LocFriendlyName="Psionic Lash"
+LocLongDescription="Pull a small unit to an adjacent tile psionically."
+LocHelpText="Pull a small unit close."
+LocFlyOverText="Psionic Lash"
+LocPromotionPopupText="<Bullet/> Both hostile and friendly units can be pulled.<br/>"
+
 ;----------------------------------------------------------------------------------------------------------------------------
 
 ; +AbilityAvailabilityCodes="AA_UnitNotMelded"

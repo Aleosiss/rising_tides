@@ -52,7 +52,7 @@ Begin:
 	UnitPawn.SetCurrentWeapon(XComWeapon(UseWeapon.m_kEntity));
 
 	Unit.CurrentFireAction = self;
-	Params.AnimName = 'NO_StrangleStart';
+	Params.AnimName = 'NO_FreezingLashStart';
 	UnitPawn.GetAnimTreeController().PlayFullBodyDynamicAnim(Params);
 
 	//Make the target face us
@@ -70,7 +70,7 @@ Begin:
 		Sleep(0.01f);
 	}
 
-	Params.AnimName = 'NO_StrangleStop';
+	Params.AnimName = 'NO_FreezingLashStop';
 	FinishAnim(UnitPawn.GetAnimTreeController().PlayFullBodyDynamicAnim(Params));
 
 	FocusUnitPawn.m_kGameUnit.IdleStateMachine.CheckForStanceUpdateOnIdle();

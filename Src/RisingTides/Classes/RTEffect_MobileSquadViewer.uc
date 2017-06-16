@@ -27,8 +27,8 @@ simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffe
 
 	TargetUnitState = XComGameState_Unit(kNewTargetState);
 	
-	if (UnitState.AffectedByEffectNames.Find(class'X2AbilityTemplateManager'.default.BurrowedName) != INDEX_NONE) {
-		UnitState.ActionPoints.AddItem(class'X2CharacterTemplateManager'.default.UnburrowActionPoint);
+	if (TargetUnitState.AffectedByEffectNames.Find(class'X2AbilityTemplateManager'.default.BurrowedName) != INDEX_NONE) {
+		TargetUnitState.ActionPoints.AddItem(class'X2CharacterTemplateManager'.default.UnburrowActionPoint);
 	}
 
 	// should find a better way soon, since the chosen can conceal, but for now, this will work
@@ -71,8 +71,8 @@ simulated function bool OnEffectTicked(const out EffectAppliedData ApplyEffectPa
 	}
 
 	// should find a better way soon, since the chosen can conceal, but for now, this will work
-	`XEVENTMGR.TriggerEvent(class'X2Ability_Chryssalid'.default.UnburrowTriggerEventName, kNewTargetState, kNewTargetState, NewGameState);
-	`XEVENTMGR.TriggerEvent(class'X2Ability_Faceless'.default.ChangeFormTriggerEventName, kNewTargetState, kNewTargetState, NewGameState);
+	`XEVENTMGR.TriggerEvent(class'X2Ability_Chryssalid'.default.UnburrowTriggerEventName, UnitState, UnitState, NewGameState);
+	`XEVENTMGR.TriggerEvent(class'X2Ability_Faceless'.default.ChangeFormTriggerEventName, UnitState, UnitState, NewGameState);
 
 
 	return true;
