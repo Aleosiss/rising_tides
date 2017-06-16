@@ -21,14 +21,12 @@ This would be a bare-bones content mod. I also have the following content in min
 	- Marksman:
 		- nothing (Maybe rework time stop to only take place over 1 turn)
 	- Gatherer:
-		- Redo Guardian Angel
-		- Psionic Lash
+		- Redo Guardian Angel (?)
 		- Add Over the Shoulder exception for civilians that are actually faceless
 		- Rework Assuming Direct Control to enable bonus abilities instead of bonus damage
 	- General:
 		- Animations/Visuals
 		- Add x2/lw abilities to PsionicAbilityList
-		- Reflection
 		- Mind Control
 
 ###### Current Table:
@@ -37,7 +35,7 @@ This would be a bare-bones content mod. I also have the following content in min
       		- Gain Stealth while preparing a massive psionic rift. On the following turn, the Stealth is broken and a rift is formed. Friendly units can use the rift to evac from the mission. The rift will persist for an additional two turns, or if this unit enters it.
 	- RTEffect_ExtendEffectDuration: change to use PreStateSubmitted
 	- Come up with a better solution for Over The Shoulder vs. concealed units
-		
+
 
 ###### Current Bugs:
 	- Time Stop damage calculation isn't visualized properly
@@ -46,5 +44,6 @@ This would be a bare-bones content mod. I also have the following content in min
 
 ###### Current Sprint Goals:
 	- Verify that Networked OI works with CCS
-	
+	- Mind Control
+
 ###### Current Overrides: X2MeleePathingPawn
