@@ -52,6 +52,8 @@ struct RTGhostOperative
 	var localized string			FirstName;
 	var localized string			NickName;
 	var localized string			LastName;
+	var localized string			preBackground;
+	var localized string			finBackGround;
 };
 
 var const config array<RTGhostOperative>	GhostTemplates;
@@ -71,13 +73,11 @@ static function SetUpRisingTidesCommand(XComGameState StartState)
 {
 	local RTGameState_RisingTidesCommand RTCom;
 
-	foreach StartState.IterateByClassType(class'RTGameState_RisingTidesCommand', RTCom)
-	{
+	foreach StartState.IterateByClassType(class'RTGameState_RisingTidesCommand', RTCom) {
 		break;
 	}
 
-	if (RTCom == none)
-	{
+	if (RTCom == none) {
 		RTCom = RTGameState_RisingTidesCommand(StartState.CreateStateObject(class'RTGameState_RisingTidesCommand'));
 	}
 
@@ -115,6 +115,7 @@ function CreateRTOperatives(XComGameState NewGameState) {
 		UnitState.ApplyInventoryLoadout(NewGameState, CharTemplate.DefaultLoadout);
 		UnitState.StartingRank = 1;
 		UnitState.SetXPForRank(1);
+		UnitState.SetBackground(IteratorGhost.preBackground);
 
 		WeaponState = UnitState.GetPrimaryWeapon();
 		foreach IteratorGhost.WeaponUpgrades(WeaponUpgradeName) {
