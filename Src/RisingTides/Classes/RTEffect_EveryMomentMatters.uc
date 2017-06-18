@@ -41,6 +41,8 @@ function int GetAttackingDamageModifier(XComGameState_Effect EffectState, XComGa
 		ExtraDamage = iMissingHealth * BONUS_DAMAGE_PERCENT;
 	}
 
+	`LOG("Rising Tides: Every Moment Matters dealing " @ ExtraDamage @ " extra damage!");
+
 	return int(ExtraDamage);
 }
 /*
