@@ -54,12 +54,21 @@ struct RTGhostOperative
 	var localized string			LastName;
 	var localized string			preBackground;
 	var localized string			finBackGround;
-};
+}
+
+struct Squad
+{
+	var StateObjectReference StateObjectRef;
+	var array<StateObjectReference> Ghosts;
+	var localized string			SquadName;
+	var localized string			SquadBackground;
+}
 
 var const config array<RTGhostOperative>	GhostTemplates;
 
 var() array<RTGhostOperative> 	Ghosts;					// ghosts active
-var() array<RTGhostOperative> 	Squad;					// ghosts that will be on the next mission
+var() array<RTGhostOperative> 	Deplayed; 			// ghosts that will be on the next mission
+var() array<Squad>							Teams						// list of ghost teams (only one for now)
 var() int 						iOperativeLevel;		// all ghosts get level ups after a mission, even if they weren't on it. lorewise, they're constantly running missions; the player only sees a fraction of them
 
 
@@ -95,6 +104,7 @@ function CreateRTOperatives(XComGameState NewGameState) {
 	local XComGameState_Item WeaponState;
 	local X2WeaponUpgradeTemplate UpgradeTemplate;
 	local name WeaponUpgradeName;
+	local RTGameState_RisingTidesCommand RTCom;
 
 	local RTGhostOperative IteratorGhost;
 	local RTGhostOperative Ghost;
@@ -129,6 +139,19 @@ function CreateRTOperatives(XComGameState NewGameState) {
 		Ghost.StateObjectRef = UnitState.GetReference();
 		Ghosts.AddItem(Ghost);
 	}
+}
+
+function CreateRTTeams(XComGameState NewGameState) {
+
+	local Squad squad;
+	local RTGhostOperative Ghost;
+	foreach Ghosts(Ghost) {
+		// team 1 "SPECTRE"
+		if(Ghost.NickName == 'Queen' || Ghost.NickName == 'Whisper' || Ghost.NickName == 'Nova')
+			squad = Teams.Find('SquadName', 'SPECTRE');
+			squad.Ghosts.AddItem(Ghost.StateObjectRef);
+	}
+
 }
 
 // UpdateNumDeaths(name CharacterTemplateName, StateObjectReference UnitRef)
@@ -291,11 +314,9 @@ function EventListenerReturn OnUnitAttacked(Object EventData, Object EventSource
 		}
 	}
 
-
 	if(AbilityContext.ResultContext.HitResult == eHit_Crit) {
 		UpdateNumCrits(AttackedUnitState.GetMyTemplate().CharacterGroupName);
 	}
-
 
 	return ELR_NoInterrupt;
 }
