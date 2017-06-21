@@ -291,6 +291,10 @@ static function X2AbilityTemplate CreateOverTheShoulderAbility(X2AbilityTemplate
 	OTSEffect.SetDisplayInfo(ePerkBuff_Bonus, default.OTS_TITLE, default.OTS_DESC_SELF, Template.IconImage, true,,Template.AbilitySourceName);
 	OTSEffect.DuplicateResponse = eDupe_Ignore;
 	OTSEffect.EffectName = default.OverTheShoulderSourceEffectName;
+	OTSEffect.VFXTemplateName = "FX_Psi_Void_Adept.P_Psi_Void_Adept_Persistent";
+	OTSEffect.VFXSocket = 'FX_Chest';
+	OTSEffect.VFXSocketsArrayName = 'BoneSocketActor';
+	OTSEffect.Scale = 1.5;										
 	Template.AddTargetEffect(OTSEffect);
 
 	// tag effect. add this last
@@ -1738,7 +1742,7 @@ simulated function DimensionalRiftStage1_BuildVisualization(XComGameState Visual
 	local X2VisualizerInterface TargetVisualizerInterface;
 
 	local XComGameState_BaseObject Placeholder_old, Placeholder_new;
-	local XComGameState_Ability SustainedAbility;
+	local XComGameState_Ability SustainedAbility, Ability;
 	local TTile					Tile;
 	local vector				Location;
 
@@ -1754,12 +1758,12 @@ simulated function DimensionalRiftStage1_BuildVisualization(XComGameState Visual
 	AvatarBuildTrack.TrackActor = History.GetVisualizer(InteractingUnitRef.ObjectID);
 
 	AvatarUnit = XComGameState_Unit(AvatarBuildTrack.StateObject_NewState);
-	History.GetCurrentAndPreviousGameStatesForObjectID(AvatarUnit.FindAbility('RTPsionicStormSustained').ObjectID,
+	History.GetCurrentAndPreviousGameStatesForObjectID(AvatarUnit.FindAbility('RTPsionicStorm').ObjectID,
 														 Placeholder_old, Placeholder_new,
 														 eReturnType_Reference,
 														 VisualizeGameState.HistoryIndex);
 
-	SustainedAbility = XComGameState_Ability(Placeholder_new);
+	Ability = XComGameState_Ability(Placeholder_old);
 
 	if( AvatarUnit != none )
 	{
@@ -1774,30 +1778,31 @@ simulated function DimensionalRiftStage1_BuildVisualization(XComGameState Visual
 		WaitAction = X2Action_TimedWait(class'X2Action_TimedWait'.static.AddToVisualizationTrack(AvatarBuildTrack, Context));
 		WaitAction.DelayTimeSec = class'X2Ability_PsiWitch'.default.DIMENSIONAL_RIFT_STAGE1_START_WARNING_FX_SEC / 10;
 
-		// Display the Warning FX (covert to tile and back to vector because stage 2 is at the GetPositionFromTileCoordinates coord
-		EffectAction = X2Action_PlayEffect(class'X2Action_PlayEffect'.static.AddToVisualizationTrack(AvatarBuildTrack, Context));
-		EffectAction.EffectName = "FX_Psi_Dimensional_Rift.P_Psi_Dimensional_Rift_Warning";
-
+ 		EffectAction = X2Action_PlayEffect(class'X2Action_PlayEffect'.static.AddToVisualizationTrack(AvatarBuildTrack, Context));
+		EffectAction.EffectName = "FX_Psi_Void_Rift.P_Psi_Void_Rift_Activation";
 		TargetLocation = Context.InputContext.TargetLocations[0];
 		TargetTile = World.GetTileCoordinatesFromPosition(TargetLocation);
-
 		EffectAction.EffectLocation = World.GetPositionFromTileCoordinates(TargetTile);
 
-		`LOG("Beginnning AvatarUnit.ObjectID = " @ AvatarUnit.ObjectID);
+		WaitAction = X2Action_TimedWait(class'X2Action_TimedWait'.static.AddToVisualizationTrack(AvatarBuildTrack, Context));
+		WaitAction.DelayTimeSec = 1.5;
 
-		SoundAction = X2Action_StartStopSound(class'X2Action_StartStopSound'.static.AddToVisualizationTrack(AvatarBuildTrack, Context));
-		SoundAction.Sound = new class'SoundCue';
-		SoundAction.Sound.AkEventOverride = AkEvent'SoundX2AvatarFX.Avatar_Ability_Dimensional_Rift_Target_Activate';
-		SoundAction.iAssociatedGameStateObjectId = AvatarUnit.ObjectID;
-		SoundAction.bStartPersistentSound = true;
-		SoundAction.bIsPositional = true;
-		SoundAction.vWorldPosition = EffectAction.EffectLocation;
+		// Display the Warning FX (covert to tile and back to vector because stage 2 is at the GetPositionFromTileCoordinates coord
+		EffectAction = X2Action_PlayEffect(class'X2Action_PlayEffect'.static.AddToVisualizationTrack(AvatarBuildTrack, Context));
+		EffectAction.EffectName = "FX_Psi_Void_Rift.P_Psi_Void_Rift";
+		TargetLocation = Context.InputContext.TargetLocations[0];
+		TargetTile = World.GetTileCoordinatesFromPosition(TargetLocation);
+		EffectAction.EffectLocation = World.GetPositionFromTileCoordinates(TargetTile);
 
-		// Play the sound cue
-		//SoundCueAction = X2Action_PlaySoundAndFlyOver(class'X2Action_PlaySoundAndFlyOver'.static.AddToVisualizationTrack(AvatarBuildTrack, Context));
-		//SoundCueAction.SetSoundAndFlyOverParameters(SoundCue'SoundX2AvatarFX.Avatar_Ability_Dimensional_Rift_Target_Activate_Cue', "", '', eColor_Good);
-
-		// class'X2Action_Fire_CloseUnfinishedAnim'.static.AddToVisualizationTrack(AvatarBuildTrack, Context);
+		if(Ability.GetCharges() == default.PSIONICSTORM_NUMSTORMS) {// checking if this is not the first storm or not 
+			SoundAction = X2Action_StartStopSound(class'X2Action_StartStopSound'.static.AddToVisualizationTrack(AvatarBuildTrack, Context));
+			SoundAction.Sound = new class'SoundCue';
+			SoundAction.Sound.AkEventOverride = AkEvent'SoundX2AvatarFX.Avatar_Ability_Dimensional_Rift_Target_Activate';
+			SoundAction.iAssociatedGameStateObjectId = AvatarUnit.ObjectID;
+			SoundAction.bStartPersistentSound = true;
+			SoundAction.bIsPositional = true;
+			SoundAction.vWorldPosition = EffectAction.EffectLocation;
+		}
 
 		Visualizer = X2VisualizerInterface(AvatarBuildTrack.TrackActor);
 		if( Visualizer != none )
@@ -1859,8 +1864,10 @@ simulated function DimensionalRigt1_BuildAffectedVisualization(name EffectName, 
 	local X2Action_StartStopSound SoundAction;
 	local XComGameState_Unit AvatarUnit;
 	local XComWorldData World;
-	local vector TargetLocation;
-	local TTile TargetTile;
+	local vector TargetLocation, Location;
+	local TTile TargetTile, Tile;
+	local XComGameState_Ability	SustainedAbility;
+	local XComGameState_BaseObject Placeholder_new, Placeholder_old;
 
 	if( !`XENGINE.IsMultiplayerGame() && EffectName == 'RTPsionicStorm')
 	{
@@ -1874,17 +1881,26 @@ simulated function DimensionalRigt1_BuildAffectedVisualization(name EffectName, 
 
 		World = `XWORLD;
 
-		// Display the Warning FX (convert to tile and back to vector because stage 2 is at the GetPositionFromTileCoordinates coord
-		EffectAction = X2Action_PlayEffect(class'X2Action_PlayEffect'.static.AddToVisualizationTrack(BuildTrack, Context));
-		EffectAction.EffectName = "FX_Psi_Dimensional_Rift.P_Psi_Dimensional_Rift_Warning";
 
-		TargetLocation = Context.InputContext.TargetLocations[0];
-		TargetTile = World.GetTileCoordinatesFromPosition(TargetLocation);
+		`XCOMHISTORY.GetCurrentAndPreviousGameStatesForObjectID(AvatarUnit.FindAbility('RTPsionicStormSustained').ObjectID,
+													   Placeholder_old, Placeholder_new,
+													   eReturnType_Reference,
+													   VisualizeGameState.HistoryIndex);
 
-		EffectAction.EffectLocation = World.GetPositionFromTileCoordinates(TargetTile);
+		SustainedAbility = XComGameState_Ability(Placeholder_old);
 
-		// Play Target Activate Sound
-		// SoundAction = X2Action_StartStopSound(class'X2Action_StartStopSound'.static.AddToVisualizationTrack(BuildTrack, Context));
+
+		foreach SustainedAbility.ValidActivationTiles(Tile) {
+			Location = World.GetPositionFromTileCoordinates(Tile);
+			// Stop the Warning FX
+			EffectAction = X2Action_PlayEffect(class'X2Action_PlayEffect'.static.AddToVisualizationTrack(BuildTrack, Context));
+			EffectAction.EffectName = "FX_Psi_Void_Rift.P_Psi_Void_Rift";
+			EffectAction.EffectLocation = Location;
+
+		}
+
+		//Play Target Activate Sound
+		SoundAction = X2Action_StartStopSound(class'X2Action_StartStopSound'.static.AddToVisualizationTrack(BuildTrack, Context));
 		SoundAction.Sound = new class'SoundCue';
 		SoundAction.Sound.AkEventOverride = AkEvent'SoundX2AvatarFX.Avatar_Ability_Dimensional_Rift_Target_Activate';
 		SoundAction.iAssociatedGameStateObjectId = AvatarUnit.ObjectID;
@@ -2077,7 +2093,7 @@ simulated function DimensionalRiftStage2_BuildVisualization(XComGameState Visual
 		WaitAction = X2Action_TimedWait(class'X2Action_TimedWait'.static.AddToVisualizationTrack(AvatarBuildTrack, Context));
 		WaitAction.DelayTimeSec = class'X2Ability_PsiWitch'.default.DIMENSIONAL_RIFT_STAGE1_START_WARNING_FX_SEC / 10;
 
-		`LOG("Ending AvatarUnit.ObjectID = " @ AvatarUnit.ObjectID);
+		
 
 		foreach SustainedAbility.ValidActivationTiles(Tile) {
 
@@ -2091,9 +2107,15 @@ simulated function DimensionalRiftStage2_BuildVisualization(XComGameState Visual
 			Location = `XWORLD.GetPositionFromTileCoordinates(Tile);
 			// Stop the Warning FX
 			EffectAction = X2Action_PlayEffect(class'X2Action_PlayEffect'.static.AddToVisualizationTrack(AvatarBuildTrack, Context));
-			EffectAction.EffectName = "FX_Psi_Dimensional_Rift.P_Psi_Dimensional_Rift_Warning";
+			EffectAction.EffectName = "FX_Psi_Void_Rift.P_Psi_Void_Rift";
 			EffectAction.EffectLocation = Location;
 			EffectAction.bStopEffect = true;
+
+			EffectAction = X2Action_PlayEffect(class'X2Action_PlayEffect'.static.AddToVisualizationTrack(AvatarBuildTrack, Context));
+			EffectAction.EffectName = "FX_Psi_Void_Rift.P_Psi_Void_Rift_Deactivation";
+			EffectAction.EffectLocation = Location;
+
+
 		}
 
 		// Notify multi targets of explosion
