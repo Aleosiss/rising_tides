@@ -26,8 +26,17 @@ This would be a bare-bones content mod. I also have the following content in min
 		- Rework Assuming Direct Control to enable bonus abilities instead of bonus damage
 	- General:
 		- Animations/Visuals
+			- Psionic Lance
+			- Time Stop
+			- Extinction Event
+			- Rudimentary Creatures
+			- Assuming Direct Control
+			- Unwilling Conduits
+			- Extinction Event
+			- Psionic Lash
+			- Overflow Barrier
+			- Purge
 		- Add x2/lw abilities to PsionicAbilityList
-		- Mind Control
 
 ###### Current Table:
 	- Shatter The Line: If this unit kills an enemy within X tiles, it triggers a flush effect on other enemies within X tiles. 2/3 turn cooldown. credits to /u/PostOfficeBuddy
@@ -44,6 +53,5 @@ This would be a bare-bones content mod. I also have the following content in min
 
 ###### Current Sprint Goals:
 	- Verify that Networked OI works with CCS
-	- Mind Control
 
 ###### Current Overrides: X2MeleePathingPawn
