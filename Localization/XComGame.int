@@ -186,6 +186,13 @@ LocHelpText="Overload an organic unit's brain with pure psionic energy, killing 
 LocFlyOverText="Mind Wrack"
 LocPromotionPopupText="<Bullet/> Overload an organic unit's brain with pure psionic energy, killing it immediately. The feedback from the ability will cause a brief moment of panic.<br/>"
 
+[RTMindControl X2AbilityTemplate]
+LocFriendlyName="Mind Control"
+LocLongDescription="Temporarily dominate an enemy unit psionically."
+LocHelpText="Attempt to take control of an enemy."
+LocFlyOverText="Mind Control"
+LocPromotionPopupText="<Bullet><br/>"
+
 [LinkedIntelligence X2AbilityTemplate]
 LocFriendlyName="Networked OI"
 LocLongDescription="Units within the meld can react instantaneously to fire commands. When a unit in the Meld takes a reaction shot, all melded units attempt to fire against the target."

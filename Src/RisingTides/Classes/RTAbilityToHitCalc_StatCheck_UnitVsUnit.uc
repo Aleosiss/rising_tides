@@ -6,7 +6,6 @@
 
 class RTAbilityToHitCalc_StatCheck_UnitVsUnit extends X2AbilityToHitCalc_StatCheck_UnitVsUnit;
 
-var ECharStatType AttackerStat, DefenderStat;
 var bool bPhysical;
 
 function int GetAttackValue(XComGameState_Ability kAbility, StateObjectReference TargetRef)

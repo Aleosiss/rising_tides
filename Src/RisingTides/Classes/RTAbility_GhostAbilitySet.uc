@@ -53,6 +53,8 @@ class RTAbility_GhostAbilitySet extends X2Ability
 	var config int FADE_COOLDOWN;
 	var config int MAX_BLOODLUST_MELDJOIN;
 	var config int FEEDBACK_DURATION;
+	var config int MIND_CONTROL_AI_TURNS_DURATION;
+	var config int MIND_CONTROL_COOLDOWN;
 
 	var name RTFeedbackEffectName;
 	var name RTFeedbackWillDebuffName;
@@ -90,6 +92,7 @@ static function array<X2DataTemplate> CreateTemplates()
 	Templates.AddItem(Teek());
 	Templates.AddItem(Fade());
 
+	Templates.AddItem(RTMindControl());
 	Templates.AddItem(LIOverwatchShot());
 	Templates.AddItem(PsionicActivate());
 	Templates.AddItem(RTRemoveAdditionalAnimSets());
@@ -106,6 +109,7 @@ static function X2AbilityTemplate GhostPsiSuite()
 {
 	local X2AbilityTemplate						Template;
 	local X2Effect_Persistent		Effect;
+	local X2Effect_AdditionalAnimSets AnimSetEffect;
 
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'GhostPsiSuite');
 	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_adventpsiwitch_mindcontrol";
@@ -123,6 +127,9 @@ static function X2AbilityTemplate GhostPsiSuite()
 	Effect.SetDisplayInfo(ePerkBuff_Passive, Template.LocFriendlyName, Template.LocLongDescription, Template.IconImage, true,, Template.AbilitySourceName);
 	Template.AddTargetEffect(Effect);
 
+	AnimSetEffect = new class'X2Effect_AdditionalAnimSets';
+	AnimSetEffect.AddAnimSetWithPath("RisingTidesContentPackage.Anims.AS_Psi");
+	Template.AddTargetEffect(AnimSetEffect);
 
 	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
 	// Note: no visualization on purpose!
@@ -929,6 +936,79 @@ static function X2AbilityTemplate TestAbility() {
 	return Template;
 
 }
+
+static function X2DataTemplate RTMindControl()
+{
+	local X2AbilityTemplate Template;
+	local X2AbilityCost_ActionPoints ActionPointCost;
+	local X2AbilityCooldown_PerPlayerType Cooldown;
+	local RTCondition_PsionicTarget PsionicTargetingCondition;
+	local X2Condition_UnitEffects EffectCondition;
+	local X2Condition_UnitImmunities UnitImmunityCondition;
+	local X2Effect_MindControl MindControlEffect;
+	local X2Effect_RemoveEffects MindControlRemoveEffects;
+	local X2AbilityTarget_Single SingleTarget;
+
+	`CREATE_X2ABILITY_TEMPLATE(Template, default.RTMindControlTemplateName);
+
+	Template.AbilitySourceName = 'eAbilitySource_Psionic';
+	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_adventpsiwitch_mindcontrol";
+	Template.Hostility = eHostility_Offensive;
+	Template.bShowActivation = true;
+
+	ActionPointCost = new class'X2AbilityCost_ActionPoints';
+	ActionPointCost.iNumPoints = 1;
+	ActionPointCost.bConsumeAllPoints = true;
+	Template.AbilityCosts.AddItem(ActionPointCost);
+
+	Cooldown = new class'X2AbilityCooldown_PerPlayerType';
+	Cooldown.iNumTurns = default.MIND_CONTROL_COOLDOWN;
+	Template.AbilityCooldown = Cooldown;
+
+	Template.AbilityToHitCalc = new class'RTAbilityToHitCalc_StatCheck_UnitVsUnit';
+
+	Template.AbilityShooterConditions.AddItem(default.LivingShooterProperty);
+	Template.AddShooterEffectExclusions();
+
+	PsionicTargetingCondition = new class'RTCondition_PsionicTarget';
+	Template.AbilityTargetConditions.AddItem(PsionicTargetingCondition);
+	Template.AbilityTargetConditions.AddItem(default.GameplayVisibilityCondition);
+
+	EffectCondition = new class'X2Condition_UnitEffects';
+	EffectCondition.AddExcludeEffect(class'X2Effect_MindControl'.default.EffectName, 'AA_UnitIsMindControlled');
+	EffectCondition.AddExcludeEffect(default.RTMindControlEffectName, 'AA_UnitIsMindControlled');
+	Template.AbilityTargetConditions.AddItem(EffectCondition);
+
+	// MindControl effect for 1 or more unblocked psi hit
+	MindControlEffect = class'X2StatusEffects'.static.CreateMindControlStatusEffect(default.MIND_CONTROL_AI_TURNS_DURATION);
+	MindControlEffect.MinStatContestResult = 1;
+	MindControlEffect.iNumTurnsForAI = default.MIND_CONTROL_AI_TURNS_DURATION;
+	MindControlEffect.EffectName = default.RTMindControlEffectName;
+	Template.AddTargetEffect(MindControlEffect);
+
+	MindControlRemoveEffects = class'X2StatusEffects'.static.CreateMindControlRemoveEffects();
+	MindControlRemoveEffects.MinStatContestResult = 1;
+	Template.AddTargetEffect(MindControlRemoveEffects);
+	// MindControl effect for 1 or more unblocked psi hit
+
+	SingleTarget = new class'X2AbilityTarget_Single';
+	Template.AbilityTargetStyle = SingleTarget;
+
+	Template.AbilityTriggers.AddItem(default.PlayerInputTrigger);
+
+	// Unlike in other cases, in TypicalAbility_BuildVisualization, the MissSpeech is used on the Target!
+	Template.TargetMissSpeech = 'SoldierResistsMindControl';
+
+	Template.CustomFireAnim = 'HL_Psi_MindControl';
+	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
+	Template.BuildInterruptGameStateFn = TypicalAbility_BuildInterruptGameState;
+	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
+	Template.CinescriptCameraType = "Psionic_FireAtUnit";
+
+	return Template;
+}
+
+
 
 defaultproperties
 {

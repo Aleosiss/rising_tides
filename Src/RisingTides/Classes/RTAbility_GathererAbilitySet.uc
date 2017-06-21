@@ -135,6 +135,7 @@ static function X2AbilityTemplate OverTheShoulder()
 	Template.AdditionalAbilities.AddItem('LeaveMeld');
 	Template.AdditionalAbilities.AddItem('PsiOverload');
 	Template.AdditionalAbilities.AddItem('RTFeedback');
+	Template.AdditionalAbilities.AddItem('RTMindControl');
 
 	// special meld abilities
 	Template.AdditionalAbilities.AddItem('LIOverwatchShot');
