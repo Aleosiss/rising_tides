@@ -13,9 +13,9 @@ LocHelpText="Fire a shot at a target. <Ability:CANNOTBEDODGED/>"
 LocLongDescription="<Bullet/>Firing the primary weapon always ends a unit's turn."
 
 [RT_Marksman X2SoldierClassTemplate]
-DisplayName="GHOST Marksman"
+DisplayName="GHOST Inflitrator"
 ClassSummary="Whisper is the unit's designated marksman and tech expert."
-LeftAbilityTreeTitle="Peeker"
+LeftAbilityTreeTitle="Fire Support"
 RightAbilityTreeTitle="Watcher"
 RandomNickNames[0]="Whisper"
 
@@ -513,7 +513,7 @@ LocPromotionPopupText="<Bullet/> Lunge forward, dealing damage to all enemies in
 
 [RT_Gatherer X2SoldierClassTemplate]
 DisplayName="GHOST Gatherer"
-ClassSummary="Nova is the team's HUMINT expert and psionic support."
+ClassSummary="Nova is the team's HUMINT expert and primary psionic support."
 LeftAbilityTreeTitle="Clairvoyant"
 RightAbilityTreeTitle="Telepath"
 RandomNickNames[0]="Nova"
