@@ -488,7 +488,12 @@ LocHelpText="Leap through shadows to strike at a target."
 LocFlyOverText="Shadow Strike"
 LocPromotionPopupText="<Bullet/> Leap through shadows to strike at a target.<br/><Bullet/> Squadsight range, direct path to target not required.<br/>"
 
-
+[RTPsionicLance X2AbilityTemplate]
+LocFriendlyName="Psionic Lance"
+LocLongDescription="Fire a lance of pure psionic energy."
+LocHelpText="Fire a lance of pure psionic energy."
+LocFlyOverText="Psionic Lance"
+LocPromotionPopupText="<Bullet/> <br/>"
 
 [RTDashingStrike X2AbilityTemplate]
 LocFriendlyName="Dashing Strike"

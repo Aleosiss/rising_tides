@@ -14,6 +14,8 @@ class RTAbility_BerserkerAbilitySet extends RTAbility_GhostAbilitySet config(Ris
 	var config int ACID_BLADE_DOT_DAMAGE;
 	var config int ACID_BLADE_DOT_SHRED;
 	var config WeaponDamageValue BURST_DMG;
+	var config WeaponDamageValue PSILANCE_DMG;
+	var config int PSIONIC_LANCE_COOLDOWN;
 	var config int BURST_COOLDOWN;
 	var config float BURST_RADIUS_METERS;
 	var config float SIPHON_AMOUNT_MULTIPLIER;
@@ -76,6 +78,7 @@ static function array<X2DataTemplate> CreateTemplates()
 	Templates.AddItem(RTQueenOfBlades());																							  // icon
 	Templates.AddItem(RTShadowStrike());																							  // icon
 	Templates.AddItem(RTDashingStrike());
+	Templates.AddItem(RTPsionicLance());
 
 
 	return Templates;
@@ -122,6 +125,7 @@ static function X2AbilityTemplate BumpInTheNight()
 	Template.AdditionalAbilities.AddItem('LeaveMeld');
 	Template.AdditionalAbilities.AddItem('PsiOverload');
 	Template.AdditionalAbilities.AddItem('RTFeedback');
+	Template.AdditionalAbilities.AddItem('RTMindControl');
 
 	// unique abilities for Bump In The Night
 	Template.AdditionalAbilities.AddItem('BumpInTheNightBloodlustListener');
@@ -2273,6 +2277,77 @@ static function X2DataTemplate RTDashingStrike()
 
 	//Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
 	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
+
+	return Template;
+}
+
+
+static function X2AbilityTemplate RTPsionicLance()
+{
+	local X2AbilityTemplate					Template;
+	local X2AbilityTarget_Cursor			CursorTarget;
+	local X2AbilityMultiTarget_Line         LineMultiTarget;
+	local X2Condition_UnitProperty          TargetCondition;
+	local X2AbilityCost_ActionPoints        ActionCost;
+	local X2Effect_ApplyWeaponDamage        DamageEffect;
+	local X2AbilityCooldown_PerPlayerType	Cooldown;
+
+	`CREATE_X2ABILITY_TEMPLATE(Template, 'RTPsionicLance');
+
+	Template.AbilitySourceName = 'eAbilitySource_Psionic';
+	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_AlwaysShow;
+	Template.Hostility = eHostility_Offensive;
+	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_nulllance";
+	Template.ShotHUDPriority = class'UIUtilities_Tactical'.const.CLASS_COLONEL_PRIORITY;
+
+	Template.CustomFireAnim = 'HL_Psi_ProjectileHigh';
+	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
+	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
+	Template.BuildInterruptGameStateFn = TypicalAbility_BuildInterruptGameState;
+
+	ActionCost = new class'X2AbilityCost_ActionPoints';
+	ActionCost.iNumPoints = 1;   // Updated 8/18/15 to 1 action point only per Jake request.  
+	ActionCost.bConsumeAllPoints = true;
+	Template.AbilityCosts.AddItem(ActionCost);
+
+	Cooldown = new class'X2AbilityCooldown_PerPlayerType';
+	Cooldown.iNumTurns = default.PSIONIC_LANCE_COOLDOWN;
+	Template.AbilityCooldown = Cooldown;
+
+	Template.AbilityTriggers.AddItem(default.PlayerInputTrigger);	
+	Template.AbilityToHitCalc = default.DeadEye;
+
+	CursorTarget = new class'X2AbilityTarget_Cursor';
+	CursorTarget.FixedAbilityRange = 18;
+	Template.AbilityTargetStyle = CursorTarget;
+
+	LineMultiTarget = new class'X2AbilityMultiTarget_Line';
+	Template.AbilityMultiTargetStyle = LineMultiTarget;
+
+	Template.AbilityShooterConditions.AddItem(default.LivingShooterProperty);
+	Template.AddShooterEffectExclusions();
+
+	TargetCondition = new class'X2Condition_UnitProperty';
+	TargetCondition.ExcludeFriendlyToSource = false;
+	TargetCondition.ExcludeDead = true;
+	Template.AbilityMultiTargetConditions.AddItem(TargetCondition);
+
+	DamageEffect = new class'X2Effect_ApplyWeaponDamage';
+	DamageEffect.bIgnoreBaseDamage = true;
+	DamageEffect.DamageTag = 'PsionicLance';
+	DamageEffect.bIgnoreArmor = true;
+	DamageEffect.EffectDamageValue = default.PSILANCE_DMG;
+	Template.AddMultiTargetEffect(DamageEffect);
+
+	Template.TargetingMethod = class'X2TargetingMethod_Line';
+	Template.CinescriptCameraType = "Psionic_FireAtLocation";
+
+	Template.ActivationSpeech = 'NullLance';
+
+	Template.bOverrideAim = true;
+	Template.bUseSourceLocationZToAim = true;
+
+	Template.PostActivationEvents.AddItem(default.UnitUsedPsionicAbilityEvent);
 
 	return Template;
 }
