@@ -1,5 +1,7 @@
 class RTEffect_OverTheShoulder extends X2Effect_AuraSource;
 
+var float Scale;
+
 function RegisterForEvents(XComGameState_Effect EffectGameState)
 {
 	local X2EventManager EventMgr;
@@ -158,6 +160,77 @@ protected function RemoveAuraTargetEffects(XComGameState_Unit SourceUnitState, X
 	XComGameStateContext_ChangeContainer(NewGameState.GetContext()).BuildVisualizationFn = RTSourceAuraEffectGameState.EffectsModifiedBuildVisualizationFn;
 
 }
+
+simulated function AddX2ActionsForVisualization(XComGameState VisualizeGameState, out VisualizationTrack BuildTrack, name EffectApplyResult)
+{
+	local XComGameState_Effect EffectState, TickedEffectState;
+	local X2Action_PersistentEffect PersistentEffectAction;
+	local RTAction_PlayEffect PlayEffectAction;
+	local int i;
+
+	if( (EffectApplyResult == 'AA_Success') && (XComGameState_Unit(BuildTrack.StateObject_NewState) != none) )
+	{
+		if (CustomIdleOverrideAnim != '')
+		{
+			// We started an idle override so this will clear it
+			PersistentEffectAction = X2Action_PersistentEffect(class'X2Action_PersistentEffect'.static.AddToVisualizationTrack(BuildTrack, VisualizeGameState.GetContext()));
+			PersistentEffectAction.IdleAnimName = CustomIdleOverrideAnim;
+		}
+
+		if (VFXTemplateName != "")
+		{
+			PlayEffectAction = RTAction_PlayEffect( class'RTAction_PlayEffect'.static.AddToVisualizationTrack(BuildTrack, VisualizeGameState.GetContext()));
+
+			PlayEffectAction.AttachToUnit = true;
+			PlayEffectAction.EffectName = VFXTemplateName;
+			PlayEffectAction.AttachToSocketName = VFXSocket;
+			PlayEffectAction.AttachToSocketsArrayName = VFXSocketsArrayName;
+			PlayEffectAction.Scale = Scale;
+		}
+
+		//  anything inside of ApplyOnTick needs handling here because when bTickWhenApplied is true, there is no separate context (which normally handles the visualization)
+		if (bTickWhenApplied)
+		{
+			foreach VisualizeGameState.IterateByClassType(class'XComGameState_Effect', EffectState)
+			{
+				if (EffectState.GetX2Effect() == self)
+				{
+					TickedEffectState = EffectState;
+					break;
+				}
+			}
+			if (TickedEffectState != none)
+			{
+				for (i = 0; i < ApplyOnTick.Length; ++i)
+				{
+					ApplyOnTick[i].AddX2ActionsForVisualization_Tick(VisualizeGameState, BuildTrack, i, TickedEffectState); 
+				}
+			}
+		}
+	}
+	
+	if (VisualizationFn != none)
+		VisualizationFn(VisualizeGameState, BuildTrack, EffectApplyResult);		
+}
+
+simulated function AddX2ActionsForVisualization_Sync( XComGameState VisualizeGameState, out VisualizationTrack BuildTrack )
+{
+	local RTAction_PlayEffect PlayEffectAction;
+
+	if (VFXTemplateName != "")
+	{
+		PlayEffectAction = RTAction_PlayEffect( class'RTAction_PlayEffect'.static.AddToVisualizationTrack( BuildTrack, VisualizeGameState.GetContext( ) ) );
+
+		PlayEffectAction.AttachToUnit = true;
+		PlayEffectAction.EffectName = VFXTemplateName;
+		PlayEffectAction.AttachToSocketName = VFXSocket;
+		PlayEffectAction.AttachToSocketsArrayName = VFXSocketsArrayName;
+		PlayEffectAction.Scale = Scale;
+	}
+}
+
+
+
 
 defaultproperties
 {

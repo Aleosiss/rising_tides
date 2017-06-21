@@ -91,13 +91,13 @@ static function array<X2DataTemplate> CreateTemplates()
 
 	Templates.AddItem(Teek());
 	Templates.AddItem(Fade());
-
 	Templates.AddItem(RTMindControl());
 	Templates.AddItem(LIOverwatchShot());
 	Templates.AddItem(PsionicActivate());
 	Templates.AddItem(RTRemoveAdditionalAnimSets());
 
 	Templates.AddItem(TestAbility());
+	
 
 
 	return Templates;
