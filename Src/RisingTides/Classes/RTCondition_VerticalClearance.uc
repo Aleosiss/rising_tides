@@ -32,7 +32,6 @@ private function bool CheckTarget(XComGameState_BaseObject kTarget) {
 	InitialTargetUnitLocation = World.GetPositionFromTileCoordinates(InitialTargetUnitTile);
 
 	if (!World.HasOverheadClearance(InitialTargetUnitLocation, 64.0f)) {
-			`LOG("Rising Tides: did not have overhead clearance!");
 			return false;
 	}
 
