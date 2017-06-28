@@ -36,6 +36,7 @@ This would be a bare-bones content mod. I also have the following content in min
 			- Psionic Lash
 			- Overflow Barrier
 			- Purge
+			- Mind Control
 		- Add x2/lw abilities to PsionicAbilityList
 
 ###### Current Table:
