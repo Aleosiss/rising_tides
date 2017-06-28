@@ -91,6 +91,7 @@ static function SetUpRisingTidesCommand(XComGameState StartState)
 	}
 
 	StartState.AddStateObject(RTCom);
+	RTCom.InitListeners();
 	RTCom.CreateRTOperatives(StartState);
 	//RTCom.CreateRTDeathRecord(StartState);
 }
