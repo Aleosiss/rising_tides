@@ -26,7 +26,7 @@ function RegisterForEvents(XComGameState_Effect EffectGameState)
 }
 
 protected function bool CheckAuraConditions(XComGameState_Unit SourceUnitState, XComGameState_Unit TargetUnitState, XComGameState_Effect SourceAuraEffectGameState, X2AbilityTemplate AuraEffectTemplate) {
-	if(class'Helpers'.static.IsTileInRange(SourceUnitState.TileLocation, TargetUnitState.TileLocation, class'RTAbility_GathererAbilitySet'.default.OTS_RADIUS_SQ, 100)) {
+	if(class'Helpers'.static.IsTileInRange(SourceUnitState.TileLocation, TargetUnitState.TileLocation, class'RTAbility_GathererAbilitySet'.default.OTS_RADIUS ** 2, 100)) {
 		return true;
 	}
 	return false;
@@ -203,14 +203,14 @@ simulated function AddX2ActionsForVisualization(XComGameState VisualizeGameState
 			{
 				for (i = 0; i < ApplyOnTick.Length; ++i)
 				{
-					ApplyOnTick[i].AddX2ActionsForVisualization_Tick(VisualizeGameState, BuildTrack, i, TickedEffectState); 
+					ApplyOnTick[i].AddX2ActionsForVisualization_Tick(VisualizeGameState, BuildTrack, i, TickedEffectState);
 				}
 			}
 		}
 	}
-	
+
 	if (VisualizationFn != none)
-		VisualizationFn(VisualizeGameState, BuildTrack, EffectApplyResult);		
+		VisualizationFn(VisualizeGameState, BuildTrack, EffectApplyResult);
 }
 
 simulated function AddX2ActionsForVisualization_Sync( XComGameState VisualizeGameState, out VisualizationTrack BuildTrack )
