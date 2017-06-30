@@ -54,7 +54,7 @@ struct RTGhostOperative
 	var localized string			LastName;
 	var localized string			preBackground;
 	var localized string			finBackGround;
-}
+};
 
 struct Squad
 {
@@ -62,7 +62,7 @@ struct Squad
 	var array<StateObjectReference> Ghosts;
 	var localized string			SquadName;
 	var localized string			SquadBackground;
-}
+};
 
 var const config array<RTGhostOperative>	GhostTemplates;
 

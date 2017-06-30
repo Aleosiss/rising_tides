@@ -980,7 +980,7 @@ static function X2DataTemplate RTMindControl()
 	Template.AbilityTargetConditions.AddItem(EffectCondition);
 
 	// MindControl effect for 1 or more unblocked psi hit
-	MindControlEffect = class'X2StatusEffects'.static.CreateMindControlStatusEffect(default.MIND_CONTROL_AI_TURNS_DURATION);
+	MindControlEffect = class'X2StatusEffects'.static.CreateMindControlStatusEffect(default.MIND_CONTROL_AI_TURNS_DURATION, false, false, -1.5f);
 	MindControlEffect.MinStatContestResult = 1;
 	MindControlEffect.iNumTurnsForAI = default.MIND_CONTROL_AI_TURNS_DURATION;
 	MindControlEffect.EffectName = default.RTMindControlEffectName;
