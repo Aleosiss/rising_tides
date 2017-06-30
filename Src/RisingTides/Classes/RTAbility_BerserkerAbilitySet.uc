@@ -91,7 +91,7 @@ static function X2AbilityTemplate BumpInTheNight()
 {
 	local X2AbilityTemplate                 Template;
 	local RTEffect_BumpInTheNight			BumpEffect;
-    local X2Effect_AdditionalAnimSets		AnimSets;
+		local X2Effect_AdditionalAnimSets		AnimSets;
 
 	// Icon Properties
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'BumpInTheNight');
@@ -356,18 +356,18 @@ static function X2AbilityTemplate RTBerserkerKnifeAttack()
 //---Burst-------------------------------------------------------------------------------
 //---------------------------------------------------------------------------------------
 static function X2AbilityTemplate RTBurst() {
-    local X2AbilityTemplate							Template;
-    local X2AbilityMultiTarget_Radius				MultiTarget;
-    local X2Effect_ApplyDirectionalWorldDamage		WorldDamage;
-    local X2Effect_ApplyWeaponDamage				WeaponDamageEffect;
-    local X2AbilityCooldown							Cooldown;
-    local X2AbilityCost_ActionPoints				ActionPointCost;
-    local X2Effect_Knockback						KnockbackEffect;
+		local X2AbilityTemplate							Template;
+		local X2AbilityMultiTarget_Radius				MultiTarget;
+		local X2Effect_ApplyDirectionalWorldDamage		WorldDamage;
+		local X2Effect_ApplyWeaponDamage				WeaponDamageEffect;
+		local X2AbilityCooldown							Cooldown;
+		local X2AbilityCost_ActionPoints				ActionPointCost;
+		local X2Effect_Knockback						KnockbackEffect;
 	local X2Effect_Persistent						Effect;
 
-    `CREATE_X2ABILITY_TEMPLATE(Template, 'RTBurst');
-    Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_snipershot"; //TODO: Change this
-    Template.AbilitySourceName = 'eAbilitySource_Psionic';
+		`CREATE_X2ABILITY_TEMPLATE(Template, 'RTBurst');
+		Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_snipershot"; //TODO: Change this
+		Template.AbilitySourceName = 'eAbilitySource_Psionic';
 	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_AlwaysShow;
 	Template.AbilityConfirmSound = "TacticalUI_ActivateAbility";
 	Template.Hostility = eHostility_Offensive;
@@ -378,7 +378,7 @@ static function X2AbilityTemplate RTBurst() {
 	ActionPointCost.bConsumeAllPoints = false;
 	Template.AbilityCosts.AddItem(ActionPointCost);
 
-   	Cooldown = new class'X2AbilityCooldown';
+		Cooldown = new class'X2AbilityCooldown';
 	Cooldown.iNumTurns = default.BURST_COOLDOWN;
 	Template.AbilityCooldown = Cooldown;
 
@@ -397,7 +397,7 @@ static function X2AbilityTemplate RTBurst() {
 	Effect.VFXTemplateName = default.BurstParticleString;
 	Template.AddShooterEffect(Effect);
 
-    WorldDamage = new class'X2Effect_ApplyDirectionalWorldDamage';  //creates the framework to apply damage to the world
+		WorldDamage = new class'X2Effect_ApplyDirectionalWorldDamage';  //creates the framework to apply damage to the world
 	WorldDamage.bUseWeaponDamageType = False;                       //overrides the normal weapon damage type
 	WorldDamage.bUseWeaponEnvironmentalDamage = false;              //replaces the weapon's environmental damage with the abilities
 	WorldDamage.EnvironmentalDamageAmount = 2500;                   //determines the amount of enviornmental damage the ability applies
@@ -431,7 +431,7 @@ static function X2AbilityTemplate RTBurst() {
 
 	Template.bCrossClassEligible = false;
 
-    return Template;
+		return Template;
 }
 
 //---------------------------------------------------------------------------------------
@@ -475,6 +475,7 @@ static function X2AbilityTemplate RTPurge() {
 	local X2Effect_RangerStealth StealthEffect;
 	local RTEffect_RemoveStacks	PurgeEffect;
 	local RTCondition_EffectStackCount	BloodlustCondition;
+	local X2Effect_Persistent 					VFXEffect;
 
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'RTPurge');
 	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_snapshot";
@@ -499,6 +500,13 @@ static function X2AbilityTemplate RTPurge() {
 	StealthEffect.bRemoveWhenTargetConcealmentBroken = true;
 	Template.AddTargetEffect(StealthEffect);
 
+	VFXEffect = new class'X2Effect_Persistent';
+	VFXEffect.VFXTemplateName = default.PurgeParticleString;
+	VFXEffect.BuildPersistentEffect(0, false);
+	Template.AddTargetEffect(VFXEffect);
+
+	Template.CustomFireAnim = 'HL_Psi_SelfCast';
+
 	PurgeEffect = new class'RTEffect_RemoveStacks';;
 	PurgeEffect.EffectNameToPurge = class'RTEffect_Bloodlust'.default.EffectName;
 	PurgeEffect.iStacksToRemove = default.PURGE_STACK_REQUIREMENT;
@@ -514,22 +522,23 @@ static function X2AbilityTemplate RTPurge() {
 
 	return Template;
 }
+
 //---------------------------------------------------------------------------------------
 //---Mentor------------------------------------------------------------------------------
 //---------------------------------------------------------------------------------------
 static function X2AbilityTemplate RTMentor() {
 	local X2AbilityTemplate 				Template;
 	local X2Condition_UnitEffects			MeldCondition;
-    local X2Condition_UnitProperty          TargetUnitPropertyCondition;
+	local X2Condition_UnitProperty          TargetUnitPropertyCondition;
 	local X2Effect_PersistentStatChange		MentorEffect;
 	local X2AbilityCost_ActionPoints		ActionPointCost;
-    local RTCondition_EffectStackCount      BloodlustCondition;
+	local RTCondition_EffectStackCount      BloodlustCondition;
 	local X2AbilityCooldown					Cooldown;
 	local X2Effect_RemoveEffects			RemoveEffect;
 
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'RTMentor');
-    Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_snipershot"; //TODO: Change this
-    Template.AbilitySourceName = 'eAbilitySource_Psionic';
+	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_snipershot"; //TODO: Change this
+	Template.AbilitySourceName = 'eAbilitySource_Psionic';
 	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_AlwaysShow;
 	Template.AbilityConfirmSound = "TacticalUI_ActivateAbility";
 	Template.Hostility = eHostility_Offensive;
@@ -539,7 +548,7 @@ static function X2AbilityTemplate RTMentor() {
 	ActionPointCost.bConsumeAllPoints = false;
 	Template.AbilityCosts.AddItem(ActionPointCost);
 
-   	Cooldown = new class'X2AbilityCooldown';
+	Cooldown = new class'X2AbilityCooldown';
 	Cooldown.iNumTurns = default.MENTOR_COOLDOWN;
 	Template.AbilityCooldown = Cooldown;
 
@@ -560,33 +569,33 @@ static function X2AbilityTemplate RTMentor() {
 	RemoveEffect.EffectNamesToRemove.AddItem(default.RTFeedbackWillDebuffName);
 	Template.AddTargetEffect(RemoveEffect);
 
-    MentorEffect = new class'X2Effect_PersistentStatChange';
-    MentorEffect.BuildPersistentEffect(1, false, false, false, eGameRule_PlayerTurnEnd);
-    MentorEffect.SetDisplayInfo(ePerkBuff_Bonus, Template.LocFriendlyName, Template.GetMyHelpText(), Template.IconImage, true, , Template.AbilitySourceName);
-    MentorEffect.AddPersistentStatChange(eStat_Will, default.MENTOR_BONUS);
-    MentorEffect.AddPersistentStatChange(eStat_PsiOffense, default.MENTOR_BONUS);
-    Template.AddTargetEffect(MentorEffect);
+	MentorEffect = new class'X2Effect_PersistentStatChange';
+	MentorEffect.BuildPersistentEffect(1, false, false, false, eGameRule_PlayerTurnEnd);
+	MentorEffect.SetDisplayInfo(ePerkBuff_Bonus, Template.LocFriendlyName, Template.GetMyHelpText(), Template.IconImage, true, , Template.AbilitySourceName);
+	MentorEffect.AddPersistentStatChange(eStat_Will, default.MENTOR_BONUS);
+	MentorEffect.AddPersistentStatChange(eStat_PsiOffense, default.MENTOR_BONUS);
+	Template.AddTargetEffect(MentorEffect);
 
 	// melded
-    MeldCondition = new class'X2Condition_UnitEffects';
+	MeldCondition = new class'X2Condition_UnitEffects';
 	MeldCondition.AddRequireEffect('RTEffect_Meld', 'AA_UnitNotMelded');
 	Template.AbilityShooterConditions.AddItem(MeldCondition);
 
 	// You probably can't be a good mentor if you're filled with bloodlust
-    BloodlustCondition = new class'RTCondition_EffectStackCount';
+	BloodlustCondition = new class'RTCondition_EffectStackCount';
 	BloodlustCondition.iMaximumStacks = default.MENTOR_STACK_MAXIMUM;
 	BloodlustCondition.StackingEffect = class'RTEffect_Bloodlust'.default.EffectName;
 	BloodlustCondition.bRequireEffect = false;
-    Template.AbilityShooterConditions.AddItem(BloodlustCondition);
+	Template.AbilityShooterConditions.AddItem(BloodlustCondition);
 	Template.AbilityShooterConditions.AddItem(default.LivingShooterProperty);
 	Template.AddShooterEffectExclusions();
 
-    Template.PostActivationEvents.AddItem(default.UnitUsedPsionicAbilityEvent);
+	Template.PostActivationEvents.AddItem(default.UnitUsedPsionicAbilityEvent);
+	Template.CustomFireAnim = 'HL_Psi_SelfCast';
 
 	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
 	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
 	Template.BuildInterruptGameStateFn = TypicalAbility_BuildInterruptGameState;
-
 
 	return Template;
 }
@@ -597,13 +606,13 @@ static function X2AbilityTemplate RTMentor() {
 static function X2AbilityTemplate RTReprobateWaltz()
 {
 	local X2AbilityTemplate					Template;
-    local X2AbilityToHitCalc_StandardMelee  StandardMelee;
-    local RTEffect_BerserkerMeleeDamage     WeaponDamageEffect;
-    local RTEffect_Acid                     AcidEffect;
-    local X2Condition_AbilityProperty       AcidCondition;
-    local RTEffect_Siphon                   SiphonEffect;
-    local X2Condition_AbilityProperty       SiphonCondition;
-    local X2Condition_UnitProperty          TargetUnitPropertyCondition;
+	local X2AbilityToHitCalc_StandardMelee  StandardMelee;
+	local RTEffect_BerserkerMeleeDamage     WeaponDamageEffect;
+	local RTEffect_Acid                     AcidEffect;
+	local X2Condition_AbilityProperty       AcidCondition;
+	local RTEffect_Siphon                   SiphonEffect;
+	local X2Condition_AbilityProperty       SiphonCondition;
+	local X2Condition_UnitProperty          TargetUnitPropertyCondition;
 	local X2AbilityTrigger_EventListener    Trigger;
 
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'RTReprobateWaltz');
@@ -690,7 +699,6 @@ static function X2AbilityTemplate RTReprobateWaltz()
 	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
 	Template.BuildInterruptGameStateFn = TypicalAbility_BuildInterruptGameState;
 
-
 	return Template;
 }
 
@@ -703,27 +711,26 @@ static function X2AbilityTemplate RTReprobateWaltzIcon()
 	local RTEffect_ReprobateWaltz	Effect;
 
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'RTReprobateWaltzIcon');
-    Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_aim";	   // TODO: THIS
-    Template.AbilitySourceName = 'eAbilitySource_Psionic';
-    Template.eAbilityIconBehaviorHUD = EAbilityIconBehavior_NeverShow;
-    Template.Hostility = eHostility_Neutral;
+	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_aim";	   // TODO: THIS
+	Template.AbilitySourceName = 'eAbilitySource_Psionic';
+	Template.eAbilityIconBehaviorHUD = EAbilityIconBehavior_NeverShow;
+	Template.Hostility = eHostility_Neutral;
 
 	// Apply perk at the start of the mission.
-    Template.AbilityToHitCalc = default.DeadEye;
-    Template.AbilityTargetStyle = default.SelfTarget;
-    Template.AbilityTriggers.AddItem(default.UnitPostBeginPlayTrigger);
+	Template.AbilityToHitCalc = default.DeadEye;
+	Template.AbilityTargetStyle = default.SelfTarget;
+	Template.AbilityTriggers.AddItem(default.UnitPostBeginPlayTrigger);
 
-    // Effect to apply
-    Effect = new class'RTEffect_ReprobateWaltz';
-    Effect.BuildPersistentEffect(1, true, true, true);
+	// Effect to apply
+	Effect = new class'RTEffect_ReprobateWaltz';
+	Effect.BuildPersistentEffect(1, true, true, true);
 	Effect.EffectName = 'RTReprobateWaltz';
-    Effect.SetDisplayInfo(ePerkBuff_Passive, Template.LocFriendlyName, Template.LocLongDescription, Template.IconImage, true,,Template.AbilitySourceName);
-    Template.AddTargetEffect(Effect);
+	Effect.SetDisplayInfo(ePerkBuff_Passive, Template.LocFriendlyName, Template.LocLongDescription, Template.IconImage, true,,Template.AbilitySourceName);
+	Template.AddTargetEffect(Effect);
 
-    // Probably required
-    Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
-    //  NOTE: No visualization on purpose!
-
+	// Probably required
+	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
+	//  NOTE: No visualization on purpose!
 
 	return Template;
 }
@@ -1000,32 +1007,32 @@ static function X2AbilityTemplate RTPyroclasticSlash()
 //---------------------------------------------------------------------------------------
 static function X2AbilityTemplate RTContainedFury() {
 	local X2AbilityTemplate 	Template;
-    local X2Effect_Persistent	Effect;
+		local X2Effect_Persistent	Effect;
 
-    `CREATE_X2ABILITY_TEMPLATE(Template, 'RTContainedFury');
-    Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_aim";
-    Template.AbilitySourceName = 'eAbilitySource_Perk';
-    Template.eAbilityIconBehaviorHUD = EAbilityIconBehavior_NeverShow;
-    Template.Hostility = eHostility_Neutral;
+		`CREATE_X2ABILITY_TEMPLATE(Template, 'RTContainedFury');
+		Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_aim";
+		Template.AbilitySourceName = 'eAbilitySource_Perk';
+		Template.eAbilityIconBehaviorHUD = EAbilityIconBehavior_NeverShow;
+		Template.Hostility = eHostility_Neutral;
 
 	// Apply perk at the start of the mission.
-    Template.AbilityToHitCalc = default.DeadEye;
-    Template.AbilityTargetStyle = default.SelfTarget;
-    Template.AbilityTriggers.AddItem(default.UnitPostBeginPlayTrigger);
+		Template.AbilityToHitCalc = default.DeadEye;
+		Template.AbilityTargetStyle = default.SelfTarget;
+		Template.AbilityTriggers.AddItem(default.UnitPostBeginPlayTrigger);
 
-    // Effect to apply
-    Effect = new class'X2Effect_Persistent';
-    Effect.BuildPersistentEffect(1, true, true, true);
-    Effect.SetDisplayInfo(ePerkBuff_Passive, Template.LocFriendlyName, Template.LocLongDescription, Template.IconImage, true,,Template.AbilitySourceName);
-    Template.AddTargetEffect(Effect);
+		// Effect to apply
+		Effect = new class'X2Effect_Persistent';
+		Effect.BuildPersistentEffect(1, true, true, true);
+		Effect.SetDisplayInfo(ePerkBuff_Passive, Template.LocFriendlyName, Template.LocLongDescription, Template.IconImage, true,,Template.AbilitySourceName);
+		Template.AddTargetEffect(Effect);
 
-    // Probably required
-    Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
-    //  NOTE: No visualization on purpose!
+		// Probably required
+		Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
+		//  NOTE: No visualization on purpose!
 
 	Template.AdditionalAbilities.AddItem('RTContainedFuryMeldJoin');
 
-    return Template;
+		return Template;
 }
 
 //---------------------------------------------------------------------------------------
@@ -1075,7 +1082,7 @@ static function X2AbilityTemplate RTContainedFuryMeldJoin()
 	Template.bSkipFireAction = true;
 
 	Template.bCrossClassEligible = false;
-    Template.OverrideAbilities.AddItem('JoinMeld');
+		Template.OverrideAbilities.AddItem('JoinMeld');
 
 	return Template;
 }
@@ -1146,51 +1153,51 @@ static function X2AbilityTemplate RTUnstableConduit()
 //---------------------------------------------------------------------------------------
 static function X2AbilityTemplate RTUnstableConduitIcon() {
 	local X2AbilityTemplate 	Template;
-    local X2Effect_Persistent	Effect;
+		local X2Effect_Persistent	Effect;
 
-    `CREATE_X2ABILITY_TEMPLATE(Template, 'RTUnstableConduitIcon');
-    Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_aim";
-    Template.AbilitySourceName = 'eAbilitySource_Psionic';
-    Template.eAbilityIconBehaviorHUD = EAbilityIconBehavior_NeverShow;
-    Template.Hostility = eHostility_Neutral;
+		`CREATE_X2ABILITY_TEMPLATE(Template, 'RTUnstableConduitIcon');
+		Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_aim";
+		Template.AbilitySourceName = 'eAbilitySource_Psionic';
+		Template.eAbilityIconBehaviorHUD = EAbilityIconBehavior_NeverShow;
+		Template.Hostility = eHostility_Neutral;
 
 	// Apply perk at the start of the mission.
-    Template.AbilityToHitCalc = default.DeadEye;
-    Template.AbilityTargetStyle = default.SelfTarget;
-    Template.AbilityTriggers.AddItem(default.UnitPostBeginPlayTrigger);
+		Template.AbilityToHitCalc = default.DeadEye;
+		Template.AbilityTargetStyle = default.SelfTarget;
+		Template.AbilityTriggers.AddItem(default.UnitPostBeginPlayTrigger);
 
 
-    // Effect to apply
-    Effect = new class'X2Effect_Persistent';
-    Effect.BuildPersistentEffect(1, true, true, true);
-    Effect.SetDisplayInfo(ePerkBuff_Passive, Template.LocFriendlyName, Template.LocLongDescription, Template.IconImage, true,,Template.AbilitySourceName);
-    Template.AddTargetEffect(Effect);
+		// Effect to apply
+		Effect = new class'X2Effect_Persistent';
+		Effect.BuildPersistentEffect(1, true, true, true);
+		Effect.SetDisplayInfo(ePerkBuff_Passive, Template.LocFriendlyName, Template.LocLongDescription, Template.IconImage, true,,Template.AbilitySourceName);
+		Template.AddTargetEffect(Effect);
 
-    // Probably required
-    Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
-    //  NOTE: No visualization on purpose!
+		// Probably required
+		Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
+		//  NOTE: No visualization on purpose!
 
-    return Template;
+		return Template;
 }
 
 //---------------------------------------------------------------------------------------
 //---Unstable Conduit Burst--------------------------------------------------------------
 //---------------------------------------------------------------------------------------
 static function X2AbilityTemplate RTUnstableConduitBurst() {
-    local X2AbilityTemplate Template;
-    local X2AbilityMultiTarget_Radius MultiTarget;
-    local X2Effect_ApplyDirectionalWorldDamage WorldDamage;
-    local X2Effect_ApplyWeaponDamage WeaponDamageEffect;
+		local X2AbilityTemplate Template;
+		local X2AbilityMultiTarget_Radius MultiTarget;
+		local X2Effect_ApplyDirectionalWorldDamage WorldDamage;
+		local X2Effect_ApplyWeaponDamage WeaponDamageEffect;
 	local X2Condition_UnitEffects			Condition;
-    local X2Effect_Knockback  KnockbackEffect;
+		local X2Effect_Knockback  KnockbackEffect;
 	local X2AbilityTrigger_EventListener Trigger;
 	local X2Effect_Persistent				Effect;
 
 
 
-    `CREATE_X2ABILITY_TEMPLATE(Template, 'RTUnstableConduitBurst');
-    Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_snipershot"; //TODO: Change this
-    Template.AbilitySourceName = 'eAbilitySource_Psionic';
+		`CREATE_X2ABILITY_TEMPLATE(Template, 'RTUnstableConduitBurst');
+		Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_snipershot"; //TODO: Change this
+		Template.AbilitySourceName = 'eAbilitySource_Psionic';
 	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_NeverShow;
 	Template.AbilityConfirmSound = "TacticalUI_ActivateAbility";
 	Template.Hostility = eHostility_Neutral;
@@ -1226,7 +1233,7 @@ static function X2AbilityTemplate RTUnstableConduitBurst() {
 	Effect.VFXTemplateName = default.BurstParticleString;
 	Template.AddShooterEffect(Effect);
 
-    WorldDamage = new class'X2Effect_ApplyDirectionalWorldDamage';  //creates the framework to apply damage to the world
+		WorldDamage = new class'X2Effect_ApplyDirectionalWorldDamage';  //creates the framework to apply damage to the world
 	WorldDamage.bUseWeaponDamageType = False;                       //overrides the normal weapon damage type
 	WorldDamage.bUseWeaponEnvironmentalDamage = false;              //replaces the weapon's environmental damage with the abilities
 	WorldDamage.EnvironmentalDamageAmount = 2500;                   //determines the amount of enviornmental damage the ability applies
@@ -1259,7 +1266,7 @@ static function X2AbilityTemplate RTUnstableConduitBurst() {
 
 	Template.bCrossClassEligible = false;
 
-    return Template;
+		return Template;
 }
 
 //---------------------------------------------------------------------------------------
@@ -1281,7 +1288,7 @@ static function X2AbilityTemplate RTPersistingImages()
 	Template.AddShooterEffectExclusions();
 
 	Template.AbilityToHitCalc = default.DeadEye;
-    Template.AbilityTargetStyle = default.SelfTarget;
+		Template.AbilityTargetStyle = default.SelfTarget;
 
 	Trigger = new class'X2AbilityTrigger_EventListener';
 	Trigger.ListenerData.Deferral = ELD_OnStateSubmitted;
@@ -1370,30 +1377,30 @@ simulated function Afterimage_BuildVisualization(XComGameState VisualizeGameStat
 
 static function X2AbilityTemplate RTPersistingImagesIcon() {
 	local X2AbilityTemplate 	Template;
-    local X2Effect_Persistent	Effect;
+		local X2Effect_Persistent	Effect;
 
-    `CREATE_X2ABILITY_TEMPLATE(Template, 'RTPersistingImagesIcon');
-    Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_aim";	   // TODO: THIS
-    Template.AbilitySourceName = 'eAbilitySource_Psionic';
-    Template.eAbilityIconBehaviorHUD = EAbilityIconBehavior_NeverShow;
-    Template.Hostility = eHostility_Neutral;
+		`CREATE_X2ABILITY_TEMPLATE(Template, 'RTPersistingImagesIcon');
+		Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_aim";	   // TODO: THIS
+		Template.AbilitySourceName = 'eAbilitySource_Psionic';
+		Template.eAbilityIconBehaviorHUD = EAbilityIconBehavior_NeverShow;
+		Template.Hostility = eHostility_Neutral;
 
 	// Apply perk at the start of the mission.
-    Template.AbilityToHitCalc = default.DeadEye;
-    Template.AbilityTargetStyle = default.SelfTarget;
-    Template.AbilityTriggers.AddItem(default.UnitPostBeginPlayTrigger);
+		Template.AbilityToHitCalc = default.DeadEye;
+		Template.AbilityTargetStyle = default.SelfTarget;
+		Template.AbilityTriggers.AddItem(default.UnitPostBeginPlayTrigger);
 
-    // Effect to apply
-    Effect = new class'X2Effect_Persistent';
-    Effect.BuildPersistentEffect(1, true, true, true);
-    Effect.SetDisplayInfo(ePerkBuff_Passive, Template.LocFriendlyName, Template.LocLongDescription, Template.IconImage, true,,Template.AbilitySourceName);
-    Template.AddTargetEffect(Effect);
+		// Effect to apply
+		Effect = new class'X2Effect_Persistent';
+		Effect.BuildPersistentEffect(1, true, true, true);
+		Effect.SetDisplayInfo(ePerkBuff_Passive, Template.LocFriendlyName, Template.LocLongDescription, Template.IconImage, true,,Template.AbilitySourceName);
+		Template.AddTargetEffect(Effect);
 
-    // Probably required
-    Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
-    //  NOTE: No visualization on purpose!
+		// Probably required
+		Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
+		//  NOTE: No visualization on purpose!
 
-    return Template;
+		return Template;
 }
 
 //---------------------------------------------------------------------------------------
@@ -1406,30 +1413,30 @@ static function X2AbilityTemplate RTGhostInTheShell()
 	local X2Effect_StayConcealed PhantomEffect;
 
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'RTGhostInTheShell');
-    Template.IconImage = "img:///RisingTidesContentPackage.PerkIcons.rt_ghostintheshell";	   // TODO: THIS
-    Template.AbilitySourceName = 'eAbilitySource_Psionic';
-    Template.eAbilityIconBehaviorHUD = EAbilityIconBehavior_NeverShow;
-    Template.Hostility = eHostility_Neutral;
+		Template.IconImage = "img:///RisingTidesContentPackage.PerkIcons.rt_ghostintheshell";	   // TODO: THIS
+		Template.AbilitySourceName = 'eAbilitySource_Psionic';
+		Template.eAbilityIconBehaviorHUD = EAbilityIconBehavior_NeverShow;
+		Template.Hostility = eHostility_Neutral;
 
 	// Apply perk at the start of the mission.
-    Template.AbilityToHitCalc = default.DeadEye;
-    Template.AbilityTargetStyle = default.SelfTarget;
-    Template.AbilityTriggers.AddItem(default.UnitPostBeginPlayTrigger);
+		Template.AbilityToHitCalc = default.DeadEye;
+		Template.AbilityTargetStyle = default.SelfTarget;
+		Template.AbilityTriggers.AddItem(default.UnitPostBeginPlayTrigger);
 
-    // Effect to apply
-    Effect = new class'RTEffect_GhostInTheShell';
-    Effect.BuildPersistentEffect(1, true, true, true);
+		// Effect to apply
+		Effect = new class'RTEffect_GhostInTheShell';
+		Effect.BuildPersistentEffect(1, true, true, true);
 	Effect.EffectName = 'RTGhostInTheShell';
-    Effect.SetDisplayInfo(ePerkBuff_Passive, Template.LocFriendlyName, Template.LocLongDescription, Template.IconImage, true,,Template.AbilitySourceName);
-    Template.AddTargetEffect(Effect);
+		Effect.SetDisplayInfo(ePerkBuff_Passive, Template.LocFriendlyName, Template.LocLongDescription, Template.IconImage, true,,Template.AbilitySourceName);
+		Template.AddTargetEffect(Effect);
 
 	PhantomEffect = new class'X2Effect_StayConcealed';
 	PhantomEffect.BuildPersistentEffect(1, true, false);
 	Template.AddTargetEffect(PhantomEffect);
 
-    // Probably required
-    Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
-    //  NOTE: No visualization on purpose!
+		// Probably required
+		Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
+		//  NOTE: No visualization on purpose!
 
 	Template.AdditionalAbilities.AddItem('RTGhostInTheShellEffect');
 
@@ -1447,10 +1454,10 @@ static function X2AbilityTemplate RTGhostInTheShellEffect()
 	local X2Effect_RangerStealth ConcealEffect;
 
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'RTGhostInTheShellEffect');
-    Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_aim";	   // TODO: THIS
-    Template.AbilitySourceName = 'eAbilitySource_Psionic';
-    Template.eAbilityIconBehaviorHUD = EAbilityIconBehavior_NeverShow;
-    Template.Hostility = eHostility_Neutral;
+		Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_aim";	   // TODO: THIS
+		Template.AbilitySourceName = 'eAbilitySource_Psionic';
+		Template.eAbilityIconBehaviorHUD = EAbilityIconBehavior_NeverShow;
+		Template.Hostility = eHostility_Neutral;
 
 	Template.AbilityToHitCalc = default.DeadEye;
 	Template.AbilityTargetStyle = default.SelfTarget;
@@ -1486,26 +1493,26 @@ static function X2AbilityTemplate RTQueenOfBlades()
 	local X2Effect_StayConcealed PhantomEffect;
 
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'RTQueenOfBlades');
-    Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_aim";	   // TODO: THIS
-    Template.AbilitySourceName = 'eAbilitySource_Psionic';
-    Template.eAbilityIconBehaviorHUD = EAbilityIconBehavior_NeverShow;
-    Template.Hostility = eHostility_Neutral;
+		Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_aim";	   // TODO: THIS
+		Template.AbilitySourceName = 'eAbilitySource_Psionic';
+		Template.eAbilityIconBehaviorHUD = EAbilityIconBehavior_NeverShow;
+		Template.Hostility = eHostility_Neutral;
 
 	// Apply perk at the start of the mission.
-    Template.AbilityToHitCalc = default.DeadEye;
-    Template.AbilityTargetStyle = default.SelfTarget;
-    Template.AbilityTriggers.AddItem(default.UnitPostBeginPlayTrigger);
+		Template.AbilityToHitCalc = default.DeadEye;
+		Template.AbilityTargetStyle = default.SelfTarget;
+		Template.AbilityTriggers.AddItem(default.UnitPostBeginPlayTrigger);
 
-    // Effect to apply
-    Effect = new class'X2Effect_Persistent';
-    Effect.BuildPersistentEffect(1, true, true, true);
+		// Effect to apply
+		Effect = new class'X2Effect_Persistent';
+		Effect.BuildPersistentEffect(1, true, true, true);
 	Effect.EffectName = 'RTQueenOfBlades';
-    Effect.SetDisplayInfo(ePerkBuff_Passive, Template.LocFriendlyName, Template.LocLongDescription, Template.IconImage, true,,Template.AbilitySourceName);
-    Template.AddTargetEffect(Effect);
+		Effect.SetDisplayInfo(ePerkBuff_Passive, Template.LocFriendlyName, Template.LocLongDescription, Template.IconImage, true,,Template.AbilitySourceName);
+		Template.AddTargetEffect(Effect);
 
-    // Probably required
-    Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
-    //  NOTE: No visualization on purpose!
+		// Probably required
+		Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
+		//  NOTE: No visualization on purpose!
 
 	return Template;
 }
@@ -1654,7 +1661,7 @@ static simulated function Teleport_ModifyActivatedAbilityContext(XComGameStateCo
 
 	// Second posiiton is the cursor position
 	`assert(AbilityContext.InputContext.TargetLocations.Length == 1);
-  	`PRES.GetTacticalHUD().GetTargetingMethod().GetPreAbilityPath(PathTiles);
+		`PRES.GetTacticalHUD().GetTargetingMethod().GetPreAbilityPath(PathTiles);
 	NewTileLocation = PathTiles[PathTiles.Length - 1];
 
 	NewLocation = World.FindClosestValidLocation(World.GetPositionFromTileCoordinates(NewTileLocation), false, true, false);
@@ -1667,7 +1674,7 @@ static simulated function Teleport_ModifyActivatedAbilityContext(XComGameStateCo
 	InputData.MovementData.AddItem(NextPoint);
 	InputData.MovementTiles.AddItem(NewTileLocation);
 
-    //Now add the path to the input context
+		//Now add the path to the input context
 	InputData.MovingUnitRef = UnitState.GetReference();
 	AbilityContext.InputContext.MovementPaths.Length = 0;
 	AbilityContext.InputContext.MovementPaths[0] = InputData;
@@ -1946,9 +1953,9 @@ simulated function Teleport_BuildVisualization(XComGameState VisualizeGameState,
 		if( TargetStateObject != none )
 		{
 			History.GetCurrentAndPreviousGameStatesForObjectID(AbilityContext.PrimaryTarget.ObjectID,
-															   BuildTrack.StateObject_OldState, BuildTrack.StateObject_NewState,
-															   eReturnType_Reference,
-															   VisualizeGameState.HistoryIndex);
+																 BuildTrack.StateObject_OldState, BuildTrack.StateObject_NewState,
+																 eReturnType_Reference,
+																 VisualizeGameState.HistoryIndex);
 			`assert(BuildTrack.StateObject_NewState == TargetStateObject);
 		}
 		else
@@ -2306,7 +2313,7 @@ static function X2AbilityTemplate RTPsionicLance()
 	Template.BuildInterruptGameStateFn = TypicalAbility_BuildInterruptGameState;
 
 	ActionCost = new class'X2AbilityCost_ActionPoints';
-	ActionCost.iNumPoints = 1;   // Updated 8/18/15 to 1 action point only per Jake request.  
+	ActionCost.iNumPoints = 1;   // Updated 8/18/15 to 1 action point only per Jake request.
 	ActionCost.bConsumeAllPoints = true;
 	Template.AbilityCosts.AddItem(ActionCost);
 
@@ -2314,7 +2321,7 @@ static function X2AbilityTemplate RTPsionicLance()
 	Cooldown.iNumTurns = default.PSIONIC_LANCE_COOLDOWN;
 	Template.AbilityCooldown = Cooldown;
 
-	Template.AbilityTriggers.AddItem(default.PlayerInputTrigger);	
+	Template.AbilityTriggers.AddItem(default.PlayerInputTrigger);
 	Template.AbilityToHitCalc = default.DeadEye;
 
 	CursorTarget = new class'X2AbilityTarget_Cursor';
@@ -2335,7 +2342,7 @@ static function X2AbilityTemplate RTPsionicLance()
 	DamageEffect = new class'X2Effect_ApplyWeaponDamage';
 	DamageEffect.bIgnoreBaseDamage = true;
 	DamageEffect.DamageTag = 'PsionicLance';
-	DamageEffect.bIgnoreArmor = true;
+	DamageEffect.bIgnoreArmor = false;
 	DamageEffect.EffectDamageValue = default.PSILANCE_DMG;
 	Template.AddMultiTargetEffect(DamageEffect);
 

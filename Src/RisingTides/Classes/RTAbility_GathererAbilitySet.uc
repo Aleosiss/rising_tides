@@ -294,7 +294,7 @@ static function X2AbilityTemplate CreateOverTheShoulderAbility(X2AbilityTemplate
 	OTSEffect.VFXTemplateName = "FX_Psi_Void_Adept.P_Psi_Void_Adept_Persistent";
 	OTSEffect.VFXSocket = 'FX_Chest';
 	OTSEffect.VFXSocketsArrayName = 'BoneSocketActor';
-	OTSEffect.Scale = 1.5;										
+	OTSEffect.Scale = 1.5;
 	Template.AddTargetEffect(OTSEffect);
 
 	// tag effect. add this last
@@ -915,6 +915,7 @@ static function X2AbilityTemplate RTRudimentaryCreatures() {
 static function X2AbilityTemplate RTRudimentaryCreaturesEvent() {
     local X2AbilityTemplate Template;
     local X2Effect_ApplyWeaponDamage DamageEffect;
+		local X2Effect_Persistent VFXEffect;
 
     `CREATE_X2ABILITY_TEMPLATE(Template, 'RTRudimentaryCreaturesEvent');
 
@@ -931,17 +932,24 @@ static function X2AbilityTemplate RTRudimentaryCreaturesEvent() {
     Template.AbilityToHitCalc = default.Deadeye;
     Template.AbilityTriggers.AddItem(new class'X2AbilityTrigger_Placeholder'); // triggered by listener return
 
-	Template.AbilityShooterConditions.AddItem(default.LivingShooterProperty);
-	Template.AbilityTargetConditions.AddItem(default.LivingTargetOnlyProperty);
+		Template.AbilityShooterConditions.AddItem(default.LivingShooterProperty);
+		Template.AbilityTargetConditions.AddItem(default.LivingTargetOnlyProperty);
+
+		VFXEffect = new class'X2Effect_Persistent';
+		VFXEffect.BuildPersistentEffect(0, false);
+		VFXEffect.VFXTemplateName = default.PsionicInterruptParticleString;
+		Template.AddTargetEffect(VFXEffect);
 
     Template.AddTargetEffect(class'X2StatusEffects'.static.CreateStunnedStatusEffect(3, 100, true));
 
     DamageEffect = new class'X2Effect_ApplyWeaponDamage';
     DamageEffect.bIgnoreBaseDamage = true;
     DamageEffect.EffectDamageValue = default.RUDIMENTARY_CREATURES_DMG;
-	DamageEffect.bIgnoreArmor = true;
-	DamageEffect.DamageTypes.AddItem('Psi');
+		DamageEffect.bIgnoreArmor = true;
+		DamageEffect.DamageTypes.AddItem('Psi');
     Template.AddTargetEffect(DamageEffect);
+
+		Template.CustomFireAnim = 'HL_Psi_SelfCast';
 
     return Template;
 }
@@ -960,17 +968,17 @@ static function X2AbilityTemplate RTUnwillingConduits() {
 	`CREATE_X2TEMPLATE(class'RTAbilityTemplate', Template, 'RTUnwillingConduits');
 
 	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_NeverShow;
-    Template.Hostility = eHostility_Neutral;
-    Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_swordSlash";
-    Template.AbilitySourceName = 'eAbilitySource_Psionic';
+  Template.Hostility = eHostility_Neutral;
+  Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_swordSlash";
+  Template.AbilitySourceName = 'eAbilitySource_Psionic';
 
-    Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
-    Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
-    Template.bCrossClassEligible = false;
+  Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
+  Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
+  Template.bCrossClassEligible = false;
 	Template.bSkipFireAction = true;
 
-    Template.AbilityTargetStyle = default.SelfTarget;
-    Template.AbilityToHitCalc = default.Deadeye;
+  Template.AbilityTargetStyle = default.SelfTarget;
+  Template.AbilityToHitCalc = default.Deadeye;
 
 	MultiTarget = new class'X2AbilityMultiTarget_AllUnits';
 	MultiTarget.bDontAcceptNeutralUnits = false;
@@ -981,7 +989,7 @@ static function X2AbilityTemplate RTUnwillingConduits() {
 	UnitEffectCondition.AddRequireEffect(default.OverTheShoulderEffectName, 'AA_NotAUnit');
 	UnitPropertyCondition = new class'X2Condition_UnitProperty';
 	UnitPropertyCondition.RequireWithinRange = true;
-	UnitPropertyCondition.WithinRange = default.OTS_RADIUS * class'XComWorldData'.const.WORLD_StepSize; // unreal units 
+	UnitPropertyCondition.WithinRange = default.OTS_RADIUS * class'XComWorldData'.const.WORLD_StepSize; // unreal units
 
 	Template.AbilityMultiTargetConditions.AddItem(UnitEffectCondition);
 	Template.AbilityMultiTargetConditions.AddItem(UnitPropertyCondition);
@@ -993,6 +1001,7 @@ static function X2AbilityTemplate RTUnwillingConduits() {
 	DamageEffect.bIgnoreArmor = true;
 	DamageEffect.bBypassShields = true;
 	DamageEffect.EffectDamageValue = default.UNWILL_DMG;
+	DamageEffect.VFXTemplateName = default.UnwillingConduitDamageParticle;
 	Template.AddMultiTargetEffect(DamageEffect);
 
 	Trigger = new class'X2AbilityTrigger_EventListener';
@@ -1003,6 +1012,7 @@ static function X2AbilityTemplate RTUnwillingConduits() {
 	Template.AbilityTriggers.AddItem(Trigger);
 
 	Template.CinescriptCameraType = "Psionic_FireAtUnit";
+	Template.CustomFireAnim = 'HL_Psi_SelfCast';
 
 	Template.AdditionalAbilities.AddItem('RTUnwillingConduitsIcon');
 
@@ -1794,7 +1804,7 @@ simulated function DimensionalRiftStage1_BuildVisualization(XComGameState Visual
 		TargetTile = World.GetTileCoordinatesFromPosition(TargetLocation);
 		EffectAction.EffectLocation = World.GetPositionFromTileCoordinates(TargetTile);
 
-		if(Ability.GetCharges() == default.PSIONICSTORM_NUMSTORMS) {// checking if this is not the first storm or not 
+		if(Ability.GetCharges() == default.PSIONICSTORM_NUMSTORMS) {// checking if this is not the first storm or not
 			SoundAction = X2Action_StartStopSound(class'X2Action_StartStopSound'.static.AddToVisualizationTrack(AvatarBuildTrack, Context));
 			SoundAction.Sound = new class'SoundCue';
 			SoundAction.Sound.AkEventOverride = AkEvent'SoundX2AvatarFX.Avatar_Ability_Dimensional_Rift_Target_Activate';
@@ -2093,7 +2103,7 @@ simulated function DimensionalRiftStage2_BuildVisualization(XComGameState Visual
 		WaitAction = X2Action_TimedWait(class'X2Action_TimedWait'.static.AddToVisualizationTrack(AvatarBuildTrack, Context));
 		WaitAction.DelayTimeSec = class'X2Ability_PsiWitch'.default.DIMENSIONAL_RIFT_STAGE1_START_WARNING_FX_SEC / 10;
 
-		
+
 
 		foreach SustainedAbility.ValidActivationTiles(Tile) {
 
