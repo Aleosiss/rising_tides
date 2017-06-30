@@ -26,17 +26,14 @@ This would be a bare-bones content mod. I also have the following content in min
 		- Rework Assuming Direct Control to enable bonus abilities instead of bonus damage
 	- General:
 		- Animations/Visuals
-			- Psionic Lance
-			- Time Stop
-			- Extinction Event
-			- Rudimentary Creatures
-			- Assuming Direct Control
-			- Unwilling Conduits
-			- Extinction Event
-			- Psionic Lash
-			- Overflow Barrier
-			- Purge
-			- Mind Control
+			- Psionic Lance: needs XComPerkContent for projectile
+			- Time Stop: needs some kind of massive particle effect (?)
+			- Extinction Event: needs some kind of massive particle effect (scaled up psi bomb?)
+			- Assuming Direct Control: needs XComPerkContent for tether
+			- Psionic Lash: could use better animation. Look into ripping DLC anims
+			- Overflow Barrier: needs XComPerkContent for startup-ending-damaged particles
+			- Mind Control: needs custom BuildVisualizationFn to lessen delay between shooter and target anims
+			- Mentor: needs XComPerkContent for tether
 		- Add x2/lw abilities to PsionicAbilityList
 
 ###### Current Table:
