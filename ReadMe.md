@@ -43,7 +43,6 @@ This would be a bare-bones content mod. I also have the following content in min
 	- RTEffect_ExtendEffectDuration: change to use PreStateSubmitted
 	- Come up with a better solution for Over The Shoulder vs. concealed units
 
-
 ###### Current Bugs:
 	- Time Stop damage calculation isn't visualized properly
 	- Time Stop damage calculation is fucked, use code from X2Effect_DLC_3AbsorptionField.uc to rewrite
