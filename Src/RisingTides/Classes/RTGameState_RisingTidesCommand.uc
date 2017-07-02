@@ -68,7 +68,7 @@ var const config array<RTGhostOperative>	GhostTemplates;
 
 var() array<RTGhostOperative> 	Ghosts;					// ghosts active
 var() array<RTGhostOperative> 	Deplayed; 			// ghosts that will be on the next mission
-var() array<Squad>							Teams						// list of ghost teams (only one for now)
+var() array<Squad>				Teams;						// list of ghost teams (only one for now)
 var() int 						iOperativeLevel;		// all ghosts get level ups after a mission, even if they weren't on it. lorewise, they're constantly running missions; the player only sees a fraction of them
 
 
