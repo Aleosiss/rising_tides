@@ -30,7 +30,6 @@ This would be a bare-bones content mod. I also have the following content in min
 			- Extinction Event: needs some kind of massive particle effect (scaled up psi bomb?)
 			- Assuming Direct Control: needs XComPerkContent for tether
 			- Overflow Barrier: needs XComPerkContent for startup-ending-damaged particles
-			- Mentor: needs XComPerkContent for tether
 		- Add x2/lw abilities to PsionicAbilityList
 
 ###### Current Table:
