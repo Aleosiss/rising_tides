@@ -26,7 +26,6 @@ This would be a bare-bones content mod. I also have the following content in min
 		- Rework Assuming Direct Control to enable bonus abilities instead of bonus damage
 	- General:
 		- Animations/Visuals
-			- Psionic Lance: needs XComPerkContent for projectile
 			- Time Stop: needs some kind of massive particle effect (pulse_distoration?)
 			- Extinction Event: needs some kind of massive particle effect (scaled up psi bomb?)
 			- Assuming Direct Control: needs XComPerkContent for tether

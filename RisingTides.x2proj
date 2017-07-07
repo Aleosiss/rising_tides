@@ -32,6 +32,18 @@
     <Content Include="Content\RisingTidesContentPackage.upk">
       <SubType>Content</SubType>
     </Content>
+    <Content Include="Content\RT_Perk_Psi_ADC.upk">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Content\RT_Perk_Psi_Lance.upk">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Content\RT_Perk_Psi_Mentor.upk">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Content\RT_Perk_Psi_MindControl.upk">
+      <SubType>Content</SubType>
+    </Content>
     <Content Include="Localization\RisingTides.int">
       <SubType>Content</SubType>
     </Content>
