@@ -1833,7 +1833,7 @@ simulated function DimensionalRiftStage1_BuildVisualization(XComGameState Visual
 			SoundAction.vWorldPosition = EffectAction.EffectLocation;
 		}
 
-		class'X2Action_Fire_CloseUnfinishedAnim'.static.AddToVisualizationTrack(AvatarBuildTrack, Context);
+		// class'X2Action_Fire_CloseUnfinishedAnim'.static.AddToVisualizationTrack(AvatarBuildTrack, Context);
 
 		Visualizer = X2VisualizerInterface(AvatarBuildTrack.TrackActor);
 		if( Visualizer != none )
