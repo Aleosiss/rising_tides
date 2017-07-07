@@ -2,7 +2,7 @@ class RTEffect_SimpleHeal extends X2Effect;
 
 var int HEAL_AMOUNT;
 var bool bUseWeaponDamage;
-var name AbilitySourceName;
+var string nAbilitySourceName;
 
 protected simulated function OnEffectAdded (const out EffectAppliedData ApplyEffectParameters, XComGameState_BaseObject kNewTargetState, XComGameState NewGameState, XComGameState_Effect NewEffectState)
 {
@@ -71,6 +71,6 @@ simulated function AddX2ActionsForVisualization(XComGameState VisualizeGameState
 	if( Healed > 0 )
 	{
 		SoundAndFlyOver = X2Action_PlaySoundAndFlyOver(class'X2Action_PlaySoundAndFlyOver'.static.AddToVisualizationTrack(BuildTrack, VisualizeGameState.GetContext()));
-		SoundAndFlyOver.SetSoundAndFlyOverParameters(None, AbilitySourceName @ ": +" @ Healed, '', eColor_Good);
+		SoundAndFlyOver.SetSoundAndFlyOverParameters(None,  nAbilitySourceName @ ": +" @ Healed, '', eColor_Good);
 	}
 }
