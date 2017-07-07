@@ -49,6 +49,7 @@ struct RTGhostOperative
 
 	var StateObjectReference 		StateObjectRef;
 
+	var string						ExternalID;
 	var localized string			FirstName;
 	var localized string			NickName;
 	var localized string			LastName;
@@ -56,9 +57,13 @@ struct RTGhostOperative
 	var localized string			finBackGround;
 };
 
+var localized string SquadOneName;
+var localized string SquadOneBackground;
+
+
 struct Squad
 {
-	var StateObjectReference StateObjectRef;
+	var int							SquadID;
 	var array<StateObjectReference> Ghosts;
 	var localized string			SquadName;
 	var localized string			SquadBackground;
@@ -68,7 +73,7 @@ var const config array<RTGhostOperative>	GhostTemplates;
 
 var() array<RTGhostOperative> 	Ghosts;					// ghosts active
 var() array<RTGhostOperative> 	Deplayed; 			// ghosts that will be on the next mission
-var() array<Squad>							Teams						// list of ghost teams (only one for now)
+var() array<Squad>				Squads;						// list of ghost teams (only one for now)
 var() int 						iOperativeLevel;		// all ghosts get level ups after a mission, even if they weren't on it. lorewise, they're constantly running missions; the player only sees a fraction of them
 
 
@@ -142,17 +147,34 @@ function CreateRTOperatives(XComGameState NewGameState) {
 	}
 }
 
-function CreateRTTeams(XComGameState NewGameState) {
+function CreateRTSquads(XComGameState NewGameState) {
 
-	local Squad squad;
+	local Squad one;
 	local RTGhostOperative Ghost;
+
+	one = CreateSquad(1, default.SquadOneName, default.SquadOneBackground);
+	
 	foreach Ghosts(Ghost) {
 		// team 1 "SPECTRE"
-		if(Ghost.NickName == 'Queen' || Ghost.NickName == 'Whisper' || Ghost.NickName == 'Nova')
-			squad = Teams.Find('SquadName', 'SPECTRE');
-			squad.Ghosts.AddItem(Ghost.StateObjectRef);
-	}
+		if(Ghost.ExternalID == "Queen" || Ghost.ExternalID == "Whisper" || Ghost.ExternalID == "Nova") {
+			one.Ghosts.AddItem(Ghost.StateObjectRef);
 
+		}
+	}
+	
+
+	Squads.AddItem(one);
+
+}
+
+function Squad CreateSquad(int ID, String LocName, String LocBackground) {
+	local Squad rtsquad;
+
+	rtsquad.SquadID = ID;
+	rtsquad.SquadName = LocName;
+	rtsquad.SquadBackground = LocBackground;
+
+	return rtsquad;
 }
 
 // UpdateNumDeaths(name CharacterTemplateName, StateObjectReference UnitRef)
