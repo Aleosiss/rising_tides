@@ -42,6 +42,8 @@ class RTAbility_BerserkerAbilitySet extends RTAbility_GhostAbilitySet config(Ris
 	var config int BITN_DEFENSE_BONUS;
 	var config int GITS_STEALTH_DURATION;
 
+	var config string PurgeParticleString;
+
 //---------------------------------------------------------------------------------------
 //---CreateTemplates---------------------------------------------------------------------
 //---------------------------------------------------------------------------------------
@@ -422,16 +424,127 @@ static function X2AbilityTemplate RTBurst() {
 	Template.PostActivationEvents.AddItem(default.UnitUsedPsionicAbilityEvent);
 
 	Template.bShowActivation = true;
-	Template.bSkipFireAction = true;
 
 	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
+	Template.CustomFireAnim = 'HL_Psi_SelfCast';
 	Template.BuildInterruptGameStateFn = TypicalAbility_BuildInterruptGameState;
-	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
+	Template.BuildVisualizationFn = Burst_BuildVisualization;
 	Template.CinescriptCameraType = "Psionic_FireAtUnit";
 
 	Template.bCrossClassEligible = false;
 
 		return Template;
+}
+
+
+simulated function Burst_BuildVisualization(XComGameState VisualizeGameState, out array<VisualizationTrack> OutVisualizationTracks)
+{
+	local XComGameStateHistory History;
+	local XComGameStateContext_Ability Context;
+	local StateObjectReference InteractingUnitRef;
+	local X2VisualizerInterface Visualizer;
+	local VisualizationTrack BuildTrack, AvatarBuildTrack;
+	local X2Action_PlayEffect EffectAction;
+	local X2Action_StartStopSound SoundAction;
+	local XComGameState_Unit AvatarUnit;
+	local XComWorldData World;
+	local vector TargetLocation;
+	local TTile TargetTile;
+	local X2Action_TimedWait WaitAction;
+	local X2Action_PlaySoundAndFlyOver SoundCueAction;
+	local int i, j;
+	local VisualizationTrack EmptyTrack;
+	local X2VisualizerInterface TargetVisualizerInterface;
+
+	History = `XCOMHISTORY;
+
+	Context = XComGameStateContext_Ability(VisualizeGameState.GetContext());
+
+	//Configure the visualization track for the shooter
+	//****************************************************************************************
+	InteractingUnitRef = Context.InputContext.SourceObject;
+	AvatarBuildTrack.StateObject_OldState = History.GetGameStateForObjectID(InteractingUnitRef.ObjectID, eReturnType_Reference, VisualizeGameState.HistoryIndex - 1);
+	AvatarBuildTrack.StateObject_NewState = VisualizeGameState.GetGameStateForObjectID(InteractingUnitRef.ObjectID);
+	AvatarBuildTrack.TrackActor = History.GetVisualizer(InteractingUnitRef.ObjectID);
+
+	AvatarUnit = XComGameState_Unit(AvatarBuildTrack.StateObject_NewState);
+
+	if( AvatarUnit != none )
+	{
+		World = `XWORLD;
+
+		class'X2Action_Fire_OpenUnfinishedAnim'.static.AddToVisualizationTrack(AvatarBuildTrack, Context);
+
+		// Wait to time the start of the warning FX
+		WaitAction = X2Action_TimedWait(class'X2Action_TimedWait'.static.AddToVisualizationTrack(AvatarBuildTrack, Context));
+		WaitAction.DelayTimeSec = 4;
+
+		// BuildEffectParticle(XComGameState VisualizeGameState, out VisualizationTrack BuildTrack, string ParticleName, name SocketName, name SocketsArrayName, bool _AttachToUnit, bool _bStopEffect) {
+		EffectAction = class'RTEffectBuilder'.static.BuildEffectParticle(VisualizeGameState, AvatarBuildTrack, default.BurstParticleString,	default.BurstSocketName, default.BurstArrayName, true, false);
+		
+		// Play Target audio
+		//SoundAction = X2Action_StartStopSound(class'X2Action_StartStopSound'.static.AddToVisualizationTrack(AvatarBuildTrack, Context));
+		//SoundAction.Sound = new class'SoundCue';
+		//SoundAction.Sound.AkEventOverride = AkEvent'SoundX2AvatarFX.Avatar_Ability_Dimensional_Rift_Target_Activate';
+		//SoundAction.iAssociatedGameStateObjectId = AvatarUnit.ObjectID;
+		//SoundAction.bStartPersistentSound = false;
+		//SoundAction.bIsPositional = true;
+		//SoundAction.vWorldPosition = World.GetPositionFromTileCoordinates(AvatarUnit.TileLocation);
+
+
+		class'X2Action_Fire_CloseUnfinishedAnim'.static.AddToVisualizationTrack(AvatarBuildTrack, Context);
+
+		Visualizer = X2VisualizerInterface(AvatarBuildTrack.TrackActor);
+		if( Visualizer != none )
+		{
+			Visualizer.BuildAbilityEffectsVisualization(VisualizeGameState, AvatarBuildTrack);
+		}
+
+	}
+	//****************************************************************************************
+
+	//****************************************************************************************
+	//Configure the visualization track for the targets
+	//****************************************************************************************
+	for (i = 0; i < Context.InputContext.MultiTargets.Length; ++i)
+	{
+		InteractingUnitRef = Context.InputContext.MultiTargets[i];
+
+		if( InteractingUnitRef == AvatarUnit.GetReference() )
+		{
+			BuildTrack = AvatarBuildTrack;
+		}
+		else
+		{
+			BuildTrack = EmptyTrack;
+			BuildTrack.StateObject_OldState = History.GetGameStateForObjectID(InteractingUnitRef.ObjectID, eReturnType_Reference, VisualizeGameState.HistoryIndex - 1);
+			BuildTrack.StateObject_NewState = VisualizeGameState.GetGameStateForObjectID(InteractingUnitRef.ObjectID);
+			BuildTrack.TrackActor = History.GetVisualizer(InteractingUnitRef.ObjectID);
+
+			class'X2Action_WaitForAbilityEffect'.static.AddToVisualizationTrack(BuildTrack, Context);
+		}
+
+		for( j = 0; j < Context.ResultContext.MultiTargetEffectResults[i].Effects.Length; ++j )
+		{
+			Context.ResultContext.MultiTargetEffectResults[i].Effects[j].AddX2ActionsForVisualization(VisualizeGameState, BuildTrack, Context.ResultContext.MultiTargetEffectResults[i].ApplyResults[j]);
+		}
+
+		TargetVisualizerInterface = X2VisualizerInterface(BuildTrack.TrackActor);
+		if( TargetVisualizerInterface != none )
+		{
+			//Allow the visualizer to do any custom processing based on the new game state. For example, units will create a death action when they reach 0 HP.
+			TargetVisualizerInterface.BuildAbilityEffectsVisualization(VisualizeGameState, BuildTrack);
+		}
+
+		if (BuildTrack.TrackActions.Length > 0)
+		{
+			OutVisualizationTracks.AddItem(BuildTrack);
+		}
+	}
+
+	OutVisualizationTracks.AddItem(AvatarBuildTrack);
+
+	TypicalAbility_AddEffectRedirects(VisualizeGameState, OutVisualizationTracks, AvatarBuildTrack);
 }
 
 //---------------------------------------------------------------------------------------
@@ -591,7 +704,7 @@ static function X2AbilityTemplate RTMentor() {
 	Template.AddShooterEffectExclusions();
 
 	Template.PostActivationEvents.AddItem(default.UnitUsedPsionicAbilityEvent);
-	Template.CustomFireAnim = 'HL_Psi_SelfCast';
+	Template.CustomFireAnim = 'HL_Psi_MindControl';
 
 	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
 	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
