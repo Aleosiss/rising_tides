@@ -113,3 +113,7 @@ FeedbackFriendlyDesc="This unit is suffering from psionic feedback! Protect them
 MeldFriendlyName="Mind Meld"
 MeldFriendlyDesc="This unit has joined the Meld, receiving and delivering psionic support."
 
+[RTGameState_RisingTidesCommand]
+SquadOneName="SPECTRE"
+SquadOneBackground"insert something edgy here"
+
