@@ -72,6 +72,8 @@ class RTAbility_GhostAbilitySet extends X2Ability
 	var config name BurstArrayName;
 	var config name BurstAnimName;
 
+	var float DefaultPsionicAnimDelay;
+
 //---------------------------------------------------------------------------------------
 //---CreateTemplates---------------------------------------------------------------------
 //---------------------------------------------------------------------------------------
@@ -913,13 +915,14 @@ static function X2AbilityTemplate TestAbility() {
 
 	Template.AbilityCosts.AddItem(default.FreeActionCost);
 	Template.AbilityTriggers.AddItem(default.PlayerInputTrigger);
-	Template.AbilityTargetStyle = default.SimpleSingleTarget;
+	Template.AbilityTargetStyle = default.SelfTarget;
 	Template.AbilityToHitCalc = default.DeadEye;
 
 	Effect = new class'X2Effect_Persistent';
 	Effect.BuildPersistentEffect(1, false, true, false, eGameRule_PlayerTurnEnd);
 	Effect.SetDisplayInfo(ePerkBuff_Penalty, "DEBUG", "DEBUG TEST EFFECT", Template.IconImage, true,,Template.AbilitySourceName);
 	Effect.DuplicateResponse = eDupe_Allow;
+	//Effect.EffectName = "TestEffect";
 	//Effect.TargetConditions.AddItem(class'X2Condition_OrderCheck'.static.CreateOrderCheck('EffectTargetCondition'));
 	Template.AddTargetEffect(Effect);
 
@@ -1063,7 +1066,7 @@ defaultproperties
 
 	RTMindControlTemplateName = "RTMindControl"
 	RTTechnopathyTemplateName = "RTTechnopathy"
-
+	DefaultPsionicAnimDelay = 4.0
 
 
 }
