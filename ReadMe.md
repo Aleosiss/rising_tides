@@ -28,7 +28,6 @@ This would be a bare-bones content mod. I also have the following content in min
 		- Animations/Visuals
 			- Time Stop: needs some kind of massive particle effect (pulse_distoration?)
 			- Extinction Event: needs some kind of massive particle effect (scaled up psi bomb?)
-			- Assuming Direct Control: needs XComPerkContent for tether
 			- Overflow Barrier: needs XComPerkContent for startup-ending-damaged particles
 		- Add x2/lw abilities to PsionicAbilityList
 
