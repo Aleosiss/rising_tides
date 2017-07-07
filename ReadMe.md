@@ -27,12 +27,10 @@ This would be a bare-bones content mod. I also have the following content in min
 	- General:
 		- Animations/Visuals
 			- Psionic Lance: needs XComPerkContent for projectile
-			- Time Stop: needs some kind of massive particle effect (?)
+			- Time Stop: needs some kind of massive particle effect (pulse_distoration?)
 			- Extinction Event: needs some kind of massive particle effect (scaled up psi bomb?)
 			- Assuming Direct Control: needs XComPerkContent for tether
-			- Psionic Lash: could use better animation. Look into ripping DLC anims
 			- Overflow Barrier: needs XComPerkContent for startup-ending-damaged particles
-			- Mind Control: needs custom BuildVisualizationFn to lessen delay between shooter and target anims
 			- Mentor: needs XComPerkContent for tether
 		- Add x2/lw abilities to PsionicAbilityList
 
