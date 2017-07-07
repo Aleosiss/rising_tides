@@ -1443,7 +1443,7 @@ static function X2AbilityTemplate TimeStandsStill()
 
 	// TODO: VISUALIZATION
 	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
-	Template.bSkipFireAction = true;
+	Template.CustomFireAnim = 'HL_Psi_SelfCast';
 
 	Template.AdditionalAbilities.AddItem('TimeStandsStillEndListener');
 
@@ -2109,7 +2109,7 @@ static function X2AbilityTemplate Harbinger()
 	Template.PostActivationEvents.AddItem(default.UnitUsedPsionicAbilityEvent);
 
 	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;	//TODO: VISUALIZATION
-	Template.bSkipFireAction = true;
+	Template.CustomFireAnim = 'HL_Psi_MindControl';
 	Template.AdditionalAbilities.AddItem('HarbingerCleanseListener');
 
 	Template.bCrossClassEligible = false;
@@ -2124,7 +2124,7 @@ simulated function OnHarbingerShieldRemoved_BuildVisualization(XComGameState Vis
 	if (XGUnit(BuildTrack.TrackActor).IsAlive())
 	{
 		SoundAndFlyOver = X2Action_PlaySoundAndFlyOver(class'X2Action_PlaySoundAndFlyOver'.static.AddToVisualizationTrack(BuildTrack, VisualizeGameState.GetContext()));
-		SoundAndFlyOver.SetSoundAndFlyOverParameters(None, "Harbinger Shield Broken", '', eColor_Bad, , 0.75, true);
+		SoundAndFlyOver.SetSoundAndFlyOverParameters(None, "Shield Broken", '', eColor_Bad, , 0.75, true);
 	}
 }
 
