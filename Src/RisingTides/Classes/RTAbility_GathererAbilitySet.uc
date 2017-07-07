@@ -55,7 +55,14 @@ class RTAbility_GathererAbilitySet extends RTAbility_GhostAbilitySet config(Risi
 	var name PsistormMarkedEffectName;
 
 
-	var localized name GuardianAngelHealText;
+	var config string ExtinctionEventChargingParticleString;
+	var config string ExtinctionEventReleaseParticleString;
+	var config string PsionicInterruptParticleString;
+	var config string UnwillingConduitDamageParticleString;
+	var config string UnwillingConduitRestoreParticleString;
+
+
+	var localized string GuardianAngelHealText;
 	var localized string KIPFriendlyName;
 	var localized string KIPFriendlyDesc;
 
@@ -312,8 +319,13 @@ static function X2AbilityTemplate CreateOverTheShoulderAbility(X2AbilityTemplate
 	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
 	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
 	Template.BuildInterruptGameStateFn = TypicalAbility_BuildInterruptGameState;
-	Template.bShowActivation = true;
-	Template.bSkipFireAction = true;
+	Template.CustomFireAnim = 'HL_Psi_SelfCast';
+
+	if(Template.DataName != 'RTTriangulation') {
+		Template.bShowActivation = true;
+		Template.bSkipFireAction = false;
+	} else Template.bSkipFireAction = true;
+	
 
 	return Template;
 }
@@ -747,7 +759,7 @@ static function X2AbilityTemplate RTMeldInduction() {
     Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
 	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
 	Template.BuildInterruptGameStateFn = TypicalAbility_BuildInterruptGameState;
-	Template.bSkipFireAction = true; // TODO: Visualization!
+	Template.CustomFireAnim = 'HL_Psi_MindControl';
 
 	Template.bCrossClassEligible = false;
 
@@ -776,7 +788,7 @@ static function RTEffect_SimpleHeal CreateGuardianAngelHealEffect() {
         Effect = new class'RTEffect_SimpleHeal';
         Effect.HEAL_AMOUNT = default.GUARDIAN_ANGEL_HEAL_VALUE;
         Effect.bUseWeaponDamage = false;
-		Effect.AbilitySourceName = default.GuardianAngelHealText;
+		Effect.nAbilitySourceName = default.GuardianAngelHealText;
 
         AbilityProperty = new class'X2Condition_AbilityProperty';
         AbilityProperty.OwnerHasSoldierAbilities.AddItem('RTGuardianAngel');
@@ -932,24 +944,24 @@ static function X2AbilityTemplate RTRudimentaryCreaturesEvent() {
     Template.AbilityToHitCalc = default.Deadeye;
     Template.AbilityTriggers.AddItem(new class'X2AbilityTrigger_Placeholder'); // triggered by listener return
 
-		Template.AbilityShooterConditions.AddItem(default.LivingShooterProperty);
-		Template.AbilityTargetConditions.AddItem(default.LivingTargetOnlyProperty);
+	Template.AbilityShooterConditions.AddItem(default.LivingShooterProperty);
+	Template.AbilityTargetConditions.AddItem(default.LivingTargetOnlyProperty);
 
-		VFXEffect = new class'X2Effect_Persistent';
-		VFXEffect.BuildPersistentEffect(0, false);
-		VFXEffect.VFXTemplateName = default.PsionicInterruptParticleString;
-		Template.AddTargetEffect(VFXEffect);
+	VFXEffect = new class'X2Effect_Persistent';
+	VFXEffect.BuildPersistentEffect(0, false);
+	VFXEffect.VFXTemplateName = default.PsionicInterruptParticleString;
+	Template.AddTargetEffect(VFXEffect);
 
     Template.AddTargetEffect(class'X2StatusEffects'.static.CreateStunnedStatusEffect(3, 100, true));
 
     DamageEffect = new class'X2Effect_ApplyWeaponDamage';
     DamageEffect.bIgnoreBaseDamage = true;
     DamageEffect.EffectDamageValue = default.RUDIMENTARY_CREATURES_DMG;
-		DamageEffect.bIgnoreArmor = true;
-		DamageEffect.DamageTypes.AddItem('Psi');
+	DamageEffect.bIgnoreArmor = true;
+	DamageEffect.DamageTypes.AddItem('Psi');
     Template.AddTargetEffect(DamageEffect);
 
-		Template.CustomFireAnim = 'HL_Psi_SelfCast';
+	Template.CustomFireAnim = 'HL_Psi_SelfCast';
 
     return Template;
 }
@@ -964,6 +976,7 @@ static function X2AbilityTemplate RTUnwillingConduits() {
 	local X2AbilityMultiTarget_AllUnits				MultiTarget;
 	local X2Condition_UnitEffects					UnitEffectCondition;
 	local X2Condition_UnitProperty					UnitPropertyCondition;
+	local X2Effect_Persistent						VFXEffect;
 
 	`CREATE_X2TEMPLATE(class'RTAbilityTemplate', Template, 'RTUnwillingConduits');
 
@@ -1001,8 +1014,14 @@ static function X2AbilityTemplate RTUnwillingConduits() {
 	DamageEffect.bIgnoreArmor = true;
 	DamageEffect.bBypassShields = true;
 	DamageEffect.EffectDamageValue = default.UNWILL_DMG;
-	DamageEffect.VFXTemplateName = default.UnwillingConduitDamageParticle;
 	Template.AddMultiTargetEffect(DamageEffect);
+
+	VFXEffect = new class'X2Effect_Persistent';
+	VFXEffect.VFXTemplateName = default.UnwillingConduitDamageParticleString;
+	Template.AddMultiTargetEffect(VFXEffect);
+
+	VFXEffect.VFXTemplateName = default.UnwillingConduitRestoreParticleString;
+	Template.AddShooterEffect(VFXEffect);
 
 	Trigger = new class'X2AbilityTrigger_EventListener';
 	Trigger.ListenerData.Deferral = ELD_OnStateSubmitted;
@@ -1712,9 +1731,8 @@ static function X2AbilityTemplate RTPsionicStorm() {
 	Template.AddMultiTargetEffect(MarkEffect);
 
 	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
-
-	// TODO: Change this
-	Template.bSkipFireAction = true;
+	Template.CustomFireAnim = 'HL_Psi_MindControl';
+	
 	Template.BuildVisualizationFn = DimensionalRiftStage1_BuildVisualization;
 	Template.BuildAffectedVisualizationSyncFn = DimensionalRigt1_BuildAffectedVisualization;
 	Template.CinescriptCameraType = "Psionic_FireAtLocation";
@@ -1755,6 +1773,7 @@ simulated function DimensionalRiftStage1_BuildVisualization(XComGameState Visual
 	local XComGameState_Ability SustainedAbility, Ability;
 	local TTile					Tile;
 	local vector				Location;
+	local X2Action_PlayAnimation AnimAction;
 
 	History = `XCOMHISTORY;
 
@@ -1782,11 +1801,11 @@ simulated function DimensionalRiftStage1_BuildVisualization(XComGameState Visual
 		// Exit cover
 		class'X2Action_ExitCover'.static.AddToVisualizationTrack(AvatarBuildTrack, Context);
 
-		// class'X2Action_Fire_OpenUnfinishedAnim'.static.AddToVisualizationTrack(AvatarBuildTrack, Context);
+		class'X2Action_Fire_OpenUnfinishedAnim'.static.AddToVisualizationTrack(AvatarBuildTrack, Context);
 
 		// Wait to time the start of the warning FX
 		WaitAction = X2Action_TimedWait(class'X2Action_TimedWait'.static.AddToVisualizationTrack(AvatarBuildTrack, Context));
-		WaitAction.DelayTimeSec = class'X2Ability_PsiWitch'.default.DIMENSIONAL_RIFT_STAGE1_START_WARNING_FX_SEC / 10;
+		WaitAction.DelayTimeSec = 4;
 
  		EffectAction = X2Action_PlayEffect(class'X2Action_PlayEffect'.static.AddToVisualizationTrack(AvatarBuildTrack, Context));
 		EffectAction.EffectName = "FX_Psi_Void_Rift.P_Psi_Void_Rift_Activation";
@@ -1813,6 +1832,8 @@ simulated function DimensionalRiftStage1_BuildVisualization(XComGameState Visual
 			SoundAction.bIsPositional = true;
 			SoundAction.vWorldPosition = EffectAction.EffectLocation;
 		}
+
+		class'X2Action_Fire_CloseUnfinishedAnim'.static.AddToVisualizationTrack(AvatarBuildTrack, Context);
 
 		Visualizer = X2VisualizerInterface(AvatarBuildTrack.TrackActor);
 		if( Visualizer != none )
