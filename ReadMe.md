@@ -26,7 +26,7 @@ This would be a bare-bones content mod. I also have the following content in min
 		- Rework Assuming Direct Control to enable bonus abilities instead of bonus damage
 	- General:
 		- Animations/Visuals
-			- Time Stop: needs some kind of massive particle effect (pulse_distoration?)
+		- Give Harbinger a bonus ability unlock instead of bonus Psi damage on hit
 			- Extinction Event: needs some kind of massive particle effect (scaled up psi bomb?)
 			- Overflow Barrier: needs XComPerkContent for startup-ending-damaged particles
 		- Add x2/lw abilities to PsionicAbilityList
