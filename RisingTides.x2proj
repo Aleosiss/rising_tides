@@ -35,6 +35,9 @@
     <Content Include="Content\RT_Perk_Psi_ADC.upk">
       <SubType>Content</SubType>
     </Content>
+    <Content Include="Content\RT_Perk_Psi_Extinction.upk">
+      <SubType>Content</SubType>
+    </Content>
     <Content Include="Content\RT_Perk_Psi_Lance.upk">
       <SubType>Content</SubType>
     </Content>
@@ -42,6 +45,9 @@
       <SubType>Content</SubType>
     </Content>
     <Content Include="Content\RT_Perk_Psi_MindControl.upk">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Content\RT_Perk_Psi_TimeStandsStill.upk">
       <SubType>Content</SubType>
     </Content>
     <Content Include="Localization\RisingTides.int">
