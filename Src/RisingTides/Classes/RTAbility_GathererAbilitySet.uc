@@ -478,7 +478,7 @@ static function X2AbilityTemplate RTExtinctionEventPartOne() {
 
       Template.CinescriptCameraType = "StandardMovement";
 
-  	  Template.bSkipFireAction = false;
+  	  Template.bSkipFireAction = true;
   	  Template.bCrossClassEligible = false;
 
       Template.AbilityTriggers.AddItem(default.PlayerInputTrigger);
@@ -511,6 +511,7 @@ static function X2AbilityTemplate RTExtinctionEventPartTwo() {
       local RTEffect_Stealth StealthEffect;
       local X2Effect_DelayedAbilityActivation ActivationEffect;
       local X2AbilityTrigger_EventListener Trigger;
+	  local X2Effect_Persistent			VFXEffect;
 
       `CREATE_X2ABILITY_TEMPLATE(Template, 'RTExtinctionEventPartTwo');
       Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_NeverShow;
@@ -536,6 +537,12 @@ static function X2AbilityTemplate RTExtinctionEventPartTwo() {
 
 	  StealthEffect = class'RTEffectBuilder'.static.RTCreateStealthEffect(1, false, 1.0f, eGameRule_PlayerTurnBegin, Template.AbilitySourceName);
 	  Template.AddTargetEffect(StealthEffect);
+
+	  VFXEffect = new class'X2Effect_Persistent';
+	  VFXEffect.BuildPersistentEffect(1, false, false, , eGameRule_PlayerTurnBegin);
+	  VFXEffect.EffectAddedFn = class'RTHelpers'.static.PanicLoopBeginFn;
+	  VFXEffect.EffectRemovedFn = class'RTHelpers'.static.PanicLoopEndFn;
+	  Template.AddTargetEffect(VFXEffect);
 
       ActivationEffect = new class'X2Effect_DelayedAbilityActivation';
       ActivationEffect.BuildPersistentEffect(1, false, false, , eGameRule_PlayerTurnBegin);
@@ -564,7 +571,8 @@ static function X2AbilityTemplate RTExtinctionEventPartThree() {
       Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
   	  Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
 	  Template.BuildInterruptGameStateFn = TypicalAbility_BuildInterruptGameState;
-  	  Template.bSkipFireAction = true; //TODO
+  	  Template.CustomFireAnim = 'HL_Psi_SelfCast';
+	  Template.bShowActivation = true;
   	  Template.bCrossClassEligible = false;
 
       Template.AbilityTargetStyle = default.SelfTarget;
@@ -595,6 +603,8 @@ static function X2AbilityTemplate RTExtinctionEventPartThree() {
       WeaponDamage.EnvironmentalDamageAmount = 9999999; // good bye
       WeaponDamage.EffectDamageValue = default.EXTINCTION_EVENT_DMG;
 	  WeaponDamage.DamageTypes.AddItem('Psi');
+	  WeaponDamage.bCanBeRedirected = false;
+	  WeaponDamage.bApplyOnMiss = true;
       Template.AddMultiTargetEffect(WeaponDamage);
 
       return Template;
@@ -677,6 +687,7 @@ static function X2AbilityTemplate RTTheSixPathsOfPain() {
 	  Template.AddShooterEffectExclusions();
 	  FeedbackCondition = new class'X2Condition_UnitEffects';
 	  FeedbackCondition.AddExcludeEffect(default.RTFeedbackEffectName, 'AA_UnitIsPanicked');
+	  FeedBackCondition.AddExcludeEffect(class'X2StatusEffects'.default.UnconsciousName, 'AA_UnitIsPanicked');
 	  Template.AbilityShooterConditions.AddItem(FeedbackCondition);
 
       ActivationEffect = new class'X2Effect_ImmediateAbilityActivation';
