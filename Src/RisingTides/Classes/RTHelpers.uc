@@ -1,7 +1,5 @@
 // This is an Unreal Script
-
 class RTHelpers extends Object config(RisingTides);
-
 
 var config array<name> StandardShots, MeleeAbilities, SniperShots, OverwatchShots, PsionicAbilities, FreeActions;
 
@@ -133,3 +131,26 @@ static function GetAdjacentTiles(TTile TargetTile, out array<TTile> AdjacentTile
 	}
 
 }
+
+static function PanicLoopBeginFn( X2Effect_Persistent PersistentEffect, const out EffectAppliedData ApplyEffectParameters, XComGameState_BaseObject kNewTargetState, XComGameState NewGameState )
+{
+	local XComGameState_Unit UnitState;
+
+	// change the height
+	UnitState = XComGameState_Unit( NewGameState.CreateStateObject( class'XComGameState_Unit', ApplyEffectParameters.TargetStateObjectRef.ObjectID ) );
+	UnitState.bPanicked = true;
+
+	NewGameState.AddStateObject( UnitState );
+}
+
+static function PanicLoopEndFn( X2Effect_Persistent PersistentEffect, const out EffectAppliedData ApplyEffectParameters, XComGameState NewGameState, bool bCleansed )
+{
+	local XComGameState_Unit UnitState;
+
+	// change the height
+	UnitState = XComGameState_Unit( NewGameState.CreateStateObject( class'XComGameState_Unit', ApplyEffectParameters.TargetStateObjectRef.ObjectID ) );
+	UnitState.bPanicked = false;
+
+	NewGameState.AddStateObject( UnitState );
+}
+
