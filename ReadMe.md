@@ -20,15 +20,16 @@ This would be a bare-bones content mod. I also have the following content in min
 		- nothing
 	- Marksman:
 		- nothing (Maybe rework time stop to only take place over 1 turn)
+		- Give Harbinger a bonus ability unlock instead of bonus Psi damage on hit
 	- Gatherer:
 		- Redo Guardian Angel (?)
 		- Add Over the Shoulder exception for civilians that are actually faceless
 		- Rework Assuming Direct Control to enable bonus abilities instead of bonus damage
 	- General:
 		- Animations/Visuals
-		- Give Harbinger a bonus ability unlock instead of bonus Psi damage on hit
-			- Extinction Event: needs some kind of massive particle effect (scaled up psi bomb?)
 			- Overflow Barrier: needs XComPerkContent for startup-ending-damaged particles
+			- Rudimentary Creatures: implement particle effect on cast
+			- Unwilling Conduits: Need soul stealing gfx
 		- Add x2/lw abilities to PsionicAbilityList
 
 ###### Current Table:
@@ -41,6 +42,8 @@ This would be a bare-bones content mod. I also have the following content in min
 ###### Current Bugs:
 	- Time Stop damage calculation isn't visualized properly
 	- Time Stop damage calculation is fucked, use code from X2Effect_DLC_3AbsorptionField.uc to rewrite
+	- Time Stop needs a listener to stop units PostBeginPlay
+	- Extinction Event needs to somehow stop revive units from reviving
 	- Make extend effect duration happen on move for Aura Effects as well, possibly by breaking its logic out into a separate method that is called in either place
 
 ###### Current Sprint Goals:
