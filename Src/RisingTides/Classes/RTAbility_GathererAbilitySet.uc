@@ -148,7 +148,7 @@ static function X2AbilityTemplate OverTheShoulder()
 	Template.AdditionalAbilities.AddItem('LIOverwatchShot');
 	Template.AdditionalAbilities.AddItem('RTUnstableConduitBurst');
 	Template.AdditionalAbilities.AddItem('PsionicActivate');
-	Template.AdditionalAbilities.AddItem('RTHarbingerBonusDamage');
+	Template.AdditionalAbilities.AddItem('RTHarbingerPsionicLance');
 
 	Template.PostActivationEvents.AddItem(default.PostOverTheShoulderEventName);
 

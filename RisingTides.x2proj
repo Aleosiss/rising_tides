@@ -32,6 +32,9 @@
     <Content Include="Content\RisingTidesContentPackage.upk">
       <SubType>Content</SubType>
     </Content>
+    <Content Include="Content\RT_Perk_Harbinger_Lance.upk">
+      <SubType>Content</SubType>
+    </Content>
     <Content Include="Content\RT_Perk_Psi_ADC.upk">
       <SubType>Content</SubType>
     </Content>

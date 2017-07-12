@@ -87,7 +87,7 @@ static function array<X2DataTemplate> CreateTemplates()
 	Templates.AddItem(HeatChannelIcon());							// icon
 	Templates.AddItem(HeatChannelCooldown());
 	Templates.AddItem(Harbinger());								// icon	// animation
-	Templates.AddItem(RTHarbingerBonusDamage());
+	Templates.AddItem(RTHarbingerPsionicLance());
 	Templates.AddItem(HarbingerCleanseListener());
 	Templates.AddItem(ShockAndAwe());								// icon
 	Templates.AddItem(ShockAndAweListener());
@@ -150,7 +150,7 @@ static function X2AbilityTemplate ScopedAndDropped()
 	Template.AdditionalAbilities.AddItem('LIOverwatchShot');
 	Template.AdditionalAbilities.AddItem('RTUnstableConduitBurst');
 	Template.AdditionalAbilities.AddItem('PsionicActivate');
-	Template.AdditionalAbilities.AddItem('RTHarbingerBonusDamage');
+	Template.AdditionalAbilities.AddItem('RTHarbingerPsionicLance');
 
 	// Probably required
 	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
@@ -2094,6 +2094,7 @@ static function X2AbilityTemplate Harbinger()
 	HarbingerEffect.BONUS_AIM = default.HARBINGER_AIM_BONUS;
 	HarbingerEffect.BONUS_WILL = default.HARBINGER_WILL_BONUS;
 	HarbingerEffect.BONUS_ARMOR = default.HARBINGER_ARMOR_BONUS;
+	HarbingerEffect.EffectName = 'HarbingerPossessionEffect';
 	Template.AddTargetEffect(HarbingerEffect);
 
 	TagEffect = new class'X2Effect_Persistent';
@@ -2131,40 +2132,75 @@ simulated function OnHarbingerShieldRemoved_BuildVisualization(XComGameState Vis
 //---------------------------------------------------------------------------------------
 //---Harbinger Bonus Damage--------------------------------------------------------------
 //---------------------------------------------------------------------------------------
-static function X2AbilityTemplate RTHarbingerBonusDamage() {
-    local X2AbilityTemplate Template;
-    local X2Effect_ApplyWeaponDamage DamageEffect;
+static function X2AbilityTemplate RTHarbingerPsionicLance() {
+	local X2AbilityTemplate					Template;
+	local X2AbilityTarget_Cursor			CursorTarget;
+	local X2AbilityMultiTarget_Line         LineMultiTarget;
+	local X2Condition_UnitProperty          TargetCondition;
+	local X2Condition_UnitEffects			EffectCondition;
+	local X2Effect_ApplyWeaponDamage        DamageEffect;
+	local X2AbilityCooldown_PerPlayerType	Cooldown;
 
-    `CREATE_X2ABILITY_TEMPLATE(Template, 'RTHarbingerBonusDamage');
+	`CREATE_X2ABILITY_TEMPLATE(Template, 'RTHarbingerPsionicLance');
 
-    Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_NeverShow;
-    Template.Hostility = eHostility_Neutral;
-    Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_swordSlash";
-    Template.AbilitySourceName = 'eAbilitySource_Psionic';
+	Template.AbilitySourceName = 'eAbilitySource_Psionic';
+	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_ShowIfAvailable;
+	Template.Hostility = eHostility_Offensive;
+	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_nulllance";
+	Template.ShotHUDPriority = class'UIUtilities_Tactical'.const.OVERWATCH_PRIORITY + 5;
 
-    Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
+	Template.CustomFireAnim = 'HL_Psi_ProjectileHigh';
+	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
 	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
 	Template.BuildInterruptGameStateFn = TypicalAbility_BuildInterruptGameState;
-	Template.bSkipFireAction = true;
-	Template.bShowActivation = true;
-    Template.bCrossClassEligible = false;
+
+	Template.AbilityCosts.AddItem(default.FreeActionCost);
+
+	Cooldown = new class'X2AbilityCooldown_PerPlayerType';
+	Cooldown.iNumTurns = 1;
+	Template.AbilityCooldown = Cooldown;
+
+	Template.AbilityTriggers.AddItem(default.PlayerInputTrigger);
+	Template.AbilityToHitCalc = default.DeadEye;
+
+	CursorTarget = new class'X2AbilityTarget_Cursor';
+	CursorTarget.FixedAbilityRange = 18;
+	Template.AbilityTargetStyle = CursorTarget;
+
+	LineMultiTarget = new class'X2AbilityMultiTarget_Line';
+	Template.AbilityMultiTargetStyle = LineMultiTarget;
+
+	EffectCondition = new class'X2Condition_UnitEffects';
+	EffectCondition.AddRequireEffect('HarbingerPossessionEffect', 'AA_UnitIsSupressed');
+	Template.AbilityShooterConditions.AddItem(EffectCondition);
 
 	Template.AbilityShooterConditions.AddItem(default.LivingShooterProperty);
-	Template.AbilityTargetConditions.AddItem(default.LivingTargetOnlyProperty);
+	Template.AddShooterEffectExclusions();
 
-    Template.AbilityTargetStyle = default.SimpleSingleTarget;
-    Template.AbilityToHitCalc = default.Deadeye;
-    Template.AbilityTriggers.AddItem(new class'X2AbilityTrigger_Placeholder'); // triggered by listener return
+	TargetCondition = new class'X2Condition_UnitProperty';
+	TargetCondition.ExcludeFriendlyToSource = false;
+	TargetCondition.ExcludeDead = true;
+	Template.AbilityMultiTargetConditions.AddItem(TargetCondition);
 
-    DamageEffect = new class'X2Effect_ApplyWeaponDamage';
-    DamageEffect.bIgnoreBaseDamage = true;
-    DamageEffect.EffectDamageValue = default.HARBINGER_DMG;
-	DamageEffect.bIgnoreArmor = true;
-    Template.AddTargetEffect(DamageEffect);
+	DamageEffect = new class'X2Effect_ApplyWeaponDamage';
+	DamageEffect.bIgnoreBaseDamage = true;
+	DamageEffect.DamageTag = 'PsionicLance';
+	DamageEffect.bIgnoreArmor = false;
+	DamageEffect.EffectDamageValue = class'RTAbility_BerserkerAbilitySet'.default.PSILANCE_DMG;
+	Template.AddMultiTargetEffect(DamageEffect);
 
-    return Template;
+	Template.TargetingMethod = class'X2TargetingMethod_Line';
+	Template.CinescriptCameraType = "Psionic_FireAtLocation";
+
+	Template.ActivationSpeech = 'NullLance';
+
+	Template.bOverrideAim = true;
+	Template.bUseSourceLocationZToAim = true;
+
+	Template.PostActivationEvents.AddItem(default.UnitUsedPsionicAbilityEvent);
+
+	return Template;
 }
-
 
 
 //---------------------------------------------------------------------------------------

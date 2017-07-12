@@ -271,11 +271,11 @@ LocFlyOverText="Heat Channel"
 LocPromotionPopupText="<Bullet/> When using Psionic abilities, this unit can channel heat from its weapon to fuel the ability, reloading the weapon and reducing the cooldown of the ability by one per ammo reloaded.<br/><Bullet/> 8 turn cooldown.<br/>"
 
 [Harbinger X2AbilityTemplate]
-LocFriendlyName="Harbinger"
+LocFriendlyName="Assuming Direct Control"
 LocLongDescription="Empower a friendly melded unit, healing it fully and granting it significant combat bonuses."
 LocHelpText="Empower a friendly melded unit, healing it fully and granting it significant combat bonuses."
-LocFlyOverText="Harbinger"
-LocPromotionPopupText="<Bullet/> Empower a friendly melded unit, healing it fully and granting it significant combat bonuses.<br/><Bullet/> 8 turn cooldown.<br/><Bullet/> +4 armor, +5 shield hp, + 10 aim, + 10 will, + 2 damage.<br/><Bullet/> Effect is broken on meld loss.<br/>"
+LocFlyOverText="Assuming Direct Control"
+LocPromotionPopupText="<Bullet/> Empower a friendly melded unit, healing it fully and granting it significant combat bonuses.<br/><Bullet/> 8 turn cooldown.<br/><Bullet/> +4 armor, +5 shield hp, + 10 aim, + 10 will.<br/><Bullet/> Effect is broken on meld loss.<br/>"
 
 [ShockAndAwe X2AbilityTemplate]
 LocFriendlyName="Shock And Awe"
@@ -500,6 +500,13 @@ LocFriendlyName="Psionic Lance"
 LocLongDescription="Fire a lance of pure psionic energy."
 LocHelpText="Fire a lance of pure psionic energy."
 LocFlyOverText="Psionic Lance"
+LocPromotionPopupText="<Bullet/> <br/>"
+
+[RTHarbingerPsionicLance X2AbilityTemplate]
+LocFriendlyName="Psionic Lance (Assuming Direct Control)"
+LocLongDescription="Fire a lance of pure psionic energy."
+LocHelpText="Fire a lance of pure psionic energy."
+LocFlyOverText="Psionic Lance (Assuming Direct Control)"
 LocPromotionPopupText="<Bullet/> <br/>"
 
 [RTDashingStrike X2AbilityTemplate]
