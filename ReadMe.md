@@ -20,14 +20,12 @@ This would be a bare-bones content mod. I also have the following content in min
 		- nothing
 	- Marksman:
 		- nothing (Maybe rework time stop to only take place over 1 turn)
-		- Give Harbinger a bonus ability unlock instead of bonus Psi damage on hit
 	- Gatherer:
 		- Redo Guardian Angel (?)
 		- Add Over the Shoulder exception for civilians that are actually faceless
-		- Rework Assuming Direct Control to enable bonus abilities instead of bonus damage
+		- Unfuck Crushing Grasp
 	- General:
 		- Animations/Visuals
-			- Overflow Barrier: needs XComPerkContent for startup-ending-damaged particles
 			- Rudimentary Creatures: implement particle effect on cast
 			- Unwilling Conduits: Need soul stealing gfx
 		- Add x2/lw abilities to PsionicAbilityList
@@ -48,5 +46,6 @@ This would be a bare-bones content mod. I also have the following content in min
 
 ###### Current Sprint Goals:
 	- Verify that Networked OI works with CCS
+	- Activation sound effect for Overflow Barrier
 
 ###### Current Overrides: X2MeleePathingPawn

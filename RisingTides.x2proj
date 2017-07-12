@@ -50,6 +50,9 @@
     <Content Include="Content\RT_Perk_Psi_MindControl.upk">
       <SubType>Content</SubType>
     </Content>
+    <Content Include="Content\RT_Perk_Psi_Overflow.upk">
+      <SubType>Content</SubType>
+    </Content>
     <Content Include="Content\RT_Perk_Psi_TimeStandsStill.upk">
       <SubType>Content</SubType>
     </Content>
