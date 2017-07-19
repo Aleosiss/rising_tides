@@ -584,11 +584,11 @@ static function X2AbilityTemplate RTBlur() {
 //---Purge-------------------------------------------------------------------------------
 //---------------------------------------------------------------------------------------
 static function X2AbilityTemplate RTPurge() {
-	local X2AbilityTemplate Template;
-	local X2Effect_RangerStealth StealthEffect;
-	local RTEffect_RemoveStacks	PurgeEffect;
-	local RTCondition_EffectStackCount	BloodlustCondition;
-	local X2Effect_Persistent 					VFXEffect;
+	local X2AbilityTemplate									Template;
+	local X2Effect_RangerStealth							StealthEffect;
+	local RTEffect_RemoveStacks								PurgeEffect;
+	local RTCondition_EffectStackCount						BloodlustCondition;
+	local X2Effect_Persistent 								VFXEffect;
 
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'RTPurge');
 	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_snapshot";
@@ -616,7 +616,7 @@ static function X2AbilityTemplate RTPurge() {
 	VFXEffect = new class'X2Effect_Persistent';
 	VFXEffect.VFXTemplateName = default.PurgeParticleString;
 	VFXEffect.BuildPersistentEffect(0, false);
-	Template.AddTargetEffect(VFXEffect);
+	//Template.AddTargetEffect(VFXEffect);
 
 	Template.CustomFireAnim = 'HL_Psi_SelfCast';
 
@@ -704,7 +704,7 @@ static function X2AbilityTemplate RTMentor() {
 	Template.AddShooterEffectExclusions();
 
 	Template.PostActivationEvents.AddItem(default.UnitUsedPsionicAbilityEvent);
-	Template.CustomFireAnim = 'HL_Psi_MindControl';
+	Template.CustomFireAnim = 'HL_Psi_ProjectileMedium';
 
 	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
 	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
@@ -741,7 +741,6 @@ static function X2AbilityTemplate RTReprobateWaltz()
 
 	Template.AbilityTargetStyle = new class'X2AbilityTarget_MovingMelee';
 	Template.TargetingMethod = class'X2TargetingMethod_MeleePath';
-
 
 	Template.AbilityTargetConditions.AddItem(default.MeleeVisibilityCondition);
 

@@ -204,7 +204,9 @@ function EventListenerReturn UnwillingConduitEvent(Object EventData, Object Even
 	iConduits = 0;
 	foreach History.IterateByClassType(class'XComGameState_Unit', IteratorUnitState) {
 		if(IteratorUnitState.AffectedByEffectNames.Find(class'RTAbility_GathererAbilitySet'.default.OverTheShoulderEffectName) != INDEX_NONE) {
-			iConduits++;
+			if(IteratorUnitState.IsEnemyUnit(PreviousSourceUnitState)) {
+				iConduits++;
+			}
 		}
 	}
 
@@ -227,8 +229,8 @@ function EventListenerReturn UnwillingConduitEvent(Object EventData, Object Even
 
 	`TACTICALRULES.SubmitGameState(NewGameState);
 
-
-	AbilityTriggerAgainstSingleTarget(OwnerStateObject, false);
+	if(iConduits > 0)
+		AbilityTriggerAgainstSingleTarget(OwnerStateObject, false);
 	return ELR_NoInterrupt;
 }
 

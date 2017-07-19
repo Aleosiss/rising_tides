@@ -2,6 +2,22 @@ class RTEffect_TimeStopMaster extends X2Effect_PersistentStatChange;
 
 var bool bShouldPauseTimer;
 
+function RegisterForEvents(XComGameState_Effect EffectGameState)
+{
+	local X2EventManager EventMgr;
+	local Object EffectObj;
+	local RTGameState_Effect RTEffectState;
+
+	EventMgr = `XEVENTMGR;
+	RTEffectState = RTGameState_Effect(EffectGameState);
+	EffectObj = RTEffectState;
+
+	// Register for the required events
+
+	// Check when anything spawns.
+	EventMgr.RegisterForEvent(EffectObj, 'OnUnitBeginPlay', RTEffectState.RTApplyTimeStop, ELD_OnStateSubmitted, 80);
+}
+
 simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffectParameters, XComGameState_BaseObject kNewTargetState, XComGameState NewGameState, XComGameState_Effect NewEffectState)
 {
 	local XComGameState_Unit TargetUnit;
@@ -58,4 +74,9 @@ simulated function DelayTimer(XComGameState NewGameState) {
 		if(NewUiTimer.TimerValue > 3) // the 3 value is hard-coded into the kismet mission maps, so we hard-code it here as well {
 			NewUiTimer.UiState = Normal_Blue;
 	}
+}
+
+defaultproperties
+{
+	GameStateEffectClass = class'RTGameState_Effect'
 }

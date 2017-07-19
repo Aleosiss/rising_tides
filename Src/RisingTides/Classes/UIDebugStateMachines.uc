@@ -59,7 +59,7 @@ simulated function UpdateFlagForUnit(XGUnit Unit)
         {
             Texts[i].Text.Show();
             Texts[i].Text.SetNormalizedPosition(TextLoc);
-            Texts[i].Text.SetText("<font color='#ffffff'>"$ Unit.Name @ Unit.IdleStateMachine.GetStateName() $ "</font>");
+            Texts[i].Text.SetText("<font color='#ffffff'>"$ Unit.Name @ Unit.IdleStateMachine.GetStateName() @ ": " @ Unit.IdleStateMachine.PersistentEffectIdleName $ "</font>");
             //Texts[i].Text.SetText(Unit.Name @ Unit.IdleStateMachine.GetStateName());
         }
         else

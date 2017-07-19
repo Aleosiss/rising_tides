@@ -83,7 +83,7 @@ DefaultProperties
 	DamageTypes(0)="Acid"
 	DuplicateResponse=eDupe_Refresh
 	bCanTickEveryAction= false // would probably be op
-	iStackCount = 1
+	// iStackCount = 1
 
 	Begin Object Class=X2Effect_ApplyWeaponDamage Name=AcidDamage
 	End Object

@@ -63,18 +63,15 @@ var localized string SquadOneBackground;
 
 struct Squad
 {
-	var int							SquadID;
-	var array<StateObjectReference> Ghosts;
-	var localized string			SquadName;
-	var localized string			SquadBackground;
+
 };
 
 var const config array<RTGhostOperative>	GhostTemplates;
 
-var() array<RTGhostOperative> 	Ghosts;					// ghosts active
-var() array<RTGhostOperative> 	Deplayed; 			// ghosts that will be on the next mission
-var() array<Squad>				Squads;						// list of ghost teams (only one for now)
-var() int 						iOperativeLevel;		// all ghosts get level ups after a mission, even if they weren't on it. lorewise, they're constantly running missions; the player only sees a fraction of them
+var() array<RTGhostOperative> 	Ghosts;													// ghosts active
+var() array<RTGhostOperative> 	Deplayed; 												// ghosts that will be on the next mission
+var() array<RTGameState_PersistentGhostSquad>				Squads;						// list of ghost teams (only one for now)
+var() int 						iOperativeLevel;										// all ghosts get level ups after a mission, even if they weren't on it. lorewise, they're constantly running missions; the player only sees a fraction of them
 
 
 /* END OPERATIVE RECORD   */
@@ -110,7 +107,8 @@ function CreateRTOperatives(XComGameState NewGameState) {
 	local XComGameState_Item WeaponState;
 	local X2WeaponUpgradeTemplate UpgradeTemplate;
 	local name WeaponUpgradeName;
-	local RTGameState_RisingTidesCommand RTCom;
+
+	// local RTGameState_RisingTidesCommand RTCom;
 
 	local RTGhostOperative IteratorGhost;
 	local RTGhostOperative Ghost;
@@ -149,11 +147,13 @@ function CreateRTOperatives(XComGameState NewGameState) {
 
 function CreateRTSquads(XComGameState NewGameState) {
 
-	local Squad one;
+	local RTGameState_PersistentGhostSquad one;
 	local RTGhostOperative Ghost;
 
-	one = CreateSquad(1, default.SquadOneName, default.SquadOneBackground);
-	
+	one = RTGameState_PersistentGhostSquad(NewGameState.CreateStateObject(class'RTGameState_PersistentGhostSquad'));
+	one.CreateSquad(1, default.SquadOneName, default.SquadOneBackground);
+	NewGameState.AddStateObject(one);
+
 	foreach Ghosts(Ghost) {
 		// team 1 "SPECTRE"
 		if(Ghost.ExternalID == "Queen" || Ghost.ExternalID == "Whisper" || Ghost.ExternalID == "Nova") {
@@ -163,18 +163,6 @@ function CreateRTSquads(XComGameState NewGameState) {
 	}
 	
 
-	Squads.AddItem(one);
-
-}
-
-function Squad CreateSquad(int ID, String LocName, String LocBackground) {
-	local Squad rtsquad;
-
-	rtsquad.SquadID = ID;
-	rtsquad.SquadName = LocName;
-	rtsquad.SquadBackground = LocBackground;
-
-	return rtsquad;
 }
 
 // UpdateNumDeaths(name CharacterTemplateName, StateObjectReference UnitRef)
@@ -247,7 +235,7 @@ simulated function UpdateNumCrits(name CharacterTemplateName) {
 static function RTGameState_RisingTidesCommand GetRTCommand() {
 	local XComGameStateHistory History;
 	local RTGameState_RisingTidesCommand RTCom;
-	local XComGameState NewGameState;
+	
 
 	History = `XCOMHISTORY;
 

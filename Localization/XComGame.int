@@ -568,17 +568,17 @@ LocFlyOverText="Meld Induction"
 LocPromotionPopupText="<Bullet/> When this unit recieves Feedback, it also recieves Stealth.<br/><Bullet/> Stealth usually lasts for the duration of the Feedback event.<br/>"
 
 [RTRudimentaryCreatures X2AbilityTemplate]
-LocFriendlyName="Rudimentary Creatures"
+LocFriendlyName="Sovereign"
 LocLongDescription="When units affected by Over the Shoulder attempt to use psionic abilities, this unit will attempt to interrupt the ability, stunning the user and dealing minor psionic damage."
 LocHelpText="When units affected by Over the Shoulder attempt to use psionic abilities, this unit will attempt to interrupt the ability, stunning the user and dealing minor psionic damage."
-LocFlyOverText="Rudimentary Creatures"
+LocFlyOverText="Sovereign"
 LocPromotionPopupText="<Bullet/> When units affected by Over the Shoulder attempt to use psionic abilities, this unit will attempt to interrupt the ability, stunning the user and dealing minor psionic damage.<br/>"
 
 [RTRudimentaryCreaturesEvent X2AbilityTemplate]
-LocFriendlyName="Rudimentary Creatures"
+LocFriendlyName="Sovereign"
 LocLongDescription="When units affected by Over the Shoulder attempt to use psionic abilities, this unit will attempt to interrupt the ability, stunning the user and dealing minor psionic damage."
 LocHelpText="When units affected by Over the Shoulder attempt to use psionic abilities, this unit will attempt to interrupt the ability, stunning the user and dealing minor psionic damage."
-LocFlyOverText="Rudimentary Creatures"
+LocFlyOverText="Sovereign"
 LocPromotionPopupText="<Bullet/> When units affected by Over the Shoulder attempt to use psionic abilities, this unit will attempt to interrupt the ability, stunning the user and dealing minor psionic damage.<br/>"
 
 [RTExtinctionEventPartOne X2AbilityTemplate]

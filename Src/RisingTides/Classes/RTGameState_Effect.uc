@@ -1725,6 +1725,7 @@ function TriggerBumpInTheNightFlyoverVisualizationFn(XComGameState VisualizeGame
 	local XComGameStateHistory History;
 	local X2AbilityTemplate AbilityTemplate;
 	local XComGameState_Ability AbilityState;
+	local string					s;
 
 	History = `XCOMHISTORY;
 	foreach VisualizeGameState.IterateByClassType(class'XComGameState_Unit', UnitState)
@@ -1747,14 +1748,37 @@ function TriggerBumpInTheNightFlyoverVisualizationFn(XComGameState VisualizeGame
 		AbilityTemplate = AbilityState.GetMyTemplate();
 		if (AbilityTemplate != none)
 		{
+			s = XComGameState_Ability(History.GetGameStateForObjectID(UnitState.FindAbility('BumpInTheNight').ObjectID)).GetMyTemplate().LocFriendlyName;
+			
 			SoundAndFlyOver = X2Action_PlaySoundAndFlyOver(class'X2Action_PlaySoundAndFlyOver'.static.AddToVisualizationTrack(BuildTrack, VisualizeGameState.GetContext()));
-			SoundAndFlyOver.SetSoundAndFlyOverParameters(None,"Bump in the Night", '', eColor_Good, AbilityTemplate.IconImage);
+			SoundAndFlyOver.SetSoundAndFlyOverParameters(None, s, '', eColor_Good, AbilityTemplate.IconImage);
 
 			OutVisualizationTracks.AddItem(BuildTrack);
 		}
 		break;
 	}
 }
+
+function EventListenerReturn RTApplyTimeStop(Object EventData, Object EventSource, XComGameState GameState, Name EventID) {
+	local XComGameState_Unit TargetState;
+	local XComGameState_Unit SourceState;
+	local XComGameState_Ability AbilityState;
+
+	TargetState = XComGameState_Unit(EventData);
+	if(TargetState == none) {
+		`LOG("Rising Tides: Couldn't apply time stop, target was not an XComGameState_Unit");
+		return ELR_NoInterrupt;
+	}
+
+	SourceState = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(ApplyEffectParameters.SourceStateObjectRef.ObjectID));
+	if(SourceState.AffectedByEffectNames.Find('TimeStopMasterEffect') != INDEX_NONE) {
+		InitializeAbilityForActivation(AbilityState, SourceState, 'TimeStandsStillInterruptListener', `XCOMHISTORY);
+		ActivateAbility(AbilityState, TargetState.GetReference());
+	}
+
+	return ELR_NoInterrupt;
+}
+
 
 defaultproperties
 {

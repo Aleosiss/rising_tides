@@ -48,6 +48,5 @@ simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffe
 
 defaultproperties
 {
-	OnlyUseTargetLocation=false
-	bResetMarkedTiles=true
+
 }

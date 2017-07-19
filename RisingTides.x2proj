@@ -38,10 +38,19 @@
     <Content Include="Content\RT_Perk_Psi_ADC.upk">
       <SubType>Content</SubType>
     </Content>
+    <Content Include="Content\RT_Perk_Psi_Conduit.upk">
+      <SubType>Content</SubType>
+    </Content>
     <Content Include="Content\RT_Perk_Psi_Extinction.upk">
       <SubType>Content</SubType>
     </Content>
+    <Content Include="Content\RT_Perk_Psi_Grasp.upk">
+      <SubType>Content</SubType>
+    </Content>
     <Content Include="Content\RT_Perk_Psi_Lance.upk">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Content\RT_Perk_Psi_Lash.upk">
       <SubType>Content</SubType>
     </Content>
     <Content Include="Content\RT_Perk_Psi_Mentor.upk">
@@ -51,6 +60,12 @@
       <SubType>Content</SubType>
     </Content>
     <Content Include="Content\RT_Perk_Psi_Overflow.upk">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Content\RT_Perk_Psi_Purge.upk">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Content\RT_Perk_Psi_RC.upk">
       <SubType>Content</SubType>
     </Content>
     <Content Include="Content\RT_Perk_Psi_TimeStandsStill.upk">
@@ -320,7 +335,7 @@
     <Content Include="Src\RisingTides\Classes\RTGameState_MeldEffect.uc">
       <SubType>Content</SubType>
     </Content>
-    <Content Include="Src\RisingTides\Classes\RTGameState_PsiStormTrackerEffect.uc">
+    <Content Include="Src\RisingTides\Classes\RTGameState_PersistentGhostSquad.uc">
       <SubType>Content</SubType>
     </Content>
     <Content Include="Src\RisingTides\Classes\RTGameState_RisingTidesCommand.uc">

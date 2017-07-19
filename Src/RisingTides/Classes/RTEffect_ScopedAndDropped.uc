@@ -26,8 +26,10 @@ function GetToHitModifiers(XComGameState_Effect EffectState, XComGameState_Unit 
 	Tiles = Attacker.TileDistanceBetween(Target);
 	//  remove number of tiles within visible range (which is in meters, so convert to units, and divide that by tile size)
 	Tiles -= Attacker.GetVisibilityRadius() * class'XComWorldData'.const.WORLD_METERS_TO_UNITS_MULTIPLIER / class'XComWorldData'.const.WORLD_StepSize;
-	if (Tiles > 0)     //  pretty much should be since a squadsight target is by definition beyond sight range. but...
-		AimMod = ((class'X2AbilityToHitCalc_StandardAim'.default.SQUADSIGHT_DISTANCE_MOD * Tiles) * -1);
+	if (Tiles > 0) {     //  pretty much should be since a squadsight target is by definition beyond sight range. but...
+		// AimMod = ((class'X2AbilityToHitCalc_StandardAim'.default.SQUADSIGHT_DISTANCE_MOD * Tiles) * -1);	// this wasn't working? I must have botched a config file or something
+		AimMod = ((-2 * Tiles) * -1);
+	}
 
 	ModInfoAim.ModType = eHit_Success;
 	ModInfoAim.Reason = RTFriendlyName;

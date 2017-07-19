@@ -1,5 +1,7 @@
 // This is an Unreal Script
 
+
+// 2017-7-14: A year later. Why the fuck does this class even exist? What was I thinking, in some kind of sleep-deprived haze?
 class RTEffect_Counter extends X2Effect_Persistent;
 
 var name CounterUnitValName, TriggerEventName;
@@ -17,7 +19,7 @@ simulated function bool OnEffectTicked(const out EffectAppliedData ApplyEffectPa
 	CounterSourceUnit = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(ApplyEffectParameters.SourceStateObjectRef.ObjectID));
 
 	if(!CounterUnit.GetUnitValue(CounterUnitValName, UnitVal)) {
-		`RedScreenOnce("Rising Tides: " @ EffectName @ " unable to find the CounterValue, aborting countdown...");
+		// `RedScreenOnce("Rising Tides: " @ EffectName @ " unable to find the CounterValue, aborting countdown...");
 		return super.OnEffectTicked(ApplyEffectParameters, kNewEffectState, NewGameState, FirstApplication);
 	}
 	CounterUnit.GetUnitValue(CounterUnitValName, UnitVal); 	// I still don't know if the above method actually populates the out param
@@ -31,7 +33,7 @@ simulated function bool OnEffectTicked(const out EffectAppliedData ApplyEffectPa
 	if(UnitVal.fValue == 0) {
 		if(bShouldTriggerEvent) { // sometimes the effect trigger looks for the counter instead of the other way around
 			`XEVENTMGR.TriggerEvent(TriggerEventName, CounterUnit, CounterSourceUnit, NewGameState);
-			`LOG("Rising Tides: " @ TriggerEventName @ " Counter triggered!");
+			//`LOG("Rising Tides: " @ TriggerEventName @ " Counter triggered!");
 		}
 	}
 

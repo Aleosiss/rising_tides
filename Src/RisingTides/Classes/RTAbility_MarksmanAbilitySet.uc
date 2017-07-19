@@ -44,6 +44,9 @@ class RTAbility_MarksmanAbilitySet extends RTAbility_GhostAbilitySet
 	var config int HARBINGER_SHIELD_AMOUNT, HARBINGER_COOLDOWN, HARBINGER_DAMAGE_BONUS, HARBINGER_WILL_BONUS, HARBINGER_AIM_BONUS, HARBINGER_ARMOR_BONUS;
 	var config WeaponDamageValue HARBINGER_DMG;
 
+	var localized string TimeStopEffectTitle;
+	var localized string TimeStopEffectDescription;
+
 	var name KillZoneReserveType;
 	var name TimeStopEffectName;
 
@@ -77,6 +80,7 @@ static function array<X2DataTemplate> CreateTemplates()
 	Templates.AddItem(DaybreakFlameIcon());							// icon
 	Templates.AddItem(YourHandsMyEyes());							// icon
 	Templates.AddItem(TimeStandsStill());									// animation
+	Templates.AddItem(TimeStandsStillInterruptListener());
 	Templates.AddItem(TimeStandsStillEndListener());
 	Templates.AddItem(TwitchReaction());
 	Templates.AddItem(TwitchReactionShot());
@@ -232,7 +236,6 @@ static function X2AbilityTemplate ScopedAndDropped()
 
 	// Hit Calculation (Different weapons now have different calculations for range)
 	ToHitCalc = new class'X2AbilityToHitCalc_StandardAim';
-	ToHitCalc.SQUADSIGHT_DISTANCE_MOD = 0;
 	Template.AbilityToHitCalc = ToHitCalc;
 
 	// Targeting Method
@@ -369,7 +372,6 @@ static function X2AbilityTemplate RTOverwatchShot()
 
 	StandardAim = new class'X2AbilityToHitCalc_StandardAim';
 	StandardAim.bReactionFire = true;
-	StandardAim.SQUADSIGHT_DISTANCE_MOD = 0;
 	Template.AbilityToHitCalc = StandardAim;
 	Template.AbilityToHitOwnerOnMissCalc = StandardAim;
 
@@ -458,7 +460,6 @@ static function X2AbilityTemplate RTPrecisionShot()
 	Template.AbilityCooldown = Cooldown;
 
 	ToHitCalc = new class'X2AbilityToHitCalc_StandardAim';
-	ToHitCalc.SQUADSIGHT_DISTANCE_MOD = 0;
 	ToHitCalc.BuiltInHitMod = -(default.HEADSHOT_AIM_MULTIPLIER);
 	Template.AbilityToHitCalc = ToHitCalc;
 
@@ -630,7 +631,6 @@ static function X2AbilityTemplate RTDisablingShot()
 	Template.AbilityCooldown = Cooldown;
 
 	ToHitCalc = new class'X2AbilityToHitCalc_StandardAim';
-	ToHitCalc.SQUADSIGHT_DISTANCE_MOD = 0;
 	ToHitCalc.BuiltInHitMod = -(default.DISABLESHOT_AIM_BONUS);
 	Template.AbilityToHitCalc = ToHitCalc;
 
@@ -1207,7 +1207,6 @@ static function X2AbilityTemplate SovereignEffect()
 
 	// Hit Calculation (Different weapons now have different calculations for range)
 	ToHitCalc = new class'X2AbilityToHitCalc_StandardAim';
-	ToHitCalc.SQUADSIGHT_DISTANCE_MOD = 0;
 	Template.AbilityToHitCalc = ToHitCalc;
 
 	//Template.bOverrideAim = true;
@@ -1403,7 +1402,6 @@ static function X2AbilityTemplate TimeStandsStill()
 	UnitPropertyCondition.ExcludeFriendlyToSource = false;
 	UnitPropertyCondition.ExcludeDead = false;
 	UnitPropertyCondition.ExcludeCosmetic = false;
-
 	Template.AbilityMultiTargetConditions.Additem(UnitPropertyCondition);
 
 	Template.ConcealmentRule = eConceal_Always;
@@ -1426,12 +1424,11 @@ static function X2AbilityTemplate TimeStandsStill()
 	TimeStopEffect.bCanBeRedirected = false;
 	TimeStopEffect.bApplyOnMiss = true;
 	TimeStopEffect.EffectTickedVisualizationFn = class'RTEffect_TimeStop'.static.TimeStopVisualizationTicked;
-	TimeStopEffect.SetDisplayInfo(ePerkBuff_Penalty, "Greyscaled",
-		"This unit has been frozen in time. It cannot take actions and is much easier to hit.", Template.IconImage);
+	TimeStopEffect.SetDisplayInfo(ePerkBuff_Penalty, default.TimeStopEffectTitle, default.TimeStopEffectDescription, Template.IconImage);
 	TimeStopEffect.bRemoveWhenTargetDies = true;
+	TimeStopEffect.bRemoveWhenSourceDies = true;
 	TimeStopEffect.bCanTickEveryAction = true;
 	TimeStopEffect.EffectName = default.TimeStopEffectName;
-
 
 	//TimeStopEffect.TargetConditions.AddItem(UnitPropertyCondition);
 
@@ -1441,17 +1438,76 @@ static function X2AbilityTemplate TimeStandsStill()
 	Template.BuildInterruptGameStateFn = TypicalAbility_BuildInterruptGameState;
 	Template.PostActivationEvents.AddItem(default.UnitUsedPsionicAbilityEvent);
 
-	// TODO: VISUALIZATION
+
 	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
 	Template.CustomFireAnim = 'HL_Psi_SelfCast';
 
 	Template.AdditionalAbilities.AddItem('TimeStandsStillEndListener');
+	Template.AdditionalAbilities.AddItem('TimeStandsStillInterruptListener');
 
 
 	Template.bCrossClassEligible = false;
 	return Template;
 }
 
+//---------------------------------------------------------------------------------------
+//---Time Stands Still Interrupt Listener------------------------------------------------
+//---------------------------------------------------------------------------------------
+ static function X2AbilityTemplate TimeStandsStillInterruptListener()
+{
+	local X2AbilityTemplate						Template;
+	local RTEffect_TimeStop						TimeStopEffect;
+	local X2Condition_UnitProperty				UnitPropertyCondition;
+	local X2AbilityTrigger_Placeholder			Trigger;
+
+	`CREATE_X2ABILITY_TEMPLATE(Template, 'TimeStandsStillInterruptListener');
+	Template.IconImage = "img:///RisingTidesContentPackage.PerkIcons.rt_horoarma";
+
+	Template.AbilitySourceName = 'eAbilitySource_Psionic';
+	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_NeverShow;
+	Template.Hostility = eHostility_Neutral;
+
+	Template.AbilityTargetStyle = default.SimpleSingleTarget;
+	Template.AbilityToHitCalc = default.DeadEye;
+
+	UnitPropertyCondition = new class'X2Condition_UnitProperty';
+	UnitPropertyCondition.FailOnNonUnits = true;
+	UnitPropertyCondition.ExcludeInStasis = false;
+	UnitPropertyCondition.ExcludeFriendlyToSource = false;
+	UnitPropertyCondition.ExcludeDead = false;
+	UnitPropertyCondition.ExcludeCosmetic = false;
+	Template.AbilityMultiTargetConditions.Additem(UnitPropertyCondition);
+
+	Template.ConcealmentRule = eConceal_Always;
+
+	// OnUnitBeginPlay
+	Trigger = new class'X2AbilityTrigger_Placeholder';
+	Template.AbilityTriggers.AddItem(Trigger);
+
+	// this effect should always apply (even if it is forced to miss) and lasts until Whisper ends it himself
+	TimeStopEffect = new class'RTEffect_TimeStop';
+	TimeStopEffect.BuildPersistentEffect(1, true, true, false, eGameRule_PlayerTurnEnd);
+	TimeStopEffect.ApplyChance = 100;
+	TimeStopEffect.bIsImpairing = true;
+	TimeStopEffect.bTickWhenApplied = false;
+	TimeStopEffect.bCanBeRedirected = false;
+	TimeStopEffect.bApplyOnMiss = true;
+	TimeStopEffect.EffectTickedVisualizationFn = class'RTEffect_TimeStop'.static.TimeStopVisualizationTicked;
+	TimeStopEffect.SetDisplayInfo(ePerkBuff_Penalty, default.TimeStopEffectTitle, default.TimeStopEffectDescription, Template.IconImage);
+	TimeStopEffect.bRemoveWhenTargetDies = true;
+	TimeStopEffect.bCanTickEveryAction = true;
+	TimeStopEffect.EffectName = default.TimeStopEffectName;
+	TimeStopEffect.bRemoveWhenSourceDies = true;
+
+	Template.AddTargetEffect(TimeStopEffect);
+
+	Template.bSkipFireAction = true;
+	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
+	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
+
+	Template.bCrossClassEligible = false;
+	return Template;
+}
 //---------------------------------------------------------------------------------------
 //---Time Stands Still End Listener------------------------------------------------------
 //---------------------------------------------------------------------------------------
@@ -1509,7 +1565,6 @@ static function X2AbilityTemplate TimeStandsStillEndListener()
 	KnockbackEffect.KnockbackDistance = 2;
 	KnockbackEffect.bUseTargetLocation = true;
 	Template.AddMultiTargetEffect(KnockbackEffect);
-	Template.AbilityMultiTargetConditions.Additem(default.LivingTargetUnitOnlyProperty);
 
 	Template.AddShooterEffect(RemoveSelfEffect);
 	Template.AddMultiTargetEffect(RemoveMultiEFfect);

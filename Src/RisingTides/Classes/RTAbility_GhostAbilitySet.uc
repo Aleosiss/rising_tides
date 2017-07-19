@@ -425,12 +425,10 @@ static function X2AbilityTemplate PsiOverload()
 	Template.AbilityTargetStyle = default.SimpleSingleTarget;
 
 	KillUnitEffect = new class 'X2Effect_KillUnit';
-	KillUnitEffect.BuildPersistentEffect(1, false, false, false,  eGameRule_PlayerTurnBegin);
 	Template.AddTargetEffect(KillUnitEffect);
 
 	Template.PostActivationEvents.AddItem('RTFeedback');
 	Template.PostActivationEvents.AddItem(default.UnitUsedPsionicAbilityEvent);
-	//Template.AdditionalAbilities.AddItem('PsiOverloadPanic');
 
 	Template.CustomFireAnim = 'HL_Psi_MindControl';
 	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
@@ -1007,6 +1005,8 @@ static function X2DataTemplate RTMindControl()
 	Template.BuildInterruptGameStateFn = TypicalAbility_BuildInterruptGameState;
 	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
 	Template.CinescriptCameraType = "Psionic_FireAtUnit";
+
+	Template.PostActivationEvents.AddItem(default.UnitUsedPsionicAbilityEvent);
 
 	return Template;
 }

@@ -52,7 +52,7 @@ Begin:
 	UnitPawn.SetCurrentWeapon(XComWeapon(UseWeapon.m_kEntity));
 
 	Unit.CurrentFireAction = self;
-	Params.AnimName = 'HL_Psi_MindControl';
+	Params.AnimName = 'HL_Psi_ProjectileMedium';
 	UnitPawn.GetAnimTreeController().PlayFullBodyDynamicAnim(Params);
 
 	//Make the target face us

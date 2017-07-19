@@ -55,6 +55,13 @@ LocHelpText="Peer over the shoulder of enemy units, seeing what they see."
 LocFlyOverText="Over The Shoulder"
 LocPromotionPopupText="<Bullet/> Over the Shoulder grants vision of enemy units, but only certain abilities will be able to target them without direct line of sight.<br/>"
 
+[RTTheSixPathsOfPainOverride RTAbilityTemplate]
+LocFriendlyName="Over The Shoulder"
+LocLongDescription="Peer over the shoulder of enemy units in a large radius, seeing what they see."
+LocHelpText="Peer over the shoulder of enemy units, seeing what they see."
+LocFlyOverText="Over The Shoulder"
+LocPromotionPopupText="<Bullet/> Over the Shoulder grants vision of enemy units, but only certain abilities will be able to target them without direct line of sight.<br/>"
+
 [RTUnwillingConduits RTAbilityTemplate]
 LocFriendlyName="Unwilling Conduits"
 LocLongDescription="Whenever this unit casts a psionic ability, it drains energy from units affected by Over the Shoulder to fuel the action,  reducing the cooldown for each unit affected."
@@ -104,6 +111,10 @@ OVERFLOW_READOUT="Overflow"
 GuardianAngelHealText="Guardian Angel"
 KIPFriendlyName="Knowledge Is Power"
 KIPFriendlyDesc="I'm onto you..."
+
+[RTAbility_MarksmanAbilitySet]
+TimeStopEffectTitle="Greyscaled"
+TimeStopEffectDescription="This unit has been frozen in time. It cannot take actions and is much easier to hit."
 
 [RTEffectBuilder]
 StealthFriendlyName="Stealth"
