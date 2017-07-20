@@ -102,26 +102,28 @@ static function RTEffect_Stealth RTCreateStealthEffect(int iDuration = 1, option
 }
 
 static function StealthVisualization(XComGameState VisualizeGameState, out VisualizationTrack BuildTrack, const name EffectApplyResult) {
-	local X2Action_PlayEffect StartActionP1, StartActionP2, PersistentAction;
+	//local X2Action_PlayEffect StartActionP1, PersistentAction;
 	if(!CheckSuccessfulUnitEffectApplication(VisualizeGameState, BuildTrack, EffectApplyResult))
 		return;
 
-	StartActionP1 = BuildEffectParticle(VisualizeGameState, BuildTrack, default.StealthStartParticleName, default.StealthSocketName, default.StealthSocketsArrayName, true, false);
-	//StartActionP2 = BuildEffectParticle(VisualizeGameState, BuildTrack, default.StealthStartParticleName, default.StealthSocketName, default.StealthSocketsArrayName, true, true);
-
-	PersistentAction = BuildEffectParticle(VisualizeGameState, BuildTrack, default.StealthPersistentParticleName, default.StealthSocketName, default.StealthSocketsArrayName, true, false);
+	//StartActionP1 = 
+	BuildEffectParticle(VisualizeGameState, BuildTrack, default.StealthStartParticleName, default.StealthSocketName, default.StealthSocketsArrayName, true, false);
+	
+	//PersistentAction = 
+	BuildEffectParticle(VisualizeGameState, BuildTrack, default.StealthPersistentParticleName, default.StealthSocketName, default.StealthSocketsArrayName, true, false);
 
 }
 
 static function StealthRemovedVisualization(XComGameState VisualizeGameState, out VisualizationTrack BuildTrack, const name EffectApplyResult) {
-	local X2Action_PlayEffect StopActionP1, StopActionP2, PersistentAction;
+	//local X2Action_PlayEffect StopActionP1, PersistentAction;
 	if(!CheckSuccessfulUnitEffectApplication(VisualizeGameState, BuildTrack, EffectApplyResult))
 		return;
 
-	PersistentAction = BuildEffectParticle(VisualizeGameState, BuildTrack, default.StealthPersistentParticleName, default.StealthSocketName, default.StealthSocketsArrayName, true, true);
+	//PersistentAction = 
+	BuildEffectParticle(VisualizeGameState, BuildTrack, default.StealthPersistentParticleName, default.StealthSocketName, default.StealthSocketsArrayName, true, true);
 
-	StopActionP1 = BuildEffectParticle(VisualizeGameState, BuildTrack, default.StealthStopParticleName, default.StealthSocketName, default.StealthSocketsArrayName, true, false);
-	//StopActionP2 = BuildEffectParticle(VisualizeGameState, BuildTrack, default.StealthStopParticleName, default.StealthSocketName, default.StealthSocketsArrayName, true, true);
+	//StopActionP1 = 
+	BuildEffectParticle(VisualizeGameState, BuildTrack, default.StealthStopParticleName, default.StealthSocketName, default.StealthSocketsArrayName, true, false);
 }
 
 static function RTEffect_Meld RTCreateMeldEffect(int iDuration = 1, optional bool bInfinite = true) {

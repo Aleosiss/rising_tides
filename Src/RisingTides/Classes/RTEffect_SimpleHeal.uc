@@ -54,7 +54,6 @@ simulated function AddX2ActionsForVisualization(XComGameState VisualizeGameState
 {
 	local XComGameState_Unit OldUnit, NewUnit;
 	local X2Action_PlaySoundAndFlyOver SoundAndFlyOver;
-	local X2AbilityTemplate Template;
 	local int Healed;
 
 	if (EffectApplyResult != 'AA_Success')

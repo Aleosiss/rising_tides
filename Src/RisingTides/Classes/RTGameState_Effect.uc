@@ -628,7 +628,6 @@ function EventListenerReturn RTPsionicInterrupt(Object EventData, Object EventSo
 	local XComGameStateHistory History;
 	local XComGameState_Ability AbilityState;
 	local XComGameState_Ability InterruptAbilityState;
-	local StateObjectReference AbilityRef;
 	local XComGameState_Unit TargetUnitState, SourceUnitState;
 	local XComGameStateContext AbilityContext;
 
@@ -748,14 +747,10 @@ function EventListenerReturn RTHarbingerBonusDamage(Object EventData, Object Eve
 // intended EventData = Ability we're going to try to extend the effect of
 // intended EventSource = Unit casting the ability
 function EventListenerReturn ExtendEffectDuration(Object EventData, Object EventSource, XComGameState GameState, Name EventID) {
-	local XComGameStateHistory History;
 	local XComGameState_Effect IteratorEffectState;
-	local XComGameState_Unit TargetUnitState, SourceUnitState;
-	local XComGameState NewGameState;
 	local XComGameStateContext_Ability AbilityContext;
 	local RTEffect_ExtendEffectDuration EffectTemplate;
-	local Object IteratorObject;
-
+	
 	local bool bDebug;
 
 	EffectTemplate = RTEffect_ExtendEffectDuration(GetX2Effect());
@@ -806,13 +801,9 @@ function EventListenerReturn ExtendEffectDuration(Object EventData, Object Event
 
 // this check grants the mobility change described in for the "Bump In The Night" ability
 function EventListenerReturn BumpInTheNightStatCheck(Object EventData, Object EventSource, XComGameState GameState, Name EventID) {
-local XComGameStateContext_Ability AbilityContext;
 	local XComGameState_Unit UnitState, NewUnitState;
-	local X2AbilityTemplate AbilityTemplate;
 	local XComGameState NewGameState;
-	local UnitValue BloodlustStackCount;
 	local RTGameState_Effect TempEffect;
-	local RTEffect_Bloodlust		BloodlustEffect;
 
 
 	UnitState = XComGameState_Unit(GameState.GetGameStateForObjectID(ApplyEffectParameters.SourceStateObjectRef.ObjectID));
@@ -928,10 +919,8 @@ function EveryMomentMattersVisualizationFn(XComGameState VisualizeGameState, out
 function EventListenerReturn GhostInTheShellCheck(Object EventData, Object EventSource, XComGameState GameState, Name EventID) {
 	local XComGameStateHistory History;
 	local XComGameStateContext_Ability AbilityContext;
-	local StateObjectReference AbilityRef;
 	local XComGameState_Ability GhostAbilityState;
 	local XComGameState_Ability AbilityState;
-	local X2AbilityTemplate AbilityTemplate;
 	local XComGameState_Unit NewAttacker, Attacker;
 	local XComGameState NewGameState;
 	local bool	bShouldTrigger;
@@ -1058,7 +1047,6 @@ function EventListenerReturn RemoveHarbingerEffect(Object EventData, Object Even
 function EventListenerReturn HeatChannelCheck(Object EventData, Object EventSource, XComGameState GameState, Name EventID) {
   local XComGameState_Unit OldSourceUnit, NewSourceUnit;
   local XComGameStateHistory History;
-  local StateObjectReference AbilityRef;
   local XComGameState_Ability OldAbilityState, NewAbilityState;
   local XComGameStateContext_Ability AbilityContext;
   local XComGameState_Item OldWeaponState, NewWeaponState;
@@ -1198,22 +1186,19 @@ function EventListenerReturn LinkedFireCheck (Object EventData, Object EventSour
 	local XComGameState_Unit TargetUnit, LinkedSourceUnit, LinkedUnit;
 	local XComGameStateHistory History;
 	local RTEffect_LinkedIntelligence LinkedEffect;
-	local RTGameState_MeldEffect  MeldEffectState;
 	local StateObjectReference AbilityRef;
 	local GameRulesCache_VisibilityInfo	VisInfo;
-	local XComGameState_Ability AbilityState, OriginalShot;
+	local XComGameState_Ability AbilityState;
 	local XComGameStateContext_Ability AbilityContext;
 	local XComGameState NewGameState;
 	local RTGameState_Effect NewLinkedEffectState;
-	local StateObjectReference	EmptyRef;
-	local bool bShouldTrigger;
 
 	if(!bCanTrigger) {
 		`LOG("Rising Tides: this should never happen");
 		return ELR_NoInterrupt;
 	}
 
-	EmptyRef.ObjectID = 0;
+	
 	History = `XCOMHISTORY;
 	AbilityContext = XComGameStateContext_Ability(GameState.GetContext());
 	if (AbilityContext == none) {
@@ -1405,9 +1390,10 @@ function EventListenerReturn ReprobateWaltzCheck( Object EventData, Object Event
 	WaltzUnit = XComGameState_Unit(History.GetGameStateForObjectID(AbilityContext.InputContext.SourceObject.ObjectID));
 	TargetUnit = XComGameState_Unit(History.GetGameStateForObjectID(AbilityContext.InputContext.PrimaryTarget.ObjectID));
 
+	fStackModifier = 1;
 	if(AbilityContext != none) {
 		iStackCount = class'RTGameState_Ability'.static.getBloodlustStackCount(WaltzUnit);
-		fFinalPercentChance = (class'RTAbility_BerserkerAbilitySet'.default.REPROBATE_WALTZ_BASE_CHANCE + ( class'RTAbility_BerserkerAbilitySet'.default.REPROBATE_WALTZ_BLOODLUST_STACK_CHANCE * iStackCount ));
+		fFinalPercentChance = (class'RTAbility_BerserkerAbilitySet'.default.REPROBATE_WALTZ_BASE_CHANCE + ( class'RTAbility_BerserkerAbilitySet'.default.REPROBATE_WALTZ_BLOODLUST_STACK_CHANCE * iStackCount  * fStackModifier));
 		iRandom = `SYNC_RAND(100);
 		if(iRandom <= int(fFinalPercentChance)) {
 			InitializeAbilityForActivation(AbilityState, WaltzUnit, 'RTReprobateWaltz', History);
@@ -1421,9 +1407,8 @@ function EventListenerReturn TwitchFireCheck (Object EventData, Object EventSour
 	local XComGameState_Unit AttackingUnit, TwitchAttackingUnit, TwitchLinkedUnit;
 	local XComGameStateHistory History;
 	local RTEffect_TwitchReaction TwitchEffect;
-	local RTGameState_MeldEffect  MeldEffectState;
 	local StateObjectReference AbilityRef;
-	local XComGameState_Ability AbilityState, OriginalShot;
+	local XComGameState_Ability AbilityState;
 	local XComGameStateContext_Ability AbilityContext;
 	local XComGameState NewGameState;
 	local RTGameState_Effect NewTwitchEffectState;
@@ -1579,10 +1564,8 @@ private function SubmitNewGameState(out XComGameState NewGameState) {
 function EventListenerReturn RTBumpInTheNight(Object EventData, Object EventSource, XComGameState GameState, Name EventID) {
 	local XComGameStateHistory History;
 	local XComGameStateContext_Ability AbilityContext;
-	local StateObjectReference AbilityRef;
 	local XComGameState_Ability BloodlustAbilityState, StealthAbilityState, RemoveMeldAbilityState, PsionicActivationAbilityState;
 	local XComGameState_Ability AbilityState;
-	local X2AbilityTemplate AbilityTemplate;
 	local XComGameState_Unit TargetUnit, OldTargetUnitState, NewAttacker, Attacker;
 	local XComGameState NewGameState;
 	local RTEffect_BumpInTheNight BITNEffect;
@@ -1590,7 +1573,7 @@ function EventListenerReturn RTBumpInTheNight(Object EventData, Object EventSour
 	local int i, j, iNumPreviousActionPoints, iNumWaltzActionPoints;
 
 	local XComGameState_BaseObject PreviousObject, CurrentObject;
-	local XComGameState_Unit AttackerStatePrevious, AttackerStateCurrent;
+	local XComGameState_Unit AttackerStatePrevious;
 
 
 	History = `XCOMHISTORY;

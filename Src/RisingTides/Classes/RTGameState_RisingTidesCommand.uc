@@ -310,8 +310,7 @@ function EventListenerReturn OnKillMail(Object EventData, Object EventSource, XC
 function EventListenerReturn OnUnitAttacked(Object EventData, Object EventSource, XComGameState GameState, Name InEventID) {
 	local XComGameStateContext_Ability AbilityContext;
 	local XComGameState_Unit AttackedUnitState;
-	local bool bWasCrit;
-
+	
 	AbilityContext = XComGameStateContext_Ability(GameState.GetContext());
 	if(AbilityContext == none) {
 		return ELR_NoInterrupt;

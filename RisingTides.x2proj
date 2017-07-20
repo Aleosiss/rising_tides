@@ -221,6 +221,9 @@
     <Content Include="Src\RisingTides\Classes\RTEffect_KnowledgeIsPower.uc">
       <SubType>Content</SubType>
     </Content>
+    <Content Include="Src\RisingTides\Classes\RTEffect_Lift.uc">
+      <SubType>Content</SubType>
+    </Content>
     <Content Include="Src\RisingTides\Classes\RTEffect_LinkedIntelligence.uc">
       <SubType>Content</SubType>
     </Content>

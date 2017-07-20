@@ -4,8 +4,8 @@ Rising Tides is an XCOM 2 content addition mod that aims to provide a DLC-like e
 
 >- Three "hero"-type units, each with unique three-branch skill trees
 >- A single Ghost "superclass" extension (as Soldier is to the Vanilla classes) which provides the following:
->  - Additional default abilities ("Mind Control", "Mind Wrack", "Mind Meld", "Reflection")
->  - Shared abilities across child classes ("Teek", "Vital Point Targeting", "Fade")
+>  - Additional default abilities ("Mind Control", "Mind Wrack", "Mind Meld")
+>  - Shared abilities across child classes ("Teek", "Fade")
 >- Special narrative missions to use these units in a controlled environment to ease balancing in a mod-rich environment
 
 This would be a bare-bones content mod. I also have the following content in mind, but would be out of my current capability to do alone (IE I would either need to develop the skills and/or obtain additional contributors, either volunteers or contractors):
@@ -37,6 +37,7 @@ This would be a bare-bones content mod. I also have the following content in min
 	- GFX for Bloodlust
 	- Reimplement EE unconciousness
 	- Extinction Event needs to somehow stop revive units from reviving
+	- SFX for Burst
 
 ###### Current Bugs:
 	- Time Stop damage calculation isn't visualized properly
@@ -44,10 +45,9 @@ This would be a bare-bones content mod. I also have the following content in min
 	- Make extend effect duration happen on move for Aura Effects as well, possibly by breaking its logic out into a separate method that is called in either place
 	- Crushing Grip doesn't override idle animations the first time it affects a unit, neither does Sovereign
 	- Psionic Storm only plays sound from one storm at a time, due to a base-game issue where a soundcue can only be played once per ObjectID
-
+	- Networked OI does not work with CCS or KillzoneShot. Unsure of exact cause, appears that CCS does not tick AbilityActivated
 
 ###### Current Sprint Goals:
-	- Verify that Networked OI works with CCS ( it doesn't, unsure why, CCSA does not appear to trigger AbilityActivated )
 	- Cut out declared but unused objects
 
 

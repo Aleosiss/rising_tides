@@ -246,7 +246,7 @@ static function X2AbilityTemplate RTBerserkerKnifeAttack()
 	local X2AbilityToHitCalc_StandardMelee  StandardMelee;
 	local RTEffect_BerserkerMeleeDamage     WeaponDamageEffect;
 	local RTEffect_Acid						AcidEffect;
-	local array<name>                       SkipExclusions;
+	//local array<name>                       SkipExclusions;
 	local X2Condition_AbilityProperty  		AcidCondition, SiphonCondition;
 	local X2Condition_UnitProperty			TargetUnitPropertyCondition;
 	local RTEffect_Siphon					SiphonEffect;
@@ -364,7 +364,7 @@ static function X2AbilityTemplate RTBurst() {
 		local X2Effect_ApplyWeaponDamage				WeaponDamageEffect;
 		local X2AbilityCooldown							Cooldown;
 		local X2AbilityCost_ActionPoints				ActionPointCost;
-		local X2Effect_Knockback						KnockbackEffect;
+		// local X2Effect_Knockback						KnockbackEffect;
 	local X2Effect_Persistent						Effect;
 
 		`CREATE_X2ABILITY_TEMPLATE(Template, 'RTBurst');
@@ -444,14 +444,14 @@ simulated function Burst_BuildVisualization(XComGameState VisualizeGameState, ou
 	local StateObjectReference InteractingUnitRef;
 	local X2VisualizerInterface Visualizer;
 	local VisualizationTrack BuildTrack, AvatarBuildTrack;
-	local X2Action_PlayEffect EffectAction;
-	local X2Action_StartStopSound SoundAction;
+	//local X2Action_PlayEffect EffectAction;
+	//local X2Action_StartStopSound SoundAction;
 	local XComGameState_Unit AvatarUnit;
-	local XComWorldData World;
-	local vector TargetLocation;
-	local TTile TargetTile;
+	//local XComWorldData World;
+	//local vector TargetLocation;
+	//local TTile TargetTile;
 	local X2Action_TimedWait WaitAction;
-	local X2Action_PlaySoundAndFlyOver SoundCueAction;
+	//local X2Action_PlaySoundAndFlyOver SoundCueAction;
 	local int i, j;
 	local VisualizationTrack EmptyTrack;
 	local X2VisualizerInterface TargetVisualizerInterface;
@@ -471,7 +471,7 @@ simulated function Burst_BuildVisualization(XComGameState VisualizeGameState, ou
 
 	if( AvatarUnit != none )
 	{
-		World = `XWORLD;
+		// World = `XWORLD;
 
 		class'X2Action_Fire_OpenUnfinishedAnim'.static.AddToVisualizationTrack(AvatarBuildTrack, Context);
 
@@ -480,7 +480,7 @@ simulated function Burst_BuildVisualization(XComGameState VisualizeGameState, ou
 		WaitAction.DelayTimeSec = 4;
 
 		// BuildEffectParticle(XComGameState VisualizeGameState, out VisualizationTrack BuildTrack, string ParticleName, name SocketName, name SocketsArrayName, bool _AttachToUnit, bool _bStopEffect) {
-		EffectAction = class'RTEffectBuilder'.static.BuildEffectParticle(VisualizeGameState, AvatarBuildTrack, default.BurstParticleString,	default.BurstSocketName, default.BurstArrayName, true, false);
+		class'RTEffectBuilder'.static.BuildEffectParticle(VisualizeGameState, AvatarBuildTrack, default.BurstParticleString, default.BurstSocketName, default.BurstArrayName, true, false);
 		
 		// Play Target audio
 		//SoundAction = X2Action_StartStopSound(class'X2Action_StartStopSound'.static.AddToVisualizationTrack(AvatarBuildTrack, Context));
@@ -726,7 +726,6 @@ static function X2AbilityTemplate RTReprobateWaltz()
 	local RTEffect_Siphon                   SiphonEffect;
 	local X2Condition_AbilityProperty       SiphonCondition;
 	local X2Condition_UnitProperty          TargetUnitPropertyCondition;
-	local X2AbilityTrigger_EventListener    Trigger;
 
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'RTReprobateWaltz');
 
@@ -1206,10 +1205,7 @@ static function X2AbilityTemplate RTUnstableConduit()
 {
 	local X2AbilityTemplate					Template;
 	local X2Condition_UnitEffects			Condition;
-	local X2AbilityMultiTarget_AllAllies	MultiTarget;
 	local X2AbilityTrigger_EventListener	Trigger;
-	local X2Effect_ImmediateMultiTargetAbilityActivation MultiActivateAbilityEffect;
-	local X2Effect_ImmediateAbilityActivation ActivateAbilityEffect;
 
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'RTUnstableConduit');
 	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_adventpsiwitch_mindcontrol";
@@ -1219,7 +1215,6 @@ static function X2AbilityTemplate RTUnstableConduit()
 	Template.Hostility = eHostility_Offensive;
 
 	Template.ConcealmentRule = eConceal_Miss;		// unsure
-
 
 	Template.AbilityShooterConditions.AddItem(default.LivingShooterProperty);
 
@@ -1237,18 +1232,6 @@ static function X2AbilityTemplate RTUnstableConduit()
 	// Add dead eye to guarantee
 	Template.AbilityToHitCalc = default.DeadEye;
 	Template.AbilityTargetStyle = default.SelfTarget;
-
-	// MultiTarget = new class'X2AbilityMultiTarget_AllAllies';
-	// MultiTarget.bExcludeSelfAsTargetIfWithinRadius = true;
-	// Template.AbilityMultiTargetStyle = MultiTarget;
-
-	// ActivateAbilityEffect = new class'X2Effect_ImmediateAbilityActivation';
-	// ActivateAbilityEffect.AbilityName = 'RTUnstableConduitBurst';
-	// Template.AddTargetEffect(ActivateAbilityEffect);
-
-	// MultiActivateAbilityEffect = new class'X2Effect_ImmediateMultiTargetAbilityActivation';
-	// MultiActivateAbilityEffect.AbilityName = 'RTUnstableConduitBurst';
-	//Template.AddMultiTargetEffect(MultiActivateAbilityEffect);
 
 	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
 	// Note: no visualization on purpose!
@@ -1301,7 +1284,6 @@ static function X2AbilityTemplate RTUnstableConduitBurst() {
 		local X2Effect_ApplyDirectionalWorldDamage WorldDamage;
 		local X2Effect_ApplyWeaponDamage WeaponDamageEffect;
 	local X2Condition_UnitEffects			Condition;
-		local X2Effect_Knockback  KnockbackEffect;
 	local X2AbilityTrigger_EventListener Trigger;
 	local X2Effect_Persistent				Effect;
 
@@ -1561,7 +1543,6 @@ static function X2AbilityTemplate RTGhostInTheShell()
 static function X2AbilityTemplate RTGhostInTheShellEffect()
 {
 	local X2AbilityTemplate		Template;
-	local X2Effect_Persistent	Effect;
 	local RTEffect_Stealth StealthEffect;
 	local X2Effect_RangerStealth ConcealEffect;
 
@@ -1602,7 +1583,6 @@ static function X2AbilityTemplate RTQueenOfBlades()
 {
 	local X2AbilityTemplate		Template;
 	local X2Effect_Persistent	Effect;
-	local X2Effect_StayConcealed PhantomEffect;
 
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'RTQueenOfBlades');
 		Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_aim";	   // TODO: THIS
@@ -1637,19 +1617,15 @@ static function X2DataTemplate RTShadowStrike()
 	local X2AbilityTemplate Template;
 	local X2AbilityCost_ActionPoints ActionPointCost;
 	local X2AbilityCooldown Cooldown;
-	local X2AbilityTarget_Cursor CursorTarget;
-	local X2AbilityMultiTarget_Radius RadiusMultiTarget;
 	local X2AbilityTrigger_PlayerInput InputTrigger;
 	local X2AbilityToHitCalc_StandardMelee StandardMelee;
 	local RTEffect_BerserkerMeleeDamage     WeaponDamageEffect;
 	local RTEffect_Acid						AcidEffect;
-	local array<name>                       SkipExclusions;
+	// local array<name>                       SkipExclusions;
 	local X2Condition_AbilityProperty  		AcidCondition, SiphonCondition;
 	local X2Condition_UnitProperty			TargetUnitPropertyCondition;
 	local RTEffect_Siphon					SiphonEffect;
 	local X2AbilityTarget_MovingMelee TargetStyle;
-	local X2Condition_Visibility TargetVisibilityCondition;
-	local X2Effect_AdditionalAnimSets AnimSets;
 	local RTCondition_VisibleToPlayer PlayerVisibilityCondition;
 
 	`CREATE_X2TEMPLATE(class'RTAbilityTemplate', Template, 'RTShadowStrike');
@@ -1868,8 +1844,6 @@ simulated function Teleport_BuildVisualization(XComGameState VisualizeGameState,
 	local XComGameState_Ability					AbilityState;
 	local bool									bInterruptPath;
 	local X2Action_ExitCover					ExitCoverAction;
-	local XComGameState_Unit					SourceUnitState;
-	local UnitValue								SilentMelee;
 
 	History = `XCOMHISTORY;
 	Context = XComGameStateContext_Ability(VisualizeGameState.GetContext());
@@ -1877,7 +1851,6 @@ simulated function Teleport_BuildVisualization(XComGameState VisualizeGameState,
 	AbilityState = XComGameState_Ability(History.GetGameStateForObjectID(AbilityContext.AbilityRef.ObjectID));
 	AbilityTemplate = class'XComGameState_Ability'.static.GetMyTemplateManager().FindAbilityTemplate(AbilityContext.AbilityTemplateName);
 	ShootingUnitRef = Context.InputContext.SourceObject;
-	SourceUnitState = XComGameState_Unit(History.GetGameStateForObjectID(ShootingUnitRef.ObjectID));
 	bInterruptPath = false;
 
 	//Configure the visualization track for the shooter, part I. We split this into two parts since
@@ -2290,12 +2263,10 @@ static function X2DataTemplate RTDashingStrike()
 	local X2AbilityToHitCalc_StandardMelee StandardMelee;
 	local RTEffect_BerserkerMeleeDamage     WeaponDamageEffect;
 	local RTEffect_Acid						AcidEffect;
-	local array<name>                       SkipExclusions;
 	local X2Condition_AbilityProperty  		AcidCondition, SiphonCondition;
 	local X2Condition_UnitProperty			TargetUnitPropertyCondition;
 	local RTEffect_Siphon					SiphonEffect;
 
-	local X2Condition_Visibility TargetVisibilityCondition;
 	local X2Effect_AdditionalAnimSets AnimSets;
 
 	`CREATE_X2TEMPLATE(class'RTAbilityTemplate', Template, 'RTDashingStrike');

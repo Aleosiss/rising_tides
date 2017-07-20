@@ -3,11 +3,9 @@ class RTEffect_Lift extends X2Effect;
 simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffectParameters, XComGameState_BaseObject kNewTargetState, XComGameState NewGameState, XComGameState_Effect NewEffectState)
 {
 	local XComGameState_Unit TargetUnitState;
-	local XComGameStateHistory History;
 	local TTIle TeleportToTile;
 	local X2EventManager EventManager;
 
-	History = `XCOMHISTORY;
 	EventManager = `XEVENTMGR;
 
 	TargetUnitState = XComGameState_Unit(kNewTargetState);

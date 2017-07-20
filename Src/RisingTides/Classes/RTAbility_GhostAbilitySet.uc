@@ -99,7 +99,7 @@ static function array<X2DataTemplate> CreateTemplates()
 	Templates.AddItem(RTRemoveAdditionalAnimSets());
 
 	Templates.AddItem(TestAbility());
-	
+
 
 
 	return Templates;
@@ -384,11 +384,10 @@ static function X2AbilityTemplate LeaveMeld()
 //---------------------------------------------------------------------------------------
 static function X2AbilityTemplate PsiOverload()
 {
-	local X2AbilityTemplate					Template;
+	local X2AbilityTemplate									Template;
 	local X2AbilityCooldown                 Cooldown;
-	local X2Effect_KillUnit					KillUnitEffect;
+	local X2Effect_KillUnit									KillUnitEffect;
 	local X2AbilityCost_ActionPoints        ActionPointCost;
-	local X2Condition_UnitProperty			UnitPropertyCondition;
 
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'PsiOverload');
 	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_hunter";
@@ -406,12 +405,7 @@ static function X2AbilityTemplate PsiOverload()
 	ActionPointCost.bConsumeAllPoints = true;
 	Template.AbilityCosts.AddItem(ActionPointCost);
 
-	UnitPropertyCondition = new class'X2Condition_UnitProperty';
-	UnitPropertyCondition.ExcludeDead = true;
-	UnitPropertyCondition.ExcludeFriendlyToSource = true;
-	UnitPropertyCondition.ExcludeRobotic = true;
-	UnitPropertyCondition.FailOnNonUnits = true;
-	Template.AbilityTargetConditions.AddItem(UnitPropertyCondition);
+	Template.AbilityTargetConditions.AddItem(default.PsionicTargetingProperty);
 	Template.AbilityTargetConditions.AddItem(default.GameplayVisibilityCondition);
 
 	Cooldown = new class'X2AbilityCooldown';
@@ -666,7 +660,6 @@ static function X2AbilityTemplate LIOverwatchShot()
 	local X2AbilityToHitCalc_StandardAim    StandardAim;
 	local X2Condition_UnitProperty          ShooterCondition;
 	local X2AbilityTarget_Single            SingleTarget;
-	local X2AbilityTrigger_Event	        Trigger;
 	local array<name>                       SkipExclusions;
 	local X2Condition_Visibility            TargetVisibilityCondition;
 
@@ -827,9 +820,9 @@ static function X2Condition_UnitValue CreateOverTheShoulderProperty() {
 // cooldown cleanser
 
 static function X2AbilityTemplate CreateRTCooldownCleanse (name TemplateName, name EffectNameToRemove, name EventIDToListenFor) {
-        local X2AbilityTemplate Template;
-        local X2Effect_RemoveEffects RemoveEffectEffect;
-        local X2AbilityTrigger_EventListener Trigger;
+	local X2AbilityTemplate Template;
+	local X2Effect_RemoveEffects RemoveEffectEffect;
+	local X2AbilityTrigger_EventListener Trigger;
 
 	`CREATE_X2ABILITY_TEMPLATE(Template, TemplateName);
 	Template.AbilitySourceName = 'eAbilitySource_Perk';
@@ -837,18 +830,18 @@ static function X2AbilityTemplate CreateRTCooldownCleanse (name TemplateName, na
 	Template.Hostility = eHostility_Neutral;
 	Template.ConcealmentRule = eConceal_Always;
 
-        Trigger = new class'X2AbilityTrigger_EventListener';
+	Trigger = new class'X2AbilityTrigger_EventListener';
 	Trigger.ListenerData.Deferral = ELD_OnStateSubmitted;
 	Trigger.ListenerData.EventID = EventIDToListenFor;
 	Trigger.ListenerData.Filter = eFilter_Unit;
-        Trigger.ListenerData.EventFn = class'XComGameState_Ability'.static.AbilityTriggerEventListener_Self;
-		Template.AbilityTriggers.AddItem(Trigger);
+	Trigger.ListenerData.EventFn = class'XComGameState_Ability'.static.AbilityTriggerEventListener_Self;
+	Template.AbilityTriggers.AddItem(Trigger);
 
-        RemoveEffectEffect = new class'X2Effect_RemoveEffects';
-        RemoveEffectEffect.EffectNamesToRemove.AddItem(EffectNameToRemove);
+	RemoveEffectEffect = new class'X2Effect_RemoveEffects';
+	RemoveEffectEffect.EffectNamesToRemove.AddItem(EffectNameToRemove);
 
-        Template.AbilityTargetStyle = default.SelfTarget;
-        Template.AddTargetEffect(RemoveEffectEffect);
+	Template.AbilityTargetStyle = default.SelfTarget;
+	Template.AddTargetEffect(RemoveEffectEffect);
 
 	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
 	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
@@ -942,10 +935,8 @@ static function X2DataTemplate RTMindControl()
 {
 	local X2AbilityTemplate Template;
 	local X2AbilityCost_ActionPoints ActionPointCost;
-	local X2AbilityCooldown_PerPlayerType Cooldown;
-	local RTCondition_PsionicTarget PsionicTargetingCondition;
+	local X2AbilityCooldown Cooldown;
 	local X2Condition_UnitEffects EffectCondition;
-	local X2Condition_UnitImmunities UnitImmunityCondition;
 	local X2Effect_MindControl MindControlEffect;
 	local X2Effect_RemoveEffects MindControlRemoveEffects;
 	local X2AbilityTarget_Single SingleTarget;
@@ -962,7 +953,7 @@ static function X2DataTemplate RTMindControl()
 	ActionPointCost.bConsumeAllPoints = true;
 	Template.AbilityCosts.AddItem(ActionPointCost);
 
-	Cooldown = new class'X2AbilityCooldown_PerPlayerType';
+	Cooldown = new class'X2AbilityCooldown';
 	Cooldown.iNumTurns = default.MIND_CONTROL_COOLDOWN;
 	Template.AbilityCooldown = Cooldown;
 
@@ -971,8 +962,7 @@ static function X2DataTemplate RTMindControl()
 	Template.AbilityShooterConditions.AddItem(default.LivingShooterProperty);
 	Template.AddShooterEffectExclusions();
 
-	PsionicTargetingCondition = new class'RTCondition_PsionicTarget';
-	Template.AbilityTargetConditions.AddItem(PsionicTargetingCondition);
+	Template.AbilityTargetConditions.AddItem(default.PsionicTargetingProperty);
 	Template.AbilityTargetConditions.AddItem(default.GameplayVisibilityCondition);
 
 	EffectCondition = new class'X2Condition_UnitEffects';

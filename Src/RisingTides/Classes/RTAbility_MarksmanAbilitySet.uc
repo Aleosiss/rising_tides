@@ -1037,7 +1037,7 @@ static function X2AbilityTemplate Sovereign()
 static function X2AbilityTemplate SovereignEffect()
 {
 	local X2AbilityTemplate						Template;
-	local X2Condition_UnitProperty				MultiUnitPropertyCondition, UnitPropertyCondition;
+	local X2Condition_UnitProperty				MultiUnitPropertyCondition;
 	local X2Effect_Panicked				        PanicEffect;
 	local X2AbilityCooldown						Cooldown;
  	local X2AbilityTrigger_EventListener		EventListener;
@@ -1118,8 +1118,7 @@ static function X2AbilityTemplate SovereignEffect()
 	local X2Effect_ApplyFireToWorld				FireToWorldEffect;  //allows ability to set shit on fire
 	local X2Effect_ApplyDirectionalWorldDamage  WorldDamage;  //allows destruction of environment
 	local X2Effect_Burning						BurningEffect;      //Allows Burning
-	local RTAbilityMultiTarget_TargetedLine		LineMultiTarget, LineSingleTarget;
-	local X2AbilityTarget_Cursor				CursorTarget;
+	local RTAbilityMultiTarget_TargetedLine		LineMultiTarget;
 	local X2AbilityTarget_Single				SingleTarget;
 
 	local RTCondition_VisibleToPlayer			PlayerVisibilityCondition;
@@ -1514,7 +1513,6 @@ static function X2AbilityTemplate TimeStandsStill()
 static function X2AbilityTemplate TimeStandsStillEndListener()
 {
 	local X2AbilityTemplate						Template;
-	local X2Condition_UnitProperty				UnitPropertyCondition;
 	local X2Effect_RemoveEffects				RemoveSelfEffect;
 	local X2Effect_RemoveEffects				RemoveMultiEffect;
 	local X2AbilityMultiTarget_Radius			MultiTarget;
@@ -2264,7 +2262,6 @@ static function X2AbilityTemplate RTHarbingerPsionicLance() {
 static function X2AbilityTemplate HarbingerCleanseListener()
 {
 	local X2AbilityTemplate						Template;
-	local X2Condition_UnitProperty				UnitPropertyCondition;
 	local X2Effect_RemoveEffects				RemoveSelfEffect;
 	local X2Effect_RemoveEffects				RemoveMultiEffect;
 	local X2AbilityMultiTarget_Radius			MultiTarget;
@@ -2319,7 +2316,7 @@ static function X2AbilityTemplate RTKillZone()
 {
 	local X2AbilityTemplate						Template;
 	local X2AbilityCooldown						Cooldown;
-	local X2AbilityCost_Ammo					AmmoCost;
+	// local X2AbilityCost_Ammo					AmmoCost; don't want this for the case where Heat Channel is up and you want to use it to reload and killzone at the same time
 	local RTAbilityCost_SnapshotActionPoints    ActionPointCost;
 	local X2AbilityTarget_Cursor				CursorTarget;
 	local X2AbilityMultiTarget_Cone				ConeMultiTarget;
@@ -2553,8 +2550,6 @@ simulated function OverflowShielded_BuildVisualization(XComGameState VisualizeGa
 	local StateObjectReference InteractingUnitRef;
 	local VisualizationTrack EmptyTrack;
 	local VisualizationTrack BuildTrack;
-	local X2Action_PlayAnimation PlayAnimationAction;
-	local X2Action_PlaySoundAndFlyOver SoundAndFlyOver;
 	local XComGameState_Unit	UnitState;
 
 	History = `XCOMHISTORY;

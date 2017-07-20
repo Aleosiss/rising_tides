@@ -4,6 +4,8 @@ var localized string RTFriendlyName;
 var float fCritDamageMod;
 var int iMobilityMod, iMeleeHitChanceMod;
 
+var localized string BloodlustEffectTitle;
+
 function RegisterForEvents(XComGameState_Effect EffectGameState)
 {
 	local X2EventManager EventMgr;
@@ -26,6 +28,9 @@ function RegisterForEvents(XComGameState_Effect EffectGameState)
 simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffectParameters, XComGameState_BaseObject kNewTargetState, XComGameState NewGameState, XComGameState_Effect NewEffectState) {
 	local XComGameState_Unit UnitState;
 
+	m_aStatChanges.Length = 0;
+
+	UnitState = XComGameState_Unit(kNewTargetState);
 
 	if(UnitState.IsUnitAffectedByEffectName('RTEffect_QueenOfBlades'))
 		AddPersistentStatChange(eStat_Mobility, iMobilityMod);
@@ -39,7 +44,7 @@ simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffe
 
 function GetToHitModifiers(XComGameState_Effect EffectState, XComGameState_Unit Attacker, XComGameState_Unit Target, XComGameState_Ability AbilityState, class<X2AbilityToHitCalc> ToHitType, bool bMelee, bool bFlanking, bool bIndirectFire, out array<ShotModifierInfo> ShotModifiers) {
 
-	local ShotModifierInfo HitMod, CritMod;
+	local ShotModifierInfo HitMod;
 	local RTGameState_Effect BumpEffect;
 	local bool bValid;
 
@@ -58,7 +63,7 @@ function GetToHitModifiers(XComGameState_Effect EffectState, XComGameState_Unit 
 
 	HitMod.ModType = eHit_Crit;
 	HitMod.Value = BumpEffect.iStacks * iMeleeHitChanceMod;
-	HitMod.Reason = "Bloodlust"; //TODO: FIX
+	HitMod.Reason = default.BloodlustEffectTitle;
 	ShotModifiers.AddItem(HitMod);
 
 }

@@ -46,21 +46,14 @@ function UpdateBasedOnAuraTarget(XComGameState_Unit SourceUnitState, XComGameSta
 {
 	local XComGameState_Unit NewTargetState;
 	local EffectAppliedData AuraTargetApplyData;
-	local XComGameStateHistory History;
-	local XComGameState_Ability AbilityStateObject;
 	local X2AbilityTemplate AbilityTemplate;
 	local int i;
 	local name EffectAttachmentResult;
-	local bool bIsAtLeastOneEffectAttached;
-	local bool bShouldAffect;
 
 	local X2Effect_Persistent PersistentAuraEffect;
 	local XComGameState_Effect NewAuraEffectState;
-	local array<StateObjectReference> EffectsToAdd;
 
 	local RTGameState_Effect RTSourceAuraEffectGameState;
-
-	History = `XCOMHISTORY;
 
 	NewTargetState = XComGameState_Unit(NewGameState.CreateStateObject(TargetUnitState.Class, TargetUnitState.ObjectID));
 	NewTargetState.bRequiresVisibilityUpdate = true;
@@ -71,8 +64,6 @@ function UpdateBasedOnAuraTarget(XComGameState_Unit SourceUnitState, XComGameSta
 	AuraTargetApplyData.TargetStateObjectRef = TargetUnitState.GetReference();
 
 	AbilityTemplate = GetAuraTemplate(SourceUnitState, TargetUnitState, SourceAuraEffectGameState, NewGameState);
-
-	bIsAtLeastOneEffectAttached = false;
 
 	RTSourceAuraEffectGameState = RTGameState_Effect(SourceAuraEffectGameState);
 	if(RTSourceAuraEffectGameState == none) {
@@ -95,7 +86,6 @@ function UpdateBasedOnAuraTarget(XComGameState_Unit SourceUnitState, XComGameSta
 				if(PersistentAuraEffect != none) {
 					NewAuraEffectState = NewTargetState.GetUnitAffectedByEffectState(PersistentAuraEffect.EffectName);
 					RTSourceAuraEffectGameState.EffectsAddedList.AddItem(NewAuraEffectState.GetReference());
-					EffectsToAdd.AddItem(NewAuraEffectState.GetReference());
 				}
 			}
 
@@ -118,7 +108,6 @@ protected function RemoveAuraTargetEffects(XComGameState_Unit SourceUnitState, X
 
 	local array<XComGameState_Effect> EffectsToRemove;
 	local X2Effect_Persistent PersistentAuraEffect;
-	local XComGameStateContext_EffectRemoved RemoveContext;
 
 	local RTGameState_Effect RTSourceAuraEffectGameState;
 

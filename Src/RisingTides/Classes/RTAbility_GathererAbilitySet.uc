@@ -182,7 +182,7 @@ static function X2AbilityTemplate CreateOverTheShoulderAbility(X2AbilityTemplate
 	// Knowledge is Power
 	local RTEffect_KnowledgeIsPower				KIPEffect;
 
-	local X2Effect_Persistent					SelfEffect, EnemyEffect, AllyEffect;
+	local X2Effect_Persistent					/*SelfEffect, EnemyEffect,*/ AllyEffect;
 
 	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_swordSlash";
 	Template.AbilitySourceName = 'eAbilitySource_Psionic';
@@ -563,7 +563,7 @@ static function X2AbilityTemplate RTExtinctionEventPartThree() {
       //local X2Effect_ApplyDamageToWorld WorldDamage;
       local X2Effect_ApplyWeaponDamage WeaponDamage;
       local X2AbilityMultiTarget_Radius Radius;
-      local X2Effect_Persistent UnconsciousEffect;
+      //local X2Effect_Persistent UnconsciousEffect;
 	  local X2Effect_PersistentStatChange DisorientedEffect;
 
       `CREATE_X2ABILITY_TEMPLATE(Template, 'RTExtinctionEventPartThree');
@@ -1206,8 +1206,7 @@ static function X2AbilityTemplate RTEchoedAgony() {
     Template.AbilitySourceName = 'eAbilitySource_Psionic';
 
     PanicHitCalc = new class'RTAbilityToHitCalc_PanicCheck'; // modified to test robotic hacking defense instead of their will
-
-    Template.AbilityToHitCalc = default.DeadEye;
+    Template.AbilityToHitCalc = PanicHitCalc;
 
     Template.AbilityTargetStyle = default.SelfTarget;
     Template.AbilityMultiTargetStyle = new class'X2AbilityMultiTarget_AllUnits'; // otscondition will handle 'range check', psionic property will handle enemy check
@@ -1376,10 +1375,10 @@ static function X2AbilityTemplate RTGuiltyConscienceEvent() {
 //---------------------------------------------------------------------------------------
 static function X2AbilityTemplate RTLift() {
 	local X2AbilityTemplate 					Template;
-	local X2Effect_Stunned 						StunEffect;
+	//local X2Effect_Stunned 						StunEffect;
 	local X2AbilityCost_ActionPoints			ActionPointCost;
 	local X2AbilityCooldown						Cooldown;
-	local RTCondition_UnitSize					UnitSizeCondition;
+	//local RTCondition_UnitSize					UnitSizeCondition;
 	local X2AbilityTarget_Cursor				CursorTarget;
 	local X2AbilityMultiTarget_Radius			RadiusMultiTarget;
 	local X2Effect_PersistentTraversalChange	TraversalEffect;
@@ -1448,15 +1447,14 @@ simulated function RTLift_ModifyActivatedAbilityContext(XComGameStateContext Con
 	local XComGameState_Unit UnitState;
 	local XComGameStateContext_Ability AbilityContext;
 	local XComGameStateHistory History;
-	local vector EndLocation;
 	local TTile EndTileLocation;
-	local XComWorldData World;
+	//local XComWorldData World;
 	local PathingInputData InputData, EmptyInput;
 	local PathingResultData ResultData, EmptyResult;
 	local int i;
 
 	History = `XCOMHISTORY;
-	World = `XWORLD;
+	//World = `XWORLD;
 
 	AbilityContext = XComGameStateContext_Ability(Context);
 	for(i = 0; i < AbilityContext.InputContext.MultiTargets.Length; i++) {
@@ -1493,13 +1491,13 @@ simulated function XComGameState RTLift_BuildGameState(XComGameStateContext Cont
 	local XComGameState NewGameState;
 	local XComGameState_Unit UnitState;
 	local XComGameStateContext_Ability AbilityContext;
-	local vector NewLocation;
+	//local vector NewLocation;
 	local TTile NewTileLocation;
-	local XComWorldData World;
+	//local XComWorldData World;
 	local X2EventManager EventManager;
-	local int LastPathElement, i;
+	local int i;
 
-	World = `XWORLD;
+	//World = `XWORLD;
 	EventManager = `XEVENTMGR;
 
 	//Build the new game state frame
@@ -1530,12 +1528,8 @@ simulated function RTLift_BuildVisualization(XComGameState VisualizeGameState, o
 	local XComGameStateHistory History;
 	local XComGameStateContext_Ability  AbilityContext;
 	local StateObjectReference InteractingUnitRef;
-	local X2AbilityTemplate AbilityTemplate;
 	local VisualizationTrack EmptyTrack, BuildTrack;
-	local X2Action_PlaySoundAndFlyOver SoundAndFlyover;
 	local int i;
-	local X2Action_MoveTurn MoveTurnAction;
-	local X2Action_PlayAnimation PlayAnimation;
 
 	TypicalAbility_BuildVisualization(VisualizeGameState, OutVisualizationTracks);
 
@@ -1592,7 +1586,6 @@ static function RTEffect_KnowledgeIsPower CreateKnowledgeIsPowerEffect(int _Stac
 //---------------------------------------------------------------------------------------
 static function X2AbilityTemplate RTCrushingGrasp() {
 	local X2AbilityTemplate 					Template;
-	local X2Effect_Stunned 						StunEffect;
 	local X2AbilityCost_ActionPoints			ActionPointCost;
 	local X2AbilityCooldown						Cooldown;
 	local X2AbilityTarget_Cursor				CursorTarget;
@@ -1822,16 +1815,13 @@ simulated function DimensionalRiftStage1_BuildVisualization(XComGameState Visual
 	local vector TargetLocation;
 	local TTile TargetTile;
 	local X2Action_TimedWait WaitAction;
-	local X2Action_PlaySoundAndFlyOver SoundCueAction;
+	//local X2Action_PlaySoundAndFlyOver SoundCueAction;
 	local int i, j;
 	local VisualizationTrack EmptyTrack;
 	local X2VisualizerInterface TargetVisualizerInterface;
 
 	local XComGameState_BaseObject Placeholder_old, Placeholder_new;
-	local XComGameState_Ability SustainedAbility, Ability;
-	local TTile					Tile;
-	local vector				Location;
-	local X2Action_PlayAnimation AnimAction;
+	local XComGameState_Ability Ability;
 
 	History = `XCOMHISTORY;
 
@@ -1953,8 +1943,8 @@ simulated function DimensionalRigt1_BuildAffectedVisualization(name EffectName, 
 	local X2Action_StartStopSound SoundAction;
 	local XComGameState_Unit AvatarUnit;
 	local XComWorldData World;
-	local vector TargetLocation, Location;
-	local TTile TargetTile, Tile;
+	local vector Location;
+	local TTile Tile;
 	local XComGameState_Ability	SustainedAbility;
 	local XComGameState_BaseObject Placeholder_new, Placeholder_old;
 
@@ -2321,12 +2311,10 @@ simulated function DimensionalRiftStage2_BuildVisualization(XComGameState Visual
 }
 
 static function X2AbilityTemplate RTSetPsistormCharges() {
-	local X2AbilityTemplate Template;
-	local X2AbilityTrigger_EventListener Trigger;
-	local X2Effect_RemoveEffects		RemoveEffect;
-	local X2Condition_UnitEffects		EffectCondition;
-	local RTEffect_RemoveValidActivationTiles RemoveTargetedAreaEffect;
-	local RTEffect_ResetCharges					ResetChargesEffect;
+	local X2AbilityTemplate								Template;
+	local X2Effect_RemoveEffects						RemoveEffect;
+	local RTEffect_RemoveValidActivationTiles			RemoveTargetedAreaEffect;
+	local RTEffect_ResetCharges							ResetChargesEffect;
 
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'RTSetPsistormCharges');
 	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_swordSlash"; //TODO: Change this
@@ -2602,7 +2590,7 @@ static function X2AbilityTemplate RTPsionicLashAnims()
 static simulated function PsionicLash_BuildVisualization(XComGameState VisualizeGameState, out array<VisualizationTrack> OutVisualizationTracks) {
 	local XComGameStateHistory			History;
 	local XComGameStateContext_Ability  Context;
-	local X2AbilityTemplate             AbilityTemplate, BindAbilityTemplate;
+	local X2AbilityTemplate             AbilityTemplate;
 	local StateObjectReference          InteractingUnitRef;
 	local RTAction_PsionicGetOverHere	GetOverHereAction;
 	local X2Action_PlaySoundAndFlyOver	SoundAndFlyover;
@@ -2614,21 +2602,12 @@ static simulated function PsionicLash_BuildVisualization(XComGameState Visualize
 
 	local int							EffectIndex;
 
-	//Support for finding and visualizing a bind attack that is part of the grab attack
-	local int							SearchHistoryIndex;
-	local XComGameState					ApplyBindState;
-	local XComGameStateContext_Ability	BindAbilityContext;
-	local bool							bGrabWasHit;
-	local bool							bBindWasHit;
-	local bool                          bDoBindVisuals;
-
 	History = `XCOMHISTORY;
 
 	Context = XComGameStateContext_Ability(VisualizeGameState.GetContext());
 	AbilityTemplate = class'XComGameState_Ability'.static.GetMyTemplateManager().FindAbilityTemplate(Context.InputContext.AbilityTemplateName);
 
-	bGrabWasHit = class'XComGameStateContext_Ability'.static.IsHitResultHit(Context.ResultContext.HitResult);
-
+	
 	//Configure the visualization track for the shooter
 	//****************************************************************************************
 	InteractingUnitRef = Context.InputContext.SourceObject;

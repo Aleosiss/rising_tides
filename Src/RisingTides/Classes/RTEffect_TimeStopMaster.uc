@@ -20,9 +20,7 @@ function RegisterForEvents(XComGameState_Effect EffectGameState)
 
 simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffectParameters, XComGameState_BaseObject kNewTargetState, XComGameState NewGameState, XComGameState_Effect NewEffectState)
 {
-	local XComGameState_Unit TargetUnit;
-
-	TargetUnit = XComGameState_Unit(kNewTargetState);
+	m_aStatChanges.Length = 0;
 
 	// Could you, Madoka? Could you see me in my stopped time?
 	// Uh, no...

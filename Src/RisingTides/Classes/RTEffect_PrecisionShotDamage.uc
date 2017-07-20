@@ -19,7 +19,6 @@ var localized string RTFriendlyName;
 function GetToHitModifiers(XComGameState_Effect EffectState, XComGameState_Unit Attacker, XComGameState_Unit Target, XComGameState_Ability AbilityState, class<X2AbilityToHitCalc> ToHitType, bool bMelee, bool bFlanking, bool bIndirectFire, out array<ShotModifierInfo> ShotModifiers)
 {
 	local ShotModifierInfo ModInfo;
-	local XComGameState_Item SourceWeapon;
 	local GameRulesCache_VisibilityInfo VisInfo;
 	local bool bSquadsight;
 	local int iCritBonus;
@@ -28,7 +27,6 @@ function GetToHitModifiers(XComGameState_Effect EffectState, XComGameState_Unit 
 	`TACTICALRULES.VisibilityMgr.GetVisibilityInfo(Attacker.ObjectID, Target.ObjectID, VisInfo);
 	if (VisInfo.bClearLOS && !VisInfo.bVisibleGameplay)
 		bSquadsight = true;
-	AbilityState.SourceWeapon = EffectState.ApplyEffectParameters.ItemStateObjectRef;
 	//Add bonus crit chance if we're shooting a precision shot.
 	if (AbilityState.GetMyTemplateName() == 'RTPrecisionShot')
 	{

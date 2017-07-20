@@ -47,9 +47,8 @@ simulated function bool OnEffectTicked(const out EffectAppliedData ApplyEffectPa
 
 simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffectParameters, XComGameState_BaseObject kNewTargetState, XComGameState NewGameState, XComGameState_Effect NewEffectState)
 {
-	local XComGameState_Unit SourceUnitState, TargetUnitState;
-	local XComGameStateHistory History;
-	local int HealAmount, ShredAmount, RuptureAmount;
+	local XComGameState_Unit TargetUnitState;
+	local int HealAmount;
 
 	m_aStatChanges.Length = 0;
 
@@ -58,10 +57,6 @@ simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffe
 	AddPersistentStatChange(eStat_Will, BONUS_WILL);
 	AddPersistentStatChange(eStat_PsiOffense, BONUS_WILL);
 	AddPersistentStatChange(eStat_ArmorMitigation, BONUS_ARMOR);
-
-
-	// gain bonus armor pen to simulate psi damage for now
-	//AddPersistentStatChange(eStat_ArmorPiercing, BONUS_PSI_DAMAGE);
 
 	TargetUnitState = XComGameState_Unit(kNewTargetState);
 	// heal to full

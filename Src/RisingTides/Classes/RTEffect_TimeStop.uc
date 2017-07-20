@@ -16,15 +16,14 @@ simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffe
 {
 	local XComGameState_Unit UnitState;
 	local RTGameState_TimeStopEffect TimeStopEffectState;
-	local X2EventManager EventManager;
 	local UnitValue	UnitVal;
-	local bool IsOurTurn;
 
 	UnitState = XComGameState_Unit(kNewTargetState);
 	TimeStopEffectState = RTGameState_TimeStopEffect(NewEffectState);
 	TimeStopEffectState.PreventedDamageValues.Length = 0;
 	TimeStopEffectState.iShouldRecordCounter = 0;
 	bWasPreviouslyImmobilized = false;
+	m_aStatChanges.Length = 0;
 
 	if(UnitState != none)
 	{
@@ -85,11 +84,8 @@ function ModifyTurnStartActionPoints(XComGameState_Unit UnitState, out array<nam
 
 simulated function bool OnEffectTicked(const out EffectAppliedData ApplyEffectParameters, XComGameState_Effect kNewEffectState, XComGameState NewGameState, bool FirstApplication)
 {
-	local XComGameState_Unit	TimeStopperUnit, TimeStoppedUnit;
-	local UnitValue				UnitVal;
+	local XComGameState_Unit TimeStoppedUnit;
 
-
-	TimeStopperUnit = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(ApplyEffectParameters.SourceStateObjectRef.ObjectID));
 	TimeStoppedUnit = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(ApplyEffectParameters.TargetStateObjectRef.ObjectID));
 	if(TimeStoppedUnit != none) {
 		TimeStoppedUnit.ActionPoints.Length = 0;
@@ -118,7 +114,6 @@ simulated function ExtendCooldownTimers(XComGameState_Unit TimeStoppedUnit, XCom
 
 simulated function ExtendEffectDurations(XComGameState_Unit TimeStoppedUnit, XComGameState NewGameState) {
 	local XComGameState_Effect EffectState, NewEffectState;
-	local int i;
 
 	foreach `XCOMHISTORY.IterateByClassType(class'XComGameState_Effect', EffectState) {
 		if(EffectState.ApplyEffectParameters.TargetStateObjectRef.ObjectID == TimeStoppedUnit.ObjectID) {
@@ -132,12 +127,8 @@ simulated function ExtendEffectDurations(XComGameState_Unit TimeStoppedUnit, XCo
 	}
 }
 
-simulated function OnEffectRemoved(const out EffectAppliedData ApplyEffectParameters, XComGameState NewGameState, bool bCleansed, XComGameState_Effect RemovedEffectState)
-{
-	local RTGameState_TimeStopEffect TimeStopEffectState;
-	local X2Effect_ApplyWeaponDamage	DamageEffect;
+simulated function OnEffectRemoved(const out EffectAppliedData ApplyEffectParameters, XComGameState NewGameState, bool bCleansed, XComGameState_Effect RemovedEffectState) {
 	local XComGameState_Unit UnitState;
-	local UnitValue UnitVal;
 
 	super.OnEffectRemoved(ApplyEffectParameters, NewGameState, bCleansed, RemovedEffectState);
 
@@ -158,12 +149,6 @@ simulated function OnEffectRemoved(const out EffectAppliedData ApplyEffectParame
 
 		// Reset stun timer, (if you're stunned while/before time is stopped, the duration should be unchanged)
 		UnitState.StunnedActionPoints = PreviousStunDuration;
-
-		//// And thus, time resumes...
-		//TimeStopEffectState = RTGameState_TimeStopEffect(RemovedEffectState);
-
-
-		//UnitState.TakeDamage(NewGameState, TimeStopEffectState.GetFinalDamageValue().Damage, 0, 0, , TimeStopEffectState, TimeStopEffectState.ApplyEffectParameters.SourceStateObjectRef, TimeStopEffectState.bExplosive);
 
 		NewGameState.AddStateObject(UnitState);
 	}
@@ -224,9 +209,9 @@ function bool TimeStopTicked(X2Effect_Persistent PersistentEffect, const out Eff
 
 
 function int GetDefendingDamageModifier(XComGameState_Effect EffectState, XComGameState_Unit Attacker, Damageable TargetDamageable, XComGameState_Ability AbilityState, const out EffectAppliedData AppliedData, const int CurrentDamage, X2Effect_ApplyWeaponDamage WeaponDamageEffect) {
-	local int DamageTaken, i;
+	local int i;
 	local RTGameState_TimeStopEffect TimeStopEffectState;
-	local WeaponDamageValue TotalWeaponDamageValue, IteratorDamageValue;
+	local WeaponDamageValue TotalWeaponDamageValue;
 	local RTEffect_TimeStopDamage TimeStopDamageEffect;
 
 	if(CurrentDamage < 1)
@@ -406,7 +391,6 @@ static function TimeStopVisualizationTicked(XComGameState VisualizeGameState, ou
 {
 	local XComGameState_Unit UnitState;
 	local array<StateObjectReference> OutEnemyViewers;
-	local bool bVisible;
 
 	UnitState = XComGameState_Unit(BuildTrack.StateObject_NewState);
 	class'X2TacticalVisibilityHelpers'.static.GetEnemyViewersOfTarget(UnitState.ObjectID, OutEnemyViewers);
@@ -424,14 +408,11 @@ static function TimeStopVisualizationTicked(XComGameState VisualizeGameState, ou
 simulated function AddX2ActionsForVisualization_Removed(XComGameState VisualizeGameState, out VisualizationTrack BuildTrack, const name EffectApplyResult, XComGameState_Effect RemovedEffect)
 {
 	local XComGameState_Unit UnitState;
-	local X2Action_ApplyWeaponDamageToUnit DamageAction;
-	local XComGameStateContext_Ability  Context;
 	local GameRulesCache_VisibilityInfo VisInfo;
 	local bool bVisible;
 	local string FlyoverText;
 
 	super.AddX2ActionsForVisualization_Removed(VisualizeGameState, BuildTrack, EffectApplyResult, RemovedEffect);
-	Context = XComGameStateContext_Ability(VisualizeGameState.GetContext());
 
 
 	bVisible = true;

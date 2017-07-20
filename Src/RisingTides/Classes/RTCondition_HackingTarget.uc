@@ -11,13 +11,10 @@ event name CallMeetsCondition(XComGameState_BaseObject kTarget)
 
 event name CallMeetsConditionWithSource(XComGameState_BaseObject kTarget, XComGameState_BaseObject kSource)
 {
-	local XComGameState_Unit TargetUnit, SourceUnit;
+	local XComGameState_Unit SourceUnit;
 	local XComGameState_InteractiveObject TargetObject;
 	local XComInteractiveLevelActor TargetVisualizer;
 	local GameRulesCache_VisibilityInfo VisInfo;
-	local bool bGoodTarget;
-	local array<StateObjectReference> VisibleUnits;
-	local array<XComInteractPoint> InteractionPoints;
 
 	SourceUnit = XComGameState_Unit(kSource);
 	TargetObject = XComGameState_InteractiveObject(kTarget);

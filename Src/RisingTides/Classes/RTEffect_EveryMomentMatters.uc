@@ -28,12 +28,12 @@ function int GetAttackingDamageModifier(XComGameState_Effect EffectState, XComGa
 	}
 
 	if(!bLastShot) {
-		return int(ExtraDamage);
+		return 0;
 	}
 
 	TargetState = XComGameState_Unit(TargetDamageable);
 	if(TargetState == none) {
-		return int(ExtraDamage);
+		return 0;
 	}
 
 	iMissingHealth = TargetState.GetMaxStat(eStat_HP) - TargetState.GetCurrentStat(eStat_HP);

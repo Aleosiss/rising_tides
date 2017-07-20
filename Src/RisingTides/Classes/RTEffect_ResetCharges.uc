@@ -5,11 +5,9 @@ var int BaseCharges;
 
 simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffectParameters, XComGameState_BaseObject kNewTargetState, XComGameState NewGameState, XComGameState_Effect NewEffectState)
 {
-	local XComGameState_Ability AbilityState, SourceAbilityState;
+	local XComGameState_Ability AbilityState;
 	local StateObjectReference AbilityRef;
 	local XComGameState_Unit UnitState;
-	local XComGameStateContext_Ability AbilityContext;
-	local X2AbilityTemplate AbilityTemplate;
 
 	UnitState = XComGameState_Unit(kNewTargetState);
 	`assert(UnitState != none);

@@ -14,7 +14,6 @@ simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffe
 	local XComGameState_Unit UnitState;
 	local Name PanicBehaviorTree;
 	local bool bCivilian;
-	local int Point;
 
 	UnitState = XComGameState_Unit(kNewTargetState);
 	if (m_aStatChanges.Length > 0)
@@ -29,20 +28,6 @@ simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffe
 	bCivilian = UnitState.GetTeam() == eTeam_Neutral;
 	if( !bCivilian )
 	{
-		//for( Point = 0; Point < 2; ++Point )
-		//{
-			//if( Point < UnitState.ActionPoints.Length )
-			//{
-				//if( UnitState.ActionPoints[Point] != class'X2CharacterTemplateManager'.default.StandardActionPoint )
-				//{
-					//UnitState.ActionPoints[Point] = class'X2CharacterTemplateManager'.default.StandardActionPoint;
-				//}
-			//}
-			//else
-			//{
-				//UnitState.ActionPoints.AddItem(class'X2CharacterTemplateManager'.default.StandardActionPoint);
-			//}
-		//}
 		UnitState.ActionPoints.Length = 0;
 	}
 	else

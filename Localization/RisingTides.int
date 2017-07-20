@@ -107,6 +107,9 @@ GREYSCALED_DESC="Frozen in time..."
 HARBINGER_BROKEN_ALERT="Shield lost!"
 OVERFLOW_READOUT="Overflow"
 
+[RTEffect_Bloodlust]
+BloodlustEffectTitle="Bloodlust"
+
 [RTAbility_GathererAbilitySet]
 GuardianAngelHealText="Guardian Angel"
 KIPFriendlyName="Knowledge Is Power"

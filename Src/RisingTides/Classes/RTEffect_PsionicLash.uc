@@ -5,7 +5,6 @@ simulated function AddX2ActionsForVisualization(XComGameState VisualizeGameState
 	local XComGameState_Unit TargetUnitState;
 	local vector NewUnitLoc;
 	local RTAction_PsionicGetOverHereTarget GetOverHereTarget;
-	local X2Action_ApplyWeaponDamageToUnit UnitAction;
 
 	TargetUnitState = XComGameState_Unit(BuildTrack.StateObject_NewState);
 	`assert(TargetUnitState != none);

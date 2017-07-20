@@ -47,7 +47,17 @@ function UpdateBasedOnAuraTarget(XComGameState_Unit SourceUnitState, XComGameSta
 		AuraTargetApplyData.EffectRef.TemplateEffectLookupArrayIndex = i;
 		EffectAttachmentResult = AbilityTemplate.AbilityMultiTargetEffects[i].ApplyEffect(AuraTargetApplyData, NewTargetState, NewGameState);
 
+		// If it didn't attach, now check to see if the effect is already attached
+		bIsAtLeastOneEffectAttached = bIsAtLeastOneEffectAttached || (EffectAttachmentResult == 'AA_Success');
+	}
+
+	if (bIsAtLeastOneEffectAttached)
+	{
 		NewGameState.AddStateObject(NewTargetState);
+	}
+	else
+	{
+		NewGameState.PurgeGameStateForObjectID(NewTargetState.ObjectID);
 	}
 }
 

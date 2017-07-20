@@ -30,12 +30,10 @@ simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffe
 	local RTGameState_MeldEffect			MeldEffectState;
 	local XComGameState_Unit				EffectTargetUnit;
 	local X2EventManager					EventMgr;
-	local XComGameStateHistory				History;
 	local Object							ListenerObj;
-	local float								i, MeldWill, MeldHacking, MeldPsiOff;
+	local float								MeldWill, MeldHacking, MeldPsiOff;
 
 	EventMgr = `XEVENTMGR;
-	History = `XCOMHISTORY;
 	EffectTargetUnit = XComGameState_Unit(kNewTargetState);
 	MeldEffectState = RTGameState_MeldEffect(NewEffectState);
 
@@ -49,19 +47,16 @@ simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffe
 		`Redscreen("RTMeld: Failed to find Meld component when registering listener... what?");
 		return;
 	}
+
 	EventMgr.RegisterForEvent(ListenerObj, 'RTAddToMeld', MeldEffectState.AddUnitToMeld, ELD_OnStateSubmitted,,,true);
 	EventMgr.RegisterForEvent(ListenerObj, 'RTRemoveFromMeld', MeldEffectState.RemoveUnitFromMeld, ELD_OnStateSubmitted,,,true);
-
-
 	EventMgr.RegisterForEvent(ListenerObj, 'RTFeedback', MeldEffectState.RemoveUnitFromMeld,ELD_OnStateSubmitted,,,true);
-
 	EventMgr.RegisterForEvent(ListenerObj, 'TacticalGameEnd', MeldEffectState.OnTacticalGameEnd, ELD_OnStateSubmitted);
 
 
 	MeldEffectState.Initialize(EffectTargetUnit);
 
 	m_aStatChanges.length = 0;
-	//MeldEffectState.StatChanges.Length = 0;
 
 	MeldWill = MeldEffectState.GetMeldStrength() - EffectTargetUnit.GetBaseStat(eStat_Will);
 	MeldPsiOff = MeldEffectState.GetMeldStrength() - EffectTargetUnit.GetBaseStat(eStat_PsiOffense);

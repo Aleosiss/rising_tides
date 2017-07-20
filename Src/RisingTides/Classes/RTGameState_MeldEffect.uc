@@ -21,8 +21,7 @@ function RTGameState_MeldEffect Initialize(XComGameState_Unit MeldMaker)
 {
 	local array<StateObjectReference> IteratorArray;
 	local RTGameState_MeldEffect ParentMeldEffect, IteratorMeldEffect;
-	local int i;
-
+	
 	`LOG("Rising Tides: Initializing new MeldEffect GameState.");
 	GameStateHost = MeldMaker.GetReference();
 
@@ -36,9 +35,6 @@ function RTGameState_MeldEffect Initialize(XComGameState_Unit MeldMaker)
 		}
 	}
 
-
-
-	//ParentMeldEffect = RTGameState_MeldEffect(`XCOMHISTORY.GetSingleGameStateObjectForClass(class, true));
 	ParentMeldEffect = RTGameState_MeldEffect(`XCOMHISTORY.GetGameStateForObjectID(IteratorArray[0].ObjectID));
 
 	// if there is no prexisting Meld, we're going to have to make it ourselves
@@ -190,7 +186,6 @@ simulated function EventListenerReturn AddUnitToMeld(Object EventData, Object Ev
 	local RTGameState_MeldEffect			CurrentMeldEffect, UpdatedMeldEffect;
 	local RTEffect_Meld						MeldEffect;
 	local XComGameState_Unit				EnteringMeldUnit, GameStateHostUnit, newGameStateHostUnit;
-	local X2EventManager					EventManager;
 	local XComGameState						NewGameState;
 	local XComGameStateHistory				History;
 	local float								HackModifier, MeldWillModifier, MeldPsiOffModifier;
@@ -409,9 +404,7 @@ function TriggerJoinMeldFlyoverVisualizationFn(XComGameState VisualizeGameState,
 	local X2Action_PlaySoundAndFlyOver SoundAndFlyOver;
 	local VisualizationTrack BuildTrack;
 	local XComGameStateHistory History;
-	local X2AbilityTemplate AbilityTemplate;
-	local XComGameState_Ability AbilityState;
-
+	
 	History = `XCOMHISTORY;
 
 	UnitState = XComGameState_Unit(History.GetGameStateForObjectID(GameStateHost.ObjectID));
@@ -433,9 +426,7 @@ function TriggerLeaveMeldFlyoverVisualizationFn(XComGameState VisualizeGameState
 	local X2Action_PlaySoundAndFlyOver SoundAndFlyOver;
 	local VisualizationTrack BuildTrack;
 	local XComGameStateHistory History;
-	local X2AbilityTemplate AbilityTemplate;
-	local XComGameState_Ability AbilityState;
-
+	
 	History = `XCOMHISTORY;
 
 	UnitState = XComGameState_Unit(History.GetGameStateForObjectID(GameStateHost.ObjectID));

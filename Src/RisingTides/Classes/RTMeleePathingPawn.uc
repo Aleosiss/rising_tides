@@ -106,10 +106,10 @@ simulated function UpdateMeleeTarget(XComGameState_BaseObject Target)
 
 	//<workshop> Francois' Smooth Cursor AMS 2016/04/07
 	//INS:
-	local TTile InvalidTile;
-	InvalidTile.X = -1;
-	InvalidTile.Y = -1;
-	InvalidTile.Z = -1;
+	//local TTile InvalidTile;
+	//InvalidTile.X = -1;
+	//InvalidTile.Y = -1;
+	//InvalidTile.Z = -1;
 	//</workshop>
 
 	if(Target == none)
@@ -163,10 +163,10 @@ simulated event Tick(float DeltaTime)
 	local float ClosestTileDistance;
 	local float TileDistance;
 
-	local TTile InvalidTile;
-	InvalidTile.X = -1;
-	InvalidTile.Y = -1;
-	InvalidTile.Z = -1;
+	//local TTile InvalidTile;
+	//InvalidTile.X = -1;
+	//InvalidTile.Y = -1;
+	//InvalidTile.Z = -1;
 	
 	if(TargetVisualizer == none) 
 	{

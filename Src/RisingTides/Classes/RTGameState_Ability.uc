@@ -37,9 +37,11 @@ function EventListenerReturn ReprobateWaltzListener( Object EventData, Object Ev
 	AbilityContext = XComGameStateContext_Ability(GameState.GetContext());
 	WaltzUnit = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(AbilityContext.InputContext.SourceObject.ObjectID));
 
+
+	fStackModifier = 1;
 	if(AbilityContext != none) {
 		iStackCount = getBloodlustStackCount(WaltzUnit);
-		fFinalPercentChance = 100 -  ( class'RTAbility_BerserkerAbilitySet'.default.REPROBATE_WALTZ_BASE_CHANCE + ( class'RTAbility_BerserkerAbilitySet'.default.REPROBATE_WALTZ_BLOODLUST_STACK_CHANCE * iStackCount ));
+		fFinalPercentChance = 100 -  ( class'RTAbility_BerserkerAbilitySet'.default.REPROBATE_WALTZ_BASE_CHANCE + ( class'RTAbility_BerserkerAbilitySet'.default.REPROBATE_WALTZ_BLOODLUST_STACK_CHANCE * iStackCount * fStackModifier));
 
 		if(`SYNC_RAND(100) <= int(fFinalPercentChance)) {
 			AbilityTriggerAgainstSingleTarget(AbilityContext.InputContext.PrimaryTarget, false);
@@ -276,14 +278,12 @@ function EventListenerReturn EchoedAgonyListener(Object EventData, Object EventS
 	local XComGameState_Ability AbilityState;
 	local XComGameState_Unit SourceUnitState;
 	local XComGameState NewGameState;
-	local XComGameStateContext_Ability AbilityContext;
 	local XComGameStateHistory History;
 	local int PanicStrength;
-	local GameRulesCache_Unit UnitCache;
-	local X2TacticalGameRuleset TacticalRules;
-	local int i;
 
 	local bool bDebug;
+
+	bDebug = false;
 
 	SourceUnitState = XComGameState_Unit(EventSource); // we are always the source
 	if(SourceUnitState.ObjectID != OwnerStateObject.ObjectID) {
@@ -291,7 +291,6 @@ function EventListenerReturn EchoedAgonyListener(Object EventData, Object EventS
 	}
 
 	History = `XCOMHISTORY;
-	TacticalRules = `TACTICALRULES;
 
 	// determine correct panic value...
 	switch(EventID) {

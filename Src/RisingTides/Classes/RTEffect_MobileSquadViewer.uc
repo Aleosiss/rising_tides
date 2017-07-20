@@ -7,10 +7,8 @@ var float ViewRadius;
 
 simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffectParameters, XComGameState_BaseObject kNewTargetState, XComGameState NewGameState, XComGameState_Effect NewEffectState) {
 	local XComGameStateHistory History;
-	local XComGameState_Unit SourceUnitState, TargetUnitState;
+	local XComGameState_Unit TargetUnitState;
 	local RTGameState_SquadViewer ViewerState;
-	local XComGameState_Ability AbilityState;
-	local Vector ViewerLocation;
 	local float fViewRadius;
 	local TTile ViewerTile;
 
@@ -156,7 +154,7 @@ simulated function AddX2ActionsForVisualization_Removed(XComGameState VisualizeG
 {
 	local RTGameState_SquadViewer SquadViewer;
 	local X2Action_AbilityPerkDurationEnd PerkEnded;
-	local RTAction_ForceVisibility VisAction;
+	// local RTAction_ForceVisibility VisAction;
 
 	SquadViewer = RTGameState_SquadViewer(`XCOMHISTORY.GetGameStateForObjectID(RemovedEffect.CreatedObjectReference.ObjectID));
 	if (SquadViewer != none)
@@ -170,7 +168,7 @@ simulated function AddX2ActionsForVisualization_Removed(XComGameState VisualizeG
 
 	if (XComGameState_Unit(BuildTrack.StateObject_NewState) != none)
 	{
-		VisAction = RTAction_ForceVisibility( class'RTAction_ForceVisibility'.static.AddToVisualizationTrack( BuildTrack, VisualizeGameState.GetContext( ) ) );
+		class'RTAction_ForceVisibility'.static.AddToVisualizationTrack( BuildTrack, VisualizeGameState.GetContext( ) );
 	}
 }
 
@@ -179,13 +177,12 @@ simulated function AddX2ActionsForVisualization_Removed(XComGameState VisualizeG
 // EffectState is the effect that contains the SquadViewer.
 function OnUnitChangedTile(const out TTile NewTileLocation, XComGameState_Effect EffectState, XComGameState_Unit TargetUnit) {
 	local XComGameStateHistory History;
-	local XComGameState_Unit SourceUnitState, NewUnitState;
+	local XComGameState_Unit NewUnitState;
 	local RTGameState_SquadViewer ViewerState, NewViewerState;
 	local XComGameState         NewGameState;
 
 	History = `XCOMHISTORY;
 	ViewerState = RTGameState_SquadViewer(History.GetGameStateForObjectID(EffectState.CreatedObjectReference.ObjectID));
-	SourceUnitState = XComGameState_Unit(History.GetGameStateForObjectID(EffectState.ApplyEffectParameters.SourceStateObjectRef.ObjectID));
 	// It appears Over the Shoulder will handle the creation and removal of all MobileSquadViewers, all we need to do is update our position. If it's too far, OTS will remove us.
 
 	if(ViewerState != none) {

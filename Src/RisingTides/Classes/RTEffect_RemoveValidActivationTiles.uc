@@ -7,13 +7,10 @@ var name AbilityToUnmark;
 
 simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffectParameters, XComGameState_BaseObject kNewTargetState, XComGameState NewGameState, XComGameState_Effect NewEffectState)
 {
-	local XComGameState_Ability AbilityState, SourceAbilityState;
+	local XComGameState_Ability AbilityState;
 	local StateObjectReference AbilityRef;
 	local XComGameState_Unit UnitState;
 	local XComGameStateContext_Ability AbilityContext;
-	local X2AbilityTemplate AbilityTemplate;
-	local vector TargetLoc;
-	local TTile TargetTile;
 //	local TTile DebugTile;        //  used for debug visualization
 
 	UnitState = XComGameState_Unit(kNewTargetState);

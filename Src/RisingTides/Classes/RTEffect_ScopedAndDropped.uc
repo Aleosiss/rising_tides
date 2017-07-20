@@ -68,20 +68,18 @@ function RegisterForEvents(XComGameState_Effect EffectGameState)
 // PostAbilityCostPaid handles SND, Sovereign, and SNA
 function bool PostAbilityCostPaid(XComGameState_Effect EffectState, XComGameStateContext_Ability AbilityContext, XComGameState_Ability kAbility, XComGameState_Unit Attacker, XComGameState_Item AffectWeapon, XComGameState NewGameState, const array<name> PreCostActionPoints, const array<name> PreCostReservePoints)
 {
-	local XComGameState_Unit				TargetUnit, PanicTargetUnit;
+	local XComGameState_Unit				TargetUnit;
 	local X2EventManager					EventMgr;
 	local XComGameState_Ability				AbilityState;
 	local GameRulesCache_VisibilityInfo		VisInfo;
 	local XComGameStateHistory				History;
 	local UnitValue							NumTimes, DamageDealt, ShockCounter;
-	local array<StateObjectReference>		VisibleUnits;
-	local int								Index, RandRoll, iTotalDamageDealt;
-	local bool								bIsStandardFire, bTesting, bHitTarget;
+	local int								RandRoll, iTotalDamageDealt;
+	local bool								bIsStandardFire, bHitTarget;
 
 
 
 	bIsStandardFire = false;
-	bTesting = true;
 	if(kAbility.GetMyTemplateName() == 'RTStandardSniperShot' || kAbility.GetMyTemplateName() == 'DaybreakFlame' || kAbility.GetMyTemplateName() == 'RTPrecisionShot' || kAbility.GetMyTemplateName() == 'RTDisablingShot')
 		bIsStandardFire = true;
 	if(AbilityContext.ResultContext.HitResult == eHit_Crit || AbilityContext.ResultContext.HitResult == eHit_Graze || AbilityContext.ResultContext.HitResult == eHit_Success)

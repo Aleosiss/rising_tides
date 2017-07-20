@@ -8,7 +8,6 @@ simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffe
 {
 	local XComGameState_Effect EffectState, PurgedState;
 	local StateObjectReference  EffectRef;
-	local X2Effect_Persistent  PersistentEffectTemplate;
 	local XComGameState_Unit  TargetUnitState;
 	local XComGameStateHistory	History;
 
@@ -31,6 +30,8 @@ simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffe
 			super.OnEffectAdded(ApplyEffectParameters, kNewTargetState, NewGameState, NewEffectState);
 			return;
 		}
+
+		// remove the effect if there are no more stacks of it left
 		if((EffectState.iStacks - iStacksToRemove) < 1) {
 			EffectState.RemoveEffect(NewGameState, NewGameState, bCleanse);
 		} else {

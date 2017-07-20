@@ -6,9 +6,7 @@ var vector SpawnLocation;
 simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffectParameters, XComGameState_BaseObject kNewTargetState, XComGameState NewGameState, XComGameState_Effect NewEffectState)
 {
 	local XComGameState_Unit   UnitState;
-	local XComWorldData World;
 
-	World = `XWORLD;
 	UnitState = XComGameState_Unit(kNewTargetState);
 
 	if (UnitState != none)
