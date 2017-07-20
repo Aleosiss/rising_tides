@@ -1,4 +1,4 @@
-// This class grants specific boons to all of my special classes	
+// This effect grants specific boons to all of my Bclasses	
 
 class RTEffect_GhostPerkBase extends X2Effect_Persistent;
 
