@@ -635,7 +635,6 @@ static function X2AbilityTemplate RTTheSixPathsOfPain() {
       local X2Effect_GrantActionPoints ActionPointEffect;
       local X2Effect_ImmediateAbilityActivation ActivationEffect;
       local X2Effect_ImmediateMultiTargetAbilityActivation MultiActivationEffect;
-
       local X2Condition_AbilityProperty TriangulationCondition;
       local X2AbilityMultiTarget_AllAllies MultiTarget;
       local X2Condition_UnitEffects   MeldCondition;
