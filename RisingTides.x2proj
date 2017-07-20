@@ -14,9 +14,9 @@
     <Folder Include="Content\" />
     <Folder Include="Localization\" />
     <Folder Include="Src\" />
-    <Folder Include="Src\XComGame" />
     <Folder Include="Src\RisingTides\" />
     <Folder Include="Src\RisingTides\Classes\" />
+    <Folder Include="Src\XComGame" />
     <Folder Include="Src\XComGame\Classes" />
   </ItemGroup>
   <ItemGroup>
@@ -375,6 +375,12 @@
       <SubType>Content</SubType>
     </Content>
     <Content Include="Src\RisingTides\Classes\X2DownloadableContentInfo_RisingTides.uc">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Src\RisingTides\Classes\X2Effect_ImmediateMultiTargetAbilityActivation.uc">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Src\RisingTides\Classes\XComGameState_Effect_ImmediateMultiTarget.uc">
       <SubType>Content</SubType>
     </Content>
     <Content Include="Src\XComGame\Classes\AnalyticsManager.uc">
