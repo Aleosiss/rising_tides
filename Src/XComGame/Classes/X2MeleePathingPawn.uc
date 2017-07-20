@@ -11,17 +11,17 @@
 class X2MeleePathingPawn extends XComPathingPawn
 	native(Unit);
 
-var protected XComGameState_Unit UnitState; // The unit we are currently using
-var protected XComGameState_Ability AbilityState; // The ability we are currently using
-var protected Actor TargetVisualizer; // Visualizer of the current target 
+var private XComGameState_Unit UnitState; // The unit we are currently using
+var private XComGameState_Ability AbilityState; // The ability we are currently using
+var private Actor TargetVisualizer; // Visualizer of the current target 
 
-var protected array<TTile> PossibleTiles; // list of possible tiles to melee from
+var private array<TTile> PossibleTiles; // list of possible tiles to melee from
 
 // Instanced mesh component for the grapple target tile markup
-var protected InstancedStaticMeshComponent InstancedMeshComponent;
+var private InstancedStaticMeshComponent InstancedMeshComponent;
 
 // adds tiles to the instance mesh component for every tile in the PossibileTiles array
-protected native function UpdatePossibleTilesVisuals();
+private native function UpdatePossibleTilesVisuals();
 
 function Init(XComGameState_Unit InUnitState, XComGameState_Ability InAbilityState)
 {

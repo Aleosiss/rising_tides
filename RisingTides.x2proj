@@ -380,6 +380,9 @@
     <Content Include="Src\RisingTides\Classes\X2Effect_ImmediateMultiTargetAbilityActivation.uc">
       <SubType>Content</SubType>
     </Content>
+    <Content Include="Src\RisingTides\Classes\X2MeleePathingPawn_RT.uc">
+      <SubType>Content</SubType>
+    </Content>
     <Content Include="Src\RisingTides\Classes\XComGameState_Effect_ImmediateMultiTarget.uc">
       <SubType>Content</SubType>
     </Content>

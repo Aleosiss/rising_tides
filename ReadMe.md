@@ -45,10 +45,11 @@ This would be a bare-bones content mod. I also have the following content in min
 	- Make extend effect duration happen on move for Aura Effects as well, possibly by breaking its logic out into a separate method that is called in either place
 	- Crushing Grip doesn't override idle animations the first time it affects a unit, neither does Sovereign
 	- Psionic Storm only plays sound from one storm at a time, due to a base-game issue where a soundcue can only be played once per ObjectID
-	- Networked OI does not work with CCS or KillzoneShot. Unsure of exact cause, appears that CCS does not tick AbilityActivated
+	- Networked OI does not work with CloseCombatSpecialistAttack or KillzoneShot. Unsure of exact cause, appears that CCS does not tick AbilityActivated
+	- Shadow Strike does not highlight the tiles it can activate to. Should be possible without highlander, but a pain in the ass, so low priority.
 
 ###### Current Sprint Goals:
-	- Cut out declared but unused objects
+
 
 
 ###### Current Overrides: X2MeleePathingPawn
