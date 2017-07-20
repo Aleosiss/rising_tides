@@ -445,5 +445,5 @@ function TriggerLeaveMeldFlyoverVisualizationFn(XComGameState VisualizeGameState
 
 defaultproperties
 {
-	MeldStrengthStatType = eStat_Will
+	MeldStrengthStatType = eStat_PsiOffense
 }
