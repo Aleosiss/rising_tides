@@ -1327,7 +1327,7 @@ static function X2AbilityTemplate RTUnstableConduitBurst() {
 	Effect.VFXTemplateName = default.BurstParticleString;
 	Template.AddShooterEffect(Effect);
 
-		WorldDamage = new class'X2Effect_ApplyDirectionalWorldDamage';  //creates the framework to apply damage to the world
+	WorldDamage = new class'X2Effect_ApplyDirectionalWorldDamage';  //creates the framework to apply damage to the world
 	WorldDamage.bUseWeaponDamageType = False;                       //overrides the normal weapon damage type
 	WorldDamage.bUseWeaponEnvironmentalDamage = false;              //replaces the weapon's environmental damage with the abilities
 	WorldDamage.EnvironmentalDamageAmount = 2500;                   //determines the amount of enviornmental damage the ability applies

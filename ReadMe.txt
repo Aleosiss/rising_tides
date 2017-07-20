@@ -22,3 +22,5 @@ robojumper, xylthixlm, and Musashi for technical support.
 * insert artist here * for the mod preview image.
 
 "Who could have known that the true threat did not fall to Earth on the backs of falling stars, but instead rose to the surface on the rising tides of our hearts?" -- Nova, December 21, 2017
+
+tags=soldier class, gameplay, LW2, long war 2, class pack, rising tides, rt
