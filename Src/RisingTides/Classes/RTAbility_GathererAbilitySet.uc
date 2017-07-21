@@ -1343,6 +1343,7 @@ static function X2AbilityTemplate RTGuiltyConscienceEvent() {
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'RTGuiltyConscienceEvent');
 
 	Template.bDontDisplayInAbilitySummary = true;
+	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_swordSlash";
 	Template.AbilitySourceName = 'eAbilitySource_Standard';
 	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_NeverShow;
 
