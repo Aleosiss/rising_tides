@@ -358,22 +358,21 @@ static function X2AbilityTemplate RTBerserkerKnifeAttack()
 //---Burst-------------------------------------------------------------------------------
 //---------------------------------------------------------------------------------------
 static function X2AbilityTemplate RTBurst() {
-		local X2AbilityTemplate							Template;
-		local X2AbilityMultiTarget_Radius				MultiTarget;
-		local X2Effect_ApplyDirectionalWorldDamage		WorldDamage;
-		local X2Effect_ApplyWeaponDamage				WeaponDamageEffect;
-		local X2AbilityCooldown							Cooldown;
-		local X2AbilityCost_ActionPoints				ActionPointCost;
-		// local X2Effect_Knockback						KnockbackEffect;
-	//local X2Effect_Persistent						Effect;
+	local X2AbilityTemplate							Template;
+	local X2AbilityMultiTarget_Radius				MultiTarget;
+	local X2Effect_ApplyDirectionalWorldDamage		WorldDamage;
+	local X2Effect_ApplyWeaponDamage				WeaponDamageEffect;
+	local X2AbilityCooldown							Cooldown;
+	local X2AbilityCost_ActionPoints				ActionPointCost;
+	// local X2Effect_Knockback						KnockbackEffect;
+	// local X2Effect_Persistent						Effect;
 
-		`CREATE_X2ABILITY_TEMPLATE(Template, 'RTBurst');
-		Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_snipershot"; //TODO: Change this
-		Template.AbilitySourceName = 'eAbilitySource_Psionic';
+	`CREATE_X2ABILITY_TEMPLATE(Template, 'RTBurst');
+	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_snipershot"; //TODO: Change this
+	Template.AbilitySourceName = 'eAbilitySource_Psionic';
 	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_AlwaysShow;
 	Template.AbilityConfirmSound = "TacticalUI_ActivateAbility";
 	Template.Hostility = eHostility_Offensive;
-
 
 	ActionPointCost = new class'X2AbilityCost_ActionPoints';
 	ActionPointCost.iNumPoints = 1;
@@ -404,7 +403,7 @@ static function X2AbilityTemplate RTBurst() {
 	WorldDamage.bApplyToWorldOnMiss = true;                         //obv
 	WorldDamage.bHitAdjacentDestructibles = true;
 	WorldDamage.PlusNumZTiles = 2;                                 //determines how 'high' the world damage is applied
-	WorldDamage.bHitTargetTile = true;
+	WorldDamage.bHitTargetTile = false;
 	WorldDamage.ApplyChance = 100;
 	WorldDamage.bAllowDestructionOfDamageCauseCover = true;
 	Template.AddMultiTargetEffect(WorldDamage);
@@ -447,13 +446,23 @@ simulated function Burst_BuildVisualization(XComGameState VisualizeGameState, ou
 	//local TTile TargetTile;
 	local X2Action_TimedWait WaitAction;
 	//local X2Action_PlaySoundAndFlyOver SoundCueAction;
-	local int i, j;
+	local int i, j, EffectIndex;
 	local VisualizationTrack EmptyTrack;
 	local X2VisualizerInterface TargetVisualizerInterface;
+	local XComGameState_EnvironmentDamage EnvironmentDamageEvent;
+	local XComGameState_WorldEffectTileData WorldDataUpdate;
+	local XComGameState_InteractiveObject  InteractiveObject;
+	local X2AbilityTemplate AbilityTemplate;
+	local AbilityInputContext AbilityContext;
+	local array<X2Effect>               MultiTargetEffects;
 
 	History = `XCOMHISTORY;
 
 	Context = XComGameStateContext_Ability(VisualizeGameState.GetContext());
+    AbilityContext = Context.InputContext;
+
+	AbilityTemplate = class'XComGameState_Ability'.static.GetMyTemplateManager().FindAbilityTemplate(AbilityContext.AbilityTemplateName);
+	MultiTargetEffects = AbilityTemplate.AbilityMultiTargetEffects;
 
 	//Configure the visualization track for the shooter
 	//****************************************************************************************
@@ -540,6 +549,98 @@ simulated function Burst_BuildVisualization(XComGameState VisualizeGameState, ou
 	OutVisualizationTracks.AddItem(AvatarBuildTrack);
 
 	TypicalAbility_AddEffectRedirects(VisualizeGameState, OutVisualizationTracks, AvatarBuildTrack);
+
+		//****************************************************************************************
+
+	//Configure the visualization tracks for the environment
+	//****************************************************************************************
+	foreach VisualizeGameState.IterateByClassType(class'XComGameState_EnvironmentDamage', EnvironmentDamageEvent)
+	{
+		BuildTrack = EmptyTrack;
+		BuildTrack.TrackActor = none;
+		BuildTrack.StateObject_NewState = EnvironmentDamageEvent;
+		BuildTrack.StateObject_OldState = EnvironmentDamageEvent;
+
+		//Wait until signaled by the shooter that the projectiles are hitting
+		if (!AbilityTemplate.bSkipFireAction) {
+			WaitAction = X2Action_TimedWait(class'X2Action_TimedWait'.static.AddToVisualizationTrack(AvatarBuildTrack, Context));
+			WaitAction.DelayTimeSec = 4;
+		}
+
+		for (EffectIndex = 0; EffectIndex < AbilityTemplate.AbilityShooterEffects.Length; ++EffectIndex)
+		{
+			AbilityTemplate.AbilityShooterEffects[EffectIndex].AddX2ActionsForVisualization(VisualizeGameState, BuildTrack, 'AA_Success');		
+		}
+
+		for (EffectIndex = 0; EffectIndex < AbilityTemplate.AbilityTargetEffects.Length; ++EffectIndex)
+		{
+			AbilityTemplate.AbilityTargetEffects[EffectIndex].AddX2ActionsForVisualization(VisualizeGameState, BuildTrack, 'AA_Success');
+		}
+
+		for (EffectIndex = 0; EffectIndex < MultiTargetEffects.Length; ++EffectIndex)
+		{
+			MultiTargetEffects[EffectIndex].AddX2ActionsForVisualization(VisualizeGameState, BuildTrack, 'AA_Success');	
+		}
+
+		OutVisualizationTracks.AddItem(BuildTrack);
+	}
+
+	foreach VisualizeGameState.IterateByClassType(class'XComGameState_WorldEffectTileData', WorldDataUpdate)
+	{
+		BuildTrack = EmptyTrack;
+		BuildTrack.TrackActor = none;
+		BuildTrack.StateObject_NewState = WorldDataUpdate;
+		BuildTrack.StateObject_OldState = WorldDataUpdate;
+
+		//Wait until signaled by the shooter that the projectiles are hitting
+		if (!AbilityTemplate.bSkipFireAction) {
+			WaitAction = X2Action_TimedWait(class'X2Action_TimedWait'.static.AddToVisualizationTrack(AvatarBuildTrack, Context));
+			WaitAction.DelayTimeSec = 4;
+		}
+
+		for (EffectIndex = 0; EffectIndex < AbilityTemplate.AbilityShooterEffects.Length; ++EffectIndex)
+		{
+			AbilityTemplate.AbilityShooterEffects[EffectIndex].AddX2ActionsForVisualization(VisualizeGameState, BuildTrack, 'AA_Success');		
+		}
+
+		for (EffectIndex = 0; EffectIndex < AbilityTemplate.AbilityTargetEffects.Length; ++EffectIndex)
+		{
+			AbilityTemplate.AbilityTargetEffects[EffectIndex].AddX2ActionsForVisualization(VisualizeGameState, BuildTrack, 'AA_Success');
+		}
+
+		for (EffectIndex = 0; EffectIndex < MultiTargetEffects.Length; ++EffectIndex)
+		{
+			MultiTargetEffects[EffectIndex].AddX2ActionsForVisualization(VisualizeGameState, BuildTrack, 'AA_Success');	
+		}
+
+		OutVisualizationTracks.AddItem(BuildTrack);
+	}
+	//****************************************************************************************
+
+	//Process any interactions with interactive objects
+	foreach VisualizeGameState.IterateByClassType(class'XComGameState_InteractiveObject', InteractiveObject)
+	{
+		// Add any doors that need to listen for notification
+		if (InteractiveObject.IsDoor() && InteractiveObject.HasDestroyAnim()) //Is this a closed door?
+		{
+			BuildTrack = EmptyTrack;
+			//Don't necessarily have a previous state, so just use the one we know about
+			BuildTrack.StateObject_OldState = InteractiveObject;
+			BuildTrack.StateObject_NewState = InteractiveObject;
+			BuildTrack.TrackActor = History.GetVisualizer(InteractiveObject.ObjectID);
+
+			if (!AbilityTemplate.bSkipFireAction) {
+				WaitAction = X2Action_TimedWait(class'X2Action_TimedWait'.static.AddToVisualizationTrack(AvatarBuildTrack, Context));
+				WaitAction.DelayTimeSec = 4;
+			}
+
+			class'X2Action_BreakInteractActor'.static.AddToVisualizationTrack(BuildTrack, Context);
+
+			OutVisualizationTracks.AddItem(BuildTrack);
+		}
+	}
+
+
 }
 
 //---------------------------------------------------------------------------------------
@@ -1274,19 +1375,17 @@ static function X2AbilityTemplate RTUnstableConduitIcon() {
 //---Unstable Conduit Burst--------------------------------------------------------------
 //---------------------------------------------------------------------------------------
 static function X2AbilityTemplate RTUnstableConduitBurst() {
-		local X2AbilityTemplate Template;
-		local X2AbilityMultiTarget_Radius MultiTarget;
-		local X2Effect_ApplyDirectionalWorldDamage WorldDamage;
-		local X2Effect_ApplyWeaponDamage WeaponDamageEffect;
-	local X2Condition_UnitEffects			Condition;
-	local X2AbilityTrigger_EventListener Trigger;
-	local X2Effect_Persistent				Effect;
+	local X2AbilityTemplate								Template;
+	local X2AbilityMultiTarget_Radius					MultiTarget;
+	local X2Effect_ApplyDirectionalWorldDamage			WorldDamage;
+	local X2Effect_ApplyWeaponDamage					WeaponDamageEffect;
+	local X2Condition_UnitEffects						Condition;
+	local X2AbilityTrigger_EventListener				Trigger;
+	local X2Effect_Persistent							Effect;
 
-
-
-		`CREATE_X2ABILITY_TEMPLATE(Template, 'RTUnstableConduitBurst');
-		Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_snipershot"; //TODO: Change this
-		Template.AbilitySourceName = 'eAbilitySource_Psionic';
+	`CREATE_X2ABILITY_TEMPLATE(Template, 'RTUnstableConduitBurst');
+	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_snipershot"; //TODO: Change this
+	Template.AbilitySourceName = 'eAbilitySource_Psionic';
 	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_NeverShow;
 	Template.AbilityConfirmSound = "TacticalUI_ActivateAbility";
 	Template.Hostility = eHostility_Neutral;
@@ -1330,7 +1429,7 @@ static function X2AbilityTemplate RTUnstableConduitBurst() {
 	WorldDamage.bApplyOnMiss = true;                                //obv
 	WorldDamage.bApplyToWorldOnHit = true;                          //obv
 	WorldDamage.bApplyToWorldOnMiss = true;                         //obv
-	WorldDamage.bHitAdjacentDestructibles = true;
+	WorldDamage.bHitAdjacentDestructibles = false;
 	WorldDamage.PlusNumZTiles = 2;                                 //determines how 'high' the world damage is applied
 	WorldDamage.bHitTargetTile = true;
 	WorldDamage.ApplyChance = 100;
@@ -1341,13 +1440,12 @@ static function X2AbilityTemplate RTUnstableConduitBurst() {
 	WeaponDamageEffect.bIgnoreBaseDamage = true;
 	WeaponDamageEffect.EffectDamageValue = default.BURST_DMG;
 	WeaponDamageEffect.bApplyWorldEffectsForEachTargetLocation = true;
-	WeaponDamageEffect.EnvironmentalDamageAmount = 250;
+	WeaponDamageEffect.EnvironmentalDamageAmount = 2500;
 	Template.AddMultiTargetEffect(WeaponDamageEffect);
 
 	Template.bSkipFireAction = true;
 
 	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
-	Template.BuildInterruptGameStateFn = TypicalAbility_BuildInterruptGameState;
 	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
 	Template.CinescriptCameraType = "Psionic_FireAtUnit";
 
