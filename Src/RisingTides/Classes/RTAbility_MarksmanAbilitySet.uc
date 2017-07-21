@@ -1133,7 +1133,7 @@ static function X2AbilityTemplate SovereignEffect()
 	Template.DisplayTargetHitChance = true;
 	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_ShowIfAvailableOrNoTargets;
 	// color of the icon
-	Template.AbilitySourceName = 'eAbilitySource_Standard';
+	Template.AbilitySourceName = 'eAbilitySource_Psionic';
 	// Activated by a button press; additionally, tells the AI this is an activatable
 	Template.AbilityTriggers.AddItem(default.PlayerInputTrigger);
 	Template.bDisplayInUITooltip = false;

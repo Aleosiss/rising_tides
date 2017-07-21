@@ -93,7 +93,7 @@ static function X2AbilityTemplate BumpInTheNight()
 {
 	local X2AbilityTemplate                 Template;
 	local RTEffect_BumpInTheNight			BumpEffect;
-		local X2Effect_AdditionalAnimSets		AnimSets;
+	local X2Effect_AdditionalAnimSets		AnimSets;
 
 	// Icon Properties
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'BumpInTheNight');
@@ -365,7 +365,7 @@ static function X2AbilityTemplate RTBurst() {
 		local X2AbilityCooldown							Cooldown;
 		local X2AbilityCost_ActionPoints				ActionPointCost;
 		// local X2Effect_Knockback						KnockbackEffect;
-	local X2Effect_Persistent						Effect;
+	//local X2Effect_Persistent						Effect;
 
 		`CREATE_X2ABILITY_TEMPLATE(Template, 'RTBurst');
 		Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_snipershot"; //TODO: Change this
@@ -380,7 +380,7 @@ static function X2AbilityTemplate RTBurst() {
 	ActionPointCost.bConsumeAllPoints = false;
 	Template.AbilityCosts.AddItem(ActionPointCost);
 
-		Cooldown = new class'X2AbilityCooldown';
+	Cooldown = new class'X2AbilityCooldown';
 	Cooldown.iNumTurns = default.BURST_COOLDOWN;
 	Template.AbilityCooldown = Cooldown;
 
@@ -394,12 +394,7 @@ static function X2AbilityTemplate RTBurst() {
 	MultiTarget.bIgnoreBlockingCover = true;
 	Template.AbilityMultiTargetStyle = MultiTarget;
 
-	Effect = new class'X2Effect_Persistent';
-	Effect.BuildPersistentEffect(0, false);
-	Effect.VFXTemplateName = default.BurstParticleString;
-	Template.AddShooterEffect(Effect);
-
-		WorldDamage = new class'X2Effect_ApplyDirectionalWorldDamage';  //creates the framework to apply damage to the world
+	WorldDamage = new class'X2Effect_ApplyDirectionalWorldDamage';  //creates the framework to apply damage to the world
 	WorldDamage.bUseWeaponDamageType = False;                       //overrides the normal weapon damage type
 	WorldDamage.bUseWeaponEnvironmentalDamage = false;              //replaces the weapon's environmental damage with the abilities
 	WorldDamage.EnvironmentalDamageAmount = 2500;                   //determines the amount of enviornmental damage the ability applies
@@ -433,7 +428,7 @@ static function X2AbilityTemplate RTBurst() {
 
 	Template.bCrossClassEligible = false;
 
-		return Template;
+	return Template;
 }
 
 
@@ -1300,7 +1295,7 @@ static function X2AbilityTemplate RTUnstableConduitBurst() {
 	Template.ConcealmentRule = eConceal_Always;
 
 	Template.AbilityShooterConditions.AddItem(default.LivingShooterProperty);
-	// Template.AddShooterEffectExclusions();
+	Template.AddShooterEffectExclusions();
 
 	Trigger = new class'X2AbilityTrigger_EventListener';
 	Trigger.ListenerData.Deferral = ELD_OnStateSubmitted;
@@ -1360,7 +1355,7 @@ static function X2AbilityTemplate RTUnstableConduitBurst() {
 
 	Template.bCrossClassEligible = false;
 
-		return Template;
+	return Template;
 }
 
 //---------------------------------------------------------------------------------------
