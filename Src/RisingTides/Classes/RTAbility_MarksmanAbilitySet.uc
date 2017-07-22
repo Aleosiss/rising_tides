@@ -144,6 +144,7 @@ static function X2AbilityTemplate ScopedAndDropped()
 	Template.AdditionalAbilities.AddItem('PsiOverload');
 	Template.AdditionalAbilities.AddItem('RTFeedback');
 	Template.AdditionalAbilities.AddItem('RTMindControl');
+	Template.AdditionalAbilities.AddItem('RTEnterStealth');
 
 	// unique abilities for Scoped and Dropped
 	Template.AdditionalAbilities.AddItem('RTStandardSniperShot');
@@ -1570,7 +1571,7 @@ static function X2AbilityTemplate TimeStandsStillEndListener()
 	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
 	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
 	Template.bSkipFireAction = true;
-
+	Template.CinescriptCameraType = "Psionic_FireAtUnit";
 
 	Template.bCrossClassEligible = false;
 	return Template;

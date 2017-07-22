@@ -22,7 +22,7 @@ function RegisterForEvents(XComGameState_Effect EffectGameState)
 
 	// Clean up MobileSquadViewers. Shouldn't actually need this.
 	// TODO: Verify that this is extraneous and remove.
-	EventMgr.RegisterForEvent(EffectObj, 'PlayerTurnBegun', RTEffectState.CleanupMobileSquadViewers, ELD_OnStateSubmitted, 50);
+	//EventMgr.RegisterForEvent(EffectObj, 'PlayerTurnBegun', RTEffectState.CleanupMobileSquadViewers, ELD_OnStateSubmitted, 50);
 }
 
 protected function bool CheckAuraConditions(XComGameState_Unit SourceUnitState, XComGameState_Unit TargetUnitState, XComGameState_Effect SourceAuraEffectGameState, X2AbilityTemplate AuraEffectTemplate) {
@@ -39,7 +39,7 @@ protected function X2AbilityTemplate GetAuraTemplate(XComGameState_Unit SourceUn
 	AbilityState = XComGameState_Ability(`XCOMHISTORY.GetGameStateForObjectID(SourceAuraEffectGameState.ApplyEffectParameters.AbilityStateObjectRef.ObjectID));
 	Template = AbilityState.GetMyTemplate();
 
-		return Template;
+	return Template;
 }
 
 function UpdateBasedOnAuraTarget(XComGameState_Unit SourceUnitState, XComGameState_Unit TargetUnitState, XComGameState_Effect SourceAuraEffectGameState, XComGameState NewGameState)

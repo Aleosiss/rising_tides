@@ -91,7 +91,7 @@ static function bool CheckAbilityActivated(name AbilityTemplateName, ERTChecklis
 	}
 
 	if(!b) {
-		`LOG("Rising Tides: " @ AbilityTemplateName @ " was not found in " @ n);
+		//`LOG("Rising Tides: " @ AbilityTemplateName @ " was not found in " @ n);
 	}
 
 

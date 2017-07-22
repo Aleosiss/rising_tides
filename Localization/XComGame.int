@@ -730,6 +730,13 @@ LocHelpText="Pull a small unit close."
 LocFlyOverText="Psionic Lash"
 LocPromotionPopupText="<Bullet/> Both hostile and friendly units can be pulled.<br/>"
 
+[RTEnterStealth X2AbilityTemplate]
+LocFriendlyName="Enter Stealth"
+LocLongDescription="Cloak, becoming invisible to the enemy for a short duration."
+LocHelpText="Go invisible."
+LocFlyOverText="Enter Stealth"
+LocPromotionPopupText="<Bullet/> Unit will be revealed when the effect ends.<br/>"
+
 ;----------------------------------------------------------------------------------------------------------------------------
 
 ; +AbilityAvailabilityCodes="AA_UnitNotMelded"

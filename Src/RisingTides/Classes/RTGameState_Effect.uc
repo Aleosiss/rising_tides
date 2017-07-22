@@ -759,12 +759,12 @@ function EventListenerReturn ExtendEffectDuration(Object EventData, Object Event
 	  return ELR_NoInterrupt;
 	}
 
-	//`LOG("Rising Tides: Extend Effect Duration activated on EVENTID: " @ EventID);
+	`LOG("Rising Tides: Extend Effect Duration activated on EVENTID: " @ EventID);
 
 	if(EventID == 'AbilityActivated') {
 		AbilityContext = XComGameStateContext_Ability(GameState.GetContext());
 		if(AbilityContext == none) {
-			  //`LOG("Rising Tides: ExtendEffectDuration had no context!");
+			 // `LOG("Rising Tides: ExtendEffectDuration had no context!");
 			  return ELR_NoInterrupt;
 		}
 

@@ -55,6 +55,7 @@ class RTAbility_GhostAbilitySet extends X2Ability
 	var config int FEEDBACK_DURATION;
 	var config int MIND_CONTROL_AI_TURNS_DURATION;
 	var config int MIND_CONTROL_COOLDOWN;
+	var config int GHOST_CHARGES;
 
 	var name RTFeedbackEffectName;
 	var name RTFeedbackWillDebuffName;
@@ -94,6 +95,9 @@ static function array<X2DataTemplate> CreateTemplates()
 	Templates.AddItem(Teek());
 	Templates.AddItem(Fade());
 	Templates.AddItem(RTMindControl());
+	Templates.AddItem(RTEnterStealth());
+
+
 	Templates.AddItem(LIOverwatchShot());
 	Templates.AddItem(PsionicActivate());
 	Templates.AddItem(RTRemoveAdditionalAnimSets());
@@ -1000,6 +1004,48 @@ static function X2DataTemplate RTMindControl()
 
 	return Template;
 }
+
+
+static function X2AbilityTemplate RTEnterStealth() {
+	local X2AbilityTemplate Template;
+	local RTEffect_Stealth StealthEffect;
+	local X2AbilityCharges Charges;
+
+	`CREATE_X2ABILITY_TEMPLATE(Template, 'RTEnterStealth');
+
+	Template.AbilitySourceName = 'eAbilitySource_Psionic';
+	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_ShowIfAvailable;
+	Template.Hostility = eHostility_Neutral;
+	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_stealth";
+	Template.ShotHUDPriority = class'UIUtilities_Tactical'.const.CLASS_COLONEL_PRIORITY;
+
+	Template.AbilityToHitCalc = default.DeadEye;
+	Template.AbilityTargetStyle = default.SelfTarget;
+	Template.AbilityTriggers.AddItem(default.PlayerInputTrigger);
+	Template.AbilityCosts.AddItem(new class'X2AbilityCost_Charges');
+	Template.AbilityCosts.AddItem(default.FreeActionCost);
+
+	Charges = new class'X2AbilityCharges';
+	Charges.InitialCharges = default.GHOST_CHARGES;
+	Template.AbilityCharges = Charges;
+
+	Template.AbilityShooterConditions.AddItem(default.LivingShooterProperty);
+
+	StealthEffect = class'RTEffectBuilder'.static.RTCreateStealthEffect(2, false);
+	Template.AddTargetEffect(StealthEffect);
+
+	Template.AddTargetEffect(class'X2Effect_Spotted'.static.CreateUnspottedEffect());
+
+	Template.ActivationSpeech = 'ActivateConcealment';
+	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
+	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
+	Template.bSkipFireAction = true;
+
+
+	return Template;
+
+}
+
 
 
 
