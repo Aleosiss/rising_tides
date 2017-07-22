@@ -144,6 +144,7 @@ static function X2AbilityTemplate OverTheShoulder()
 	Template.AdditionalAbilities.AddItem('PsiOverload');
 	Template.AdditionalAbilities.AddItem('RTFeedback');
 	Template.AdditionalAbilities.AddItem('RTMindControl');
+	Template.AdditionalAbilities.AddItem('RTEnterStealth');
 
 	// special meld abilities
 	Template.AdditionalAbilities.AddItem('LIOverwatchShot');
@@ -733,6 +734,7 @@ static function X2AbilityTemplate RTTheSixPathsOfPainOverride() {
 	Template.AdditionalAbilities.AddItem('PsiOverload');
 	Template.AdditionalAbilities.AddItem('RTFeedback');
 	Template.AdditionalAbilities.AddItem('RTMindControl');
+	Template.AdditionalAbilities.AddItem('RTEnterStealth');
 
 	// special meld abilities
 	Template.AdditionalAbilities.AddItem('LIOverwatchShot');
@@ -1181,6 +1183,16 @@ static function X2AbilityTemplate RTSibyl() {
     Effect.bSelfBuff = true;
     Effect.AdditionalEvents.AddItem('UnitMoveFinished');
     Effect.AbilityToExtendName = 'RTTriangulation';
+    Effect.EffectToExtendName = default.OverTheShoulderEffectName;
+    Effect.iDurationExtension = default.SIBYL_STRENGTH;
+    Template.AddTargetEffect(Effect);
+
+	Effect = new class'RTEffect_ExtendEffectDuration';
+    Effect.BuildPersistentEffect(1, true, true, false);
+    Effect.SetDisplayInfo(ePerkBuff_Passive, Template.LocFriendlyName, Template.LocLongDescription, Template.IconImage, true,, Template.AbilitySourceName);
+    Effect.bSelfBuff = true;
+    Effect.AdditionalEvents.AddItem('UnitMoveFinished');
+    Effect.AbilityToExtendName = 'RTTheSixPathsOfPainOverride';
     Effect.EffectToExtendName = default.OverTheShoulderEffectName;
     Effect.iDurationExtension = default.SIBYL_STRENGTH;
     Template.AddTargetEffect(Effect);
