@@ -58,7 +58,7 @@ static function array<X2DataTemplate> CreateTemplates()
 	Templates.AddItem(PurePassive('RTAcidicBlade', "img:///RisingTidesContentPackage.PerkIcons.UIPerk_stim_knife", false, 'eAbilitySource_Perk'));
 	Templates.AddItem(PurePassive('RTPsionicBlade', "img:///RisingTidesContentPackage.PerkIcons.UIPerk_psi_knife", false, 'eAbilitySource_Psionic'));
 	Templates.AddItem(PurePassive('RTHiddenBlade', "img:///RisingTidesContentPackage.PerkIcons.UIPerk_stealth_knife", false, 'eAbilitySource_Perk'));
-	Templates.AddItem(PurePassive('RTSiphon', "img:///UILibrary_PerkIcons.UIPerk_salvo", false, 'eAbilitySource_Psionic'));			  // icon
+	Templates.AddItem(PurePassive('RTSiphon', "img:///RisingTidesContentPackage.PerkIcons.UIPerk_medkit_knife_siphon", false, 'eAbilitySource_Psionic'));			  // icon
 	Templates.AddItem(RTBurst());																									  // icon	// animation
 	Templates.AddItem(RTBlur());																									  // icon
 	Templates.AddItem(RTPurge());																									  // icon	// animation
@@ -97,7 +97,7 @@ static function X2AbilityTemplate BumpInTheNight()
 
 	// Icon Properties
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'BumpInTheNight');
-	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_swordSlash";
+	Template.IconImage = "img:///RisingTidesContentPackage.PerkIcons.UIPerk_knife_blossom_bitn";
 	Template.AbilitySourceName = 'eAbilitySource_Perk';
 	Template.eAbilityIconBehaviorHUD = EAbilityIconBehavior_NeverShow;
 	Template.Hostility = eHostility_Neutral;
@@ -159,7 +159,7 @@ static function X2AbilityTemplate BumpInTheNightBloodlustListener()
 	local X2AbilityTrigger_EventListener	Trigger;
 
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'BumpInTheNightBloodlustListener');
-	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_swordSlash"; // TODO: Change this
+	Template.IconImage = "img:///RisingTidesContentPackage.PerkIcons.UIPerk_knife_adrenaline_bloodlust"; // TODO: Change this
 	Template.AbilitySourceName = 'eAbilitySource_Perk';
 	Template.eAbilityIconBehaviorHUD = EAbilityIconBehavior_NeverShow;
 	Template.Hostility = eHostility_Neutral;
@@ -1467,7 +1467,7 @@ static function X2AbilityTemplate RTPersistingImages()
 	local RTEffect_GenerateAfterimage AfterEffect;
 
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'RTPersistingImages');
-	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_aim";
+	Template.IconImage = "img:///RisingTidesContentPackage.PerkIcons.UIPerk_stealth_circle_pi";
 	Template.AbilitySourceName = 'eAbilitySource_Psionic';
 	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_NeverShow;
 	Template.Hostility = eHostility_Neutral;
@@ -1476,7 +1476,7 @@ static function X2AbilityTemplate RTPersistingImages()
 	Template.AddShooterEffectExclusions();
 
 	Template.AbilityToHitCalc = default.DeadEye;
-		Template.AbilityTargetStyle = default.SelfTarget;
+	Template.AbilityTargetStyle = default.SelfTarget;
 
 	Trigger = new class'X2AbilityTrigger_EventListener';
 	Trigger.ListenerData.Deferral = ELD_OnStateSubmitted;
@@ -1565,30 +1565,30 @@ simulated function Afterimage_BuildVisualization(XComGameState VisualizeGameStat
 
 static function X2AbilityTemplate RTPersistingImagesIcon() {
 	local X2AbilityTemplate 	Template;
-		local X2Effect_Persistent	Effect;
+	local X2Effect_Persistent	Effect;
 
-		`CREATE_X2ABILITY_TEMPLATE(Template, 'RTPersistingImagesIcon');
-		Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_aim";	   // TODO: THIS
-		Template.AbilitySourceName = 'eAbilitySource_Psionic';
-		Template.eAbilityIconBehaviorHUD = EAbilityIconBehavior_NeverShow;
-		Template.Hostility = eHostility_Neutral;
+	`CREATE_X2ABILITY_TEMPLATE(Template, 'RTPersistingImagesIcon');
+	Template.IconImage = "img:///RisingTidesContentPackage.PerkIcons.UIPerk_stealth_circle_pi";
+	Template.AbilitySourceName = 'eAbilitySource_Psionic';
+	Template.eAbilityIconBehaviorHUD = EAbilityIconBehavior_NeverShow;
+	Template.Hostility = eHostility_Neutral;
 
 	// Apply perk at the start of the mission.
-		Template.AbilityToHitCalc = default.DeadEye;
-		Template.AbilityTargetStyle = default.SelfTarget;
-		Template.AbilityTriggers.AddItem(default.UnitPostBeginPlayTrigger);
+	Template.AbilityToHitCalc = default.DeadEye;
+	Template.AbilityTargetStyle = default.SelfTarget;
+	Template.AbilityTriggers.AddItem(default.UnitPostBeginPlayTrigger);
 
-		// Effect to apply
-		Effect = new class'X2Effect_Persistent';
-		Effect.BuildPersistentEffect(1, true, true, true);
-		Effect.SetDisplayInfo(ePerkBuff_Passive, Template.LocFriendlyName, Template.LocLongDescription, Template.IconImage, true,,Template.AbilitySourceName);
-		Template.AddTargetEffect(Effect);
+	// Effect to apply
+	Effect = new class'X2Effect_Persistent';
+	Effect.BuildPersistentEffect(1, true, true, true);
+	Effect.SetDisplayInfo(ePerkBuff_Passive, Template.LocFriendlyName, Template.LocLongDescription, Template.IconImage, true,,Template.AbilitySourceName);
+	Template.AddTargetEffect(Effect);
 
-		// Probably required
-		Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
-		//  NOTE: No visualization on purpose!
+	// Probably required
+	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
+	//  NOTE: No visualization on purpose!
 
-		return Template;
+	return Template;
 }
 
 //---------------------------------------------------------------------------------------

@@ -747,10 +747,12 @@ function EventListenerReturn RTHarbingerBonusDamage(Object EventData, Object Eve
 // intended EventData = Ability we're going to try to extend the effect of
 // intended EventSource = Unit casting the ability
 function EventListenerReturn ExtendEffectDuration(Object EventData, Object EventSource, XComGameState GameState, Name EventID) {
-	local XComGameState_Effect IteratorEffectState;
+	local XComGameState_Effect IteratorEffectState, ExtendedEffectState;
 	local XComGameStateContext_Ability AbilityContext;
 	local RTEffect_ExtendEffectDuration EffectTemplate;
-	
+	local XComGameState					NewGameState;
+	local XComGameStateHistory			History;
+
 	local bool bDebug;
 
 	EffectTemplate = RTEffect_ExtendEffectDuration(GetX2Effect());
@@ -759,39 +761,54 @@ function EventListenerReturn ExtendEffectDuration(Object EventData, Object Event
 	  return ELR_NoInterrupt;
 	}
 
-	`LOG("Rising Tides: Extend Effect Duration activated on EVENTID: " @ EventID);
+	//`LOG("Rising Tides: Extend Effect Duration activated on EVENTID: " @ EventID);
 
 	if(EventID == 'AbilityActivated') {
 		AbilityContext = XComGameStateContext_Ability(GameState.GetContext());
 		if(AbilityContext == none) {
-			 // `LOG("Rising Tides: ExtendEffectDuration had no context!");
-			  return ELR_NoInterrupt;
+			return ELR_NoInterrupt;
 		}
 
 		if(AbilityContext.InputContext.AbilityTemplateName != EffectTemplate.AbilityToExtendName) {
-		   //`LOG("Rising Tides: ExtendEffectDuration had the wrong ability!");
+			//`LOG("Incorrect AbilityTemplateName; was " @ AbilityContext.InputContext.AbilityTemplateName @ ", expected " @ EffectTemplate.AbilityToExtendName);
 			return ELR_NoInterrupt;
 		}
 	}
 	bDebug = false;
+	`LOG("Rising Tides: Attempting to extend " @ EffectTemplate.AbilityToExtendName);
+	NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("Rising Tides: Extending " @ EffectTemplate.EffectToExtendName);
 	foreach GameState.IterateByClassType(class'XComGameState_Effect', IteratorEffectState) {
 	  if(IteratorEffectState == none) {
 		  //`RedScreen("Rising Tides: What the heck, iterating through gamestate_effects returned a non-gamestate_effect object?");
 		  continue;
 	  }
 
-	  bDebug = true;
 	  if(IteratorEffectState.bRemoved) {
 		  continue;
-	  }
+	  }									  
 
 	  if(IteratorEffectState.GetX2Effect().EffectName == EffectTemplate.EffectToExtendName) {
-		  IteratorEffectState.iTurnsRemaining += EffectTemplate.iDurationExtension;
-	  }
+		  //`LOG("Rising TIdes: EED proced on " @ EffectTemplate.AbilityToExtendName @ " for effect " @	EffectTemplate.EffectToExtendName);
+		  bDebug = true;
+		  ExtendedEffectState = XComGameState_Effect(NewGameState.CreateStateObject(class'XComGameState_Effect', IteratorEffectState.ObjectID));
+		  ExtendedEffectState.iTurnsRemaining += EffectTemplate.iDurationExtension;
+		  NewGameState.AddStateObject(ExtendedEffectState);
+		  continue;
+	  }											 
 	}
 
+	History = `XCOMHISTORY;
+
+	if(NewGameState.GetNumGameStateObjects() > 0) {
+		SubmitNewGameState(NewGameState);			
+	} else {
+		History.CleanupPendingGameState(NewGameState);
+	}
+	
+		
+
 	if(!bDebug) {
-	  //`LOG("Rising Tides: ExtendEffectDuration fired on the right ability / event, but there was no effects on the gamestate?");
+	  `LOG("Rising Tides: ExtendEffectDuration fired on the right ability / event, but there was no effects on the gamestate?");
 	}
 
 	//`LOG("Rising Tides: ExtendEffectDuration was successful!");

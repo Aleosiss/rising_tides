@@ -288,7 +288,7 @@ static function X2AbilityTemplate JoinMeld()
 	local RTEffect_Meld						MeldEffect;
 
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'JoinMeld');
-	Template.IconImage = "img:///RisingTidesContentPackage.PerkIcons.UIPerk_psi_circle";
+	Template.IconImage = "img:///RisingTidesContentPackage.PerkIcons.UIPerk_psi_x2_meld";
 
 	Template.AbilitySourceName = 'eAbilitySource_Psionic';
 	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_HideSpecificErrors;

@@ -101,7 +101,6 @@ simulated function bool OnEffectTicked(const out EffectAppliedData ApplyEffectPa
 	ViewerState.AssociatedPlayer = XComGameState_Unit(History.GetGameStateForObjectID(ApplyEffectParameters.SourceStateObjectRef.ObjectID)).ControllingPlayer;
 	ViewerState.SetVisibilityLocation(ViewerTile);
 	ViewerState.ViewerTile = ViewerTile;
-	`LOG("Rising Tides: Updateing MobileSquadViewer for " @ TargetUnitState.GetFullName() @ ". ViewRadius = " @ fViewRadius);
 	ViewerState.ViewerRadius = fViewRadius;
 	ViewerState.bRequiresVisibilityUpdate = true;
 
@@ -111,8 +110,6 @@ simulated function bool OnEffectTicked(const out EffectAppliedData ApplyEffectPa
 	NewGameState.AddStateObject(TargetUnitState);
 	NewGameState.AddStateObject(ViewerState);
 	kNewEffectState.CreatedObjectReference = ViewerState.GetReference();
-
-	`LOG("Rising Tides: Target Unit visibility = " @ TargetUnitState.ForceModelVisible());
 
 	return true;
 }

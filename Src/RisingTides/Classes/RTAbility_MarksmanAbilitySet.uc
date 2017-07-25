@@ -114,7 +114,7 @@ static function X2AbilityTemplate ScopedAndDropped()
 
 	// Icon Properties
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'ScopedAndDropped');
-	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_aim";
+	Template.IconImage = "img:///RisingTidesContentPackage.PerkIcons.UIPerk_stealth_crit2_snd";
 	Template.AbilitySourceName = 'eAbilitySource_Perk';
 	Template.eAbilityIconBehaviorHUD = EAbilityIconBehavior_NeverShow;
 	Template.Hostility = eHostility_Neutral;
@@ -936,7 +936,7 @@ static function X2AbilityTemplate SlowIsSmooth()
 	local X2Effect_Persistent					Effect;
 
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'SlowIsSmooth');
-	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_deadeye";
+	Template.IconImage = "img:///RisingTidesContentPackage.PerkIcons.UIPerk_stealth_cycle_sis";
 
 	Template.AbilitySourceName = 'eAbilitySource_Perk';
 	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_NeverShow;
@@ -1314,7 +1314,7 @@ static function X2AbilityTemplate YourHandsMyEyes()
 	local RTEffect_YourHandsMyEyes				RTEffect;
 
 	 `CREATE_X2ABILITY_TEMPLATE(Template, 'YourHandsMyEyes');
-	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_insanity";
+	Template.IconImage = "img:///RisingTidesContentPackage.PerkIcons.UIPerk_psi_box_yhme";
 
 	Template.AbilitySourceName = 'eAbilitySource_Psionic';
 	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_NeverShow;
@@ -1588,7 +1588,7 @@ static function X2AbilityTemplate LinkedIntelligence()
 	local X2Condition_UnitEffectsWithAbilityTarget	UnitCondition;
 
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'LinkedIntelligence');
-	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_insanity";
+	Template.IconImage = "img:///RisingTidesContentPackage.PerkIcons.UIPerk_mind_psi_chevron_x3_networkedoi";
 
 	Template.AbilitySourceName = 'eAbilitySource_Psionic';
 	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_NeverShow;
@@ -1771,7 +1771,7 @@ static function X2AbilityTemplate PsionicSurge()
 	local X2Effect_Persistent				Effect;
 
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'PsionicSurge');
-	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_adventpsiwitch_mindcontrol";
+	Template.IconImage = "img:///RisingTidesContentPackage.PerkIcons.UIPerk_psi_shot_2_psisurge";
 
 	Template.AbilitySourceName = 'eAbilitySource_Psionic';
 	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_AlwaysShow;
@@ -1838,7 +1838,7 @@ static function X2AbilityTemplate HeatChannel()
 	local X2Effect_SetUnitValue				UnitValEffect;
 
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'HeatChannel');
-	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_phantom";
+	Template.IconImage = "img:///RisingTidesContentPackage.PerkIcons.UIPerk_reload_psi_heatchannel";
 
 	Template.AbilitySourceName = 'eAbilitySource_Psionic';
 	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_NeverShow;
@@ -1894,7 +1894,12 @@ static function X2AbilityTemplate HeatChannel()
 //---------------------------------------------------------------------------------------
 static function X2AbilityTemplate HeatChannelIcon()
 {
-	return CreateRTCooldownCleanse('HeatChannelIcon', 'HeatChannelCooldownTrackerEffect', 'HeatChannelCooldownComplete');
+	local X2AbilityTemplate Template;
+
+	Template = CreateRTCooldownCleanse('HeatChannelIcon', 'HeatChannelCooldownTrackerEffect', 'HeatChannelCooldownComplete');
+	Template.IconImage = "img:///RisingTidesContentPackage.PerkIcons.UIPerk_reload_psi_heatchannel";
+
+	return Template;
 }
 
 //---------------------------------------------------------------------------------------
@@ -1908,7 +1913,7 @@ static function X2AbilityTemplate HeatChannelCooldown()
 	local X2Effect_Persistent				AgroEffect;
 
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'HeatChannelCooldown');
-	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_adventpsiwitch_mindcontrol";
+	Template.IconImage = "img:///RisingTidesContentPackage.PerkIcons.UIPerk_reload_psi_heatchannel";
 
 	Template.AbilitySourceName = 'eAbilitySource_Psionic';
 	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_NeverShow;
@@ -2418,7 +2423,7 @@ static function X2AbilityTemplate RTEveryMomentMatters()
 	local RTEffect_EveryMomentMatters			RTEffect;
 
 	 `CREATE_X2ABILITY_TEMPLATE(Template, 'RTEveryMomentMatters');
-	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_insanity";
+	Template.IconImage = "img:///RisingTidesContentPackage.PerkIcons.UIPerk_shot_bullet_everymomentmatters";
 
 	Template.AbilitySourceName = 'eAbilitySource_Perk';
 	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_NeverShow;
@@ -2453,7 +2458,7 @@ static function X2AbilityTemplate RTOverflowBarrier()
 	local X2AbilityMultiTarget_Radius	MultiTarget;
 
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'RTOverflowBarrier');
-	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_insanity";
+	Template.IconImage = "img:///RisingTidesContentPackage.PerkIcons.UIPerk_shield_psi_overflowbarrier";
 
 	Template.AbilitySourceName = 'eAbilitySource_Psionic';
 	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_NeverShow;
@@ -2488,7 +2493,7 @@ static function X2AbilityTemplate RTOverflowBarrier()
 
 	RTEffect = new class 'RTEffect_OverflowBarrier';
 	RTEffect.BuildPersistentEffect(1, false, true, false,  eGameRule_PlayerTurnBegin);
-	//RTEffect.SetDisplayInfo(ePerkBuff_Bonus, Template.LocFriendlyName, Template.LocLongDescription, Template.IconImage, true,, Template.AbilitySourceName);
+	RTEffect.SetDisplayInfo(ePerkBuff_Bonus, Template.LocFriendlyName, Template.LocLongDescription, Template.IconImage, true,, Template.AbilitySourceName);
 	RTEffect.EffectRemovedVisualizationFn = OnShieldRemoved_BuildVisualization;
 	RTEffect.EffectName = 'OverflowBarrierShield';
 	Template.AddTargetEffect(RTEffect);

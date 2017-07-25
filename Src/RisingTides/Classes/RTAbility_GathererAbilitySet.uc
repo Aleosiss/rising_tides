@@ -80,7 +80,7 @@ static function array<X2DataTemplate> CreateTemplates()
 	Templates.AddItem(OverTheShoulderVisibilityUpdate());
 
 	Templates.AddItem(RTForcedIntroversion());
-	Templates.AddItem(PurePassive('RTUnsettlingVoices', "img:///UILibrary_PerkIcons.UIPerk_swordSlash", false, 'eAbilitySource_Psionic'));
+	Templates.AddItem(PurePassive('RTUnsettlingVoices', "img:///RisingTidesContentPackage.PerkIcons.UIPerk_mind_overwatch_psi_us", false, 'eAbilitySource_Psionic'));
 	Templates.AddItem(RTTheSixPathsOfPain());
 	Templates.AddItem(RTTheSixPathsOfPainIcon());
 	Templates.AddItem(RTTheSixPathsOfPainOverride());
@@ -185,7 +185,7 @@ static function X2AbilityTemplate CreateOverTheShoulderAbility(X2AbilityTemplate
 
 	local X2Effect_Persistent					/*SelfEffect, EnemyEffect,*/ AllyEffect;
 
-	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_swordSlash";
+	Template.IconImage = "img:///RisingTidesContentPackage.PerkIcons.UIPerk_overwatch_circle_ots";
 	Template.AbilitySourceName = 'eAbilitySource_Psionic';
 	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_AlwaysShow;
 	Template.Hostility = eHostility_Neutral;
@@ -243,6 +243,7 @@ static function X2AbilityTemplate CreateOverTheShoulderAbility(X2AbilityTemplate
 	VisionEffect.bRemoveWhenTargetDies = true;
 	VisionEffect.bRemoveWhenSourceDies = true;
 	VisionEffect.EffectName = default.OverTheShoulderEffectName;
+	VisionEffect.IconImage = Template.IconImage;
 	Template.AddMultiTargetEffect(VisionEffect);
 
 	// Unsettling Voices
@@ -256,6 +257,7 @@ static function X2AbilityTemplate CreateOverTheShoulderAbility(X2AbilityTemplate
 	VoiceEffect.UV_AIM_PENALTY = default.UV_AIM_PENALTY;
 	VoiceEffect.UV_DEFENSE_PENALTY = default.UV_DEFENSE_PENALTY;
 	VoiceEffect.UV_WILL_PENALTY = default.UV_WILL_PENALTY;
+	VoiceEffect.IconImage = "img:///RisingTidesContentPackage.PerkIcons.UIPerk_mind_overwatch_psi_us";
 
 	VoicesCondition = new class'X2Condition_AbilityProperty';
 	VoicesCondition.OwnerHasSoldierAbilities.AddItem('RTUnsettlingVoices');
@@ -283,6 +285,7 @@ static function X2AbilityTemplate CreateOverTheShoulderAbility(X2AbilityTemplate
 	AllyEffect.TargetConditions.AddItem(default.LivingFriendlyUnitOnlyProperty);
 	AllyEffect.DuplicateResponse = eDupe_Ignore;
 	AllyEffect.EffectName = default.OverTheShoulderEffectName;
+	AllyEffect.IconImage = Template.IconImage;
 	Template.AddMultiTargetEffect(AllyEffect);
 
 	// guardian angel
@@ -645,7 +648,7 @@ static function X2AbilityTemplate RTTheSixPathsOfPain() {
       `CREATE_X2ABILITY_TEMPLATE(Template, 'RTTheSixPathsOfPain');
       Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_NeverShow;
       Template.Hostility = eHostility_Neutral;
-      Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_swordSlash";
+      Template.IconImage = "img:///RisingTidesContentPackage.PerkIcons.UIPerk_overwatch_blaze_spop";
       Template.AbilitySourceName = 'eAbilitySource_Psionic';
 
       Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
@@ -716,7 +719,7 @@ static function X2AbilityTemplate RTTheSixPathsOfPain() {
 }
 
 static function X2AbilityTemplate RTTheSixPathsOfPainIcon() {
-    return PurePassive('RTTheSixPathsOfPainIcon', "img:///UILibrary_PerkIcons.UIPerk_swordSlash", true);
+    return PurePassive('RTTheSixPathsOfPainIcon', "img:///RisingTidesContentPackage.PerkIcons.UIPerk_overwatch_blaze_spop", true);
 }
 
 static function X2AbilityTemplate RTTheSixPathsOfPainOverride() {
@@ -726,6 +729,8 @@ static function X2AbilityTemplate RTTheSixPathsOfPainOverride() {
 	Template = CreateOverTheShoulderAbility(Template);
 
 	Template.AdditionalAbilities.AddItem('OverTheShoulderVisibilityUpdate');
+	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_NeverShow;
+	Template.IconImage = "img:///RisingTidesContentPackage.PerkIcons.UIPerk_overwatch_blaze_spop";
 
 	// standard ghost abilities
 	Template.AdditionalAbilities.AddItem('GhostPsiSuite');
@@ -820,7 +825,7 @@ static function X2AbilityTemplate RTMeldInduction() {
 //---Guardian Angel----------------------------------------------------------------------
 //---------------------------------------------------------------------------------------
 static function X2AbilityTemplate RTGuardianAngel() {
-    return PurePassive('RTGuardianAngel', "img:///UILibrary_PerkIcons.UIPerk_swordSlash", true);
+    return PurePassive('RTGuardianAngel', "img:///RisingTidesContentPackage.PerkIcons.UIPerk_revive_overwatch_ga", true);
  }
 
 static function CreateGuardianAngel(out array<X2Effect> Effects) {
@@ -951,7 +956,7 @@ static function X2AbilityTemplate RTRudimentaryCreatures() {
     `CREATE_X2ABILITY_TEMPLATE(Template, 'RTRudimentaryCreatures');
     Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_NeverShow;
     Template.Hostility = eHostility_Neutral;
-    Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_swordSlash";
+    Template.IconImage = "img:///RisingTidesContentPackage.PerkIcons.UIPerk_overwatch_defense2_rc";
     Template.AbilitySourceName = 'eAbilitySource_Psionic';
 
     Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
@@ -1325,7 +1330,7 @@ static function X2AbilityTemplate RTCreateEchoedAgonyEffectAbility()
 //---Guilty Conscience-------------------------------------------------------------------
 //---------------------------------------------------------------------------------------
 static function X2AbilityTemplate RTGuiltyConscience() {
-	return PurePassive('RTGuiltyConscience', "img:///UILibrary_PerkIcons.UIPerk_swordSlash", false, 'eAbilitySource_Psionic');
+	return PurePassive('RTGuiltyConscience', "img:///RisingTidesContentPackage.PerkIcons.UIPerk_panic_overwatch_gc", false, 'eAbilitySource_Psionic');
 }
 
 static function RTEffect_GuiltyConscience CreateGuiltyConscienceEffect(int TriggerThreshold) {
@@ -1336,6 +1341,7 @@ static function RTEffect_GuiltyConscience CreateGuiltyConscienceEffect(int Trigg
     Effect.iTriggerThreshold = TriggerThreshold;
     Effect.BuildPersistentEffect(2, false, true, false, eGameRule_PlayerTurnBegin); // 2 turn duration means it won't get removed by OTS
     Effect.DuplicateResponse = eDupe_Refresh;
+	Effect.IconImage = "img:///RisingTidesContentPackage.PerkIcons.UIPerk_panic_overwatch_gc";
     Effect.EffectName = default.GuiltyConscienceEffectName;
 	Effect.GuiltyConscienceEventName = default.GuiltyConscienceEventName;
     Effect.TargetConditions.AddItem(default.PsionicTargetingProperty);
@@ -1566,7 +1572,7 @@ simulated function RTLift_BuildVisualization(XComGameState VisualizeGameState, o
 //---Knowledge is Power------------------------------------------------------------------
 //---------------------------------------------------------------------------------------
 static function X2AbilityTemplate RTKnowledgeIsPower() {
-	return PurePassive('RTKnowledgeIsPower', "img:///UILibrary_PerkIcons.UIPerk_swordSlash", false, 'eAbilitySource_Psionic');
+	return PurePassive('RTKnowledgeIsPower', "img:///RisingTidesContentPackage.PerkIcons.UIPerk_overwatch_cycle_kip", false, 'eAbilitySource_Psionic');
 }
 
 
@@ -1584,6 +1590,7 @@ static function RTEffect_KnowledgeIsPower CreateKnowledgeIsPowerEffect(int _Stac
 	Effect.StackCap = _StackCap;
 	Effect.CritChancePerStack = _CritChancePerStack;
 	Effect.EffectName = default.KnowledgeIsPowerEffectName;
+	Effect.IconImage = "img:///RisingTidesContentPackage.PerkIcons.UIPerk_overwatch_cycle_kip";
 
 
 	Condition = new class'X2Condition_AbilityProperty';
@@ -1603,13 +1610,10 @@ static function X2AbilityTemplate RTCrushingGrasp() {
 	local X2AbilityTarget_Cursor				CursorTarget;
 	local X2AbilityMultiTarget_Radius			RadiusMultiTarget;
 	local X2Effect_ApplyWeaponDamage			WorldDamage;
-	local X2Effect_Stunned						StunnedEffect;
-	local RTCondition_VisibleToPlayer			PlayerVisibilityCondition;
-
-	local X2Effect_Stasis						StasisEffect;
+	local X2Effect_Stunned						StunnedEffect;		
 
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'RTCrushingGrasp');
-	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_swordSlash"; //TODO: Change this
+	Template.IconImage = "img:///RisingTidesContentPackage.PerkIcons.UIPerk_stasis_psi_crushinggrasp";
 	Template.AbilitySourceName = 'eAbilitySource_Psionic';
 	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_AlwaysShow;
 	Template.AbilityConfirmSound = "TacticalUI_ActivateAbility";
@@ -1627,9 +1631,6 @@ static function X2AbilityTemplate RTCrushingGrasp() {
 	Template.AbilityShooterConditions.AddItem(default.LivingShooterProperty);
 	Template.AddShooterEffectExclusions();
 
-	PlayerVisibilityCondition = new class'RTCondition_VisibleToPlayer';
-
-	Template.AbilityMultiTargetConditions.AddItem(PlayerVisibilityCondition);
 	Template.AbilityMultiTargetConditions.AddItem(default.LivingHostileUnitOnlyProperty);
 
 	Template.AbilityTriggers.AddItem(default.PlayerInputTrigger);
@@ -1658,15 +1659,6 @@ static function X2AbilityTemplate RTCrushingGrasp() {
 	StunnedEffect.EffectHierarchyValue = 955;
 	StunnedEffect.EffectName = 'RTCrushingGraspEffect';
 	Template.AddMultiTargetEffect(StunnedEffect);
-
-	StasisEffect = new class'X2Effect_Stasis';
-	StasisEffect.BuildPersistentEffect(1, false, false, false, eGameRule_PlayerTurnBegin);
-	StasisEffect.bUseSourcePlayerState = true;
-	StasisEffect.bRemoveWhenTargetDies = true;          //  probably shouldn't be possible for them to die while in stasis, but just in case
-	StasisEffect.SetDisplayInfo(ePerkBuff_Penalty, Template.LocFriendlyName, Template.GetMyHelpText(), Template.IconImage);
-	//StasisEffect.EffectName = 'RTCrushingGraspEffect';
-	//Template.AddMultiTargetEffect(StasisEffect);
-
 
 	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
 
@@ -1722,7 +1714,7 @@ static function X2AbilityTemplate RTPsionicStorm() {
 
 
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'RTPsionicStorm');
-	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_swordSlash"; //TODO: Change this
+	Template.IconImage = "img:///RisingTidesContentPackage.PerkIcons.UIPerk_psi_lightning_psistorm";
 	Template.AbilitySourceName = 'eAbilitySource_Psionic';
 	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_AlwaysShow;
 	Template.AbilityConfirmSound = "TacticalUI_ActivateAbility";
@@ -2501,7 +2493,7 @@ static function X2AbilityTemplate RTConstructTechnopathyHack(name TemplateName, 
 
 static function X2AbilityTemplate RTPsionicLash() {
 	local X2AbilityTemplate Template;
-	local RTEffect_PsionicLash	LashEffect;
+	local RTEffect_PsionicLash	LashEffect;			 
 	local X2AbilityCooldown Cooldown;
 	local X2AbilityCost_ActionPoints ActionPointCost;
 	local RTAbilityToHitCalc_StatCheck_UnitVsUnit HitCalc;
@@ -2510,7 +2502,7 @@ static function X2AbilityTemplate RTPsionicLash() {
 	local X2Condition_UnitProperty UnitPropertyCondition;
 
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'RTPsionicLash');
-	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_swordSlash"; //TODO: Change this
+	Template.IconImage = "img:///RisingTidesContentPackage.PerkIcons.UIPerk_loot_psi_psioniclash"; //TODO: Change this
 	Template.AbilitySourceName = 'eAbilitySource_Psionic';
 	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_AlwaysShow;
 	Template.AbilityConfirmSound = "TacticalUI_ActivateAbility";
