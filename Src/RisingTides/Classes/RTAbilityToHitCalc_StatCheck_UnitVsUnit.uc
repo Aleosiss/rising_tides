@@ -36,6 +36,6 @@ function string GetDefendString() { return class'X2TacticalGameRulesetDataStruct
 
 DefaultProperties
 {
-	AttackerStat = eStat_Will
+	AttackerStat = eStat_PsiOffense
 	DefenderStat = eStat_Will
 }

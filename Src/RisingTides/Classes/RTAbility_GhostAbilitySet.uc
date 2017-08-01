@@ -509,8 +509,6 @@ static function X2AbilityTemplate RTFeedback()
 	Template.bSkipFireAction = true;
 	Template.FrameAbilityCameraType = eCameraFraming_Never;
 
-
-
 	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
 	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
 	Template.bSkipFireAction = true;
@@ -877,7 +875,7 @@ static function X2AbilityTemplate CreateRTPassiveAbilityCooldown(name TemplateNa
 		Template.AbilityTriggers.AddItem(new class'X2AbilityTrigger_Placeholder');
     }
 
-        // Add dead eye to guarantee
+    // Add dead eye to guarantee
 	Template.AbilityToHitCalc = default.DeadEye;
 	Template.AbilityTargetStyle = default.SelfTarget;
 
@@ -1005,18 +1003,18 @@ static function X2DataTemplate RTMindControl()
 	return Template;
 }
 
-
 static function X2AbilityTemplate RTEnterStealth() {
 	local X2AbilityTemplate Template;
 	local RTEffect_Stealth StealthEffect;
 	local X2AbilityCharges Charges;
+	local X2Condition_UnitEffects	EffectCondition;
 
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'RTEnterStealth');
 
 	Template.AbilitySourceName = 'eAbilitySource_Psionic';
 	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_ShowIfAvailable;
 	Template.Hostility = eHostility_Neutral;
-	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_stealth";
+	Template.IconImage = class'RTEffectBuilder'.default.StealthIconPath;
 	Template.ShotHUDPriority = class'UIUtilities_Tactical'.const.CLASS_COLONEL_PRIORITY;
 
 	Template.AbilityToHitCalc = default.DeadEye;
@@ -1029,6 +1027,9 @@ static function X2AbilityTemplate RTEnterStealth() {
 	Charges.InitialCharges = default.GHOST_CHARGES;
 	Template.AbilityCharges = Charges;
 
+	EffectCondition = new class'X2Condition_UnitEffects';
+	EffectCondition.AddExcludeEffect(class'RTEffectBuilder'.default.StealthEffectName, 'AA_UnitIsConcealed');
+	Template.AbilityShooterConditions.AddItem(EffectCondition);
 	Template.AbilityShooterConditions.AddItem(default.LivingShooterProperty);
 
 	StealthEffect = class'RTEffectBuilder'.static.RTCreateStealthEffect(2, false);

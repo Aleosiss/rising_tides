@@ -28,24 +28,24 @@ LocPromotionPopupText="<Bullet/> This unit does not suffer from squadsight penal
 
 [RTOverflowBarrier X2AbilityTemplate]
 LocFriendlyName="Overflow Barrier"
-LocLongDescription="When this unit deals overkill damage, it converts it into shielding for itself and its melded allies."
-LocHelpText="When this unit deals overkill damage, it converts it into shielding for itself and its melded allies."
+LocLongDescription="When this unit deals overkill damage, it converts that damage into shielding for itself and its melded allies."
+LocHelpText="When this unit deals overkill damage, it converts that damage into shielding for itself and its melded allies."
 LocFlyOverText="Overflow Barrier"
-LocPromotionPopupText="<Bullet/> Try to use in combination with powerful damage abilities.<br/><Bullet/> Minimum of 1 Shield HP if overkill damage is dealt.<br/><Bullet/> The unit with Overflow Barrier must be melded to generate any shielding.<br/><Bullet/> Shields persist even if the meld is lost.<br/>"
+LocPromotionPopupText="<Bullet/> Try to use in combination with powerful damage abilities such as Precision Shot or Time Stands Still.<br/><Bullet/> Minimum of 1 Shield HP if overkill damage is dealt.<br/><Bullet/> The unit with Overflow Barrier must be melded to generate any shielding.<br/><Bullet/> Shields persist even if the meld is lost.<br/>"
 
 [RTOverflowBarrierEvent X2AbilityTemplate]
 LocFriendlyName="Overflow Barrier"
-LocLongDescription="When this unit deals overkill damage, it converts it into shielding for itself and its melded allies."
-LocHelpText="When this unit deals overkill damage, it converts it into shielding for itself and its melded allies."
+LocLongDescription="When this unit deals overkill damage, it converts that damage into shielding for itself and its melded allies."
+LocHelpText="When this unit deals overkill damage, it converts that damage into shielding for itself and its melded allies."
 LocFlyOverText="Overflow Barrier"
-LocPromotionPopupText="<Bullet/> When this unit deals overkill damage, it converts it into shielding for itself and its melded allies.<br/><Bullet/> Minimum of 1 Shield HP if overkill damage is dealt.<br/><Bullet/> The unit with Overflow Barrier must be melded to generate any shielding.<br/><Bullet/> Shields persist even if the meld is lost.<br/>"
+LocPromotionPopupText="<Bullet/> Minimum of 1 Shield HP if overkill damage is dealt.<br/><Bullet/> The unit with Overflow Barrier must be melded to generate any shielding.<br/><Bullet/> Shields persist even if the meld is lost.<br/>"
 
 [RTPrecisionShot X2AbilityTemplate]
 LocFriendlyName="Precision Shot"
 LocLongDescription="A carefully aimed shot, suffering decreased aim but increased critical chance and critical damage."
 LocHelpText="Shoot with decreased aim, but increased critical chance and critical damage."
 LocFlyOverText="Precision Shot"
-LocPromotionPopupText="<Bullet/> Shoot a precision shot, suffering from decreased chance to hit, but increased critical chance and critical damage.<br/>"
+LocPromotionPopupText="<Bullet> <Ability:SelfCooldown/> turn cooldown.<br/><Bullet/> Shoot a precision shot, suffering from decreased chance to hit, but increased critical chance and critical damage.<br/>"
 
 [RTAggression X2AbilityTemplate]
 LocFriendlyName="Aggression"
@@ -66,7 +66,7 @@ LocFriendlyName="Disabling Shot"
 LocLongDescription="A carefully aimed shot, suffering decreased aim and damage but forcing the target to reload their primary weapon."
 LocHelpText="Weak and hard-to-hit shot that disables target enemy weapon for a turn."
 LocFlyOverText="Disabling Shot"
-LocPromotionPopupText="<Bullet/> Disabling Shot also removes one action point from the target.<br/>"
+LocPromotionPopupText="<Bullet> <Ability:SelfCooldown/> turn cooldown.<br/><Bullet/> Disabling Shot also removes one action point from the target.<br/>"
 
 [RTSnapshot X2AbilityTemplate]
 LocFriendlyName="Snapshot"
@@ -92,17 +92,17 @@ LocFriendlyName="Overwatch Shot"
 
 [SixOClock X2AbilityTemplate]
 LocFriendlyName="Six O'Clock"
-LocLongDescription="Allies that can see your overwatch gain bonuses to defense, psi, and will."
+LocLongDescription="When this unit uses overwatch, allied units within it's range gain bonuses to defense, psi, and will."
 LocHelpText=" "
 LocFlyOverText="Six O'Clock"
-LocPromotionPopupText="<Bullet/> This also affects units that do not have direct line of sight to the the overwatching unit.<br/>"
+LocPromotionPopupText="<Bullet/> This affects units that do not have direct line of sight to the the overwatching unit.<br/>"
 
 [SixOClockEffect X2AbilityTemplate]
 LocFriendlyName="Six O'Clock Effect"
-LocLongDescription="Allies that can see your overwatch gain bonuses to defense, psi, and will."
+LocLongDescription="When this unit uses overwatch, allied units within it's range gain bonuses to defense, psi, and will."
 LocHelpText=" "
 LocFlyOverText="Six O'Clock Effect"
-LocPromotionPopupText="<Bullet/> This also affects units that do not have direct line of sight to the the overwatching unit.<br/>"
+LocPromotionPopupText="<Bullet/> This affects units that do not have direct line of sight to the the overwatching unit.<br/>"
 
 [RTVitalPointTargeting X2AbilityTemplate]
 LocFriendlyName="Vital Point Targeting"
@@ -116,24 +116,24 @@ LocFriendlyName="Damn Good Ground"
 LocLongDescription="Confers +15 Aim and +15 Defense against enemies at lower elevation, in addition to the usual elevation bonuses."
 LocHelpText=" "
 LocFlyOverText="Damn Good Ground"
-LocPromotionPopupText="<Bullet/>Confers +15 Aim and +15 Defense against enemies at lower elevation, in addition to the usual elevation bonuses.<br/>"
+LocPromotionPopupText="<Bullet/> Confers +15 Aim and +15 Defense against enemies at lower elevation, in addition to the usual elevation bonuses.<br/>"
 
 [SlowIsSmooth X2AbilityTemplate]
 LocFriendlyName="Slow Is Smooth"
 LocLongDescription="Shots taken from concealment have +25 Aim and Crit. Reenter Concealment after breaking LOS with all enemies for 4 turns."
 LocHelpText=" "
 LocFlyOverText="Slow Is Smooth"
-LocPromotionPopupText="<Bullet/>Shots taken from concealment have +25 Aim and Crit. Reenter Concealment after breaking LOS with all enemies for 4 turns.<br/>"
+LocPromotionPopupText="<Bullet/> Shots taken from concealment have +25 Aim and Crit.<br/><Bullet/> Reenter Concealment after breaking LOS with all enemies for 4 turns.<br/>"
 
 [Sovereign X2AbilityTemplate]
-LocFriendlyName="Sovereign"
+LocFriendlyName="UNUSED, SEE RUDIMENTARY CREATURES"
 LocLongDescription="Kill shots have a chance to inflict panic on nearby foes."
 LocHelpText="Kill shots have a chance to inflict panic on nearby foes."
 LocFlyOverText="Sovereign"
 LocPromotionPopupText="<Bullet/>Kill shots have a chance to inflict panic on nearby foes.<br/>"
 
 [SovereignEffect X2AbilityTemplate]
-LocFriendlyName="Sovereign"
+LocFriendlyName="UNUSED, SEE RUDIMENTARY CREATURES"
 LocLongDescription="Kill shots have a chance to inflict panic on nearby foes."
 LocHelpText="Kill shots have a chance to inflict panic on nearby foes."
 LocFlyOverText="Sovereign"
@@ -184,14 +184,14 @@ LocFriendlyName="Mind Wrack"
 LocLongDescription="Overload an organic unit's brain with pure psionic energy, killing it immediately."
 LocHelpText="Overload an organic unit's brain with pure psionic energy, killing it immediately."
 LocFlyOverText="Mind Wrack"
-LocPromotionPopupText="<Bullet/> Overload an organic unit's brain with pure psionic energy, killing it immediately. The feedback from the ability will cause a brief moment of panic.<br/>"
+LocPromotionPopupText="<Bullet> <Ability:SelfCooldown/> turn cooldown.<br/><Bullet/> Overload an organic unit's brain with pure psionic energy, killing it immediately. The feedback from the ability will cause a significant moment of panic.<br/>"
 
 [RTMindControl X2AbilityTemplate]
 LocFriendlyName="Mind Control"
 LocLongDescription="Temporarily dominate an enemy unit psionically."
 LocHelpText="Attempt to take control of an enemy."
 LocFlyOverText="Mind Control"
-LocPromotionPopupText="<Bullet><br/>"
+LocPromotionPopupText="<Bullet><Ability:SelfCooldown/> turn cooldown.<br/>"
 
 [LinkedIntelligence X2AbilityTemplate]
 LocFriendlyName="Networked OI"
@@ -212,35 +212,35 @@ LocFriendlyName="Time Stands Still"
 LocLongDescription="Throw a wrench in the gears of the universe for a brief moment. Allies and Enemies alike become Greyscaled, losing their ability to affect or perceive the world around them."
 LocHelpText="The World! Stop Time!"
 LocFlyOverText="Time Stands Still"
-LocPromotionPopupText="<Bullet/> Timers and Reinforcements will be delayed while time is stopped.<br/><Bullet/> Greyscaled units are easy to hit and critically hit.<br/>"
+LocPromotionPopupText="<Bullet> <Ability:SelfCooldown/> turn cooldown.<br/><Bullet/> Timers and Reinforcements will be delayed while time is stopped.<br/><Bullet/> Greyscaled units are easy to hit and critically hit.<br/>"
 
 [PsionicSurge X2AbilityTemplate]
 LocFriendlyName="Psionic Surge"
 LocLongDescription="Empower this unit's weapon with psionic energy, increasing its fire rate and energy throughput."
 LocHelpText="Empower this unit's weapon with psionic energy."
 LocFlyOverText="Psionic Surge"
-LocPromotionPopupText="<Bullet/> Standard shots do not end turn and cost one AP.<br/><Bullet/> Special shots do not have cooldowns while this effect is active.<br/>"
+LocPromotionPopupText="<Bullet> <Ability:SelfCooldown/> turn cooldown.<br/><Bullet/> Standard shots do not end turn and cost one AP.<br/><Bullet/> Special shots do not have cooldowns while this effect is active.<br/>"
 
 [FadeIcon X2AbilityTemplate]
 LocFriendlyName="Fade"
 LocLongDescription="Fade from view whenever this unit takes damage."
 LocHelpText="Fade from view whenever this unit takes damage."
 LocFlyOverText="Fade"
-LocPromotionPopupText="<Bullet/> Gain stealth until the start of the next turn whenever this unit takes damage. 5 turn cooldown.<br/>"
+LocPromotionPopupText="<Bullet/> Gain stealth for a short duration whenever this unit takes damage. <Ability:SelfCooldown/> turn cooldown.<br/>"
 
 [Fade X2AbilityTemplate]
 LocFriendlyName="Fade"
 LocLongDescription="Fade from view whenever this unit takes damage."
 LocHelpText="Fade from view whenever this unit takes damage."
 LocFlyOverText="Fade"
-LocPromotionPopupText="<Bullet/> Gain stealth until the start of the next turn whenever this unit takes damage. 5 turn cooldown.<br/>"
+LocPromotionPopupText="<Bullet/> Gain stealth for a short duration whenever this unit takes damage. <Ability:SelfCooldown/> turn cooldown.<br/>"
 
 [Teek X2AbilityTemplate]
 LocFriendlyName="Teek"
-LocLongDescription="This unit has honed its telekinetic abilities, increasing its ability to dodge, deflect, and redirect enemy fire."
-LocHelpText="This unit has honed its telekinetic abilities, increasing its ability to dodge, deflect, and redirect enemy fire."
+LocLongDescription="This unit has honed its telekinetic abilities, increasing its ability to dodge, and deflect enemy fire."
+LocHelpText="This unit has honed its telekinetic abilities, increasing its ability to dodge, and deflect enemy fire."
 LocFlyOverText="Teek"
-LocPromotionPopupText="<Bullet/> This unit has honed its telekinetic abilities, increasing its ability to dodge, deflect, and redirect enemy fire.<br/><Bullet/> + 10 Dodge, + 10 Defense, + 20% Reflection chance.<br/>"
+LocPromotionPopupText="<Bullet/> This unit has honed its telekinetic abilities, increasing its ability to dodge, and deflect enemy fire.<br/><Bullet/> + 10 Dodge, + 10 Defense.<br/>"
 
 [EyeInTheSky X2AbilityTemplate]
 LocFriendlyName="Eye In the Sky"
@@ -254,28 +254,28 @@ LocFriendlyName="Heat Channel"
 LocLongDescription="When using Psionic abilities, this unit can channel heat from its weapon to fuel the ability, reloading the weapon and reducing the cooldown of the ability by one per ammo reloaded."
 LocHelpText="When using Psionic abilities, this unit can channel heat from its weapon to fuel the ability, reloading the weapon and reducing the cooldown of the ability by one per ammo reloaded."
 LocFlyOverText="Heat Channel"
-LocPromotionPopupText="<Bullet/> When using Psionic abilities, this unit can channel heat from its weapon to fuel the ability, reloading the weapon and reducing the cooldown of the ability by one per ammo reloaded.<br/><Bullet/> 8 turn cooldown.<br/>"
+LocPromotionPopupText="<Bullet/> When using Psionic abilities, this unit can channel heat from its weapon to fuel the ability, reloading the weapon and reducing the cooldown of the ability by one per ammo reloaded.<br/><Bullet/> 2 turn cooldown.<br/>"
 
 [HeatChannelIcon X2AbilityTemplate]
 LocFriendlyName="Heat Channel"
 LocLongDescription="When using Psionic abilities, this unit can channel heat from its weapon to fuel the ability, reloading the weapon and reducing the cooldown of the ability by one per ammo reloaded."
 LocHelpText="When using Psionic abilities, this unit can channel heat from its weapon to fuel the ability, reloading the weapon and reducing the cooldown of the ability by one per ammo reloaded."
 LocFlyOverText="Heat Channel"
-LocPromotionPopupText="<Bullet/> When using Psionic abilities, this unit can channel heat from its weapon to fuel the ability, reloading the weapon and reducing the cooldown of the ability by one per ammo reloaded.<br/><Bullet/> 8 turn cooldown.<br/>"
+LocPromotionPopupText="<Bullet/> When using Psionic abilities, this unit can channel heat from its weapon to fuel the ability, reloading the weapon and reducing the cooldown of the ability by one per ammo reloaded.<br/><Bullet/> 2 turn cooldown.<br/>"
 
 [HeatChannelCooldown X2AbilityTemplate]
 LocFriendlyName="Heat Channel"
 LocLongDescription="When using Psionic abilities, this unit can channel heat from its weapon to fuel the ability, reloading the weapon and reducing the cooldown of the ability by one per ammo reloaded."
 LocHelpText="When using Psionic abilities, this unit can channel heat from its weapon to fuel the ability, reloading the weapon and reducing the cooldown of the ability by one per ammo reloaded."
 LocFlyOverText="Heat Channel"
-LocPromotionPopupText="<Bullet/> When using Psionic abilities, this unit can channel heat from its weapon to fuel the ability, reloading the weapon and reducing the cooldown of the ability by one per ammo reloaded.<br/><Bullet/> 8 turn cooldown.<br/>"
+LocPromotionPopupText="<Bullet/> When using Psionic abilities, this unit can channel heat from its weapon to fuel the ability, reloading the weapon and reducing the cooldown of the ability by one per ammo reloaded.<br/><Bullet/> 2 turn cooldown.<br/>"
 
 [Harbinger X2AbilityTemplate]
 LocFriendlyName="Assuming Direct Control"
 LocLongDescription="Empower a friendly melded unit, healing it fully and granting it significant combat bonuses."
 LocHelpText="Empower a friendly melded unit, healing it fully and granting it significant combat bonuses."
 LocFlyOverText="Assuming Direct Control"
-LocPromotionPopupText="<Bullet/> Empower a friendly melded unit, healing it fully and granting it significant combat bonuses.<br/><Bullet/> 8 turn cooldown.<br/><Bullet/> +4 armor, +5 shield hp, + 10 aim, + 10 will.<br/><Bullet/> Effect is broken on meld loss.<br/>"
+LocPromotionPopupText="<Bullet/> Empower a friendly melded unit, healing it fully and granting it significant combat bonuses.<br/><Bullet/> <Ability:SelfCooldown/> turn cooldown.<br/><Bullet/> +4 armor, +5 shield hp, + 10 aim, + 10 will.<br/><Bullet/> Effect is broken on meld loss.<br/>"
 
 [ShockAndAwe X2AbilityTemplate]
 LocFriendlyName="Shock And Awe"
@@ -347,7 +347,7 @@ LocFriendlyName="Acid Blade"
 LocLongDescription="This unit's blade is covered in a classified acidic solution. It shreds armor and applies this solution to the target."
 LocHelpText="This unit's melee attacks deal additional acid damage."
 LocFlyOverText="Acid Blade"
-LocPromotionPopupText="<Bullet/> This unit's blade is covered in a classified acidic solution. It shreds armor and applies this solution to the target.<br/><Bullet/> Acid shreds additional armor and does damage per turn.<br/><Bullet/> Consecutive melee attacks will refresh the duration of the acid and increase its potency, stacking the damage effect.<br/>"
+LocPromotionPopupText="<Bullet/> This unit's blade is covered in a classified acidic solution. It shreds armor and applies this solution to the target.<br/><Bullet/> Acid shreds additional armor and does damage per turn.<br/><Bullet/> Consecutive melee attacks will refresh the duration of the acid and increase its potency, stacking the damage and shredding effect.<br/>"
 
 [RTPsionicBlade X2AbilityTemplate]
 LocFriendlyName="Psiblade"
@@ -368,7 +368,7 @@ LocFriendlyName="Burst"
 LocLongDescription="Unleash a burst of psionic energy, damaging surrounding enemies and tiles."
 LocHelpText="Unleash a burst of psionic energy, damaging surrounding enemies and tiles."
 LocFlyOverText="Burst"
-LocPromotionPopupText="<Bullet/> Unleash a burst of psionic energy, damaging surrounding enemies and tiles.<br/>"
+LocPromotionPopupText="<Bullet> <Ability:SelfCooldown/> turn cooldown.<br/><Bullet/> Unleash a burst of psionic energy, damaging surrounding enemies and tiles.<br/>"
 
 [RTBlur X2AbilityTemplate]
 LocFriendlyName="Blur"
@@ -389,28 +389,28 @@ LocFriendlyName="Mentor"
 LocLongDescription="Lend a friendly melded unit psionic support though the meld."
 LocHelpText="Lend a friendly melded unit psionic support though the meld."
 LocFlyOverText="Mentor"
-LocPromotionPopupText="<Bullet/> Lend a friendly melded unit psionic support though the meld.<br/><Bullet/>Grants +60 Will and Psi Offense to targeted unit.<br/>"
+LocPromotionPopupText="<Bullet> <Ability:SelfCooldown/> turn cooldown.<br/><Bullet/> Grants +60 Will and Psi Offense to targeted unit and cleanses their feedback.<br/>"
 
 [RTReprobateWaltz X2AbilityTemplate]
 LocFriendlyName="Reprobate Waltz"
 LocLongDescription="Whenever this unit uses a melee attack, there is a chance to attack again, increasing with Bloodlust stacks."
 LocHelpText="Whenever this unit uses a melee attack, there is a chance to attack again, increasing with Bloodlust stacks."
 LocFlyOverText="Reprobate Waltz"
-LocPromotionPopupText="<Bullet/> Whenever this unit uses a melee attack, there is a chance to attack again, increasing with Bloodlust stacks.<br/>"
+LocPromotionPopupText="<Bullet/> 20% Base Chance, +10% for each Bloodlust stack.<br/>"
 
 [RTReprobateWaltzIcon X2AbilityTemplate]
 LocFriendlyName="Reprobate Waltz"
 LocLongDescription="Whenever this unit uses a melee attack, there is a chance to attack again, increasing with Bloodlust stacks."
 LocHelpText="Whenever this unit uses a melee attack, there is a chance to attack again, increasing with Bloodlust stacks."
 LocFlyOverText="Reprobate Waltz"
-LocPromotionPopupText="<Bullet/> Whenever this unit uses a melee attack, there is a chance to attack again, increasing with Bloodlust stacks.<br/>"
+LocPromotionPopupText="<Bullet/> 20% Base Chance, +10% for each Bloodlust stack.<br/>"
 
 [RTPyroclasticFlow X2AbilityTemplate]
 LocFriendlyName="Pyroclastic Flow"
 LocLongDescription="This unit can now melee while it is burning, and while burning, it leaves a devastating trail of fire in its wake."
 LocHelpText="This unit can now melee while it is burning, and while burning, it leaves a devastating trail of fire in its wake."
 LocFlyOverText="Pyroclastic Flow"
-LocPromotionPopupText="<Bullet/> This unit can now melee while it is burning, and while burning, it leaves a devastating trail of fire in its wake.<br/>"
+LocPromotionPopupText="<Bullet/> Does not give immunity to burning.<br/>"
 
 [RTPyroclasticSlash X2AbilityTemplate]
 LocFriendlyName="Slash (Pyroclastic)"
@@ -423,7 +423,7 @@ LocFriendlyName="Contained Fury"
 LocLongDescription="This unit's meld status is no longer affected by Bloodlust stacks."
 LocHelpText="This unit's meld status is no longer affected by Bloodlust stacks."
 LocFlyOverText="Contained Fury"
-LocPromotionPopupText="<Bullet/> This unit's meld status is no longer affected by Bloodlust stacks.<br/>"
+LocPromotionPopupText=""
 
 [RTContainedFuryMeldJoin X2AbilityTemplate]
 LocFriendlyName="Enter Meld"
@@ -451,7 +451,7 @@ LocFriendlyName="Persisting Images"
 LocLongDescription="Whenever this unit gains Stealth, it creates a afterimage of itself nearby."
 LocHelpText="Whenever this unit gains Stealth, it creates a afterimage of itself nearby."
 LocFlyOverText="Persisting Images"
-LocPromotionPopupText="<Bullet/> Whenever this unit gains Stealth, it creates a afterimage of itself nearby.<br/><Bullet/> Afterimages will draw enemy attention, but have only one HP.<br/>"
+LocPromotionPopupText="<Bullet/> Afterimages will draw enemy attention, but have only one HP.<br/>"
 
 [RTUnstableConduitIcon X2AbilityTemplate]
 LocFriendlyName="Unstable Tempest"
@@ -472,7 +472,7 @@ LocFriendlyName="Ghost In The Shell"
 LocLongDescription="When this unit interacts with objectives, it gains short burst of Stealth."
 LocHelpText="When this unit interacts with objectives, it gains short burst of Stealth."
 LocFlyOverText="Ghost In The Shell"
-LocPromotionPopupText="<Bullet/> When this unit interacts with objectives, it gains short burst of Stealth.<br/>"
+LocPromotionPopupText=""
 
 [RTGhostInTheShellListener X2AbilityTemplate]
 LocFriendlyName="Ghost In The Shell"
@@ -486,28 +486,28 @@ LocFriendlyName="The Queen of Blades"
 LocLongDescription="If a melee attack kills a unit, the action points for the attack are refunded. Additionally, Bloodlust stacks will increase mobility, instead of decreasing it."
 LocHelpText="If a melee attack kills a unit, the action points for the attack are refunded. Additionally, Bloodlust stacks will increase mobility, instead of decreasing it."
 LocFlyOverText="The Queen of Blades"
-LocPromotionPopupText="<Bullet/> If a melee attack kills a unit, the action points for the attack are refunded.<br/><Bullet/> Additionally, Bloodlust stacks will increase mobility, instead of decreasing it.<br/>"
+LocPromotionPopupText=""
 
 [RTShadowStrike X2AbilityTemplate]
 LocFriendlyName="Shadow Strike"
 LocLongDescription="Leap through shadows to strike at a target."
 LocHelpText="Leap through shadows to strike at a target."
 LocFlyOverText="Shadow Strike"
-LocPromotionPopupText="<Bullet/> Leap through shadows to strike at a target.<br/><Bullet/> Squadsight range, direct path to target not required.<br/>"
+LocPromotionPopupText="<Bullet> <Ability:SelfCooldown/> turn cooldown.<br/><Bullet/> Unlimited range, direct path to target not required.<br/>"
 
 [RTPsionicLance X2AbilityTemplate]
 LocFriendlyName="Psionic Lance"
 LocLongDescription="Fire a lance of pure psionic energy."
 LocHelpText="Fire a lance of pure psionic energy."
 LocFlyOverText="Psionic Lance"
-LocPromotionPopupText="<Bullet/> <br/>"
+LocPromotionPopupText="<Bullet> <Ability:SelfCooldown/> turn cooldown.<br/>"
 
 [RTHarbingerPsionicLance X2AbilityTemplate]
 LocFriendlyName="Psionic Lance (Assuming Direct Control)"
 LocLongDescription="Fire a lance of pure psionic energy."
 LocHelpText="Fire a lance of pure psionic energy."
 LocFlyOverText="Psionic Lance (Assuming Direct Control)"
-LocPromotionPopupText="<Bullet/> <br/>"
+LocPromotionPopupText="<Bullet> <Ability:SelfCooldown/> turn cooldown.<br/>"
 
 [RTDashingStrike X2AbilityTemplate]
 LocFriendlyName="Dashing Strike"
@@ -544,7 +544,7 @@ LocFriendlyName="Meld Induction"
 LocLongDescription="Force a unit into the Meld."
 LocHelpText="Force a unit into the Meld."
 LocFlyOverText="Meld Induction"
-LocPromotionPopupText="<Bullet/> Force a unit into the Meld.<br/><Bullet/> This cannot be done if the unit using Meld Induction is not in the meld itself.<br/>"
+LocPromotionPopupText="<Bullet> <Ability:SelfCooldown/> turn cooldown.<br/><Bullet/> This cannot be done if the unit using Meld Induction is not in the meld itself.<br/>"
 
 [RTUnsettlingVoices X2AbilityTemplate]
 LocFriendlyName="Unsettling Voices"
@@ -555,10 +555,10 @@ LocPromotionPopupText="<Bullet/> Enemy units affected by Over The Shoulder suffe
 
 [RTGuardianAngel X2AbilityTemplate]
 LocFriendlyName="Guardian Angel"
-LocLongDescription="Grant an effect to allied units affected by Over the Shoulder which cleanses mental debuffs, slowly heals, and stabilizes them."
-LocHelpText="Grant an effect to allied units affected by Over the Shoulder which cleanses mental debuffs, slowly heals, and stabilizes them."
+LocLongDescription="Grant an effect to allied units affected by Over the Shoulder which cleanses mental debuffs, and slowly heals them."
+LocHelpText="Grant an effect to allied units affected by Over the Shoulder which cleanses mental debuffs, and slowly heals them."
 LocFlyOverText="Guardian Angel"
-LocPromotionPopupText="<Bullet/> Grant an effect to allied units affected by Over the Shoulder which cleanses mental debuffs, slowly heals, and stablizes them.<br/><Bullet/> The healing effect can only happen once per turn.<br/>"
+LocPromotionPopupText="<Bullet/> Grant an effect to allied units affected by Over the Shoulder which cleanses mental debuffs, and slowly heals them.<br/><Bullet/> The healing effect can only happen once per turn.<br/>"
 
 [RTForcedIntroversion X2AbilityTemplate]
 LocFriendlyName="Forced Introversion"
@@ -572,7 +572,7 @@ LocFriendlyName="Sovereign"
 LocLongDescription="When units affected by Over the Shoulder attempt to use psionic abilities, this unit will attempt to interrupt the ability, stunning the user and dealing minor psionic damage."
 LocHelpText="When units affected by Over the Shoulder attempt to use psionic abilities, this unit will attempt to interrupt the ability, stunning the user and dealing minor psionic damage."
 LocFlyOverText="Sovereign"
-LocPromotionPopupText="<Bullet/> When units affected by Over the Shoulder attempt to use psionic abilities, this unit will attempt to interrupt the ability, stunning the user and dealing minor psionic damage.<br/>"
+LocPromotionPopupText="<Bullet/> Not all psionic abilities can be interrupted. Notable exceptions include Over The Shoulder and Join/Leave Meld.<br/>"
 
 [RTRudimentaryCreaturesEvent X2AbilityTemplate]
 LocFriendlyName="Sovereign"
@@ -607,7 +607,7 @@ LocFriendlyName="Unwilling Conduits"
 LocLongDescription="Whenever this unit casts a psionic ability, it drains energy from units affected by Over the Shoulder to fuel the action,  reducing the cooldown for each unit affected."
 LocHelpText="Whenever this unit casts a psionic ability, it drains energy from units affected by Over the Shoulder to fuel the action, reducing the cooldown for each unit affected."
 LocFlyOverText="Unwilling Conduits"
-LocPromotionPopupText="<Bullet/> Deals a small amount of damage to enemy and ally alike.<br/><Bullet/> Cooldown will be reduced to a minimum of 1; usable next turn.<br/>"
+LocPromotionPopupText="<Bullet/> Cooldown will be reduced to a minimum of 1; usable next turn.<br/>"
 
 [RTDomination X2AbilityTemplate]
 LocFriendlyName="Domination"
@@ -642,7 +642,7 @@ LocFriendlyName="Guilty Conscience"
 LocLongDescription="Enemies that are forced to suffer this unit's mental presence for too long will be disoriented by the experience."
 LocHelpText="Enemies that are forced to suffer this unit's mental presence for too long will be disoriented by the experience."
 LocFlyOverText="Guilty Conscience"
-LocPromotionPopupText="<Bullet/> Enemy units that are affected by Over the Shoulder multiple turns in a row will be disoriented.<br/>"
+LocPromotionPopupText="<Bullet/> This ability can activate against the same target multiple times if the engagement lasts that long.<br/>"
 
 [RTGuiltyConscienceEvent X2AbilityTemplate]
 LocFriendlyName="Guilty Conscience"
@@ -663,7 +663,7 @@ LocFriendlyName="Knowledge is Power"
 LocLongDescription="Gain increasing damage and critical strike chance against units that endure Over the Shoulder for multiple turns."
 LocHelpText="Gain increasing damage and critical strike chance against units that endure Over the Shoulder for multiple turns."
 LocFlyOverText="Knowledge is Power"
-LocPromotionPopupText="<Bullet/> The effects of this ability build for up to four turns.<br/>"
+LocPromotionPopupText="<Bullet/> The effects of this ability accumulate over four turns.<br/>"
 
 [RTLift X2AbilityTemplate]
 LocFriendlyName="Lift"
@@ -677,14 +677,14 @@ LocFriendlyName="Crushing Grasp"
 LocLongDescription="Telekinetically grip a small area, stunning enemy units and destroying their cover."
 LocHelpText="Telekinetically grip a small area, stunning enemy units and destroying their cover."
 LocFlyOverText="Crushing Grasp"
-LocPromotionPopupText="<Bullet/> Crushing Grasp should be used liberally to enable Whisper's Scoped and Dropped and to create flanking paths for Queen's Bump in the Night.<br/>"
+LocPromotionPopupText="<Bullet> <Ability:SelfCooldown/> turn cooldown.<br/><Bullet/> Crushing Grasp should be used liberally to enable Whisper's Scoped and Dropped and to create flanking paths for Queen's Bump in the Night.<br/>"
 
 [RTPsionicStorm X2AbilityTemplate]
 LocFriendlyName="Psionic Storm"
 LocLongDescription="Create a damaging psionic storm that ravages a moderate area indefinitely."
 LocHelpText="Cast a psionic storm."
 LocFlyOverText="Psionic Storm"
-LocPromotionPopupText="<Bullet/> The unit can sustain three separate psionic storms at once.<br/><Bullet/> Stacking psionic storms does not increase their damage.<br/><Bullet/> Psionic storms must be manually canceled.<br/>"
+LocPromotionPopupText="<Bullet> <Ability:SelfCooldown/> turn cooldown.<br/><Bullet/> The unit can sustain three separate psionic storms at once.<br/><Bullet/> Stacking psionic storms does not increase their damage.<br/><Bullet/> Psionic storms must be manually canceled.<br/>"
 
 [RTPsionicStormSustained X2AbilityTemplate]
 LocFriendlyName="Psionic Storm Sustained"
@@ -725,11 +725,11 @@ LocFlyOverText="Hack (Psionic)"
 
 [RTPsionicLash X2AbilityTemplate]
 LocFriendlyName="Psionic Lash"
-LocLongDescription="Pull a small unit to an adjacent tile psionically."
-LocHelpText="Pull a small unit close."
+LocLongDescription="Pull a humanoid unit to an adjacent tile psionically."
+LocHelpText="Pull a humanoid unit close."
 LocFlyOverText="Psionic Lash"
-LocPromotionPopupText="<Bullet/> Both hostile and friendly units can be pulled.<br/>"
-
+LocPromotionPopupText="<Bullet> <Ability:SelfCooldown/> turn cooldown.<br/><Bullet/> Both hostile and friendly units can be pulled.<br/>"
+												  `
 [RTEnterStealth X2AbilityTemplate]
 LocFriendlyName="Enter Stealth"
 LocLongDescription="Cloak, becoming invisible to the enemy for a short duration."

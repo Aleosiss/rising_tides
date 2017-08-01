@@ -1,7 +1,7 @@
 ;This is a text file.
 
 [RTEffect_ScopedAndDropped]
-RTFriendlyName="Skill"
+RTFriendlyName="Scoped and Dropped"
 RTNotFriendlyName="Pressure"
 
 [RTEffect_PrecisionShotDamage]
@@ -81,7 +81,7 @@ LocFriendlyName="Triangulation"
 LocLongDescription="Melded allies will now serve as additional sources of Over the Shoulder's effect."
 LocHelpText="Melded allies will now serve as additional sources of Over the Shoulder's effect."
 LocFlyOverText="Triangulation"
-LocPromotionPopupText="<Bullet/> The effect lasts an entire turn, even if the meld is broken.<br/><Bullet/> This is one of the very few ways for the Gatherer to affect itself with powerful Over the Shoulder effects.<br/>"
+LocPromotionPopupText="<Bullet/> The effect lasts an entire turn, even if the meld is broken.<br/>"
 
 [RTAbility_GhostAbilitySet]
 FEEDBACK_NAME="AGugHGGHGH"
@@ -91,7 +91,7 @@ OTS_DESC_SELF="I peer back."
 OTS_DESC_ALLY="I'll keep an eye out for you!"
 OTS_DESC_ENEMY="I see you... see me."
 BLOODLUST_TITLE="Bloodlust"
-BLOODLUST_DESC="<todo>"
+BLOODLUST_DESC="This unit is experiencing the thrill of combat! Their melee critical strike chance and damage is increased."
 STEALTH_TITLE="Stealth"
 STEALTH_DESC="This unit is invisible, and cannot be seen by most units."
 MELD_TITLE="Mind Meld"
@@ -129,5 +129,5 @@ MeldFriendlyDesc="This unit has joined the Meld, receiving and delivering psioni
 
 [RTGameState_RisingTidesCommand]
 SquadOneName="SPECTRE"
-SquadOneBackground"insert something edgy here"
+SquadOneBackground"insert something here"
 

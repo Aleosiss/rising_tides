@@ -369,7 +369,7 @@ static function X2AbilityTemplate RTBurst() {
 	// local X2Effect_Persistent						Effect;
 
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'RTBurst');
-	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_snipershot"; //TODO: Change this
+	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_swordSlash"; //TODO: Change this
 	Template.AbilitySourceName = 'eAbilitySource_Psionic';
 	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_AlwaysShow;
 	Template.AbilityConfirmSound = "TacticalUI_ActivateAbility";
@@ -747,7 +747,7 @@ static function X2AbilityTemplate RTMentor() {
 	local X2Effect_RemoveEffects			RemoveEffect;
 
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'RTMentor');
-	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_snipershot"; //TODO: Change this
+	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_swordSlash"; //TODO: Change this
 	Template.AbilitySourceName = 'eAbilitySource_Psionic';
 	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_AlwaysShow;
 	Template.AbilityConfirmSound = "TacticalUI_ActivateAbility";
@@ -919,7 +919,7 @@ static function X2AbilityTemplate RTReprobateWaltzIcon()
 	local RTEffect_ReprobateWaltz	Effect;
 
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'RTReprobateWaltzIcon');
-	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_aim";	   // TODO: THIS
+	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_reaper";	   // TODO: THIS
 	Template.AbilitySourceName = 'eAbilitySource_Psionic';
 	Template.eAbilityIconBehaviorHUD = EAbilityIconBehavior_NeverShow;
 	Template.Hostility = eHostility_Neutral;
@@ -952,7 +952,7 @@ static function X2AbilityTemplate RTPyroclasticFlow()
 	local X2Effect_Persistent					SOVEffect;
 
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'RTPyroclasticFlow');
-	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_snipershot";
+	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_swordSlash";
 
 	Template.AbilitySourceName = 'eAbilitySource_Perk';
 	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_NeverShow;
@@ -1218,7 +1218,7 @@ static function X2AbilityTemplate RTContainedFury() {
 		local X2Effect_Persistent	Effect;
 
 		`CREATE_X2ABILITY_TEMPLATE(Template, 'RTContainedFury');
-		Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_aim";
+		Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_swordSlash";
 		Template.AbilitySourceName = 'eAbilitySource_Perk';
 		Template.eAbilityIconBehaviorHUD = EAbilityIconBehavior_NeverShow;
 		Template.Hostility = eHostility_Neutral;
@@ -1254,7 +1254,7 @@ static function X2AbilityTemplate RTContainedFuryMeldJoin()
 	local RTEffect_Meld					MeldEffect;
 
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'RTContainedFuryMeldJoin');
-	Template.IconImage = "img:///RisingTidesContentPackage.PerkIcons.UIPerk_psi_circle";
+	Template.IconImage = "img:///RisingTidesContentPackage.PerkIcons.UIPerk_psi_x2_meld";
 
 	Template.AbilitySourceName = 'eAbilitySource_Psionic';
 	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_HideSpecificErrors;
@@ -1290,7 +1290,7 @@ static function X2AbilityTemplate RTContainedFuryMeldJoin()
 	Template.bSkipFireAction = true;
 
 	Template.bCrossClassEligible = false;
-		Template.OverrideAbilities.AddItem('JoinMeld');
+	Template.OverrideAbilities.AddItem('JoinMeld');
 
 	return Template;
 }
@@ -1348,7 +1348,7 @@ static function X2AbilityTemplate RTUnstableConduitIcon() {
 		local X2Effect_Persistent	Effect;
 
 		`CREATE_X2ABILITY_TEMPLATE(Template, 'RTUnstableConduitIcon');
-		Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_aim";
+		Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_swordSlash";
 		Template.AbilitySourceName = 'eAbilitySource_Psionic';
 		Template.eAbilityIconBehaviorHUD = EAbilityIconBehavior_NeverShow;
 		Template.Hostility = eHostility_Neutral;
@@ -1385,7 +1385,7 @@ static function X2AbilityTemplate RTUnstableConduitBurst() {
 	local X2Effect_Persistent							Effect;
 
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'RTUnstableConduitBurst');
-	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_snipershot"; //TODO: Change this
+	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_swordSlash"; //TODO: Change this
 	Template.AbilitySourceName = 'eAbilitySource_Psionic';
 	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_NeverShow;
 	Template.AbilityConfirmSound = "TacticalUI_ActivateAbility";
@@ -1641,7 +1641,7 @@ static function X2AbilityTemplate RTGhostInTheShellEffect()
 	local X2Effect_RangerStealth ConcealEffect;
 
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'RTGhostInTheShellEffect');
-		Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_aim";	   // TODO: THIS
+		Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_swordSlash";	   // TODO: THIS
 		Template.AbilitySourceName = 'eAbilitySource_Psionic';
 		Template.eAbilityIconBehaviorHUD = EAbilityIconBehavior_NeverShow;
 		Template.Hostility = eHostility_Neutral;
@@ -1679,7 +1679,7 @@ static function X2AbilityTemplate RTQueenOfBlades()
 	local X2Effect_Persistent	Effect;
 
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'RTQueenOfBlades');
-		Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_aim";	   // TODO: THIS
+		Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_swordSlash";	   // TODO: THIS
 		Template.AbilitySourceName = 'eAbilitySource_Psionic';
 		Template.eAbilityIconBehaviorHUD = EAbilityIconBehavior_NeverShow;
 		Template.Hostility = eHostility_Neutral;
