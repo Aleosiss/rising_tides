@@ -63,6 +63,7 @@ simulated static function bool IsTargetVisibleToLocalPlayer(StateObjectReference
 
 	}
 
+	return false;
 }
 
 defaultproperties

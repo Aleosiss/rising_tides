@@ -55,6 +55,8 @@ class RTAbility_MarksmanAbilitySet extends RTAbility_GhostAbilitySet
 	var name KillZoneReserveType;
 	var name TimeStopEffectName;
 
+	var config array<name> AbilityPerksToLoad;
+
 //---------------------------------------------------------------------------------------
 //---CreateTemplates---------------------------------------------------------------------
 //---------------------------------------------------------------------------------------
@@ -118,6 +120,7 @@ static function X2AbilityTemplate ScopedAndDropped()
 	local X2AbilityTemplate						Template;
 	local RTEffect_ScopedAndDropped				ScopedEffect;
 	local RTEffect_Squadsight					SSEffect;
+	local RTEffect_LoadPerks					LoadPerks;
 
 	// Icon Properties
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'ScopedAndDropped');
@@ -143,6 +146,11 @@ static function X2AbilityTemplate ScopedAndDropped()
 	SSEffect = new class'RTEffect_Squadsight';
 	SSEffect.BuildPersistentEffect(1, true, true, true);
 	Template.AddTargetEffect(SSEffect);
+
+	LoadPerks = new class'RTEffect_LoadPerks';
+	LoadPerks.AbilitiesToLoad = default.AbilityPerksToLoad;
+	Template.AddShooterEffect(LoadPerks);
+
 
 	// standard ghost abilities
 	Template.AdditionalAbilities.AddItem('GhostPsiSuite');
@@ -1464,6 +1472,8 @@ static function X2AbilityTemplate TimeStandsStill()
 
 	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
 	Template.CustomFireAnim = 'HL_Psi_SelfCast';
+	Template.bFrameEvenWhenUnitIsHidden = true;
+	Template.AbilityConfirmSound = "TacticalUI_ActivateAbility";
 
 	Template.AdditionalAbilities.AddItem('TimeStandsStillEndListener');
 	Template.AdditionalAbilities.AddItem('TimeStandsStillInterruptListener');

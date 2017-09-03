@@ -59,15 +59,70 @@ simulated function UpdateFlagForUnit(XGUnit Unit)
         {
             Texts[i].Text.Show();
             Texts[i].Text.SetNormalizedPosition(TextLoc);
-            Texts[i].Text.SetText("<font color='#ffffff'>"$ Unit.Name @ Unit.IdleStateMachine.GetStateName() @ ": " @ Unit.IdleStateMachine.PersistentEffectIdleName $ "</font>");
+            Texts[i].Text.SetText("<font color='#ffffff'>"$ Unit.Name @ Unit.GetPawn().arrPawnPerkContent[0].GetAbilityName() $ "</font>");
             //Texts[i].Text.SetText(Unit.Name @ Unit.IdleStateMachine.GetStateName());
         }
         else
         {
             Texts[i].Text.Hide();
-        }      
+        }
     }
 }
+
+// Trying to determine if my PerkContents are even managing to make it onto my units!
+simulated static function PrintOutPerkContentsForXComUnits() {
+    local XGUnit Unit;
+	
+	foreach `TACTICALGRI.AllActors(class'XGUnit', Unit)
+    {
+        if(Unit.GetTeam() == eTeam_XCom)
+			PrintOutPerkContentsForUnit(Unit);
+    }
+}
+
+
+simulated static function PrintOutPerkContentsForUnit(XGUnit Unit) {
+	local XComUnitPawn UnitPawn;
+	local XComPerkContent IteratorPerkContent;
+
+	UnitPawn = Unit.GetPawn();
+	`log(Unit.Name $ " -------" $ XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(UnitPawn.m_kGameUnit.ObjectID)).GetFullName());
+	if(UnitPawn.arrPawnPerkDefinitions.Length > 0) 
+		`log("This UnitPawn has "$ UnitPawn.arrPawnPerkDefinitions.Length $" Perks defined, and here they are: "); 
+	else `log("This UnitPawn has no Perks defined.");
+	foreach UnitPawn.arrPawnPerkDefinitions(IteratorPerkContent) {
+		`log(IteratorPerkContent.Name);
+	}
+}
+
+simulated static function PrintOutLoadedPerkContents() {
+	local XComContentManager Content;
+	local XComPerkContent PerkDef;
+	
+	Content = `CONTENT;
+
+	`LOG("Printing all loaded PerkContent names:");
+	foreach Content.PerkContent( PerkDef ) {
+		`LOG(PerkDef.Name);
+	}
+}
+
+simulated static function TryForceAppendAbilityPerks(name AbilityName) {
+	local XComUnitPawnNativeBase UnitPawnNativeBase;
+	
+	UnitPawnNativeBase = XComTacticalController(class'WorldInfo'.static.GetWorldInfo().GetALocalPlayerController()).GetActiveUnitPawn();
+	`CONTENT.AppendAbilityPerks(AbilityName, UnitPawnNativeBase);
+}
+
+simulated static function TryForceCachePerkContent(name AbilityName) {
+	`CONTENT.CachePerkContent(AbilityName);
+}
+
+simulated static function TryForceBuildPerkContentCache() {
+	`CONTENT.BuildPerkPackageCache();
+}
+
+
  
  
 defaultproperties

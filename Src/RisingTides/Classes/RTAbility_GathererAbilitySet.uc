@@ -68,6 +68,8 @@ class RTAbility_GathererAbilitySet extends RTAbility_GhostAbilitySet config(Risi
 
 	var config string KIPIconPath;
 
+	var config array<name> AbilityPerksToLoad;
+
 //---------------------------------------------------------------------------------------
 //---CreateTemplates---------------------------------------------------------------------
 //---------------------------------------------------------------------------------------
@@ -77,7 +79,7 @@ static function array<X2DataTemplate> CreateTemplates()
 
 
 	Templates.AddItem(OverTheShoulder());
-	Templates.AddItem(OverTheShoulderVisibilityUpdate());
+	Templates.AddItem(OverTheShoulderPassives());
 
 	Templates.AddItem(RTForcedIntroversion());
 	Templates.AddItem(PurePassive('RTUnsettlingVoices', "img:///RisingTidesContentPackage.PerkIcons.UIPerk_mind_overwatch_psi_us", false, 'eAbilitySource_Psionic'));
@@ -135,7 +137,7 @@ static function X2AbilityTemplate OverTheShoulder()
 
 	Template = CreateOverTheShoulderAbility(Template);
 
-	Template.AdditionalAbilities.AddItem('OverTheShoulderVisibilityUpdate');
+	Template.AdditionalAbilities.AddItem('OverTheShoulderPassives');
 
 	// standard ghost abilities
 	Template.AdditionalAbilities.AddItem('GhostPsiSuite');
@@ -303,7 +305,7 @@ static function X2AbilityTemplate CreateOverTheShoulderAbility(X2AbilityTemplate
 	OTSEffect.SetDisplayInfo(ePerkBuff_Bonus, default.OTS_TITLE, default.OTS_DESC_SELF, Template.IconImage, true,,Template.AbilitySourceName);
 	OTSEffect.DuplicateResponse = eDupe_Ignore;
 	OTSEffect.EffectName = default.OverTheShoulderSourceEffectName;
-	OTSEffect.VFXTemplateName = "RisingTidesContentPackage.P_Nova_Psi_OTS";
+	OTSEffect.VFXTemplateName = "RisingTidesContentPackage.fX.P_Nova_Psi_OTS";
 	OTSEffect.VFXSocket = 'None';
 	OTSEffect.VFXSocketsArrayName = 'None';
 	OTSEffect.Scale = 1.5;
@@ -337,12 +339,11 @@ static function X2AbilityTemplate CreateOverTheShoulderAbility(X2AbilityTemplate
 	return Template;
 }
 
-static function X2AbilityTemplate OverTheShoulderVisibilityUpdate() {
+static function X2AbilityTemplate OverTheShoulderPassives() {
 	local X2AbilityTemplate                     Template;
-	local X2AbilityTrigger_EventListener        EventListener;
-	local X2Effect_Persistent					Effect;
+	local RTEffect_LoadPerks					LoadPerks;
 
-	`CREATE_X2ABILITY_TEMPLATE(Template, 'OverTheShoulderVisibilityUpdate')
+	`CREATE_X2ABILITY_TEMPLATE(Template, 'OverTheShoulderPassives')
 
 	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_solace";
 	Template.AbilitySourceName = 'eAbilitySource_Psionic';
@@ -352,29 +353,15 @@ static function X2AbilityTemplate OverTheShoulderVisibilityUpdate() {
 	Template.AbilityToHitCalc = default.DeadEye;
 	Template.AbilityTargetStyle = default.SelfTarget;
 
-	Effect = new class'X2Effect_Persistent';
-	Effect.BuildPersistentEffect(1, false, true, false, eGameRule_PlayerTurnEnd);
-	Effect.SetDisplayInfo(ePerkBuff_Penalty, "DEBUG", "DEBUG X2EFFECT_VISIBILITYUPDATE", Template.IconImage, true,,Template.AbilitySourceName);
-	Effect.DuplicateResponse = eDupe_Allow;
-	Template.AddTargetEffect(Effect);
+	LoadPerks = new class'RTEffect_LoadPerks';
+	LoadPerks.AbilitiesToLoad = default.AbilityPerksToLoad;
+	Template.AddShooterEffect(LoadPerks);
 
-	// If I remove this, it works. But if I remove it, then you get that annoying "No points, no abilities, still doesn't automatically end turn" state.
-	Template.AbilityCosts.AddItem(default.FreeActionCost);
-
-	EventListener = new class'X2AbilityTrigger_EventListener';
-	EventListener.ListenerData.Deferral = ELD_OnVisualizationBlockCompleted;
-	EventListener.ListenerData.EventID = 'UnitMoveFinished';
-	EventListener.ListenerData.Filter = eFilter_None;
-	EventListener.ListenerData.EventFn = class'XComGameState_Ability'.static.AbilityTriggerEventListener_Self;
-	EventListener.ListenerData.Priority = 40;
-
-	//Template.AbilityTriggers.AddItem(EventListener);
-	Template.AbilityTriggers.AddItem(default.PlayerInputTrigger);
+	Template.AbilityTriggers.AddItem(default.UnitPostBeginPlayTrigger);
 
 	Template.bSkipFireAction = true;
 
 	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
-	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
 
 	return Template;
 }
@@ -728,7 +715,7 @@ static function X2AbilityTemplate RTTheSixPathsOfPainOverride() {
 
 	Template = CreateOverTheShoulderAbility(Template);
 
-	Template.AdditionalAbilities.AddItem('OverTheShoulderVisibilityUpdate');
+	Template.AdditionalAbilities.AddItem('OverTheShoulderPassives');
 	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_NeverShow;
 	Template.IconImage = "img:///RisingTidesContentPackage.PerkIcons.UIPerk_overwatch_blaze_spop";
 

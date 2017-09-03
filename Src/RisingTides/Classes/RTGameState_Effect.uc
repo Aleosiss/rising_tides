@@ -23,7 +23,7 @@ function EventListenerReturn OnTacticalGameEnd(Object EventData, Object EventSou
 	NewGameState.RemoveStateObject(ObjectID);
 	`GAMERULES.SubmitGameState(NewGameState);
 
-	`LOG("RisingTides: RTGameState_Effect of type " @ self.class @" passive effect unregistered from events.");
+	//`LOG("RisingTides: RTGameState_Effect of type " @ self.class @" passive effect unregistered from events.");
 
 	return ELR_NoInterrupt;
 }
@@ -450,7 +450,7 @@ function EventListenerReturn RTOverkillDamageRecorder(Object EventData, Object E
 		History.GetCurrentAndPreviousGameStatesForObjectID(DeadUnitState.GetReference().ObjectID, PreviousObject, CurrentObject,, GameState.HistoryIndex - i);
 		PreviousDeadUnitState = XComGameState_Unit(PreviousObject);
 		iHPValue = PreviousDeadUnitState.GetCurrentStat( eStat_HP );
-		`LOG("Rising Tides: iHPValue"@iHPValue);
+		//`LOG("Rising Tides: iHPValue"@iHPValue);
 	}
 
 	iOverKillDamage = abs(PreviousDeadUnitState.GetCurrentStat( eStat_HP ) - LastEffectDamageValue.fValue);
@@ -619,7 +619,7 @@ function EventListenerReturn ExtendEffectDuration(Object EventData, Object Event
 		}
 	}
 	bDebug = false;
-	`LOG("Rising Tides: Attempting to extend " @ EffectTemplate.AbilityToExtendName);
+	//`LOG("Rising Tides: Attempting to extend " @ EffectTemplate.AbilityToExtendName);
 	NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("Rising Tides: Extending " @ EffectTemplate.EffectToExtendName);
 	foreach GameState.IterateByClassType(class'XComGameState_Effect', IteratorEffectState) {
 	  if(IteratorEffectState == none) {
@@ -652,7 +652,7 @@ function EventListenerReturn ExtendEffectDuration(Object EventData, Object Event
 		
 
 	if(!bDebug) {
-	  `LOG("Rising Tides: ExtendEffectDuration fired on the right ability / event, but there was no effects on the gamestate?");
+	  //`LOG("Rising Tides: ExtendEffectDuration fired on the right ability / event, but there was no effects on the gamestate?");
 	}
 
 	//`LOG("Rising Tides: ExtendEffectDuration was successful!");
@@ -848,7 +848,7 @@ function TriggerGhostInTheShellFlyoverVisualizationFn(XComGameState VisualizeGam
 		if (AbilityState == none)
 		{
 			`RedScreenOnce("Ability state missing from" @ GetFuncName() @ "-jbouscher @gameplay");
-			`LOG("Rising Tides: ITS BROKEN");
+			//`LOG("Rising Tides: ITS BROKEN");
 			return;
 		}
 
@@ -915,7 +915,7 @@ function EventListenerReturn HeatChannelCheck(Object EventData, Object EventSour
 
   local XComGameState_Ability CooldownAbilityState;
 
-  `LOG("Rising Tides: Starting HeatChannel");
+  //`LOG("Rising Tides: Starting HeatChannel");
   // EventData = AbilityState to Channel
   OldAbilityState = XComGameState_Ability(EventData);
   // Event Source = UnitState of AbilityState
@@ -983,7 +983,7 @@ function EventListenerReturn HeatChannelCheck(Object EventData, Object EventSour
   // put the ability on cooldown
   NewSourceUnit.SetUnitFloatValue('RTEffect_HeatChannel_Cooldown', class'RTAbility_MarksmanAbilitySet'.default.HEATCHANNEL_COOLDOWN, eCleanUp_BeginTactical);
 
-  `LOG("Rising Tides: Finishing HeatChannel");
+  //`LOG("Rising Tides: Finishing HeatChannel");
 
 
   // submit gamestate
@@ -1422,7 +1422,7 @@ function EventListenerReturn RTBumpInTheNight(Object EventData, Object EventSour
 		return ELR_NoInterrupt;
 
 	if(AbilityContext.InterruptionStatus == eInterruptionStatus_Interrupt) {
-		`LOG("Rising Tides: not on the interrupt stage!");
+		//`LOG("Rising Tides: not on the interrupt stage!");
 		return ELR_NoInterrupt;
 	}
 
@@ -1463,11 +1463,11 @@ function EventListenerReturn RTBumpInTheNight(Object EventData, Object EventSour
 	if(Attacker != none && bShouldTriggerMelee) {
 		// trigger psionic activation if psionic blades were present and used or on shadow strike
 		if(Attacker.HasSoldierAbility('RTPsionicBlade') || AbilityState.GetMyTemplateName() == 'RTShadowStrike') {
-			`LOG("Rising Tides: attempted to force a psionic ability event.");
+			//`LOG("Rising Tides: attempted to force a psionic ability event.");
 			InitializeAbilityForActivation(PsionicActivationAbilityState, Attacker, 'PsionicActivate', History);
 			ActivateAbility(PsionicActivationAbilityState, Attacker.GetReference());
 		} else {
-			`LOG("Rising Tides: did not attempt to force a psionic ability event.");
+			//`LOG("Rising Tides: did not attempt to force a psionic ability event.");
 		}
 	}
 

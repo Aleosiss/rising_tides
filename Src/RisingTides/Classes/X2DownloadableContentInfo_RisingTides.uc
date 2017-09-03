@@ -25,7 +25,32 @@ static event InstallNewCampaign(XComGameState StartState)
 {}
 
 
-exec function ToggleIASMText()
-{
+exec function RT_ToggleCustomDebugOutput() {
     class'UIDebugStateMachines'.static.GetThisScreen().ToggleVisible();
+}
+
+exec function RT_PrintPerkContentsForXCom() {
+    class'UIDebugStateMachines'.static.PrintOutPerkContentsForXComUnits();
+}
+
+exec function RT_PrintLoadedPerkContents() {
+    class'UIDebugStateMachines'.static.PrintOutLoadedPerkContents();
+}
+
+exec function RT_TryForceAppendAbilityPerks(name AbilityName) {
+	class'UIDebugStateMachines'.static.TryForceAppendAbilityPerks(AbilityName);
+}
+
+exec function RT_TryForceCachePerkContent(name AbilityName) {
+	class'UIDebugStateMachines'.static.TryForceCachePerkContent(AbilityName);
+}
+
+exec function RT_TryForceBuildPerkContentCache() {
+	class'UIDebugStateMachines'.static.TryForceBuildPerkContentCache();
+}
+
+exec function RT_ForceLoadPerkOnToUnit(name AbilityName) {
+	class'UIDebugStateMachines'.static.TryForceBuildPerkContentCache();
+	class'UIDebugStateMachines'.static.TryForceCachePerkContent(AbilityName);
+	class'UIDebugStateMachines'.static.TryForceAppendAbilityPerks(AbilityName);
 }

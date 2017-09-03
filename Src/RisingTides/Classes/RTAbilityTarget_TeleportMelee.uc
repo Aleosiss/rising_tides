@@ -10,18 +10,9 @@ simulated function name GetPrimaryTargetOptions(const XComGameState_Ability Abil
 	local XComGameStateHistory History;
 	local XComGameState_Unit UnitState;
 
-	`LOG("Called GetPrimaryTargetOptions");
-
 	AvailableCode = super.GetPrimaryTargetOptions(Ability, Targets);
 
-	History = `XCOMHISTORY;
-	`LOG("Found Targets:");
-	foreach Targets(Target) {
-		`LOG(XComGameState_Unit(History.GetGameStateForObjectID(Target.PrimaryTarget.ObjectID)).GetFullName());
-	}
-
-
-   
+	History = `XCOMHISTORY;   
 	foreach History.IterateByClassType(class'XComGameState_Unit', UnitState) {
 		Target = EmptyTarget;
 		if(UnitState.ObjectID == Ability.OwnerStateObject.ObjectID)
@@ -29,8 +20,7 @@ simulated function name GetPrimaryTargetOptions(const XComGameState_Ability Abil
 
 		Target.PrimaryTarget = UnitState.GetReference();
 		if(Targets.Find('PrimaryTarget', Target.PrimaryTarget) == INDEX_NONE) {
-			`LOG("Adding a " @ UnitState.GetFullName() @ " to the targets array");
-
+			//`LOG("Adding a " @ UnitState.GetFullName() @ " to the targets array");
 			Targets.AddItem(Target);
 		}
 	}
