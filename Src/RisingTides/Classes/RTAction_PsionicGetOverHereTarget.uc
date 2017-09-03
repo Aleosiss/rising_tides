@@ -8,15 +8,22 @@ class RTAction_PsionicGetOverHereTarget extends X2Action;
 var private XComGameStateContext_Ability AbilityContext;
 var private CustomAnimParams	Params;
 var private Vector				DesiredLocation;
-var private float				DistanceToTargetSquared;
+var private float				DistanceFromStartSquared;
+var private AnimNodeSequence	PlayingSequence;
+var private float				StopDistanceSquared;
 
 var private BoneAtom StartingAtom;
 var private Rotator DesiredRotation;
+
+var private bool StoredAllowNewAnimations;
+
+var Name StartAnimName;
+var Name StopAnimName;
 //*************************************
 
-function Init(const out VisualizationTrack InTrack)
+function Init()
 {
-	super.Init(InTrack);
+	super.Init();
 
 	AbilityContext = XComGameStateContext_Ability(StateChangeContext);
 }
@@ -29,61 +36,87 @@ function bool CheckInterrupted()
 function SetDesiredLocation(Vector NewDesiredLocation, XGUnit NeededForZ)
 {
 	DesiredLocation = NewDesiredLocation;
-	DesiredLocation.Z = NeededForZ.GetDesiredZForLocation(DesiredLocation);
+
+	//Don't get the floor Z because by the time this is called the floor might have exploded. Trust that the tile requested is correct
+	DesiredLocation.Z = NeededForZ.GetDesiredZForLocation(DesiredLocation, false); 
 }
 
 simulated state Executing
 {
 Begin:
-	//Wait for our turn to complete... and then set our rotation to face the destination exactly
-	while( UnitPawn.m_kGameUnit.IdleStateMachine.IsEvaluatingStance() )
+	StoredAllowNewAnimations = UnitPawn.GetAnimTreeController().GetAllowNewAnimations();
+	if( StoredAllowNewAnimations )
 	{
-		Sleep(0.01f);
+		//Wait for our turn to complete... and then set our rotation to face the destination exactly
+		while( UnitPawn.m_kGameUnit.IdleStateMachine.IsEvaluatingStance() )
+		{
+			Sleep(0.01f);
+		}
+	}
+	else
+	{
+		UnitPawn.SetRotation(Rotator(Normal(DesiredLocation - UnitPawn.Location)));
 	}
 
-	UnitPawn.EnableRMA(true, true);
+	UnitPawn.EnableRMA(true,true);
 	UnitPawn.EnableRMAInteractPhysics(true);
 	UnitPawn.bSkipIK = true;
 
-	Params.AnimName = 'NO_StrangleStart';
+	UnitPawn.GetAnimTreeController().SetAllowNewAnimations(true);
+
+	Params.AnimName = StartAnimName;
 	DesiredRotation = Rotator(Normal(DesiredLocation - UnitPawn.Location));
 	StartingAtom.Rotation = QuatFromRotator(DesiredRotation);
 	StartingAtom.Translation = UnitPawn.Location;
 	StartingAtom.Scale = 1.0f;
 	UnitPawn.GetAnimTreeController().GetDesiredEndingAtomFromStartingAtom(Params, StartingAtom);
-	UnitPawn.GetAnimTreeController().PlayFullBodyDynamicAnim(Params);
+	PlayingSequence = UnitPawn.GetAnimTreeController().PlayFullBodyDynamicAnim(Params);
 
 	// hide the targeting icon
 	Unit.SetDiscState(eDS_None);
 
-	DistanceToTargetSquared = VSizeSq(DesiredLocation - UnitPawn.Location);
-	while( DistanceToTargetSquared > Square(UnitPawn.fStrangleStopDistance) )
-	{
-		Sleep(0.0f);
-		DistanceToTargetSquared = VSizeSq(DesiredLocation - UnitPawn.Location);
-	}
+	StopDistanceSquared = Square(VSize(DesiredLocation - StartingAtom.Translation) - UnitPawn.fStrangleStopDistance);
 
+	// to protect against overshoot, rather than check the distance to the target, we check the distance from the source.
+	// Otherwise it is possible to go from too far away in front of the target, to too far away on the other side
+	DistanceFromStartSquared = 0;
+	while( DistanceFromStartSquared < StopDistanceSquared )
+	{
+		if( !PlayingSequence.bRelevant || !PlayingSequence.bPlaying || PlayingSequence.AnimSeq == None )
+		{
+			if( DistanceFromStartSquared < StopDistanceSquared )
+			{
+				`RedScreen("Get Over Here Target never made it to the destination");
+			}
+			break;
+		}
+
+		Sleep(0.0f);
+		DistanceFromStartSquared = VSizeSq(UnitPawn.Location - StartingAtom.Translation);
+	}
+	
 	UnitPawn.bSkipIK = false;
-	Params.AnimName = 'NO_StrangleStop';
-	Params.HasDesiredEndingAtom = true;
-	Params.DesiredEndingAtom.Scale = 1.0f;
-	Params.DesiredEndingAtom.Translation = DesiredLocation;
+	Params = default.Params;
+	Params.AnimName = StopAnimName;
+	Params.DesiredEndingAtoms.Add(1);
+	Params.DesiredEndingAtoms[0].Scale = 1.0f;
+	Params.DesiredEndingAtoms[0].Translation = DesiredLocation;
 	DesiredRotation = UnitPawn.Rotation;
 	DesiredRotation.Pitch = 0.0f;
 	DesiredRotation.Roll = 0.0f;
-	Params.DesiredEndingAtom.Rotation = QuatFromRotator(DesiredRotation);
+	Params.DesiredEndingAtoms[0].Rotation = QuatFromRotator(DesiredRotation);
+	UnitPawn.GetAnimTreeController().SetAllowNewAnimations(true);
 	FinishAnim(UnitPawn.GetAnimTreeController().PlayFullBodyDynamicAnim(Params));
+
+	UnitPawn.GetAnimTreeController().SetAllowNewAnimations(StoredAllowNewAnimations);
 
 	CompleteAction();
 }
 
-event bool BlocksAbilityActivation()
-{
-	return true;
-}
-
-
 DefaultProperties
 {
-
+	StartAnimName=NO_StrangleStart
+	StopAnimName=NO_StrangleStop
+	InputEventIDs.Add( "Visualizer_AbilityHit" )
+	InputEventIDs.Add( "Visualizer_ProjectileHit" )
 }

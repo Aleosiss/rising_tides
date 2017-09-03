@@ -3,10 +3,11 @@
 //-----------------------------------------------------------
 class RTAction_PlayEffect extends X2Action;
 
+
 // The path name of the particle system effect to be played.
 var string EffectName;
 
-// The size of the particle system effect to be played. Defaults to 1.0
+// The scale of the particle system to played.
 var float Scale;
 
 // The location at which the effect will be played.
@@ -50,6 +51,9 @@ var float EffectSpawnTime;
 
 var XComNarrativeMoment NarrativeToPlay;
 
+var XGUnit TetherToUnit;
+var Name TetherToSocketName;
+
 event bool BlocksAbilityActivation()
 {
 	return false;
@@ -71,15 +75,17 @@ simulated state Executing
 	{
 		PSComponent = class'WorldInfo'.static.GetWorldInfo().MyEmitterPool.SpawnEmitter(ParticleSystem(DynamicLoadObject(EffectName, class'ParticleSystem')), EffectLocation, EffectRotation);
 
-		if (AttachToUnit)
+		if( TetherToUnit != None )
+		{
+			UpdateTether(Unit.ObjectID, TetherToUnit.ObjectID, AttachToSocketName, TetherToSocketName);
+		}
+		else if (AttachToUnit)
 		{
 			PSComponent.SetAbsolute(false, false, false);
 			PSComponent.SetTickGroup( TG_EffectsUpdateWork );
 
-			
 			PSComponent.SetScale( Scale );
 			
-
 			if (AttachToSocketName != '')
 			{
 				if (UnitPawn.Mesh.GetSocketByName( AttachToSocketName ) != none)
@@ -196,6 +202,66 @@ simulated state Executing
 		}
 	}
 
+	private function GetTetherLocation(XComUnitPawn TetherUnit, Name BoneOrSocketName, out Vector OutLocation)
+	{
+		if( TetherUnit.Mesh.GetSocketWorldLocationAndRotation(BoneOrSocketName, OutLocation) )
+		{
+			// success. location filled out from call to socket function
+		}
+		else if( TetherUnit.Mesh.MatchRefBone(BoneOrSocketName) > -1 )
+		{
+			OutLocation = TetherUnit.Mesh.GetBoneLocation(BoneOrSocketName);
+		}
+		else
+		{
+			OutLocation = TetherUnit.Location;
+		}
+	}
+
+	private function UpdateTether(int FirstObjectID, int SecondObjectID, Name StartSocket, Name EndSocket)
+	{
+		local XComUnitPawn FirstTethered, SecondTethered;
+		local Vector FirstLocation, SecondLocation;
+		local Vector FirstToSecond;
+		local float DistanceBetween;
+		local Vector DistanceBetweenVector;
+		local XComGameStateHistory History;
+
+		History = `XCOMHISTORY;
+
+		if( PSComponent != None )
+		{
+			FirstTethered = XGUnit(History.GetVisualizer(FirstObjectID)).GetPawn();
+			SecondTethered = XGUnit(History.GetVisualizer(SecondObjectID)).GetPawn();
+
+			GetTetherLocation(FirstTethered, StartSocket, FirstLocation);
+			GetTetherLocation(SecondTethered, EndSocket, SecondLocation);
+			FirstToSecond = SecondLocation - FirstLocation;
+			DistanceBetween = VSize(FirstToSecond);
+			FirstToSecond = Normal(FirstToSecond);
+
+			PSComponent.SetAbsolute(true, true);
+			PSComponent.SetTranslation(FirstLocation);
+			PSComponent.SetRotation(Rotator(FirstToSecond));
+
+			DistanceBetweenVector.X = DistanceBetween;
+			DistanceBetweenVector.Y = DistanceBetween;
+			DistanceBetweenVector.Z = DistanceBetween;
+			PSComponent.SetVectorParameter('Distance', DistanceBetweenVector);
+			PSComponent.SetFloatParameter('Distance', DistanceBetween);
+		}
+	}
+
+	simulated event Tick(float fDeltaT)
+	{
+		Super.Tick(fDeltaT);
+
+		if( TetherToUnit != None )
+		{
+			UpdateTether(Unit.ObjectID, TetherToUnit.ObjectID, AttachToSocketName, TetherToSocketName);
+		}
+	}
+
 Begin:
 	// center the LookAt cam & FOW viewer on the effect location
 	if( CenterCameraOnEffectDuration > 0.0 )
@@ -265,7 +331,7 @@ Begin:
 		CompleteAction();
 	}
 	else
-	{
+	{		
 		GotoState('Finished');
 	}
 }
@@ -275,6 +341,5 @@ defaultproperties
 {
 	RevealFOWRadius = 768.0; //8 tiles
 	bWaitForCameraCompletion = true
-	Scale = 1.0; 
+	Scale = 1.0
 }
-

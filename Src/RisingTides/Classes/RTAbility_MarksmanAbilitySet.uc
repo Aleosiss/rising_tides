@@ -47,6 +47,11 @@ class RTAbility_MarksmanAbilitySet extends RTAbility_GhostAbilitySet
 	var localized string TimeStopEffectTitle;
 	var localized string TimeStopEffectDescription;
 
+	var config int KUBIKURI_COOLDOWN;
+	var config int KUBIKURI_AMMO_COST;
+	var config int KUBIKURI_MIN_ACTION_REQ;
+	var config int KUBIKURI_MAX_HP_PCT;
+
 	var name KillZoneReserveType;
 	var name TimeStopEffectName;
 
@@ -57,7 +62,7 @@ static function array<X2DataTemplate> CreateTemplates()
 {
 	local array<X2DataTemplate> Templates;
 
-	Templates.AddItem(ScopedAndDropped());							// icon
+	Templates.AddItem(ScopedAndDropped());							
 	Templates.AddItem(RTStandardSniperShot());
 	Templates.AddItem(RTOverwatch());
 	Templates.AddItem(RTOverwatchShot());
@@ -72,33 +77,35 @@ static function array<X2DataTemplate> CreateTemplates()
 	Templates.AddItem(SixOClockEffect());
 	//Templates.AddItem(VitalPointTargeting());
 	Templates.AddItem(RTDamnGoodGround());
-	Templates.AddItem(SlowIsSmooth());								// icon
+	Templates.AddItem(SlowIsSmooth());								
 	Templates.AddItem(SlowIsSmoothEffect());
-	Templates.AddItem(Sovereign());									// icon
+	Templates.AddItem(Sovereign());									
 	Templates.AddItem(SovereignEffect());
 	Templates.AddItem(DaybreakFlame());										// animation
-	Templates.AddItem(DaybreakFlameIcon());							// icon
-	Templates.AddItem(YourHandsMyEyes());							// icon
+	Templates.AddItem(DaybreakFlameIcon());							
+	Templates.AddItem(YourHandsMyEyes());							
 	Templates.AddItem(TimeStandsStill());									// animation
 	Templates.AddItem(TimeStandsStillInterruptListener());
 	Templates.AddItem(TimeStandsStillEndListener());
 	Templates.AddItem(TwitchReaction());
 	Templates.AddItem(TwitchReactionShot());
-	Templates.AddItem(LinkedIntelligence());						// icon
-	Templates.AddItem(PsionicSurge());								// icon	// animation
-	Templates.AddItem(EyeInTheSky());								// icon
+	Templates.AddItem(LinkedIntelligence());						
+	Templates.AddItem(PsionicSurge());								     	// animation
+	Templates.AddItem(EyeInTheSky());								
 	Templates.AddItem(HeatChannel());										// animation
-	Templates.AddItem(HeatChannelIcon());							// icon
+	Templates.AddItem(HeatChannelIcon());							
 	Templates.AddItem(HeatChannelCooldown());
-	Templates.AddItem(Harbinger());								// icon	// animation
+	Templates.AddItem(Harbinger());								
 	Templates.AddItem(RTHarbingerPsionicLance());
 	Templates.AddItem(HarbingerCleanseListener());
-	Templates.AddItem(ShockAndAwe());								// icon
+	Templates.AddItem(ShockAndAwe());								
 	Templates.AddItem(ShockAndAweListener());
 	Templates.AddItem(RTKillzone());								// icon
-	Templates.AddItem(RTEveryMomentMatters());						// icon
-	Templates.AddItem(RTOverflowBarrier());							// icon // animation
+	Templates.AddItem(RTEveryMomentMatters());						
+	Templates.AddItem(RTOverflowBarrier());							
 	Templates.AddItem(RTOverflowBarrierEvent());
+	Templates.AddItem(RTKubikuri());
+	Templates.AddItem(RTKubikuriDamage());
 
 	return Templates;
 }
@@ -251,10 +258,17 @@ static function X2AbilityTemplate ScopedAndDropped()
 	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
 	Template.BuildInterruptGameStateFn = TypicalAbility_BuildInterruptGameState;
 
+	class'X2StrategyElement_XpackDarkEvents'.static.AddStilettoRoundsEffect(Template);
+
 	KnockbackEffect = new class'X2Effect_Knockback';
-	KnockbackEffect.KnockbackDistance = 2;
-	KnockbackEffect.bUseTargetLocation = true;
 	Template.AddTargetEffect(KnockbackEffect);
+
+	Template.SuperConcealmentLoss = class'X2AbilityTemplateManager'.default.SuperConcealmentStandardShotLoss;
+	Template.ChosenActivationIncreasePerUse = class'X2AbilityTemplateManager'.default.StandardShotChosenActivationIncreasePerUse;
+	Template.LostSpawnIncreasePerUse = class'X2AbilityTemplateManager'.default.StandardShotLostSpawnIncreasePerUse;
+
+	Template.bFrameEvenWhenUnitIsHidden = true;
+
 
 	return Template;
 }
@@ -1263,11 +1277,20 @@ static function X2AbilityTemplate SovereignEffect()
 	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
 	Template.BuildInterruptGameStateFn = TypicalAbility_BuildInterruptGameState;
 
+	class'X2StrategyElement_XpackDarkEvents'.static.AddStilettoRoundsEffect(Template);
+	// add it to multitargets as well
+	Template.AddMultiTargetEffect(Template.AbilityTargetEffects[Template.AbilityTargetEffects.Length - 1]);
+
 	KnockbackEffect = new class'X2Effect_Knockback';
 	KnockbackEffect.KnockbackDistance = 2;
-	KnockbackEffect.bUseTargetLocation = true;
 	Template.AddTargetEffect(KnockbackEffect);
 	Template.AddMultiTargetEffect(KnockbackEffect);
+
+	Template.SuperConcealmentLoss = class'X2AbilityTemplateManager'.default.SuperConcealmentStandardShotLoss;
+	Template.ChosenActivationIncreasePerUse = class'X2AbilityTemplateManager'.default.StandardShotChosenActivationIncreasePerUse;
+	Template.LostSpawnIncreasePerUse = class'X2AbilityTemplateManager'.default.StandardShotLostSpawnIncreasePerUse;
+
+	Template.bFrameEvenWhenUnitIsHidden = true;
 
 	return Template;
 }
@@ -1562,7 +1585,6 @@ static function X2AbilityTemplate TimeStandsStillEndListener()
 
 	KnockbackEffect = new class'X2Effect_Knockback';
 	KnockbackEffect.KnockbackDistance = 2;
-	KnockbackEffect.bUseTargetLocation = true;
 	Template.AddMultiTargetEffect(KnockbackEffect);
 
 	Template.AddShooterEffect(RemoveSelfEffect);
@@ -1748,7 +1770,6 @@ static function X2AbilityTemplate TwitchReactionShot()
 
 	KnockbackEffect = new class'X2Effect_Knockback';
 	KnockbackEffect.KnockbackDistance = 2;
-	KnockbackEffect.bUseTargetLocation = true;
 	Template.AddTargetEffect(KnockbackEffect);
 
 	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
@@ -2177,13 +2198,13 @@ static function X2AbilityTemplate Harbinger()
 	return Template;
 }
 
-simulated function OnHarbingerShieldRemoved_BuildVisualization(XComGameState VisualizeGameState, out VisualizationTrack BuildTrack, const name EffectApplyResult)
+simulated function OnHarbingerShieldRemoved_BuildVisualization(XComGameState VisualizeGameState, out VisualizationActionMetadata ActionMetadata, const name EffectApplyResult)
 {
 	local X2Action_PlaySoundAndFlyOver SoundAndFlyOver;
 
-	if (XGUnit(BuildTrack.TrackActor).IsAlive())
+	if (XGUnit(ActionMetadata.VisualizeActor).IsAlive())
 	{
-		SoundAndFlyOver = X2Action_PlaySoundAndFlyOver(class'X2Action_PlaySoundAndFlyOver'.static.AddToVisualizationTrack(BuildTrack, VisualizeGameState.GetContext()));
+		SoundAndFlyOver = X2Action_PlaySoundAndFlyOver(class'X2Action_PlaySoundAndFlyOver'.static.AddToVisualizationTree(ActionMetadata, VisualizeGameState.GetContext(), false, ActionMetadata.LastActionAdded));
 		SoundAndFlyOver.SetSoundAndFlyOverParameters(None, "Shield Broken", '', eColor_Bad, , 0.75, true);
 	}
 }
@@ -2538,24 +2559,25 @@ static function X2AbilityTemplate RTOverflowBarrierEvent() {
 	return Template;
 }
 
-simulated function OnShieldRemoved_BuildVisualization(XComGameState VisualizeGameState, out VisualizationTrack BuildTrack, const name EffectApplyResult)
+simulated function OnShieldRemoved_BuildVisualization(XComGameState VisualizeGameState, out VisualizationActionMetadata ActionMetadata, const name EffectApplyResult)
 {
 	local X2Action_PlaySoundAndFlyOver SoundAndFlyOver;
 
-	if (XGUnit(BuildTrack.TrackActor).IsAlive())
+	if (XGUnit(ActionMetadata.VisualizeActor).IsAlive())
 	{
-		SoundAndFlyOver = X2Action_PlaySoundAndFlyOver(class'X2Action_PlaySoundAndFlyOver'.static.AddToVisualizationTrack(BuildTrack, VisualizeGameState.GetContext()));
+		SoundAndFlyOver = X2Action_PlaySoundAndFlyOver(class'X2Action_PlaySoundAndFlyOver'.static.AddToVisualizationTree(ActionMetadata, VisualizeGameState.GetContext(), false, ActionMetadata.LastActionAdded));
 		SoundAndFlyOver.SetSoundAndFlyOverParameters(None, class'XLocalizedData'.default.ShieldRemovedMsg, '', eColor_Bad, , , true);
 	}
 }
 
-simulated function OverflowShielded_BuildVisualization(XComGameState VisualizeGameState, out array<VisualizationTrack> OutVisualizationTracks)
+simulated function OverflowShielded_BuildVisualization(XComGameState VisualizeGameState)
 {
 	local XComGameStateHistory History;
 	local XComGameStateContext_Ability  Context;
 	local StateObjectReference InteractingUnitRef;
-	local VisualizationTrack EmptyTrack;
-	local VisualizationTrack BuildTrack;
+	//Tree metadata
+	local VisualizationActionMetadata   InitData;
+	local VisualizationActionMetadata   SourceData;
 	local XComGameState_Unit	UnitState;
 
 	History = `XCOMHISTORY;
@@ -2565,17 +2587,122 @@ simulated function OverflowShielded_BuildVisualization(XComGameState VisualizeGa
 
 	//Configure the visualization track for the shooter
 	//****************************************************************************************
-	BuildTrack = EmptyTrack;
-	BuildTrack.StateObject_OldState = History.GetGameStateForObjectID(InteractingUnitRef.ObjectID, eReturnType_Reference, VisualizeGameState.HistoryIndex - 1);
-	BuildTrack.StateObject_NewState = VisualizeGameState.GetGameStateForObjectID(InteractingUnitRef.ObjectID);
-	BuildTrack.TrackActor = History.GetVisualizer(InteractingUnitRef.ObjectID);
+	SourceData = InitData;
+	SourceData.StateObject_OldState = History.GetGameStateForObjectID(InteractingUnitRef.ObjectID, eReturnType_Reference, VisualizeGameState.HistoryIndex - 1);
+	SourceData.StateObject_NewState = VisualizeGameState.GetGameStateForObjectID(InteractingUnitRef.ObjectID);
+	SourceData.VisualizeActor = History.GetVisualizer(InteractingUnitRef.ObjectID);
 
-	UnitState = XComGameState_Unit(BuildTrack.StateObject_OldState);
+	UnitState = XComGameState_Unit(SourceData.StateObject_OldState);
 
 	if(UnitState.AffectedByEffectNames.Find('OverflowBarrierShield') ==  INDEX_NONE) {
-		TypicalAbility_BuildVisualization(VisualizeGameState, OutVisualizationTracks);
+		TypicalAbility_BuildVisualization(VisualizeGameState);
 	}
 }
+
+
+// Kubikiri
+static function X2AbilityTemplate RTKubikuri()
+{
+	local X2AbilityTemplate					Template;
+	local X2AbilityCost_Ammo                AmmoCost;
+	local X2AbilityCost_ActionPoints        ActionPointCost;
+	local X2AbilityCooldown                 Cooldown;
+	local X2AbilityToHitCalc_StandardAim    ToHitCalc;
+	local X2Condition_Visibility			VisibilityCondition;
+	local X2Effect_Knockback				KnockbackEffect;
+	local X2Condition_UnitStatCheck			TargetHPCondition;
+	local X2Condition_UnitEffects			SuppressedCondition;
+
+	`CREATE_X2ABILITY_TEMPLATE (Template, 'RTKubikuri');
+	Template.IconImage = "img:///UILibrary_LW_PerkPack.LW_AbilityKubikuri";
+	Template.AbilitySourceName = 'eAbilitySource_Perk';
+	Template.ShotHUDPriority = class'UIUtilities_Tactical'.const.CLASS_CAPTAIN_PRIORITY;
+	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_AlwaysShow;
+	Template.DisplayTargetHitChance = true;
+	Template.AbilityConfirmSound = "TacticalUI_ActivateAbility";
+	Template.CinescriptCameraType = "StandardGunFiring";
+	Template.TargetingMethod = class'X2TargetingMethod_OverTheShoulder';
+	Template.bCrossClassEligible = false;
+	Template.bUsesFiringCamera = true;
+	Template.bPreventsTargetTeleport = false;
+	Template.Hostility = eHostility_Offensive;
+	Template.AbilityTriggers.AddItem(default.PlayerInputTrigger);
+	Template.AbilityTargetStyle = default.SimpleSingleTarget;
+	Template.AbilityShooterConditions.AddItem(default.LivingShooterProperty);
+	Template.AbilityTargetConditions.AddItem(default.LivingHostileTargetProperty);
+	Template.AddShooterEffectExclusions();
+	Template.ActivationSpeech = 'Reaper';
+
+	VisibilityCondition = new class'X2Condition_Visibility';
+	VisibilityCondition.bRequireGameplayVisible = true;
+	VisibilityCondition.bAllowSquadsight = true;
+	Template.AbilityTargetConditions.AddItem(VisibilityCondition);
+
+	Template.AddTargetEffect(class'X2Ability_GrenadierAbilitySet'.static.HoloTargetEffect());
+	Template.AssociatedPassives.AddItem('HoloTargeting');
+	Template.AddTargetEffect(class'X2Ability_GrenadierAbilitySet'.static.ShredderDamageEffect());
+	Template.bAllowAmmoEffects = true;
+
+	ActionPointCost = new class 'X2AbilityCost_ActionPoints';
+	ActionPointCost.iNumPoints = default.KUBIKURI_MIN_ACTION_REQ;
+	ActionPointCost.bConsumeAllPoints = true;
+	Template.AbilityCosts.AddItem(ActionPointCost);
+
+	TargetHPCondition = new class 'X2Condition_UnitStatCheck';
+	TargetHPCondition.AddCheckStat(eStat_HP,default.KUBIKURI_MAX_HP_PCT,eCheck_LessThanOrEqual,,,true);
+	Template.AbilityTargetConditions.AddItem(TargetHPCondition);
+
+	SuppressedCondition = new class'X2Condition_UnitEffects';
+	SuppressedCondition.AddExcludeEffect(class'X2Effect_Suppression'.default.EffectName, 'AA_UnitIsSuppressed');
+	SuppressedCondition.AddExcludeEffect('AreaSuppression', 'AA_UnitIsSuppressed');
+	Template.AbilityShooterConditions.AddItem(SuppressedCondition);
+
+	ToHitCalc = new class'X2AbilityToHitCalc_StandardAim';
+	Template.AbilityToHitCalc = ToHitCalc;
+	Template.AbilityToHitOwnerOnMissCalc = ToHitCalc;
+
+	Cooldown = new class'X2AbilityCooldown';
+    Cooldown.iNumTurns = default.KUBIKURI_COOLDOWN;
+    Template.AbilityCooldown = Cooldown;
+
+	AmmoCost = new class'X2AbilityCost_Ammo';
+	AmmoCost.iAmmo = default.KUBIKURI_AMMO_COST;
+	Template.AbilityCosts.AddItem(AmmoCost);
+
+	Template.AdditionalAbilities.AddItem('RTKubikuriDamage');
+	
+	KnockbackEffect = new class'X2Effect_Knockback';
+	KnockbackEffect.KnockbackDistance = 2;
+	Template.AddTargetEffect(KnockbackEffect);
+
+	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
+	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
+	Template.BuildInterruptGameStateFn = TypicalAbility_BuildInterruptGameState;
+	return Template;
+}
+
+static function X2AbilityTemplate RTKubikuriDamage()
+{
+	local X2Effect_Kubikuri					DamageEffect;
+	local X2AbilityTemplate					Template;
+
+	`CREATE_X2ABILITY_TEMPLATE (Template, 'RTKubikuriDamage');
+	Template.IconImage = "img:///UILibrary_LW_PerkPack.LW_AbilityKubikuri";
+    Template.AbilitySourceName = 'eAbilitySource_Perk';
+    Template.eAbilityIconBehaviorHUD = 2;
+    Template.Hostility = 2;
+    Template.AbilityToHitCalc = default.DeadEye;
+    Template.AbilityTargetStyle = default.SelfTarget;
+    Template.AbilityTriggers.AddItem(default.UnitPostBeginPlayTrigger);
+	DamageEffect=new class'X2Effect_Kubikuri';
+    DamageEffect.BuildPersistentEffect(1, true, false, false);
+    DamageEffect.SetDisplayInfo(0, Template.LocFriendlyName, Template.GetMyLongDescription(), Template.IconImage, false,, Template.AbilitySourceName);
+    Template.AddTargetEffect(DamageEffect);
+    Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
+    return Template;
+}
+
+
 
 defaultproperties
 {

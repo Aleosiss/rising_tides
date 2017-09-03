@@ -11,11 +11,11 @@ var private X2Camera_LookAtActorTimed	LookAtCamera; // deprecated
 // the index of the last available target we were targeting
 var private int LastTarget;
 
-function Init(AvailableAction InAction)
+function Init(AvailableAction InAction, int NewTargetIndex)
 {
 	local XComPresentationLayer Pres;
 
-	super.Init(InAction);
+	super.Init(InAction, NewTargetIndex);
 
 	Pres = `PRES;
 
@@ -24,7 +24,7 @@ function Init(AvailableAction InAction)
 	PathingPawn.HideRenderablePath(true);
 	PathingPawn.SetVisible(true);
 	PathingPawn.HideRenderablePath(true);
-	PathingPawn.Init(UnitState, Ability);
+	PathingPawn.Init(UnitState, Ability, new class'X2TargetingMethod_MeleePath');
 	IconManager = Pres.GetActionIconMgr();
 	LevelBorderManager = Pres.GetLevelBorderMgr();
 

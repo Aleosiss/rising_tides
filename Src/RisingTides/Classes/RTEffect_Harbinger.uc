@@ -26,7 +26,7 @@ function RegisterForEvents(XComGameState_Effect EffectState) {
 	// EventMgr.RegisterForEvent(ListenerObj, 'AbilityActivated', HarbyEffectState.RTHarbingerBonusDamage, ELD_OnStateSubmitted, 75, FilterObj); // this should go before everything...
 }
 
-simulated function bool OnEffectTicked(const out EffectAppliedData ApplyEffectParameters, XComGameState_Effect kNewEffectState, XComGameState NewGameState, bool FirstApplication)
+simulated function bool OnEffectTicked(const out EffectAppliedData ApplyEffectParameters, XComGameState_Effect kNewEffectState, XComGameState NewGameState, bool FirstApplication, XComGameState_Player Player)
 {
 	local XComGameState_Ability OldAbilityState, NewAbilityState;
 	local XComGameStateHistory History;
@@ -87,39 +87,20 @@ function GetToHitModifiers(XComGameState_Effect EffectState, XComGameState_Unit 
 	ShotModifiers.AddItem(ModInfoAim);
 }
 
-function int GetDefendingDamageModifier(XComGameState_Effect EffectState, XComGameState_Unit Attacker, Damageable TargetDamageable, XComGameState_Ability AbilityState, const out EffectAppliedData AppliedData, const int CurrentDamage, X2Effect_ApplyWeaponDamage WeaponDamageEffect) {
-	//return -(BONUS_ARMOR);
-	return 0;
-
-}
-
-function int GetAttackingDamageModifier(XComGameState_Effect EffectState, XComGameState_Unit Attacker, Damageable TargetDamageable, XComGameState_Ability AbilityState, const out EffectAppliedData AppliedData, const int CurrentDamage, optional XComGameState NewGameState)
-{
-	//return BONUS_PSI_DAMAGE;
-}
-
-
-
-simulated function AddX2ActionsForVisualization(XComGameState VisualizeGameState, out VisualizationTrack BuildTrack, const name EffectApplyResult)
+simulated function AddX2ActionsForVisualization(XComGameState VisualizeGameState, out VisualizationActionMetadata ActionMetadata, const name EffectApplyResult)
 {
 	local XComGameState_Unit OldUnit, NewUnit;
 	local X2Action_PlaySoundAndFlyOver SoundAndFlyOver;
 
-	OldUnit = XComGameState_Unit(BuildTrack.StateObject_OldState);
-	NewUnit = XComGameState_Unit(BuildTrack.StateObject_NewState);
+	OldUnit = XComGameState_Unit(ActionMetadata.StateObject_OldState);
+	NewUnit = XComGameState_Unit(ActionMetadata.StateObject_NewState);
 
 	if (OldUnit != none && NewUnit != None)
 	{
 
-		SoundAndFlyOver = X2Action_PlaySoundAndFlyOver(class'X2Action_PlaySoundAndFlyOver'.static.AddToVisualizationTrack(BuildTrack, VisualizeGameState.GetContext()));
+		SoundAndFlyOver = X2Action_PlaySoundAndFlyOver(class'X2Action_PlaySoundAndFlyOver'.static.AddToVisualizationTree(ActionMetadata, VisualizeGameState.GetContext(), false, ActionMetadata.LastActionAdded));
 		SoundAndFlyOver.SetSoundAndFlyOverParameters(None, "Harbinger Intervention", '', eColor_Good);
 	}
-}
-
-simulated function AddX2ActionsForVisualization_Tick(XComGameState VisualizeGameState, out VisualizationTrack BuildTrack, const int TickIndex, XComGameState_Effect EffectState)
-{
-	// AddX2ActionsForVisualization(VisualizeGameState, BuildTrack, 'AA_Success');
-	super.AddX2ActionsForVisualization_Tick(VisualizeGameState, BuildTrack, TickIndex, EffectState);
 }
 
 defaultproperties

@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" DefaultTargets="Default" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
-    <Guid>e5b22929-7a20-4f5c-b1e8-c60174eff59c</Guid>
+    <Guid>913614b3-2ba2-4127-af31-6fa985f91263</Guid>
     <Name>RisingTides</Name>
     <Description>"Who could have known that the true threat did not fall to Earth on the backs of falling stars, but instead rose to the surface on the rising tides of our hearts?"</Description>
     <SteamPublishID>0</SteamPublishID>
@@ -25,6 +25,96 @@
       <SubType>Content</SubType>
     </Content>
     <Content Include="Config\XComRisingTides.ini">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Content\FX_Avatar.upk">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Content\FX_Explosion_EMP_Grenade.upk">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Content\FX_Psionics_Sectoid.upk">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Content\FX_Psionics_Shared.upk">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Content\FX_Psi_Aether_Shift.upk">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Content\FX_Psi_Blast.upk">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Content\FX_Psi_Bomb.upk">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Content\FX_Psi_Cloud_the_Mind.upk">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Content\FX_Psi_Dimensional_Rift.upk">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Content\FX_Psi_Dissonance.upk">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Content\FX_Psi_Explosion.upk">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Content\FX_Psi_Fortress.upk">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Content\FX_Psi_Fuse.upk">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Content\FX_Psi_Gate.upk">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Content\FX_Psi_Insanity.upk">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Content\FX_Psi_Inspire.upk">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Content\FX_Psi_Mental_States.upk">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Content\FX_Psi_Mindblast.upk">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Content\FX_Psi_Mind_Control.upk">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Content\FX_Psi_NullShield.upk">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Content\FX_Psi_Null_Lance.upk">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Content\FX_Psi_Precognition.upk">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Content\FX_Psi_Reanimation.upk">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Content\FX_Psi_Shield_Projection.upk">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Content\FX_Psi_Solace.upk">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Content\FX_Psi_Soothe.upk">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Content\FX_Psi_Void_Adept.upk">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Content\FX_Psi_Void_Rift.upk">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Content\FX_Soul_Steal.upk">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Content\FX_Wraith_Armor.upk">
       <SubType>Content</SubType>
     </Content>
     <Content Include="Content\RisingTidesContentPackage.upk">
@@ -369,16 +459,28 @@
     <Content Include="Src\RisingTides\Classes\UIDebugStateMachines.uc">
       <SubType>Content</SubType>
     </Content>
+    <Content Include="Src\RisingTides\Classes\X2AbilityTarget_Single_CCS.uc">
+      <SubType>Content</SubType>
+    </Content>
     <Content Include="Src\RisingTides\Classes\X2DownloadableContentInfo_RisingTides.uc">
       <SubType>Content</SubType>
     </Content>
+    <Content Include="Src\RisingTides\Classes\X2Effect_AuraSource.uc">
+      <SubType>Content</SubType>
+    </Content>
     <Content Include="Src\RisingTides\Classes\X2Effect_ImmediateMultiTargetAbilityActivation.uc">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Src\RisingTides\Classes\X2Effect_Kubikuri.uc">
       <SubType>Content</SubType>
     </Content>
     <Content Include="Src\RisingTides\Classes\X2MeleePathingPawn_RT.uc">
       <SubType>Content</SubType>
     </Content>
     <Content Include="Src\RisingTides\Classes\XComGameState_Effect_ImmediateMultiTarget.uc">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="StartDebugging.bat">
       <SubType>Content</SubType>
     </Content>
   </ItemGroup>

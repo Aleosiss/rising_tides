@@ -8,10 +8,6 @@ event bool BlocksAbilityActivation() {
 	return false;
 }
 
-function Init(const out VisualizationTrack InTrack) {
-	super.Init(InTrack);
-}
-
 simulated state Executing {
 	Begin:
 			Unit.SetForceVisibility(Visibility);

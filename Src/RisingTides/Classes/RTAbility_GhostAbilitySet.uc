@@ -134,7 +134,8 @@ static function X2AbilityTemplate GhostPsiSuite()
 	Template.AddTargetEffect(Effect);
 
 	AnimSetEffect = new class'X2Effect_AdditionalAnimSets';
-	AnimSetEffect.AddAnimSetWithPath("RisingTidesContentPackage.Anims.AS_Psi");
+	//AnimSetEffect.AddAnimSetWithPath("RisingTidesContentPackage.Anims.AS_Psi_X2");
+	AnimSetEffect.AddAnimSetWithPath("RisingTidesContentPackage.Anims.AS_Psi_WOTC");
 	Template.AddTargetEffect(AnimSetEffect);
 
 	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
@@ -145,7 +146,7 @@ static function X2AbilityTemplate GhostPsiSuite()
 	return Template;
 }
 //---------------------------------------------------------------------------------------
-//---StandardGhostShot--------------------------------------------------------------------------
+//---StandardGhostShot-------------------------------------------------------------------
 //---------------------------------------------------------------------------------------
 static function X2AbilityTemplate StandardGhostShot()
 {
@@ -261,10 +262,17 @@ static function X2AbilityTemplate StandardGhostShot()
 
 	KnockbackEffect = new class'X2Effect_Knockback';
 	KnockbackEffect.KnockbackDistance = 2;
-	KnockbackEffect.bUseTargetLocation = true;
 	Template.AddTargetEffect(KnockbackEffect);
 
 	Template.PostActivationEvents.AddItem('StandardGhostShotActivated');
+
+	class'X2StrategyElement_XpackDarkEvents'.static.AddStilettoRoundsEffect(Template);
+
+	Template.SuperConcealmentLoss = class'X2AbilityTemplateManager'.default.SuperConcealmentStandardShotLoss;
+	Template.ChosenActivationIncreasePerUse = class'X2AbilityTemplateManager'.default.StandardShotChosenActivationIncreasePerUse;
+	Template.LostSpawnIncreasePerUse = class'X2AbilityTemplateManager'.default.StandardShotLostSpawnIncreasePerUse;
+
+	Template.bFrameEvenWhenUnitIsHidden = true;
 
 	return Template;
 }
@@ -447,8 +455,6 @@ static function X2AbilityTemplate RTFeedback()
 	local X2AbilityTemplate					Template;
 	local X2AbilityTrigger_EventListener	Trigger;
 	local RTEffect_Panicked					PanicEffect;
-	local X2Condition_UnitProperty			Condition;
-	local X2Effect_PanickedWill				PanickedWillEffect;
 	local X2AbilityCost_ActionPoints		ActionPointCost;
 
 
@@ -474,31 +480,12 @@ static function X2AbilityTemplate RTFeedback()
 	Template.AbilityTriggers.AddItem(Trigger);
 
 	// Build the effect
-	PanicEffect = new class'RTEffect_Panicked';
-	PanicEffect.DuplicateResponse = eDupe_Ignore;
-	PanicEffect.AddPersistentStatChange(eStat_Offense, -10);
-	PanicEffect.EffectHierarchyValue = 550;
-	PanicEffect.VisualizationFn = class'X2StatusEffects'.static.PanickedVisualization;
-	PanicEffect.EffectTickedVisualizationFn = class'X2StatusEffects'.static.PanickedVisualizationTicked;
-	PanicEffect.EffectRemovedVisualizationFn = class'X2StatusEffects'.static.PanickedVisualizationRemoved;
-	PanicEffect.bRemoveWhenTargetDies = true;
-	PanicEffect.DelayVisualizationSec = 0.0f;
+	PanicEffect = RTEffect_Panicked(class'X2StatusEffects'.static.CreatePanickedStatusEffect());
 	PanicEffect.EffectName = default.RTFeedbackEffectName;
-	// One turn duration
 	PanicEffect.BuildPersistentEffect(default.FEEDBACK_DURATION, false, true, false, eGameRule_PlayerTurnBegin);
 	PanicEffect.SetDisplayInfo(ePerkBuff_Penalty, default.FEEDBACK_TITLE,
 		default.FEEDBACK_DESC, Template.IconImage);
 	Template.AddTargetEffect(PanicEffect);
-
-	PanickedWillEffect = new class'X2Effect_PanickedWill';
-	PanickedWillEffect.BuildPersistentEffect(default.FEEDBACK_DURATION, false, true, false, eGameRule_PlayerTurnBegin);
-	PanickedWillEffect.EffectName = default.RTFeedbackWillDebuffName;
-	Template.AddTargetEffect(PanickedWillEffect);
-
-	Condition = new class'X2Condition_UnitProperty';
-	Condition.ExcludeRobotic = true;
-	Condition.ExcludePanicked = true;
-	//Template.AbilityTargetConditions.AddItem(Condition);
 
 	// Add dead eye to guarantee
 	Template.AbilityToHitCalc = default.DeadEye;
@@ -664,6 +651,7 @@ static function X2AbilityTemplate LIOverwatchShot()
 	local X2AbilityTarget_Single            SingleTarget;
 	local array<name>                       SkipExclusions;
 	local X2Condition_Visibility            TargetVisibilityCondition;
+	local X2Effect_Knockback				KnockbackEffect;
 
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'LIOverwatchShot');
 
@@ -722,6 +710,18 @@ static function X2AbilityTemplate LIOverwatchShot()
 	// Damage Effect
 	//
 	Template.AddTargetEffect(default.WeaponUpgradeMissDamage);
+	
+	KnockbackEffect = new class'X2Effect_Knockback';
+	KnockbackEffect.KnockbackDistance = 2;
+	Template.AddTargetEffect(KnockbackEffect);
+
+	class'X2StrategyElement_XpackDarkEvents'.static.AddStilettoRoundsEffect(Template);
+
+	Template.SuperConcealmentLoss = class'X2AbilityTemplateManager'.default.SuperConcealmentStandardShotLoss;
+	Template.ChosenActivationIncreasePerUse = class'X2AbilityTemplateManager'.default.StandardShotChosenActivationIncreasePerUse;
+	Template.LostSpawnIncreasePerUse = class'X2AbilityTemplateManager'.default.StandardShotLostSpawnIncreasePerUse;
+
+	Template.bFrameEvenWhenUnitIsHidden = true;
 
 	return Template;
 }

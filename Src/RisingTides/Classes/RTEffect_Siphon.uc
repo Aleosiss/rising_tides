@@ -46,7 +46,7 @@ simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffe
 	}
 }
 
-simulated function AddX2ActionsForVisualizationSource(XComGameState VisualizeGameState, out VisualizationTrack BuildTrack, const name EffectApplyResult)
+simulated function AddX2ActionsForVisualizationSource(XComGameState VisualizeGameState, out VisualizationActionMetadata ActionMetadata, const name EffectApplyResult)
 {
 	local XComGameState_Unit OldUnit, NewUnit;
 	local X2Action_PlaySoundAndFlyOver SoundAndFlyOver;
@@ -56,14 +56,14 @@ simulated function AddX2ActionsForVisualizationSource(XComGameState VisualizeGam
 		return;
 
 	// Grab the current and previous gatekeeper unit and check if it has been healed
-	OldUnit = XComGameState_Unit(BuildTrack.StateObject_OldState);
-	NewUnit = XComGameState_Unit(BuildTrack.StateObject_NewState);
+	OldUnit = XComGameState_Unit(ActionMetadata.StateObject_OldState);
+	NewUnit = XComGameState_Unit(ActionMetadata.StateObject_NewState);
 
 	Healed = NewUnit.GetCurrentStat(eStat_HP) - OldUnit.GetCurrentStat(eStat_HP);
 
 	if( Healed > 0 )
 	{
-		SoundAndFlyOver = X2Action_PlaySoundAndFlyOver(class'X2Action_PlaySoundAndFlyOver'.static.AddToVisualizationTrack(BuildTrack, VisualizeGameState.GetContext()));
+		SoundAndFlyOver = X2Action_PlaySoundAndFlyOver(class'X2Action_PlaySoundAndFlyOver'.static.AddToVisualizationTree(ActionMetadata, VisualizeGameState.GetContext(), false, ActionMetadata.LastActionAdded));
 		SoundAndFlyOver.SetSoundAndFlyOverParameters(None, "Siphon: +" $ Healed, '', eColor_Good);
 	}
 }

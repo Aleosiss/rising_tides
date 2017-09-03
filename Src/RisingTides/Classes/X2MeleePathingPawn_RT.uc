@@ -13,6 +13,7 @@ class X2MeleePathingPawn_RT extends X2MeleePathingPawn;
 var protected XComGameState_Unit UnitState; // The unit we are currently using
 var protected XComGameState_Ability AbilityState; // The ability we are currently using
 var protected Actor TargetVisualizer; // Visualizer of the current target 
+var protected X2TargetingMethod_MeleePath TargetingMethod; // targeting method that spawned this pathing pawn, if any
 
 var protected array<TTile> PossibleTiles; // list of possible tiles to melee from
 
@@ -20,17 +21,17 @@ var protected array<TTile> PossibleTiles; // list of possible tiles to melee fro
 var protected InstancedStaticMeshComponent InstancedMeshComponent;
 
 
-function Init(XComGameState_Unit InUnitState, XComGameState_Ability InAbilityState)
+function Init(XComGameState_Unit InUnitState, XComGameState_Ability InAbilityState, X2TargetingMethod_MeleePath InTargetingMethod)
 {
 	super.SetActive(XGUnitNativeBase(InUnitState.GetVisualizer()));
 
 	UnitState = InUnitState;
 	AbilityState = InAbilityState;
+	TargetingMethod = InTargetingMethod;
 
 	InstancedMeshComponent.SetStaticMesh(StaticMesh(DynamicLoadObject("UI_3D.Tile.AOETile", class'StaticMesh')));
 	InstancedMeshComponent.SetAbsolute(true, true);
 }
-
 simulated function SetActive(XGUnitNativeBase kActiveXGUnit, optional bool bCanDash, optional bool bObeyMaxCost)
 {
 	`assert(false); // call Init() instead

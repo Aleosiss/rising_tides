@@ -9,13 +9,13 @@ event bool BlocksAbilityActivation()
 	return false;
 }
 
-function Init(const out VisualizationTrack InTrack)
+function Init()
 {
 	local XComWeapon							SecondaryWeapon;
 	local MaterialInstanceTimeVarying			MITV;
 	local SkeletalMeshComponent					SkelMesh;
 
-	super.Init(InTrack);
+	super.Init();
 
 	MITV = MaterialInstanceTimeVarying(DynamicLoadObject(MITVPath, class'MaterialInstanceTimeVarying'));
 

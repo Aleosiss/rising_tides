@@ -29,7 +29,7 @@ function GetToHitModifiers(XComGameState_Effect EffectState, XComGameState_Unit 
 	}
 }
 
-simulated function bool OnEffectTicked(const out EffectAppliedData ApplyEffectParameters, XComGameState_Effect kNewEffectState, XComGameState NewGameState, bool FirstApplication)
+simulated function bool OnEffectTicked(const out EffectAppliedData ApplyEffectParameters, XComGameState_Effect kNewEffectState, XComGameState NewGameState, bool FirstApplication, XComGameState_Player Player)
 {
 	local XComGameState_Unit			EffectTargetUnit;
 	local UnitValue						Count;
@@ -58,7 +58,7 @@ simulated function bool OnEffectTicked(const out EffectAppliedData ApplyEffectPa
 			EffectTargetUnit.SetUnitFloatValue('SISCounter', 0, eCleanup_BeginTactical);
 		}
 	}
-	return super.OnEffectTicked(ApplyEffectParameters, kNewEffectState, NewGameState, FirstApplication);
+	return super.OnEffectTicked(ApplyEffectParameters, kNewEffectState, NewGameState, FirstApplication, Player);
 }
 
 DefaultProperties

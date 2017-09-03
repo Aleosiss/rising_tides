@@ -28,7 +28,7 @@ public static function int getBloodlustStackCount(XComGameState_Unit WaltzUnit) 
 }
 
 // Reprobate Waltz
-function EventListenerReturn ReprobateWaltzListener( Object EventData, Object EventSource, XComGameState GameState, Name EventID) {
+function EventListenerReturn ReprobateWaltzListener( Object EventData, Object EventSource, XComGameState GameState, Name EventID, Object CallbackData) {
 	local XComGameStateContext_Ability AbilityContext;
 	local XComGameState_Unit WaltzUnit;
 	local int iStackCount;
@@ -169,7 +169,7 @@ simulated function int SortAvailableTargets(AvailableTarget TargetA, AvailableTa
 // this should be triggered off of a UnitUsedPsionicAbilityEvent:
 // EventData = XComGameState_Ability
 // EventSource = XComGameState_Unit
-function EventListenerReturn UnwillingConduitEvent(Object EventData, Object EventSource, XComGameState GameState, Name EventID) {
+function EventListenerReturn UnwillingConduitEvent(Object EventData, Object EventSource, XComGameState GameState, Name EventID, Object CallbackData) {
 	local XComGameStateHistory					History;
 	local XComGameState_Ability					PreviousAbilityState, NewAbilityState;
 	local XComGameState							NewGameState;
@@ -236,10 +236,10 @@ function EventListenerReturn UnwillingConduitEvent(Object EventData, Object Even
 	return ELR_NoInterrupt;
 }
 
-function ConduitVisualizationFn(XComGameState VisualizeGameState, out array<VisualizationTrack> OutVisualizationTracks) {
+function ConduitVisualizationFn(XComGameState VisualizeGameState) {
 	local XComGameState_Unit UnitState;
 	local X2Action_PlaySoundAndFlyOver SoundAndFlyOver;
-	local VisualizationTrack BuildTrack;
+	local VisualizationActionMetadata ActionMetadata;
 	local XComGameStateHistory History;
 	local X2AbilityTemplate AbilityTemplate;
 	local XComGameState_Ability AbilityState;
@@ -257,24 +257,22 @@ function ConduitVisualizationFn(XComGameState VisualizeGameState, out array<Visu
 			return;
 		}
 
-		History.GetCurrentAndPreviousGameStatesForObjectID(UnitState.ObjectID, BuildTrack.StateObject_OldState, BuildTrack.StateObject_NewState, , VisualizeGameState.HistoryIndex);
-		BuildTrack.StateObject_NewState = UnitState;
-		BuildTrack.TrackActor = UnitState.GetVisualizer();
+		History.GetCurrentAndPreviousGameStatesForObjectID(UnitState.ObjectID, ActionMetadata.StateObject_OldState, ActionMetadata.StateObject_NewState, , VisualizeGameState.HistoryIndex);
+		ActionMetadata.StateObject_NewState = UnitState;
+		ActionMetadata.VisualizeActor = UnitState.GetVisualizer();
 
 		AbilityTemplate = AbilityState.GetMyTemplate();
 		if (AbilityTemplate != none)
 		{
-			SoundAndFlyOver = X2Action_PlaySoundAndFlyOver(class'X2Action_PlaySoundAndFlyOver'.static.AddToVisualizationTrack(BuildTrack, VisualizeGameState.GetContext()));
+			SoundAndFlyOver = X2Action_PlaySoundAndFlyOver(class'X2Action_PlaySoundAndFlyOver'.static.AddToVisualizationTree(ActionMetadata, VisualizeGameState.GetContext(), false, ActionMetadata.LastActionAdded));
 			SoundAndFlyOver.SetSoundAndFlyOverParameters(None, "Unwilling Conduits", '', eColor_Good, "img:///UILibrary_PerkIcons.UIPerk_reload");
-
-			OutVisualizationTracks.AddItem(BuildTrack);
 		}
 		break;
 	}
 }
 
 // Echoed Agony Listener
-function EventListenerReturn EchoedAgonyListener(Object EventData, Object EventSource, XComGameState GameState, Name EventID) {
+function EventListenerReturn EchoedAgonyListener(Object EventData, Object EventSource, XComGameState GameState, Name EventID, Object CallbackData) {
 	local XComGameState_Ability AbilityState;
 	local XComGameState_Unit SourceUnitState;
 	local XComGameState NewGameState;
@@ -341,7 +339,7 @@ function EventListenerReturn EchoedAgonyListener(Object EventData, Object EventS
 	return ELR_NoInterrupt;
 }
 
-function EventListenerReturn TriangulationListener(Object EventData, Object EventSource, XComGameState GameState, Name EventID) {
+function EventListenerReturn TriangulationListener(Object EventData, Object EventSource, XComGameState GameState, Name EventID, Object CallbackData) {
 	local XComGameState_Unit SourceUnitState, IteratorUnitState, OwnerUnitState;
 	local XComGameStateHistory History;
 
@@ -385,7 +383,7 @@ function EventListenerReturn TriangulationListener(Object EventData, Object Even
 	return ELR_NoInterrupt;
 }
 
-function EventListenerReturn RTAbilityTriggerEventListener_ValidAbilityLocations(Object EventData, Object EventSource, XComGameState GameState, Name EventID) {
+function EventListenerReturn RTAbilityTriggerEventListener_ValidAbilityLocations(Object EventData, Object EventSource, XComGameState GameState, Name EventID, Object CallbackData) {
 	local XComWorldData World;
 	local XComGameStateHistory History;
 	local AvailableAction CurrentAvailableAction;

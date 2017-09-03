@@ -57,7 +57,7 @@ simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffe
 
 }
 
-simulated function bool OnEffectTicked(const out EffectAppliedData ApplyEffectParameters, XComGameState_Effect kNewEffectState, XComGameState NewGameState, bool FirstApplication)
+simulated function bool OnEffectTicked(const out EffectAppliedData ApplyEffectParameters, XComGameState_Effect kNewEffectState, XComGameState NewGameState, bool FirstApplication, XComGameState_Player Player) 
 {
 	local XComGameState_Unit TargetUnitState;
 	local XComGameStateHistory History;
@@ -114,13 +114,13 @@ simulated function bool OnEffectTicked(const out EffectAppliedData ApplyEffectPa
 	return true;
 }
 
-simulated function AddX2ActionsForVisualization_Tick(XComGameState VisualizeGameState, out VisualizationTrack BuildTrack, const int TickIndex, XComGameState_Effect EffectState)
+simulated function AddX2ActionsForVisualization_Tick(XComGameState VisualizeGameState, out VisualizationActionMetadata ActionMetadata, const int TickIndex, XComGameState_Effect EffectState)
 {
 	local RTAction_ForceVisibility VisAction;
 
-	if (XComGameState_Unit(BuildTrack.StateObject_NewState) != none)
+	if (XComGameState_Unit(ActionMetadata.StateObject_NewState) != none)
 	{
-		VisAction = RTAction_ForceVisibility( class'RTAction_ForceVisibility'.static.AddToVisualizationTrack( BuildTrack, VisualizeGameState.GetContext( ) ) );
+		VisAction = RTAction_ForceVisibility( class'RTAction_ForceVisibility'.static.AddToVisualizationTree(ActionMetadata, VisualizeGameState.GetContext(), false, ActionMetadata.LastActionAdded));
 		VisAction.Visibility = eForceVisible;
 	}
 }
@@ -152,15 +152,15 @@ simulated function OnEffectRemoved(const out EffectAppliedData ApplyEffectParame
 }
 
 
-simulated function AddX2ActionsForVisualization(XComGameState VisualizeGameState, out VisualizationTrack BuildTrack, name EffectApplyResult)
+simulated function AddX2ActionsForVisualization(XComGameState VisualizeGameState, out VisualizationActionMetadata ActionMetadata, name EffectApplyResult)
 {
 	local XComGameState_Effect EffectState, VisualizeEffect;
 	local XComGameState_SquadViewer SquadViewer;
 	local RTAction_ForceVisibility VisAction;
 
-	if (EffectApplyResult == 'AA_Success' && XComGameState_Unit(BuildTrack.StateObject_NewState) != none)
+	if (EffectApplyResult == 'AA_Success' && XComGameState_Unit(ActionMetadata.StateObject_NewState) != none)
 	{
-		VisAction = RTAction_ForceVisibility( class'RTAction_ForceVisibility'.static.AddToVisualizationTrack( BuildTrack, VisualizeGameState.GetContext( ) ) );
+		VisAction = RTAction_ForceVisibility( class'RTAction_ForceVisibility'.static.AddToVisualizationTree(ActionMetadata, VisualizeGameState.GetContext(), false, ActionMetadata.LastActionAdded));
 		VisAction.Visibility = eForceVisible;
 	}
 
@@ -190,17 +190,17 @@ simulated function AddX2ActionsForVisualization(XComGameState VisualizeGameState
 
 }
 
-simulated function AddX2ActionsForVisualization_Sync( XComGameState VisualizeGameState, out VisualizationTrack BuildTrack )
+simulated function AddX2ActionsForVisualization_Sync( XComGameState VisualizeGameState, out VisualizationActionMetadata ActionMetadata )
 {
 	local RTAction_ForceVisibility VisAction;
 
-	VisAction = RTAction_ForceVisibility( class'RTAction_ForceVisibility'.static.AddToVisualizationTrack( BuildTrack, VisualizeGameState.GetContext( ) ) );
+	VisAction = RTAction_ForceVisibility( class'RTAction_ForceVisibility'.static.AddToVisualizationTree(ActionMetadata, VisualizeGameState.GetContext(), false, ActionMetadata.LastActionAdded));
 	VisAction.Visibility = eForceVisible;
 
 
 }
 
-simulated function AddX2ActionsForVisualization_Removed(XComGameState VisualizeGameState, out VisualizationTrack BuildTrack, const name EffectApplyResult, XComGameState_Effect RemovedEffect)
+simulated function AddX2ActionsForVisualization_Removed(XComGameState VisualizeGameState, out VisualizationActionMetadata ActionMetadata, const name EffectApplyResult, XComGameState_Effect RemovedEffect)
 {
 	local XComGameState_SquadViewer SquadViewer;
 	local X2Action_AbilityPerkDurationEnd PerkEnded;
@@ -213,12 +213,12 @@ simulated function AddX2ActionsForVisualization_Removed(XComGameState VisualizeG
 		SquadViewer.DestroyVisualizer();        //  @TODO - use an action instead
 	}
 
-	PerkEnded = X2Action_AbilityPerkDurationEnd( class'X2Action_AbilityPerkDurationEnd'.static.AddToVisualizationTrack( BuildTrack, VisualizeGameState.GetContext() ) );
+	PerkEnded = X2Action_AbilityPerkDurationEnd( class'X2Action_AbilityPerkDurationEnd'.static.AddToVisualizationTree(ActionMetadata, VisualizeGameState.GetContext(), false, ActionMetadata.LastActionAdded));
 	PerkEnded.EndingEffectState = RemovedEffect;
 
-	if (XComGameState_Unit(BuildTrack.StateObject_NewState) != none)
+	if (XComGameState_Unit(ActionMetadata.StateObject_NewState) != none)
 	{
-		class'RTAction_ForceVisibility'.static.AddToVisualizationTrack( BuildTrack, VisualizeGameState.GetContext( ) );
+		class'RTAction_ForceVisibility'.static.AddToVisualizationTree(ActionMetadata, VisualizeGameState.GetContext(), false, ActionMetadata.LastActionAdded);
 	}
 }
 

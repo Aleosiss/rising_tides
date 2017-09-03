@@ -45,38 +45,6 @@ function int GetAttackingDamageModifier(XComGameState_Effect EffectState, XComGa
 
 	return int(ExtraDamage);
 }
-/*
-function GetToHitModifiers(XComGameState_Effect EffectState, XComGameState_Unit Attacker, XComGameState_Unit Target, XComGameState_Ability AbilityState, class<X2AbilityToHitCalc> ToHitType, bool bMelee, bool bFlanking, bool bIndirectFire, out array<ShotModifierInfo> ShotModifiers)
-{
-	local ShotModifierInfo ModInfo;
-	local XComGameState_Item SourceWeapon, PrimaryWeapon;
-	local float Value;
-
-
-	Value = 1000;
-
-	SourceWeapon = AbilityState.GetSourceWeapon();
-	if (SourceWeapon != none)
-	{
-		if(SourceWeapon.Ammo == 1) {
-			ModInfo.ModType = eHit_Crit;
-			ModInfo.Reason = "Death In" @SourceWeapon.GetClipSize()@"Acts";
-			ModInfo.Value = Value;
-			ShotModifiers.AddItem(ModInfo);
-		}
-	} else {
-		PrimaryWeapon = Attacker.GetPrimaryWeapon();
-		if(PrimaryWeapon != none) {
-			if(PrimaryWeapon.Ammo == 1) {
-				ModInfo.ModType = eHit_Crit;
-				ModInfo.Reason = "Death In" @PrimaryWeapon.GetClipSize()@"Acts";
-				ModInfo.Value = Value;
-				ShotModifiers.AddItem(ModInfo);
-			}
-		}
-	}
-}
-*/
 
 function bool ChangeHitResultForAttacker(XComGameState_Unit Attacker, XComGameState_Unit TargetUnit, XComGameState_Ability AbilityState, const EAbilityHitResult CurrentResult, out EAbilityHitResult NewHitResult) {
 	local XComGameState_Item SourceWeapon, PrimaryWeapon;

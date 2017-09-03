@@ -153,7 +153,7 @@ simulated function RemakeSelf(RTGameState_MeldEffect OtherMeldEffect)
 }
 
 // Tactical Game Cleanup
-function EventListenerReturn OnTacticalGameEnd(Object EventData, Object EventSource, XComGameState GameState, Name EventID)
+function EventListenerReturn OnTacticalGameEnd(Object EventData, Object EventSource, XComGameState GameState, Name EventID, Object CallbackData)
 {
 	local X2EventManager EventManager;
 	local Object ListenerObj;
@@ -181,7 +181,7 @@ function EventListenerReturn OnTacticalGameEnd(Object EventData, Object EventSou
 }
 
 // Add Unit To Meld
-simulated function EventListenerReturn AddUnitToMeld(Object EventData, Object EventSource, XComGameState GameState, Name EventID)
+simulated function EventListenerReturn AddUnitToMeld(Object EventData, Object EventSource, XComGameState GameState, Name EventID, Object CallbackData)
 {
 	local RTGameState_MeldEffect			CurrentMeldEffect, UpdatedMeldEffect;
 	local RTEffect_Meld						MeldEffect;
@@ -265,7 +265,7 @@ simulated function EventListenerReturn AddUnitToMeld(Object EventData, Object Ev
 }
 
 // Remove Unit From Meld
-simulated function EventListenerReturn RemoveUnitFromMeld(Object EventData, Object EventSource, XComGameState GameState, Name EventID)
+simulated function EventListenerReturn RemoveUnitFromMeld(Object EventData, Object EventSource, XComGameState GameState, Name EventID, Object CallbackData)
 {
 	local RTGameState_MeldEffect			CurrentMeldEffect, UpdatedMeldEffect;
 	local XComGameState_Unit				LeavingMeldUnit, MeldIndexUnit, GameStateHostUnit, newGameStateHostUnit;
@@ -398,11 +398,11 @@ simulated function EventListenerReturn RemoveUnitFromMeld(Object EventData, Obje
 }
 
 // Join Visualization
-function TriggerJoinMeldFlyoverVisualizationFn(XComGameState VisualizeGameState, out array<VisualizationTrack> OutVisualizationTracks)
+function TriggerJoinMeldFlyoverVisualizationFn(XComGameState VisualizeGameState)
 {
 	local XComGameState_Unit UnitState;
 	local X2Action_PlaySoundAndFlyOver SoundAndFlyOver;
-	local VisualizationTrack BuildTrack;
+	local VisualizationActionMetadata ActionMetadata;
 	local XComGameStateHistory History;
 	
 	History = `XCOMHISTORY;
@@ -410,21 +410,21 @@ function TriggerJoinMeldFlyoverVisualizationFn(XComGameState VisualizeGameState,
 	UnitState = XComGameState_Unit(History.GetGameStateForObjectID(GameStateHost.ObjectID));
 
 
-	History.GetCurrentAndPreviousGameStatesForObjectID(UnitState.ObjectID, BuildTrack.StateObject_OldState, BuildTrack.StateObject_NewState, , VisualizeGameState.HistoryIndex);
-	BuildTrack.StateObject_NewState = UnitState;
-	BuildTrack.TrackActor = UnitState.GetVisualizer();
+	History.GetCurrentAndPreviousGameStatesForObjectID(UnitState.ObjectID, ActionMetadata.StateObject_OldState, ActionMetadata.StateObject_NewState, , VisualizeGameState.HistoryIndex);
+	ActionMetadata.StateObject_NewState = UnitState;
+	ActionMetadata.VisualizeActor = UnitState.GetVisualizer();
 
-	SoundAndFlyOver = X2Action_PlaySoundAndFlyOver(class'X2Action_PlaySoundAndFlyOver'.static.AddToVisualizationTrack(BuildTrack, VisualizeGameState.GetContext()));
+	SoundAndFlyOver = X2Action_PlaySoundAndFlyOver(class'X2Action_PlaySoundAndFlyOver'.static.AddToVisualizationTree(ActionMetadata, VisualizeGameState.GetContext(), false, ActionMetadata.LastActionAdded));
 	SoundAndFlyOver.SetSoundAndFlyOverParameters(None, default.MeldJoinedText, '', eColor_Attention, "img:///UILibrary_PerkIcons.UIPerk_reload");
-	OutVisualizationTracks.AddItem(BuildTrack);
+
 }
 
 // Leave Visualization
-function TriggerLeaveMeldFlyoverVisualizationFn(XComGameState VisualizeGameState, out array<VisualizationTrack> OutVisualizationTracks)
+function TriggerLeaveMeldFlyoverVisualizationFn(XComGameState VisualizeGameState)
 {
 	local XComGameState_Unit UnitState;
 	local X2Action_PlaySoundAndFlyOver SoundAndFlyOver;
-	local VisualizationTrack BuildTrack;
+	local VisualizationActionMetadata ActionMetadata;
 	local XComGameStateHistory History;
 	
 	History = `XCOMHISTORY;
@@ -432,14 +432,12 @@ function TriggerLeaveMeldFlyoverVisualizationFn(XComGameState VisualizeGameState
 	UnitState = XComGameState_Unit(History.GetGameStateForObjectID(GameStateHost.ObjectID));
 
 
-	History.GetCurrentAndPreviousGameStatesForObjectID(UnitState.ObjectID, BuildTrack.StateObject_OldState, BuildTrack.StateObject_NewState, , VisualizeGameState.HistoryIndex);
-	BuildTrack.StateObject_NewState = UnitState;
-	BuildTrack.TrackActor = UnitState.GetVisualizer();
+	History.GetCurrentAndPreviousGameStatesForObjectID(UnitState.ObjectID, ActionMetadata.StateObject_OldState, ActionMetadata.StateObject_NewState, , VisualizeGameState.HistoryIndex);
+	ActionMetadata.StateObject_NewState = UnitState;
+	ActionMetadata.VisualizeActor = UnitState.GetVisualizer();
 
-	SoundAndFlyOver = X2Action_PlaySoundAndFlyOver(class'X2Action_PlaySoundAndFlyOver'.static.AddToVisualizationTrack(BuildTrack, VisualizeGameState.GetContext()));
+	SoundAndFlyOver = X2Action_PlaySoundAndFlyOver(class'X2Action_PlaySoundAndFlyOver'.static.AddToVisualizationTree(ActionMetadata, VisualizeGameState.GetContext(), false, ActionMetadata.LastActionAdded));
 	SoundAndFlyOver.SetSoundAndFlyOverParameters(None, default.MeldLeftText, '', eColor_Attention, "img:///UILibrary_PerkIcons.UIPerk_reload");
-	OutVisualizationTracks.AddItem(BuildTrack);
-
 
 }
 

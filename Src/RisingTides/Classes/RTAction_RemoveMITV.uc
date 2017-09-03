@@ -1,4 +1,3 @@
-// All credit goes to Musashi for this class.
 class RTAction_RemoveMITV extends X2Action;
 
 event bool BlocksAbilityActivation()
@@ -6,9 +5,9 @@ event bool BlocksAbilityActivation()
 	return false;
 }
 
-function Init(const out VisualizationTrack InTrack)
+function Init()
 {
-	super.Init(InTrack);
+	super.Init();
 
 	CleanUpMITV();
 }
@@ -30,7 +29,15 @@ simulated function CleanUpMITV()
 		{
 			if (MeshComp.GetMaterial(i).IsA('MaterialInstanceTimeVarying'))
 			{
-				MeshComp.SetMaterial(i, none);
+				MeshComp.PopMaterial(i, eMatPriority_AnimNotify);
+			}
+		}
+
+		for (i = 0; i < MeshComp.AuxMaterials.Length; i++)
+		{
+			if (MeshComp.GetMaterial(i).IsA('MaterialInstanceTimeVarying'))
+			{
+				MeshComp.PopMaterial(i, eMatPriority_AnimNotify);
 			}
 		}
 	}

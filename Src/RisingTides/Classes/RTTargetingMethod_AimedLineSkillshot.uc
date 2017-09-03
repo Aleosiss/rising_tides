@@ -9,58 +9,36 @@
 //---------------------------------------------------------------------------------------
 
 class RTTargetingMethod_AimedLineSkillshot extends X2TargetingMethod;
+
 var protected vector NewTargetLocation, FiringLocation;
 var protected TTile FiringTile;
 var protected XComWorldData WorldData;
-var private X2Camera_Midpoint MidpointCamera; // if the user has glam cams turned off in the options menu, then use a midpoint camera instead of the normal OTS cam to target the units
 var private int LastTarget;
 var protected bool bGoodTarget;
 var protected X2Actor_LineTarget LineActor;
 
-function Init(AvailableAction InAction)
+function Init(AvailableAction InAction, int NewTargetIndex)
 {
-	local X2Camera_OTSTargeting TargetingCamera;
-	local X2Camera_MidpointTimed LookAtMidpointCamera;
 	local X2AbilityTemplate AbilityTemplate;
 	local float TileLength;
 
-	super.Init(InAction);
+
+	super.Init(InAction, NewTargetIndex);
 
 	// Make sure we have targets of some kind.
 	`assert(Action.AvailableTargets.Length > 0);
 
-	AbilityTemplate = Ability.GetMyTemplate( );
+	// select the target before setting up the midpoint cam so we know where we are midpointing to
+	DirectSetTarget(NewTargetIndex);
+
+        AbilityTemplate = Ability.GetMyTemplate( );
 	WorldData = `XWORLD;
 	FiringTile = UnitState.TileLocation;
 	FiringLocation = WorldData.GetPositionFromTileCoordinates(UnitState.TileLocation);
 	FiringLocation.Z += class'XComWorldData'.const.WORLD_HalfFloorHeight;
 
-	if(`Battle.ProfileSettingsGlamCam()) // no ots cameras if the user has glam cams off. We should stay in 3/4 view
-	{
-		// setup the camera. This will be a compound camera, where we get the unit onscreen,
-		// then accent in to him, then cut to the ots cam
-		TargetingCamera = new class'X2Camera_OTSTargeting';
-		TargetingCamera.FiringUnit = FiringUnit;
-		TargetingCamera.CandidateMatineeCommentPrefix = UnitState.GetMyTemplate().strTargetingMatineePrefix;
-		TargetingCamera.ShouldBlend = class'X2Camera_LookAt'.default.UseSwoopyCam;
-		TargetingCamera.ShouldHideUI = false;
-		FiringUnit.TargetingCamera = TargetingCamera;
-		`CAMERASTACK.AddCamera(TargetingCamera);
-	}
-
 	// select the target before setting up the midpoint cam so we know where we are midpointing to
 	DirectSetTarget(0);
-
-	// if we aren't using swoopy cams, then midpoint to the thing we are targeting before transitioning to the ots camera,
-	// so that the user can see what they are about to target in the world
-	if(!class'X2Camera_LookAt'.default.UseSwoopyCam)
-	{
-		LookAtMidpointCamera = new class'X2Camera_MidpointTimed';
-		LookAtMidpointCamera.AddFocusActor(FiringUnit);
-		LookAtMidpointCamera.LookAtDuration = 0.0f;
-		LookAtMidpointCamera.AddFocusPoint(TargetingCamera.GetTargetLocation());
-		TargetingCamera.PushCamera(LookAtMidpointCamera);
-	}
 
 	// set up the GUI line
 	if (!AbilityTemplate.SkipRenderOfTargetingTemplate)
@@ -72,11 +50,94 @@ function Init(AvailableAction InAction)
 		LineActor.InitLineMesh( TileLength  );
 		LineActor.SetLocation( FiringLocation );
 	}
+
+
+	UpdatePostProcessEffects(true);
 }
 
-private function RemoveCamera()
+private function AddTargetingCamera(Actor NewTargetActor, bool ShouldUseMidpointCamera)
 {
-	if(FiringUnit.TargetingCamera != none)
+	local X2Camera_Midpoint MidpointCamera;
+	local X2Camera_OTSTargeting OTSCamera;
+	local X2Camera_MidpointTimed LookAtMidpointCamera;
+	local bool bCurrentTargetingCameraIsMidpoint;
+	local bool bShouldAddNewTargetingCameraToStack;
+
+	if( FiringUnit.TargetingCamera != None )
+	{
+		bCurrentTargetingCameraIsMidpoint = (X2Camera_Midpoint(FiringUnit.TargetingCamera) != None);
+
+		if( bCurrentTargetingCameraIsMidpoint != ShouldUseMidpointCamera )
+		{
+			RemoveTargetingCamera();
+		}
+	}
+
+	if( ShouldUseMidpointCamera )
+	{
+		if( FiringUnit.TargetingCamera == None )
+		{
+			FiringUnit.TargetingCamera = new class'X2Camera_Midpoint';
+			bShouldAddNewTargetingCameraToStack = true;
+		}
+
+		MidpointCamera = X2Camera_Midpoint(FiringUnit.TargetingCamera);
+		MidpointCamera.TargetActor = NewTargetActor;
+		MidpointCamera.ClearFocusActors();
+		MidpointCamera.AddFocusActor(FiringUnit);
+		MidpointCamera.AddFocusActor(NewTargetActor);
+
+		// the following only needed if bQuickTargetSelectEnabled were desired
+		//if( TacticalHud.m_kAbilityHUD.LastTargetActor != None )
+		//{
+		//	MidpointCamera.AddFocusActor(TacticalHud.m_kAbilityHUD.LastTargetActor);
+		//}
+
+		if( bShouldAddNewTargetingCameraToStack )
+		{
+		`CAMERASTACK.AddCamera(FiringUnit.TargetingCamera);
+	}
+
+		MidpointCamera.RecomputeLookatPointAndZoom(false);
+	}
+	else
+	{
+		if( FiringUnit.TargetingCamera == None )
+		{
+			FiringUnit.TargetingCamera = new class'X2Camera_OTSTargeting';
+			bShouldAddNewTargetingCameraToStack = true;
+}
+
+		OTSCamera = X2Camera_OTSTargeting(FiringUnit.TargetingCamera);
+		OTSCamera.FiringUnit = FiringUnit;
+		OTSCamera.CandidateMatineeCommentPrefix = UnitState.GetMyTemplate().strTargetingMatineePrefix;
+		OTSCamera.ShouldBlend = class'X2Camera_LookAt'.default.UseSwoopyCam;
+		OTSCamera.ShouldHideUI = false;
+
+		if( bShouldAddNewTargetingCameraToStack )
+{
+			`CAMERASTACK.AddCamera(FiringUnit.TargetingCamera);
+		}
+
+		// add swoopy midpoint
+		if( !OTSCamera.ShouldBlend )
+	{
+		LookAtMidpointCamera = new class'X2Camera_MidpointTimed';
+		LookAtMidpointCamera.AddFocusActor(FiringUnit);
+		LookAtMidpointCamera.LookAtDuration = 0.0f;
+			LookAtMidpointCamera.AddFocusPoint(OTSCamera.GetTargetLocation());
+			OTSCamera.PushCamera(LookAtMidpointCamera);
+		}
+
+		// have the camera look at the new target
+		OTSCamera.SetTarget(NewTargetActor);
+	}
+}
+
+
+private function RemoveTargetingCamera()
+{
+	if( FiringUnit.TargetingCamera != none )
 	{
 		`CAMERASTACK.RemoveCamera(FiringUnit.TargetingCamera);
 		FiringUnit.TargetingCamera = none;
@@ -85,36 +146,34 @@ private function RemoveCamera()
 
 function Canceled()
 {
-	RemoveCamera();
+	super.Canceled();
+
+	ClearTargetedActors();
+	RemoveTargetingCamera();
 
 	FiringUnit.IdleStateMachine.bTargeting = false;
 	NotifyTargetTargeted(false);
 
-	if(MidpointCamera != none)
-	{
-		`CAMERASTACK.RemoveCamera(MidpointCamera);
-		MidpointCamera = none;
-	}
-	AOEMeshActor.Destroy();
+        AOEMeshActor.Destroy();
 	ClearTargetedActors();
 	LineActor.Destroy();
+
+
+	UpdatePostProcessEffects(false);
 }
 
 function Committed()
 {
-	if(!Ability.GetMyTemplate().bUsesFiringCamera)
-	{
-		RemoveCamera();
-	}
-
-	if(MidpointCamera != none)
-	{
-		`CAMERASTACK.RemoveCamera(MidpointCamera);
-		MidpointCamera = none;
-	}
 	AOEMeshActor.Destroy();
 	ClearTargetedActors();
 	LineActor.Destroy();
+
+	if(!Ability.GetMyTemplate().bUsesFiringCamera)
+	{
+		RemoveTargetingCamera();
+	}
+
+	UpdatePostProcessEffects(false);
 }
 
 function Update(float DeltaTime);
@@ -138,65 +197,38 @@ function DirectSetTarget(int TargetIndex)
 {
 	local XComPresentationLayer Pres;
 	local UITacticalHUD TacticalHud;
-	local XComGameStateHistory History;
 	local Actor NewTargetActor;
-	local array<Actor> CurrentlyMarkedTargets;
-	local TTile TargetTile;
+	local bool ShouldUseMidpointCamera;
 	local array<TTile> Tiles;
+	local XComDestructibleActor Destructible;
+	local Vector TilePosition;
+	local TTile CurrentTile, TargetTile;
+	local XComWorldData World;
+	local array<Actor> CurrentlyMarkedTargets;
 	local vector ShooterToTarget;
 	local Rotator LineRotator;
-	local int NewTarget;
 
 	Pres = `PRES;
-	History = `XCOMHISTORY;
-
+	World = `XWORLD;
+	
 	NotifyTargetTargeted(false);
 
-	// advance the target counter
-	NewTarget = TargetIndex % Action.AvailableTargets.Length;
-	if(NewTarget < 0) NewTarget = Action.AvailableTargets.Length + NewTarget;
+	// make sure our target is in bounds (wrap around out of bounds values)
+	LastTarget = TargetIndex;
+	LastTarget = LastTarget % Action.AvailableTargets.Length;
+	if (LastTarget < 0) LastTarget = Action.AvailableTargets.Length + LastTarget;
+
+	ShouldUseMidpointCamera = ShouldUseMidpointCameraForTarget(Action.AvailableTargets[LastTarget].PrimaryTarget.ObjectID) || !`Battle.ProfileSettingsGlamCam();
+
+	NewTargetActor = GetTargetedActor();
+
+	AddTargetingCamera(NewTargetActor, ShouldUseMidpointCamera);
+	
 	// put the targeting reticle on the new target
 	TacticalHud = Pres.GetTacticalHUD();
-	if(NewTarget != LastTarget)
-	{
-		LastTarget = NewTarget;
-		TacticalHud.TargetEnemy(NewTarget);
-	}
-
-	NewTargetActor = History.GetVisualizer(Action.AvailableTargets[LastTarget].PrimaryTarget.ObjectID);
-
-	NewTargetLocation = WorldData.GetPositionFromTileCoordinates(XComGameState_Unit(History.GetGameStateForObjectID(Action.AvailableTargets[LastTarget].PrimaryTarget.ObjectID)).TileLocation);
-	TargetTile = WorldData.GetTileCoordinatesFromPosition(NewTargetLocation);
-	//NewTargetLocation = WorldData.GetPositionFromTileCoordinates(TargetTile);
-	NewTargetLocation.Z = WorldData.GetFloorZForPosition(NewTargetLocation, true) + class'XComWorldData'.const.WORLD_HalfFloorHeight;
-
-	if (TargetTile == FiringTile)
-	{
-		bGoodTarget = false;
-		return;
-	}
-	bGoodTarget = true;
-
-	GetTargetedActors(NewTargetLocation, CurrentlyMarkedTargets, Tiles);
-	CheckForFriendlyUnit(CurrentlyMarkedTargets);
-	MarkTargetedActors(CurrentlyMarkedTargets, (!AbilityIsOffensive) ? FiringUnit.GetTeam() : eTeam_None );
-
-	DrawAOETiles(Tiles);
-
-	if (LineActor != none)
-	{
-		ShooterToTarget = NewTargetLocation - FiringLocation;
-		LineRotator = rotator( ShooterToTarget );
-		LineActor.SetRotation( LineRotator );
-	}
+	TacticalHud.TargetEnemy(GetTargetedObjectID());
 
 
-
-
-	// have the camera look at the new target
-	if(FiringUnit.TargetingCamera != none) {
-		FiringUnit.TargetingCamera.SetTarget(NewTargetActor);
-	}
 	FiringUnit.IdleStateMachine.bTargeting = true;
 	FiringUnit.IdleStateMachine.CheckForStanceUpdate();
 
@@ -204,22 +236,82 @@ function DirectSetTarget(int TargetIndex)
 
 	NotifyTargetTargeted(true);
 
-	// if the user has glam cams turned off, we won't have an OTS targeting cam. So midpoint instead.
-	if(MidpointCamera != none)
+	Destructible = XComDestructibleActor(NewTargetActor);
+	if( Destructible != None )
 	{
-		`CAMERASTACK.RemoveCamera(MidpointCamera);
-		MidpointCamera = none;
+		Destructible.GetRadialDamageTiles(Tiles);
+	}
+	else
+	{
+		GetEffectAOETiles(Tiles);
 	}
 
-	if(!`Battle.ProfileSettingsGlamCam())
+	//	reset these values when changing targets
+	bFriendlyFireAgainstObjects = false;
+	bFriendlyFireAgainstUnits = false;
+
+    NewTargetLocation = WorldData.GetPositionFromTileCoordinates(XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(GetTargetedObjectID())).TileLocation);
+	TargetTile = WorldData.GetTileCoordinatesFromPosition(NewTargetLocation);
+	//NewTargetLocation = WorldData.GetPositionFromTileCoordinates(TargetTile);
+	NewTargetLocation.Z = WorldData.GetFloorZForPosition(NewTargetLocation, true) + class'XComWorldData'.const.WORLD_HalfFloorHeight;
+
+        GetTargetedActors(NewTargetLocation, CurrentlyMarkedTargets, Tiles);
+	CheckForFriendlyUnit(CurrentlyMarkedTargets);
+	MarkTargetedActors(CurrentlyMarkedTargets, (!AbilityIsOffensive) ? FiringUnit.GetTeam() : eTeam_None );
+	
+	if( ShouldUseMidpointCamera )
 	{
-		MidpointCamera = new class'X2Camera_Midpoint';
-		MidpointCamera.AddFocusActor(FiringUnit);
-		MidpointCamera.AddFocusActor(NewTargetActor);
-		`CAMERASTACK.AddCamera(MidpointCamera);
+		foreach Tiles(CurrentTile)
+		{
+			TilePosition = World.GetPositionFromTileCoordinates(CurrentTile);
+			if( World.Volume.EncompassesPoint(TilePosition) )
+			{
+				X2Camera_Midpoint(FiringUnit.TargetingCamera).AddFocusPoint(TilePosition, true);
+			}
+		}
+			
+	}
+	GetTargetedActorsInTiles(Tiles, CurrentlyMarkedTargets, false);
+	CheckForFriendlyUnit(CurrentlyMarkedTargets);
+	MarkTargetedActors(CurrentlyMarkedTargets, (!AbilityIsOffensive) ? FiringUnit.GetTeam() : eTeam_None);
+	DrawAOETiles(Tiles);
+	AOEMeshActor.SetHidden(false);
+        if (LineActor != none)
+	{
+		ShooterToTarget = NewTargetLocation - FiringLocation;
+		LineRotator = rotator( ShooterToTarget );
+		LineActor.SetRotation( LineRotator );
 	}
 
 
+}
+
+private function GetEffectAOETiles(out array<TTile> TilesToBeDamaged)
+{
+	local XComGameState_Unit TargetUnit;
+	local XComGameStateHistory History;
+	local XComGameState_Effect EffectState;
+	local StateObjectReference EffectRef;
+	local XComGameState_Unit SourceUnit;
+
+	History = `XCOMHISTORY;
+
+	TargetUnit = XComGameState_Unit(History.GetGameStateForObjectID(GetTargetedObjectID()));
+	if( TargetUnit != None )
+	{
+		foreach TargetUnit.AffectedByEffects(EffectRef)
+		{
+			EffectState = XComGameState_Effect(History.GetGameStateForObjectID(EffectRef.ObjectID));
+			if( EffectState != None )
+			{
+				SourceUnit = XComGameState_Unit(History.GetGameStateForObjectID(EffectState.ApplyEffectParameters.SourceStateObjectRef.ObjectID));
+				if( SourceUnit != None )
+				{
+					EffectState.GetX2Effect().GetAOETiles(SourceUnit, TargetUnit, TilesToBeDamaged);
+				}
+			}
+		}
+	}
 }
 
 private function NotifyTargetTargeted(bool Targeted)
@@ -231,7 +323,7 @@ private function NotifyTargetTargeted(bool Targeted)
 
 	if( LastTarget != -1 )
 	{
-		TargetUnit = XGUnit(History.GetVisualizer(Action.AvailableTargets[LastTarget].PrimaryTarget.ObjectID));
+		TargetUnit = XGUnit(History.GetVisualizer(GetTargetedObjectID()));
 	}
 
 	if( TargetUnit != None )
@@ -245,8 +337,13 @@ private function NotifyTargetTargeted(bool Targeted)
 
 function bool GetCurrentTargetFocus(out Vector Focus)
 {
-	if(FiringUnit.TargetingCamera != none){
+	if( FiringUnit.TargetingCamera != None )
+	{
 		Focus = FiringUnit.TargetingCamera.GetTargetLocation();
+	}
+	else
+	{
+		Focus = GetTargetedActor().Location;
 	}
 	return true;
 }
@@ -256,33 +353,6 @@ static function bool ShouldWaitForFramingCamera()
 	// we only need to disable the framing camera if we are pushing an OTS targeting camera, which we don't do when user
 	// has disabled glam cams
 	return !`BATTLE.ProfileSettingsGlamCam();
-}
-
-function bool GetAdditionalTargets(out AvailableTarget AdditionalTargets)
-{
-	local int i;
-	`log("RTTargetingMethod_AimedLinedSkillshot: NewTargetLocation: "@NewTargetLocation);
-	Ability.GatherAdditionalAbilityTargetsForLocation(NewTargetLocation, AdditionalTargets);
-	for(i = 0; i < AdditionalTargets.AdditionalTargets.Length; i++)
-	{
-		`log("Additional Target "@i@" ObjectID = "@ AdditionalTargets.AdditionalTargets[i].ObjectID);
-	}
-	return true;
-}
-
-function GetTargetLocations(out array<Vector> TargetLocations)
-{
-	TargetLocations.Length = 0;
-	TargetLocations.AddItem(NewTargetLocation);
-}
-
-function name ValidateTargetLocations(const array<Vector> TargetLocations)
-{
-	if (TargetLocations.Length == 1 && bGoodTarget)
-	{
-		return 'AA_Success';
-	}
-	return 'AA_NoTargets';
 }
 
 defaultproperties

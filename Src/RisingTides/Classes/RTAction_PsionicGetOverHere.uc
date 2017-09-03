@@ -12,9 +12,9 @@ var XComWeapon	PreviousWeapon;
 var XComUnitPawn FocusUnitPawn;
 //*************************************
 
-function Init(const out VisualizationTrack InTrack)
+function Init()
 {
-	super.Init(InTrack);
+	super.Init();
 
 	if( AbilityContext.InputContext.ItemObject.ObjectID > 0 )
 	{
@@ -52,6 +52,7 @@ Begin:
 	UnitPawn.SetCurrentWeapon(XComWeapon(UseWeapon.m_kEntity));
 
 	Unit.CurrentFireAction = self;
+	UnitPawn.GetAnimTreeController().SetAllowNewAnimations(true);
 	Params.AnimName = 'HL_Psi_ProjectileMedium';
 	UnitPawn.GetAnimTreeController().PlayFullBodyDynamicAnim(Params);
 

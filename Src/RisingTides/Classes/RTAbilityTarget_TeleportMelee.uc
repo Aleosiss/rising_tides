@@ -63,17 +63,16 @@ simulated static function bool SelectAttackTile(XComGameState_Unit UnitState,
 
 	class'RTHelpers'.static.GetAdjacentTiles(Tile, Tiles);
 	foreach Tiles(IteratorTile) {
-		if(IsValidAttackTile(UnitState, IteratorTile, Tile))
+		if(IsValidAttackTile(UnitState, IteratorTile, Tile, none))
 			SortedPossibleTiles.AddItem(IteratorTile);
 	}
 
 	return SortedPossibleTiles.Length != 0;
-		
-
 }
 
 // returns true the given unit can perform a melee attack from SourceTile to TargetTile. Only checks spatial considerations, such as distance
 // and walls. You still need to check if the melee ability is valid at all by validating its conditions.
-simulated static function bool IsValidAttackTile(XComGameState_Unit UnitState, const out TTile SourceTile, const out TTile TargetTile) {
+// hilariously enough, Firaxis added a TileCache of all reachable tiles in WOTC, but not having that is the whole point of this class!
+simulated static function bool IsValidAttackTile(XComGameState_Unit UnitState, const out TTile SourceTile, const out TTile TargetTile, X2ReachableTilesCache TileCache) {
 	return !`XWORLD.IsAdjacentTileBlocked(SourceTile, TargetTile) && (`XWORLD.IsFloorTile(SourceTile) || `XWORLD.IsGroundTile(SourceTile));
 }

@@ -16,14 +16,14 @@ simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffe
 	}
 }
 
-function vector GetSpawnLocation(const out EffectAppliedData ApplyEffectParameters) {
+function vector GetSpawnLocation(const out EffectAppliedData ApplyEffectParameters, XComGameState NewGameState) {
 	return SpawnLocation;
 }
 
 simulated function vector GetRandomSpawnLocation(const out EffectAppliedData ApplyEffectParameters, int RBMaxOffset) {
 	local TTile TileLocation, DesiredSpawnLocation;
 	local XComWorldData World;
-	local Actor TileActor;
+	local array<Actor> TileActors;
 	local vector RandSpawnLocation, RandomOffset, DesiredSpawnVector;
 	local bool bValid;
 	local XComGameState_Unit UnitState;
@@ -53,9 +53,9 @@ simulated function vector GetRandomSpawnLocation(const out EffectAppliedData App
 			continue;
 		}
 
-		TileActor = World.GetActorOnTile(DesiredSpawnLocation);
+		TileActors = World.GetActorsOnTile(DesiredSpawnLocation);
 
-		if (TileActor == none)
+		if (TileActors.Length == 0)
 		{
 			RandSpawnLocation = DesiredSpawnVector;
 			bValid = true;
@@ -64,7 +64,7 @@ simulated function vector GetRandomSpawnLocation(const out EffectAppliedData App
 	return RandSpawnLocation;
 }
 
-function OnSpawnComplete(const out EffectAppliedData ApplyEffectParameters, StateObjectReference NewUnitRef, XComGameState NewGameState)
+function OnSpawnComplete(const out EffectAppliedData ApplyEffectParameters, StateObjectReference NewUnitRef, XComGameState NewGameState, XComGameState_Effect NewEffectState)
 {
 	local XComGameState_Unit MimicBeaconGameState, SourceUnitGameState, AttackingUnit;
 	local XComGameStateContext_Ability AbilityContext;
@@ -87,7 +87,7 @@ function OnSpawnComplete(const out EffectAppliedData ApplyEffectParameters, Stat
 	{
 		AbilityContext.InputContext.PrimaryTarget.ObjectID = NewUnitRef.ObjectID;
 	}
-	super.OnSpawnComplete(ApplyEffectParameters, NewUnitRef, NewGameState);
+	super.OnSpawnComplete(ApplyEffectParameters, NewUnitRef, NewGameState, NewEffectState);
 
 	MimicBeaconGameState.SetCurrentStat(eStat_HP, 1);
 	MimicBeaconGameState.SetBaseMaxStat(eStat_HP, 1, ECSMAR_None);

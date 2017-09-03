@@ -48,9 +48,9 @@ simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffe
 		return;
 	}
 
-	EventMgr.RegisterForEvent(ListenerObj, 'RTAddToMeld', MeldEffectState.AddUnitToMeld, ELD_OnStateSubmitted,,,true);
-	EventMgr.RegisterForEvent(ListenerObj, 'RTRemoveFromMeld', MeldEffectState.RemoveUnitFromMeld, ELD_OnStateSubmitted,,,true);
-	EventMgr.RegisterForEvent(ListenerObj, 'RTFeedback', MeldEffectState.RemoveUnitFromMeld,ELD_OnStateSubmitted,,,true);
+	EventMgr.RegisterForEvent(ListenerObj, 'RTAddToMeld', MeldEffectState.AddUnitToMeld, ELD_OnStateSubmitted,,,true,);
+	EventMgr.RegisterForEvent(ListenerObj, 'RTRemoveFromMeld', MeldEffectState.RemoveUnitFromMeld, ELD_OnStateSubmitted,,,true,);
+	EventMgr.RegisterForEvent(ListenerObj, 'RTFeedback', MeldEffectState.RemoveUnitFromMeld,ELD_OnStateSubmitted,,,true,);
 	EventMgr.RegisterForEvent(ListenerObj, 'TacticalGameEnd', MeldEffectState.OnTacticalGameEnd, ELD_OnStateSubmitted);
 
 

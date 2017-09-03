@@ -27,7 +27,8 @@ function GetToHitAsTargetModifiers(XComGameState_Effect EffectState, XComGameSta
 }
 
 
-function int GetDefendingDamageModifier(XComGameState_Effect EffectState, XComGameState_Unit Attacker, Damageable TargetDamageable, XComGameState_Ability AbilityState, const out EffectAppliedData AppliedData, const int CurrentDamage, X2Effect_ApplyWeaponDamage WeaponDamageEffect) {
+function int GetDefendingDamageModifier(XComGameState_Effect EffectState, XComGameState_Unit Attacker, Damageable TargetDamageable, XComGameState_Ability AbilityState, 
+							const out EffectAppliedData AppliedData, const int CurrentDamage, X2Effect_ApplyWeaponDamage WeaponDamageEffect, optional XComGameState NewGameState) {
 	local int BonusDamage;
 	local int DamageCap;
 	local bool bShouldApply;
@@ -58,7 +59,7 @@ function int GetDefendingDamageModifier(XComGameState_Effect EffectState, XComGa
 	return BonusDamage;
 }
 
-simulated function bool OnEffectTicked(const out EffectAppliedData ApplyEffectParameters, XComGameState_Effect kNewEffectState, XComGameState NewGameState, bool FirstApplication) {
+simulated function bool OnEffectTicked(const out EffectAppliedData ApplyEffectParameters, XComGameState_Effect kNewEffectState, XComGameState NewGameState, bool FirstApplication, XComGameState_Player PlayerState) {
 	local XComGameState_Unit UnitState;
 
 	UnitState = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(ApplyEffectParameters.TargetStateObjectRef.ObjectID));
@@ -69,7 +70,7 @@ simulated function bool OnEffectTicked(const out EffectAppliedData ApplyEffectPa
 
 	kNewEffectState.iStacks++;
 
-    return super.OnEffectTicked(ApplyEffectParameters, kNewEffectState, NewGameState, FirstApplication);
+    return super.OnEffectTicked(ApplyEffectParameters, kNewEffectState, NewGameState, FirstApplication, PlayerState);
 }
 
 defaultproperties

@@ -57,8 +57,9 @@ simulated protected function UpdatePuckVisuals(XComGameState_Unit ActiveUnitStat
 	PuckMeshCircleComponent.SetStaticMesh(GetMeleePuckMeshForAbility(MeleeAbilityTemplate));
 	//</workshop>
 
+	//MeshTranslation = VisualPath.GetEndPoint(); // make sure we line up perfectly with the end of the path ribbon
+	MeshTranslation = WorldData.GetPositionFromTileCoordinates(PathDestination);
 
-	MeshTranslation = VisualPath.GetEndPoint(); // make sure we line up perfectly with the end of the path ribbon
 	MeshTranslation.Z = WorldData.GetFloorZForPosition(MeshTranslation) + PathHeightOffset;
 	PuckMeshComponent.SetTranslation(MeshTranslation);
 	//<workshop> SMOOTH_TACTICAL_CURSOR AMS 2016/01/22
@@ -144,10 +145,16 @@ simulated function UpdateMeleeTarget(XComGameState_BaseObject Target)
 				`CURSOR.CursorSetLocation(TileLocation, true, true);
 			}
 		}
+
+		LastDestinationTile = PossibleTiles[0];
+
+		super(XComPathingPawn).SetActive(XGUnitNativeBase(Target.GetVisualizer()));
+		DoUpdatePuckVisuals(PossibleTiles[0], Target.GetVisualizer(), AbilityTemplate);
 	}
 	//<workshop> TACTICAL_CURSOR_PROTOTYPING AMS 2015/12/07
 	//INS:
-	DoUpdatePuckVisuals(PossibleTiles[0], Target.GetVisualizer(), AbilityTemplate);
+
+
 	//</workshop>
 }
 

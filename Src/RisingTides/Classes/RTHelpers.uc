@@ -49,9 +49,10 @@ static function ListDefaultAbilityLists() {
 
 
 static function bool CheckAbilityActivated(name AbilityTemplateName, ERTChecklist Checklist) {
-	local bool b;
+	local bool b, d;
 	local string n;
 	b = true;
+	d = false; // debug flag
 
 	//ListDefaultAbilityLists();
 
@@ -90,8 +91,8 @@ static function bool CheckAbilityActivated(name AbilityTemplateName, ERTChecklis
 					b = false;
 	}
 
-	if(!b) {
-		//`LOG("Rising Tides: " @ AbilityTemplateName @ " was not found in " @ n);
+	if(!b && d) {
+		`LOG("Rising Tides: " @ AbilityTemplateName @ " was not found in " @ n);
 	}
 
 

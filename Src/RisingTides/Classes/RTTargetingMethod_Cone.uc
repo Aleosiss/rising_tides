@@ -20,14 +20,14 @@ var protected array<TTile>			ReticuleTargetedSecondaryTiles;    // These are nei
 var protected TTile FinalTile;
 
 
-function Init(AvailableAction InAction)
+function Init(AvailableAction InAction, int NewTargetIndex)
 {
 	local float TargetingRange;
 	local X2AbilityTarget_Cursor CursorTarget;
 	local X2AbilityMultiTarget_Cone ConeMultiTarget;
 	local X2AbilityTemplate AbilityTemplate;
 
-	super.Init(InAction);
+	super.Init(InAction, NewTargetIndex);
 	WorldData = `XWORLD;
 
 	// get the firing unit

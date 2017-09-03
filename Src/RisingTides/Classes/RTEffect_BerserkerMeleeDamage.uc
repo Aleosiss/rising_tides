@@ -3,7 +3,7 @@ class RTEffect_BerserkerMeleeDamage extends X2Effect_ApplyWeaponDamage;
 var int iBaseBladeDamage, iBaseBladeCritDamage, iBaseBladeDamageSpread, iAcidicBladeShred;
 var float fHiddenBladeCritModifier;
 
-function WeaponDamageValue GetBonusEffectDamageValue(XComGameState_Ability AbilityState, XComGameState_Item SourceWeapon, StateObjectReference TargetRef) {
+function WeaponDamageValue GetBonusEffectDamageValue(XComGameState_Ability AbilityState, XComGameState_Unit SourceUnit, XComGameState_Item SourceWeapon, StateObjectReference TargetRef) {
 	local WeaponDamageValue ReturnDamageValue;
 	local XComGameState_Unit AttackerUnitState;
 	local bool bHasAcidBlade, bHasPsionicBlade, bHasHiddenBlade;

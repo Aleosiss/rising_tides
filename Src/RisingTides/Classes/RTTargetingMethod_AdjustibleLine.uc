@@ -2,12 +2,12 @@ class RTTargetingMethod_AdjustibleLine extends X2TargetingMethod_Line;
 
 var int LineLengthLimit;
 
-function Init(AvailableAction InAction)
+function Init(AvailableAction InAction, int NewTargetIndex)
 {
 	local X2AbilityTemplate AbilityTemplate;
 	local float TileLength;
 
-	super.Init(InAction);
+	super.Init(InAction, NewTargetIndex);
 	WorldData = `XWORLD;
 
 	AbilityTemplate = Ability.GetMyTemplate( );

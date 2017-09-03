@@ -133,7 +133,7 @@ protected function RemoveAuraTargetEffects(XComGameState_Unit SourceUnitState, X
 			if (TargetUnitAuraEffect != none && (TargetUnitAuraEffect.ApplyEffectParameters.SourceStateObjectRef.ObjectID == SourceUnitState.ObjectID) && TargetUnitAuraEffect.iTurnsRemaining < 2)	// only remove effects that drop immediately
 			{
 				// This effect should be removed if it is affecting this Target Unit and the Source Unit of the
-				// effect is the same as the SourceUnitState
+				// effect is the same as the SourceUnitStateout VisualizationActionM
 				EffectsToRemove.AddItem(TargetUnitAuraEffect);
 				RTSourceAuraEffectGameState.EffectsRemovedList.AddItem(TargetUnitAuraEffect.GetReference());
 			}
@@ -150,25 +150,25 @@ protected function RemoveAuraTargetEffects(XComGameState_Unit SourceUnitState, X
 
 }
 
-simulated function AddX2ActionsForVisualization(XComGameState VisualizeGameState, out VisualizationTrack BuildTrack, name EffectApplyResult)
+simulated function AddX2ActionsForVisualization(XComGameState VisualizeGameState, out VisualizationActionMetadata ActionMetadata, name EffectApplyResult)
 {
 	local XComGameState_Effect EffectState, TickedEffectState;
 	local X2Action_PersistentEffect PersistentEffectAction;
 	local RTAction_PlayEffect PlayEffectAction;
 	local int i;
 
-	if( (EffectApplyResult == 'AA_Success') && (XComGameState_Unit(BuildTrack.StateObject_NewState) != none) )
+	if( (EffectApplyResult == 'AA_Success') && (XComGameState_Unit(ActionMetadata.StateObject_NewState) != none) )
 	{
 		if (CustomIdleOverrideAnim != '')
 		{
 			// We started an idle override so this will clear it
-			PersistentEffectAction = X2Action_PersistentEffect(class'X2Action_PersistentEffect'.static.AddToVisualizationTrack(BuildTrack, VisualizeGameState.GetContext()));
+			PersistentEffectAction = X2Action_PersistentEffect(class'X2Action_PersistentEffect'.static.AddToVisualizationTree(ActionMetadata, VisualizeGameState.GetContext()));
 			PersistentEffectAction.IdleAnimName = CustomIdleOverrideAnim;
 		}
 
 		if (VFXTemplateName != "")
 		{
-			PlayEffectAction = RTAction_PlayEffect( class'RTAction_PlayEffect'.static.AddToVisualizationTrack(BuildTrack, VisualizeGameState.GetContext()));
+			PlayEffectAction = RTAction_PlayEffect( class'RTAction_PlayEffect'.static.AddToVisualizationTree(ActionMetadata, VisualizeGameState.GetContext()));
 
 			PlayEffectAction.AttachToUnit = true;
 			PlayEffectAction.EffectName = VFXTemplateName;
@@ -192,23 +192,23 @@ simulated function AddX2ActionsForVisualization(XComGameState VisualizeGameState
 			{
 				for (i = 0; i < ApplyOnTick.Length; ++i)
 				{
-					ApplyOnTick[i].AddX2ActionsForVisualization_Tick(VisualizeGameState, BuildTrack, i, TickedEffectState);
+					ApplyOnTick[i].AddX2ActionsForVisualization_Tick(VisualizeGameState, ActionMetadata, i, TickedEffectState);
 				}
 			}
 		}
 	}
 
 	if (VisualizationFn != none)
-		VisualizationFn(VisualizeGameState, BuildTrack, EffectApplyResult);
+		VisualizationFn(VisualizeGameState, ActionMetadata, EffectApplyResult);
 }
 
-simulated function AddX2ActionsForVisualization_Sync( XComGameState VisualizeGameState, out VisualizationTrack BuildTrack )
+simulated function AddX2ActionsForVisualization_Sync( XComGameState VisualizeGameState, out VisualizationActionMetadata ActionMetadata )
 {
 	local RTAction_PlayEffect PlayEffectAction;
 
 	if (VFXTemplateName != "")
 	{
-		PlayEffectAction = RTAction_PlayEffect( class'RTAction_PlayEffect'.static.AddToVisualizationTrack( BuildTrack, VisualizeGameState.GetContext( ) ) );
+		PlayEffectAction = RTAction_PlayEffect( class'RTAction_PlayEffect'.static.AddToVisualizationTree( ActionMetadata, VisualizeGameState.GetContext( ) ) );
 
 		PlayEffectAction.AttachToUnit = true;
 		PlayEffectAction.EffectName = VFXTemplateName;

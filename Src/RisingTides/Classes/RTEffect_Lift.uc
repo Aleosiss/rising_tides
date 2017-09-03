@@ -26,26 +26,26 @@ simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffe
 	super.OnEffectAdded(ApplyEffectParameters, kNewTargetState, NewGameState, NewEffectState);
 }
 
-simulated function AddX2ActionsForVisualization(XComGameState VisualizeGameState, out VisualizationTrack BuildTrack, name EffectApplyResult)
+simulated function AddX2ActionsForVisualization(XComGameState VisualizeGameState, out VisualizationActionMetadata ActionMetadata, name EffectApplyResult)
 {
 	local XComGameState_Unit TargetUnitState;
 	local vector NewUnitLoc;
 	local RTAction_PsionicGetOverHereTarget GetOverHereTarget;
 	local X2Action_ApplyWeaponDamageToUnit UnitAction;
 
-	TargetUnitState = XComGameState_Unit(BuildTrack.StateObject_NewState);
+	TargetUnitState = XComGameState_Unit(ActionMetadata.StateObject_NewState);
 	`assert(TargetUnitState != none);
 
 	// Move the target to this space
 	if( EffectApplyResult == 'AA_Success' )
 	{
-		GetOverHereTarget = RTAction_PsionicGetOverHereTarget(class'RTAction_PsionicGetOverHereTarget'.static.AddToVisualizationTrack(BuildTrack, VisualizeGameState.GetContext()));
+		GetOverHereTarget = RTAction_PsionicGetOverHereTarget(class'RTAction_PsionicGetOverHereTarget'.static.AddToVisualizationTree(ActionMetadata, VisualizeGameState.GetContext(), false, ActionMetadata.LastActionAdded));
 		NewUnitLoc = `XWORLD.GetPositionFromTileCoordinates(TargetUnitState.TileLocation);
-		GetOverHereTarget.SetDesiredLocation(NewUnitLoc, XGUnit(BuildTrack.TrackActor));
+		GetOverHereTarget.SetDesiredLocation(NewUnitLoc, XGUnit(ActionMetadata.VisualizeActor));
 	}
 	else
 	{
-		UnitAction = X2Action_ApplyWeaponDamageToUnit(class'X2Action_ApplyWeaponDamageToUnit'.static.AddToVisualizationTrack(BuildTrack, VisualizeGameState.GetContext()));
+		UnitAction = X2Action_ApplyWeaponDamageToUnit(class'X2Action_ApplyWeaponDamageToUnit'.static.AddToVisualizationTree(ActionMetadata, VisualizeGameState.GetContext(), false, ActionMetadata.LastActionAdded));
 		UnitAction.OriginatingEffect = self;
 	}
 }

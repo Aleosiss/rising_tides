@@ -4,7 +4,8 @@ class RTEffect_GuiltyConscience extends X2Effect_Persistent;
 var int iTriggerThreshold;
 var name GuiltyConscienceEventName;
 
-simulated function bool OnEffectTicked(const out EffectAppliedData ApplyEffectParameters, XComGameState_Effect kNewEffectState, XComGameState NewGameState, bool FirstApplication) {
+simulated function bool OnEffectTicked(const out EffectAppliedData ApplyEffectParameters, XComGameState_Effect kNewEffectState, XComGameState NewGameState, bool FirstApplication, XComGameState_Player Player)
+{
 	local XComGameState_Unit TargetUnitState;
 	local XComGameState_Unit SourceUnitState;
 
@@ -25,7 +26,7 @@ simulated function bool OnEffectTicked(const out EffectAppliedData ApplyEffectPa
 		kNewEffectState.iStacks++;
 	}
 
-	return super.OnEffectTicked(ApplyEffectParameters, kNewEffectState, NewGameState, FirstApplication);
+	return super.OnEffectTicked(ApplyEffectParameters, kNewEffectState, NewGameState, FirstApplication, Player);
 }
 
 defaultproperties

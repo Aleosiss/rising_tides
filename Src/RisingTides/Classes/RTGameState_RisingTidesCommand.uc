@@ -68,11 +68,13 @@ struct Squad
 
 var const config array<RTGhostOperative>	GhostTemplates;
 
-var() array<RTGhostOperative> 					Ghosts;						// ghosts active
-var() array<RTGhostOperative> 					Deplayed; 					// ghosts that will be on the next mission
-var() array<RTGameState_PersistentGhostSquad>	Squads;						// list of ghost teams (only one for now)
-var() int 										iOperativeLevel;			// all ghosts get level ups after a mission, even if they weren't on it. lorewise, they're constantly running missions; the player only sees a fraction of them
-
+var() array<RTGhostOperative>									Master; 						// master list of operatives
+var() array<StateObjectReference> 								Active;						// ghosts active
+var() array<StateObjectReference> 								Deployed; 				// ghosts that will be on the next mission
+var() array<StateObjectReference>								Captured;					// ghosts not available
+var() array<RTGameState_PersistentGhostSquad>					Squads;						// list of ghost teams (only one for now)
+var() int 														iOperativeLevel;	// all ghosts get level ups after a mission, even if they weren't on it. lorewise, they're constantly running missions; the player only sees a fraction of them
+var bool														bSetupComplete;		// if we should rebuild the ghost array from config
 
 /* END OPERATIVE RECORD   */
 
@@ -94,12 +96,24 @@ static function SetUpRisingTidesCommand(XComGameState StartState)
 
 	StartState.AddStateObject(RTCom);
 	RTCom.InitListeners();
-	RTCom.CreateRTOperatives(StartState);
-	//RTCom.CreateRTDeathRecord(StartState);
+	if(!RTCom.bSetupComplete) {
+		RTCom.CreateRTOperatives(StartState);
+		//RTCom.CreateRTDeathRecord(StartState);
+	}
 }
 
 // CreateRTOperatives(XComGameState NewGameState)
-function CreateRTOperatives(XComGameState NewGameState) {
+function CreateRTOperatives(XComGameState StartState) {
+	local RTGhostOperative IteratorGhostTemplate;
+
+
+	foreach default.GhostTemplates(IteratorGhostTemplate) {
+		CreateRTOperative(IteratorGhostTemplate, StartState);
+
+	}
+}
+
+function CreateRTOperative(RTGhostOperative IteratorGhostTemplate, XComGameState StartState) {
 	local XComGameState_Unit UnitState;
 	local X2ItemTemplateManager ItemTemplateMgr;
 	local X2CharacterTemplateManager CharMgr;
@@ -107,61 +121,60 @@ function CreateRTOperatives(XComGameState NewGameState) {
 	local XComGameState_Item WeaponState;
 	local X2WeaponUpgradeTemplate UpgradeTemplate;
 	local name WeaponUpgradeName;
-
-	// local RTGameState_RisingTidesCommand RTCom;
-
-	local RTGhostOperative IteratorGhost;
 	local RTGhostOperative Ghost;
 
 	CharMgr = class'X2CharacterTemplateManager'.static.GetCharacterTemplateManager();
 	ItemTemplateMgr = class'X2ItemTemplateManager'.static.GetItemTemplateManager();
 
-	foreach default.GhostTemplates(IteratorGhost) {
-		CharTemplate = CharMgr.FindCharacterTemplate(IteratorGhost.CharacterTemplateName);
-		CharTemplate.bIsPsionic = true;
+	CharTemplate = CharMgr.FindCharacterTemplate(IteratorGhostTemplate.CharacterTemplateName);
+	CharTemplate.bIsPsionic = true;
 
-		UnitState = CharTemplate.CreateInstanceFromTemplate(NewGameState);
-		NewGameState.AddStateObject(UnitState);
+	UnitState = CharTemplate.CreateInstanceFromTemplate(StartState);
+	StartState.AddStateObject(UnitState);
 
-		UnitState.SetCharacterName(IteratorGhost.FirstName, IteratorGhost.LastName, IteratorGhost.NickName);
-		UnitState.SetCountry(CharTemplate.DefaultAppearance.nmFlag);
-		UnitState.RankUpSoldier(NewGameState, IteratorGhost.SoldierClassTemplateName);
-		UnitState.ApplyInventoryLoadout(NewGameState, CharTemplate.DefaultLoadout);
-		UnitState.StartingRank = 1;
-		UnitState.SetXPForRank(1);
-		UnitState.SetBackground(IteratorGhost.preBackground);
+	UnitState.SetCharacterName(IteratorGhostTemplate.FirstName, IteratorGhostTemplate.LastName, IteratorGhostTemplate.NickName);
+	UnitState.SetCountry(CharTemplate.DefaultAppearance.nmFlag);
+	UnitState.RankUpSoldier(StartState, IteratorGhostTemplate.SoldierClassTemplateName);
+	UnitState.ApplyInventoryLoadout(StartState, CharTemplate.DefaultLoadout);
+	UnitState.StartingRank = 1;
+	UnitState.SetXPForRank(1);
+	UnitState.SetBackground(IteratorGhostTemplate.preBackground);
 
-		WeaponState = UnitState.GetPrimaryWeapon();
-		foreach IteratorGhost.WeaponUpgrades(WeaponUpgradeName) {
-			UpgradeTemplate = X2WeaponUpgradeTemplate(ItemTemplateMgr.FindItemTemplate(WeaponUpgradeName));
-			if (UpgradeTemplate != none) {
-				WeaponState.ApplyWeaponUpgradeTemplate(UpgradeTemplate);
-			}
+	WeaponState = UnitState.GetPrimaryWeapon();
+	foreach IteratorGhostTemplate.WeaponUpgrades(WeaponUpgradeName) {
+		UpgradeTemplate = X2WeaponUpgradeTemplate(ItemTemplateMgr.FindItemTemplate(WeaponUpgradeName));
+		if (UpgradeTemplate != none) {
+			WeaponState.ApplyWeaponUpgradeTemplate(UpgradeTemplate);
 		}
-
-		Ghost = IteratorGhost;
-		Ghost.StateObjectRef = UnitState.GetReference();
-		Ghosts.AddItem(Ghost);
 	}
+
+	Ghost = IteratorGhostTemplate;
+	Ghost.StateObjectRef = UnitState.GetReference();
+
+	Active.AddItem(UnitState.GetReference());
+	Master.AddItem(Ghost);
 }
 
-function CreateRTSquads(XComGameState NewGameState) {
+
+
+function CreateRTSquads(XComGameState StartState) {
 
 	local RTGameState_PersistentGhostSquad one;
 	local RTGhostOperative Ghost;
 
-	one = RTGameState_PersistentGhostSquad(NewGameState.CreateStateObject(class'RTGameState_PersistentGhostSquad'));
+	one = RTGameState_PersistentGhostSquad(StartState.CreateStateObject(class'RTGameState_PersistentGhostSquad'));
 	one.CreateSquad(1, default.SquadOneName, default.SquadOneBackground);
-	NewGameState.AddStateObject(one);
+	StartState.AddStateObject(one);
+	Squads.AddItem(one);
 
-	foreach Ghosts(Ghost) {
+	foreach Master(Ghost) {
 		// team 1 "SPECTRE"
 		if(Ghost.ExternalID == "Queen" || Ghost.ExternalID == "Whisper" || Ghost.ExternalID == "Nova") {
-			one.Ghosts.AddItem(Ghost.StateObjectRef);
-
+			one.Operatives.AddItem(Ghost.StateObjectRef);
+			one.initOperatives.AddItem(Ghost.StateObjectRef);
 		}
 	}
-	
+
 
 }
 
@@ -235,7 +248,7 @@ simulated function UpdateNumCrits(name CharacterTemplateName) {
 static function RTGameState_RisingTidesCommand GetRTCommand() {
 	local XComGameStateHistory History;
 	local RTGameState_RisingTidesCommand RTCom;
-	
+
 
 	History = `XCOMHISTORY;
 
@@ -269,13 +282,13 @@ function InitListeners() {
 	EventMgr = `XEVENTMGR;
 	EventMgr.UnregisterFromAllEvents(ThisObj); // clear all old listeners to clear out old stuff before re-registering
 
-	EventMgr.RegisterForEvent(ThisObj, 'KillMail', OnKillMail, ELD_OnStateSubmitted,,, true);
-	EventMgr.RegisterForEvent(ThisObj, 'UnitAttacked', OnUnitAttacked, ELD_OnStateSubmitted,,, true);
+	EventMgr.RegisterForEvent(ThisObj, 'KillMail', OnKillMail, ELD_OnStateSubmitted,,,);
+	EventMgr.RegisterForEvent(ThisObj, 'UnitAttacked', OnUnitAttacked, ELD_OnStateSubmitted,,,);
 }
 
 // EventData = DeadUnitState
 // EventSource = KillerUnitState
-function EventListenerReturn OnKillMail(Object EventData, Object EventSource, XComGameState GameState, Name InEventID) {
+function EventListenerReturn OnKillMail(Object EventData, Object EventSource, XComGameState GameState, Name InEventID, Object CallbackData) {
 	local XComGameState_Unit KillerUnitState, DeadUnitState;
 	local RTGameState_RisingTidesCommand RTCom;
 	local XComGameState NewGameState;
@@ -307,10 +320,10 @@ function EventListenerReturn OnKillMail(Object EventData, Object EventSource, XC
 // EventID = UnitAttacked
 // EventData = UnitState
 // EventSource = UnitState
-function EventListenerReturn OnUnitAttacked(Object EventData, Object EventSource, XComGameState GameState, Name InEventID) {
+function EventListenerReturn OnUnitAttacked(Object EventData, Object EventSource, XComGameState GameState, Name InEventID, Object CallbackData) {
 	local XComGameStateContext_Ability AbilityContext;
 	local XComGameState_Unit AttackedUnitState;
-	
+
 	AbilityContext = XComGameStateContext_Ability(GameState.GetContext());
 	if(AbilityContext == none) {
 		return ELR_NoInterrupt;
@@ -330,3 +343,35 @@ function EventListenerReturn OnUnitAttacked(Object EventData, Object EventSource
 
 	return ELR_NoInterrupt;
 }
+/*
+function OnEndTacticalPlay(XComGameState NewGameState)
+{
+	local XComGameStateHistory History;
+	local XComGameState_Unit UnitState;
+	local XComGameState_HeadquartersXCom XComHQ, NewXComHQ;
+	local XComGameState_MissionSite MissionState;
+
+	local RTGameState_RisingTidesCommand 	RTCom, NewRTCom;
+
+
+	super.OnEndTacticalPlay(NewGameState);
+	History = class'XComGameStateHistory'.static.GetGameStateHistory();
+
+	RTCom	= RTGameState_RisingTidesCommand(History.GetSingleGameStateObjectForClass(class'RTGameState_RisingTidesCommand'));
+	NewRTCom = RTGameState_RisingTidesCommand(NewGameState.ModifyStateObject(class'RTGameState_RisingTidesCommand', RTCom.GetReference().ObjectID));
+	XComHQ = XComGameState_HeadquartersXCom(History.GetSingleGameStateObjectForClass(class'XComGameState_HeadquartersXCom'));
+	NewXComHQ = XComGameState_HeadquartersXCom(NewGameState.ModifyStateObject(class'XComGameState_HeadquartersXCom', XComHQ.GetReference().ObjectID));
+	
+	MissionState = XComGameState_MissionSite(History.GetGameStateForObjectID(XComHQ.MissionRef.ObjectID));
+
+	foreach History.IterateByClassType(class'XComGameState_Unit', UnitState) {
+		if(Master.Find('NickName', UnitState.GetNickName()) != INDEX_NONE) {
+			Deployed.RemoveItem(UnitState.GetReference());
+			if(UnitState.bCaptured) {
+				Captured.AddItem(UnitState.GetReference());
+			} else {
+				Active.AddItem(UnitState.GetReference());
+			}
+		}
+	}
+}*/

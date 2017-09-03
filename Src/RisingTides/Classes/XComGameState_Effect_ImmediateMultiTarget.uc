@@ -17,7 +17,7 @@ function XComGameState_Effect GetOwningEffect()
 }
 
 // This is called when the a X2Effect_ImmediateMultiTargetAbilityActivation is added to a unit
-function EventListenerReturn OnFireImmediateMultiTargetAbility(Object EventData, Object EventSource, XComGameState GameState, Name EventID)
+function EventListenerReturn OnFireImmediateMultiTargetAbility(Object EventData, Object EventSource, XComGameState GameState, Name EventID, Object CallbackData)
 {
 	local XComGameState_Unit EffectSourceUnit, EffectTargetUnit, EventTargetUnit;
 	local X2Effect_ImmediateMultiTargetAbilityActivation EffectTemplate;

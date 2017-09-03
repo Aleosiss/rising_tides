@@ -1,7 +1,7 @@
 class RTEffect_TimeStopDamage extends X2Effect_ApplyWeaponDamage
 	config(RisingTides);
 
-function WeaponDamageValue GetBonusEffectDamageValue(XComGameState_Ability AbilityState, XComGameState_Item SourceWeapon, StateObjectReference TargetRef)
+function WeaponDamageValue GetBonusEffectDamageValue(XComGameState_Ability AbilityState, XComGameState_Unit SourceUnit, XComGameState_Item SourceWeapon, StateObjectReference TargetRef)
 {
 	local RTGameState_TimeStopEffect TimeStopEffectState;
 	local XComGameState_Unit TargetUnitState;

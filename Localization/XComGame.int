@@ -13,7 +13,7 @@ LocHelpText="Fire a shot at a target. <Ability:CANNOTBEDODGED/>"
 LocLongDescription="<Bullet/>Firing the primary weapon always ends a unit's turn."
 
 [RT_Marksman X2SoldierClassTemplate]
-DisplayName="GHOST Inflitrator"
+DisplayName="GHOST Infiltrator"
 ClassSummary="Whisper is the unit's designated marksman and tech expert."
 LeftAbilityTreeTitle="Fire Support"
 RightAbilityTreeTitle="Watcher"
@@ -157,6 +157,13 @@ LocLongDescription="Whisper can use the meld to hack targets he can't himself re
 LocHelpText="Whisper can use the meld to hack targets he can't himself reach."
 LocFlyOverText="Your Hands, My Eyes"
 LocPromotionPopupText="<Bullet/>Whisper can use the meld to hack targets he can't himself reach.<br/>"
+
+[RTKubikuri X2AbilityTemplate]
+LocFriendlyName="Kubikiri"
+LocFlyOverText="Kubikiri"
+LocLongDescription="Special shot against most enemies who have taken any damage: Any critical hit kills them, but regular hits do half damage. Requires two actions and has a 4-turn cooldown."
+LocHelpText="Crits automatically kill enemies at less than full hit points. Regular hits do half damage."
+LocPromotionPopupText="<Bullet/> Special shot against enemies with less than full hit points: Any critical hit kills them, but regular hits do half damage.<br/><Bullet/> Requires two actions.<br/><Bullet> <Ability:SelfCooldown/> turn cooldown.<br/><Bullet/> Against alien rulers, a critical hit will do double normal crit damage instead of killing the enemy outright."
 
 [GhostPsiSuite X2AbilityTemplate]
 LocFriendlyName="GHOST Ability Suite"
@@ -426,7 +433,7 @@ LocFlyOverText="Contained Fury"
 LocPromotionPopupText=""
 
 [RTContainedFuryMeldJoin X2AbilityTemplate]
-LocFriendlyName="Enter Meld"
+LocFriendlyName="Enter Meld (Contained Fury)"
 LocLongDescription="Enter the meld, gaining increased will and sharing certain abilities."
 LocHelpText="Enter the meld, gaining increased will and sharing certain abilities."
 LocFlyOverText="Enter Meld"
@@ -515,6 +522,21 @@ LocLongDescription="Lunge forward, dealing damage to all enemies in the path of 
 LocHelpText="Lunge forward, dealing damage to all enemies in the path of the strike."
 LocFlyOverText="Dashing Strike"
 LocPromotionPopupText="<Bullet/> Lunge forward, dealing damage to all enemies in the path of the strike.<br/>"
+
+[RTCloseCombatSpecialist X2AbilityTemplate]
+LocFriendlyName="Close Combat Specialist"
+LocFlyOverText="Close Combat Specialist"
+LocLongDescription="During enemy turns, fire a free reaction shot with your primary weapon at any visible enemy within four tiles who moves or fires."
+LocHelpText="During enemy turns, Fire a free reaction shot at any visible enemy within four tiles who moves or fires."
+LocPromotionPopupText="<Bullet/> Will not trigger if soldier is concealed.<br/><Bullet/> You may shoot at each enemy with this ability once per turn.<br/><Bullet/> Each shot requires 2 ammo.<br/>""
+
+[RTCloseCombatSpecialistAttack X2AbilityTemplate]
+LocFriendlyName="Close Combat Specialist"
+LocFlyOverText="Close Combat Specialist"
+LocLongDescription="During enemy turns, fire a free reaction shot with your primary weapon at any visible enemy within four tiles who moves or fires."
+LocHelpText="During enemy turns, Fire a free reaction shot at any visible enemy within four tiles who moves or fires."
+LocPromotionPopupText="<Bullet/> Will not trigger if soldier is concealed.<br/><Bullet/> You may shoot at each enemy with this ability once per turn.<br/><Bullet/> Each shot requires 2 ammo.<br/>""
+
 
 ; <Bullet/><br/>
 
@@ -771,3 +793,9 @@ LocLongDescription="You should never see this."
 LocHelpText="You should never see this."
 LocFlyOverText="Test"
 LocPromotionPopupText="<Bullet/> You should never see this.<br/>"
+
+[RT_Animation_Placeholder_CV X2WeaponTemplate]
+FriendlyName="Rising Tides Animation Placeholder"
+FriendlyNamePlural="Rising Tides Animation Placeholder"
+BriefSummary=""
+TacticalText="<Bullet/> A placeholder that allows Rising Tides classes to use base-game psi animations. Users of the mod should never see this.<br/>."
