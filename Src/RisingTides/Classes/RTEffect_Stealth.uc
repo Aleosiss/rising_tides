@@ -73,31 +73,31 @@ simulated function OnEffectRemoved(const out EffectAppliedData ApplyEffectParame
 
 }
 
-simulated function AddX2ActionsForVisualization(XComGameState VisualizeGameState, out VisualizationTrack BuildTrack, name EffectApplyResult)
+simulated function AddX2ActionsForVisualization(XComGameState VisualizeGameState, out VisualizationActionMetadata ActionMetadata, name EffectApplyResult)
 {
 	local RTAction_ApplyMITV	MITVAction;
 
-	super.AddX2ActionsForVisualization(VisualizeGameState, BuildTrack, EffectApplyResult);
+	super.AddX2ActionsForVisualization(VisualizeGameState, ActionMetadata, EffectApplyResult);
 
-	MITVAction = RTAction_ApplyMITV(class'RTAction_ApplyMITV'.static.AddToVisualizationTrack(BuildTrack, VisualizeGameState.GetContext()));
+	MITVAction = RTAction_ApplyMITV(class'RTAction_ApplyMITV'.static.AddToVisualizationTree(ActionMetadata, VisualizeGameState.GetContext(), false, ActionMetadata.LastActionAdded));
 	MITVAction.MITVPath = "FX_Wraith_Armor.M_Wraith_Armor_Overlay_On_MITV";
 }
 
-simulated function AddX2ActionsForVisualization_Sync(XComGameState VisualizeGameState, out VisualizationTrack BuildTrack)
+simulated function AddX2ActionsForVisualization_Sync(XComGameState VisualizeGameState, out VisualizationActionMetadata ActionMetadata)
 {
-	AddX2ActionsForVisualization(VisualizeGameState, BuildTrack, 'AA_Success');
+	AddX2ActionsForVisualization(VisualizeGameState, ActionMetadata, 'AA_Success');
 }
 
 
-simulated function AddX2ActionsForVisualization_Removed(XComGameState VisualizeGameState, out VisualizationTrack BuildTrack, const name EffectApplyResult, XComGameState_Effect RemovedEffect)
+simulated function AddX2ActionsForVisualization_Removed(XComGameState VisualizeGameState, out VisualizationActionMetadata ActionMetadata, const name EffectApplyResult, XComGameState_Effect RemovedEffect)
 {
 	local X2Action_Delay			DelayAction;
 
-	class'RTAction_RemoveMITV'.static.AddToVisualizationTrack(BuildTrack, VisualizeGameState.GetContext());
+	class'RTAction_RemoveMITV'.static.AddToVisualizationTree(ActionMetadata, VisualizeGameState.GetContext(), false, ActionMetadata.LastActionAdded);
 	
-	super.AddX2ActionsForVisualization_Removed(VisualizeGameState, BuildTrack, EffectApplyResult, RemovedEffect);
+	super.AddX2ActionsForVisualization_Removed(VisualizeGameState, ActionMetadata, EffectApplyResult, RemovedEffect);
 
-	DelayAction = X2Action_Delay(class'X2Action_Delay'.static.AddToVisualizationTrack(BuildTrack, VisualizeGameState.GetContext()));
+	DelayAction = X2Action_Delay(class'X2Action_Delay'.static.AddToVisualizationTree(ActionMetadata, VisualizeGameState.GetContext(), false, ActionMetadata.LastActionAdded));
 	DelayAction.Duration = 0.33f;
 	DelayAction.bIgnoreZipMode = true;
 
@@ -111,6 +111,4 @@ DefaultProperties
 	bStackOnRefresh = true
 	bRemoveWhenTargetConcealmentBroken = true
 	StealthPreviousUnitValName= "UnitPreviouslyConcealed"
-
-
 }
