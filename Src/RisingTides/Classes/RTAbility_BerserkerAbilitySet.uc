@@ -104,7 +104,7 @@ static function X2AbilityTemplate BumpInTheNight()
 	// Icon Properties
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'BumpInTheNight');
 	Template.IconImage = "img:///RisingTidesContentPackage.PerkIcons.UIPerk_knife_blossom_bitn";
-	Template.AbilitySourceName = 'eAbilitySource_Perk';
+	Template.AbilitySourceName = 'eAbilitySource_Psionic';
 	Template.eAbilityIconBehaviorHUD = EAbilityIconBehavior_NeverShow;
 	Template.Hostility = eHostility_Neutral;
 
@@ -170,7 +170,7 @@ static function X2AbilityTemplate BumpInTheNightBloodlustListener()
 
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'BumpInTheNightBloodlustListener');
 	Template.IconImage = "img:///RisingTidesContentPackage.PerkIcons.UIPerk_knife_adrenaline_bloodlust"; // TODO: Change this
-	Template.AbilitySourceName = 'eAbilitySource_Perk';
+	Template.AbilitySourceName = 'eAbilitySource_Psionic';
 	Template.eAbilityIconBehaviorHUD = EAbilityIconBehavior_NeverShow;
 	Template.Hostility = eHostility_Neutral;
 
@@ -651,7 +651,7 @@ static function X2AbilityTemplate RTBlur() {
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'RTBlur');
 	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_snapshot";
 
-	Template.AbilitySourceName = 'eAbilitySource_Perk';
+	Template.AbilitySourceName = 'eAbilitySource_Psionic';
 	Template.eAbilityIconBehaviorHUD = EAbilityIconBehavior_NeverShow;
 	Template.Hostility = eHostility_Neutral;
 
@@ -896,7 +896,7 @@ static function X2AbilityTemplate RTReprobateWaltz()
 
 
 	Template.ShotHUDPriority = class'UIUtilities_Tactical'.const.CLASS_COLONEL_PRIORITY;
-	Template.AbilitySourceName = 'eAbilitySource_Perk';
+	Template.AbilitySourceName = 'eAbilitySource_Psionic';
 	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_NeverShow;
 	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_reaper";
 
@@ -983,7 +983,7 @@ static function X2AbilityTemplate RTCreateFireTrailAbility()
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'RTCreateFireTrailAbility');
 	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_andromedon_poisoncloud"; // TODO: This needs to be changed
 
-	Template.AbilitySourceName = 'eAbilitySource_Standard';
+	Template.AbilitySourceName = 'eAbilitySource_Psionic';
 	Template.eAbilityIconBehaviorHUD = EAbilityIconBehavior_NeverShow;
 	Template.Hostility = eHostility_Neutral;
 
@@ -1216,7 +1216,7 @@ static function X2AbilityTemplate RTContainedFury() {
 
 		`CREATE_X2ABILITY_TEMPLATE(Template, 'RTContainedFury');
 		Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_swordSlash";
-		Template.AbilitySourceName = 'eAbilitySource_Perk';
+		Template.AbilitySourceName = 'eAbilitySource_Psionic';
 		Template.eAbilityIconBehaviorHUD = EAbilityIconBehavior_NeverShow;
 		Template.Hostility = eHostility_Neutral;
 

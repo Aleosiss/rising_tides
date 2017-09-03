@@ -812,7 +812,7 @@ static function X2AbilityTemplate RTMeldInduction() {
 //---Guardian Angel----------------------------------------------------------------------
 //---------------------------------------------------------------------------------------
 static function X2AbilityTemplate RTGuardianAngel() {
-    return PurePassive('RTGuardianAngel', "img:///RisingTidesContentPackage.PerkIcons.UIPerk_revive_overwatch_ga", true);
+    return PurePassive('RTGuardianAngel', "img:///RisingTidesContentPackage.PerkIcons.UIPerk_revive_overwatch_ga", false, 'eAbilitySource_Psionic');
  }
 
 static function CreateGuardianAngel(out X2AbilityTemplate Template) {
@@ -1289,7 +1289,7 @@ static function X2AbilityTemplate RTCreateEchoedAgonyEffectAbility()
 	`CREATE_X2ABILITY_TEMPLATE(Template, default.EchoedAgonyEffectAbilityTemplateName);
 
 	Template.bDontDisplayInAbilitySummary = true;
-	Template.AbilitySourceName = 'eAbilitySource_Standard';
+	Template.AbilitySourceName = 'eAbilitySource_Psionic';
 	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_NeverShow;
 
 	Template.AbilityTargetStyle = default.SimpleSingleTarget;
@@ -1349,7 +1349,7 @@ static function X2AbilityTemplate RTGuiltyConscienceEvent() {
 
 	Template.bDontDisplayInAbilitySummary = true;
 	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_swordSlash";
-	Template.AbilitySourceName = 'eAbilitySource_Standard';
+	Template.AbilitySourceName = 'eAbilitySource_Psionic';
 	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_NeverShow;
 
 	Template.AbilityTargetStyle = default.SimpleSingleTarget;
@@ -2344,7 +2344,7 @@ static function X2AbilityTemplate RTFinalizeTechnopathyHack(name FinalizeName = 
 	Template.bDisplayInUITooltip = false;
 	Template.bLimitTargetIcons = true;
 	Template.ShotHUDPriority = class'UIUtilities_Tactical'.const.CLASS_SERGEANT_PRIORITY;
-	Template.AbilitySourceName = 'eAbilitySource_Perk';
+	Template.AbilitySourceName = 'eAbilitySource_Psionic';
 	Template.Hostility = eHostility_Neutral;
 
 	// successfully completing the hack requires and costs an action point
@@ -2385,7 +2385,7 @@ static function X2AbilityTemplate RTCancelTechnopathyHack(Name TemplateName = 'R
 	Template.bDisplayInUITooltip = false;
 	Template.bLimitTargetIcons = true;
 	Template.ShotHUDPriority = class'UIUtilities_Tactical'.const.CLASS_SERGEANT_PRIORITY;
-	Template.AbilitySourceName = 'eAbilitySource_Perk';
+	Template.AbilitySourceName = 'eAbilitySource_Psionic';
 	Template.Hostility = eHostility_Neutral;
 
 	Template.AbilityToHitCalc = default.DeadEye;
