@@ -26,6 +26,7 @@ simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffe
 	// Uh, no...
 	// Oh.
 	AddPersistentStatChange(eStat_DetectionModifier, 1);
+	ToggleWOTCSpawns(NewGameState, false);
 
 	super.OnEffectAdded(ApplyEffectParameters, kNewTargetState, NewGameState, NewEffectState);
 }
@@ -40,7 +41,7 @@ simulated function bool OnEffectTicked(const out EffectAppliedData ApplyEffectPa
 simulated function OnEffectRemoved(const out EffectAppliedData ApplyEffectParameters, XComGameState NewGameState, bool bCleansed, XComGameState_Effect RemovedEffectState)
 {
 	//ModifyTimer(!bShouldPauseTimer);
-
+	ToggleWOTCSpawns(NewGameState, true);
 	super.OnEffectRemoved(ApplyEffectParameters, NewGameState, bCleansed, RemovedEffectState);
 }
 
@@ -72,6 +73,18 @@ simulated function DelayTimer(XComGameState NewGameState) {
 		if(NewUiTimer.TimerValue > 3) // the 3 value is hard-coded into the kismet mission maps, so we hard-code it here as well {
 			NewUiTimer.UiState = Normal_Blue;
 	}
+}
+
+simulated function ToggleWOTCSpawns(XComGameState NewGameState, bool ShouldSpawn) {
+	local XComGameState_BattleData Data;
+	local XComGameStateHistory History;
+
+	History = `XCOMHISTORY;
+	Data = XComGameState_BattleData(`XCOMHISTORY.GetSingleGameStateObjectForClass(class'XComGameState_BattleData'));
+	Data = XComGameState_BattleData(NewGameState.ModifyStateObject(class'XComGameState_BattleData', Data.ObjectID));
+
+	Data.bChosenSpawningDisabledViaKismet = !ShouldSpawn;
+	Data.bLostSpawningDisabledViaKismet = !ShouldSpawn;
 }
 
 defaultproperties

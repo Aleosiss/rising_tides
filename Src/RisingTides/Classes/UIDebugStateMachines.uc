@@ -75,11 +75,11 @@ simulated static function PrintOutPerkContentsForXComUnits() {
 	
 	foreach `TACTICALGRI.AllActors(class'XGUnit', Unit)
     {
-        if(Unit.GetTeam() == eTeam_XCom)
+        if(Unit.GetTeam() == eTeam_XCom) {
 			PrintOutPerkContentsForUnit(Unit);
+		}
     }
 }
-
 
 simulated static function PrintOutPerkContentsForUnit(XGUnit Unit) {
 	local XComUnitPawn UnitPawn;

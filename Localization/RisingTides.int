@@ -55,6 +55,13 @@ LocHelpText="Peer over the shoulder of enemy units, seeing what they see."
 LocFlyOverText="Over The Shoulder"
 LocPromotionPopupText="<Bullet/> Over the Shoulder grants vision of enemy units, but only certain abilities will be able to target them without direct line of sight.<br/>"
 
+[RTTheSixPathsOfPain RTAbilityTemplate]
+LocFriendlyName="The Six Paths of Pain"
+LocLongDescription="Automatically cast Over the Shoulder for free at the start of each turn."
+LocHelpText="Automatically cast Over the Shoulder for free at the start of each turn."
+LocFlyOverText="The Six Paths of Pain"
+LocPromotionPopupText="<Bullet/> Will not trigger if the unit can't cast Over the Shoulder.<br/>"
+
 [RTTheSixPathsOfPainOverride RTAbilityTemplate]
 LocFriendlyName="Over The Shoulder"
 LocLongDescription="Peer over the shoulder of enemy units in a large radius, seeing what they see."

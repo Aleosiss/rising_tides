@@ -1,0 +1,91 @@
+[PersonnelHadley X2EncyclopediaTemplate]
+ListTitle="Personnel Dossier: Dr. Hadley"
+DescriptionTitle="Dr. Hadley - STATUS: ACTIVE"
+DescriptionEntry="Dr. Elizabeth Hadley, born on October 3rd, 1968, is a certified genius. Earning her Ph.D at the age of 19, it was assumed by academia at large that she had a bright future ahead of her. However, she fell off the face of the planet shortly afterwards, leaving many to speculate that she had been snatched up by the R&D branch of the government. Although it seems obvious now, whatever she has been working on for the past thirty-five years is unknown, and that she has been transferred to XCOM only now, with Aliens on own proverbial doorstep, speaks for its importance. \nC.O. Bradford Note: Yes, this is the exact file I gave you last time."
+
+[FactionTemplars X2EncyclopediaTemplate]
+ListTitle="The Program"
+DescriptionTitle="Program"
+DescriptionEntry="The Program, led by Dr. Hadley, are an offshoot of XCOM, branching off in the 1970's. Their primary focus is ensuring that when ADVENT falls, they-- at the expense of any other, even XCOM-- stand on top of the pile of rumble."
+
+[ProgramGhosts X2EncyclopediaTemplate]
+ListTitle="Program Classes"
+DescriptionTitle="Program Classes"
+DescriptionEntry="The Program fields a small number of psionic operatives. Augmented cybernetically and genetically through a substance known as \"MELD"\, they are truly elite, each a veteran of twenty, thirty, or even forty years of combat against both human and alien threats. Each has a unique skillset, but they share a common base of psionic abilities, such as Mind Control, Mind Wrack, and Mind Meld."
+
+[Faction_Program X2ResistanceFactionTemplate]
+FactionTitle="Program"
+FactionHQDisplayName="PROGRAM FOB-00X"
+LeaderQuote="\"We fight against the subtle threats. Including you, Commander.\" - Dr. Hadley"
+InfluenceMediumQuote="\"It is good to work with you again, Commander. Reminds me of the good old days, when the threats fell from the stars and not rise up all around.\" - Dr. Hadley"
+InfluenceHighQuote="\"With the Templars gone, there is only one lasting threat to the stability of our society. Commander. You know what must be done.\" - Dr. Hadley"
+
+GroupNames[0]="SPECTRE"
+GroupNames[1]="GHOST"
+GroupNames[2]="PHANTOM"
+GroupNames[3]="SHADE"
+GroupNames[4]="REAPER"
+GroupNames[5]="MIRAGE"
+
+Descriptors_Prefix[0]=""
+
+Descriptors_Suffix[0]="-001"
+Descriptors_Suffix[1]="-002"
+Descriptors_Suffix[2]="-003"
+Descriptors_Suffix[3]="-004"
+Descriptors_Suffix[4]="-005"
+Descriptors_Suffix[5]="-006"
+Descriptors_Suffix[6]="-007"
+Descriptors_Suffix[7]="-008"
+Descriptors_Suffix[8]="-009"
+
+
+[CovertActionNarrative_FindFaction_Program X2CovertActionNarrativeTemplate]
+ActionName="Old Signals"
+ActionPreNarrative="Commander, we've been picking up scattered transmissions on an old XCOM frequency. With your permission, I'd like to take a squad and investigate."
+ActionPostNarrative="Commander, I managed to locate the source of the signals-- a old FOB, manned by an unknown faction. When I introduced myself, they told me that Dr. Hadley, of all people, was waiting to talk."
+
+[CovertActionNarrative_RecruitEngineer_Program X2CovertActionNarrativeTemplate]
+ActionName="Tech Support"
+ActionPreNarrative="We have made contact with resistance sympathizer in one of the megacities. Allowing him to join us would be a security breach, but they're all yours."
+ActionPostNarrative="The sympathizer turned out to be technically-minded, having worked extensively in an ADVENT Mechbay. They'll be a boon to engineering."
+
+[CovertActionNarrative_HuntTemplars_P1_Program X2CovertActionNarrativeTemplate]
+ActionName="Find Them"
+ActionPreNarrative="As you might recall, Commander, six days after the Temple Ship crash-landed, I started Operation: Brave New World. Unfortunately, there was a lone survivor. Staff Sergeant Lanner was left a managled wreck, his mind in shambles from my operative's psionic assault, but he managed to limp away during the chaos of the beginning of Operation: Ashes and Temples part three. Only recently have we managed to pinpoint his general location, but we need your manpower to figure out where he's hiding."
+ActionPostNarrative="Excellent. You should be proud of your soldiers, Commander. Keeping up with my operatives is not an easy task."
+
+[CovertActionNarrative_HuntTemplars_P2_Program X2CovertActionNarrativeTemplate]
+ActionName="Gain Their Trust"
+ActionPreNarrative="Mobilizing enough operatives to assault the base head-on and ensure no survivors would take far too long. I have a better idea, and I'll need more of your men to accomplish it."
+ActionPostNarrative="With the help of your soldiers, I have managed to place several operatives as civilians within the Templar compound. One step at a time."
+
+[CovertActionNarrative_HuntTemplars_P3_Program X2CovertActionNarrativeTemplate]
+ActionName="Annihilate Them"
+ActionPreNarrative="I have directed my operatives on the inside to attempt to set up a meeting with Geist. When that happens, Commander, I hope you will send your best."
+ActionPostNarrative="The trap is set. The bait is ready. All that remains is spring it. I will send my best, and if you do the same, victory is assured."
+
+[CovertActionNarrative_RevealChosenMovements_Program X2CovertActionNarrativeTemplate]
+ActionName="Behind Enemy Lines"
+ActionPreNarrative="My operative onboard the Avenger has informed me that the Chosen have been hunting for you in particular, Commander. Troubling, but not unexpected in light of recent events. I have a man with information on <XGParam:StrValue2/!ChosenClass/>'s base of operations, but communications with him are patchy and sporadic. I recommend that you send some soldiers to rendezvous with him and retrieve that intelligence."
+ActionPostNarrative="The data indicates <XGParam:StrValue1/!ChosenName/>'s' stronghold is located in <XGParam:StrValue3/!ContinentName/>."
+
+[CovertActionNarrative_RevealChosenStrengths_Program X2CovertActionNarrativeTemplate]
+ActionName="Find the Stronghold"
+ActionPreNarrative="Now that we have the general location, I can bring the full might of the Program against <XGParam:StrValue2/!ChosenClass/>'s stronghold. However, RECSATs are old and need maintenance. If you can send some men on a raid for parts, we can make this happen."
+ActionPostNarrative="We now have satellite confirmation of ADVENT transports entering and leaving a covert base of operations located in <XGParam:StrValue3/!ContinentName/>. We will begin planning for the strike immediately."
+
+[CovertActionNarrative_RevealChosenStronghold_Program X2CovertActionNarrativeTemplate]
+ActionName="Into the Fire"
+ActionPreNarrative="In order to enable the strike against the Chosen Stronghold, we'll need to figure out of to breach it. Send some of your men along with my own Operatives to get a feel for the base."
+ActionPostNarrative="We have determined the best plan of entry to <XGParam:StrValue1/!ChosenName/>'s stronghold. Transmitting now."
+
+[CovertActionNarrative_RemoveDoom_Program X2CovertActionNarrativeTemplate]
+ActionName="Sabotage"
+ActionPreNarrative="Sabotage is one of many specialties."
+ActionPostNarrative="All too easy."
+
+[CovertActionNarrative_BreakthroughTech_Program X2CovertActionNarrativeTemplate]
+ActionName="Technical Advances"
+ActionPreNarrative="I'm surprised you guys don't know about this. Let me dig through the old archives for the reports."
+ActionPostNarrative="Thanks, Commander. Going through those files is a pleasant trip down memory lane. Happy to do it for you."

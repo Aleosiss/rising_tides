@@ -395,7 +395,6 @@ function EventListenerReturn RTAbilityTriggerEventListener_ValidAbilityLocations
 	local AvailableTarget EmptyTarget;
 	local int i;
 
-	`LOG("IT'S WORKING, IT'S WORKING !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
 	History = `XCOMHISTORY;
 
 	SourceUnit = XComGameState_Unit(History.GetGameStateForObjectID(OwnerStateObject.ObjectID));
@@ -407,7 +406,7 @@ function EventListenerReturn RTAbilityTriggerEventListener_ValidAbilityLocations
 		World = `XWORLD;
 		CurrentAvailableAction.AbilityObjectRef = GetReference();
 		i = 0;
-		`LOG("Listing X Coords of ValidTiles");
+		//`LOG("Listing X Coords of ValidTiles");
 		foreach ValidActivationTiles(ValidTile) {
 			`LOG("" @ ValidTile.X);
 			// reset targets each loop
@@ -430,6 +429,38 @@ function EventListenerReturn RTAbilityTriggerEventListener_ValidAbilityLocations
 	}
 
 	return ELR_NoInterrupt;
+}
+
+function EventListenerReturn RTAbilityTriggerEventListener_Self(Object EventData, Object EventSource, XComGameState GameState, Name EventID, Object CallbackData)
+{
+	`LOG("Rising Tides: RTAbilityTriggerEventListener_Self");
+	`LOG(XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(OwnerStateObject.ObjectID)).GetFullName());
+	ActivateAbility(OwnerStateObject);
+	return ELR_NoInterrupt;
+}
+
+// ActivateAbility
+protected function ActivateAbility(StateObjectReference TargetRef) {
+	local XComGameStateContext_Ability	AbilityContext;
+	local XComGameState					NewGameState;
+	local name							AvailableCode;
+
+	AvailableCode = CanActivateAbilityForObserverEvent(XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(TargetRef.ObjectID)));
+	if(AvailableCode != 'AA_Success') {
+		`LOG("Rising Tides: Couldn't Activate "@ self.GetMyTemplateName() @ " for observer event, Code = "$ AvailableCode);
+	} else {
+		NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState(string(GetFuncName()));
+		NewGameState.ModifyStateObject(self.Class, ObjectID);
+		`TACTICALRULES.SubmitGameState(NewGameState);
+	}
+
+	AbilityContext = class'XComGameStateContext_Ability'.static.BuildContextFromAbility(self, TargetRef.ObjectID);
+
+	if( AbilityContext.Validate() ) {
+		`TACTICALRULES.SubmitGameStateContext(AbilityContext);
+	} else {
+		`LOG("Rising Tides: Couldn't validate AbilityContext, " @ self.GetMyTemplateName() @ " not activated.");
+	}
 }
 
 defaultproperties

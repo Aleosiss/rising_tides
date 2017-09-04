@@ -554,7 +554,7 @@ static function X2AbilityTemplate RTExtinctionEventPartThree() {
       local X2Effect_ApplyWeaponDamage WeaponDamage;
       local X2AbilityMultiTarget_Radius Radius;
       //local X2Effect_Persistent UnconsciousEffect;
-	  local X2Effect_PersistentStatChange DisorientedEffect;
+	  local X2Effect_Persistent DisorientedEffect;
 
       `CREATE_X2ABILITY_TEMPLATE(Template, 'RTExtinctionEventPartThree');
       Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_NeverShow;
@@ -592,8 +592,7 @@ static function X2AbilityTemplate RTExtinctionEventPartThree() {
       //UnconsciousEffect = class'X2StatusEffects'.static.CreateUnconsciousStatusEffect();
       //Template.AddTargetEffect(UnconsciousEffect);
 
-	  DisorientedEffect = class'X2StatusEffects'.static.CreateDisorientedStatusEffect(,,false);
-	  DisorientedEffect.iNumTurns = 40;
+	  DisorientedEffect = class'X2StatusEffects'.static.CreateUnconsciousStatusEffect();
 	  Template.AddTargetEffect(DisorientedEffect);
 
 	  WeaponDamage = new class'X2Effect_ApplyWeaponDamage';
@@ -620,88 +619,84 @@ static function X2AbilityTemplate RTExtinctionEventPartThree() {
 // Then, it checks for Triangulation on the source.
 // Finally, SPoP activates TriangulatedOverTheShoulder on each MultiTarget that passes.
 static function X2AbilityTemplate RTTheSixPathsOfPain() {
-      local X2AbilityTemplate Template;
-      local X2AbilityTrigger_EventListener Trigger;
-      local X2Effect_GrantActionPoints ActionPointEffect;
-      local X2Effect_ImmediateAbilityActivation ActivationEffect;
-      local X2Effect_ImmediateMultiTargetAbilityActivation MultiActivationEffect;
-      local X2Condition_AbilityProperty TriangulationCondition;
-      local X2AbilityMultiTarget_AllAllies MultiTarget;
-      local X2Condition_UnitEffects   MeldCondition;
-      local X2Condition_UnitEffectsWithAbilitySource SourceMeldCondition;
-	  local X2Condition_UnitEffects FeedbackCondition;
+    local X2AbilityTemplate Template;
+    local X2AbilityTrigger_EventListener EventTrigger;
+    local X2Effect_GrantActionPoints ActionPointEffect;
+    local X2Effect_ImmediateAbilityActivation ActivationEffect;
+    local X2Effect_ImmediateMultiTargetAbilityActivation MultiActivationEffect;
+    local X2Condition_AbilityProperty TriangulationCondition;
+    local X2AbilityMultiTarget_AllAllies MultiTarget;
+    local X2Condition_UnitEffects   MeldCondition;
+    local X2Condition_UnitEffectsWithAbilitySource SourceMeldCondition;
+	local X2Condition_UnitEffects FeedbackCondition;
 
-      `CREATE_X2ABILITY_TEMPLATE(Template, 'RTTheSixPathsOfPain');
-      Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_NeverShow;
-      Template.Hostility = eHostility_Neutral;
-      Template.IconImage = "img:///RisingTidesContentPackage.PerkIcons.UIPerk_overwatch_blaze_spop";
-      Template.AbilitySourceName = 'eAbilitySource_Psionic';
+	`CREATE_X2TEMPLATE(class'RTAbilityTemplate', Template, 'RTTheSixPathsOfPain');
+    Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_NeverShow;
+    Template.Hostility = eHostility_Neutral;
+    Template.IconImage = "img:///RisingTidesContentPackage.PerkIcons.UIPerk_overwatch_blaze_spop";
+    Template.AbilitySourceName = 'eAbilitySource_Psionic';
 
-      Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
-  	  Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
-  	  Template.bSkipFireAction = true;
-  	  Template.bCrossClassEligible = false;
+    Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
+  	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
+  	Template.bSkipFireAction = true;
+  	Template.bCrossClassEligible = false;
 
-      Template.AbilityTargetStyle = default.SelfTarget;
-      Template.AbilityToHitCalc = default.Deadeye;
+    Template.AbilityTargetStyle = default.SelfTarget;
+    Template.AbilityToHitCalc = default.Deadeye;
 
-	  Template.AbilityCosts.AddItem(default.FreeActionCost);
+    // This block handles MultiTargeting for Triangulation effects:
+    // Only if the Gatherer has Triangulation.
+    // Only if the Gatherer is melded.
+    // Only if the Target is melded.
+    MeldCondition = new class'X2Condition_UnitEffects';
+    MeldCondition.AddRequireEffect(class'RTEffect_Meld'.default.EffectName, 'AA_UnitNotMelded');
+    SourceMeldCondition = new class'X2Condition_UnitEffectsWithAbilitySource';
+    SourceMeldCondition.AddRequireEffect(class'RTEffect_Meld'.default.EffectName, 'AA_UnitNotMelded');
+    TriangulationCondition = new class'X2Condition_AbilityProperty';
+    TriangulationCondition.OwnerHasSoldierAbilities.AddItem('RTTriangulation');
+	
+	Template.AbilityMultiTargetConditions.AddItem(TriangulationCondition);
+    Template.AbilityMultiTargetConditions.AddItem(MeldCondition);
+    Template.AbilityMultiTargetConditions.AddItem(SourceMeldCondition);
+	Template.AbilityMultiTargetConditions.AddItem(default.LivingFriendlyUnitOnlyProperty);
 
-      Trigger = new class'X2AbilityTrigger_EventListener';
-      Trigger.ListenerData.Priority = 35; // this way we don't conflict with automatic SquadViewer cleanup
-      Trigger.ListenerData.EventID = 'PlayerTurnBegun';
-      Trigger.ListenerData.EventFn = class'XComGameState_Ability'.static.AbilityTriggerEventListener_Self;
-      Trigger.ListenerData.Filter = eFilter_None;
-      Trigger.ListenerData.Deferral = ELD_OnStateSubmitted;
-      Template.AbilityTriggers.AddItem(Trigger);
+    MultiTarget = new class'X2AbilityMultiTarget_AllAllies';
+    Template.AbilityMultiTargetStyle = MultiTarget;
 
-      // This block handles MultiTargeting for Triangulation effects:
-      // Only if the Gatherer has Triangulation.
-      // Only if the Gatherer is melded.
-      // Only if the Target is melded.
-      MeldCondition = new class'X2Condition_UnitEffects';
-      MeldCondition.AddRequireEffect(class'RTEffect_Meld'.default.EffectName, 'AA_UnitNotMelded');
-      SourceMeldCondition = new class'X2Condition_UnitEffectsWithAbilitySource';
-      SourceMeldCondition.AddRequireEffect(class'RTEffect_Meld'.default.EffectName, 'AA_UnitNotMelded');
-      TriangulationCondition = new class'X2Condition_AbilityProperty';
-      TriangulationCondition.OwnerHasSoldierAbilities.AddItem('RTTriangulation');
+    // OTS requires an Action Point to use, but The Six Paths of Pain makes it free. Grant an additional point here.
+    ActionPointEffect = new class'X2Effect_GrantActionPoints';
+    ActionPointEffect.NumActionPoints = default.OTS_ACTION_POINT_COST;
+    ActionPointEffect.PointType = class'X2CharacterTemplateManager'.default.StandardActionPoint;
 
-      Template.AbilityMultiTargetConditions.AddItem(TriangulationCondition);
-      Template.AbilityMultiTargetConditions.AddItem(MeldCondition);
-      Template.AbilityMultiTargetConditions.AddItem(SourceMeldCondition);
-	  Template.AbilityMultiTargetConditions.AddItem(default.LivingFriendlyUnitOnlyProperty);
+    //Template.AddMultiTargetEffect(ActionPointEffect);
+	Template.AddShooterEffectExclusions();
+	FeedbackCondition = new class'X2Condition_UnitEffects';
+	FeedbackCondition.AddExcludeEffect(default.RTFeedbackEffectName, 'AA_UnitIsPanicked');
+	FeedBackCondition.AddExcludeEffect(class'X2StatusEffects'.default.UnconsciousName, 'AA_UnitIsPanicked');
+	Template.AbilityShooterConditions.AddItem(FeedbackCondition);
 
-      MultiTarget = new class'X2AbilityMultiTarget_AllAllies';
-      Template.AbilityMultiTargetStyle = MultiTarget;
+    ActivationEffect = new class'X2Effect_ImmediateAbilityActivation';
+    ActivationEffect.AbilityName = 'RTTheSixPathsOfPainOverride';
+	Template.AddTargetEffect(ActivationEffect);
 
-      // OTS requires an Action Point to use, but The Six Paths of Pain makes it free. Grant an additional point here.
-      ActionPointEffect = new class'X2Effect_GrantActionPoints';
-      ActionPointEffect.NumActionPoints = default.OTS_ACTION_POINT_COST;
-      ActionPointEffect.PointType = class'X2CharacterTemplateManager'.default.StandardActionPoint;
-
-      //Template.AddMultiTargetEffect(ActionPointEffect);
-
-	  Template.AddShooterEffectExclusions();
-	  FeedbackCondition = new class'X2Condition_UnitEffects';
-	  FeedbackCondition.AddExcludeEffect(default.RTFeedbackEffectName, 'AA_UnitIsPanicked');
-	  FeedBackCondition.AddExcludeEffect(class'X2StatusEffects'.default.UnconsciousName, 'AA_UnitIsPanicked');
-	  Template.AbilityShooterConditions.AddItem(FeedbackCondition);
-
-      ActivationEffect = new class'X2Effect_ImmediateAbilityActivation';
-      ActivationEffect.AbilityName = 'RTTheSixPathsOfPainOverride';
-
-      MultiActivationEffect = new class'X2Effect_ImmediateMultiTargetAbilityActivation';
-      MultiActivationEffect.AbilityName = 'TriangulatedOverTheShoulder';
-
-      Template.AddTargetEffect(ActivationEffect);
-      Template.AddMultiTargetEffect(MultiActivationEffect);
-	  Template.AddTargetEffect(ActionPointEffect);				 // add this after activating OTS
-
-      Template.AdditionalAbilities.AddItem('RTTheSixPathsOfPainIcon');
-	  Template.AdditionalAbilities.AddItem('RTTheSixPathsOfPainOverride');
+    MultiActivationEffect = new class'X2Effect_ImmediateMultiTargetAbilityActivation';
+    MultiActivationEffect.AbilityName = 'TriangulatedOverTheShoulder';
+	Template.AddMultiTargetEffect(MultiActivationEffect);
 	  
+	Template.AddTargetEffect(ActionPointEffect);				 // add this after activating OTS
 
-      return Template;
+    Template.AdditionalAbilities.AddItem('RTTheSixPathsOfPainIcon');
+	Template.AdditionalAbilities.AddItem('RTTheSixPathsOfPainOverride');
+	
+	Template.AbilityTriggers.Length = 0;
+	EventTrigger = new class'X2AbilityTrigger_EventListener';
+	EventTrigger.ListenerData.Deferral = ELD_OnStateSubmitted;
+	EventTrigger.ListenerData.EventID = 'PlayerTurnBegun';
+	EventTrigger.ListenerData.Filter = eFilter_None;
+	EventTrigger.ListenerData.EventFn = class'XComGameState_Ability'.static.AbilityTriggerEventListener_Self;
+	Template.AbilityTriggers.AddItem(EventTrigger);
+	  
+    return Template;
 }
 
 static function X2AbilityTemplate RTTheSixPathsOfPainIcon() {
@@ -714,24 +709,23 @@ static function X2AbilityTemplate RTTheSixPathsOfPainOverride() {
 
 	Template = CreateOverTheShoulderAbility(Template);
 
-	Template.AdditionalAbilities.AddItem('OverTheShoulderPassives');
 	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_NeverShow;
 	Template.IconImage = "img:///RisingTidesContentPackage.PerkIcons.UIPerk_overwatch_blaze_spop";
 
-	// standard ghost abilities
-	Template.AdditionalAbilities.AddItem('GhostPsiSuite');
-	Template.AdditionalAbilities.AddItem('JoinMeld');
-	Template.AdditionalAbilities.AddItem('LeaveMeld');
-	Template.AdditionalAbilities.AddItem('PsiOverload');
-	Template.AdditionalAbilities.AddItem('RTFeedback');
-	Template.AdditionalAbilities.AddItem('RTMindControl');
-	Template.AdditionalAbilities.AddItem('RTEnterStealth');
-
-	// special meld abilities
-	Template.AdditionalAbilities.AddItem('LIOverwatchShot');
-	Template.AdditionalAbilities.AddItem('RTUnstableConduitBurst');
-	Template.AdditionalAbilities.AddItem('PsionicActivate');
-	Template.AdditionalAbilities.AddItem('RTHarbingerPsionicLance');
+	//// standard ghost abilities
+	//Template.AdditionalAbilities.AddItem('GhostPsiSuite');
+	//Template.AdditionalAbilities.AddItem('JoinMeld');
+	//Template.AdditionalAbilities.AddItem('LeaveMeld');
+	//Template.AdditionalAbilities.AddItem('PsiOverload');
+	//Template.AdditionalAbilities.AddItem('RTFeedback');
+	//Template.AdditionalAbilities.AddItem('RTMindControl');
+	//Template.AdditionalAbilities.AddItem('RTEnterStealth');
+//
+	//// special meld abilities
+	//Template.AdditionalAbilities.AddItem('LIOverwatchShot');
+	//Template.AdditionalAbilities.AddItem('RTUnstableConduitBurst');
+	//Template.AdditionalAbilities.AddItem('PsionicActivate');
+	//Template.AdditionalAbilities.AddItem('RTHarbingerPsionicLance');
 
 	Template.PostActivationEvents.AddItem(default.PostOverTheShoulderEventName);
 
@@ -1654,6 +1648,7 @@ static function X2AbilityTemplate RTCrushingGrasp() {
 
 	// This ability is 'offensive' and can be interrupted!
 	Template.BuildInterruptGameStateFn = TypicalAbility_BuildInterruptGameState;
+	Template.PostActivationEvents.AddItem(default.UnitUsedPsionicAbilityEvent);
 
 	return Template;
 
@@ -1777,8 +1772,6 @@ static function X2AbilityTemplate RTPsionicStorm() {
 	Template.BuildVisualizationFn = DimensionalRiftStage1_BuildVisualization;
 	Template.BuildAffectedVisualizationSyncFn = DimensionalRigt1_BuildAffectedVisualization;
 	Template.CinescriptCameraType = "Psionic_FireAtLocation";
-
-
 
 	// This ability is 'offensive' and can be interrupted!
 	Template.BuildInterruptGameStateFn = TypicalAbility_BuildInterruptGameState;
