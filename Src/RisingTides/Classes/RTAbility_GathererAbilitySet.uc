@@ -94,7 +94,7 @@ static function array<X2DataTemplate> CreateTemplates()
 	Templates.AddItem(RTExtinctionEventPartTwo());
 	Templates.AddItem(RTExtinctionEventPartThree());
 	Templates.AddItem(RTUnwillingConduits());
-	Templates.AddItem(PurePassive('RTUnwillingConduitsIcon', "img://UILibrary_PerkIcons.UIPerk_swordSlash", false, 'eAbilitySource_Psionic'));
+	Templates.AddItem(PurePassive('RTUnwillingConduitsIcon', "img:///UILibrary_PerkIcons.UIPerk_swordSlash", false, 'eAbilitySource_Psionic'));
 	Templates.AddItem(RTDomination());
 	Templates.AddItem(RTTechnopathy());
 	Templates.AddItem(RTConstructTechnopathyHack('RTTechnopathy_Hack'));
@@ -105,7 +105,7 @@ static function array<X2DataTemplate> CreateTemplates()
 	Templates.AddItem(RTCancelTechnopathyHack());
 	Templates.AddItem(RTSibyl());
 	Templates.AddItem(RTEchoedAgony());
-	Templates.AddItem(PurePassive('RTEchoedAgonyIcon', "img://UILibrary_PerkIcons.UIPerk_swordSlash", false, 'eAbilitySource_Psionic'));
+	Templates.AddItem(PurePassive('RTEchoedAgonyIcon', "img:///UILibrary_PerkIcons.UIPerk_swordSlash", false, 'eAbilitySource_Psionic'));
 	Templates.AddItem(RTCreateEchoedAgonyEffectAbility());
 	Templates.AddItem(RTGuiltyConscience());
 	Templates.AddItem(RTGuiltyConscienceEvent());
@@ -372,7 +372,7 @@ static function X2AbilityTemplate RTTriangulation() {
 
 	`CREATE_X2TEMPLATE(class'RTAbilityTemplate', Template, 'RTTriangulation');
 	Template = CreateOverTheShoulderAbility(Template);
-
+	Template.AbilitySourceName = 'eAbilitySource_Psionic';
 	Template.AbilityTriggers.Length = 0;
 	Template.AbilityCosts.Length = 0;
 	Template.AbilityCooldown = none;
@@ -397,8 +397,7 @@ static function X2AbilityTemplate RTTriangulation() {
 static function X2AbilityTemplate RTTriangulationIcon() {
 	local X2AbilityTemplate Template;
 
-	Template = PurePassive('RTTriangulationIcon', "img:///UILibrary_PerkIcons.UIPerk_swordSlash", true);
-	Template.AbilitySourceName = 'eAbilitySource_Psionic';
+	Template = PurePassive('RTTriangulationIcon', "img:///UILibrary_PerkIcons.UIPerk_swordSlash", false, 'eAbilitySource_Psionic');
 
 	return Template;
 }
@@ -706,7 +705,7 @@ static function X2AbilityTemplate RTTheSixPathsOfPain() {
 }
 
 static function X2AbilityTemplate RTTheSixPathsOfPainIcon() {
-    return PurePassive('RTTheSixPathsOfPainIcon', "img:///RisingTidesContentPackage.PerkIcons.UIPerk_overwatch_blaze_spop", true);
+    return PurePassive('RTTheSixPathsOfPainIcon', "img:///RisingTidesContentPackage.PerkIcons.UIPerk_overwatch_blaze_spop", false, 'eAbilitySource_Psionic');
 }
 
 static function X2AbilityTemplate RTTheSixPathsOfPainOverride() {
@@ -1123,7 +1122,7 @@ static function X2AbilityTemplate RTDomination() {
 static function X2AbilityTemplate RTTechnopathy() {
 	local X2AbilityTemplate Template;
 
-	Template = PurePassive(default.RTTechnopathyTemplateName, "img:///UILibrary_PerkIcons.UIPerk_swordSlash", true);
+	Template = PurePassive(default.RTTechnopathyTemplateName, "img:///UILibrary_PerkIcons.UIPerk_swordSlash", true, 'eAbilitySource_Psionic');
 
 	Template.AdditionalAbilities.AddItem('RTFinalizeTechnopathyHack');
 	Template.AdditionalAbilities.AddItem('RTCancelTechnopathyHack');

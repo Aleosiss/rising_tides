@@ -2649,7 +2649,7 @@ static function X2AbilityTemplate RTCloseCombatSpecialist()
 {
 	local X2AbilityTemplate                 Template;
 
-	Template = PurePassive('RTCloseCombatSpecialist', "img:///UILibrary_LW_PerkPack.LW_AbilityCloseCombatSpecialist", false, 'eAbilitySource_Perk');
+	Template = PurePassive('RTCloseCombatSpecialist', "img:///RisingTidesContentPackage.PerkIcons.LW_AbilityCloseCombatSpecialist", false, 'eAbilitySource_Perk');
 	Template.AdditionalAbilities.AddItem('RTCloseCombatSpecialistAttack');
 	return Template;
 }
@@ -2673,7 +2673,7 @@ static function X2AbilityTemplate RTCloseCombatSpecialistAttack()
 
 	Template.AbilitySourceName = 'eAbilitySource_Perk';
 	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_NeverShow;
-	Template.IconImage = "img:///UILibrary_LW_PerkPack.LW_AbilityCloseCombatSpecialist";
+	Template.IconImage = "img:///RisingTidesContentPackage.PerkIcons.LW_AbilityCloseCombatSpecialist";
 	Template.ShotHUDPriority = class'UIUtilities_Tactical'.const.CLASS_CAPTAIN_PRIORITY;
 	Template.Hostility = eHostility_Defensive;
 	Template.bCrossClassEligible = false;

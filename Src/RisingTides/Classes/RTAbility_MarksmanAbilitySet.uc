@@ -468,7 +468,7 @@ static function X2AbilityTemplate RTPrecisionShot()
 	Template.AdditionalAbilities.AddItem('RTPrecisionShotDamage');
 
 	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_deadeye";
-	Template.AbilitySourceName = 'eAbilitySource_Perk';
+	Template.AbilitySourceName = 'eAbilitySource_Standard';
 	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_AlwaysShow;
 	Template.Hostility = eHostility_Offensive;
 	Template.ShotHUDPriority = class'UIUtilities_Tactical'.const.CLASS_SERGEANT_PRIORITY;
@@ -567,7 +567,7 @@ static function X2AbilityTemplate RTAggression()
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'RTAggression');
 	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_aggression";
 
-	Template.AbilitySourceName = 'eAbilitySource_Perk';
+	Template.AbilitySourceName = 'eAbilitySource_Psionic';
 	Template.eAbilityIconBehaviorHUD = EAbilityIconBehavior_NeverShow;
 	Template.Hostility = eHostility_Neutral;
 
@@ -599,7 +599,7 @@ static function X2AbilityTemplate KnockThemDown()
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'KnockThemDown');
 	Template.IconImage = "img:///RisingTidesContentPackage.PerkIcons.UIPerk_sniper_bullet_x3";
 
-	Template.AbilitySourceName = 'eAbilitySource_Perk';
+	Template.AbilitySourceName = 'eAbilitySource_Psionic';
 	Template.eAbilityIconBehaviorHUD = EAbilityIconBehavior_NeverShow;
 	Template.Hostility = eHostility_Neutral;
 
@@ -778,7 +778,7 @@ static function X2AbilityTemplate SixOClock()
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'SixOClock');
 	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_tacticalsense";
 
-	Template.AbilitySourceName = 'eAbilitySource_Perk';
+	Template.AbilitySourceName = 'eAbilitySource_Psionic';
 	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_NeverShow;
 	Template.Hostility = eHostility_Neutral;
 	Template.bIsPassive = true;
@@ -818,7 +818,7 @@ static function X2AbilityTemplate SixOClockEffect()
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'SixOClockEffect');
 	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_tacticalsense";
 
-	Template.AbilitySourceName = 'eAbilitySource_Perk';
+	Template.AbilitySourceName = 'eAbilitySource_Psionic';
 	Template.eAbilityIconBehaviorHUD = EAbilityIconBehavior_NeverShow;
 	Template.Hostility = eHostility_Neutral;
 
@@ -1314,7 +1314,7 @@ static function X2AbilityTemplate DaybreakFlameIcon()
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'DaybreakFlameIcon');
 	Template.IconImage = "img:///RisingTidesContentPackage.PerkIcons.rt_daybreaker";
 
-	Template.AbilitySourceName = 'eAbilitySource_Perk';
+	Template.AbilitySourceName = 'eAbilitySource_Psionic';
 	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_NeverShow;
 	Template.Hostility = eHostility_Neutral;
 
@@ -2624,7 +2624,7 @@ static function X2AbilityTemplate RTKubikuri()
 	local X2Condition_UnitEffects			SuppressedCondition;
 
 	`CREATE_X2ABILITY_TEMPLATE (Template, 'RTKubikuri');
-	Template.IconImage = "img:///UILibrary_LW_PerkPack.LW_AbilityKubikuri";
+	Template.IconImage = "img:///RisingTidesContentPackage.PerkIcons.LW_AbilityKubikuri";
 	Template.AbilitySourceName = 'eAbilitySource_Perk';
 	Template.ShotHUDPriority = class'UIUtilities_Tactical'.const.CLASS_CAPTAIN_PRIORITY;
 	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_AlwaysShow;
@@ -2697,7 +2697,7 @@ static function X2AbilityTemplate RTKubikuriDamage()
 	local X2AbilityTemplate					Template;
 
 	`CREATE_X2ABILITY_TEMPLATE (Template, 'RTKubikuriDamage');
-	Template.IconImage = "img:///UILibrary_LW_PerkPack.LW_AbilityKubikuri";
+	Template.IconImage = "img:///RisingTidesContentPackage.PerkIcons.LW_AbilityKubikuri";
     Template.AbilitySourceName = 'eAbilitySource_Perk';
     Template.eAbilityIconBehaviorHUD = 2;
     Template.Hostility = 2;

@@ -118,9 +118,9 @@ static function X2AbilityTemplate GhostPsiSuite()
 	local X2Effect_AdditionalAnimSets AnimSetEffect;
 
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'GhostPsiSuite');
-	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_adventpsiwitch_mindcontrol";
+	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_adventpsiwitch_mindcontrol"; //TODO: Change this
 
-	Template.AbilitySourceName = 'eAbilitySource_Perk';
+	Template.AbilitySourceName = 'eAbilitySource_Psionic';
 	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_NeverShow;
 	Template.Hostility = eHostility_Neutral;
 
