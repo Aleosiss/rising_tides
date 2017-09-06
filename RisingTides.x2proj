@@ -14,7 +14,6 @@
     <Folder Include="Content\" />
     <Folder Include="Localization\" />
     <Folder Include="Src\" />
-    <Folder Include="Src\TheProgram" />
     <Folder Include="Src\XComGame" />
     <Folder Include="Src\RisingTides\" />
     <Folder Include="Src\RisingTides\Classes\" />
@@ -25,6 +24,9 @@
       <SubType>Content</SubType>
     </Content>
     <Content Include="Config\XComGameData.ini">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Config\XComGameData_SoldierSkills.ini">
       <SubType>Content</SubType>
     </Content>
     <Content Include="Config\XComRisingTides.ini">
@@ -435,7 +437,7 @@
     <Content Include="Src\RisingTides\Classes\RTGameState_PersistentGhostSquad.uc">
       <SubType>Content</SubType>
     </Content>
-    <Content Include="Src\RisingTides\Classes\RTGameState_RisingTidesCommand.uc">
+    <Content Include="Src\RisingTides\Classes\RTGameState_ProgramFaction.uc">
       <SubType>Content</SubType>
     </Content>
     <Content Include="Src\RisingTides\Classes\RTGameState_SquadViewer.uc">

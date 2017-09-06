@@ -1,6 +1,5 @@
-// X2MeleePathingPawn, except no line to the target. Still working on not actually requiring a path to the target but this will do for now.
-
-class RTMeleePathingPawn extends X2MeleePathingPawn_RT;
+// X2MeleePathingPawn, except no line to the target
+class RTMeleePathingPawn extends X2MeleePathingPawn;
 
 // overridden to always just show the slash UI, regardless of cursor location or other considerations
 simulated protected function UpdatePuckVisuals(XComGameState_Unit ActiveUnitState,

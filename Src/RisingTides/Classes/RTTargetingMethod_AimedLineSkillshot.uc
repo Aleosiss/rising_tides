@@ -202,7 +202,7 @@ function DirectSetTarget(int TargetIndex)
 	local array<TTile> Tiles;
 	local XComDestructibleActor Destructible;
 	local Vector TilePosition;
-	local TTile CurrentTile, TargetTile;
+	local TTile CurrentTile;
 	local XComWorldData World;
 	local array<Actor> CurrentlyMarkedTargets;
 	local vector ShooterToTarget;
@@ -251,11 +251,10 @@ function DirectSetTarget(int TargetIndex)
 	bFriendlyFireAgainstUnits = false;
 
     NewTargetLocation = WorldData.GetPositionFromTileCoordinates(XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(GetTargetedObjectID())).TileLocation);
-	TargetTile = WorldData.GetTileCoordinatesFromPosition(NewTargetLocation);
 	//NewTargetLocation = WorldData.GetPositionFromTileCoordinates(TargetTile);
 	NewTargetLocation.Z = WorldData.GetFloorZForPosition(NewTargetLocation, true) + class'XComWorldData'.const.WORLD_HalfFloorHeight;
 
-        GetTargetedActors(NewTargetLocation, CurrentlyMarkedTargets, Tiles);
+	GetTargetedActors(NewTargetLocation, CurrentlyMarkedTargets, Tiles);
 	CheckForFriendlyUnit(CurrentlyMarkedTargets);
 	MarkTargetedActors(CurrentlyMarkedTargets, (!AbilityIsOffensive) ? FiringUnit.GetTeam() : eTeam_None );
 	
@@ -271,6 +270,7 @@ function DirectSetTarget(int TargetIndex)
 		}
 			
 	}
+
 	GetTargetedActorsInTiles(Tiles, CurrentlyMarkedTargets, false);
 	CheckForFriendlyUnit(CurrentlyMarkedTargets);
 	MarkTargetedActors(CurrentlyMarkedTargets, (!AbilityIsOffensive) ? FiringUnit.GetTeam() : eTeam_None);
@@ -282,8 +282,6 @@ function DirectSetTarget(int TargetIndex)
 		LineRotator = rotator( ShooterToTarget );
 		LineActor.SetRotation( LineRotator );
 	}
-
-
 }
 
 private function GetEffectAOETiles(out array<TTile> TilesToBeDamaged)

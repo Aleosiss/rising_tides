@@ -1,4 +1,4 @@
-class RTGameState_RisingTidesCommand extends XComGameState_BaseObject config(RisingTides);
+class RTGameState_ProgramFaction extends XComGameState_ResistanceFaction config(RisingTides);
 
 // a lot of the DeathRecordData code is from Xyl's Anatomist Perk. Thanks to him!
 
@@ -68,15 +68,20 @@ struct Squad
 
 var const config array<RTGhostOperative>	GhostTemplates;
 
-var() array<RTGhostOperative>									Master; 						// master list of operatives
-var() array<StateObjectReference> 								Active;						// ghosts active
-var() array<StateObjectReference> 								Deployed; 				// ghosts that will be on the next mission
-var() array<StateObjectReference>								Captured;					// ghosts not available
-var() array<RTGameState_PersistentGhostSquad>					Squads;						// list of ghost teams (only one for now)
+var() array<RTGhostOperative>									Master; 			// master list of operatives
+var() array<StateObjectReference> 								Active;				// ghosts active
+var() array<StateObjectReference> 								Deployed; 			// ghosts that will be on the next mission
+var() array<StateObjectReference>								Captured;			// ghosts not available
+var() array<RTGameState_PersistentGhostSquad>					Squads;				// list of ghost teams (only one for now)
 var() int 														iOperativeLevel;	// all ghosts get level ups after a mission, even if they weren't on it. lorewise, they're constantly running missions; the player only sees a fraction of them
 var bool														bSetupComplete;		// if we should rebuild the ghost array from config
 
 /* END OPERATIVE RECORD   */
+
+
+// FACTION VARIABLES
+var bool														bOneSmallFavorAvailable;	// can send squad on a mission, replacing XCOM				
+var bool														bTemplarsDestroyed;														
 
 
 /* *********************************************************************** */
@@ -375,3 +380,32 @@ function OnEndTacticalPlay(XComGameState NewGameState)
 		}
 	}
 }*/
+
+
+
+
+// Faction Stuff
+
+//#############################################################################################
+//----------------   FACTION SOLDIERS ---------------------------------------------------------
+//#############################################################################################
+
+//---------------------------------------------------------------------------------------
+function int GetNumFactionSoldiers(optional XComGameState NewGameState)
+{
+	return Master.Length;
+}
+
+//---------------------------------------------------------------------------------------
+function bool IsFactionSoldierRewardAllowed(XComGameState NewGameState)
+{
+	// The Program doesn't give out Faction Soldier rewards
+	return false;
+}
+
+//---------------------------------------------------------------------------------------
+function bool IsExtraFactionSoldierRewardAllowed(XComGameState NewGameState)
+{
+	// The Program doesn't give out Faction Soldier rewards
+	return false;
+}

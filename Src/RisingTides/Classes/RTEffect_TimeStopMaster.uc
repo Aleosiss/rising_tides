@@ -77,9 +77,7 @@ simulated function DelayTimer(XComGameState NewGameState) {
 
 simulated function ToggleWOTCSpawns(XComGameState NewGameState, bool ShouldSpawn) {
 	local XComGameState_BattleData Data;
-	local XComGameStateHistory History;
 
-	History = `XCOMHISTORY;
 	Data = XComGameState_BattleData(`XCOMHISTORY.GetSingleGameStateObjectForClass(class'XComGameState_BattleData'));
 	Data = XComGameState_BattleData(NewGameState.ModifyStateObject(class'XComGameState_BattleData', Data.ObjectID));
 

@@ -265,7 +265,7 @@ static function X2AbilityTemplate StandardGhostShot()
 	Template.AddTargetEffect(KnockbackEffect);
 
 	Template.PostActivationEvents.AddItem('StandardGhostShotActivated');
-
+	Template.PostActivationEvents.AddItem('StandardShotActivated');
 	class'X2StrategyElement_XpackDarkEvents'.static.AddStilettoRoundsEffect(Template);
 
 	Template.SuperConcealmentLoss = class'X2AbilityTemplateManager'.default.SuperConcealmentStandardShotLoss;
