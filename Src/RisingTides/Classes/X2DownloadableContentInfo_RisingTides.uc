@@ -25,6 +25,42 @@ static event InstallNewCampaign(XComGameState StartState)
 {}
 
 
+static event OnPostTemplatesCreated()
+{
+	MakePsiAbilitiesInterruptable();
+}
+
+simulated static function MakePsiAbilitiesInterruptable() {
+    local array<name> AbilityTemplateNames, PsionicTemplateNames;
+		local name AbilityTemplateName;
+    local X2AbilityTemplate AbilityTemplate;
+		local array<X2AbilityTemplate> AbilityTemplates;
+	  local X2AbilityTemplateManager AbilityTemplateMgr;
+		local int i;
+
+		// first unreserved index
+		for(i = 26; i < class'RTHelpers'.default.PsionicAbilities.Length; ++i) {
+				PsionicTemplateNames.AddItem(class'RTHelpers'.default.PsionicAbilities[i]);
+		}
+
+	  AbilityTemplateMgr = class'X2AbilityTemplateManager'.static.GetAbilityTemplateManager();
+	  AbilityTemplateMgr.GetTemplateNames(AbilityTemplateNames);
+		foreach AbilityTemplateNames(AbilityTemplateName) {
+				AbilityTemplates.Length = 0;
+				if(PsionicTemplateNames.Find(AbilityTemplateName) == INDEX_NONE) {
+						continue;
+				}
+				AbilityTemplateMgr.FindAbilityTemplateAllDifficulties(AbilityTemplateName, AbilityTemplates);
+				foreach AbilityTemplates(AbilityTemplate) {
+						if(AbilityTemplate.PostActivationEvents.Find(class'RTAbility_GhostAbilitySet'.default.UnitUsedPsionicAbilityEvent) == INDEX_NONE)
+								AbilityTemplate.PostActivationEvents.AddItem(class'RTAbility_GhostAbilitySet'.default.UnitUsedPsionicAbilityEvent);
+						if(AbilityTemplate.BuildInterruptGameStateFn == none)
+		        		AbilityTemplate.BuildInterruptGameStateFn = class'X2Ability'.static.TypicalAbility_BuildInterruptGameState;
+
+			 }
+		 }
+}
+
 exec function RT_ToggleCustomDebugOutput() {
     class'UIDebugStateMachines'.static.GetThisScreen().ToggleVisible();
 }
