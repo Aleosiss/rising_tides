@@ -155,3 +155,17 @@ static function PanicLoopEndFn( X2Effect_Persistent PersistentEffect, const out 
 	NewGameState.AddStateObject( UnitState );
 }
 
+static function RTGameState_ProgramFaction GetNewProgramState(XComGameState NewGameState) {
+	local RTGameState_ProgramFaction Program;
+
+	foreach NewGameState.IterateByClassType(class'RTGameState_ProgramFaction', Program) {
+		break;
+	}
+
+	if(Program == none) {
+		Program = RTGameState_ProgramFaction(`XCOMHISTORY.GetSingleGameStateObjectForClass(class'RTGameState_ProgramFaction'));
+	} 
+	
+	Program = RTGameState_ProgramFaction(NewGameState.ModifyStateObject(class'RTGameState_ProgramFaction', Program.ObjectID));
+	return Program;
+}

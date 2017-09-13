@@ -8,8 +8,8 @@ event bool BlocksAbilityActivation()
 function Init()
 {
 	super.Init();
-
-	CleanUpMITV();
+	UnitPawn.CleanUpMITV();
+	//CleanUpMITV();
 }
 
 simulated state Executing

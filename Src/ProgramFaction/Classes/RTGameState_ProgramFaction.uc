@@ -1,4 +1,4 @@
-class RTGameState_ProgramFaction extends XComGameState_ResistanceFaction config(RisingTides);
+class RTGameState_ProgramFaction extends XComGameState_ResistanceFaction config(ProgramFaction);
 
 // a lot of the DeathRecordData code is from Xyl's Anatomist Perk. Thanks to him!
 
@@ -31,7 +31,7 @@ struct RTDeathRecord
 	var array<RTKillCount>        IndividualKillCounts;   	// per-unit kill counts ( worth more to VitalPointTargeting than other kills ); the sum of these should always equal NumDeaths
 };
 
-var() array<RTDeathRecord> DeathRecordData;					// GHOST Datavault contianing information on every kill made by deployed actor
+var() array<RTDeathRecord> DeathRecordData;					// Program Datavault contianing information on every kill made by deployed actor
 
 /* END KILL RECORD   */
 
@@ -70,7 +70,7 @@ var const config array<RTGhostOperative>	GhostTemplates;
 
 var() array<RTGhostOperative>									Master; 			// master list of operatives
 var() array<StateObjectReference> 								Active;				// ghosts active
-var() array<StateObjectReference> 								Deployed; 			// ghosts that will be on the next mission
+var() RTGameState_PersistentGhostSquad							Deployed; 			// ghosts that will be on the next mission
 var() array<StateObjectReference>								Captured;			// ghosts not available
 var() array<RTGameState_PersistentGhostSquad>					Squads;				// list of ghost teams (only one for now)
 var() int 														iOperativeLevel;	// all ghosts get level ups after a mission, even if they weren't on it. lorewise, they're constantly running missions; the player only sees a fraction of them
@@ -80,7 +80,7 @@ var bool														bSetupComplete;		// if we should rebuild the ghost array f
 
 
 // FACTION VARIABLES
-var bool														bOneSmallFavorAvailable;	// can send squad on a mission, replacing XCOM				
+var bool														bOneSmallFavorAvailable;	// can send squad on a mission, replacing XCOM	
 var bool														bTemplarsDestroyed;														
 
 
@@ -408,4 +408,36 @@ function bool IsExtraFactionSoldierRewardAllowed(XComGameState NewGameState)
 {
 	// The Program doesn't give out Faction Soldier rewards
 	return false;
+}
+
+private function AddRisingTidesTacticalTags(XComGameState_HeadquartersXCom XComHQ) // mark missions as being invalid for One Small Favor or Just Passing Through, usually story, (golden path or otherwise)
+{
+	
+}
+
+simulated function bool CashOneSmallFavor(XComGameState NewGameState, XComGameState_MissionSite MissionSite) {
+	local StateObjectReference GhostRef, EmptyRef;
+	local name GhostTemplateName;
+
+	if(!bOneSmallFavorAvailable)
+		return false;
+
+	RotateRandomSquadToDeploy();
+	if(Deployed == none) {
+		return false;
+	}
+
+	MissionSite = XComGameState_MissionSite(NewGameState.ModifyStateObject(MissionSite.class, MissionSite.ObjectID));	
+	foreach Deployed.Operatives(GhostRef) {
+		GhostTemplateName = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(GhostRef.ObjectID)).GetMyTemplateName();
+		MissionSite.GeneratedMission.Mission.SpecialSoldiers.AddItem(GhostTemplateName);
+	}
+
+	return true;
+}
+
+protected function RotateRandomSquadToDeploy() {
+	if(Squads.Length == 0)
+		return;
+	Deployed = Squads[`SYNC_RAND(Squads.Length)];
 }
