@@ -1,12 +1,12 @@
 [PersonnelHadley X2EncyclopediaTemplate]
 ListTitle="Personnel Dossier: Dr. Hadley"
 DescriptionTitle="Dr. Hadley - STATUS: ACTIVE"
-DescriptionEntry="Dr. Elizabeth Hadley, born on October 3rd, 1968, is a certified genius. Earning her Ph.D at the age of 19, it was assumed by academia at large that she had a bright future ahead of her. However, she fell off the face of the planet shortly afterwards, leaving many to speculate that she had been snatched up by the R&D branch of the government. Although it seems obvious now, whatever she has been working on for the past thirty-five years is unknown, and that she has been transferred to XCOM only now, with Aliens on own proverbial doorstep, speaks for its importance. \nC.O. Bradford Note: Yes, this is the exact file I gave you last time."
+DescriptionEntry="Dr. Elizabeth Hadley, born on October 3rd, 1968, is a certified genius. Earning her Ph.D at the age of 19, it was assumed by academia at large that she had a bright future ahead of her. However, she fell off the face of the planet shortly afterwards, leaving many to speculate that she had been snatched up by the R&D branch of the government. Although it seems obvious now, whatever she has been working on for the past thirty-five years is unknown, and that she has been transferred to XCOM only now, with Aliens on own proverbial doorstep, speaks for its importance. \nC.O. Bradford Note: Yes, this is the exact file I gave you last time. Hopefully it's still good."
 
 [FactionTemplars X2EncyclopediaTemplate]
 ListTitle="The Program"
 DescriptionTitle="Program"
-DescriptionEntry="The Program, led by Dr. Hadley, are an offshoot of XCOM, branching off in the 1970's. Their primary focus is ensuring that when ADVENT falls, they-- at the expense of any other, even XCOM-- stand on top of the pile of rumble."
+DescriptionEntry="The Program, led by the illusive Dr. Hadley, are an offshoot of XCOM, branching off in the 1970's. Their primary focus is ensuring that when ADVENT falls, they-- at the expense of any other, even XCOM-- stand on top of the pile of rubble."
 
 [ProgramGhosts X2EncyclopediaTemplate]
 ListTitle="Program Classes"
@@ -17,7 +17,7 @@ DescriptionEntry="The Program fields a small number of psionic operatives. Augme
 FactionTitle="Program"
 FactionHQDisplayName="PROGRAM FOB-00X"
 LeaderQuote="\"We fight against the subtle threats. Including you, Commander.\" - Dr. Hadley"
-InfluenceMediumQuote="\"It is good to work with you again, Commander. Reminds me of the good old days, when the threats fell from the stars and not rise up all around.\" - Dr. Hadley"
+InfluenceMediumQuote="\"It is good to work with you again, Commander. Reminds me of the good old days, when the threats fell from the stars and did not rise up all around us.\" - Dr. Hadley"
 InfluenceHighQuote="\"With the Templars gone, there is only one lasting threat to the stability of our society. Commander. You know what must be done.\" - Dr. Hadley"
 
 GroupNames[0]="SPECTRE"
@@ -48,11 +48,11 @@ ActionPostNarrative="Commander, I managed to locate the source of the signals-- 
 [CovertActionNarrative_RecruitEngineer_Program X2CovertActionNarrativeTemplate]
 ActionName="Tech Support"
 ActionPreNarrative="We have made contact with resistance sympathizer in one of the megacities. Allowing him to join us would be a security breach, but they're all yours."
-ActionPostNarrative="The sympathizer turned out to be technically-minded, having worked extensively in an ADVENT Mechbay. They'll be a boon to engineering."
+ActionPostNarrative="The sympathizer turned out to be technically-minded, having worked extensively in an ADVENT Mech Bay. They'll be a boon to engineering."
 
 [CovertActionNarrative_HuntTemplars_P1_Program X2CovertActionNarrativeTemplate]
 ActionName="Find Them"
-ActionPreNarrative="As you might recall, Commander, six days after the Temple Ship crash-landed, I started Operation: Brave New World. Unfortunately, there was a lone survivor. Staff Sergeant Lanner was left a managled wreck, his mind in shambles from my operative's psionic assault, but he managed to limp away during the chaos of the beginning of Operation: Ashes and Temples part three. Only recently have we managed to pinpoint his general location, but we need your manpower to figure out where he's hiding."
+ActionPreNarrative="As you might recall, Commander, six days after the Temple Ship crash-landed, I initiated Operation: Brave New World. Unfortunately, there was a lone survivor. Staff Sergeant Lanner was left a mangled wreck, his mind in shambles from my operative's psionic assault, but he managed to limp away during the chaos of the beginning of Operation: Ashes and Temples part three. Only recently have we managed to pinpoint his general location, but we need your manpower to figure out where he's hiding."
 ActionPostNarrative="Excellent. You should be proud of your soldiers, Commander. Keeping up with my operatives is not an easy task."
 
 [CovertActionNarrative_HuntTemplars_P2_Program X2CovertActionNarrativeTemplate]
