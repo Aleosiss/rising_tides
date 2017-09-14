@@ -14,8 +14,6 @@
     <Folder Include="Content\" />
     <Folder Include="Localization\" />
     <Folder Include="Src\" />
-    <Folder Include="Src\ProgramFaction" />
-    <Folder Include="Src\ProgramFaction\Classes" />
     <Folder Include="Src\XComGame" />
     <Folder Include="Src\RisingTides\" />
     <Folder Include="Src\RisingTides\Classes\" />
@@ -181,15 +179,6 @@
     <Content Include="Config\XComEngine.ini" />
     <Content Include="Config\XComGame.ini" />
     <Content Include="Localization\XComGame.int" />
-    <Content Include="Src\ProgramFaction\Classes\RTSitrep_OneSmallFavor.uc">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Src\ProgramFaction\Classes\RTStrategyElement_ProgramActions.uc">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Src\ProgramFaction\Classes\RTUIScreenListener_OneSmallFavor.uc">
-      <SubType>Content</SubType>
-    </Content>
     <Content Include="Src\RisingTides\Classes\RTAbilityCooldown.uc">
       <SubType>Content</SubType>
     </Content>
@@ -448,10 +437,10 @@
     <Content Include="Src\RisingTides\Classes\RTGameState_MeldEffect.uc">
       <SubType>Content</SubType>
     </Content>
-    <Content Include="Src\ProgramFaction\Classes\RTGameState_PersistentGhostSquad.uc">
+    <Content Include="Src\RisingTides\Classes\RTGameState_PersistentGhostSquad.uc">
       <SubType>Content</SubType>
     </Content>
-    <Content Include="Src\ProgramFaction\Classes\RTGameState_ProgramFaction.uc">
+    <Content Include="Src\RisingTides\Classes\RTGameState_ProgramFaction.uc">
       <SubType>Content</SubType>
     </Content>
     <Content Include="Src\RisingTides\Classes\RTGameState_SquadViewer.uc">
@@ -464,6 +453,12 @@
       <SubType>Content</SubType>
     </Content>
     <Content Include="Src\RisingTides\Classes\RTMeleePathingPawn.uc">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Src\RisingTides\Classes\RTSitrep_OneSmallFavor.uc">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Src\RisingTides\Classes\RTStrategyElement_ProgramActions.uc">
       <SubType>Content</SubType>
     </Content>
     <Content Include="Src\RisingTides\Classes\RTTacticalVisibilityHelpers.uc">
@@ -479,6 +474,9 @@
       <SubType>Content</SubType>
     </Content>
     <Content Include="Src\RisingTides\Classes\RTTargetingMethod_TargetedMeleeTeleport.uc">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Src\RisingTides\Classes\RTUIScreenListener_OneSmallFavor.uc">
       <SubType>Content</SubType>
     </Content>
     <Content Include="Src\RisingTides\Classes\UIDebugStateMachines.uc">
