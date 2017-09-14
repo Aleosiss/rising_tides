@@ -24,5 +24,5 @@ protected simulated function OnEffectAdded (const out EffectAppliedData ApplyEff
 
 defaultproperties
 {
-	ReservedName = 'RT_Reserved'
+	ReservedName = "RT_Reserved"
 }
