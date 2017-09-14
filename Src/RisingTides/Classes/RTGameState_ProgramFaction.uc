@@ -80,30 +80,30 @@ var bool														bSetupComplete;		// if we should rebuild the ghost array f
 
 
 // FACTION VARIABLES
-var bool														bOneSmallFavorAvailable;	// can send squad on a mission, replacing XCOM	
-var bool														bTemplarsDestroyed;														
+var bool														bOneSmallFavorAvailable;	// can send squad on a mission, replacing XCOM
+var bool														bTemplarsDestroyed;
 
 
 /* *********************************************************************** */
 
 // SetUpRisingTidesCommand(XComGameState StartState)
-static function SetUpRisingTidesCommand(XComGameState StartState)
+static function SetUpProgramFaction(XComGameState StartState)
 {
-	local RTGameState_RisingTidesCommand RTCom;
+	local RTGameState_ProgramFaction ProgramFaction;
 
-	foreach StartState.IterateByClassType(class'RTGameState_RisingTidesCommand', RTCom) {
+	foreach StartState.IterateByClassType(class'RTGameState_ProgramFaction', ProgramFaction) {
 		break;
 	}
 
-	if (RTCom == none) {
-		RTCom = RTGameState_RisingTidesCommand(StartState.CreateStateObject(class'RTGameState_RisingTidesCommand'));
+	if (ProgramFaction == none) {
+		ProgramFaction = RTGameState_ProgramFaction(StartState.CreateStateObject(class'RTGameState_ProgramFaction'));
 	}
 
-	StartState.AddStateObject(RTCom);
-	RTCom.InitListeners();
-	if(!RTCom.bSetupComplete) {
-		RTCom.CreateRTOperatives(StartState);
-		//RTCom.CreateRTDeathRecord(StartState);
+	StartState.AddStateObject(Program);
+	ProgramFaction.InitListeners();
+	if(!ProgramFaction.bSetupComplete) {
+		ProgramFaction.CreateRTOperatives(StartState);
+		//Program.CreateRTDeathRecord(StartState);
 	}
 }
 
@@ -249,33 +249,33 @@ simulated function UpdateNumCrits(name CharacterTemplateName) {
 }
 
 // Creates the killtracker object if it doesn't exist
-// RTGameState_RisingTidesCommand GetRTCommand()
-static function RTGameState_RisingTidesCommand GetRTCommand() {
+// RTGameState_ProgramFaction GetProgrammand()
+static function RTGameState_ProgramFaction GetProgramFaction {
 	local XComGameStateHistory History;
-	local RTGameState_RisingTidesCommand RTCom;
+	local RTGameState_ProgramFaction Program;
 
 
 	History = `XCOMHISTORY;
 
-	foreach History.IterateByClassType(class'RTGameState_RisingTidesCommand', RTCom)
+	foreach History.IterateByClassType(class'RTGameState_ProgramFaction', Program)
 	{
 		break;
 	}
 
-	if (RTCom != none) {
-		return RTCom;
+	if (Program != none) {
+		return Program;
 	} else {
-		`RedScreen("RTCom does not exist! Returning null!");
+		`RedScreen("Program does not exist! Returning null!");
 		return none;
 	}
 }
 
 // RefreshListeners()
 static function RefreshListeners() {
-	local RTGameState_RisingTidesCommand RTCom;
+	local RTGameState_Program Program;
 
-	RTCom = GetRTCommand();
-	RTCom.InitListeners();
+	Program = GetProgramFaction();
+	Program.InitListeners();
 }
 
 // InitListeners()
@@ -295,7 +295,7 @@ function InitListeners() {
 // EventSource = KillerUnitState
 function EventListenerReturn OnKillMail(Object EventData, Object EventSource, XComGameState GameState, Name InEventID, Object CallbackData) {
 	local XComGameState_Unit KillerUnitState, DeadUnitState;
-	local RTGameState_RisingTidesCommand RTCom;
+	local RTGameState_ProgramFaction Program;
 	local XComGameState NewGameState;
 
 	// `Log("OnKillMail: EventData =" @ EventData);
@@ -311,9 +311,9 @@ function EventListenerReturn OnKillMail(Object EventData, Object EventSource, XC
 		return ELR_NoInterrupt;
 
 	NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("Rising Tides: UpdateDeathRecordData");
-	RTCom = RTGameState_RisingTidesCommand(NewGameState.CreateStateObject(class'RTGameState_RisingTidesCommand', self.ObjectID));
-	NewGameState.AddStateObject(RTCom);
-	RTCom.UpdateNumDeaths(DeadUnitState.GetMyTemplate().CharacterGroupName, KillerUnitState.GetReference());
+	Program = RTGameState_ProgramFaction(NewGameState.CreateStateObject(class'RTGameState_ProgramFaction', self.ObjectID));
+	NewGameState.AddStateObject(Program);
+	Program.UpdateNumDeaths(DeadUnitState.GetMyTemplate().CharacterGroupName, KillerUnitState.GetReference());
 	`GAMERULES.SubmitGameState(NewGameState);
 
 	return ELR_NoInterrupt;
@@ -356,17 +356,17 @@ function OnEndTacticalPlay(XComGameState NewGameState)
 	local XComGameState_HeadquartersXCom XComHQ, NewXComHQ;
 	local XComGameState_MissionSite MissionState;
 
-	local RTGameState_RisingTidesCommand 	RTCom, NewRTCom;
+	local RTGameState_ProgramFaction 	Program, NewProgram;
 
 
 	super.OnEndTacticalPlay(NewGameState);
 	History = class'XComGameStateHistory'.static.GetGameStateHistory();
 
-	RTCom	= RTGameState_RisingTidesCommand(History.GetSingleGameStateObjectForClass(class'RTGameState_RisingTidesCommand'));
-	NewRTCom = RTGameState_RisingTidesCommand(NewGameState.ModifyStateObject(class'RTGameState_RisingTidesCommand', RTCom.GetReference().ObjectID));
+	Program	= RTGameState_ProgramFaction(History.GetSingleGameStateObjectForClass(class'RTGameState_ProgramFaction'));
+	NewProgram = RTGameState_ProgramFaction(NewGameState.ModifyStateObject(class'RTGameState_ProgramFaction', Program.GetReference().ObjectID));
 	XComHQ = XComGameState_HeadquartersXCom(History.GetSingleGameStateObjectForClass(class'XComGameState_HeadquartersXCom'));
 	NewXComHQ = XComGameState_HeadquartersXCom(NewGameState.ModifyStateObject(class'XComGameState_HeadquartersXCom', XComHQ.GetReference().ObjectID));
-	
+
 	MissionState = XComGameState_MissionSite(History.GetGameStateForObjectID(XComHQ.MissionRef.ObjectID));
 
 	foreach History.IterateByClassType(class'XComGameState_Unit', UnitState) {
@@ -412,7 +412,7 @@ function bool IsExtraFactionSoldierRewardAllowed(XComGameState NewGameState)
 
 private function AddRisingTidesTacticalTags(XComGameState_HeadquartersXCom XComHQ) // mark missions as being invalid for One Small Favor or Just Passing Through, usually story, (golden path or otherwise)
 {
-	
+
 }
 
 simulated function bool CashOneSmallFavor(XComGameState NewGameState, XComGameState_MissionSite MissionSite) {
@@ -427,7 +427,7 @@ simulated function bool CashOneSmallFavor(XComGameState NewGameState, XComGameSt
 		return false;
 	}
 
-	MissionSite = XComGameState_MissionSite(NewGameState.ModifyStateObject(MissionSite.class, MissionSite.ObjectID));	
+	MissionSite = XComGameState_MissionSite(NewGameState.ModifyStateObject(MissionSite.class, MissionSite.ObjectID));
 	foreach Deployed.Operatives(GhostRef) {
 		GhostTemplateName = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(GhostRef.ObjectID)).GetMyTemplateName();
 		MissionSite.GeneratedMission.Mission.SpecialSoldiers.AddItem(GhostTemplateName);

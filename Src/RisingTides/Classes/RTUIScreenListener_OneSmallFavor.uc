@@ -4,7 +4,7 @@ class RTUIScreenListener_OneSmallFavor extends UIScreenListener;
 simulated function OnInit(UIScreen Screen)
 {
 	if(UIMission(Screen) != none) {
-		
+
 	}
 }
 
@@ -12,12 +12,12 @@ simulated function OnInit(UIScreen Screen)
 simulated function OnReceiveFocus(UIScreen Screen)
 {
 	if(UIMission(Screen) != none) {
-
+		
 	}
 }
 
 
-simulated function AddOneSmallFavorSitrep(UIMission MissionScreen) {	
+simulated function AddOneSmallFavorSitrep(UIMission MissionScreen) {
 	local RTGameState_ProgramFaction Program;
 	local XComGameState_MissionSite MissionState;
 	local XComGameState NewGameState;
@@ -39,7 +39,7 @@ simulated function AddOneSmallFavorSitrep(UIMission MissionScreen) {
 		return;
 	}
 
-	if(!CheckInvalidMission(MissionState.GetMissionSource())) {
+	if(CheckIsInvalidMission(MissionState.GetMissionSource())) {
 		return;
 	}
 
@@ -63,8 +63,8 @@ simulated function AddOneSmallFavorSitrep(UIMission MissionScreen) {
 
 }
 
-simulated function bool CheckInvalidMission(X2MissionTemplate Template) {
-	return true;
+simulated function bool CheckIsInvalidMission(X2MissionTemplate Template) {
+	return false;
 }
 
 //---------------------------------------------------------------------------------------
