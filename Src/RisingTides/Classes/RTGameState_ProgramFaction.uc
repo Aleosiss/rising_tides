@@ -82,6 +82,7 @@ var bool														bSetupComplete;		// if we should rebuild the ghost array f
 // FACTION VARIABLES
 var bool														bOneSmallFavorAvailable;	// can send squad on a mission, replacing XCOM
 var bool														bTemplarsDestroyed;
+var config array<name>											InvalidMissionNames; 		// list of mission types ineligible for Program support
 
 
 /* *********************************************************************** */
@@ -399,7 +400,7 @@ function int GetNumFactionSoldiers(optional XComGameState NewGameState)
 	i = 0 ;
 	foreach Master(g) {
 		i++;
-	} 
+	}
 
 	return i;
 }

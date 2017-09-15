@@ -107,7 +107,7 @@ function EffectAddedBuildVisualizationFn (XComGameState VisualizeGameState) {
 
 		  EffectTemplate = EffectState.GetX2Effect();
 		  EffectTemplate.AddX2ActionsForVisualization(AssociatedState, TargetMetadata, 'AA_Success');
-		 
+
 		}
 
 		if (EffectTarget.ObjectID == EffectSource.ObjectID)
@@ -123,7 +123,7 @@ function EffectAddedBuildVisualizationFn (XComGameState VisualizeGameState) {
 		  SourceMetadata.StateObject_NewState = SourceMetadata.StateObject_OldState;
 
 		  EffectTemplate.AddX2ActionsForVisualizationSource(AssociatedState, SourceMetadata, 'AA_Success');
-		  
+
 		}
 
 	  }
@@ -175,7 +175,7 @@ function EffectRemovedBuildVisualizationFn(XComGameState VisualizeGameState) {
 
 		  EffectTemplate = EffectState.GetX2Effect();
 		  EffectTemplate.AddX2ActionsForVisualization_Removed(AssociatedState, TargetMetadata, 'AA_Success', EffectState);
-		  
+
 		}
 
 		if (EffectTarget.ObjectID == EffectSource.ObjectID)
@@ -243,7 +243,7 @@ function EffectsModifiedBuildVisualizationFn(XComGameState VisualizeGameState) {
 
 		  EffectTemplate = EffectState.GetX2Effect();
 		  EffectTemplate.AddX2ActionsForVisualization_Removed(AssociatedState, TargetMetadata, 'AA_Success', EffectState);
-		  
+
 		}
 
 		if (EffectTarget.ObjectID == EffectSource.ObjectID)
@@ -287,7 +287,7 @@ function EffectsModifiedBuildVisualizationFn(XComGameState VisualizeGameState) {
 
 		  EffectTemplate = EffectState.GetX2Effect();
 		  EffectTemplate.AddX2ActionsForVisualization(AssociatedState, TargetMetadata, 'AA_Success');
-		 
+
 		}
 
 		if (EffectTarget.ObjectID == EffectSource.ObjectID)
@@ -303,7 +303,7 @@ function EffectsModifiedBuildVisualizationFn(XComGameState VisualizeGameState) {
 		  SourceMetadata.StateObject_NewState = SourceMetadata.StateObject_OldState;
 
 		  EffectTemplate.AddX2ActionsForVisualizationSource(AssociatedState, SourceMetadata, 'AA_Success');
-		  
+
 		}
 
 	  }
@@ -629,7 +629,7 @@ function EventListenerReturn ExtendEffectDuration(Object EventData, Object Event
 
 	  if(IteratorEffectState.bRemoved) {
 		  continue;
-	  }									  
+	  }
 
 	  if(IteratorEffectState.GetX2Effect().EffectName == EffectTemplate.EffectToExtendName) {
 		  //`LOG("Rising TIdes: EED proced on " @ EffectTemplate.AbilityToExtendName @ " for effect " @	EffectTemplate.EffectToExtendName);
@@ -638,18 +638,18 @@ function EventListenerReturn ExtendEffectDuration(Object EventData, Object Event
 		  ExtendedEffectState.iTurnsRemaining += EffectTemplate.iDurationExtension;
 		  NewGameState.AddStateObject(ExtendedEffectState);
 		  continue;
-	  }											 
+	  }
 	}
 
 	History = `XCOMHISTORY;
 
 	if(NewGameState.GetNumGameStateObjects() > 0) {
-		SubmitNewGameState(NewGameState);			
+		SubmitNewGameState(NewGameState);
 	} else {
 		History.CleanupPendingGameState(NewGameState);
 	}
-	
-		
+
+
 
 	if(!bDebug) {
 	  //`LOG("Rising Tides: ExtendEffectDuration fired on the right ability / event, but there was no effects on the gamestate?");
@@ -1057,7 +1057,7 @@ function EventListenerReturn LinkedFireCheck (Object EventData, Object EventSour
 		return ELR_NoInterrupt;
 	}
 
-	
+
 	History = `XCOMHISTORY;
 	AbilityContext = XComGameStateContext_Ability(GameState.GetContext());
 	if (AbilityContext == none) {
@@ -1435,12 +1435,18 @@ function EventListenerReturn RTBumpInTheNight(Object EventData, Object EventSour
 	if (AbilityState == none || AbilityState.ObjectID == 0)
 		return ELR_NoInterrupt;
 
-	if(AbilityState.GetMyTemplateName() == 'OverwatchShot' ||  AbilityState.GetMyTemplateName() == 'StandardShot' || AbilityState.GetMyTemplateName() == 'StandardGhostShot')
-			bShouldTriggerStandard = true;
-	if(AbilityState.GetMyTemplateName() == 'RTBerserkerKnifeAttack' || AbilityState.GetMyTemplateName() == 'RTPyroclasticSlash' || AbilityState.GetMyTemplateName() == 'RTReprobateWaltz')
-			bShouldTriggerMelee = true;
-	if(AbilityState.GetMyTemplateName() == 'RTShadowStrike')
-			bShouldTriggerMelee = true;
+	if(class'RTHelpers'.StandardShots.Find(AbilityState.GetMyTemplateName()) != INDEX_NONE) {
+		bShouldTriggerStandard = true;
+	}
+
+	if(class'RTHelpers'.OverwatchShots.Find(AbilityState.GetMyTemplateName()) != INDEX_NONE) {
+		bShouldTriggerStandard = true;
+	}
+
+	if(class'RTHelpers'.MeleeAbilities.Find(AbilityState.GetMyTemplateName()) != INDEX_NONE) {
+		bShouldTriggerMelee = true;
+	}
+
 	if(AbilityState.GetMyTemplateName() == 'RTReprobateWaltz')
 			bShouldTriggerWaltz = true;
 
@@ -1572,7 +1578,7 @@ function TriggerBumpInTheNightFlyoverVisualizationFn(XComGameState VisualizeGame
 		if (AbilityTemplate != none)
 		{
 			s = XComGameState_Ability(History.GetGameStateForObjectID(UnitState.FindAbility('BumpInTheNight').ObjectID)).GetMyTemplate().LocFriendlyName;
-			
+
 			SoundAndFlyOver = X2Action_PlaySoundAndFlyOver(class'X2Action_PlaySoundAndFlyOver'.static.AddToVisualizationTree(ActionMetadata, VisualizeGameState.GetContext(), false, ActionMetadata.LastActionAdded));
 			SoundAndFlyOver.SetSoundAndFlyOverParameters(None, s, '', eColor_Good, AbilityTemplate.IconImage);
 

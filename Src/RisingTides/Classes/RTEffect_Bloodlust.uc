@@ -48,7 +48,7 @@ function GetToHitModifiers(XComGameState_Effect EffectState, XComGameState_Unit 
 	local RTGameState_Effect BumpEffect;
 	local bool bValid;
 
-	if(AbilityState.GetMyTemplateName() == 'RTBerserkerKnifeAttack' || AbilityState.GetMyTemplateName() == 'RTPyroclasticSlash' || AbilityState.GetMyTemplateName() == 'RTReprobateWaltz' || AbilityState.GetMyTemplateName() == 'RTShadowStrike') {
+	if(class'RTHelpers'.MeleeAbilities.Find(AbilityState.GetMyTemplateName()) != INDEX_NONE) {
 		bValid = true;
 	}
 
@@ -73,9 +73,11 @@ function int GetAttackingDamageModifier(XComGameState_Effect EffectState, XComGa
 	local RTGameState_Effect BumpEffect;
 	local bool bValid;
 
-	if(AbilityState.GetMyTemplateName() == 'RTBerserkerKnifeAttack' || AbilityState.GetMyTemplateName() == 'RTPyroclasticSlash' || AbilityState.GetMyTemplateName() == 'RTReprobateWaltz' || AbilityState.GetMyTemplateName() == 'RTShadowStrike') {
+	if(class'RTHelpers'.MeleeAbilities.Find(AbilityState.GetMyTemplateName()) != INDEX_NONE) {
 		bValid = true;
 	}
+
+
 	if(Attacker.HasSoldierAbility('RTContainedFury')) {
 		bValid = true;
 	}
