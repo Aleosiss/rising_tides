@@ -56,7 +56,7 @@ static function ActivateJustPassingThrough(XComGameState StartState) {
 	if (IsSplitMission( StartState ))
 		return;
 	
-	Program = class'RTHelpers'.static.GetNewProgramState(NewGameState);
+	Program = class'RTHelpers'.static.GetNewProgramState(StartState);
 	if(default.JustPassingThroughChance * Program.InfluenceScore < `SYNC_RAND_STATIC(100)) //TODO: Refactor to include an Operative-based modifer (location + personality)
 		return;
 
@@ -73,10 +73,20 @@ static function ActivateJustPassingThrough(XComGameState StartState) {
 	if(XComHQ.TacticalGameplayTags.Find( 'NoRisingTides' ) != INDEX_NONE)
 		return;
 	
-	SoldierObjRef == Program.Master[`SYNC_RAND_STATIC(Program.Master.Length)];
+	SoldierObjRef = Program.Master[`SYNC_RAND_STATIC(Program.Master.Length)].StateObjectRef;
 
 	XComHQ.Squad.AddItem(SoldierObjRef);
-	XComHQ.AllSquads.AddItem(SoldierObjRef);
+	XComHQ.AllSquads[0].SquadMembers.AddItem(SoldierObjRef);
+}
+
+static function bool IsSplitMission( XComGameState StartState )
+{
+	local XComGameState_BattleData BattleData;
+
+	foreach StartState.IterateByClassType( class'XComGameState_BattleData', BattleData )
+		break;
+
+	return (BattleData != none) && BattleData.DirectTransferInfo.IsDirectMissionTransfer;
 }
 
 

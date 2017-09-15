@@ -57,13 +57,13 @@ simulated function AddOneSmallFavorSitrep(UIMission MissionScreen) {
 
 	if (NewGameState.GetNumGameStateObjects() > 0) {
 		`XCOMGAME.GameRuleset.SubmitGameState(NewGameState);
-		UIMission(Screen).UpdateData();
+		MissionScreen.UpdateData();
 	} else
 		History.CleanupPendingGameState(NewGameState);
 
 }
 
-simulated function bool CheckIsInvalidMission(X2MissionTemplate Template) {
+simulated function bool CheckIsInvalidMission(X2MissionSourceTemplate Template) {
 	return false;
 }
 

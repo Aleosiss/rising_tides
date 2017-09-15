@@ -99,7 +99,7 @@ static function SetUpProgramFaction(XComGameState StartState)
 		ProgramFaction = RTGameState_ProgramFaction(StartState.CreateStateObject(class'RTGameState_ProgramFaction'));
 	}
 
-	StartState.AddStateObject(Program);
+	StartState.AddStateObject(ProgramFaction);
 	ProgramFaction.InitListeners();
 	if(!ProgramFaction.bSetupComplete) {
 		ProgramFaction.CreateRTOperatives(StartState);
@@ -250,7 +250,7 @@ simulated function UpdateNumCrits(name CharacterTemplateName) {
 
 // Creates the killtracker object if it doesn't exist
 // RTGameState_ProgramFaction GetProgrammand()
-static function RTGameState_ProgramFaction GetProgramFaction {
+static function RTGameState_ProgramFaction GetProgramFaction() {
 	local XComGameStateHistory History;
 	local RTGameState_ProgramFaction Program;
 
@@ -272,7 +272,7 @@ static function RTGameState_ProgramFaction GetProgramFaction {
 
 // RefreshListeners()
 static function RefreshListeners() {
-	local RTGameState_Program Program;
+	local RTGameState_ProgramFaction Program;
 
 	Program = GetProgramFaction();
 	Program.InitListeners();
@@ -393,7 +393,15 @@ function OnEndTacticalPlay(XComGameState NewGameState)
 //---------------------------------------------------------------------------------------
 function int GetNumFactionSoldiers(optional XComGameState NewGameState)
 {
-	return Master.Length;
+	local int i;
+	local RTGhostOperative g;
+
+	i = 0 ;
+	foreach Master(g) {
+		i++;
+	} 
+
+	return i;
 }
 
 //---------------------------------------------------------------------------------------
