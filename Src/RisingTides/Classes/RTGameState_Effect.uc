@@ -1435,15 +1435,15 @@ function EventListenerReturn RTBumpInTheNight(Object EventData, Object EventSour
 	if (AbilityState == none || AbilityState.ObjectID == 0)
 		return ELR_NoInterrupt;
 
-	if(class'RTHelpers'.StandardShots.Find(AbilityState.GetMyTemplateName()) != INDEX_NONE) {
+	if(class'RTHelpers'.default.StandardShots.Find(AbilityState.GetMyTemplateName()) != INDEX_NONE) {
 		bShouldTriggerStandard = true;
 	}
 
-	if(class'RTHelpers'.OverwatchShots.Find(AbilityState.GetMyTemplateName()) != INDEX_NONE) {
+	if(class'RTHelpers'.default.OverwatchShots.Find(AbilityState.GetMyTemplateName()) != INDEX_NONE) {
 		bShouldTriggerStandard = true;
 	}
 
-	if(class'RTHelpers'.MeleeAbilities.Find(AbilityState.GetMyTemplateName()) != INDEX_NONE) {
+	if(class'RTHelpers'.default.MeleeAbilities.Find(AbilityState.GetMyTemplateName()) != INDEX_NONE) {
 		bShouldTriggerMelee = true;
 	}
 

@@ -77,8 +77,6 @@ function bool PostAbilityCostPaid(XComGameState_Effect EffectState, XComGameStat
 	local int								RandRoll, iTotalDamageDealt;
 	local bool								bIsStandardFire, bHitTarget;
 
-
-
 	bIsStandardFire = false;
 	if(kAbility.GetMyTemplateName() == 'RTStandardSniperShot' || kAbility.GetMyTemplateName() == 'DaybreakFlame' || kAbility.GetMyTemplateName() == 'RTPrecisionShot' || kAbility.GetMyTemplateName() == 'RTDisablingShot')
 		bIsStandardFire = true;

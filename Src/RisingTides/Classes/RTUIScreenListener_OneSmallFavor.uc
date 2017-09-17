@@ -4,7 +4,7 @@ class RTUIScreenListener_OneSmallFavor extends UIScreenListener;
 simulated function OnInit(UIScreen Screen)
 {
 	if(UIMission(Screen) != none) {
-		AddOneSmallFavorSitrep(Screen);
+		AddOneSmallFavorSitrep(UIMission(Screen));
 	}
 }
 
@@ -12,7 +12,7 @@ simulated function OnInit(UIScreen Screen)
 simulated function OnReceiveFocus(UIScreen Screen)
 {
 	if(UIMission(Screen) != none) {
-		AddOneSmallFavorSitrep(Screen);
+		AddOneSmallFavorSitrep(UIMission(Screen));
 	}
 }
 
@@ -58,7 +58,7 @@ simulated function AddOneSmallFavorSitrep(UIMission MissionScreen) {
 
 	MissionState.TacticalGameplayTags.AddItem('RTOneSmallFavor');
 	Program.CashOneSmallFavor(NewGameState, MissionState);
-	AddOneSmallFavorSitrepEffectToGeneratedMission(Program);
+	AddOneSmallFavorSitrepEffectToGeneratedMission(Program, MissionState);
 
 	ModifyMissionData(XComHQ, MissionState);
 	Program.bOneSmallFavorAvailable = false;
@@ -77,7 +77,7 @@ simulated function bool CheckIsInvalidMission(X2MissionSourceTemplate Template) 
 
 simulated function AddOneSmallFavorSitrepEffectToGeneratedMission(RTGameState_ProgramFaction Program, XComGameState_MissionSite MissionState) {
 	local int iNumOperativesInSquad;
-	iNumOperativesInSquad = Program.Deployed.SquadMembers.Length;
+	iNumOperativesInSquad = Program.Deployed.Operatives.Length;
 	switch(iNumOperativesInSquad) {
 		case 1:
 			MissionState.GeneratedMission.SitReps.AddItem('RTOneSmallFavor_1');

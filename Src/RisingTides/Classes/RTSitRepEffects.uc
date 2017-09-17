@@ -21,7 +21,7 @@ static function X2SitRepEffectTemplate RTCreateOneSmallFavorEffectTemplate(name 
 {
 	local X2SitRepEffect_SquadSize Template;
 
-	`CREATE_X2TEMPLATE(class'RTSitRepEffect_OneSmallFavor', Template, 'TemplateName');
+	`CREATE_X2TEMPLATE(class'RTSitRep_OneSmallFavor', Template, 'TemplateName');
 
 	Template.MaxSquadSize = _SquadSize;
 
