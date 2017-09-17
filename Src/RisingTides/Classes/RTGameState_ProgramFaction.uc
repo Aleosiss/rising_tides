@@ -105,6 +105,7 @@ static function SetUpProgramFaction(XComGameState StartState)
 	if(!ProgramFaction.bSetupComplete) {
 		ProgramFaction.CreateRTOperatives(StartState);
 		//Program.CreateRTDeathRecord(StartState);
+		ProgramFaction.bSetupComplete = true;
 	}
 }
 
@@ -250,7 +251,7 @@ simulated function UpdateNumCrits(name CharacterTemplateName) {
 }
 
 // Creates the killtracker object if it doesn't exist
-// RTGameState_ProgramFaction GetProgrammand()
+// RTGameState_ProgramFaction GetProgramFaction()
 static function RTGameState_ProgramFaction GetProgramFaction() {
 	local XComGameStateHistory History;
 	local RTGameState_ProgramFaction Program;

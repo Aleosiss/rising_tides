@@ -22,7 +22,9 @@ static event OnLoadedSavedGame()
 /// Called when the player starts a new campaign while this DLC / Mod is installed
 /// </summary>
 static event InstallNewCampaign(XComGameState StartState)
-{}
+{
+	//class'RTGameState_ProgramFaction'.static.SetUpProgramFaction(StartState);
+}
 
 
 static event OnPostTemplatesCreated()
@@ -50,13 +52,13 @@ simulated static function MakePsiAbilitiesInterruptable() {
 		if(PsionicTemplateNames.Find(AbilityTemplateName) == INDEX_NONE) {
 				continue;
 		}
+
 		AbilityTemplateMgr.FindAbilityTemplateAllDifficulties(AbilityTemplateName, AbilityTemplates);
 		foreach AbilityTemplates(AbilityTemplate) {
 				if(AbilityTemplate.PostActivationEvents.Find(class'RTAbility_GhostAbilitySet'.default.UnitUsedPsionicAbilityEvent) == INDEX_NONE)
 					AbilityTemplate.PostActivationEvents.AddItem(class'RTAbility_GhostAbilitySet'.default.UnitUsedPsionicAbilityEvent);
 				if(AbilityTemplate.BuildInterruptGameStateFn == none)
 					AbilityTemplate.BuildInterruptGameStateFn = class'X2Ability'.static.TypicalAbility_BuildInterruptGameState;
-
 		}
 	}
 }
