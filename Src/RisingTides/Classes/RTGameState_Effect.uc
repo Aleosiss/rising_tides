@@ -4,6 +4,8 @@ var array<StateObjectReference> EffectsAddedList;
 var array<StateObjectReference> EffectsRemovedList;
 var bool bCanTrigger;
 
+var localized string LocPsionicallyInterruptedName;
+
 // OnTacticalGameEnd (Don't need this anymore)
 function EventListenerReturn OnTacticalGameEnd(Object EventData, Object EventSource, XComGameState GameState, Name EventID, Object CallbackData) {
 	local X2EventManager EventManager;
@@ -36,8 +38,7 @@ protected function ActivateAbility(XComGameState_Ability AbilityState, StateObje
 	if(AbilityState.CanActivateAbilityForObserverEvent(XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(TargetRef.ObjectID))) != 'AA_Success') {
 		`LOG("Rising Tides: Couldn't Activate "@ AbilityState.GetMyTemplateName() @ " for observer event.");
 	} else {
-
-		NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState(string(GetFuncName()));
+		NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("Activating Ability " $ AbilityState.GetMyTemplateName());
 		AbilityState = XComGameState_Ability(NewGameState.CreateStateObject(AbilityState.Class, AbilityState.ObjectID));
 		NewGameState.AddStateObject(AbilityState);
 		`TACTICALRULES.SubmitGameState(NewGameState);
@@ -474,6 +475,7 @@ function EventListenerReturn RTPsionicInterrupt(Object EventData, Object EventSo
 	local XComGameState_Ability InterruptAbilityState;
 	local XComGameState_Unit TargetUnitState, SourceUnitState;
 	local XComGameStateContext AbilityContext;
+	local XComGameState	NewGameState;
 
 	AbilityContext = GameState.GetContext();
 	if(AbilityContext == none) {
@@ -501,8 +503,8 @@ function EventListenerReturn RTPsionicInterrupt(Object EventData, Object EventSo
 	if(SourceUnitState == none) {
 		//`LOG("Rising Tides: " @ GetFuncName() @ " has no SourceUnit?! ");
 		return ELR_NoInterrupt;
-
 	}
+
 	if(TargetUnitState.AffectedByEffectNames.Find(class'RTAbility_GathererAbilitySet'.default.OverTheShoulderEffectName) == INDEX_NONE)
 		return ELR_NoInterrupt;
 
@@ -511,6 +513,13 @@ function EventListenerReturn RTPsionicInterrupt(Object EventData, Object EventSo
 	}
 
 	if(class'RTHelpers'.static.CheckAbilityActivated(AbilityState.GetMyTemplateName(), eChecklist_PsionicAbilities)) {
+		NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("Rising Tides: recording interrupted AbilityStateObjectRef: " $ AbilityState.ObjectID);
+		TargetUnitState = XComGameState_Unit(NewGameState.ModifyStateObject(TargetUnitState.class, TargetUnitState.ObjectID));
+		TargetUnitState.SetUnitFloatValue('RT_InterruptAbilityStateObjectID', AbilityState.ObjectID, eCleanup_BeginTurn);
+		AbilityState = XComGameState_Ability(NewGameState.ModifyStateObject(AbilityState.class, AbilityState.ObjectID));
+		AbilityState.iCooldown = class'RTAbility_GathererAbilitySet'.default.RUDIMENTARY_CREATURES_INTERRUPT_ABILITY_COOLDOWN;
+		SubmitNewGameState(NewGameState);
+
 		InitializeAbilityForActivation(InterruptAbilityState, SourceUnitState, 'RTRudimentaryCreaturesEvent', History);
 		ActivateAbility(InterruptAbilityState, TargetUnitState.GetReference());
 		return ELR_InterruptEventAndListeners;

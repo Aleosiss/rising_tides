@@ -30,6 +30,12 @@ static event InstallNewCampaign(XComGameState StartState)
 static event OnPostTemplatesCreated()
 {
 	MakePsiAbilitiesInterruptable();
+	AddProgramFactionCovertActions();
+}
+
+
+simulated static function AddProgramFactionCovertActions() {
+	class'RTStrategyElement_CovertActions'.static.AddFactionToGeneratedTemplates();
 }
 
 simulated static function MakePsiAbilitiesInterruptable() {
@@ -55,10 +61,13 @@ simulated static function MakePsiAbilitiesInterruptable() {
 
 		AbilityTemplateMgr.FindAbilityTemplateAllDifficulties(AbilityTemplateName, AbilityTemplates);
 		foreach AbilityTemplates(AbilityTemplate) {
-				if(AbilityTemplate.PostActivationEvents.Find(class'RTAbility_GhostAbilitySet'.default.UnitUsedPsionicAbilityEvent) == INDEX_NONE)
+				if(AbilityTemplate.PostActivationEvents.Find(class'RTAbility_GhostAbilitySet'.default.UnitUsedPsionicAbilityEvent) == INDEX_NONE) {
 					AbilityTemplate.PostActivationEvents.AddItem(class'RTAbility_GhostAbilitySet'.default.UnitUsedPsionicAbilityEvent);
-				if(AbilityTemplate.BuildInterruptGameStateFn == none)
+				}
+				
+				if(AbilityTemplate.BuildInterruptGameStateFn == none) {
 					AbilityTemplate.BuildInterruptGameStateFn = class'X2Ability'.static.TypicalAbility_BuildInterruptGameState;
+				}
 		}
 	}
 }

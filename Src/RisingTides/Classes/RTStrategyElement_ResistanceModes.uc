@@ -49,7 +49,7 @@ static function OnXCOMArrivesPsiTrainingMode(XComGameState NewGameState, StateOb
 	{
 		XComHQ.PsiTrainingRate = class'XComGameState_HeadquartersXCom'.default.XComHeadquarters_DefaultPsiTrainingWorkPerHour;
 	}
-	XComHQ.HealingRate += `ScaleGameLengthArrayInt(class'XComGameState_HeadquartersXCom'.default.XComHeadquarters_DefaultPsiTrainingWorkPerHour) * `ScaleStrategyArrayFloat(default.PsiModeTrainingRateScalar);
+	XComHQ.HealingRate += class'XComGameState_HeadquartersXCom'.default.XComHeadquarters_DefaultPsiTrainingWorkPerHour * `ScaleStrategyArrayFloat(default.PsiModeTrainingRateScalar);
 	XComHQ.HandlePowerOrStaffingChange(NewGameState);
 }
 //---------------------------------------------------------------------------------------
@@ -58,10 +58,28 @@ static function OnXCOMLeavesPsiTrainingMode(XComGameState NewGameState, StateObj
 	local XComGameState_HeadquartersXCom XComHQ;
 
 	XComHQ = GetNewXComHQState(NewGameState);
-	XComHQ.HealingRate -= `ScaleGameLengthArrayInt(class'XComGameState_HeadquartersXCom'.default.XComHeadquarters_DefaultPsiTrainingWorkPerHour) * `ScaleStrategyArrayFloat(default.PsiModeTrainingRateScalar);
+	XComHQ.HealingRate -= class'XComGameState_HeadquartersXCom'.default.XComHeadquarters_DefaultPsiTrainingWorkPerHour * `ScaleStrategyArrayFloat(default.PsiModeTrainingRateScalar);
 	if (XComHQ.PsiTrainingRate < class'XComGameState_HeadquartersXCom'.default.XComHeadquarters_DefaultPsiTrainingWorkPerHour) // safety check: ensure healing rate is never below default
 	{
 		XComHQ.PsiTrainingRate = class'XComGameState_HeadquartersXCom'.default.XComHeadquarters_DefaultPsiTrainingWorkPerHour;
 	}
 	XComHQ.HandlePowerOrStaffingChange(NewGameState);
+}
+
+static function XComGameState_HeadquartersXCom GetNewXComHQState(XComGameState NewGameState)
+{
+	local XComGameState_HeadquartersXCom NewXComHQ;
+
+	foreach NewGameState.IterateByClassType(class'XComGameState_HeadquartersXCom', NewXComHQ)
+	{
+		break;
+	}
+
+	if (NewXComHQ == none)
+	{
+		NewXComHQ = XComGameState_HeadquartersXCom(`XCOMHISTORY.GetSingleGameStateObjectForClass(class'XComGameState_HeadquartersXCom'));
+		NewXComHQ = XComGameState_HeadquartersXCom(NewGameState.ModifyStateObject(class'XComGameState_HeadquartersXCom', NewXComHQ.ObjectID));
+	}
+
+	return NewXComHQ;
 }

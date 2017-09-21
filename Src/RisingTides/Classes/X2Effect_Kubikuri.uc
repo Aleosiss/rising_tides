@@ -15,10 +15,7 @@ function int GetAttackingDamageModifier(XComGameState_Effect EffectState, XComGa
     local XComGameState_Unit TargetUnit;
 	local StateObjectReference AbilityRef;
 
-	`LOG ("Kubikiri testing");
-
 	if (AppliedData.AbilityResultContext.CalculatedHitChance <= 0) {
-		`LOG("RTKubikuri bp1");
 		return 0;
 	}
 

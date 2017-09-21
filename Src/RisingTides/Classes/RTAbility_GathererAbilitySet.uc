@@ -30,6 +30,7 @@ class RTAbility_GathererAbilitySet extends RTAbility_GhostAbilitySet config(Risi
 	var config WeaponDamageValue RUDIMENTARY_CREATURES_DMG;
 	var config WeaponDamageValue UNWILL_DMG;
 	var config WeaponDamageValue PSISTORM_DMG;
+	var config int RUDIMENTARY_CREATURES_INTERRUPT_ABILITY_COOLDOWN;
 	var config int LIFT_COOLDOWN;
 	var config int LIFT_DURATION;
 	var config float LIFT_RADIUS;
@@ -65,6 +66,7 @@ class RTAbility_GathererAbilitySet extends RTAbility_GhostAbilitySet config(Risi
 	var localized string GuardianAngelHealText;
 	var localized string KIPFriendlyName;
 	var localized string KIPFriendlyDesc;
+	var localized string LocPsionicallyInterruptedName;
 
 	var config string KIPIconPath;
 
@@ -983,9 +985,9 @@ static function X2AbilityTemplate RTRudimentaryCreaturesEvent() {
 	Template.AbilityTargetConditions.AddItem(default.LivingTargetOnlyProperty);
 
 	VFXEffect = new class'X2Effect_Persistent';
-	VFXEffect.BuildPersistentEffect(0, false);
-	VFXEffect.VFXTemplateName = default.PsionicInterruptParticleString;
-	// Template.AddTargetEffect(VFXEffect);
+	VFXEffect.BuildPersistentEffect(1, false);
+	VFXEffect.VisualizationFn = RudimentaryCreaturesAffectTargetVisualization;
+	Template.AddTargetEffect(VFXEffect);
 
     DamageEffect = new class'X2Effect_ApplyWeaponDamage';
     DamageEffect.bIgnoreBaseDamage = true;
@@ -1001,6 +1003,36 @@ static function X2AbilityTemplate RTRudimentaryCreaturesEvent() {
 
     return Template;
 }
+
+
+function RudimentaryCreaturesAffectTargetVisualization(XComGameState VisualizeGameState, out VisualizationActionMetadata ActionMetadata, const name EffectApplyResult) {
+	local XComGameState_Unit TargetState;
+	local XComGameState_Ability AbilityState;
+	local int ObjectID;
+	local UnitValue UnitVal;
+
+	if (EffectApplyResult != 'AA_Success')
+	{
+		return;
+	}
+
+	TargetState = XComGameState_Unit(VisualizeGameState.GetGameStateForObjectID(ActionMetadata.StateObject_NewState.ObjectID));
+	if (TargetState == none)
+		return;
+	TargetState.GetUnitValue('RT_InterruptAbilityStateObjectID', UnitVal);
+	ObjectID = UnitVal.fValue;
+
+	AbilityState = XComGameState_Ability(`XCOMHISTORY.GetGameStateForObjectID(ObjectID));
+	if(AbilityState == none) {
+		`LOG("Rising Tides: RudimentaryCreaturesAffectTargetVisualization failed to find an abilitystate for object ID " $ ObjectID);
+		return;
+	}
+
+	class'X2StatusEffects'.static.AddEffectSoundAndFlyOverToTrack(ActionMetadata, VisualizeGameState.GetContext(), AbilityState.GetMyTemplate().LocFriendlyName $ ": " $ default.LocPsionicallyInterruptedName, '', eColor_Attention, class'UIUtilities_Image'.const.UnitStatus_Stunned);
+	class'X2StatusEffects'.static.UpdateUnitFlag(ActionMetadata, VisualizeGameState.GetContext());
+}
+
+
 
 //---------------------------------------------------------------------------------------
 //---Unwilling Conduits------------------------------------------------------------------

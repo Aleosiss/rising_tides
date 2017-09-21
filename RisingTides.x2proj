@@ -176,6 +176,9 @@
     <Content Include="Localization\RisingTides.int">
       <SubType>Content</SubType>
     </Content>
+    <Content Include="Localization\TheProgram.int">
+      <SubType>Content</SubType>
+    </Content>
     <Content Include="ReadMe.txt" />
     <Content Include="ModPreview.jpg" />
     <Content Include="Config\XComEditor.ini" />
@@ -462,6 +465,9 @@
       <SubType>Content</SubType>
     </Content>
     <Content Include="Src\RisingTides\Classes\RTSitrep_OneSmallFavor.uc">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Src\RisingTides\Classes\RTStrategyElement_CovertActions.uc">
       <SubType>Content</SubType>
     </Content>
     <Content Include="Src\RisingTides\Classes\RTStrategyElement_ProgramActions.uc">
