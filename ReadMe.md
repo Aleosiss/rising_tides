@@ -31,11 +31,9 @@ This would be a bare-bones content mod. I also have the following content in min
 	- Shatter The Line: If this unit kills an enemy within X tiles, it triggers a flush effect on other enemies within X tiles. 2/3 turn cooldown. credits to /u/PostOfficeBuddy
 	- Orpheus Warp: "…the hero of the broken moon. A pawn played by a negligent deity, a marionette maneuvered by an... epileptic..."
       		- Gain Stealth while preparing a massive psionic rift. On the following turn, the Stealth is broken and a rift is formed. Friendly units can use the rift to evac from the mission. The rift will persist for an additional two turns, or if this unit enters it.
-	- RTEffect_ExtendEffectDuration: change to use PreStateSubmitted
 	- Come up with a better solution for Over The Shoulder vs. concealed units	  
-	- Purge: Add a remove debuffs effect. Additionally propogate this new effect across melded allies?
+	- Purge: Add a remove debuffs effect. Additionally propagate this new effect across melded allies?
 	- GFX for Bloodlust
-	- Reimplement EE unconciousness
 	- Extinction Event needs to somehow stop revive units from reviving
 	- SFX for Burst
 
@@ -43,13 +41,9 @@ This would be a bare-bones content mod. I also have the following content in min
 	- Time Stop damage calculation isn't visualized properly
 	- Time Stop damage calculation is fucked, use code from X2Effect_DLC_3AbsorptionField.uc to rewrite
 	- Make extend effect duration happen on move for Aura Effects as well, possibly by breaking its logic out into a separate method that is called in either place
-	- Crushing Grip doesn't override idle animations the first time it affects a unit, neither does Sovereign
 	- Psionic Storm only plays sound from one storm at a time, due to a base-game issue where a soundcue can only be played once per ObjectID
 	- Networked OI does not work with CloseCombatSpecialistAttack or KillzoneShot. Unsure of exact cause, appears that CCS does not tick AbilityActivated
 	- Shadow Strike does not highlight the tiles it can activate to. Should be possible without highlander, but a pain in the ass, so low priority.
 
 ###### Current Sprint Goals:
-
-
-
-###### Current Overrides: X2MeleePathingPawn
+	- Get the Faction in the game
