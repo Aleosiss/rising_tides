@@ -126,6 +126,7 @@ LocPsionicallyInterruptedName="Interrupted!"
 [RTAbility_MarksmanAbilitySet]
 TimeStopEffectTitle="Greyscaled"
 TimeStopEffectDescription="This unit has been frozen in time. It cannot take actions and is much easier to hit."
+EveryMomentMattersTitle=""
 
 [RTEffectBuilder]
 StealthFriendlyName="Stealth"

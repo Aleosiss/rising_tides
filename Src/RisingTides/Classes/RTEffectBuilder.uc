@@ -146,19 +146,18 @@ static function RTEffect_Meld RTCreateMeldEffect(int iDuration = 1, optional boo
 	return Effect;
 }
 
-static function RTEffect_Panicked RTCreateFeedbackEffect(int iDuration = 4) {
-	local RTEffect_Panicked Effect;
+static function RTEffect_Panicked RTCreateFeedbackEffect(int _EffectDuration, name _EffectName, string _EffectDisplayTitle, string _EffectDisplayDesc, string _IconImage) {
+	local RTEffect_Panicked     PanickedEffect;
 
-	Effect = new class'RTEffect_Panicked';
-	Effect.EffectName = default.FeedbackEffectName;
-	Effect.DuplicateResponse = eDupe_Ignore;
-	Effect.BuildPersistentEffect(iDuration, false, true, false,  eGameRule_PlayerTurnBegin);
-	Effect.SetDisplayInfo(ePerkBuff_Penalty, default.FeedbackFriendlyName, default.FeedbackFriendlyDesc, default.FeedbackIconPath, true,,'eAbilitySource_Standard');
-	//Effect.VisualizationFn = FeedbackVisualization;
-	//Effect.EffectRemovedVisualizationFn = FeedbackRemovedVisualization;
-
-	return Effect;
+	PanickedEffect = new class'RTEffect_Panicked';
+	PanickedEffect.EffectName = _EffectName;
+	PanickedEffect.BuildPersistentEffect(_EffectDuration, false, true, false, eGameRule_PlayerTurnBegin);
+	PanickedEffect.EffectHierarchyValue = class'X2StatusEffects'.default.PANICKED_HIERARCHY_VALUE;
+	PanickedEffect.EffectAppliedEventName = 'PanickedEffectApplied';
+	PanickedEffect.SetDisplayInfo(ePerkBuff_Penalty, _EffectDisplayTitle, _EffectDisplayDesc, _IconImage);
+	return PanickedEffect;
 }
+
 
 static function X2Effect_Stunned RTCreateLiftEffect(int StunLevel) {
 	local X2Effect_Stunned Effect;

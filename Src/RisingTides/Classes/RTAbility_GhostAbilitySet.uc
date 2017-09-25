@@ -397,9 +397,9 @@ static function X2AbilityTemplate LeaveMeld()
 static function X2AbilityTemplate PsiOverload()
 {
 	local X2AbilityTemplate									Template;
-	local X2AbilityCooldown                 Cooldown;
+	local X2AbilityCooldown									Cooldown;
 	local X2Effect_KillUnit									KillUnitEffect;
-	local X2AbilityCost_ActionPoints        ActionPointCost;
+	local X2AbilityCost_ActionPoints						ActionPointCost;
 
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'PsiOverload');
 	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_hunter";
@@ -468,10 +468,6 @@ static function X2AbilityTemplate RTFeedback()
 
 	Template.ConcealmentRule = eConceal_Always;
 
-	ActionPointCost = new class'X2AbilityCost_ActionPoints';
-	ActionPointCost.bFreeCost = true;
-	Template.AbilityCosts.AddItem(ActionPointCost);
-
 	Trigger = new class'X2AbilityTrigger_EventListener';
 	Trigger.ListenerData.Deferral = ELD_OnStateSubmitted;
 	Trigger.ListenerData.EventID = 'RTFeedback';
@@ -480,16 +476,13 @@ static function X2AbilityTemplate RTFeedback()
 	Template.AbilityTriggers.AddItem(Trigger);
 
 	// Build the effect
-	PanicEffect = RTEffect_Panicked(class'X2StatusEffects'.static.CreatePanickedStatusEffect());
-	PanicEffect.EffectName = default.RTFeedbackEffectName;
-	PanicEffect.BuildPersistentEffect(default.FEEDBACK_DURATION, false, true, false, eGameRule_PlayerTurnBegin);
-	PanicEffect.SetDisplayInfo(ePerkBuff_Penalty, default.FEEDBACK_TITLE,
-		default.FEEDBACK_DESC, Template.IconImage);
+	PanicEffect = class'RTEffectBuilder'.static.RTCreateFeedbackEffect(default.FEEDBACK_DURATION, default.RTFeedbackEffectName, default.FEEDBACK_TITLE, default.FEEDBACK_DESC, Template.IconImage);
 	Template.AddTargetEffect(PanicEffect);
 
 	// Add dead eye to guarantee
 	Template.AbilityToHitCalc = default.DeadEye;
 	Template.AbilityTargetStyle = default.SelfTarget;
+
 	Template.PostActivationEvents.AddItem('UnitPanicked');
 	Template.PostActivationEvents.AddItem('RTUnitFeedbacked');
 

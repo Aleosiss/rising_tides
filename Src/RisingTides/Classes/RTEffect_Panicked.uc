@@ -15,6 +15,8 @@ simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffe
 	local Name PanicBehaviorTree;
 	local bool bCivilian;
 
+
+	`LOG("Rising Tides: RTEffect_Panicked applied to unit!");
 	UnitState = XComGameState_Unit(kNewTargetState);
 	if (m_aStatChanges.Length > 0)
 	{
@@ -38,6 +40,7 @@ simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffe
 			UnitState.SetCurrentStat(eStat_AlertLevel, `ALERT_LEVEL_RED);
 		}
 	}
+
 	UnitState.bPanicked = true;
 
 	if( !bCivilian )
@@ -49,4 +52,70 @@ simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffe
 		// update, since it requires the ability cache to be refreshed with the new action points.
 		UnitState.AutoRunBehaviorTree(PanicBehaviorTree, 2, `XCOMHISTORY.GetCurrentHistoryIndex() + 1, true);
 	}
+}
+
+
+simulated function AddX2ActionsForVisualization(XComGameState VisualizeGameState, out VisualizationActionMetadata BuildTrack, name EffectApplyResult)
+{
+	local XComGameState_Unit UnitState;
+
+	if( EffectApplyResult != 'AA_Success' )
+	{
+		return;
+	}
+
+	// pan to the panicking unit (but only if it isn't a civilian)
+	UnitState = XComGameState_Unit(BuildTrack.StateObject_NewState);
+	if (UnitState == none)
+		return;
+
+	if(!UnitState.IsCivilian())
+	{
+		class'X2StatusEffects'.static.AddEffectCameraPanToAffectedUnitToTrack(BuildTrack, VisualizeGameState.GetContext());
+		class'X2StatusEffects'.static.AddEffectSoundAndFlyOverToTrack(BuildTrack, VisualizeGameState.GetContext(), EffectFriendlyName, 'PanicScream', eColor_Bad, class'UIUtilities_Image'.const.UnitStatus_Panicked);
+		
+	}
+
+	class'X2StatusEffects'.static.UpdateUnitFlag(BuildTrack, VisualizeGameState.GetContext());
+}
+
+simulated function AddX2ActionsForVisualization_Tick(XComGameState VisualizeGameState, out VisualizationActionMetadata BuildTrack, const int TickIndex, XComGameState_Effect EffectState)
+{
+	local XComGameState_Unit UnitState;
+
+	UnitState = XComGameState_Unit(BuildTrack.StateObject_NewState);
+	if (UnitState == none)
+		return;
+
+	// dead units should not be reported, nor civilians
+	if( !UnitState.IsAlive() )
+	{
+		return;
+	}
+
+	if( !UnitState.IsCivilian() )
+	{
+		class'X2StatusEffects'.static.AddEffectCameraPanToAffectedUnitToTrack(BuildTrack, VisualizeGameState.GetContext());
+		class'X2StatusEffects'.static.AddEffectSoundAndFlyOverToTrack(BuildTrack, VisualizeGameState.GetContext(), EffectFriendlyName, 'PanickedBreathing', eColor_Bad, class'UIUtilities_Image'.const.UnitStatus_Panicked);
+	}
+
+	class'X2StatusEffects'.static.UpdateUnitFlag(BuildTrack, VisualizeGameState.GetContext());
+}
+
+simulated function AddX2ActionsForVisualization_Removed(XComGameState VisualizeGameState, out VisualizationActionMetadata BuildTrack, const name EffectApplyResult, XComGameState_Effect RemovedEffect)
+{
+	local XComGameState_Unit UnitState;
+
+	UnitState = XComGameState_Unit(BuildTrack.StateObject_NewState);
+	if (UnitState == none)
+		return;
+
+	// dead units should not be reported. Also, rescued civilians should not display the fly-over.
+	if( !UnitState.IsAlive() || UnitState.bRemovedFromPlay )
+	{
+		return;
+	}
+
+	class'X2StatusEffects'.static.AddEffectSoundAndFlyOverToTrack(BuildTrack, VisualizeGameState.GetContext(), EffectLostFriendlyName, '', eColor_Good, class'UIUtilities_Image'.const.UnitStatus_Panicked, 2.0f);
+	class'X2StatusEffects'.static.UpdateUnitFlag(BuildTrack, VisualizeGameState.GetContext());
 }
