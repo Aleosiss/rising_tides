@@ -10,6 +10,8 @@
 
 class X2DownloadableContentInfo_RisingTides extends X2DownloadableContentInfo;
 
+var bool bDebugOutputDisabled;
+
 /// <summary>
 /// This method is run if the player loads a saved game that was created prior to this DLC / Mod being installed, and allows the
 /// DLC / Mod to perform custom processing in response. This will only be called once the first time a player loads a save that was
@@ -31,6 +33,22 @@ static event OnPostTemplatesCreated()
 {
 	MakePsiAbilitiesInterruptable();
 	AddProgramFactionCovertActions();
+}
+
+
+simulated static function PrintResistanceFactionNames() {
+	local XComGameStateHistory History;
+	local XComGameState_ResistanceFaction Faction;
+	
+	if(!DebuggingEnabled()) {
+		return;
+	}
+	
+	`LOG("Rising Tides: printing faction names...")`
+	foreach History.IterateByClassType(Faction.class, Faction) {
+		`LOG(Faction.GetMyTemplateName());
+	}
+	
 }
 
 
@@ -100,4 +118,9 @@ exec function RT_ForceLoadPerkOnToUnit(name AbilityName) {
 	class'UIDebugStateMachines'.static.TryForceBuildPerkContentCache();
 	class'UIDebugStateMachines'.static.TryForceCachePerkContent(AbilityName);
 	class'UIDebugStateMachines'.static.TryForceAppendAbilityPerks(AbilityName);
+}
+
+
+static function bool DebuggingEnabled() {
+	return !bDebugOutputDisabled;
 }
