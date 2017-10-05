@@ -722,7 +722,7 @@ static function X2AbilityTemplate RTTheSixPathsOfPainOverride() {
 	//Template.AdditionalAbilities.AddItem('RTFeedback');
 	//Template.AdditionalAbilities.AddItem('RTMindControl');
 	//Template.AdditionalAbilities.AddItem('RTEnterStealth');
-//
+
 	//// special meld abilities
 	//Template.AdditionalAbilities.AddItem('LIOverwatchShot');
 	//Template.AdditionalAbilities.AddItem('RTUnstableConduitBurst');
@@ -789,7 +789,6 @@ static function X2AbilityTemplate RTMeldInduction() {
 	MeldEffect.bRemoveWhenSourceDies = true;
 	MeldEffect.bRemoveWhenTargetDies = true;
 	Template.AddTargetEffect(MeldEffect);
-
 
 	Template.PostActivationEvents.AddItem(default.UnitUsedPsionicAbilityEvent);
 
