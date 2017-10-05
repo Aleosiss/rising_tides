@@ -2573,7 +2573,9 @@ static function X2DataTemplate RTDashingStrike()
 	return Template;
 }
 
-
+//---------------------------------------------------------------------------------------
+//---Psionic Lance-----------------------------------------------------------------------
+//---------------------------------------------------------------------------------------
 static function X2AbilityTemplate RTPsionicLance()
 {
 	local X2AbilityTemplate					Template;
@@ -2644,7 +2646,9 @@ static function X2AbilityTemplate RTPsionicLance()
 	return Template;
 }
 
-
+//---------------------------------------------------------------------------------------
+//---Close Combat Specialist-------------------------------------------------------------
+//---------------------------------------------------------------------------------------
 static function X2AbilityTemplate RTCloseCombatSpecialist()
 {
 	local X2AbilityTemplate                 Template;
@@ -2760,7 +2764,6 @@ static function X2AbilityTemplate RTCloseCombatSpecialistAttack()
 
 	return Template;
 }
-
 
 //Must be static, because it will be called with a different object (an XComGameState_Ability)
 //Used to trigger Bladestorm when the source's concealment is broken by a unit in melee range (the regular movement triggers get called too soon)

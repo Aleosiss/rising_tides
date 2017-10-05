@@ -127,7 +127,6 @@ static function array<X2DataTemplate> CreateTemplates()
 	return Templates;
 }
 
-
 //---------------------------------------------------------------------------------------
 //---Over the Shoulder-------------------------------------------------------------------
 //---------------------------------------------------------------------------------------
@@ -444,8 +443,6 @@ static function X2AbilityTemplate RTForcedIntroversion() {
 
 	return Template;
 }
-
-
 
 //---------------------------------------------------------------------------------------
 //---Extinction Event--------------------------------------------------------------------
@@ -1003,7 +1000,6 @@ static function X2AbilityTemplate RTRudimentaryCreaturesEvent() {
 	return Template;
 }
 
-
 function RudimentaryCreaturesAffectTargetVisualization(XComGameState VisualizeGameState, out VisualizationActionMetadata ActionMetadata, const name EffectApplyResult) {
 	local XComGameState_Unit TargetState;
 	local XComGameState_Ability AbilityState;
@@ -1030,8 +1026,6 @@ function RudimentaryCreaturesAffectTargetVisualization(XComGameState VisualizeGa
 	class'X2StatusEffects'.static.AddEffectSoundAndFlyOverToTrack(ActionMetadata, VisualizeGameState.GetContext(), AbilityState.GetMyTemplate().LocFriendlyName $ ": " $ default.LocPsionicallyInterruptedName, '', eColor_Attention, class'UIUtilities_Image'.const.UnitStatus_Stunned);
 	class'X2StatusEffects'.static.UpdateUnitFlag(ActionMetadata, VisualizeGameState.GetContext());
 }
-
-
 
 //---------------------------------------------------------------------------------------
 //---Unwilling Conduits------------------------------------------------------------------
@@ -2355,7 +2349,9 @@ static function X2AbilityTemplate RTSetPsistormCharges() {
 	return Template;
 }
 
-
+//---------------------------------------------------------------------------------------
+//---Technopathy-------------------------------------------------------------------------
+//---------------------------------------------------------------------------------------
 static function X2AbilityTemplate RTFinalizeTechnopathyHack(name FinalizeName = 'RTFinalizeTechnopathyHack')
 {
 	local X2AbilityTemplate                 Template;
@@ -2494,6 +2490,9 @@ static function X2AbilityTemplate RTConstructTechnopathyHack(name TemplateName, 
 	return Template;
 }
 
+//---------------------------------------------------------------------------------------
+//---Psionic Lash------------------------------------------------------------------------
+//---------------------------------------------------------------------------------------
 static function X2AbilityTemplate RTPsionicLash() {
 	local X2AbilityTemplate Template;
 	local RTEffect_PsionicLash	LashEffect;			 
