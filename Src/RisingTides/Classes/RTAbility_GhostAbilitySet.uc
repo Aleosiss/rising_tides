@@ -812,8 +812,6 @@ static function X2Condition_UnitValue CreateOverTheShoulderProperty() {
 
 }
 
-// cooldown cleanser
-
 static function X2AbilityTemplate CreateRTCooldownCleanse (name TemplateName, name EffectNameToRemove, name EventIDToListenFor) {
 	local X2AbilityTemplate Template;
 	local X2Effect_RemoveEffects RemoveEffectEffect;
@@ -888,6 +886,9 @@ static function X2AbilityTemplate CreateRTPassiveAbilityCooldown(name TemplateNa
 		return Template;
 }
 
+//---------------------------------------------------------------------------------------
+//---Test Ability=-----------------------------------------------------------------------
+//---------------------------------------------------------------------------------------
 static function X2AbilityTemplate TestAbility() {
 	local X2AbilityTemplate Template;
 	local X2Effect_Persistent Effect;
@@ -926,6 +927,9 @@ static function X2AbilityTemplate TestAbility() {
 
 }
 
+//---------------------------------------------------------------------------------------
+//---Mind Control------------------------------------------------------------------------
+//---------------------------------------------------------------------------------------
 static function X2DataTemplate RTMindControl()
 {
 	local X2AbilityTemplate Template;
@@ -996,6 +1000,9 @@ static function X2DataTemplate RTMindControl()
 	return Template;
 }
 
+//---------------------------------------------------------------------------------------
+//---Stealth-----------------------------------------------------------------------------
+//---------------------------------------------------------------------------------------
 static function X2AbilityTemplate RTEnterStealth() {
 	local X2AbilityTemplate Template;
 	local RTEffect_Stealth StealthEffect;

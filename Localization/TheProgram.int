@@ -6,7 +6,7 @@ DescriptionEntry="Dr. Elizabeth Hadley, born on October 3rd, 1968, is a certifie
 [FactionProgram X2EncyclopediaTemplate]
 ListTitle="The Program"
 DescriptionTitle="Program"
-DescriptionEntry="The Program, led by the illusive Dr. Hadley, are an offshoot of XCOM, branching off in the 1970's. Their primary focus is ensuring that when ADVENT falls, they-- at the expense of any other, even XCOM-- stand on top of the pile of rubble."
+DescriptionEntry="The Program, seemingly led by the illusive Dr. Hadley, are an offshoot of XCOM, branching off in the 1970's. Their primary focus is ensuring that when ADVENT falls, they-- at the expense of any other, even XCOM-- stand on top of the pile of rubble."
 
 [ProgramGhosts X2EncyclopediaTemplate]
 ListTitle="Program Classes"
@@ -18,7 +18,7 @@ FactionTitle="Program"
 FactionHQDisplayName="PROGRAM FOB-00X"
 LeaderQuote="\"We fight against the subtle threats. Including you, Commander.\" - Dr. Hadley"
 InfluenceMediumQuote="\"It is good to work with you again, Commander. Reminds me of the good old days, when the threats fell from the stars and did not rise up all around us.\" - Dr. Hadley"
-InfluenceHighQuote="\"With the Templars gone, there is only one lasting threat to the stability of our society. Commander. You know what must be done.\" - Dr. Hadley"
+InfluenceHighQuote="\"With the Templars gone, there will be only one lasting threat to the stability of our society. Commander. You know what must be done.\" - Dr. Hadley"
 
 GroupNames[0]="SPECTRE"
 GroupNames[1]="GHOST"
