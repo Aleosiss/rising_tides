@@ -470,7 +470,7 @@ simulated function Burst_BuildVisualization(XComGameState VisualizeGameState)
 	History = `XCOMHISTORY;
 
 	Context = XComGameStateContext_Ability(VisualizeGameState.GetContext());
-    AbilityContext = Context.InputContext;
+	AbilityContext = Context.InputContext;
 
 	AbilityTemplate = class'XComGameState_Ability'.static.GetMyTemplateManager().FindAbilityTemplate(AbilityContext.AbilityTemplateName);
 	MultiTargetEffects = AbilityTemplate.AbilityMultiTargetEffects;
@@ -2684,7 +2684,7 @@ static function X2AbilityTemplate RTCloseCombatSpecialistAttack()
 	 
 	//Cooldown = new class'X2AbilityCooldown';
 	//Cooldown.iNumTurns = 1;
-    //Template.AbilityCooldown = Cooldown;
+	//Template.AbilityCooldown = Cooldown;
 
 	AmmoCost = new class 'X2AbilityCost_Ammo';
 	AmmoCost.iAmmo = default.CCS_AMMO_PER_SHOT;

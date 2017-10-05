@@ -12,6 +12,11 @@ class X2DownloadableContentInfo_RisingTides extends X2DownloadableContentInfo;
 
 var bool bDebugOutputDisabled;
 
+defaultproperties
+{
+	bDebugOutputDisabled = false;
+}
+
 /// <summary>
 /// This method is run if the player loads a saved game that was created prior to this DLC / Mod being installed, and allows the
 /// DLC / Mod to perform custom processing in response. This will only be called once the first time a player loads a save that was
@@ -50,7 +55,6 @@ simulated static function PrintResistanceFactionNames() {
 	}
 	
 }
-
 
 simulated static function AddProgramFactionCovertActions() {
 	class'RTStrategyElement_CovertActions'.static.AddFactionToGeneratedTemplates();

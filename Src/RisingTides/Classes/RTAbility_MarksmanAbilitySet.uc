@@ -772,7 +772,7 @@ static function X2AbilityTemplate RTSnapshot()
 //---------------------------------------------------------------------------------------
 static function X2AbilityTemplate SixOClock()
 {
-    local X2AbilityTemplate                     Template;
+	local X2AbilityTemplate                     Template;
 	local RTEffect_SixOClock            PersistentEffect;
 
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'SixOClock');
@@ -884,7 +884,7 @@ static function X2AbilityTemplate SixOClockEffect()
 //---------------------------------------------------------------------------------------
 static function X2AbilityTemplate VitalPointTargeting()
 {
-    local X2AbilityTemplate                     Template;
+	local X2AbilityTemplate                     Template;
 	local RTEffect_VPTargeting					VPEffect;
 
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'VitalPointTargeting');
@@ -1063,7 +1063,7 @@ static function X2AbilityTemplate SovereignEffect()
 	local X2Condition_UnitProperty				MultiUnitPropertyCondition;
 	local X2Effect_Panicked				        PanicEffect;
 	local X2AbilityCooldown						Cooldown;
- 	local X2AbilityTrigger_EventListener		EventListener;
+	 local X2AbilityTrigger_EventListener		EventListener;
 	local X2AbilityMultiTarget_Radius			MultiTarget;
 	local X2Effect_Persistent					CooldownEffect;
 
@@ -1550,7 +1550,7 @@ static function X2AbilityTemplate TimeStandsStillEndListener()
 	local X2Effect_RemoveEffects				RemoveSelfEffect;
 	local X2Effect_RemoveEffects				RemoveMultiEffect;
 	local X2AbilityMultiTarget_Radius			MultiTarget;
- 	local X2AbilityTrigger_EventListener		EventListener;
+	 local X2AbilityTrigger_EventListener		EventListener;
 	local X2Effect_Knockback					KnockbackEffect;
 	local RTEffect_TimeStopDamage				TimeStopDamageEffect;
 
@@ -2302,7 +2302,7 @@ static function X2AbilityTemplate HarbingerCleanseListener()
 	local X2Effect_RemoveEffects				RemoveSelfEffect;
 	local X2Effect_RemoveEffects				RemoveMultiEffect;
 	local X2AbilityMultiTarget_Radius			MultiTarget;
- 	local X2AbilityTrigger_EventListener		EventListener;
+	 local X2AbilityTrigger_EventListener		EventListener;
 
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'HarbingerCleanseListener');
 	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_voidadept";
@@ -2533,7 +2533,7 @@ static function X2AbilityTemplate RTOverflowBarrier()
 	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
 	//Template.BuildVisualizationFn = Shielded_BuildVisualization;
 	Template.bSkipFireAction = true;
-   	Template.bShowActivation = true;
+	   Template.bShowActivation = true;
 
 	Template.BuildVisualizationFn = OverflowShielded_BuildVisualization;
 	Template.CinescriptCameraType = "AdvShieldBearer_EnergyShieldArmor";
@@ -2672,8 +2672,8 @@ static function X2AbilityTemplate RTKubikuri()
 	Template.AbilityToHitOwnerOnMissCalc = ToHitCalc;
 
 	Cooldown = new class'X2AbilityCooldown';
-    Cooldown.iNumTurns = default.KUBIKURI_COOLDOWN;
-    Template.AbilityCooldown = Cooldown;
+	Cooldown.iNumTurns = default.KUBIKURI_COOLDOWN;
+	Template.AbilityCooldown = Cooldown;
 
 	AmmoCost = new class'X2AbilityCost_Ammo';
 	AmmoCost.iAmmo = default.KUBIKURI_AMMO_COST;
@@ -2698,18 +2698,18 @@ static function X2AbilityTemplate RTKubikuriDamage()
 
 	`CREATE_X2ABILITY_TEMPLATE (Template, 'RTKubikuriDamage');
 	Template.IconImage = "img:///RisingTidesContentPackage.PerkIcons.LW_AbilityKubikuri";
-    Template.AbilitySourceName = 'eAbilitySource_Perk';
-    Template.eAbilityIconBehaviorHUD = 2;
-    Template.Hostility = 2;
-    Template.AbilityToHitCalc = default.DeadEye;
-    Template.AbilityTargetStyle = default.SelfTarget;
-    Template.AbilityTriggers.AddItem(default.UnitPostBeginPlayTrigger);
+	Template.AbilitySourceName = 'eAbilitySource_Perk';
+	Template.eAbilityIconBehaviorHUD = 2;
+	Template.Hostility = 2;
+	Template.AbilityToHitCalc = default.DeadEye;
+	Template.AbilityTargetStyle = default.SelfTarget;
+	Template.AbilityTriggers.AddItem(default.UnitPostBeginPlayTrigger);
 	DamageEffect=new class'X2Effect_Kubikuri';
-    DamageEffect.BuildPersistentEffect(1, true, false, false);
-    DamageEffect.SetDisplayInfo(0, Template.LocFriendlyName, Template.GetMyLongDescription(), Template.IconImage, false,, Template.AbilitySourceName);
-    Template.AddTargetEffect(DamageEffect);
-    Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
-    return Template;
+	DamageEffect.BuildPersistentEffect(1, true, false, false);
+	DamageEffect.SetDisplayInfo(0, Template.LocFriendlyName, Template.GetMyLongDescription(), Template.IconImage, false,, Template.AbilitySourceName);
+	Template.AddTargetEffect(DamageEffect);
+	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
+	return Template;
 }
 
 

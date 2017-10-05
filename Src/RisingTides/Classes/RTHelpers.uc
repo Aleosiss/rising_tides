@@ -169,3 +169,11 @@ static function RTGameState_ProgramFaction GetNewProgramState(XComGameState NewG
 	Program = RTGameState_ProgramFaction(NewGameState.ModifyStateObject(class'RTGameState_ProgramFaction', Program.ObjectID));
 	return Program;
 }
+
+static function RTLog(string message, optional bool bShouldRedScreenToo = false) {
+	if(!class'X2DownloadableContentInfo_RisingTides'.static.DebuggingEnabled())
+		return;
+	`LOG("Rising Tides: " $ message);
+	if(bShouldRedScreenToo)
+		`RedScreen("Rising Tides: " $ message);
+}

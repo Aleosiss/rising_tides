@@ -847,9 +847,9 @@ static function X2AbilityTemplate CreateRTCooldownCleanse (name TemplateName, na
 }
 
 static function X2AbilityTemplate CreateRTPassiveAbilityCooldown(name TemplateName, name CooldownTrackerEffectName, optional bool bTriggerCooldownViaEvent = false, optional name EventIDToListenFor) {
-        local X2AbilityTemplate Template;
-        local X2Effect_Persistent Effect;
-        local X2AbilityTrigger_EventListener Trigger;
+		local X2AbilityTemplate Template;
+		local X2Effect_Persistent Effect;
+		local X2AbilityTrigger_EventListener Trigger;
 
 	`CREATE_X2ABILITY_TEMPLATE(Template, TemplateName);
 	Template.AbilitySourceName = 'eAbilitySource_Perk';
@@ -857,18 +857,18 @@ static function X2AbilityTemplate CreateRTPassiveAbilityCooldown(name TemplateNa
 	Template.Hostility = eHostility_Neutral;
 	Template.ConcealmentRule = eConceal_Always;
 
-    Trigger = new class'X2AbilityTrigger_EventListener';
+	Trigger = new class'X2AbilityTrigger_EventListener';
 	Trigger.ListenerData.Deferral = ELD_OnStateSubmitted;
 	Trigger.ListenerData.EventID = EventIDToListenFor;
 	Trigger.ListenerData.Filter = eFilter_Unit;
-    Trigger.ListenerData.EventFn = class'XComGameState_Ability'.static.AbilityTriggerEventListener_Self;
-    if(bTriggerCooldownViaEvent) {
+	Trigger.ListenerData.EventFn = class'XComGameState_Ability'.static.AbilityTriggerEventListener_Self;
+	if(bTriggerCooldownViaEvent) {
 		Template.AbilityTriggers.AddItem(Trigger);
-    } else {
+	} else {
 		Template.AbilityTriggers.AddItem(new class'X2AbilityTrigger_Placeholder');
-    }
+	}
 
-    // Add dead eye to guarantee
+	// Add dead eye to guarantee
 	Template.AbilityToHitCalc = default.DeadEye;
 	Template.AbilityTargetStyle = default.SelfTarget;
 
@@ -885,7 +885,7 @@ static function X2AbilityTemplate CreateRTPassiveAbilityCooldown(name TemplateNa
 
 	Template.bCrossClassEligible = false;
 
-        return Template;
+		return Template;
 }
 
 static function X2AbilityTemplate TestAbility() {
