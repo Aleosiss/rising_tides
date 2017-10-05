@@ -37,7 +37,7 @@ static event InstallNewCampaign(XComGameState StartState)
 static event OnPostTemplatesCreated()
 {
 	MakePsiAbilitiesInterruptable();
-	AddProgramFactionCovertActions();
+	//AddProgramFactionCovertActions();
 }
 
 
