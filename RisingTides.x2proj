@@ -476,6 +476,9 @@
     <Content Include="Src\RisingTides\Classes\RTStrategyElement_ResistanceModes.uc">
       <SubType>Content</SubType>
     </Content>
+    <Content Include="Src\RisingTides\Classes\RTStrategyElement_Rewards.uc">
+      <SubType>Content</SubType>
+    </Content>
     <Content Include="Src\RisingTides\Classes\RTTacticalVisibilityHelpers.uc">
       <SubType>Content</SubType>
     </Content>

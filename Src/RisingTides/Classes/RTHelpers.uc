@@ -2,6 +2,7 @@
 class RTHelpers extends Object config(RisingTides);
 
 var config array<name> StandardShots, MeleeAbilities, SniperShots, OverwatchShots, PsionicAbilities, FreeActions;
+var config name ProgramFactionName;
 
 enum ERTChecklist {
 	eChecklist_StandardShots,

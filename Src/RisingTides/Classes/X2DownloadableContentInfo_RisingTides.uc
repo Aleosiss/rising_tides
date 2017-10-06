@@ -37,21 +37,27 @@ static event InstallNewCampaign(XComGameState StartState)
 static event OnPostTemplatesCreated()
 {
 	MakePsiAbilitiesInterruptable();
-	//AddProgramFactionCovertActions();
+	AddProgramFactionCovertActions();
 }
 
 
-simulated static function PrintResistanceFactionNames() {
+exec function PrintResistanceFactionNames() {
 	local XComGameStateHistory History;
 	local XComGameState_ResistanceFaction Faction;
+	local object obj;
 	
 	if(!DebuggingEnabled()) {
 		return;
 	}
+
+	History = `XCOMHISTORY;
 	
-	`LOG("Rising Tides: printing faction names...")`
-	foreach History.IterateByClassType(Faction.class, Faction) {
-		`LOG(Faction.GetMyTemplateName());
+	`LOG("Rising Tides: printing faction names...");
+	foreach History.IterateByClassType(class'XComGameState_ResistanceFaction', Faction) {
+		//Faction = XComGameState_ResistanceFaction(obj);
+		if(Faction != none) {
+			`LOG(Faction.GetMyTemplateName());
+		}
 	}
 	
 }
@@ -126,5 +132,5 @@ exec function RT_ForceLoadPerkOnToUnit(name AbilityName) {
 
 
 static function bool DebuggingEnabled() {
-	return !bDebugOutputDisabled;
+	return !default.bDebugOutputDisabled;
 }

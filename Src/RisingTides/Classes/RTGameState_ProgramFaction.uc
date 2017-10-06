@@ -451,3 +451,87 @@ protected function RotateRandomSquadToDeploy() {
 		return;
 	Deployed = Squads[`SYNC_RAND(Squads.Length)];
 }
+
+//#############################################################################################
+//-----------------   COVERT ACTIONS  ---------------------------------------------------------
+//#############################################################################################
+
+//---------------------------------------------------------------------------------------
+// Creates the Golden Path actions for the Faction, if they do not already exist
+function ModifyGoldenPathActions(XComGameState NewGameState)
+{
+	local X2StrategyElementTemplateManager StratMgr;
+	local array<X2StrategyElementTemplate> AllActionTemplates;
+	local X2StrategyElementTemplate DataTemplate;
+	local X2CovertActionTemplate ActionTemplate;
+	local XComGameState_CovertAction ActionState;
+	local XComGameStateHistory History;
+	local StateObjectReference ActionRef;
+
+
+	class'RTHelpers'.static.RTLog("Modifying Golden Path actions for The Program...");
+	if(GoldenPathActions.Length == 0) {
+		class'RTHelpers'.static.RTLog("ModifyGoldenPathActions called too early, no GoldenPathActions available!", true);
+	} else {
+		History = `XCOMHISTORY;
+		foreach GoldenPathActions(ActionRef)
+		{
+			ActionState = XComGameState_CovertAction(History.GetGameStateForObjectID(ActionRef.ObjectID));
+			if(ActionState.GetMyTemplateName() == 'CovertAction_FindFaction' || ActionState.GetMyTemplateName() == 'CovertAction_FindFarthestFaction') {
+				GoldenPathActions.RemoveItem(ActionRef);
+			}
+		}
+
+		// add replacement golden path templates
+		StratMgr = class'X2StrategyElementTemplateManager'.static.GetStrategyElementTemplateManager();
+		AllActionTemplates = StratMgr.GetAllTemplatesOfClass(class'X2CovertActionTemplate');
+
+		foreach AllActionTemplates(DataTemplate)
+		{
+			ActionTemplate = X2CovertActionTemplate(DataTemplate);
+			if (ActionTemplate != none) {
+				if(ActionTemplate.DataName == 'CovertAction_FindProgramFaction' || ActionTemplate.DataName == 'CovertAction_FindProgramFarAwayFaction')
+					GoldenPathActions.AddItem(CreateCovertAction(NewGameState, ActionTemplate, ActionTemplate.RequiredFactionInfluence));
+			}
+		}
+	}
+}
+
+//#############################################################################################
+//-----------------  GENERAL FACTION STUFF  ---------------------------------------------------
+//#############################################################################################
+
+function MeetXCom(XComGameState NewGameState)
+{
+	local XComGameState_HeadquartersResistance ResHQ;
+	local array<Name> ExclusionList;
+	local int idx;
+
+	ResHQ = XComGameState_HeadquartersResistance(`XCOMHISTORY.GetSingleGameStateObjectForClass(class'XComGameState_HeadquartersResistance'));
+	ResHQ = XComGameState_HeadquartersResistance(NewGameState.ModifyStateObject(class'XComGameState_HeadquartersResistance', ResHQ.ObjectID));
+ 	ExclusionList = ResHQ.CovertActionExclusionList; // Get the current list of covert actions for other factions from Res HQ
+
+	bMetXCom = true;
+	bNewFragmentActionAvailable = true;
+	MetXComDate = GetCurrentTime();
+
+	CleanUpFactionCovertActions(NewGameState);
+	CreateGoldenPathActions(NewGameState);
+	ModifyGoldenPathActions(NewGameState);
+	GenerateCovertActions(NewGameState, ExclusionList);
+	
+	for(idx = 0; idx < default.NumCardsOnMeet; idx++)
+	{
+		GenerateNewPlayableCard(NewGameState);
+	}
+
+	// DisplayResistancePlaque(NewGameState);
+
+	ResHQ.CovertActionExclusionList = ExclusionList; // Save the updated Exclusion List to ResHQ
+
+	// Ensure a Rookie Covert Action exists
+	if (!ResHQ.IsRookieCovertActionAvailable(NewGameState))
+	{
+		ResHQ.CreateRookieCovertAction(NewGameState);
+	}
+}

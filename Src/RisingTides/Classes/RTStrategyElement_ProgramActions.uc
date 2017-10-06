@@ -46,6 +46,8 @@ static function X2DataTemplate RTCreateJustPassingThrough() {
 	`CREATE_X2TEMPLATE(class'X2StrategyCardTemplate', Template, 'RTResCard_JustPassingThrough');
 	Template.Category = "ResistanceCard";
 	Template.ModifyTacticalStartStateFn = ActivateJustPassingThrough;
+
+	return Template;
 }
 
 static function ActivateJustPassingThrough(XComGameState StartState) {
