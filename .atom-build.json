@@ -1,0 +1,39 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "taskName": "build",
+            "type": "shell",
+            "command": "powershell.exe -file '${workspaceRoot}/scripts/build.ps1' -mod 'RisingTides' -srcDirectory '${workspaceRoot}' -sdkPath 'W:/SteamLibrary/steamapps/common/XCOM 2 War of the Chosen SDK/XComGame/' -gamePath 'W:/SteamLibrary/steamapps/common/XCOM 2/XCom2-WarOfTheChosen/XComGame/'",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        },
+        {
+            "taskName": "debug",
+            "type": "shell",
+            "command": "powershell.exe -file '${workspaceRoot}/scripts/run.ps1' -gamePath 'W:/SteamLibrary/steamapps/common/XCOM 2/XCom2-WarOfTheChosen/XComGame/'"
+        },
+        {
+            "taskName": "runUnrealEditor",
+            "type": "shell",
+            "command": "powershell.exe -file '${workspaceRoot}/scripts/runUnrealEditor.ps1' -gamePath 'W:/SteamLibrary/steamapps/common/XCOM 2/XCom2-WarOfTheChosen/XComGame/'"
+        }
+    ]
+}
+
+{
+    "targets": {
+        "build": {
+            
+        },
+        "run": {
+
+        },
+        "open unreal editor": {
+
+        }
+    }
+
+}
