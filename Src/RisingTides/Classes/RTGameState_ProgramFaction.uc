@@ -468,10 +468,9 @@ function ModifyGoldenPathActions(XComGameState NewGameState)
 	local XComGameStateHistory History;
 	local StateObjectReference ActionRef;
 
-
 	class'RTHelpers'.static.RTLog("Modifying Golden Path actions for The Program...");
 	if(GoldenPathActions.Length == 0) {
-		class'RTHelpers'.static.RTLog("ModifyGoldenPathActions called too early, no GoldenPathActions available!", true);
+		class'RTHelpers'.static.RTLog("ModifyGoldenPathActions failed, no GoldenPathActions available!", true);
 	} else {
 		History = `XCOMHISTORY;
 		foreach GoldenPathActions(ActionRef)
@@ -481,24 +480,11 @@ function ModifyGoldenPathActions(XComGameState NewGameState)
 				GoldenPathActions.RemoveItem(ActionRef);
 			}
 		}
-
-		// add replacement golden path templates
-		StratMgr = class'X2StrategyElementTemplateManager'.static.GetStrategyElementTemplateManager();
-		AllActionTemplates = StratMgr.GetAllTemplatesOfClass(class'X2CovertActionTemplate');
-
-		foreach AllActionTemplates(DataTemplate)
-		{
-			ActionTemplate = X2CovertActionTemplate(DataTemplate);
-			if (ActionTemplate != none) {
-				if(ActionTemplate.DataName == 'CovertAction_FindProgramFaction' || ActionTemplate.DataName == 'CovertAction_FindProgramFarAwayFaction')
-					GoldenPathActions.AddItem(CreateCovertAction(NewGameState, ActionTemplate, ActionTemplate.RequiredFactionInfluence));
-			}
-		}
 	}
 }
 
 //#############################################################################################
-//-----------------  GENERAL FACTION STUFF  ---------------------------------------------------
+//----------------- GENERAL FACTION METHODS ---------------------------------------------------
 //#############################################################################################
 
 function MeetXCom(XComGameState NewGameState)
@@ -519,7 +505,7 @@ function MeetXCom(XComGameState NewGameState)
 	CreateGoldenPathActions(NewGameState);
 	ModifyGoldenPathActions(NewGameState);
 	GenerateCovertActions(NewGameState, ExclusionList);
-	
+
 	for(idx = 0; idx < default.NumCardsOnMeet; idx++)
 	{
 		GenerateNewPlayableCard(NewGameState);

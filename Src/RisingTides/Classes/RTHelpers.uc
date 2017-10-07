@@ -156,20 +156,36 @@ static function PanicLoopEndFn( X2Effect_Persistent PersistentEffect, const out 
 	NewGameState.AddStateObject( UnitState );
 }
 
-static function RTGameState_ProgramFaction GetNewProgramState(XComGameState NewGameState) {
+static function RTGameState_ProgramFaction GetProgramState(optional XComGameState NewGameState) {
 	local RTGameState_ProgramFaction Program;
+	
+	if(NewGameState != none) {
+		foreach NewGameState.IterateByClassType(class'RTGameState_ProgramFaction', Program) {
+			break;
+		}
+	}
 
-	foreach NewGameState.IterateByClassType(class'RTGameState_ProgramFaction', Program) {
-		break;
+	if(Program == none) {
+		foreach `XCOMHISTORY.IterateByClassType(class'RTGameState_ProgramFaction', Program) {
+			break;
+		}
 	}
 
 	if(Program == none) {
 		Program = RTGameState_ProgramFaction(`XCOMHISTORY.GetSingleGameStateObjectForClass(class'RTGameState_ProgramFaction'));
 	} 
 	
+	return Program;
+}
+
+static function RTGameState_ProgramFaction GetNewProgramState(optional XComGameState NewGameState) {
+	local RTGameState_ProgramFaction Program;
+
+	Program = GetProgramState(NewGameState); 
 	Program = RTGameState_ProgramFaction(NewGameState.ModifyStateObject(class'RTGameState_ProgramFaction', Program.ObjectID));
 	return Program;
 }
+
 
 static function RTLog(string message, optional bool bShouldRedScreenToo = false) {
 	if(!class'X2DownloadableContentInfo_RisingTides'.static.DebuggingEnabled())

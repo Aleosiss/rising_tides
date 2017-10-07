@@ -19,7 +19,7 @@ static function X2DataTemplate CreateFindProgramFactionRewardTemplate()
 	local X2RewardTemplate Template;
 
 	`CREATE_X2Reward_TEMPLATE(Template, 'Reward_RTProgram_FindFaction');
-	Template.IsRewardAvailableFn = IsFindFactionRewardAvailable;
+	Template.IsRewardAvailableFn = IsFindProgramFactionRewardAvailable;
 	Template.GenerateRewardFn = GenerateMeetFactionReward;
 	Template.GiveRewardFn = MeetProgramFaction;
 	Template.CleanUpRewardFn = CleanUpUnitReward;

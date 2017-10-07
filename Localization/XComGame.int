@@ -830,7 +830,7 @@ ListTitle="Program Classes"
 DescriptionTitle="Program Classes"
 DescriptionEntry="The Program fields a small number of psionic operatives. Augmented cybernetically and genetically through a substance known as \"MELD"\, they are truly elite, each a veteran of twenty, thirty, or even forty years of combat against both human and alien threats. Each has a unique skillset, but they share a common base of psionic abilities, such as Mind Control, Mind Wrack, and Mind Meld."
 
-[Faction_Program X2ResistanceFactionTemplate]
+[Faction_Program RTProgramFactionTemplate]
 FactionTitle="The Program"
 FactionHQDisplayName="PROGRAM FOB-00X"
 LeaderQuote="\"We fight against the subtle threats. Including you, Commander.\" - Dr. Hadley"
@@ -843,15 +843,21 @@ GroupNames[3]="SHADE"
 GroupNames[4]="REAPER"
 GroupNames[5]="MIRAGE"
 Descriptors_Prefix[0]="OSC -"
-Descriptors_Suffix[0]="-001"
-Descriptors_Suffix[1]="-002"
-Descriptors_Suffix[2]="-003"
-Descriptors_Suffix[3]="-004"
-Descriptors_Suffix[4]="-005"
-Descriptors_Suffix[5]="-006"
-Descriptors_Suffix[6]="-007"
-Descriptors_Suffix[7]="-008"
-Descriptors_Suffix[8]="-009"
+Descriptors_Suffix[0]="- 001"
+Descriptors_Suffix[1]="- 002"
+Descriptors_Suffix[2]="- 003"
+Descriptors_Suffix[3]="- 004"
+Descriptors_Suffix[4]="- 005"
+Descriptors_Suffix[5]="- 006"
+Descriptors_Suffix[6]="- 007"
+Descriptors_Suffix[7]="- 008"
+Descriptors_Suffix[8]="- 009"
+
+[CovertAction_FindProgramFaction X2CovertActionTemplate]
+ActionObjective="Investigate Transmissions"
+
+[CovertAction_FindProgramFarAwayFaction X2CovertActionTemplate]
+ActionObjective="Investigate Transmissions"
 
 [CovertActionNarrative_FindFaction_Program X2CovertActionNarrativeTemplate]
 ActionName="Old Signals"
@@ -902,3 +908,11 @@ ActionPostNarrative="All too easy."
 ActionName="Technical Advances"
 ActionPreNarrative="I'm surprised you guys don't know about this. Let me dig through the old archives for the reports."
 ActionPostNarrative="Thanks, Commander. Going through those files is a pleasant trip down memory lane. Happy to do it for you."
+
+[Reward_RTProgram_FindFaction X2RewardTemplate]
+DisplayName="Unknown"
+RewardDetails="Uncover signal source."
+
+[Reward_RTProgram_FindFarthestFaction X2RewardTemplate]
+DisplayName="Unknown"
+RewardDetails="Uncover signal source."
