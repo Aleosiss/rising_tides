@@ -451,3 +451,99 @@ protected function RotateRandomSquadToDeploy() {
 		return;
 	Deployed = Squads[`SYNC_RAND(Squads.Length)];
 }
+
+//#############################################################################################
+//-----------------   COVERT ACTIONS  ---------------------------------------------------------
+//#############################################################################################
+
+//---------------------------------------------------------------------------------------
+// Remove vanilla actions for modded faction where the modded action should override
+function ModifyGoldenPathActions(XComGameState NewGameState)
+{
+	local X2StrategyElementTemplateManager StratMgr;
+	local array<X2StrategyElementTemplate> AllActionTemplates;
+	local X2StrategyElementTemplate DataTemplate;
+	local X2CovertActionTemplate ActionTemplate;
+	local XComGameState_CovertAction ActionState;
+	local XComGameStateHistory History;
+	local StateObjectReference ActionRef;
+
+	class'RTHelpers'.static.RTLog("Modifying Golden Path actions for The Program...");
+	if(GoldenPathActions.Length == 0) {
+		class'RTHelpers'.static.RTLog("ModifyGoldenPathActions failed, no GoldenPathActions available!", true);
+	} else {
+		History = `XCOMHISTORY;
+		foreach GoldenPathActions(ActionRef)
+		{
+			class'RTHelpers'.static.RTLOG("Found Covert Action " $ ActionState.GetMyTemplateName $ "...", false);
+			ActionState = XComGameState_CovertAction(History.GetGameStateForObjectID(ActionRef.ObjectID));
+			if(ActionState.GetMyTemplateName() == 'CovertAction_FindFaction' || ActionState.GetMyTemplateName() == 'CovertAction_FindFarthestFaction') {
+				RemoveCovertAction(ActionRef);
+			}
+		}
+	}
+}
+
+function PrintGoldenPathActionInformation() {
+	local XComGameStateHistory 				History;
+	local StateObjectReference 				StateObjRef;
+	local XComGameState_CovertAction 		CovertActionState;
+	local X2CovertActionTemplate			CovertActionTemplate;
+
+	History = `XCOMHISTORY;
+
+	class'RTHelpers'.static.RTLog("Printing Golden Path covert actions for the Program...");
+	foreach GoldenPathActions(StateObjRef) {
+		CovertActionState = XComGameState_CovertAction(History.GetGameStateForObjectID(StateObjRef.ObjectID));
+		if(CovertActionState == none)
+			continue;
+		CovertActionTemplate = CovertActionState.GetMyTemplate();
+		class'RTHelpers'.static.RTLog("" $ CovertActionTemplate.DataName);
+	}
+}
+
+function CreateGoldenPathActions(XComGameState NewGameState)
+{
+	super.CreateGoldenPathActions(NewGameState);
+	PrintGoldenPathActionInformation();
+	ModifyGoldenPathActions(NewGameState);
+}
+
+//#############################################################################################
+//----------------- GENERAL FACTION METHODS ---------------------------------------------------
+//#############################################################################################
+
+function MeetXCom(XComGameState NewGameState)
+{
+	local XComGameState_HeadquartersResistance ResHQ;
+	local array<Name> ExclusionList;
+	local int idx;
+
+	ResHQ = XComGameState_HeadquartersResistance(`XCOMHISTORY.GetSingleGameStateObjectForClass(class'XComGameState_HeadquartersResistance'));
+	ResHQ = XComGameState_HeadquartersResistance(NewGameState.ModifyStateObject(class'XComGameState_HeadquartersResistance', ResHQ.ObjectID));
+ 	ExclusionList = ResHQ.CovertActionExclusionList; // Get the current list of covert actions for other factions from Res HQ
+
+	bMetXCom = true;
+	bNewFragmentActionAvailable = true;
+	MetXComDate = GetCurrentTime();
+
+	CleanUpFactionCovertActions(NewGameState);
+	CreateGoldenPathActions(NewGameState);
+	ModifyGoldenPathActions(NewGameState);
+	GenerateCovertActions(NewGameState, ExclusionList);
+
+	for(idx = 0; idx < default.NumCardsOnMeet; idx++)
+	{
+		GenerateNewPlayableCard(NewGameState);
+	}
+
+	// DisplayResistancePlaque(NewGameState);
+
+	ResHQ.CovertActionExclusionList = ExclusionList; // Save the updated Exclusion List to ResHQ
+
+	// Ensure a Rookie Covert Action exists
+	if (!ResHQ.IsRookieCovertActionAvailable(NewGameState))
+	{
+		ResHQ.CreateRookieCovertAction(NewGameState);
+	}
+}

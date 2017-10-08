@@ -31,29 +31,63 @@ static event OnLoadedSavedGame()
 static event InstallNewCampaign(XComGameState StartState)
 {
 	//class'RTGameState_ProgramFaction'.static.SetUpProgramFaction(StartState);
+	ModifyInitialFactionState(StartState);
 }
 
 
 static event OnPostTemplatesCreated()
 {
 	MakePsiAbilitiesInterruptable();
-	//AddProgramFactionCovertActions();
+	AddProgramFactionCovertActions();
 }
 
+simulated static function ModifyInitialFactionState(XComGameState StartState) {
+	local RTGameState_ProgramFaction Faction;
 
-simulated static function PrintResistanceFactionNames() {
-	local XComGameStateHistory History;
-	local XComGameState_ResistanceFaction Faction;
-	
+	foreach StartState.IterateByClassType(class'RTGameState_ProgramFaction', Faction) {
+		if(Faction.GetMyTemplateName() == 'Faction_Program') { break; }
+	}
+
+	if(Faction == none) {
+		class'RTHelpers'.static.RTLog("Could not find an ProgramFactionState in the start state!", true);
+		return;
+	} else { class'RTHelpers'.static.RTLog("Modifying Golden Path Actions for the Program...", false); }
+
+	Faction.ModifyGoldenPathActions(StartState);
+}
+
+exec function PrintResistanceFactionNames() {
+	local XComGameStateHistory 					History;
+	local XComGameState_ResistanceFaction 		Faction;
+	local object 								obj;
+
 	if(!DebuggingEnabled()) {
 		return;
 	}
-	
-	`LOG("Rising Tides: printing faction names...")`
-	foreach History.IterateByClassType(Faction.class, Faction) {
-		`LOG(Faction.GetMyTemplateName());
+
+	History = `XCOMHISTORY;
+
+	class'RTHelpers'.static.RTLog("printing faction names...", false);
+	foreach History.IterateByClassType(class'XComGameState_ResistanceFaction', Faction) {
+		if(Faction != none) {
+			`LOG(Faction.GetMyTemplateName());
+		}
 	}
-	
+}
+
+exec function PrintProgramFactionInformation() {
+	local XComGameStateHistory 				History;
+	local RTGameState_ProgramFaction 		Faction;
+	History = `XCOMHISTORY;
+
+	class'RTHelpers'.static.RTLog("Gathering Debug Information for the Program...");
+	Faction = class'RTHelpers'.static.GetProgramState();
+
+	class'RTHelpers'.static.RTLog("Printing Golden Path covert actions for the Program...");
+	class'RTHelpers'.static.PrintCovertActionsForFaction(Faction);
+
+	class'RTHelpers'.static.RTLog("Printing Misc Information for the Program...");
+	class'RTHelpers'.static.PrintMiscInfoForFaction(Faction);
 }
 
 simulated static function AddProgramFactionCovertActions() {
@@ -86,7 +120,7 @@ simulated static function MakePsiAbilitiesInterruptable() {
 				if(AbilityTemplate.PostActivationEvents.Find(class'RTAbility_GhostAbilitySet'.default.UnitUsedPsionicAbilityEvent) == INDEX_NONE) {
 					AbilityTemplate.PostActivationEvents.AddItem(class'RTAbility_GhostAbilitySet'.default.UnitUsedPsionicAbilityEvent);
 				}
-				
+
 				if(AbilityTemplate.BuildInterruptGameStateFn == none) {
 					AbilityTemplate.BuildInterruptGameStateFn = class'X2Ability'.static.TypicalAbility_BuildInterruptGameState;
 				}
@@ -126,5 +160,5 @@ exec function RT_ForceLoadPerkOnToUnit(name AbilityName) {
 
 
 static function bool DebuggingEnabled() {
-	return !bDebugOutputDisabled;
+	return !default.bDebugOutputDisabled;
 }
