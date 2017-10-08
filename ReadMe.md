@@ -46,4 +46,4 @@ This would be a bare-bones content mod. I also have the following content in min
 	- Shadow Strike does not highlight the tiles it can activate to. Should be possible without highlander, but a pain in the ass, so low priority.
 
 ###### Current Sprint Goals:
-	- Get the Faction in the game
+	- Get the Strategy Card interface working
