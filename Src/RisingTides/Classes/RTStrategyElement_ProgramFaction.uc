@@ -5,7 +5,7 @@ var config array<name> Factions;
 static function array<X2DataTemplate> CreateTemplates()
 {
 	local array<X2DataTemplate> Templates;
-	local X2ResistanceFactionTemplate Template;
+	local RTProgramFactionTemplate Template;
 	local name FactionName;
 
 	foreach default.Factions(FactionName)

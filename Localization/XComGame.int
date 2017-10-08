@@ -830,29 +830,6 @@ ListTitle="Program Classes"
 DescriptionTitle="Program Classes"
 DescriptionEntry="The Program fields a small number of psionic operatives. Augmented cybernetically and genetically through a substance known as \"MELD"\, they are truly elite, each a veteran of twenty, thirty, or even forty years of combat against both human and alien threats. Each has a unique skillset, but they share a common base of psionic abilities, such as Mind Control, Mind Wrack, and Mind Meld."
 
-[Faction_Program RTProgramFactionTemplate]
-FactionTitle="The Program"
-FactionHQDisplayName="PROGRAM FOB-00X"
-LeaderQuote="\"We fight against the subtle threats. Including you, Commander.\" - Dr. Hadley"
-InfluenceMediumQuote="\"It is good to work with you again, Commander. Reminds me of the good old days, when the threats fell from the stars and did not rise up all around us.\" - Dr. Hadley"
-InfluenceHighQuote="\"With the Templars gone, there will be only one lasting threat to the stability of our society. Commander. You know what must be done.\" - Dr. Hadley"
-GroupNames[0]="SPECTRE"
-GroupNames[1]="GHOST"
-GroupNames[2]="PHANTOM"
-GroupNames[3]="SHADE"
-GroupNames[4]="REAPER"
-GroupNames[5]="MIRAGE"
-Descriptors_Prefix[0]="OSC -"
-Descriptors_Suffix[0]="- 001"
-Descriptors_Suffix[1]="- 002"
-Descriptors_Suffix[2]="- 003"
-Descriptors_Suffix[3]="- 004"
-Descriptors_Suffix[4]="- 005"
-Descriptors_Suffix[5]="- 006"
-Descriptors_Suffix[6]="- 007"
-Descriptors_Suffix[7]="- 008"
-Descriptors_Suffix[8]="- 009"
-
 [CovertAction_FindProgramFaction X2CovertActionTemplate]
 ActionObjective="Investigate Transmissions"
 
@@ -916,3 +893,9 @@ RewardDetails="Uncover signal source."
 [Reward_RTProgram_FindFarthestFaction X2RewardTemplate]
 DisplayName="Unknown"
 RewardDetails="Uncover signal source."
+
+[ResistanceMode_PsiTraining X2ResistanceModeTemplate]
+DisplayName="Scanning Bonus: Psionic Expertise"
+SummaryText="Resistance scientists assist with operating the psi-lab while the Avenger is scanning at this location, decreasing the training time of soldiers inside it.\n\nWARNING: Purchasing this ability will overwrite the current Resistance HQ scanning bonus. The Scanning Bonus may only be modified once per month."
+ScanLabel="TRAIN PSI FASTER"
+ScanTooltip="Scanning at this site speeds up the rate at which we can train our psi-operatives."

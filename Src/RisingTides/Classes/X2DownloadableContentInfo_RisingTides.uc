@@ -51,9 +51,8 @@ simulated static function ModifyInitialFactionState(XComGameState StartState) {
 	if(Faction == none) {
 		class'RTHelpers'.static.RTLog("Could not find an ProgramFactionState in the start state!", true);
 		return;
-	}
+	} else { class'RTHelpers'.static.RTLog("Modifying Golden Path Actions for the Program...", false); }
 
-	Faction = RTGameState_ProgramFaction(StartState.ModifyStateObject(class'RTGameState_ProgramFaction', Faction.ObjectID));
 	Faction.ModifyGoldenPathActions(StartState);
 }
 
@@ -68,9 +67,8 @@ exec function PrintResistanceFactionNames() {
 
 	History = `XCOMHISTORY;
 
-	`LOG("Rising Tides: printing faction names...");
+	class'RTHelpers'.static.RTLog("printing faction names...", false);
 	foreach History.IterateByClassType(class'XComGameState_ResistanceFaction', Faction) {
-		//Faction = XComGameState_ResistanceFaction(obj);
 		if(Faction != none) {
 			`LOG(Faction.GetMyTemplateName());
 		}
@@ -96,7 +94,7 @@ exec function PrintProgramFactionInformation() {
 		CovertActionTemplate = CovertActionState.GetMyTemplate();
 		class'RTHelpers'.static.RTLog("" $ CovertActionTemplate.DataName);
 	}
-	
+
 }
 
 simulated static function AddProgramFactionCovertActions() {

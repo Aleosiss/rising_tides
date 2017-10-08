@@ -457,7 +457,7 @@ protected function RotateRandomSquadToDeploy() {
 //#############################################################################################
 
 //---------------------------------------------------------------------------------------
-// Creates the Golden Path actions for the Faction, if they do not already exist
+// Remove vanilla actions for modded faction where the modded action should override
 function ModifyGoldenPathActions(XComGameState NewGameState)
 {
 	local X2StrategyElementTemplateManager StratMgr;
@@ -475,12 +475,38 @@ function ModifyGoldenPathActions(XComGameState NewGameState)
 		History = `XCOMHISTORY;
 		foreach GoldenPathActions(ActionRef)
 		{
+			class'RTHelpers'.static.RTLOG("Found Covert Action " $ ActionState.GetMyTemplateName $ "...", false);
 			ActionState = XComGameState_CovertAction(History.GetGameStateForObjectID(ActionRef.ObjectID));
 			if(ActionState.GetMyTemplateName() == 'CovertAction_FindFaction' || ActionState.GetMyTemplateName() == 'CovertAction_FindFarthestFaction') {
-				GoldenPathActions.RemoveItem(ActionRef);
+				RemoveCovertAction(ActionRef);
 			}
 		}
 	}
+}
+
+function PrintGoldenPathActionInformation() {
+	local XComGameStateHistory 				History;
+	local StateObjectReference 				StateObjRef;
+	local XComGameState_CovertAction 		CovertActionState;
+	local X2CovertActionTemplate			CovertActionTemplate;
+
+	History = `XCOMHISTORY;
+
+	class'RTHelpers'.static.RTLog("Printing Golden Path covert actions for the Program...");
+	foreach GoldenPathActions(StateObjRef) {
+		CovertActionState = XComGameState_CovertAction(History.GetGameStateForObjectID(StateObjRef.ObjectID));
+		if(CovertActionState == none)
+			continue;
+		CovertActionTemplate = CovertActionState.GetMyTemplate();
+		class'RTHelpers'.static.RTLog("" $ CovertActionTemplate.DataName);
+	}
+}
+
+function CreateGoldenPathActions(XComGameState NewGameState)
+{
+	super.CreateGoldenPathActions(NewGameState);
+	PrintGoldenPathActionInformation();
+	ModifyGoldenPathActions(NewGameState);
 }
 
 //#############################################################################################
