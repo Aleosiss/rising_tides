@@ -43,7 +43,10 @@ static function DeactivatePsiTrainingMode(XComGameState NewGameState, StateObjec
 static function OnXCOMArrivesPsiTrainingMode(XComGameState NewGameState, StateObjectReference InRef)
 {
 	local XComGameState_HeadquartersXCom XComHQ;
-	
+
+	// this is a hack to get around the "locate faction not completing" issue
+	CompleteCurrentCovertAction(NewGameState);
+
 	XComHQ = GetNewXComHQState(NewGameState);
 	if (XComHQ.PsiTrainingRate < class'XComGameState_HeadquartersXCom'.default.XComHeadquarters_DefaultPsiTrainingWorkPerHour) // safety check: ensure healing rate is never below default
 	{
@@ -82,4 +85,25 @@ static function XComGameState_HeadquartersXCom GetNewXComHQState(XComGameState N
 	}
 
 	return NewXComHQ;
+}
+
+simulated static function CompleteCurrentCovertAction(XComGameState NewGameState)
+{
+	local XComGameStateHistory History;
+	local XComGameState_CovertAction ActionState;
+
+	class'RTHelpers'.static.RTLog("HACK! Overriding failed Covert Action! Searching through Available Actions...");
+	History = `XCOMHISTORY;
+	foreach History.IterateByClassType(class'XComGameState_CovertAction', ActionState)
+	{
+		class'RTHelpers'.static.RTLog("" $ ActionState.GetMyTemplateName());
+		if(ActionState.GetMyTemplateName() == 'CovertAction_FindProgramFaction' || ActionState.GetMyTemplateName() == 'CovertAction_FindProgramFarAwayFaction') {
+			class'RTHelpers'.static.RTLog("Found it!");
+			if (ActionState.bStarted)
+			{
+				ActionState = XComGameState_CovertAction(NewGameState.ModifyStateObject(class'XComGameState_CovertAction', ActionState.ObjectID));
+				ActionState.CompleteCovertAction(NewGameState);
+			}
+		}
+	}
 }
