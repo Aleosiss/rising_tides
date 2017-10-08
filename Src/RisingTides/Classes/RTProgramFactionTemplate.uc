@@ -1,6 +1,12 @@
 class RTProgramFactionTemplate extends X2ResistanceFactionTemplate;
 
-defaultproperties
+function XComGameState_ResistanceFaction CreateInstanceFromTemplate(XComGameState NewGameState)
 {
-    GameStateFactionClass = class'RTGameState_ProgramFaction'
+	local RTGameState_ProgramFaction FactionState;
+
+	`LOG("Adding Program Faction GameState!");
+
+	FactionState = RTGameState_ProgramFaction(NewGameState.CreateNewStateObject(class'RTGameState_ProgramFaction', self));
+
+	return FactionState;
 }
