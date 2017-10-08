@@ -78,23 +78,16 @@ exec function PrintResistanceFactionNames() {
 exec function PrintProgramFactionInformation() {
 	local XComGameStateHistory 				History;
 	local RTGameState_ProgramFaction 		Faction;
-	local StateObjectReference 				StateObjRef;
-	local XComGameState_CovertAction 		CovertActionState;
-	local X2CovertActionTemplate			CovertActionTemplate;
-
 	History = `XCOMHISTORY;
+
 	class'RTHelpers'.static.RTLog("Gathering Debug Information for the Program...");
 	Faction = class'RTHelpers'.static.GetProgramState();
 
 	class'RTHelpers'.static.RTLog("Printing Golden Path covert actions for the Program...");
-	foreach Faction.GoldenPathActions(StateObjRef) {
-		CovertActionState = XComGameState_CovertAction(History.GetGameStateForObjectID(StateObjRef.ObjectID));
-		if(CovertActionState == none)
-			continue;
-		CovertActionTemplate = CovertActionState.GetMyTemplate();
-		class'RTHelpers'.static.RTLog("" $ CovertActionTemplate.DataName);
-	}
+	class'RTHelpers'.static.PrintCovertActionsForFaction(Faction);
 
+	class'RTHelpers'.static.RTLog("Printing Misc Information for the Program...");
+	class'RTHelpers'.static.PrintMiscInfoForFaction(Faction);
 }
 
 simulated static function AddProgramFactionCovertActions() {
