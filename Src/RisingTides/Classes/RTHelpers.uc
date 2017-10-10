@@ -200,6 +200,20 @@ static function PrintCovertActionsForFaction(XComGameState_ResistanceFaction Fac
 	local XComGameState_CovertAction CovertActionState;
 	local X2CovertActionTemplate CovertActionTemplate;
 
+	foreach Faction.CovertActions(StateObjRef) {
+		CovertActionState = XComGameState_CovertAction(`XCOMHISTORY.GetGameStateForObjectID(StateObjRef.ObjectID));
+		if(CovertActionState == none)
+			continue;
+		CovertActionTemplate = CovertActionState.GetMyTemplate();
+		RTLog("" $ CovertActionTemplate.DataName);
+	}
+}
+
+static function PrintGoldenPathActionsForFaction(XComGameState_ResistanceFaction Faction) {
+	local StateObjectReference StateObjRef;
+	local XComGameState_CovertAction CovertActionState;
+	local X2CovertActionTemplate CovertActionTemplate;
+
 	foreach Faction.GoldenPathActions(StateObjRef) {
 		CovertActionState = XComGameState_CovertAction(`XCOMHISTORY.GetGameStateForObjectID(StateObjRef.ObjectID));
 		if(CovertActionState == none)
@@ -207,7 +221,6 @@ static function PrintCovertActionsForFaction(XComGameState_ResistanceFaction Fac
 		CovertActionTemplate = CovertActionState.GetMyTemplate();
 		RTLog("" $ CovertActionTemplate.DataName);
 	}
-
 }
 
 static function PrintMiscInfoForFaction(XComGameState_ResistanceFaction Faction) {

@@ -468,9 +468,9 @@ function ModifyGoldenPathActions(XComGameState NewGameState)
 	local XComGameStateHistory History;
 	local StateObjectReference ActionRef;
 
-	class'RTHelpers'.static.RTLog("Modifying Golden Path actions for The Program...");
+	//class'RTHelpers'.static.RTLog("Modifying Golden Path actions for The Program...");
 	if(GoldenPathActions.Length == 0) {
-		class'RTHelpers'.static.RTLog("ModifyGoldenPathActions failed, no GoldenPathActions available!", true);
+		//class'RTHelpers'.static.RTLog("ModifyGoldenPathActions failed, no GoldenPathActions available!", true);
 	} else {
 		History = `XCOMHISTORY;
 		foreach GoldenPathActions(ActionRef)
@@ -492,13 +492,13 @@ function PrintGoldenPathActionInformation() {
 
 	History = `XCOMHISTORY;
 
-	class'RTHelpers'.static.RTLog("Printing Golden Path covert actions for the Program...");
+	//class'RTHelpers'.static.RTLog("Printing Golden Path covert actions for the Program...");
 	foreach GoldenPathActions(StateObjRef) {
 		CovertActionState = XComGameState_CovertAction(History.GetGameStateForObjectID(StateObjRef.ObjectID));
 		if(CovertActionState == none)
 			continue;
 		CovertActionTemplate = CovertActionState.GetMyTemplate();
-		class'RTHelpers'.static.RTLog("" $ CovertActionTemplate.DataName);
+		//class'RTHelpers'.static.RTLog("" $ CovertActionTemplate.DataName);
 	}
 }
 
@@ -529,7 +529,6 @@ function MeetXCom(XComGameState NewGameState)
 
 	CleanUpFactionCovertActions(NewGameState);
 	CreateGoldenPathActions(NewGameState);
-	ModifyGoldenPathActions(NewGameState);
 	GenerateCovertActions(NewGameState, ExclusionList);
 
 	for(idx = 0; idx < default.NumCardsOnMeet; idx++)
