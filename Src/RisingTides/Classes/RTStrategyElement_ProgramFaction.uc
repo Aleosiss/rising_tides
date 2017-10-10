@@ -11,8 +11,7 @@ static function array<X2DataTemplate> CreateTemplates()
 	foreach default.Factions(FactionName)
 	{
 		`CREATE_X2TEMPLATE(class'RTProgramFactionTemplate', Template, FactionName);
-        class'RTHelpers'.static.RTLog("Adding the Program Faction Template...", false);
-		Templates.AddItem(Template);
+        Templates.AddItem(Template);
 	}
 
 	return Templates;

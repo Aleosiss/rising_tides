@@ -84,6 +84,9 @@ exec function PrintProgramFactionInformation() {
 	Faction = class'RTHelpers'.static.GetProgramState();
 
 	class'RTHelpers'.static.RTLog("Printing Golden Path covert actions for the Program...");
+	class'RTHelpers'.static.PrintGoldenPathActionsForFaction(Faction);
+
+	class'RTHelpers'.static.RTLog("Printing Standard covert actions for the Program...");
 	class'RTHelpers'.static.PrintCovertActionsForFaction(Faction);
 
 	class'RTHelpers'.static.RTLog("Printing Misc Information for the Program...");
