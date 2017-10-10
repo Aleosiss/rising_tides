@@ -122,7 +122,7 @@ static function AddFactionToGeneratedTemplates() {
 
 	`LOG("Rising Tides: Adding faction Program to covert action CovertAction_RevealChosenMovement...");
 	Manager.FindDataTemplateAllDifficulties('CovertAction_RevealChosenMovement', DataTemplates);
-	AddFactionToCovertActionNarratives(DataTemplates, 'CovertActionNarrative_RevealChosenMovement_Program');
+	AddFactionToCovertActionNarratives(DataTemplates, 'CovertActionNarrative_RevealChosenMovements_Program');
 
 	`LOG("Rising Tides: Adding faction Program to covert action CovertAction_RevealChosenStrengths...");
 	Manager.FindDataTemplateAllDifficulties('CovertAction_RevealChosenStrengths', DataTemplates);
