@@ -64,7 +64,7 @@ static function array<X2DataTemplate> CreateTemplates()
 {
 	local array<X2DataTemplate> Templates;
 
-	Templates.AddItem(ScopedAndDropped());							
+	Templates.AddItem(ScopedAndDropped());
 	Templates.AddItem(RTStandardSniperShot());
 	Templates.AddItem(RTOverwatch());
 	Templates.AddItem(RTOverwatchShot());
@@ -79,32 +79,32 @@ static function array<X2DataTemplate> CreateTemplates()
 	Templates.AddItem(SixOClockEffect());
 	//Templates.AddItem(VitalPointTargeting());
 	Templates.AddItem(RTDamnGoodGround());
-	Templates.AddItem(SlowIsSmooth());								
+	Templates.AddItem(SlowIsSmooth());
 	Templates.AddItem(SlowIsSmoothEffect());
-	Templates.AddItem(Sovereign());									
+	Templates.AddItem(Sovereign());
 	Templates.AddItem(SovereignEffect());
 	Templates.AddItem(DaybreakFlame());										// animation
-	Templates.AddItem(DaybreakFlameIcon());							
-	Templates.AddItem(YourHandsMyEyes());							
+	Templates.AddItem(DaybreakFlameIcon());
+	Templates.AddItem(YourHandsMyEyes());
 	Templates.AddItem(TimeStandsStill());									// animation
 	Templates.AddItem(TimeStandsStillInterruptListener());
 	Templates.AddItem(TimeStandsStillEndListener());
 	Templates.AddItem(TwitchReaction());
 	Templates.AddItem(TwitchReactionShot());
-	Templates.AddItem(LinkedIntelligence());						
+	Templates.AddItem(LinkedIntelligence());
 	Templates.AddItem(PsionicSurge());								     	// animation
-	Templates.AddItem(EyeInTheSky());								
+	Templates.AddItem(EyeInTheSky());
 	Templates.AddItem(HeatChannel());										// animation
-	Templates.AddItem(HeatChannelIcon());							
+	Templates.AddItem(HeatChannelIcon());
 	Templates.AddItem(HeatChannelCooldown());
-	Templates.AddItem(Harbinger());								
+	Templates.AddItem(Harbinger());
 	Templates.AddItem(RTHarbingerPsionicLance());
 	Templates.AddItem(HarbingerCleanseListener());
-	Templates.AddItem(ShockAndAwe());								
+	Templates.AddItem(ShockAndAwe());
 	Templates.AddItem(ShockAndAweListener());
 	Templates.AddItem(RTKillzone());								// icon
-	Templates.AddItem(RTEveryMomentMatters());						
-	Templates.AddItem(RTOverflowBarrier());							
+	Templates.AddItem(RTEveryMomentMatters());
+	Templates.AddItem(RTOverflowBarrier());
 	Templates.AddItem(RTOverflowBarrierEvent());
 	Templates.AddItem(RTKubikuri());
 	Templates.AddItem(RTKubikuriDamage());
@@ -148,6 +148,7 @@ static function X2AbilityTemplate ScopedAndDropped()
 	Template.AddTargetEffect(SSEffect);
 
 	LoadPerks = new class'RTEffect_LoadPerks';
+	LoadPerks.BuildPersistentEffect(1, true, false, true);
 	LoadPerks.AbilitiesToLoad = default.AbilityPerksToLoad;
 	Template.AddShooterEffect(LoadPerks);
 
@@ -174,7 +175,8 @@ static function X2AbilityTemplate ScopedAndDropped()
 
 	// Probably required
 	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
-	//  NOTE: No visualization on purpose!
+	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
+	Template.bSkipFireAction = true;
 
 	return Template;
 }
@@ -2680,7 +2682,7 @@ static function X2AbilityTemplate RTKubikuri()
 	Template.AbilityCosts.AddItem(AmmoCost);
 
 	Template.AdditionalAbilities.AddItem('RTKubikuriDamage');
-	
+
 	KnockbackEffect = new class'X2Effect_Knockback';
 	KnockbackEffect.KnockbackDistance = 2;
 	Template.AddTargetEffect(KnockbackEffect);

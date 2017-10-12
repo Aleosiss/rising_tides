@@ -135,6 +135,13 @@ simulated static function MakePsiAbilitiesInterruptable() {
 	}
 }
 
+exec function RT_DebugModVersion() {
+	local int ModVersion;
+
+	ModVersion = 4;
+	class'RTHelpers'.static.RTLog("Mod Version is: " $ ModVersion);
+}
+
 exec function RT_ToggleCustomDebugOutput() {
     class'UIDebugStateMachines'.static.GetThisScreen().ToggleVisible();
 }

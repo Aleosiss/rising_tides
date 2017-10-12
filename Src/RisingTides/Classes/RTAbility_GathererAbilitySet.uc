@@ -354,14 +354,15 @@ static function X2AbilityTemplate OverTheShoulderPassives() {
 	Template.AbilityTargetStyle = default.SelfTarget;
 
 	LoadPerks = new class'RTEffect_LoadPerks';
+	LoadPerks.BuildPersistentEffect(1, true, false, true);
 	LoadPerks.AbilitiesToLoad = default.AbilityPerksToLoad;
 	Template.AddShooterEffect(LoadPerks);
 
 	Template.AbilityTriggers.AddItem(default.UnitPostBeginPlayTrigger);
 
-	Template.bSkipFireAction = true;
-
 	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
+	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
+	Template.bSkipFireAction = true;
 
 	return Template;
 }
@@ -652,7 +653,7 @@ static function X2AbilityTemplate RTTheSixPathsOfPain() {
 	SourceMeldCondition.AddRequireEffect(class'RTEffect_Meld'.default.EffectName, 'AA_UnitNotMelded');
 	TriangulationCondition = new class'X2Condition_AbilityProperty';
 	TriangulationCondition.OwnerHasSoldierAbilities.AddItem('RTTriangulation');
-	
+
 	Template.AbilityMultiTargetConditions.AddItem(TriangulationCondition);
 	Template.AbilityMultiTargetConditions.AddItem(MeldCondition);
 	Template.AbilityMultiTargetConditions.AddItem(SourceMeldCondition);
@@ -680,12 +681,12 @@ static function X2AbilityTemplate RTTheSixPathsOfPain() {
 	MultiActivationEffect = new class'X2Effect_ImmediateMultiTargetAbilityActivation';
 	MultiActivationEffect.AbilityName = 'TriangulatedOverTheShoulder';
 	Template.AddMultiTargetEffect(MultiActivationEffect);
-	  
+
 	Template.AddTargetEffect(ActionPointEffect);				 // add this after activating OTS
 
 	Template.AdditionalAbilities.AddItem('RTTheSixPathsOfPainIcon');
 	Template.AdditionalAbilities.AddItem('RTTheSixPathsOfPainOverride');
-	
+
 	Template.AbilityTriggers.Length = 0;
 	EventTrigger = new class'X2AbilityTrigger_EventListener';
 	EventTrigger.ListenerData.Deferral = ELD_OnStateSubmitted;
@@ -693,7 +694,7 @@ static function X2AbilityTemplate RTTheSixPathsOfPain() {
 	EventTrigger.ListenerData.Filter = eFilter_None;
 	EventTrigger.ListenerData.EventFn = class'XComGameState_Ability'.static.AbilityTriggerEventListener_Self;
 	Template.AbilityTriggers.AddItem(EventTrigger);
-	  
+
 	return Template;
 }
 
@@ -1614,7 +1615,7 @@ static function X2AbilityTemplate RTCrushingGrasp() {
 	local X2AbilityTarget_Cursor				CursorTarget;
 	local X2AbilityMultiTarget_Radius			RadiusMultiTarget;
 	local X2Effect_ApplyWeaponDamage			WorldDamage;
-	local X2Effect_Stunned						StunnedEffect;		
+	local X2Effect_Stunned						StunnedEffect;
 
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'RTCrushingGrasp');
 	Template.IconImage = "img:///RisingTidesContentPackage.PerkIcons.UIPerk_stasis_psi_crushinggrasp";
@@ -1792,7 +1793,7 @@ static function X2AbilityTemplate RTPsionicStorm() {
 
 	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
 	Template.CustomFireAnim = 'HL_Psi_MindControl';
-	
+
 	Template.BuildVisualizationFn = DimensionalRiftStage1_BuildVisualization;
 	Template.BuildAffectedVisualizationSyncFn = DimensionalRigt1_BuildAffectedVisualization;
 	Template.CinescriptCameraType = "Psionic_FireAtLocation";
@@ -2253,7 +2254,7 @@ simulated function DimensionalRiftStage2_BuildVisualization(XComGameState Visual
 
 		for (EffectIndex = 0; EffectIndex < AbilityTemplate.AbilityShooterEffects.Length; ++EffectIndex)
 		{
-			AbilityTemplate.AbilityShooterEffects[EffectIndex].AddX2ActionsForVisualization(VisualizeGameState, BuildData, 'AA_Success');		
+			AbilityTemplate.AbilityShooterEffects[EffectIndex].AddX2ActionsForVisualization(VisualizeGameState, BuildData, 'AA_Success');
 		}
 
 		for (EffectIndex = 0; EffectIndex < AbilityTemplate.AbilityTargetEffects.Length; ++EffectIndex)
@@ -2263,7 +2264,7 @@ simulated function DimensionalRiftStage2_BuildVisualization(XComGameState Visual
 
 		for (EffectIndex = 0; EffectIndex < AbilityTemplate.AbilityMultiTargetEffects.Length; ++EffectIndex)
 		{
-			AbilityTemplate.AbilityMultiTargetEffects[EffectIndex].AddX2ActionsForVisualization(VisualizeGameState, BuildData, 'AA_Success');	
+			AbilityTemplate.AbilityMultiTargetEffects[EffectIndex].AddX2ActionsForVisualization(VisualizeGameState, BuildData, 'AA_Success');
 		}
 	}
 
@@ -2276,7 +2277,7 @@ simulated function DimensionalRiftStage2_BuildVisualization(XComGameState Visual
 
 		for (EffectIndex = 0; EffectIndex < AbilityTemplate.AbilityShooterEffects.Length; ++EffectIndex)
 		{
-			AbilityTemplate.AbilityShooterEffects[EffectIndex].AddX2ActionsForVisualization(VisualizeGameState, BuildData, 'AA_Success');		
+			AbilityTemplate.AbilityShooterEffects[EffectIndex].AddX2ActionsForVisualization(VisualizeGameState, BuildData, 'AA_Success');
 		}
 
 		for (EffectIndex = 0; EffectIndex < AbilityTemplate.AbilityTargetEffects.Length; ++EffectIndex)
@@ -2286,7 +2287,7 @@ simulated function DimensionalRiftStage2_BuildVisualization(XComGameState Visual
 
 		for (EffectIndex = 0; EffectIndex < AbilityTemplate.AbilityMultiTargetEffects.Length; ++EffectIndex)
 		{
-			AbilityTemplate.AbilityMultiTargetEffects[EffectIndex].AddX2ActionsForVisualization(VisualizeGameState, BuildData, 'AA_Success');	
+			AbilityTemplate.AbilityMultiTargetEffects[EffectIndex].AddX2ActionsForVisualization(VisualizeGameState, BuildData, 'AA_Success');
 		}
 	}
 	//****************************************************************************************
@@ -2294,7 +2295,7 @@ simulated function DimensionalRiftStage2_BuildVisualization(XComGameState Visual
 		//Process any interactions with interactive objects
 	foreach VisualizeGameState.IterateByClassType(class'XComGameState_InteractiveObject', InteractiveObject)
 	{
-		// Add any doors that need to listen for notification. 
+		// Add any doors that need to listen for notification.
 		// Move logic is taken from MoveAbility_BuildVisualization, which only has special case handling for AI patrol movement ( which wouldn't happen here )
 		if ( Context.InputContext.MovementPaths.Length > 0 || (InteractiveObject.IsDoor() && InteractiveObject.HasDestroyAnim()) ) //Is this a closed door?
 		{
@@ -2494,7 +2495,7 @@ static function X2AbilityTemplate RTConstructTechnopathyHack(name TemplateName, 
 //---------------------------------------------------------------------------------------
 static function X2AbilityTemplate RTPsionicLash() {
 	local X2AbilityTemplate Template;
-	local RTEffect_PsionicLash	LashEffect;			 
+	local RTEffect_PsionicLash	LashEffect;
 	local X2AbilityCooldown Cooldown;
 	local X2AbilityCost_ActionPoints ActionPointCost;
 	local RTAbilityToHitCalc_StatCheck_UnitVsUnit HitCalc;
@@ -2523,7 +2524,7 @@ static function X2AbilityTemplate RTPsionicLash() {
 	Template.AbilityShooterConditions.AddItem(default.LivingShooterProperty);
 	Template.AddShooterEffectExclusions();
 
-	// the target must be a human. I WILL FIND A WAY TO FIX THIS. 
+	// the target must be a human. I WILL FIND A WAY TO FIX THIS.
 	UnitPropertyCondition = new class'X2Condition_UnitProperty';
 	UnitPropertyCondition.ExcludeDead = true;
 	UnitPropertyCondition.FailOnNonUnits = true;
@@ -2612,7 +2613,7 @@ static simulated function PsionicLash_BuildVisualization(XComGameState Visualize
 	Context = XComGameStateContext_Ability(VisualizeGameState.GetContext());
 	AbilityTemplate = class'XComGameState_Ability'.static.GetMyTemplateManager().FindAbilityTemplate(Context.InputContext.AbilityTemplateName);
 
-	
+
 	//Configure the visualization track for the shooter
 	//****************************************************************************************
 	InteractingUnitRef = Context.InputContext.SourceObject;
