@@ -87,7 +87,6 @@ static function array<X2DataTemplate> CreateTemplates()
 	Templates.AddItem(RTCloseCombatSpecialist());
 	Templates.AddItem(RTCloseCombatSpecialistAttack()); 
 
-
 	return Templates;
 }
 
@@ -169,7 +168,7 @@ static function X2AbilityTemplate BumpInTheNightBloodlustListener()
 	local X2AbilityTrigger_EventListener	Trigger;
 
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'BumpInTheNightBloodlustListener');
-	Template.IconImage = "img:///RisingTidesContentPackage.PerkIcons.UIPerk_knife_adrenaline_bloodlust"; // TODO: Change this
+	Template.IconImage = "img:///RisingTidesContentPackage.PerkIcons.UIPerk_knife_adrenaline_bloodlust"; 
 	Template.AbilitySourceName = 'eAbilitySource_Psionic';
 	Template.eAbilityIconBehaviorHUD = EAbilityIconBehavior_NeverShow;
 	Template.Hostility = eHostility_Neutral;
@@ -203,7 +202,6 @@ static function X2AbilityTemplate BumpInTheNightBloodlustListener()
 	Template.bSkipFireAction = true;
 	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
 	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
-	// TODO: Visualization!
 
 	return Template;
 }
@@ -218,7 +216,7 @@ static function X2AbilityTemplate BumpInTheNightStealthListener()
 	local X2AbilityTrigger_EventListener	Trigger;
 
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'BumpInTheNightStealthListener');
-	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_swordSlash"; // TODO: Change this
+	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_swordSlash";
 	Template.AbilitySourceName = 'eAbilitySource_Psionic';
 	Template.eAbilityIconBehaviorHUD = EAbilityIconBehavior_NeverShow;
 	Template.Hostility = eHostility_Neutral;
@@ -242,7 +240,6 @@ static function X2AbilityTemplate BumpInTheNightStealthListener()
 	Template.bSkipFireAction = true;
 	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
 	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
-	// TODO: Visualization!
 
 	return Template;
 }
@@ -354,7 +351,6 @@ static function X2AbilityTemplate RTBerserkerKnifeAttack()
 
 	Template.PostActivationEvents.AddItem('RTBerserkerKnifeAttack');
 
-
 	// Voice events
 	//
 	Template.SourceMissSpeech = 'SwordMiss';
@@ -441,7 +437,6 @@ static function X2AbilityTemplate RTBurst() {
 	return Template;
 }
 
-
 simulated function Burst_BuildVisualization(XComGameState VisualizeGameState)
 {
 	local XComGameStateHistory History;
@@ -486,8 +481,6 @@ simulated function Burst_BuildVisualization(XComGameState VisualizeGameState)
 
 	if( AvatarUnit != none )
 	{
-		
-
 		if (Context.InterruptionStatus != eInterruptionStatus_None)
 		{
 			//Insert markers for the subsequent interrupt to insert into

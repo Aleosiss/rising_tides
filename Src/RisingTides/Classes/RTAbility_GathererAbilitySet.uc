@@ -123,7 +123,6 @@ static function array<X2DataTemplate> CreateTemplates()
 	Templates.AddItem(RTPsionicLash());
 	Templates.AddItem(RTPsionicLashAnims());
 
-
 	return Templates;
 }
 
@@ -432,7 +431,6 @@ static function X2AbilityTemplate RTForcedIntroversion() {
 	StealthEffect = class'RTEffectBuilder'.static.RTCreateStealthEffect(default.FEEDBACK_DURATION, false, 1.0f, eGameRule_PlayerTurnBegin, Template.AbilitySourceName);
 	Template.AddTargetEffect(StealthEffect);
 
-
 	Template.AddTargetEffect(class'X2Effect_Spotted'.static.CreateUnspottedEffect());
 
 	Template.bShowPostActivation = true;
@@ -440,6 +438,7 @@ static function X2AbilityTemplate RTForcedIntroversion() {
 	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
 	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
 	// TODO: Visualization!
+
 
 	return Template;
 }

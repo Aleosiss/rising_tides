@@ -37,8 +37,6 @@ simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffe
 	EffectTargetUnit = XComGameState_Unit(kNewTargetState);
 	MeldEffectState = RTGameState_MeldEffect(NewEffectState);
 
-
-
 	EventMgr.TriggerEvent('RTAddToMeld', EffectTargetUnit, EffectTargetUnit, NewGameState);
 
 	ListenerObj = MeldEffectState;
@@ -52,7 +50,6 @@ simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffe
 	EventMgr.RegisterForEvent(ListenerObj, 'RTRemoveFromMeld', MeldEffectState.RemoveUnitFromMeld, ELD_OnStateSubmitted,,,true,);
 	EventMgr.RegisterForEvent(ListenerObj, 'RTFeedback', MeldEffectState.RemoveUnitFromMeld,ELD_OnStateSubmitted,,,true,);
 	EventMgr.RegisterForEvent(ListenerObj, 'TacticalGameEnd', MeldEffectState.OnTacticalGameEnd, ELD_OnStateSubmitted);
-
 
 	MeldEffectState.Initialize(EffectTargetUnit);
 
@@ -68,7 +65,6 @@ simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffe
 
 	MeldEffectState.StatChanges = m_aStatChanges;
 
-
 	super.OnEffectAdded(ApplyEffectParameters, kNewTargetState, NewGameState, MeldEffectState);
 }
 
@@ -79,7 +75,6 @@ simulated function OnEffectRemoved(const out EffectAppliedData ApplyEffectParame
 	EffectTargetUnit = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(ApplyEffectParameters.TargetStateObjectRef.ObjectID));
 	`XEVENTMGR.TriggerEvent('RTRemoveFromMeld', EffectTargetUnit, EffectTargetUnit, NewGameState);
 	super.OnEffectRemoved(ApplyEffectParameters, NewGameState, bCleansed, RemovedEffectState);
-
 }
 
 DefaultProperties

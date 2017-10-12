@@ -33,9 +33,6 @@ simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffe
 	`XEVENTMGR.TriggerEvent(class'X2Ability_Chryssalid'.default.UnburrowTriggerEventName, kNewTargetState, kNewTargetState, NewGameState);
 	`XEVENTMGR.TriggerEvent(class'X2Ability_Faceless'.default.ChangeFormTriggerEventName, kNewTargetState, kNewTargetState, NewGameState);
 	
-
-
-
 	ViewerTile = TargetUnitState.TileLocation;
 
 	if(bUseTargetSightRadius) {
@@ -45,7 +42,7 @@ simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffe
 	} else {
 		fViewRadius = float(iCustomTileRadius) * class'XComWorldData'.const.WORLD_METERS_TO_UNITS_MULTIPLIER / class'XComWorldData'.const.WORLD_StepSize;
 	}
-
+	
 	ViewerState = XComGameState_SquadViewer(NewGameState.CreateStateObject(class'XComGameState_SquadViewer'));
 	ViewerState.AssociatedPlayer = XComGameState_Unit(History.GetGameStateForObjectID(ApplyEffectParameters.SourceStateObjectRef.ObjectID)).ControllingPlayer;
 	ViewerState.SetVisibilityLocation(ViewerTile);
@@ -255,7 +252,6 @@ function OnUnitChangedTile(const out TTile NewTileLocation, XComGameState_Effect
 
 			NewGameState.AddStateObject(NewViewerState);
 			NewGameState.AddStateObject(NewUnitState);
-
 
 			`TACTICALRULES.SubmitGameState(NewGameState);
 	}
