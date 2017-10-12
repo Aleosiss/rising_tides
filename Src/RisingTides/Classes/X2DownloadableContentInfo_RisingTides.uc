@@ -78,6 +78,7 @@ exec function PrintResistanceFactionNames() {
 exec function PrintProgramFactionInformation() {
 	local XComGameStateHistory 				History;
 	local RTGameState_ProgramFaction 		Faction;
+
 	History = `XCOMHISTORY;
 
 	class'RTHelpers'.static.RTLog("Gathering Debug Information for the Program...");
@@ -91,6 +92,9 @@ exec function PrintProgramFactionInformation() {
 
 	class'RTHelpers'.static.RTLog("Printing Misc Information for the Program...");
 	class'RTHelpers'.static.PrintMiscInfoForFaction(Faction);
+
+	class'RTHelpers'.static.RTLog("Printing Riven Chosen for the Program...");
+	class'RTHelpers'.static.RTLog("" $ XComGameState_AdventChosen(History.GetGameStateForObjectID(Faction.RivalChosen.ObjectID)).GetChosenClassName());
 }
 
 simulated static function AddProgramFactionCovertActions() {
@@ -160,7 +164,6 @@ exec function RT_ForceLoadPerkOnToUnit(name AbilityName) {
 	class'UIDebugStateMachines'.static.TryForceCachePerkContent(AbilityName);
 	class'UIDebugStateMachines'.static.TryForceAppendAbilityPerks(AbilityName);
 }
-
 
 static function bool DebuggingEnabled() {
 	return !default.bDebugOutputDisabled;

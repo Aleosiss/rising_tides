@@ -475,7 +475,7 @@ function ModifyGoldenPathActions(XComGameState NewGameState)
 		History = `XCOMHISTORY;
 		foreach GoldenPathActions(ActionRef)
 		{
-			class'RTHelpers'.static.RTLOG("Found Covert Action " $ ActionState.GetMyTemplateName $ "...", false);
+			//class'RTHelpers'.static.RTLOG("Found Covert Action " $ ActionState.GetMyTemplateName $ "...", false);
 			ActionState = XComGameState_CovertAction(History.GetGameStateForObjectID(ActionRef.ObjectID));
 			if(ActionState.GetMyTemplateName() == 'CovertAction_FindFaction' || ActionState.GetMyTemplateName() == 'CovertAction_FindFarthestFaction') {
 				RemoveCovertAction(ActionRef);
@@ -492,20 +492,20 @@ function PrintGoldenPathActionInformation() {
 
 	History = `XCOMHISTORY;
 
-	//class'RTHelpers'.static.RTLog("Printing Golden Path covert actions for the Program...");
+	class'RTHelpers'.static.RTLog("Printing Golden Path covert actions for the Program...");
 	foreach GoldenPathActions(StateObjRef) {
 		CovertActionState = XComGameState_CovertAction(History.GetGameStateForObjectID(StateObjRef.ObjectID));
 		if(CovertActionState == none)
 			continue;
 		CovertActionTemplate = CovertActionState.GetMyTemplate();
-		//class'RTHelpers'.static.RTLog("" $ CovertActionTemplate.DataName);
+		class'RTHelpers'.static.RTLog("" $ CovertActionTemplate.DataName);
 	}
 }
 
 function CreateGoldenPathActions(XComGameState NewGameState)
 {
 	super.CreateGoldenPathActions(NewGameState);
-	PrintGoldenPathActionInformation();
+	//PrintGoldenPathActionInformation();
 	ModifyGoldenPathActions(NewGameState);
 }
 
