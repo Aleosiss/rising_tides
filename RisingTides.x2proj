@@ -476,7 +476,7 @@
     <Content Include="Src\RisingTides\Classes\RTStrategyElement_CovertActions.uc">
       <SubType>Content</SubType>
     </Content>
-    <Content Include="Src\RisingTides\Classes\RTStrategyElement_ProgramActions.uc">
+    <Content Include="Src\RisingTides\Classes\RTStrategyElement_StrategyCards.uc">
       <SubType>Content</SubType>
     </Content>
     <Content Include="Src\RisingTides\Classes\RTStrategyElement_ResistanceModes.uc">

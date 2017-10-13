@@ -1,5 +1,5 @@
 // This is an Unreal Script
-class RTStrategyElement_ProgramActions extends X2StrategyElement config(ProgramFaction);
+class RTStrategyElement_StrategyCards extends X2StrategyElement config(ProgramFaction);
 
 var config float JustPassingThroughChance;
 
