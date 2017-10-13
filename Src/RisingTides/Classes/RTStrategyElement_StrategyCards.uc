@@ -1,7 +1,7 @@
 // This is an Unreal Script
 class RTStrategyElement_StrategyCards extends X2StrategyElement config(ProgramFaction);
 
-var config float JustPassingThroughChance;
+var config int JustPassingThroughChance;
 
 static function array<X2DataTemplate> CreateTemplates()
 {
@@ -53,12 +53,15 @@ static function X2DataTemplate RTCreateJustPassingThrough() {
 static function ActivateJustPassingThrough(XComGameState StartState) {
 	local RTGameState_ProgramFaction Program;
 	local XComGameState_HeadquartersXCom XComHQ;
+	local array<StateObjectReference> AvailableSoldiers;
 	local StateObjectReference SoldierObjRef;
 
 	if (IsSplitMission( StartState ))
 		return;
 
 	Program = class'RTHelpers'.static.GetNewProgramState(StartState);
+	SoldierObjRef = Program.Master[`SYNC_RAND_STATIC(Program.Master.Length)].StateObjectRef;
+	
 	if(default.JustPassingThroughChance * Program.InfluenceScore < `SYNC_RAND_STATIC(100)) //TODO: Refactor to include an Operative-based modifer (location + personality)
 		return;
 
@@ -75,7 +78,6 @@ static function ActivateJustPassingThrough(XComGameState StartState) {
 	if(XComHQ.TacticalGameplayTags.Find( 'NoRisingTides' ) != INDEX_NONE)
 		return;
 
-	SoldierObjRef = Program.Master[`SYNC_RAND_STATIC(Program.Master.Length)].StateObjectRef;
 
 	XComHQ.Squad.AddItem(SoldierObjRef);
 	XComHQ.AllSquads[0].SquadMembers.AddItem(SoldierObjRef);
