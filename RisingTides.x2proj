@@ -470,7 +470,7 @@
     <Content Include="Src\RisingTides\Classes\RTSitRepEffects.uc">
       <SubType>Content</SubType>
     </Content>
-    <Content Include="Src\RisingTides\Classes\RTSitrep_OneSmallFavor.uc">
+    <Content Include="Src\RisingTides\Classes\RTSitrepEffect_OneSmallFavor.uc">
       <SubType>Content</SubType>
     </Content>
     <Content Include="Src\RisingTides\Classes\RTStrategyElement_CovertActions.uc">

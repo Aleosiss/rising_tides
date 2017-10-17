@@ -4,8 +4,6 @@ function XComGameState_ResistanceFaction CreateInstanceFromTemplate(XComGameStat
 {
 	local RTGameState_ProgramFaction FactionState;
 
-	//`LOG("Adding Program Faction GameState!");
-
 	FactionState = RTGameState_ProgramFaction(NewGameState.CreateNewStateObject(class'RTGameState_ProgramFaction', self));
 
 	return FactionState;

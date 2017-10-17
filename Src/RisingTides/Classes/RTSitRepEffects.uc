@@ -16,12 +16,11 @@ static function array<X2DataTemplate> CreateTemplates()
 	return Templates;
 }
 
-
 static function X2SitRepEffectTemplate RTCreateOneSmallFavorEffectTemplate(name TemplateName, int _SquadSize)
 {
-	local RTSitRep_OneSmallFavor Template;
+	local RTSitRepEffect_OneSmallFavor Template;
 
-	`CREATE_X2TEMPLATE(class'RTSitRep_OneSmallFavor', Template, 'TemplateName');
+	`CREATE_X2TEMPLATE(class'RTSitRepEffect_OneSmallFavor', Template, 'TemplateName');
 
 	Template.MaxSquadSize = _SquadSize;
 
