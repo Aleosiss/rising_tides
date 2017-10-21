@@ -22,7 +22,7 @@ node('master') {
                       [$class: 'StringBinding', credentialsId: 'RisingTidesSrcDir', variable: 'srcDir'],
                       [$class: 'StringBinding', credentialsId: 'SDKPath', variable: 'sdkPath'],
                       [$class: 'StringBinding', credentialsId: 'GamePath', variable: 'gamePath'],
-                      [$class: 'StringBinding', credentialsId: 'PowershellPath', variable: 'PSPath']]) {
+                      [$class: 'StringBinding', credentialsId: 'PSPath', variable: 'PSPath']]) {
   stage('Build Mod Project') {
    bat '''
       echo "Building Mod Project!"
