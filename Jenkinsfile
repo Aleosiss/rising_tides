@@ -16,8 +16,12 @@ node('master') {
     sdkPath: credentials('SDKPath')
     gamePath: credentials('GamePath')
     PSPath: credentials('PowershellPath')
-  }
-
+  }  #// string(credentialsId: 'mytoken', variable: 'TOKEN')
+  withCredentials ([  string(credentialsId: 'RisingTidesModName', variable = 'modName'), 
+                      string(credentialsId: 'RisingTidesSrcDir', variable = 'srcDir'),
+                      string(credentialsId: 'SDKPath', variable = 'sdkPath'),
+                      string(credentialsId: 'GamePath', variable = 'gamePath'),
+                      string(credentialsId: 'PowershellPath', variable = 'PSPath')]) {
   stage('Build Mod Project') {
    bat '''
       echo "Building Mod Project!"
@@ -31,5 +35,6 @@ node('master') {
       echo ""
       %PSPath% "./scripts/build.ps1" -mod %modName% -srcDirectory %WORKSPACE% -sdkPath %sdkPath% -gamePath %gamePath%
       '''
+    }
   }
 }
