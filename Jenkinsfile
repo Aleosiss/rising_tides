@@ -34,7 +34,7 @@ node('master') {
       echo %PSPath%
       echo ""
       echo ""
-      %PSPath% "./scripts/build.ps1" -mod %modName% -srcDirectory %WORKSPACE% -sdkPath %sdkPath% -gamePath %gamePath%
+      %PSPath% "./scripts/build.ps1" -mod %modName% -srcDirectory "%WORKSPACE%" -sdkPath %sdkPath% -gamePath %gamePath%
       '''
     }
   }
