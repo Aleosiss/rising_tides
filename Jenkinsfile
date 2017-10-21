@@ -34,6 +34,7 @@ node('master') {
       echo %PSPath%
       echo ""
       echo ""
+      %PSPath% set-executionpolicy remotesigned
       %PSPath% "./scripts/build.ps1" -mod %modName% -srcDirectory "'%WORKSPACE%'" -sdkPath %sdkPath% -gamePath %gamePath%
       '''
     }
