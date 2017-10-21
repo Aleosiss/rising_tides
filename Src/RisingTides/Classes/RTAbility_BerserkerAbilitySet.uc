@@ -87,8 +87,6 @@ static function array<X2DataTemplate> CreateTemplates()
 	Templates.AddItem(RTCloseCombatSpecialist());
 	Templates.AddItem(RTCloseCombatSpecialistAttack());
 
-	Templates.AddItem(WRONGTHING())
-
 	return Templates;
 }
 
