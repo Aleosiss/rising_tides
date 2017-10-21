@@ -19,14 +19,17 @@ node('master') {
   }
 
   stage('Build Mod Project') {
-    bat 'echo %WORKSPACE%'
-    bat 'echo %modName%'
-    bat 'echo %srcDir%'
-    bat 'echo %sdkPath%'
-    bat 'echo %gamePath%'
-    bat 'echo %PSPath%'
-    bat 'echo ""'
-    bat 'echo ""'
-    bat '%PSPath% "./scripts/build.ps1" -mod %modName% -srcDirectory %WORKSPACE% -sdkPath %sdkPath% -gamePath %gamePath%'
+   bat '''
+      echo "Building Mod Project!"
+      echo %WORKSPACE%
+      echo %modName%
+      echo %srcDir%
+      echo %sdkPath%'
+      echo %gamePath%
+      echo %PSPath%
+      echo ""
+      echo ""
+      %PSPath% "./scripts/build.ps1" -mod %modName% -srcDirectory %WORKSPACE% -sdkPath %sdkPath% -gamePath %gamePath%
+      '''
   }
 }
