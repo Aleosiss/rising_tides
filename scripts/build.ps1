@@ -11,9 +11,9 @@ function WriteModMetadata([string]$mod, [string]$sdkPath, [int]$publishedId, [st
 }
 
 function StageDirectory ([string]$directoryName, [string]$srcDirectory, [string]$targetDirectory) {
-    Write-Host "Staging mod $directoryName from source ($srcDirectory/$directoryName) to staging ($targetDirectory/$directoryName)..."
+    Write-Host "Staging mod $directoryName from source ($srcDirectory) to staging ($targetDirectory/$directoryName)..."
 
-    if (Test-Path "$srcDirectory/$directoryName") {
+    if (Test-Path "$srcDirectory") {
         Copy-Item "$srcDirectory/$directoryName" "$targetDirectory/$directoryName" -Recurse -WarningAction SilentlyContinue
         Write-Host "Staged."
     }
