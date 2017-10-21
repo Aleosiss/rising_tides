@@ -26,7 +26,7 @@ function StageDirectory ([string]$directoryName, [string]$srcDirectory, [string]
 $modNameCanonical = $mod
 # we're going to ask that people specify the folder that has their .XCOM_sln in it as the -srcDirectory argument, but a lot of the time all we care about is
 # the folder below that that contains Config, Localization, Src, etc...
-$modSrcRoot = "$srcDirectory/$modNameCanonical"
+$modSrcRoot = "$srcDirectory"
 
 # clean
 $stagingPath = "{0}/XComGame/Mods/{1}/" -f $sdkPath, $modNameCanonical
