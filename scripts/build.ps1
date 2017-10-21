@@ -1,3 +1,5 @@
+$ErrorActionPreference = "Stop"
+
 Param(
     [string]$mod, # your mod's name - this shouldn't have spaces or special characters, and it's usually the name of the first directory inside your mod's source dir
     [string]$srcDirectory, # the path that contains your mod's .XCOM_sln
@@ -8,6 +10,22 @@ Param(
 
 function WriteModMetadata([string]$mod, [string]$sdkPath, [int]$publishedId, [string]$title, [string]$description) {
     Set-Content "$sdkPath/XComGame/Mods/$mod/$mod.XComMod" "[mod]`npublishedFileId=$publishedId`nTitle=$title`nDescription=$description`nRequiresXPACK=true"
+}
+
+function CheckLastExitCode {
+    param ([int[]]$SuccessCodes = @(0), [scriptblock]$CleanupScript=$null)
+
+    if ($SuccessCodes -notcontains $LastExitCode) {
+        if ($CleanupScript) {
+            "Executing cleanup script: $CleanupScript"
+            &$CleanupScript
+        }
+        $msg = @"
+EXE RETURNED EXIT CODE $LastExitCode
+CALLSTACK:$(Get-PSCallStack | Out-String)
+"@
+        throw $msg
+    }
 }
 
 function StageDirectory ([string]$directoryName, [string]$srcDirectory, [string]$targetDirectory) {
@@ -87,17 +105,20 @@ else {
 # build the base game scripts
 Write-Host "Compiling base game scripts..."
 & "$sdkPath/binaries/Win64/XComGame.com" make -nopause -unattended
+CheckLastExitCode
 Write-Host "Compiled."
 
 # build the mod's scripts
 Write-Host "Compiling mod scripts..."
 &"$sdkPath/binaries/Win64/XComGame.com" make -nopause -mods $modNameCanonical "$stagingPath"
+CheckLastExitCode
 Write-Host "Compiled."
 
 # build the mod's shader cache
 if (Test-Path -Path "$stagingPath/Content/*" -Include *.upk, *.umap) {
     Write-Host "Precompiling mod shaders..."
     &"$sdkPath/binaries/Win64/XComGame.com" precompileshaders -nopause platform=pc_sm4 DLC=$modNameCanonical
+    CheckLastExitCode
     Write-Host "Precompiled."
 }
 else {
