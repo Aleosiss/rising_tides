@@ -1,5 +1,3 @@
-$ErrorActionPreference = "Stop"
-
 Param(
     [string]$mod, # your mod's name - this shouldn't have spaces or special characters, and it's usually the name of the first directory inside your mod's source dir
     [string]$srcDirectory, # the path that contains your mod's .XCOM_sln
@@ -7,6 +5,8 @@ Param(
     [string]$gamePath, # the path to your XCOM 2 installation ending in "XCOM 2"
     [bool]$forceFullBuild = $false # force the script to rebuild the base game's scripts, even if they're already built
 )
+
+$ErrorActionPreference = "Stop"
 
 function WriteModMetadata([string]$mod, [string]$sdkPath, [int]$publishedId, [string]$title, [string]$description) {
     Set-Content "$sdkPath/XComGame/Mods/$mod/$mod.XComMod" "[mod]`npublishedFileId=$publishedId`nTitle=$title`nDescription=$description`nRequiresXPACK=true"
