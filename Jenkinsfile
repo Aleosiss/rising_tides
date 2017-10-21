@@ -17,11 +17,12 @@ node('master') {
     gamePath: credentials('GamePath')
     PSPath: credentials('PowershellPath')
   }  
-  withCredentials ([  string(credentialsId: 'RisingTidesModName', variable = 'modName'), 
-                      string(credentialsId: 'RisingTidesSrcDir', variable = 'srcDir'),
-                      string(credentialsId: 'SDKPath', variable = 'sdkPath'),
-                      string(credentialsId: 'GamePath', variable = 'gamePath'),
-                      string(credentialsId: 'PowershellPath', variable = 'PSPath')]) {
+  
+  withCredentials ([  [$class: 'StringBinding', credentialsId: 'RisingTidesModName', variable = 'modName'], 
+                      [$class: 'StringBinding', credentialsId: 'RisingTidesSrcDir', variable = 'srcDir'],
+                      [$class: 'StringBinding', credentialsId: 'SDKPath', variable = 'sdkPath'],
+                      [$class: 'StringBinding', credentialsId: 'GamePath', variable = 'gamePath'],
+                      [$class: 'StringBinding', credentialsId: 'PowershellPath', variable = 'PSPath']]) {
   stage('Build Mod Project') {
    bat '''
       echo "Building Mod Project!"
