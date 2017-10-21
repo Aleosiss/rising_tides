@@ -176,9 +176,6 @@
     <Content Include="Localization\RisingTides.int">
       <SubType>Content</SubType>
     </Content>
-    <Content Include="Localization\TheProgram.int">
-      <SubType>Content</SubType>
-    </Content>
     <Content Include="ReadMe.txt" />
     <Content Include="ModPreview.jpg" />
     <Content Include="Config\XComEditor.ini" />
