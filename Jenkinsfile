@@ -16,7 +16,7 @@ node('master') {
     sdkPath: credentials('SDKPath')
     gamePath: credentials('GamePath')
     PSPath: credentials('PowershellPath')
-  }  #// string(credentialsId: 'mytoken', variable: 'TOKEN')
+  }  
   withCredentials ([  string(credentialsId: 'RisingTidesModName', variable = 'modName'), 
                       string(credentialsId: 'RisingTidesSrcDir', variable = 'srcDir'),
                       string(credentialsId: 'SDKPath', variable = 'sdkPath'),
