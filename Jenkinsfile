@@ -19,6 +19,7 @@ node('master') {
   }
 
   stage('Build Mod Project') {
-    bat '%PSPath% "./scripts/build.ps1" -mod %modName% -srcDirectory %srcDir% -sdkPath %sdkPath% -gamePath %gamePath%'
+    bat 'echo %WORKSPACE%'
+    bat '%PSPath% "./scripts/build.ps1" -mod %modName% -srcDirectory %WORKSPACE% -sdkPath %sdkPath% -gamePath %gamePath%'
   }
 }
