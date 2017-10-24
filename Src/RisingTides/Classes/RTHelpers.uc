@@ -191,6 +191,10 @@ static function RTLog(string message, optional bool bShouldRedScreenToo = false)
 		`RedScreen("Rising Tides: " $ message);
 }
 
+static function bool DebuggingEnabled() {
+	return class'X2DownloadableContentInfo_RisingTides'.static.DebuggingEnabled();
+}
+
 static function PrintCovertActionsForFaction(XComGameState_ResistanceFaction Faction) {
 	local StateObjectReference StateObjRef;
 	local XComGameState_CovertAction CovertActionState;

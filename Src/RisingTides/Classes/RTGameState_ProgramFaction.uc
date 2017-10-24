@@ -57,8 +57,10 @@ struct RTGhostOperative
 	var localized string			finBackGround;
 };
 
+// SPECTRE
 var localized string SquadOneName;
 var localized string SquadOneBackground;
+var config array<name> SquadOneMembers;
 
 
 struct Squad
@@ -72,7 +74,7 @@ var() array<RTGhostOperative>									Master; 			// master list of operatives
 var() array<StateObjectReference> 								Active;				// ghosts active
 var() RTGameState_PersistentGhostSquad							Deployed; 			// ghosts that will be on the next mission
 var() array<StateObjectReference>								Captured;			// ghosts not available
-var() array<RTGameState_PersistentGhostSquad>					Squads;				// list of ghost teams (only one for now)
+var() array<StateObjectReference>								Squads;				// list of ghost teams (only one for now)
 var() int 														iOperativeLevel;	// all ghosts get level ups after a mission, even if they weren't on it. lorewise, they're constantly running missions; the player only sees a fraction of them
 var bool														bSetupComplete;		// if we should rebuild the ghost array from config
 
@@ -81,38 +83,28 @@ var bool														bSetupComplete;		// if we should rebuild the ghost array f
 
 // FACTION VARIABLES
 var bool														bOneSmallFavorAvailable;	// can send squad on a mission, replacing XCOM
+var bool														bOneSmallFavorActivated; 	// player has chosen to send squad on next mission
 var bool														bTemplarsDestroyed;
 var config array<name>											InvalidMissionNames; 		// list of mission types ineligible for Program support
 
 
 /* *********************************************************************** */
 
-// SetUpRisingTidesCommand(XComGameState StartState)
-static function SetUpProgramFaction(XComGameState StartState)
+// SetUpProgramFaction(XComGameState StartState)
+ function SetUpProgramFaction(XComGameState StartState)
 {
-	local RTGameState_ProgramFaction ProgramFaction;
-
-	foreach StartState.IterateByClassType(class'RTGameState_ProgramFaction', ProgramFaction) {
-		break;
-	}
-
-	if (ProgramFaction == none) {
-		ProgramFaction = RTGameState_ProgramFaction(StartState.CreateStateObject(class'RTGameState_ProgramFaction'));
-	}
-
-	StartState.AddStateObject(ProgramFaction);
-	ProgramFaction.InitListeners();
-	if(!ProgramFaction.bSetupComplete) {
-		ProgramFaction.CreateRTOperatives(StartState);
+	InitListeners();
+	if(!bSetupComplete) {
+		CreateRTOperatives(StartState);
+		CreateRTSquads(StartState);
 		//Program.CreateRTDeathRecord(StartState);
-		ProgramFaction.bSetupComplete = true;
+		bSetupComplete = true;
 	}
 }
 
 // CreateRTOperatives(XComGameState NewGameState)
 function CreateRTOperatives(XComGameState StartState) {
 	local RTGhostOperative IteratorGhostTemplate;
-
 
 	foreach default.GhostTemplates(IteratorGhostTemplate) {
 		CreateRTOperative(IteratorGhostTemplate, StartState);
@@ -169,20 +161,17 @@ function CreateRTSquads(XComGameState StartState) {
 	local RTGameState_PersistentGhostSquad one;
 	local RTGhostOperative Ghost;
 
-	one = RTGameState_PersistentGhostSquad(StartState.CreateStateObject(class'RTGameState_PersistentGhostSquad'));
+	one = RTGameState_PersistentGhostSquad(StartState.CreateNewStateObject(class'RTGameState_PersistentGhostSquad'));
 	one.CreateSquad(1, default.SquadOneName, default.SquadOneBackground);
-	StartState.AddStateObject(one);
-	Squads.AddItem(one);
+	Squads.AddItem(one.GetReference());
 
 	foreach Master(Ghost) {
 		// team 1 "SPECTRE"
-		if(Ghost.ExternalID == "Queen" || Ghost.ExternalID == "Whisper" || Ghost.ExternalID == "Nova") {
+		if(default.SquadOneMembers.Find(Ghost.ExternalID) != INDEX_NONE) {
 			one.Operatives.AddItem(Ghost.StateObjectRef);
 			one.initOperatives.AddItem(Ghost.StateObjectRef);
 		}
 	}
-
-
 }
 
 // UpdateNumDeaths(name CharacterTemplateName, StateObjectReference UnitRef)
@@ -350,7 +339,7 @@ function EventListenerReturn OnUnitAttacked(Object EventData, Object EventSource
 
 	return ELR_NoInterrupt;
 }
-/*
+
 function OnEndTacticalPlay(XComGameState NewGameState)
 {
 	local XComGameStateHistory History;
@@ -364,16 +353,14 @@ function OnEndTacticalPlay(XComGameState NewGameState)
 	super.OnEndTacticalPlay(NewGameState);
 	History = class'XComGameStateHistory'.static.GetGameStateHistory();
 
-	Program	= RTGameState_ProgramFaction(History.GetSingleGameStateObjectForClass(class'RTGameState_ProgramFaction'));
-	NewProgram = RTGameState_ProgramFaction(NewGameState.ModifyStateObject(class'RTGameState_ProgramFaction', Program.GetReference().ObjectID));
 	XComHQ = XComGameState_HeadquartersXCom(History.GetSingleGameStateObjectForClass(class'XComGameState_HeadquartersXCom'));
-	NewXComHQ = XComGameState_HeadquartersXCom(NewGameState.ModifyStateObject(class'XComGameState_HeadquartersXCom', XComHQ.GetReference().ObjectID));
+	XComHQ = XComGameState_HeadquartersXCom(NewGameState.ModifyStateObject(class'XComGameState_HeadquartersXCom', XComHQ.GetReference().ObjectID));
 
 	MissionState = XComGameState_MissionSite(History.GetGameStateForObjectID(XComHQ.MissionRef.ObjectID));
-
-	foreach History.IterateByClassType(class'XComGameState_Unit', UnitState) {
+	if()
+	
+	foreach NewGameState.IterateByClassType(class'XComGameState_Unit', UnitState) {
 		if(Master.Find('NickName', UnitState.GetNickName()) != INDEX_NONE) {
-			Deployed.RemoveItem(UnitState.GetReference());
 			if(UnitState.bCaptured) {
 				Captured.AddItem(UnitState.GetReference());
 			} else {
@@ -381,7 +368,7 @@ function OnEndTacticalPlay(XComGameState NewGameState)
 			}
 		}
 	}
-}*/
+}
 
 
 
@@ -420,8 +407,7 @@ function bool IsExtraFactionSoldierRewardAllowed(XComGameState NewGameState)
 	return false;
 }
 
-private function AddRisingTidesTacticalTags(XComGameState_HeadquartersXCom XComHQ) // mark missions as being invalid for One Small Favor or Just Passing Through, usually story, (golden path or otherwise)
-{
+private function AddRisingTidesTacticalTags(XComGameState_HeadquartersXCom XComHQ) {// mark missions as being invalid for One Small Favor or Just Passing Through, usually story, (golden path or otherwise) 
 
 }
 
@@ -431,10 +417,13 @@ simulated function bool CashOneSmallFavor(XComGameState NewGameState, XComGameSt
 
 	if(!bOneSmallFavorAvailable)
 		return false;
-
-	RotateRandomSquadToDeploy();
+	
 	if(Deployed == none) {
-		return false;
+		RotateRandomSquadToDeploy();
+	}
+	
+	if(Deployed == none) {
+		return false; // we... have no squads?
 	}
 
 	MissionSite = XComGameState_MissionSite(NewGameState.ModifyStateObject(MissionSite.class, MissionSite.ObjectID));
@@ -449,7 +438,7 @@ simulated function bool CashOneSmallFavor(XComGameState NewGameState, XComGameSt
 protected function RotateRandomSquadToDeploy() {
 	if(Squads.Length == 0)
 		return;
-	Deployed = Squads[`SYNC_RAND(Squads.Length)];
+	Deployed = `XCOMHISTORY.GetGameStateForObjectID(Squads[`SYNC_RAND(Squads.Length)].ObjectID);
 }
 
 //#############################################################################################
@@ -512,6 +501,13 @@ function CreateGoldenPathActions(XComGameState NewGameState)
 //#############################################################################################
 //----------------- GENERAL FACTION METHODS ---------------------------------------------------
 //#############################################################################################
+event OnCreation(optional X2DataTemplate Template)
+{
+	local int idx;
+
+	super.OnCreation( Template );
+
+}
 
 function MeetXCom(XComGameState NewGameState)
 {
@@ -530,6 +526,9 @@ function MeetXCom(XComGameState NewGameState)
 	CleanUpFactionCovertActions(NewGameState);
 	CreateGoldenPathActions(NewGameState);
 	GenerateCovertActions(NewGameState, ExclusionList);
+	
+	// Program-specfic startup
+	SetUpProgramFaction(NewGameState);
 
 	for(idx = 0; idx < default.NumCardsOnMeet; idx++)
 	{
@@ -544,5 +543,13 @@ function MeetXCom(XComGameState NewGameState)
 	if (!ResHQ.IsRookieCovertActionAvailable(NewGameState))
 	{
 		ResHQ.CreateRookieCovertAction(NewGameState);
+	}
+}
+
+
+function PreMissionUpdate(XComGameState NewGameState, XComGameState_MissionSite MissionSiteState) {
+	if(bOneSmallFavorActivated && bOneSmallFavorAvailable) {
+		bOneSmallFavorAvailable = false;
+		bOneSmallFavorActivated = false;
 	}
 }

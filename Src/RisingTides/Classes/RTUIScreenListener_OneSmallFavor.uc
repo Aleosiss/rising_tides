@@ -16,7 +16,6 @@ simulated function OnReceiveFocus(UIScreen Screen)
 	}
 }
 
-
 simulated function AddOneSmallFavorSitrep(UIMission MissionScreen) {
 	local RTGameState_ProgramFaction Program;
 	local XComGameState_MissionSite MissionState;
@@ -26,27 +25,33 @@ simulated function AddOneSmallFavorSitrep(UIMission MissionScreen) {
 	local XComGameStateHistory History;
 	local int iNumOperativesInSquad;
 
-
 	History = `XCOMHISTORY;
 	Program = RTGameState_ProgramFaction(History.GetSingleGameStateObjectForClass(class'RTGameState_ProgramFaction'));
 	if(Program == none)
 		return;
-
-	if(Program.InfluenceScore < 2)
-		return;
-
-	if(!Program.bOneSmallFavorAvailable) {
-		return;
-	}
+	if(!class'RTHelpers'.static.DebuggingEnabled()) {
+		if(Program.InfluenceScore < 2)
+			return;
+	
+		if(!Program.bOneSmallFavorAvailable) {
+			return;
+		}
+	
+		if(!Program.bOneSmallFavorActivated) {
+			return;
+		}
+	} else { class'RTHelpers'.static.RTLog("Adding One Small Favor SITREP via debug override!", true); }
 
 	XComHQ = class'UIUtilities_Strategy'.static.GetXComHQ();
 
 	MissionState = MissionScreen.GetMission();
 	if(MissionState.GeneratedMission.SitReps.Find('RTOneSmallFavor') != INDEX_NONE) {
+		`LOG("Rising Tides: this map already has the One Small Favor tag!");
 		return;
 	}
 
 	if(CheckIsInvalidMission(MissionState.GetMissionSource())) {
+		`LOG("Rising Tides: this map is invalid!");
 		return;
 	}
 
@@ -61,13 +66,14 @@ simulated function AddOneSmallFavorSitrep(UIMission MissionScreen) {
 	AddOneSmallFavorSitrepEffectToGeneratedMission(Program, MissionState);
 
 	ModifyMissionData(XComHQ, MissionState);
-	Program.bOneSmallFavorAvailable = false;
 
 	if (NewGameState.GetNumGameStateObjects() > 0) {
 		`XCOMGAME.GameRuleset.SubmitGameState(NewGameState);
 		MissionScreen.UpdateData();
-	} else
+	} else {
+		class'RTHelpers'.static.RTLog("Warning: One Small Favor activated but didn't add any objects to the GameState?!", true);
 		History.CleanupPendingGameState(NewGameState);
+	}
 
 }
 

@@ -41,6 +41,17 @@ static event OnPostTemplatesCreated()
 	AddProgramFactionCovertActions();
 }
 
+/// <summary>
+/// Called just before the player launches into a tactical a mission while this DLC / Mod is installed.
+/// </summary>
+static event OnPreMission(XComGameState NewGameState, XComGameState_MissionSite MissionState)
+{
+	local RTGameState_ProgramFaction ProgramState;
+	
+	ProgramState = class'RTHelpers'.static.GetNewProgramState(NewGameState);
+	ProgramState.PreMissionUpdate(NewGameState, MissionState);
+}
+
 simulated static function ModifyInitialFactionState(XComGameState StartState) {
 	local RTGameState_ProgramFaction Faction;
 
