@@ -167,7 +167,7 @@ function CreateRTSquads(XComGameState StartState) {
 
 	foreach Master(Ghost) {
 		// team 1 "SPECTRE"
-		if(default.SquadOneMembers.Find(Ghost.ExternalID) != INDEX_NONE) {
+		if(SquadOneMembers.Find(Ghost.ExternalID) != INDEX_NONE) {
 			one.Operatives.AddItem(Ghost.StateObjectRef);
 			one.initOperatives.AddItem(Ghost.StateObjectRef);
 		}
@@ -357,7 +357,7 @@ function OnEndTacticalPlay(XComGameState NewGameState)
 	XComHQ = XComGameState_HeadquartersXCom(NewGameState.ModifyStateObject(class'XComGameState_HeadquartersXCom', XComHQ.GetReference().ObjectID));
 
 	MissionState = XComGameState_MissionSite(History.GetGameStateForObjectID(XComHQ.MissionRef.ObjectID));
-	if()
+	
 	
 	foreach NewGameState.IterateByClassType(class'XComGameState_Unit', UnitState) {
 		if(Master.Find('NickName', UnitState.GetNickName()) != INDEX_NONE) {
@@ -368,10 +368,15 @@ function OnEndTacticalPlay(XComGameState NewGameState)
 			}
 		}
 	}
+	
+	RecalculateActiveOperativesAndSquads(NewGameState);
 }
 
 
-
+protected function RecalculateActiveOperativesAndSquads(XComGameState NewGameState) {
+	//TODO:: this
+	return;
+}
 
 // Faction Stuff
 
@@ -423,6 +428,7 @@ simulated function bool CashOneSmallFavor(XComGameState NewGameState, XComGameSt
 	}
 	
 	if(Deployed == none) {
+		class'RTHelpers'.static.RTLog("The Program has no squads?", true);
 		return false; // we... have no squads?
 	}
 
@@ -438,7 +444,7 @@ simulated function bool CashOneSmallFavor(XComGameState NewGameState, XComGameSt
 protected function RotateRandomSquadToDeploy() {
 	if(Squads.Length == 0)
 		return;
-	Deployed = `XCOMHISTORY.GetGameStateForObjectID(Squads[`SYNC_RAND(Squads.Length)].ObjectID);
+	Deployed = Squads[`SYNC_RAND(Squads.Length)].ObjectID;
 }
 
 //#############################################################################################
