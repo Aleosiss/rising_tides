@@ -347,9 +347,6 @@ function OnEndTacticalPlay(XComGameState NewGameState)
 	local XComGameState_HeadquartersXCom XComHQ, NewXComHQ;
 	local XComGameState_MissionSite MissionState;
 
-	local RTGameState_ProgramFaction 	Program, NewProgram;
-
-
 	super.OnEndTacticalPlay(NewGameState);
 	History = class'XComGameStateHistory'.static.GetGameStateHistory();
 
@@ -357,8 +354,9 @@ function OnEndTacticalPlay(XComGameState NewGameState)
 	XComHQ = XComGameState_HeadquartersXCom(NewGameState.ModifyStateObject(class'XComGameState_HeadquartersXCom', XComHQ.GetReference().ObjectID));
 
 	MissionState = XComGameState_MissionSite(History.GetGameStateForObjectID(XComHQ.MissionRef.ObjectID));
-	
-	
+	if(!IsRelevantMission(MissionState)) {
+		return;
+	}
 	foreach NewGameState.IterateByClassType(class'XComGameState_Unit', UnitState) {
 		if(Master.Find('NickName', UnitState.GetNickName()) != INDEX_NONE) {
 			if(UnitState.bCaptured) {
@@ -370,10 +368,21 @@ function OnEndTacticalPlay(XComGameState NewGameState)
 	}
 	
 	RecalculateActiveOperativesAndSquads(NewGameState);
+	PromoteAllOperatives(NewGameState);
+
+
+
+protected static boolean IsRelevantMission(XComGameState_MissionSite MissionState) {
+	// TODO:: this
+	return;
 }
 
-
 protected function RecalculateActiveOperativesAndSquads(XComGameState NewGameState) {
+	//TODO:: this
+	return;
+}
+
+protected function PromoteAllOperatives(NewGameState) {
 	//TODO:: this
 	return;
 }
