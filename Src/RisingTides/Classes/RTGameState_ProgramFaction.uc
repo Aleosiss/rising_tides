@@ -49,7 +49,7 @@ struct RTGhostOperative
 
 	var StateObjectReference 		StateObjectRef;
 
-	var string						ExternalID;
+	var name						ExternalID;
 	var localized string			FirstName;
 	var localized string			NickName;
 	var localized string			LastName;
@@ -371,10 +371,11 @@ function OnEndTacticalPlay(XComGameState NewGameState)
 	PromoteAllOperatives(NewGameState);
 
 
+}
 
-protected static boolean IsRelevantMission(XComGameState_MissionSite MissionState) {
+protected static function bool IsRelevantMission(XComGameState_MissionSite MissionState) {
 	// TODO:: this
-	return;
+	return true;
 }
 
 protected function RecalculateActiveOperativesAndSquads(XComGameState NewGameState) {
@@ -382,7 +383,7 @@ protected function RecalculateActiveOperativesAndSquads(XComGameState NewGameSta
 	return;
 }
 
-protected function PromoteAllOperatives(NewGameState) {
+protected function PromoteAllOperatives(XComGameState NewGameState) {
 	//TODO:: this
 	return;
 }
@@ -453,7 +454,7 @@ simulated function bool CashOneSmallFavor(XComGameState NewGameState, XComGameSt
 protected function RotateRandomSquadToDeploy() {
 	if(Squads.Length == 0)
 		return;
-	Deployed = Squads[`SYNC_RAND(Squads.Length)].ObjectID;
+	Deployed = RTGameState_PersistentGhostSquad(`XCOMHISTORY.GetGameStateForObjectID(Squads[`SYNC_RAND(Squads.Length)].ObjectID));
 }
 
 //#############################################################################################
