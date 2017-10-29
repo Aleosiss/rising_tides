@@ -146,6 +146,16 @@ simulated static function MakePsiAbilitiesInterruptable() {
 	}
 }
 
+exec function RT_ActivateOneSmallFavor() {
+	local RTGameState_ProgramFaction	ProgramState;
+	local XComGameState					NewGameState;
+
+	NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("CHEAT: Force One Small Favor!");
+	ProgramState = class'RTHelpers'.static.GetNewProgramState(NewGameState);
+	ProgramState.bOneSmallFavorAvailable = true;
+	`GAMERULES.SubmitGameState(NewGameState);
+}
+
 exec function RT_DebugModVersion() {
 	local int ModVersion;
 
