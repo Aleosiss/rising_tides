@@ -61,6 +61,7 @@ struct RTGhostOperative
 var localized string SquadOneName;
 var localized string SquadOneBackground;
 var config array<name> SquadOneMembers;
+var config name SquadOneSitRepName;
 
 
 struct Squad
@@ -162,7 +163,7 @@ function CreateRTSquads(XComGameState StartState) {
 	local RTGhostOperative Ghost;
 
 	one = RTGameState_PersistentGhostSquad(StartState.CreateNewStateObject(class'RTGameState_PersistentGhostSquad'));
-	one.CreateSquad(1, default.SquadOneName, default.SquadOneBackground);
+	one.CreateSquad(1, default.SquadOneName, default.SquadOneBackground, default.SquadOneSitRepName);
 	Squads.AddItem(one.GetReference());
 
 	foreach Master(Ghost) {

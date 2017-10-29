@@ -82,24 +82,7 @@ simulated function bool CheckIsInvalidMission(X2MissionSourceTemplate Template) 
 }
 
 simulated function AddOneSmallFavorSitrepEffectToGeneratedMission(RTGameState_ProgramFaction Program, XComGameState_MissionSite MissionState) {
-	local int iNumOperativesInSquad;
-	iNumOperativesInSquad = Program.Deployed.Operatives.Length;
-	switch(iNumOperativesInSquad) {
-		case 1:
-			MissionState.GeneratedMission.SitReps.AddItem('RTOneSmallFavor_1');
-		case 2:
-			MissionState.GeneratedMission.SitReps.AddItem('RTOneSmallFavor_2');
-		case 3:
-			MissionState.GeneratedMission.SitReps.AddItem('RTOneSmallFavor_3');
-		case 4:
-			MissionState.GeneratedMission.SitReps.AddItem('RTOneSmallFavor_4');
-		case 5:
-			MissionState.GeneratedMission.SitReps.AddItem('RTOneSmallFavor_5');
-		case 6:
-			MissionState.GeneratedMission.SitReps.AddItem('RTOneSmallFavor_6');
-		default:
-			MissionState.GeneratedMission.SitReps.AddItem('RTOneSmallFavor_3');
-	}
+	MissionState.GeneratedMission.SitReps.AddItem(Program.Deployed.AssociatedSitRepTemplateName);
 }
 
 //---------------------------------------------------------------------------------------
