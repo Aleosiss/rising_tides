@@ -18,6 +18,7 @@ static function X2CharacterTemplate CreateWhisperTemplate()
 	
 	CharTemplate.DefaultSoldierClass = 'RT_Marksman';
 	CharTemplate.DefaultLoadout = 'RT_Marksman';
+    CharTemplate.bIsPsionic = true;
 
     //CharTemplate.bHasFullDefaultAppearance = true;
     //TODO: Appearance
@@ -57,7 +58,8 @@ static function X2CharacterTemplate CreateQueenTemplate()
 	
 	CharTemplate.DefaultSoldierClass = 'RT_Berserker';
 	CharTemplate.DefaultLoadout = 'RT_Berserker';
-
+    CharTemplate.bIsPsionic = true;
+    
     //CharTemplate.bHasFullDefaultAppearance = true;
     //TODO: Appearance
     //CharTemplate.DefaultAppearance.nmPawn = 'XCom_Soldier_M';
@@ -96,7 +98,8 @@ static function X2CharacterTemplate CreateNovaTemplate()
 	
 	CharTemplate.DefaultSoldierClass = 'RT_Gatherer';
 	CharTemplate.DefaultLoadout = 'RT_Gatherer';
-
+    CharTemplate.bIsPsionic = true;
+    
     //CharTemplate.bHasFullDefaultAppearance = true;
     //TODO: Appearance
     //CharTemplate.DefaultAppearance.nmPawn = 'XCom_Soldier_M';

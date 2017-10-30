@@ -160,15 +160,18 @@ exec function RT_DebugActiveOperatives() {
 	local RTGameState_ProgramFaction		ProgramState;
 	local StateObjectReference				IteratorRef;
 	local XComGameStateHistory				History;
-	local XComGameState_Unit				IteratorUnitState;
+	local XComGameState_Unit				UnitState;
 
 	ProgramState = class'RTHelpers'.static.GetProgramState();
 	History = `XCOMHISTORY;
 	
 	class'RTHelpers'.static.RTLog("Printing Active Operatives...");
 	foreach ProgramState.Active(IteratorRef) {
-		IteratorUnitState = XComGameState_Unit(History.GetGameStateForObjectID(IteratorRef.ObjectID));
-		class'RTHelpers'.static.RTLog("" $ IteratorUnitState.GetSoldierClassTemplateName());
+		UnitState = XComGameState_Unit(History.GetGameStateForObjectID(IteratorRef.ObjectID));
+		class'RTHelpers'.RTLog( "Found Ghost Operative " $ UnitState.GetFullName() $ 
+								", with ObjectID " $ UnitState.GetReference().ObjectID $
+								", and CharacterTemplateName " $ UnitState.GetMyTemplateName()
+							);
 	}
 
 }

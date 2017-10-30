@@ -127,10 +127,12 @@ function CreateRTOperative(RTGhostOperative IteratorGhostTemplate, XComGameState
 	ItemTemplateMgr = class'X2ItemTemplateManager'.static.GetItemTemplateManager();
 
 	CharTemplate = CharMgr.FindCharacterTemplate(IteratorGhostTemplate.CharacterTemplateName);
-	CharTemplate.bIsPsionic = true;
 
 	UnitState = CharTemplate.CreateInstanceFromTemplate(StartState);
-	StartState.AddStateObject(UnitState);
+	class'RTHelpers'.RTLog( "Creating Ghost Operative " $ UnitState.GetFullName() $ 
+							", with ObjectID " $ UnitState.GetReference().ObjectID $
+							", and CharacterTemplateName " $ UnitState.GetMyTemplateName()
+						);
 
 	UnitState.SetCharacterName(IteratorGhostTemplate.FirstName, IteratorGhostTemplate.LastName, IteratorGhostTemplate.NickName);
 	UnitState.SetCountry(CharTemplate.DefaultAppearance.nmFlag);
