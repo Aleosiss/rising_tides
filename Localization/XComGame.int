@@ -46,8 +46,8 @@ LocPromotionPopupText="<Bullet/> Minimum of 1 Shield HP if overkill damage is de
 
 [RTPrecisionShot X2AbilityTemplate]
 LocFriendlyName="Precision Shot"
-LocLongDescription="A carefully aimed shot, suffering decreased aim but increased critical chance and critical damage."
-LocHelpText="Shoot with decreased aim, but increased critical chance and critical damage."
+LocLongDescription="A carefully aimed shot, suffering decreased chance to hit, but increased critical chance and critical damage."
+LocHelpText="Shoot with decreased chance to hit, but increased critical chance and critical damage."
 LocFlyOverText="Precision Shot"
 LocPromotionPopupText="<Bullet> <Ability:SelfCooldown/> turn cooldown.<br/><Bullet/> Shoot a precision shot, suffering from decreased chance to hit, but increased critical chance and critical damage.<br/>"
 

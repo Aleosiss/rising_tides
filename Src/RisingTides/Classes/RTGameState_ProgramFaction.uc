@@ -173,6 +173,8 @@ function CreateRTSquads(XComGameState StartState) {
 			one.initOperatives.AddItem(Ghost.StateObjectRef);
 		}
 	}
+
+	Deployed = one;
 }
 
 // UpdateNumDeaths(name CharacterTemplateName, StateObjectReference UnitRef)

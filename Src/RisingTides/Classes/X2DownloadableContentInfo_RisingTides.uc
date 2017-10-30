@@ -67,7 +67,7 @@ simulated static function ModifyInitialFactionState(XComGameState StartState) {
 	Faction.ModifyGoldenPathActions(StartState);
 }
 
-exec function PrintResistanceFactionNames() {
+exec function RT_PrintResistanceFactionNames() {
 	local XComGameStateHistory 					History;
 	local XComGameState_ResistanceFaction 		Faction;
 	local object 								obj;
@@ -86,7 +86,7 @@ exec function PrintResistanceFactionNames() {
 	}
 }
 
-exec function PrintProgramFactionInformation() {
+exec function RT_PrintProgramFactionInformation() {
 	local XComGameStateHistory 				History;
 	local RTGameState_ProgramFaction 		Faction;
 
@@ -154,6 +154,51 @@ exec function RT_ActivateOneSmallFavor() {
 	ProgramState = class'RTHelpers'.static.GetNewProgramState(NewGameState);
 	ProgramState.bOneSmallFavorAvailable = true;
 	`GAMERULES.SubmitGameState(NewGameState);
+}
+
+exec function RT_DebugActiveOperatives() {
+	local RTGameState_ProgramFaction		ProgramState;
+	local StateObjectReference				IteratorRef;
+	local XComGameStateHistory				History;
+	local XComGameState_Unit				IteratorUnitState;
+
+	ProgramState = class'RTHelpers'.static.GetProgramState();
+	History = `XCOMHISTORY;
+	
+	class'RTHelpers'.static.RTLog("Printing Active Operatives...");
+	foreach ProgramState.Active(IteratorRef) {
+		IteratorUnitState = XComGameState_Unit(History.GetGameStateForObjectID(IteratorRef.ObjectID));
+		class'RTHelpers'.static.RTLog("" $ IteratorUnitState.GetSoldierClassTemplateName());
+	}
+
+}
+
+exec function RT_AddSPECTREToXCOMCrew() {
+	local XComGameStateHistory History;
+	local XComGameState NewGameState;
+	local XComGameState_HeadquartersXCom XComHQ;
+	local XComGameState_Unit UnitState;
+	local bool bFoundAtLeastOne;
+
+	History = `XCOMHISTORY;
+	bFoundAtLeastOne = false;
+	foreach History.IterateByClassType(class'XComGameState_Unit', UnitState)
+	{
+		if(UnitState.GetMyTemplateName() == 'RTGhostMarksman' || UnitState.GetMyTemplateName() == 'RTGhostBerserker' || UnitState.GetMyTemplateName() == 'RTGhostGatherer')
+		{
+			`LOG("Rising Tides: Found a " $ UnitState.GetMyTemplateName() $ ", adding them to XCOM!");
+			NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("Rising Tides: CHEAT: AddSPECTREToCrew");
+			UnitState = XComGameState_Unit(NewGameState.ModifyStateObject(class'XComGameState_Unit', UnitState.ObjectID));
+			XComHQ = XComGameState_HeadquartersXCom(History.GetSingleGameStateObjectForClass(class'XComGameState_HeadquartersXCom'));
+			XComHQ = XComGameState_HeadquartersXCom(NewGameState.ModifyStateObject(class'XComGameState_HeadquartersXCom', XComHQ.ObjectID));
+			XComHQ.AddToCrew(NewGameState, UnitState);
+			`XCOMGAME.GameRuleset.SubmitGameState(NewGameState);
+			bFoundAtLeastOne = true;
+		}
+	}
+
+	if(!bFoundAtLeastOne)
+		`LOG("Rising Tides: Did not find any active operatives!");
 }
 
 exec function RT_DebugModVersion() {

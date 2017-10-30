@@ -239,6 +239,9 @@
     <Content Include="Src\RisingTides\Classes\RTAction_RemoveMITV.uc">
       <SubType>Content</SubType>
     </Content>
+    <Content Include="Src\RisingTides\Classes\RTCharacter_DefaultCharacters.uc">
+      <SubType>Content</SubType>
+    </Content>
     <Content Include="Src\RisingTides\Classes\RTConditionBuilder.uc">
       <SubType>Content</SubType>
     </Content>

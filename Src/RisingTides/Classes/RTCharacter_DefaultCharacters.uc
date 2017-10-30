@@ -1,4 +1,4 @@
-class RTCharacter_DefaultCharacters extends X2Character config(RisingTides);
+class RTCharacter_DefaultCharacters extends X2Character_DefaultCharacters config(RisingTides);
 
 static function array<X2DataTemplate> CreateTemplates()
 {
@@ -45,7 +45,7 @@ static function X2CharacterTemplate CreateWhisperTemplate()
     //CharTemplate.DefaultAppearance.nmTorso_Underlay = 'CnvUnderlay_Std_Torsos_A_M';
     //CharTemplate.DefaultAppearance.nmWeaponPattern = 'Pat_Nothing';
     //CharTemplate.DefaultAppearance.nmVoice = 'CentralVoice1_Localized';
-
+	class'RTHelpers'.static.RTLog("Adding Whisper's character template!");
 	return CharTemplate;
 }
 
@@ -84,7 +84,7 @@ static function X2CharacterTemplate CreateQueenTemplate()
     //CharTemplate.DefaultAppearance.nmTorso_Underlay = 'CnvUnderlay_Std_Torsos_A_M';
     //CharTemplate.DefaultAppearance.nmWeaponPattern = 'Pat_Nothing';
     //CharTemplate.DefaultAppearance.nmVoice = 'CentralVoice1_Localized';
-
+	class'RTHelpers'.static.RTLog("Adding Queen's character template!");
 	return CharTemplate;
 }
 
@@ -123,6 +123,6 @@ static function X2CharacterTemplate CreateNovaTemplate()
     //CharTemplate.DefaultAppearance.nmTorso_Underlay = 'CnvUnderlay_Std_Torsos_A_M';
     //CharTemplate.DefaultAppearance.nmWeaponPattern = 'Pat_Nothing';
     //CharTemplate.DefaultAppearance.nmVoice = 'CentralVoice1_Localized';
-
+	class'RTHelpers'.static.RTLog("Adding Nova's character template!");
 	return CharTemplate;
 }
