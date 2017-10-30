@@ -129,7 +129,7 @@ function CreateRTOperative(RTGhostOperative IteratorGhostTemplate, XComGameState
 	CharTemplate = CharMgr.FindCharacterTemplate(IteratorGhostTemplate.CharacterTemplateName);
 
 	UnitState = CharTemplate.CreateInstanceFromTemplate(StartState);
-	class'RTHelpers'.RTLog( "Creating Ghost Operative " $ UnitState.GetFullName() $ 
+	class'RTHelpers'.static.RTLog( "Creating Ghost Operative " $ UnitState.GetFullName() $ 
 							", with ObjectID " $ UnitState.GetReference().ObjectID $
 							", and CharacterTemplateName " $ UnitState.GetMyTemplateName()
 						);

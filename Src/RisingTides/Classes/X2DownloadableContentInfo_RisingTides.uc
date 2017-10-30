@@ -168,7 +168,7 @@ exec function RT_DebugActiveOperatives() {
 	class'RTHelpers'.static.RTLog("Printing Active Operatives...");
 	foreach ProgramState.Active(IteratorRef) {
 		UnitState = XComGameState_Unit(History.GetGameStateForObjectID(IteratorRef.ObjectID));
-		class'RTHelpers'.RTLog( "Found Ghost Operative " $ UnitState.GetFullName() $ 
+		class'RTHelpers'.static.RTLog( "Found Ghost Operative " $ UnitState.GetFullName() $ 
 								", with ObjectID " $ UnitState.GetReference().ObjectID $
 								", and CharacterTemplateName " $ UnitState.GetMyTemplateName()
 							);
