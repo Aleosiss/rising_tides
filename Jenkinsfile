@@ -1,5 +1,8 @@
-node('master') {
+properties properties: [
+  disableConcurrentBuilds()
+]
 
+node('master') {
   stage('Code Checkout'){
     checkout([$class: 'GitSCM',
     branches: [[name: '*/nightly']],
