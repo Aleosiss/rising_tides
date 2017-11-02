@@ -104,7 +104,7 @@ exec function RT_PrintProgramFactionInformation() {
 	class'RTHelpers'.static.RTLog("Printing Misc Information for the Program...");
 	class'RTHelpers'.static.PrintMiscInfoForFaction(Faction);
 
-	class'RTHelpers'.static.RTLog("Printing Riven Chosen for the Program...");
+	class'RTHelpers'.static.RTLog("Printing Rival Chosen for the Program...");
 	class'RTHelpers'.static.RTLog("" $ XComGameState_AdventChosen(History.GetGameStateForObjectID(Faction.RivalChosen.ObjectID)).GetChosenClassName());
 }
 
