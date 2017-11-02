@@ -20,44 +20,15 @@ static function array<X2DataTemplate> CreateTemplates()
 
 static function ModifySitrepTemplate(out X2SitRepTemplate Template)
 {
-	switch (Template.DataName)
-	{
-	case 'LowProfile':
-		ModifyLowProfileSitrepTemplate(Template);
-		break;
-	case 'StealthInsertion':
-		ModifyStealthInsertionSitrepTemplate(Template);
-		break;
-	default:
-		break;
-	}
+	DisableStrategyLayerSITREPGeneration(Template);
 }
 
-static function ModifyLowProfileSitrepTemplate(out X2SitRepTemplate Template)
+static function DisableStrategyLayerSITREPGeneration(out X2SitRepTemplate Template)
 {
-	Template.StrategyReqs.SpecialRequirementsFn = IsLowProfileSitrepAvailable;
+	Template.StrategyReqs.SpecialRequirementsFn = DisableStrategy;
 }
 
-static function bool IsLowProfileSitrepAvailable()
+static function bool DisableStrategy()
 {
-	local XComGameState_HeadquartersXCom XComHQ;
-	local array<XComGameState_Unit> AvailableLowProfileSoldiers;
-
-	XComHQ = XComGameState_HeadquartersXCom(`XCOMHISTORY.GetSingleGameStateObjectForClass(class'XComGameState_HeadquartersXCom'));
-	AvailableLowProfileSoldiers = XComHQ.GetDeployableSoldiers(false, false, -1, 3);
-
-	return (AvailableLowProfileSoldiers.Length > 0);
-}
-
-static function ModifyStealthInsertionSitrepTemplate(out X2SitRepTemplate Template)
-{
-	Template.StrategyReqs.SpecialRequirementsFn = IsStealthInsertionSitrepAvailable;
-}
-
-static function bool IsStealthInsertionSitrepAvailable()
-{
-	local XComGameState_HeadquartersAlien AlienHQ;
-
-	AlienHQ = XComGameState_HeadquartersAlien(`XCOMHISTORY.GetSingleGameStateObjectForClass(class'XComGameState_HeadquartersAlien'));
-	return !AlienHQ.IsDarkEventActive('DarkEvent_HighAlert');
+	return false;
 }

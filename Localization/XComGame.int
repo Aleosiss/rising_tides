@@ -899,3 +899,7 @@ DisplayName="Scanning Bonus: Psionic Expertise"
 SummaryText="Resistance scientists assist with operating the psi-lab while the Avenger is scanning at this location, decreasing the training time of soldiers inside it.\n\nWARNING: Purchasing this ability will overwrite the current Resistance HQ scanning bonus. The Scanning Bonus may only be modified once per month."
 ScanLabel="TRAIN PSI FASTER"
 ScanTooltip="Scanning at this site speeds up the rate at which we can train our psi-operatives."
+
+[RTOneSmallFavor_SPECTRE X2SitRepTemplate]
+FriendlyName="One Small Favor"
+Description="The Program has lent one of their squads to handle this operation."

@@ -50,9 +50,9 @@ struct RTGhostOperative
 	var StateObjectReference 		StateObjectRef;
 
 	var name						ExternalID;
-	var localized string			FirstName;
-	var localized string			NickName;
-	var localized string			LastName;
+	var string						FirstName;
+	var string						NickName;
+	var string						LastName;
 	var localized string			preBackground;
 	var localized string			finBackGround;
 };
@@ -129,10 +129,7 @@ function CreateRTOperative(RTGhostOperative IteratorGhostTemplate, XComGameState
 	CharTemplate = CharMgr.FindCharacterTemplate(IteratorGhostTemplate.CharacterTemplateName);
 
 	UnitState = CharTemplate.CreateInstanceFromTemplate(StartState);
-	class'RTHelpers'.static.RTLog( "Creating Ghost Operative " $ UnitState.GetFullName() $ 
-							", with ObjectID " $ UnitState.GetReference().ObjectID $
-							", and CharacterTemplateName " $ UnitState.GetMyTemplateName()
-						);
+	
 
 	UnitState.SetCharacterName(IteratorGhostTemplate.FirstName, IteratorGhostTemplate.LastName, IteratorGhostTemplate.NickName);
 	UnitState.SetCountry(CharTemplate.DefaultAppearance.nmFlag);
@@ -155,6 +152,11 @@ function CreateRTOperative(RTGhostOperative IteratorGhostTemplate, XComGameState
 
 	Active.AddItem(UnitState.GetReference());
 	Master.AddItem(Ghost);
+
+	class'RTHelpers'.static.RTLog( "Creating Ghost Operative " $ UnitState.GetFullName() $ 
+							", with ObjectID " $ UnitState.GetReference().ObjectID $
+							", and CharacterTemplateName " $ UnitState.GetMyTemplateName()
+						);
 }
 
 
@@ -435,9 +437,6 @@ simulated function bool CashOneSmallFavor(XComGameState NewGameState, XComGameSt
 	local StateObjectReference GhostRef, EmptyRef;
 	local name GhostTemplateName;
 
-	if(!bOneSmallFavorAvailable)
-		return false;
-	
 	if(Deployed == none) {
 		RotateRandomSquadToDeploy();
 	}
@@ -450,6 +449,7 @@ simulated function bool CashOneSmallFavor(XComGameState NewGameState, XComGameSt
 	MissionSite = XComGameState_MissionSite(NewGameState.ModifyStateObject(MissionSite.class, MissionSite.ObjectID));
 	foreach Deployed.Operatives(GhostRef) {
 		GhostTemplateName = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(GhostRef.ObjectID)).GetMyTemplateName();
+		class'RTHelpers'.static.RTLog("Adding a " $ GhostTemplateName $ " to the SpecialSoldiers for Mission " $ MissionSite.GeneratedMission.Mission.MissionName);
 		MissionSite.GeneratedMission.Mission.SpecialSoldiers.AddItem(GhostTemplateName);
 	}
 

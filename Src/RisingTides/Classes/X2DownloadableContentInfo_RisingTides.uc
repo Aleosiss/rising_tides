@@ -241,6 +241,66 @@ exec function RT_ForceLoadPerkOnToUnit(name AbilityName) {
 	class'UIDebugStateMachines'.static.TryForceAppendAbilityPerks(AbilityName);
 }
 
+exec function RT_PrintAppearence(int ObjectID) {
+	local XComGameState_Unit UnitState;
+	local TAppearance a;
+
+	UnitState = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(ObjectID));
+	if(UnitState == none) {
+		class'RTHelpers'.static.RTLog("UnitState was null for PrintAppearance!");
+		return;
+	}	
+
+	a = UnitState.kAppearance;
+	`LOG(a.nmHead);
+	`LOG(a.iGender);
+	`LOG(a.iRace);
+	`LOG(a.nmHaircut);
+	`LOG(a.iHairColor);
+	`LOG(a.iFacialHair);
+	`LOG(a.nmBeard);
+	`LOG(a.iSkinColor);
+	`LOG(a.iEyeColor);
+	`LOG(a.nmFlag);
+	`LOG(a.iVoice);
+	`LOG(a.iAttitude);
+	`LOG(a.iArmorDeco);
+	`LOG(a.iArmorTint);
+	`LOG(a.iArmorTintSecondary);
+	`LOG(a.iWeaponTint);
+	`LOG(a.iTattooTint);
+	`LOG(a.nmWeaponPattern);
+	`LOG(a.nmPawn);
+	`LOG(a.nmTorso);
+	`LOG(a.nmArms);
+	`LOG(a.nmLegs);
+	`LOG(a.nmHelmet);
+	`LOG(a.nmEye);
+	`LOG(a.nmTeeth);
+	`LOG(a.nmFacePropLower);
+	`LOG(a.nmFacePropUpper);
+	`LOG(a.nmPatterns);
+	`LOG(a.nmVoice);
+	`LOG(a.nmLanguage);
+	`LOG(a.nmTattoo_LeftArm);
+	`LOG(a.nmTattoo_RightArm);
+	`LOG(a.nmScars);
+	`LOG(a.nmTorso_Underlay);
+	`LOG(a.nmArms_Underlay);
+	`LOG(a.nmLegs_Underlay);
+	`LOG(a.nmFacePaint);
+	`LOG(a.nmLeftArm);
+	`LOG(a.nmRightArm);
+	`LOG(a.nmLeftArmDeco);
+	`LOG(a.nmRightArmDeco);
+	`LOG(a.nmLeftForearm);
+	`LOG(a.nmRightForearm);
+	`LOG(a.nmThighs);
+	`LOG(a.nmShins);
+	`LOG(a.nmTorsoDeco);
+	`LOG(a.bGhostPawn);
+}
+
 static function bool DebuggingEnabled() {
 	return !default.bDebugOutputDisabled;
 }
