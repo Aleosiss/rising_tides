@@ -64,35 +64,35 @@ static function X2CharacterTemplate CreateQueenTemplate()
 	CharTemplate.DefaultLoadout = 'RT_Berserker';
     CharTemplate.bIsPsionic = true;
     
-	CharTemplate.bForceAppearance = true;
+	CharTemplate.bHasFullDefaultAppearance = true;
 	CharTemplate.bAppearanceDefinesPawn = true;
 
-	CharTemplate.ForceAppearance.nmPawn = 'XCom_Soldier_F';
-	CharTemplate.ForceAppearance.nmHead = 'Shen_Head';
-	CharTemplate.ForceAppearance.nmHaircut = 'Shen_Hair';
-	CharTemplate.ForceAppearance.nmBeard = '';
-	CharTemplate.ForceAppearance.iArmorTint = 97;
-	CharTemplate.ForceAppearance.iArmorTintSecondary = 3;
-	CharTemplate.ForceAppearance.iGender = 2;
-	CharTemplate.ForceAppearance.iAttitude = 3;
-	CharTemplate.ForceAppearance.nmArms = 'Shen_Arms';
-	CharTemplate.ForceAppearance.nmArms_Underlay = 'CnvMed_Underlay_A_F';
-	CharTemplate.ForceAppearance.nmEye = 'DefaultEyes_2';
-	CharTemplate.ForceAppearance.nmFacePropLower = 'Prop_FaceLower_Blank';
-	CharTemplate.ForceAppearance.nmFacePropUpper = 'Prop_FaceUpper_Blank';
-	CharTemplate.ForceAppearance.nmFlag = 'Country_USA'; // Taiwanese-American -acheng
-	CharTemplate.ForceAppearance.nmHelmet = 'Helmet_0_NoHelmet_F';
-	CharTemplate.ForceAppearance.nmLegs = 'CnvMed_Std_A_F';
-	CharTemplate.ForceAppearance.nmLegs_Underlay = 'CnvUnderlay_Std_A_F';
-	CharTemplate.ForceAppearance.nmPatterns = 'Pat_Nothing';
-	CharTemplate.ForceAppearance.nmTattoo_LeftArm = 'Tattoo_Arms_BLANK';
-	CharTemplate.ForceAppearance.nmTattoo_RightArm = 'DLC_3_Tattoo_Arms_01';
-	CharTemplate.ForceAppearance.nmTeeth = 'DefaultTeeth';
-	CharTemplate.ForceAppearance.nmTorso = 'CnvMed_Std_A_F';
-	CharTemplate.ForceAppearance.nmTorso_Underlay = 'CnvUnderlay_Std_A_F';
-	CharTemplate.ForceAppearance.nmWeaponPattern = 'Pat_Nothing';
-	CharTemplate.ForceAppearance.iWeaponTint = 3;
-	CharTemplate.ForceAppearance.nmVoice = 'ShenVoice1_Localized';
+	CharTemplate.DefaultAppearance.nmPawn = 'XCom_Soldier_F';
+	CharTemplate.DefaultAppearance.nmHead = 'Shen_Head';
+	CharTemplate.DefaultAppearance.nmHaircut = 'Shen_Hair';
+	CharTemplate.DefaultAppearance.nmBeard = '';
+	CharTemplate.DefaultAppearance.iArmorTint = 97;
+	CharTemplate.DefaultAppearance.iArmorTintSecondary = 3;
+	CharTemplate.DefaultAppearance.iGender = 2;
+	CharTemplate.DefaultAppearance.iAttitude = 3;
+	CharTemplate.DefaultAppearance.nmArms = 'Shen_Arms';
+	CharTemplate.DefaultAppearance.nmArms_Underlay = 'CnvMed_Underlay_A_F';
+	CharTemplate.DefaultAppearance.nmEye = 'DefaultEyes_2';
+	CharTemplate.DefaultAppearance.nmFacePropLower = 'Prop_FaceLower_Blank';
+	CharTemplate.DefaultAppearance.nmFacePropUpper = 'Prop_FaceUpper_Blank';
+	CharTemplate.DefaultAppearance.nmFlag = 'Country_USA'; // Taiwanese-American -acheng
+	CharTemplate.DefaultAppearance.nmHelmet = 'Helmet_0_NoHelmet_F';
+	CharTemplate.DefaultAppearance.nmLegs = 'CnvMed_Std_A_F';
+	CharTemplate.DefaultAppearance.nmLegs_Underlay = 'CnvUnderlay_Std_A_F';
+	CharTemplate.DefaultAppearance.nmPatterns = 'Pat_Nothing';
+	CharTemplate.DefaultAppearance.nmTattoo_LeftArm = 'Tattoo_Arms_BLANK';
+	CharTemplate.DefaultAppearance.nmTattoo_RightArm = 'DLC_3_Tattoo_Arms_01';
+	CharTemplate.DefaultAppearance.nmTeeth = 'DefaultTeeth';
+	CharTemplate.DefaultAppearance.nmTorso = 'CnvMed_Std_A_F';
+	CharTemplate.DefaultAppearance.nmTorso_Underlay = 'CnvUnderlay_Std_A_F';
+	CharTemplate.DefaultAppearance.nmWeaponPattern = 'Pat_Nothing';
+	CharTemplate.DefaultAppearance.iWeaponTint = 3;
+	CharTemplate.DefaultAppearance.nmVoice = 'ShenVoice1_Localized';
 
 	class'RTHelpers'.static.RTLog("Adding Queen's character template!");
 	return CharTemplate;
@@ -108,35 +108,35 @@ static function X2CharacterTemplate CreateNovaTemplate()
 	CharTemplate.DefaultLoadout = 'RT_Gatherer';
     CharTemplate.bIsPsionic = true;
     
-	CharTemplate.bForceAppearance = true;
+	CharTemplate.bHasFullDefaultAppearance = true;
 	CharTemplate.bAppearanceDefinesPawn = true;
 
-	CharTemplate.ForceAppearance.nmPawn = 'XCom_Soldier_F';
-	CharTemplate.ForceAppearance.nmHead = 'Shen_Head';
-	CharTemplate.ForceAppearance.nmHaircut = 'Shen_Hair';
-	CharTemplate.ForceAppearance.nmBeard = '';
-	CharTemplate.ForceAppearance.iArmorTint = 97;
-	CharTemplate.ForceAppearance.iArmorTintSecondary = 3;
-	CharTemplate.ForceAppearance.iGender = 2;
-	CharTemplate.ForceAppearance.iAttitude = 3;
-	CharTemplate.ForceAppearance.nmArms = 'Shen_Arms';
-	CharTemplate.ForceAppearance.nmArms_Underlay = 'CnvMed_Underlay_A_F';
-	CharTemplate.ForceAppearance.nmEye = 'DefaultEyes_2';
-	CharTemplate.ForceAppearance.nmFacePropLower = 'Prop_FaceLower_Blank';
-	CharTemplate.ForceAppearance.nmFacePropUpper = 'Prop_FaceUpper_Blank';
-	CharTemplate.ForceAppearance.nmFlag = 'Country_USA'; // Taiwanese-American -acheng
-	CharTemplate.ForceAppearance.nmHelmet = 'Helmet_0_NoHelmet_F';
-	CharTemplate.ForceAppearance.nmLegs = 'CnvMed_Std_A_F';
-	CharTemplate.ForceAppearance.nmLegs_Underlay = 'CnvUnderlay_Std_A_F';
-	CharTemplate.ForceAppearance.nmPatterns = 'Pat_Nothing';
-	CharTemplate.ForceAppearance.nmTattoo_LeftArm = 'Tattoo_Arms_BLANK';
-	CharTemplate.ForceAppearance.nmTattoo_RightArm = 'DLC_3_Tattoo_Arms_01';
-	CharTemplate.ForceAppearance.nmTeeth = 'DefaultTeeth';
-	CharTemplate.ForceAppearance.nmTorso = 'CnvMed_Std_A_F';
-	CharTemplate.ForceAppearance.nmTorso_Underlay = 'CnvUnderlay_Std_A_F';
-	CharTemplate.ForceAppearance.nmWeaponPattern = 'Pat_Nothing';
-	CharTemplate.ForceAppearance.iWeaponTint = 3;
-	CharTemplate.ForceAppearance.nmVoice = 'ShenVoice1_Localized';
+	CharTemplate.DefaultAppearance.nmPawn = 'XCom_Soldier_F';
+	CharTemplate.DefaultAppearance.nmHead = 'Shen_Head';
+	CharTemplate.DefaultAppearance.nmHaircut = 'Shen_Hair';
+	CharTemplate.DefaultAppearance.nmBeard = '';
+	CharTemplate.DefaultAppearance.iArmorTint = 97;
+	CharTemplate.DefaultAppearance.iArmorTintSecondary = 3;
+	CharTemplate.DefaultAppearance.iGender = 2;
+	CharTemplate.DefaultAppearance.iAttitude = 3;
+	CharTemplate.DefaultAppearance.nmArms = 'Shen_Arms';
+	CharTemplate.DefaultAppearance.nmArms_Underlay = 'CnvMed_Underlay_A_F';
+	CharTemplate.DefaultAppearance.nmEye = 'DefaultEyes_2';
+	CharTemplate.DefaultAppearance.nmFacePropLower = 'Prop_FaceLower_Blank';
+	CharTemplate.DefaultAppearance.nmFacePropUpper = 'Prop_FaceUpper_Blank';
+	CharTemplate.DefaultAppearance.nmFlag = 'Country_USA'; // Taiwanese-American -acheng
+	CharTemplate.DefaultAppearance.nmHelmet = 'Helmet_0_NoHelmet_F';
+	CharTemplate.DefaultAppearance.nmLegs = 'CnvMed_Std_A_F';
+	CharTemplate.DefaultAppearance.nmLegs_Underlay = 'CnvUnderlay_Std_A_F';
+	CharTemplate.DefaultAppearance.nmPatterns = 'Pat_Nothing';
+	CharTemplate.DefaultAppearance.nmTattoo_LeftArm = 'Tattoo_Arms_BLANK';
+	CharTemplate.DefaultAppearance.nmTattoo_RightArm = 'DLC_3_Tattoo_Arms_01';
+	CharTemplate.DefaultAppearance.nmTeeth = 'DefaultTeeth';
+	CharTemplate.DefaultAppearance.nmTorso = 'CnvMed_Std_A_F';
+	CharTemplate.DefaultAppearance.nmTorso_Underlay = 'CnvUnderlay_Std_A_F';
+	CharTemplate.DefaultAppearance.nmWeaponPattern = 'Pat_Nothing';
+	CharTemplate.DefaultAppearance.iWeaponTint = 3;
+	CharTemplate.DefaultAppearance.nmVoice = 'ShenVoice1_Localized';
 
 	class'RTHelpers'.static.RTLog("Adding Nova's character template!");
 	return CharTemplate;
