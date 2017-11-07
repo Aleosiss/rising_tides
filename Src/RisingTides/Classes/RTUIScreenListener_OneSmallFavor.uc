@@ -78,7 +78,7 @@ simulated function bool AddOneSmallFavorSitrep(UIMission MissionScreen) {
 
 	MissionState.TacticalGameplayTags.AddItem('RTOneSmallFavor');
 	Program.CashOneSmallFavor(NewGameState, MissionState);
-	AddOneSmallFavorSitrepEffectToGeneratedMission(Program, MissionState);
+	AddOneSmallFavorSitrepToGeneratedMission(Program, MissionState);
 
 	ModifyMissionData(XComHQ, MissionState);
 
@@ -97,7 +97,7 @@ simulated function bool CheckIsInvalidMission(X2MissionSourceTemplate Template) 
 	return class'RTGameState_ProgramFaction'.default.InvalidMissionNames.Find(Template.DataName) != INDEX_NONE;
 }
 
-simulated function AddOneSmallFavorSitrepEffectToGeneratedMission(RTGameState_ProgramFaction Program, XComGameState_MissionSite MissionState) {
+simulated function AddOneSmallFavorSitrepToGeneratedMission(RTGameState_ProgramFaction Program, XComGameState_MissionSite MissionState) {
 	MissionState.GeneratedMission.SitReps.AddItem(Program.Deployed.AssociatedSitRepTemplateName);
 }
 

@@ -452,6 +452,8 @@ simulated function bool CashOneSmallFavor(XComGameState NewGameState, XComGameSt
 		class'RTHelpers'.static.RTLog("Adding a " $ GhostTemplateName $ " to the SpecialSoldiers for Mission " $ MissionSite.GeneratedMission.Mission.MissionName);
 		MissionSite.GeneratedMission.Mission.SpecialSoldiers.AddItem(GhostTemplateName);
 	}
+	
+	MissionSite.GeneratedMission.Mission.MaxSoldiers = Deployed.Operatives.Length;
 
 	return true;
 }
