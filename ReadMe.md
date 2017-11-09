@@ -16,33 +16,40 @@ This would be a bare-bones content mod. I also have the following content in min
 >- New enemy units, possible returns from EW
 
 ###### Current TODOs:
-	- Get the Strategy Card interface working 
-		- build a new one probably
+	- Get One Small Favor Working
+		- squad size modifier
+		- button selector
 
 ###### Current Table:
 	- Berserker:
-		- nothing (Maybe allow Shadow Strike to target allies but do no damage)
+		- Shadow Strike: Idea: Target allies (no damage), implement by having a helper ability which activates subabilities based on selection
 		- GFX for Bloodlust
 		- SFX for Burst
-		- Purge: Add a remove debuffs effect. Additionally propagate this new effect across melded allies?
-		- Orpheus Warp: "…the hero of the broken moon. A pawn played by a negligent deity, a marionette maneuvered by an... epileptic..."
-				- Gain Stealth while preparing a massive psionic rift. On the following turn, the Stealth is broken and a rift is formed. Friendly units can use the rift to evac from the mission. The rift will persist for an additional two turns, or if this unit enters it.
+		- Purge: Idea: Add a remove debuffs effect. Additionally propagate this new effect across melded allies?
+		- Orpheus Warp: "…the hero of the shattered moon. A pawn played by a negligent deity, a marionette maneuvered by a epileptic..."
+				- Gain Stealth while preparing a massive psionic rift. On the following turn, the Stealth is broken and a rift is formed. Friendly units can use the rift to evac from the mission. The rift will end after two turns, or if caster's connection is broken.
 	- Marksman:
 		- Maybe rework time stop to only take place over 1 turn
-		- Shatter The Line: If this unit kills an enemy within X tiles, it triggers a flush effect on other enemies within X tiles. 2/3 turn cooldown. credits to /u/PostOfficeBuddy
+		- rework boring perks
 	- Gatherer:
-		- Redo Guardian Angel (?)
+		- Redo Guardian Angel (?, no one has told me if it actually works or not)
 		- Add Over the Shoulder exception for civilians that are actually faceless
 		- Extinction Event needs to somehow stop revive units from reviving
 		- Come up with a better solution for Over The Shoulder vs. concealed units	  
 	- General:
-		- Animations/Visuals
-		- Add x2/lw abilities to PsionicAbilityList
+		- none
+	- The Program:
+		- get new icon and faceplate
+		- create customizations for all ghosts
+		- figure out a way to either remove certain covert actions for the Program or simply template them as previously done
+	- Precogniscator
+		- this word sounded cool, so i will make it into a class
+		- wtf will it do?
 
 ###### Current Bugs:
 	- Time Stop damage calculation isn't visualized properly
 	- Time Stop damage calculation is fucked, use code from X2Effect_DLC_3AbsorptionField.uc to rewrite
-	- Make extend effect duration happen on move for Aura Effects as well, possibly by breaking its logic out into a separate method that is called in either place
-	- Psionic Storm only plays sound from one storm at a time, due to a base-game issue where a soundcue can only be played once per ObjectID
+	- Make extend effect duration happen on ObjectMoved for Aura Effects as well, possibly by breaking its logic out into a separate method that is called in either place
+	- Psionic Storm only plays sound from one storm at a time, due to a base-game issue where a looping soundcue can only be played once per ObjectID
 	- Networked OI does not work with CloseCombatSpecialistAttack or KillzoneShot. Unsure of exact cause, appears that CCS does not tick AbilityActivated
-	- Shadow Strike does not highlight the tiles it can activate to. Should be possible without highlander, but a pain in the ass, so low priority.
+	- Shadow Strike does not highlight the tiles it can activate to.
