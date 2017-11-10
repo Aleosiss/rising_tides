@@ -19,6 +19,7 @@ This would be a bare-bones content mod. I also have the following content in min
 	- Get One Small Favor Working
 		- squad size modifier
 		- button selector
+	- Fix SPoP bug (activates every other turn)
 
 ###### Current Table:
 	- Berserker:
@@ -26,7 +27,7 @@ This would be a bare-bones content mod. I also have the following content in min
 		- GFX for Bloodlust
 		- SFX for Burst
 		- Purge: Idea: Add a remove debuffs effect. Additionally propagate this new effect across melded allies?
-		- Orpheus Warp: "…the hero of the shattered moon. A pawn played by a negligent deity, a marionette maneuvered by a epileptic..."
+		- New Capstone Perk Idea: Orpheus Warp: "…the hero of the shattered moon. A pawn played by a negligent deity, a marionette maneuvered by a epileptic..."
 				- Gain Stealth while preparing a massive psionic rift. On the following turn, the Stealth is broken and a rift is formed. Friendly units can use the rift to evac from the mission. The rift will end after two turns, or if caster's connection is broken.
 	- Marksman:
 		- Maybe rework time stop to only take place over 1 turn
@@ -38,13 +39,15 @@ This would be a bare-bones content mod. I also have the following content in min
 		- Come up with a better solution for Over The Shoulder vs. concealed units	  
 	- General:
 		- none
-	- The Program:
+	- The Program (New Faction):
 		- get new icon and faceplate
 		- create customizations for all ghosts
 		- figure out a way to either remove certain covert actions for the Program or simply template them as previously done
-	- Precogniscator
+		- Covert Action: One Small Favor: once per month, send a Program squad on a mission in place of an XCOM squad. Can't send on Golden Path missions.
+		- Covert Action: Just Passing Through: the Program equivalent to Volunteer Army and ADVENT Defectors, although with a lower chance to activate and no activations on One Small Favor missions or Golden Path missions. 
+	- Precogniscator (New Class)
 		- this word sounded cool, so i will make it into a class
-		- wtf will it do?
+		- wtf will it do? not sure how "seeing the future" can work irl
 
 ###### Current Bugs:
 	- Time Stop damage calculation isn't visualized properly
