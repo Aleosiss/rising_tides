@@ -1,3 +1,6 @@
+// maybe I shouldn't put all of my debugging code in this class? :thinking:
+// credits to robojumper for everything until the line saying 'Aleosiss code to follow'
+
 class UIDebugStateMachines extends UIScreen;
  
 struct UnitTextMapping
@@ -69,6 +72,8 @@ simulated function UpdateFlagForUnit(XGUnit Unit)
     }
 }
 
+
+// Aleosiss code to follow
 // Trying to determine if my PerkContents are even managing to make it onto my units!
 simulated static function PrintOutPerkContentsForXComUnits() {
     local XGUnit Unit;
@@ -121,9 +126,6 @@ simulated static function TryForceCachePerkContent(name AbilityName) {
 simulated static function TryForceBuildPerkContentCache() {
 	`CONTENT.BuildPerkPackageCache();
 }
-
-
- 
  
 defaultproperties
 {
