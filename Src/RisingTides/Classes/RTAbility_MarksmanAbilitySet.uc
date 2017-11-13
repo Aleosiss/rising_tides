@@ -824,14 +824,8 @@ static function X2AbilityTemplate SixOClockEffect()
 	Template.eAbilityIconBehaviorHUD = EAbilityIconBehavior_NeverShow;
 	Template.Hostility = eHostility_Neutral;
 
-
 	Template.AbilityToHitCalc = default.DeadEye;
 	Template.AbilityTargetStyle = default.SelfTarget;
-
-	// Apply perk when we go on overwatch.
-	//Trigger = new class 'X2AbilityTrigger_OnAbilityActivated';
-	//Trigger.SetListenerData('RTOverwatch');
-	//Template.AbilityTriggers.AddItem(Trigger);
 
 	// Apply perk when we go on overwatch (ATTEMPT 2)
 	Trigger = new class'X2AbilityTrigger_EventListener';
@@ -845,7 +839,6 @@ static function X2AbilityTemplate SixOClockEffect()
 	// Multi target
 	MultiTarget = new class'X2AbilityMultiTarget_Radius';
 	MultiTarget.fTargetRadius = 500;
-
 	MultiTarget.bIgnoreBlockingCover = true;
 	Template.AbilityMultiTargetStyle = MultiTarget;
 
