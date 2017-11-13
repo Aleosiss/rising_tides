@@ -682,7 +682,7 @@ static function X2AbilityTemplate RTTheSixPathsOfPain() {
 	MultiActivationEffect.AbilityName = 'TriangulatedOverTheShoulder';
 	Template.AddMultiTargetEffect(MultiActivationEffect);
 
-	Template.AddTargetEffect(ActionPointEffect);				 // add this after activating OTS
+	//Template.AddTargetEffect(ActionPointEffect);				 // add this after activating OTS
 
 	Template.AdditionalAbilities.AddItem('RTTheSixPathsOfPainIcon');
 	Template.AdditionalAbilities.AddItem('RTTheSixPathsOfPainOverride');
@@ -691,7 +691,7 @@ static function X2AbilityTemplate RTTheSixPathsOfPain() {
 	EventTrigger = new class'X2AbilityTrigger_EventListener';
 	EventTrigger.ListenerData.Deferral = ELD_OnStateSubmitted;
 	EventTrigger.ListenerData.EventID = 'PlayerTurnBegun';
-	EventTrigger.ListenerData.Filter = eFilter_None;
+	EventTrigger.ListenerData.Filter = eFilter_Player;
 	EventTrigger.ListenerData.EventFn = class'XComGameState_Ability'.static.AbilityTriggerEventListener_Self;
 	Template.AbilityTriggers.AddItem(EventTrigger);
 
@@ -710,21 +710,8 @@ static function X2AbilityTemplate RTTheSixPathsOfPainOverride() {
 
 	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_NeverShow;
 	Template.IconImage = "img:///RisingTidesContentPackage.PerkIcons.UIPerk_overwatch_blaze_spop";
-
-	//// standard ghost abilities
-	//Template.AdditionalAbilities.AddItem('GhostPsiSuite');
-	//Template.AdditionalAbilities.AddItem('JoinMeld');
-	//Template.AdditionalAbilities.AddItem('LeaveMeld');
-	//Template.AdditionalAbilities.AddItem('PsiOverload');
-	//Template.AdditionalAbilities.AddItem('RTFeedback');
-	//Template.AdditionalAbilities.AddItem('RTMindControl');
-	//Template.AdditionalAbilities.AddItem('RTEnterStealth');
-
-	//// special meld abilities
-	//Template.AdditionalAbilities.AddItem('LIOverwatchShot');
-	//Template.AdditionalAbilities.AddItem('RTUnstableConduitBurst');
-	//Template.AdditionalAbilities.AddItem('PsionicActivate');
-	//Template.AdditionalAbilities.AddItem('RTHarbingerPsionicLance');
+	Template.AbilityCosts.Length = 0;
+	Template.AbilityCooldown = none;
 
 	Template.PostActivationEvents.AddItem(default.PostOverTheShoulderEventName);
 

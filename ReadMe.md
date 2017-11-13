@@ -17,7 +17,6 @@ This would be a bare-bones content mod. I also have the following content in min
 
 ###### Current TODOs:
 	- Get One Small Favor Working
-		- squad size modifier
 		- button selector
 
 ###### Current Table:
@@ -42,8 +41,8 @@ This would be a bare-bones content mod. I also have the following content in min
 		- get new icon and faceplate
 		- create customizations for all ghosts
 		- figure out a way to either remove certain covert actions for the Program or simply template them as previously done
-	- Precogniscator
-		- this word sounded cool, so i will make it into a class
+	- Prognosticator
+		- this word sounded cool, so I will make it into a class
 		- wtf will it do?
 
 ###### Current Bugs:
