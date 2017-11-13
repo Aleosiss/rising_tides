@@ -350,7 +350,7 @@ LocPromotionPopupText="<Bullet/> You can trigger the Slash ability by placing th
 LocFriendlyName="Siphon"
 LocLongDescription="This unit will siphon health from organic enemies based on the damage it deals to them."
 LocHelpText="This unit will siphon health from organic enemies based on the damage it deals to them."
-LocFlyOverText="Bump In The Night"
+LocFlyOverText="Siphon"
 LocPromotionPopupText="<Bullet/> This unit will siphon health from organic enemies based on the damage it deals to them. <br/><Bullet/> Minimum health gain per attack is 2. <br/>"
 
 [RTAcidicBlade X2AbilityTemplate]
@@ -530,15 +530,15 @@ LocPromotionPopupText="<Bullet/> Lunge forward, dealing damage to all enemies in
 [RTCloseCombatSpecialist X2AbilityTemplate]
 LocFriendlyName="Close Combat Specialist"
 LocFlyOverText="Close Combat Specialist"
-LocLongDescription="During enemy turns, fire a free reaction shot with your primary weapon at any visible enemy within four tiles who moves or fires."
-LocHelpText="During enemy turns, Fire a free reaction shot at any visible enemy within four tiles who moves or fires."
-LocPromotionPopupText="<Bullet/> Will not trigger if soldier is concealed.<br/><Bullet/> You may shoot at each enemy with this ability once per turn.<br/><Bullet/> Each shot requires 2 ammo.<br/>""
+LocLongDescription="Fire a free reaction shot with your primary weapon at any visible enemy within four tiles who moves or fires."
+LocHelpText="Fire a free reaction shot at any visible enemy within four tiles who moves or fires."
+LocPromotionPopupText="<Bullet/> Will not trigger if soldier is concealed.<br/><Bullet/> You may shoot at each enemy with this ability once per turn.<br/><Bullet/> Each shot requires 1 ammo.<br/>""
 
 [RTCloseCombatSpecialistAttack X2AbilityTemplate]
 LocFriendlyName="Close Combat Specialist"
 LocFlyOverText="Close Combat Specialist"
-LocLongDescription="During enemy turns, fire a free reaction shot with your primary weapon at any visible enemy within four tiles who moves or fires."
-LocHelpText="During enemy turns, Fire a free reaction shot at any visible enemy within four tiles who moves or fires."
+LocLongDescription="Fire a free reaction shot with your primary weapon at any visible enemy within four tiles who moves or fires."
+LocHelpText="Fire a free reaction shot at any visible enemy within four tiles who moves or fires."
 LocPromotionPopupText="<Bullet/> Will not trigger if soldier is concealed.<br/><Bullet/> You may shoot at each enemy with this ability once per turn.<br/><Bullet/> Each shot requires 2 ammo.<br/>""
 
 
