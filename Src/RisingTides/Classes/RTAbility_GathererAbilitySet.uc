@@ -629,7 +629,8 @@ static function X2AbilityTemplate RTTheSixPathsOfPain() {
 	local X2Condition_UnitEffectsWithAbilitySource SourceMeldCondition;
 	local X2Condition_UnitEffects FeedbackCondition;
 
-	`CREATE_X2TEMPLATE(class'RTAbilityTemplate', Template, 'RTTheSixPathsOfPain');
+	//`CREATE_X2TEMPLATE(class'RTAbilityTemplate', Template, 'RTTheSixPathsOfPain');
+	`CREATE_X2ABILITY_TEMPLATE(Template, 'RTTheSixPathsOfPain');
 	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_NeverShow;
 	Template.Hostility = eHostility_Neutral;
 	Template.IconImage = "img:///RisingTidesContentPackage.PerkIcons.UIPerk_overwatch_blaze_spop";
