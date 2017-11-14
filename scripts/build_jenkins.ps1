@@ -6,26 +6,8 @@ Param(
     [bool]$forceFullBuild = $false # force the script to rebuild the base game's scripts, even if they're already built
 )
 
-$ErrorActionPreference = "Stop"
-
 function WriteModMetadata([string]$mod, [string]$sdkPath, [int]$publishedId, [string]$title, [string]$description) {
     Set-Content "$sdkPath/XComGame/Mods/$mod/$mod.XComMod" "[mod]`npublishedFileId=$publishedId`nTitle=$title`nDescription=$description`nRequiresXPACK=true"
-}
-
-function CheckLastExitCode {
-    param ([int[]]$SuccessCodes = @(0), [scriptblock]$CleanupScript=$null)
-
-    if ($SuccessCodes -notcontains $LastExitCode) {
-        if ($CleanupScript) {
-            "Executing cleanup script: $CleanupScript"
-            &$CleanupScript
-        }
-        $msg = @"
-EXE RETURNED EXIT CODE $LastExitCode
-CALLSTACK:$(Get-PSCallStack | Out-String)
-"@
-        throw $msg
-    }
 }
 
 function StageDirectory ([string]$directoryName, [string]$srcDirectory, [string]$targetDirectory) {
@@ -37,6 +19,12 @@ function StageDirectory ([string]$directoryName, [string]$srcDirectory, [string]
     }
     else {
         Write-Host "Mod doesn't have any $directoryName."
+    }
+}
+
+function CheckErrorCode([string] $message) {
+    if ($LASTEXITCODE -ne 0) {
+        throw $message;
     }
 }
 
@@ -98,27 +86,27 @@ else {
     if (Test-Path "$sdkPath\XComGame\Script\$modNameCanonical.u") {
         Remove-Item "$sdkPath\XComGame\Script\$modNameCanonical.u"
     }
-
+    
     Write-Host "Cleaned."
 }
 
 # build the base game scripts
 Write-Host "Compiling base game scripts..."
 & "$sdkPath/binaries/Win64/XComGame.com" make -nopause -unattended
-CheckLastExitCode
 Write-Host "Compiled."
+CheckErrorCode "Failed to compile the base game scripts. This probably isn't a problem with your mod. Have you been monkeying around with SrcOrig, perchance?"
 
 # build the mod's scripts
 Write-Host "Compiling mod scripts..."
 &"$sdkPath/binaries/Win64/XComGame.com" make -nopause -mods $modNameCanonical "$stagingPath"
-CheckLastExitCode
+CheckErrorCode "Failed to compile mod scripts."
 Write-Host "Compiled."
 
 # build the mod's shader cache
 if (Test-Path -Path "$stagingPath/Content/*" -Include *.upk, *.umap) {
     Write-Host "Precompiling mod shaders..."
     &"$sdkPath/binaries/Win64/XComGame.com" precompileshaders -nopause platform=pc_sm4 DLC=$modNameCanonical
-    CheckLastExitCode
+    CheckErrorCode "Failed to precompile mod shaders."
     Write-Host "Precompiled."
 }
 else {
@@ -131,8 +119,12 @@ Copy-Item "$sdkPath/XComGame/Script/$modNameCanonical.u" "$stagingPath/Script" -
 Write-Host "Copied."
 
 # copy all staged files to the actual game's mods folder
+$productionPath = "$gamePath/XCom2-WarOfTheChosen/XComGame/Mods/"
 Write-Host "Copying all staging files to production..."
-Copy-Item $stagingPath "$gamePath/XCom2-WarOfTheChosen/XComGame/Mods/" -Force -Recurse -WarningAction SilentlyContinue
+if (-Not (Test-Path $productionPath)) {
+    New-Item $productionPath -ItemType Directory
+}
+Copy-Item $stagingPath $productionPath -Force -Recurse -WarningAction SilentlyContinue
 Write-Host "Copied."
 
 # we made it!
