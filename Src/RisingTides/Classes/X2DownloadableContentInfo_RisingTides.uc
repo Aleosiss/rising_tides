@@ -204,6 +204,19 @@ exec function RT_AddSPECTREToXCOMCrew() {
 		`LOG("Rising Tides: Did not find any active operatives!");
 }
 
+exec function RT_TriggerEvent(name EventID) {
+	local XComGameState NewGameState;
+
+	NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("Rising Tides: RT_TriggerEvent" $ EventID);
+
+	`XEVENTMGR.TriggerEvent(EventID, none, none, NewGameState);
+
+	if (NewGameState.GetNumGameStateObjects() > 0) {
+		`XCOMGAME.GameRuleset.SubmitGameState(NewGameState);
+	} else
+		`XCOMHISTORY.CleanupPendingGameState(NewGameState);
+}
+
 exec function RT_DebugModVersion() {
 	local int ModVersion;
 

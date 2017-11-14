@@ -629,9 +629,8 @@ static function X2AbilityTemplate RTTheSixPathsOfPain() {
 	local X2Condition_UnitEffectsWithAbilitySource SourceMeldCondition;
 	local X2Condition_UnitEffects FeedbackCondition;
 
-	//`CREATE_X2TEMPLATE(class'RTAbilityTemplate', Template, 'RTTheSixPathsOfPain');
-	`CREATE_X2ABILITY_TEMPLATE(Template, 'RTTheSixPathsOfPain');
-	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_NeverShow;
+	`CREATE_X2TEMPLATE(class'RTAbilityTemplate', Template, 'RTTheSixPathsOfPain');
+	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_AlwaysShow;
 	Template.Hostility = eHostility_Neutral;
 	Template.IconImage = "img:///RisingTidesContentPackage.PerkIcons.UIPerk_overwatch_blaze_spop";
 	Template.AbilitySourceName = 'eAbilitySource_Psionic';
@@ -689,11 +688,18 @@ static function X2AbilityTemplate RTTheSixPathsOfPain() {
 	Template.AdditionalAbilities.AddItem('RTTheSixPathsOfPainOverride');
 
 	Template.AbilityTriggers.Length = 0;
+
 	EventTrigger = new class'X2AbilityTrigger_EventListener';
 	EventTrigger.ListenerData.Deferral = ELD_OnStateSubmitted;
 	EventTrigger.ListenerData.EventID = 'PlayerTurnBegun';
 	EventTrigger.ListenerData.Filter = eFilter_Player;
-	EventTrigger.ListenerData.EventFn = class'XComGameState_Ability'.static.AbilityTriggerEventListener_Self;
+	EventTrigger.ListenerData.EventFn = class'RTGameState_Ability'.static.RTAbilityTriggerEventListener_Self;
+	Template.AbilityTriggers.AddItem(EventTrigger);
+
+	EventTrigger = new class'X2AbilityTrigger_EventListener';
+	EventTrigger.ListenerData.Deferral = ELD_OnStateSubmitted;
+	EventTrigger.ListenerData.EventID = 'RisingTidesTestEventID';
+	EventTrigger.ListenerData.EventFn = class'RTGameState_Ability'.static.RTAbilityTriggerEventListener_Self;
 	Template.AbilityTriggers.AddItem(EventTrigger);
 
 	return Template;

@@ -315,22 +315,6 @@ function EventListenerReturn EchoedAgonyListener(Object EventData, Object EventS
 	NewGameState.AddStateObject(AbilityState);
 	`TACTICALRULES.SubmitGameState(NewGameState);
 
-	//bDebug = false;
-	// finally, activate the ability with the updated panic strength
-	//TacticalRules.GetGameRulesCache_Unit(SourceUnitState.GetReference(), UnitCache);
-	//for(i = 0; i < UnitCache.AvailableActions.Length; i++) {
-		//AbilityState = XComGameState_Ability(History.GetGameStateForObjectID(UnitCache.AvailableActions[i].AbilityObjectRef.ObjectID));
-		//if(AbilityState.m_TemplateName == m_TemplateName) {     // found myself
-			//bDebug = true;
-			//if(UnitCache.AvailableActions[i].AvailableCode == 'AA_Success') {
-				//class'XComGameStateContext_Ability'.static.ActivateAbility(UnitCache.AvailableActions[i]);
-			//} else {
-				//`LOG("Rising Tides: Could not activate Echoed Agony!");
-			//}
-			//break;
-		//}
-	//}
-
 	AbilityTriggerAgainstSingleTarget(OwnerStateObject, false);
 
 	if(!bDebug) {
@@ -431,10 +415,11 @@ function EventListenerReturn RTAbilityTriggerEventListener_ValidAbilityLocations
 	return ELR_NoInterrupt;
 }
 
+// mostly used for debugging
 function EventListenerReturn RTAbilityTriggerEventListener_Self(Object EventData, Object EventSource, XComGameState GameState, Name EventID, Object CallbackData)
 {
-	`LOG("Rising Tides: RTAbilityTriggerEventListener_Self");
-	`LOG(XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(OwnerStateObject.ObjectID)).GetFullName());
+	class'RTHelpers'.static.RTLog("RTAbilityTriggerEventListener_Self");
+	class'RTHelpers'.static.RTLog(XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(OwnerStateObject.ObjectID)).GetFullName());
 	ActivateAbility(OwnerStateObject);
 	return ELR_NoInterrupt;
 }
@@ -447,8 +432,9 @@ protected function ActivateAbility(StateObjectReference TargetRef) {
 
 	AvailableCode = CanActivateAbilityForObserverEvent(XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(TargetRef.ObjectID)));
 	if(AvailableCode != 'AA_Success') {
-		`LOG("Rising Tides: Couldn't Activate "@ self.GetMyTemplateName() @ " for observer event, Code = "$ AvailableCode);
+		class'RTHelpers'.static.RTLog("Couldn't Activate "@ self.GetMyTemplateName() @ " for observer event, Code = "$ AvailableCode);
 	} else {
+		class'RTHelpers'.static.RTLog("AvailableCode = AA_Success, building the GameState...");
 		NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState(string(GetFuncName()));
 		NewGameState.ModifyStateObject(self.Class, ObjectID);
 		`TACTICALRULES.SubmitGameState(NewGameState);
@@ -457,11 +443,18 @@ protected function ActivateAbility(StateObjectReference TargetRef) {
 	AbilityContext = class'XComGameStateContext_Ability'.static.BuildContextFromAbility(self, TargetRef.ObjectID);
 
 	if( AbilityContext.Validate() ) {
-		`TACTICALRULES.SubmitGameStateContext(AbilityContext);
+		class'RTHelpers'.static.RTLog("The AbilityContext was validated, submitting it!");
+		if(!`TACTICALRULES.SubmitGameStateContext(AbilityContext)) {
+			class'RTHelpers'.static.RTLog("The Context failed to be submitted!");
+		} else {
+			class'RTHelpers'.static.RTLog("The Context was submitted successfully!");
+		}
 	} else {
-		`LOG("Rising Tides: Couldn't validate AbilityContext, " @ self.GetMyTemplateName() @ " not activated.");
+		class'RTHelpers'.static.RTLog("Rising Tides: Couldn't validate AbilityContext, " @ self.GetMyTemplateName() @ " not activated.");
 	}
 }
+
+
 
 defaultproperties
 {
