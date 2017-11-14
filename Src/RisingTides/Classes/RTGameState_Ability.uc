@@ -422,7 +422,7 @@ function EventListenerReturn RTAbilityTriggerEventListener_Self(Object EventData
 	class'RTHelpers'.static.RTLog(XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(OwnerStateObject.ObjectID)).GetFullName());
 	if(class'XComGameStateContext_Ability'.static.ActivateAbilityByTemplateName(OwnerStateObject, GetMyTemplateName(), OwnerStateObject)) {
 		class'RTHelpers'.static.RTLog("The ability should have activated successfully!");
-	} else { class'RTHelpers'.static.RTLog("The ability did not activate successfully.")}
+	} else { class'RTHelpers'.static.RTLog("The ability did not activate successfully."); }
 	return ELR_NoInterrupt;
 }
 
