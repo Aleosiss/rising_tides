@@ -38,7 +38,7 @@ node('master') {
       echo ""
       echo ""
       %PSPath% set-executionpolicy remotesigned
-      %PSPath% "./scripts/build.ps1" -mod %modName% -srcDirectory "'%WORKSPACE%'" -sdkPath %sdkPath% -gamePath %gamePath%
+      %PSPath% "./scripts/build_jenkins.ps1" -mod %modName% -srcDirectory "'%WORKSPACE%'" -sdkPath %sdkPath% -gamePath %gamePath%
       '''
     }
   }

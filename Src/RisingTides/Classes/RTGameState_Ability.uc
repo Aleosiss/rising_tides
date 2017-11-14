@@ -427,7 +427,7 @@ function EventListenerReturn RTAbilityTriggerEventListener_Self(Object EventData
 }
 
 // ActivateAbility
-protected function ActivateAbility(StateObjectReference TargetRef) {
+protected function bool ActivateAbility(StateObjectReference TargetRef) {
 	local XComGameStateContext_Ability	AbilityContext;
 	local XComGameState					NewGameState;
 	local name							AvailableCode;
@@ -435,6 +435,7 @@ protected function ActivateAbility(StateObjectReference TargetRef) {
 	AvailableCode = CanActivateAbilityForObserverEvent(XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(TargetRef.ObjectID)));
 	if(AvailableCode != 'AA_Success') {
 		class'RTHelpers'.static.RTLog("Couldn't Activate "@ self.GetMyTemplateName() @ " for observer event, Code = "$ AvailableCode);
+		return false;
 	} else {
 		class'RTHelpers'.static.RTLog("AvailableCode = AA_Success, building the GameState...");
 		NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState(string(GetFuncName()));
@@ -448,11 +449,14 @@ protected function ActivateAbility(StateObjectReference TargetRef) {
 		class'RTHelpers'.static.RTLog("The AbilityContext was validated, submitting it!");
 		if(!`TACTICALRULES.SubmitGameStateContext(AbilityContext)) {
 			class'RTHelpers'.static.RTLog("The Context failed to be submitted!");
+			return false;
 		} else {
 			class'RTHelpers'.static.RTLog("The Context was submitted successfully!");
+			return true;
 		}
 	} else {
 		class'RTHelpers'.static.RTLog("Rising Tides: Couldn't validate AbilityContext, " @ self.GetMyTemplateName() @ " not activated.");
+		return false;
 	}
 }
 
