@@ -157,10 +157,10 @@ LocPromotionPopupText="<Bullet/>Pyrokinetically-enhanced rounds punch through co
 
 [YourHandsMyEyes X2AbilityTemplate]
 LocFriendlyName="Your Hands, My Eyes"
-LocLongDescription="Whisper can use the meld to hack targets he can't himself reach."
-LocHelpText="Whisper can use the meld to hack targets he can't himself reach."
+LocLongDescription="Mind Meld shares the owner's hacking stat in addition to the normal will bonuses."
+LocHelpText="Mind Meld shares the owner's hacking stat in addition to the normal will bonuses."
 LocFlyOverText="Your Hands, My Eyes"
-LocPromotionPopupText="<Bullet/>Whisper can use the meld to hack targets he can't himself reach.<br/>"
+LocPromotionPopupText="<Bullet/>Mind Meld shares the owner's hacking stat in addition to the normal will bonuses.<br/>"
 
 [RTKubikuri X2AbilityTemplate]
 LocFriendlyName="Kubikiri"
@@ -205,11 +205,11 @@ LocFlyOverText="Mind Control"
 LocPromotionPopupText="<Bullet><Ability:SelfCooldown/> turn cooldown.<br/>"
 
 [LinkedIntelligence X2AbilityTemplate]
-LocFriendlyName="Networked OI"
-LocLongDescription="Units within the meld can react instantaneously to fire commands. When a unit in the Meld takes a reaction shot, all melded units attempt to fire against the target."
+LocFriendlyName="Possibility Mapping"
+LocLongDescription="Units within the meld can react instantaneously to firing commands. When a unit in the Meld takes a reaction shot, all melded units attempt to fire against the target."
 LocHelpText="When a unit in the Meld takes a reaction shot, all melded units attempt to fire against the target."
-LocFlyOverText="Networked OI"
-LocPromotionPopupText="<Bullet/> Networked OI will trigger at squadsight range.<br/><Bullet/> Units will not break concealment in order to fire.<br/>"
+LocFlyOverText="Possibility Mapped"
+LocPromotionPopupText="<Bullet/> Possibility Mapping will trigger at squadsight range.<br/><Bullet/> Units will not break concealment in order to fire.<br/>"
 
 [TwitchReaction X2AbilityTemplate]
 LocFriendlyName="Twitch Reaction"
@@ -597,7 +597,7 @@ LocPromotionPopupText="<Bullet/> Grant an effect to allied units affected by Ove
 LocFriendlyName="Forced Introversion"
 LocLongDescription="When this unit recieves Feedback, it also recieves Stealth."
 LocHelpText="When this unit recieves Feedback, it also recieves Stealth."
-LocFlyOverText="Meld Induction"
+LocFlyOverText="Forced Introversion"
 LocPromotionPopupText="<Bullet/> When this unit recieves Feedback, it also recieves Stealth.<br/><Bullet/> Stealth usually lasts for the duration of the Feedback event.<br/>"
 
 [RTRudimentaryCreatures X2AbilityTemplate]
