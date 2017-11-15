@@ -693,13 +693,7 @@ static function X2AbilityTemplate RTTheSixPathsOfPain() {
 	EventTrigger.ListenerData.Deferral = ELD_OnStateSubmitted;
 	EventTrigger.ListenerData.EventID = 'PlayerTurnBegun';
 	EventTrigger.ListenerData.Filter = eFilter_Player;
-	EventTrigger.ListenerData.EventFn = class'RTGameState_Ability'.static.RTAbilityTriggerEventListener_Self;
-	Template.AbilityTriggers.AddItem(EventTrigger);
-
-	EventTrigger = new class'X2AbilityTrigger_EventListener';
-	EventTrigger.ListenerData.Deferral = ELD_OnStateSubmitted;
-	EventTrigger.ListenerData.EventID = 'RisingTidesTestEventID';
-	EventTrigger.ListenerData.EventFn = class'RTGameState_Ability'.static.RTAbilityTriggerEventListener_Self;
+	EventTrigger.ListenerData.EventFn = class'RTGameState_Ability'.static.AbilityTriggerEventListener_Self;
 	Template.AbilityTriggers.AddItem(EventTrigger);
 
 	return Template;

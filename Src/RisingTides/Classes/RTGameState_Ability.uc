@@ -420,9 +420,9 @@ function EventListenerReturn RTAbilityTriggerEventListener_Self(Object EventData
 {
 	class'RTHelpers'.static.RTLog("RTAbilityTriggerEventListener_Self");
 	class'RTHelpers'.static.RTLog(XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(OwnerStateObject.ObjectID)).GetFullName());
-	if(class'XComGameStateContext_Ability'.static.ActivateAbilityByTemplateName(OwnerStateObject, GetMyTemplateName(), OwnerStateObject)) {
-		class'RTHelpers'.static.RTLog("The ability should have activated successfully!");
-	} else { class'RTHelpers'.static.RTLog("The ability did not activate successfully."); }
+	//RTAbilityTriggerAgainstSingleTarget(OwnerStateObject, false);
+	ActivateAbility(OwnerStateObject);
+	
 	return ELR_NoInterrupt;
 }
 
@@ -437,8 +437,9 @@ protected function ActivateAbility(StateObjectReference TargetRef) {
 		class'RTHelpers'.static.RTLog("Couldn't Activate "@ self.GetMyTemplateName() @ " for observer event, Code = "$ AvailableCode);
 	} else {
 		class'RTHelpers'.static.RTLog("AvailableCode = AA_Success, building the GameState...");
-		NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState(string(GetFuncName()));
+		NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("Activating Ability " $ GetMyTemplateName());
 		NewGameState.ModifyStateObject(self.Class, ObjectID);
+		iCharges++;
 		`TACTICALRULES.SubmitGameState(NewGameState);
 	}
 
@@ -456,7 +457,56 @@ protected function ActivateAbility(StateObjectReference TargetRef) {
 	}
 }
 
+function bool RTAbilityTriggerAgainstSingleTarget(StateObjectReference TargetRef, bool bMustHaveAdditionalTargets, optional int VisualizeIndex = -1, optional array<vector> TargetLocations)
+{
+	return RTAbilityTriggerAgainstSingleTarget_Static(ObjectID, OwnerStateObject, TargetRef, bMustHaveAdditionalTargets, VisualizeIndex, TargetLocations);
+}
 
+static function bool RTAbilityTriggerAgainstSingleTarget_Static(int AbilityID, StateObjectReference SourceRef, StateObjectReference TargetRef, bool bMustHaveAdditionalTargets, optional int VisualizeIndex = -1, optional array<vector> TargetLocations)
+{
+	local GameRulesCache_Unit UnitCache;
+	local int i, j;
+	local X2TacticalGameRuleset TacticalRules;
+	local AvailableTarget AvailTarget;
+
+	TacticalRules = `TACTICALRULES;
+	`log("0");
+	if (TacticalRules.GetGameRulesCache_Unit(SourceRef, UnitCache))
+	{
+		`log("1");
+		for (i = 0; i < UnitCache.AvailableActions.Length; ++i)
+		{
+			`log("2");
+			if (UnitCache.AvailableActions[i].AbilityObjectRef.ObjectID == AbilityID)
+			{
+				`log("3");
+				for (j = 0; j < UnitCache.AvailableActions[i].AvailableTargets.Length; ++j)
+				{
+					`log("4");
+					AvailTarget = UnitCache.AvailableActions[i].AvailableTargets[j];
+					if (AvailTarget.PrimaryTarget.ObjectID == TargetRef.ObjectID)
+					{
+						`log("5");
+						if (UnitCache.AvailableActions[i].AvailableCode == 'AA_Success')
+						{
+							`log("6");
+							if (bMustHaveAdditionalTargets ? AvailTarget.AdditionalTargets.Length > 0 : true)
+							{
+								if(class'XComGameStateContext_Ability'.static.ActivateAbility(UnitCache.AvailableActions[i], j, TargetLocations,,,, VisualizeIndex)) {
+									`log("7");
+								} else `log("8");
+								return true;
+							}
+						}
+						break;
+					}
+				}
+				break;
+			}
+		}
+	}
+	return false;
+}
 
 defaultproperties
 {
