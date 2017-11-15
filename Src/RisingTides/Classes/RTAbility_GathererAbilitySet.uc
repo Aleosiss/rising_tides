@@ -666,8 +666,8 @@ static function X2AbilityTemplate RTTheSixPathsOfPain() {
 	ActionPointEffect = new class'X2Effect_GrantActionPoints';
 	ActionPointEffect.NumActionPoints = default.OTS_ACTION_POINT_COST;
 	ActionPointEffect.PointType = class'X2CharacterTemplateManager'.default.StandardActionPoint;
-
 	//Template.AddMultiTargetEffect(ActionPointEffect);
+
 	Template.AddShooterEffectExclusions();
 	FeedbackCondition = new class'X2Condition_UnitEffects';
 	FeedbackCondition.AddExcludeEffect(default.RTFeedbackEffectName, 'AA_UnitIsPanicked');
