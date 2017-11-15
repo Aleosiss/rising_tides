@@ -437,11 +437,12 @@ protected function bool ActivateAbility(StateObjectReference TargetRef) {
 		class'RTHelpers'.static.RTLog("Couldn't Activate "@ self.GetMyTemplateName() @ " for observer event, Code = "$ AvailableCode);
 		return false;
 	} else {
-		class'RTHelpers'.static.RTLog("AvailableCode = AA_Success, building the GameState...");
+		class'RTHelpers'.static.RTLog("AvailableCode = AA_Success, building the GameState at HistoryIndex " $ `XCOMHISTORY.GetCurrentHistoryIndex() $ "...");
 		NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("Activating Ability " $ GetMyTemplateName());
 		NewGameState.ModifyStateObject(self.Class, ObjectID);
 		iCharges++;
 		`TACTICALRULES.SubmitGameState(NewGameState);
+		class'RTHelpers'.static.RTLog("THe new latest HistoryIndex is " $ `XCOMHISTORY.GetCurrentHistoryIndex());
 	}
 
 	AbilityContext = class'XComGameStateContext_Ability'.static.BuildContextFromAbility(self, TargetRef.ObjectID);
