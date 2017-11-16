@@ -22,7 +22,7 @@ function RTGameState_MeldEffect Initialize(XComGameState_Unit MeldMaker)
 	local array<StateObjectReference> IteratorArray;
 	local RTGameState_MeldEffect ParentMeldEffect, IteratorMeldEffect;
 	
-	`LOG("Rising Tides: Initializing new MeldEffect GameState.");
+	class'RTHelpers'.static.RTLog("Initializing new MeldEffect GameState.");
 	GameStateHost = MeldMaker.GetReference();
 
 	foreach `XCOMHISTORY.IterateByClassType(class'RTGameState_MeldEffect', IteratorMeldEffect){
@@ -40,7 +40,7 @@ function RTGameState_MeldEffect Initialize(XComGameState_Unit MeldMaker)
 	// if there is no prexisting Meld, we're going to have to make it ourselves
 	if(ParentMeldEffect == none || ParentMeldEffect.ObjectID == ObjectID)
 	{
-		`LOG("Rising Tides: No parent Meld found, setting this unit as the host.");
+		class'RTHelpers'.static.RTLog("No parent Meld found, setting this unit as the host.");
 		MeldHost = MeldMaker.GetReference();
 		Members.AddItem(MeldMaker.GetReference());
 
@@ -58,7 +58,7 @@ function RTGameState_MeldEffect Initialize(XComGameState_Unit MeldMaker)
 	}
 	else
 	{
-		`LOG("Rising Tides: Meld Parent GameState found:");
+		class'RTHelpers'.static.RTLog("Meld Parent GameState found:");
 		`LOG(IteratorArray[0].ObjectID @ " is the parent StateObjectReference.");
 		MeldHost = ParentMeldEffect.MeldHost;
 		Members = ParentMeldEffect.Members;
@@ -85,7 +85,7 @@ function RTGameState_MeldEffect Initialize(XComGameState_Unit MeldMaker)
 		}
 	}
 
-   	`LOG("Rising Tides: " @ XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(GameStateHost.ObjectID)).GetName(eNameType_Full) @" has finished initalizing its RTGameState_MeldEffect.");
+   	class'RTHelpers'.static.RTLog("" @ XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(GameStateHost.ObjectID)).GetName(eNameType_Full) @" has finished initalizing its RTGameState_MeldEffect.");
 	return self;
 }
 
@@ -159,7 +159,7 @@ function EventListenerReturn OnTacticalGameEnd(Object EventData, Object EventSou
 	local Object ListenerObj;
     local XComGameState NewGameState;
 
-    //`LOG("Rising Tides: 'TacticalGameEnd' event listener delegate invoked.");
+    //class'RTHelpers'.static.RTLog("'TacticalGameEnd' event listener delegate invoked.");
 
 	EventManager = `XEVENTMGR;
 
@@ -193,7 +193,7 @@ simulated function EventListenerReturn AddUnitToMeld(Object EventData, Object Ev
 
 	History = `XCOMHISTORY;
 
-	`LOG("Rising Tides: AddUnitToMeld called by " @ EventID);
+	class'RTHelpers'.static.RTLog("AddUnitToMeld called by " @ EventID);
 
 	EnteringMeldUnit = XComGameState_Unit(EventSource);
 	MeldEffect = RTEffect_Meld(GetX2Effect());
@@ -249,7 +249,7 @@ simulated function EventListenerReturn AddUnitToMeld(Object EventData, Object Ev
 
 
 	RemakeSelf(UpdatedMeldEffect);
-	//`LOG("Rising Tides: " @ GameStateHostUnit.GetName(eNameType_Full) @ "'s meld has " @ UpdatedMeldEffect.Members.Length @ " people in it.");
+	//class'RTHelpers'.static.RTLog("" @ GameStateHostUnit.GetName(eNameType_Full) @ "'s meld has " @ UpdatedMeldEffect.Members.Length @ " people in it.");
 	newGameStateHostUnit = XComGameState_Unit(NewGameState.CreateStateObject(class'XComGameState_Unit', GameStateHostUnit.ObjectID));
 	//newGameStateHostUnit.ApplyEffectToStats(self, NewGameState);
 	//`LOG("" @ GameStateHostUnit.GetName(eNameType_Full) @ " is attempting to add " @ UpdatedMeldEffect.CombinedWill @ " to itself.");
@@ -277,7 +277,7 @@ simulated function EventListenerReturn RemoveUnitFromMeld(Object EventData, Obje
 	local int								Index;
 	local float								HackModifier, MeldWillModifier, MeldPsiOffModifier;
 
-	`LOG("Rising Tides: RemoveUnitToMeld called by " @ EventID);
+	class'RTHelpers'.static.RTLog("RemoveUnitToMeld called by " @ EventID);
 	History = `XCOMHISTORY;
 	LeavingMeldUnit = XComGameState_Unit(EventSource);
 	GameStateHostUnit = XComGameState_Unit(History.GetGameStateForObjectID(ApplyEffectParameters.SourceStateObjectRef.ObjectID));
@@ -382,7 +382,7 @@ simulated function EventListenerReturn RemoveUnitFromMeld(Object EventData, Obje
 
 
 	RemakeSelf(UpdatedMeldEffect);
-	//`LOG("Rising Tides: " @ GameStateHostUnit.GetName(eNameType_Full) @ "'s meld has " @ UpdatedMeldEffect.Members.Length @ " people in it.");
+	//class'RTHelpers'.static.RTLog("" @ GameStateHostUnit.GetName(eNameType_Full) @ "'s meld has " @ UpdatedMeldEffect.Members.Length @ " people in it.");
 	newGameStateHostUnit = XComGameState_Unit(NewGameState.CreateStateObject(class'XComGameState_Unit', GameStateHostUnit.ObjectID));
 	//newGameStateHostUnit.ApplyEffectToStats(self, NewGameState);
 	//`LOG("" @ GameStateHostUnit.GetName(eNameType_Full) @ " is attempting to add " @ UpdatedMeldEffect.CombinedWill @ " to itself.");

@@ -189,7 +189,7 @@ exec function RT_AddSPECTREToXCOMCrew() {
 	{
 		if(UnitState.GetMyTemplateName() == 'RTGhostMarksman' || UnitState.GetMyTemplateName() == 'RTGhostBerserker' || UnitState.GetMyTemplateName() == 'RTGhostGatherer')
 		{
-			`LOG("Rising Tides: Found a " $ UnitState.GetMyTemplateName() $ ", adding them to XCOM!");
+			class'RTHelpers'.static.RTLog("Found a " $ UnitState.GetMyTemplateName() $ ", adding them to XCOM!");
 			NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("Rising Tides: CHEAT: AddSPECTREToCrew");
 			UnitState = XComGameState_Unit(NewGameState.ModifyStateObject(class'XComGameState_Unit', UnitState.ObjectID));
 			XComHQ = XComGameState_HeadquartersXCom(History.GetSingleGameStateObjectForClass(class'XComGameState_HeadquartersXCom'));
@@ -201,7 +201,7 @@ exec function RT_AddSPECTREToXCOMCrew() {
 	}
 
 	if(!bFoundAtLeastOne)
-		`LOG("Rising Tides: Did not find any active operatives!");
+		class'RTHelpers'.static.RTLog("Did not find any active operatives!");
 }
 
 exec function RT_TriggerEvent(name EventID) {

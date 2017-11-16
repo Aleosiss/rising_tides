@@ -217,25 +217,25 @@ function int GetDefendingDamageModifier(XComGameState_Effect EffectState, XComGa
 
 	if(CurrentDamage < 1)
 		return 0;
-	`LOG("Rising Tides: Current Damage greater than 0, proceeding...");
+	class'RTHelpers'.static.RTLog("Current Damage greater than 0, proceeding...");
 	// You can't take damage during a time-stop. Negate and store the damage for when it ends.
 	// Let the damage from the Time Stop pass through
 	if(WeaponDamageEffect.DamageTag == 'TimeStopDamageEffect' || WeaponDamageEffect.IsA('RTEffect_TimeStopDamage')){
-		`LOG("Rising Tides: allowing TimeStopDamageEffect!");
+		class'RTHelpers'.static.RTLog("allowing TimeStopDamageEffect!");
 		return 0;
 
 	}
 	// first check wasn't working...?
 	TimeStopDamageEffect = RTEffect_TimeStopDamage(WeaponDamageEffect);
 	if(TimeStopDamageEffect != none) {
-		`LOG("Rising Tides: TimeStopDamageEffect found, allowing");
+		class'RTHelpers'.static.RTLog("TimeStopDamageEffect found, allowing");
 		return 0;
 	}
 
 
 	TimeStopEffectState = RTGameState_TimeStopEffect(EffectState);
 	if(TimeStopEffectState == none) {
-		`LOG("Rising Tides: TimeStopEffectState not found!");
+		class'RTHelpers'.static.RTLog("TimeStopEffectState not found!");
 		return 0;
 	}
 
@@ -247,24 +247,24 @@ function int GetDefendingDamageModifier(XComGameState_Effect EffectState, XComGa
 
 	// record WeaponDamageValues
 	if(TimeStopEffectState.bShouldRecordDamageValue){
-		`LOG("Rising Tides: Recording Weapon Damage Value");
+		class'RTHelpers'.static.RTLog("Recording Weapon Damage Value");
 
 		TotalWeaponDamageValue = SetTotalWeaponDamageValue(CurrentDamage, WeaponDamageEffect.EffectDamageValue);
 		TimeStopEffectState.PreventedDamageValues.AddItem(TotalWeaponDamageValue);
 
-		`LOG("Rising Tides: Logging,");
+		class'RTHelpers'.static.RTLog("Logging,");
 		`LOG("PreventedDamageValues.Length = " @ TimeStopEffectState.PreventedDamageValues.Length);
 		for(i = 0; i < TimeStopEffectState.PreventedDamageValues.Length; i++) {
 			`LOG("TimeStopEffectState.PreventedDamageValues["@i@"].DamageType = " @ TimeStopEffectState.PreventedDamageValues[i].DamageType);
 		}
-		`LOG("Rising Tides: Time Stop has negated " @ TimeStopEffectState.GetFinalDamageValue().Damage @ " damage so far! This time, it was of type " @ TimeStopEffectState.PreventedDamageValues[TimeStopEffectState.PreventedDamageValues.length-1].DamageType @"!");
+		class'RTHelpers'.static.RTLog("Time Stop has negated " @ TimeStopEffectState.GetFinalDamageValue().Damage @ " damage so far! This time, it was of type " @ TimeStopEffectState.PreventedDamageValues[TimeStopEffectState.PreventedDamageValues.length-1].DamageType @"!");
 
 		// record crit //TODO: figure out how to force crit damage popup
 		if(AppliedData.AbilityResultContext.HitResult == eHit_Crit)
 			TimeStopEffectState.bCrit = true;
 		TimeStopEffectState.bShouldRecordDamageValue = false;
 	} else {
-		`LOG("Rising Tides: TimeStopEffectState.GetDefendingDamageModifier was told not to record a damage value.");
+		class'RTHelpers'.static.RTLog("TimeStopEffectState.GetDefendingDamageModifier was told not to record a damage value.");
 		return 0;
 	}
 	return -(CurrentDamage);

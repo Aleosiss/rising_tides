@@ -231,7 +231,7 @@ function OnUnitChangedTile(const out TTile NewTileLocation, XComGameState_Effect
 	History = `XCOMHISTORY;
 	ViewerState = XComGameState_SquadViewer(History.GetGameStateForObjectID(EffectState.CreatedObjectReference.ObjectID));
 	// It appears Over the Shoulder will handle the creation and removal of all MobileSquadViewers, all we need to do is update our position. If it's too far, OTS will remove us.
-	`LOG("Rising Tides: Effect updating on move!");
+	class'RTHelpers'.static.RTLog("Effect updating on move!");
 	if(ViewerState != none) {
 		// if the unit that was moving is the one that had this SquadViewer, we need to update its position.
 		if(TargetUnit.ObjectID == EffectState.ApplyEffectParameters.TargetStateObjectRef.ObjectID) {
