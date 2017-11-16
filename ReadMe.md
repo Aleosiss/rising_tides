@@ -1,11 +1,11 @@
-## Rising Tides
+# Rising Tides
 
 Rising Tides is an XCOM 2 content addition mod that aims to provide a DLC-like experience. Currently I looking to provide the following:
 
 >- Three "hero"-type units, each with unique three-branch skill trees
 >- A single Ghost "superclass" extension (as Soldier is to the Vanilla classes) which provides the following:
->  - Additional default abilities ("Mind Control", "Mind Wrack", "Mind Meld")
->  - Shared abilities across child classes ("Teek", "Fade")
+>- Additional default abilities ("Mind Control", "Mind Wrack", "Mind Meld")
+>- Shared abilities across child classes ("Teek", "Fade")
 >- Special narrative missions to use these units in a controlled environment to ease balancing in a mod-rich environment
 
 This would be a bare-bones content mod. I also have the following content in mind, but would be out of my current capability to do alone (IE I would either need to develop the skills and/or obtain additional contributors, either volunteers or contractors):
@@ -15,12 +15,14 @@ This would be a bare-bones content mod. I also have the following content in min
 >- High-quality 2D artwork (Producing icons is possible ATM, but not much more)
 >- New enemy units, possible returns from EW
 
-###### Current TODOs:
+## Current TODOs
+
 	- Get One Small Favor Working
 		- button selector
 	- Fix SPoP bug (activates every other turn)
 
-###### Current Table:
+## Current Table
+
 	- Berserker:
 		- Shadow Strike: Idea: Target allies (no damage), implement by having a helper ability which activates subabilities based on selection
 		- GFX for Bloodlust
@@ -35,7 +37,7 @@ This would be a bare-bones content mod. I also have the following content in min
 		- Redo Guardian Angel (?, no one has told me if it actually works or not)
 		- Add Over the Shoulder exception for civilians that are actually faceless
 		- Extinction Event needs to somehow stop revive units from reviving
-		- Come up with a better solution for Over The Shoulder vs. concealed units	  
+		- Come up with a better solution for Over The Shoulder vs. concealed units
 	- General:
 		- none
 	- The Program (New Faction):
@@ -48,7 +50,8 @@ This would be a bare-bones content mod. I also have the following content in min
 		- this word sounded cool, so I will make it into a class
 		- wtf will it do? not sure how "seeing the future" can work IRL
 
-###### Current Bugs:
+## Current Bugs
+
 	- Time Stop damage calculation isn't visualized properly
 	- Time Stop damage calculation is fucked, use code from X2Effect_DLC_3AbsorptionField.uc to rewrite
 	- Make extend effect duration happen on ObjectMoved for Aura Effects as well, possibly by breaking its logic out into a separate method that is called in either place
