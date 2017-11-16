@@ -86,7 +86,7 @@ else {
     if (Test-Path "$sdkPath\XComGame\Script\$modNameCanonical.u") {
         Remove-Item "$sdkPath\XComGame\Script\$modNameCanonical.u"
     }
-    
+
     Write-Host "Cleaned."
 }
 
