@@ -2,8 +2,6 @@
 
 class RTAbilityTarget_TeleportMelee extends X2AbilityTarget_MovingMelee;
 
-
-
 simulated function name GetPrimaryTargetOptions(const XComGameState_Ability Ability, out array<AvailableTarget> Targets) {
 	local name AvailableCode;
 	local AvailableTarget Target, EmptyTarget;

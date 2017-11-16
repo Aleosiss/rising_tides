@@ -4,16 +4,20 @@ class RTUIScreenListener_OneSmallFavor extends UIScreenListener;
 simulated function OnInit(UIScreen Screen)
 {
 	if(UIMission(Screen) != none) {
-		AddOneSmallFavorSitrep(UIMission(Screen));
+		AddOneSmallFavorSelectionCheckBox(UIMission(Screen));
 	}
 }
 
 // This event is triggered after a screen receives focus
-simulated function OnReceiveFocus(UIScreen Screen)
+simulated function OnReceiveFocus(UIMission(Screen)
 {
 	if(UIMission(Screen) != none) {
-		AddOneSmallFavorSitrep(UIMission(Screen));
+		AddOneSmallFavorSelectionCheckBox(UIMission(Screen));
 	}
+}
+
+simulated function AddOneSmallFavorSelectionCheckBox(UIMission Screen) {
+	//TODO:: 
 }
 
 simulated function bool AddOneSmallFavorSitrep(UIMission MissionScreen) {
@@ -36,9 +40,6 @@ simulated function bool AddOneSmallFavorSitrep(UIMission MissionScreen) {
 	}
 
 	if(!class'RTHelpers'.static.DebuggingEnabled()) {
-		if(Program.InfluenceScore < 2)
-			return false;
-	
 		if(!Program.bOneSmallFavorAvailable) {
 			return false;
 		}
@@ -74,7 +75,6 @@ simulated function bool AddOneSmallFavorSitrep(UIMission MissionScreen) {
 	Program = RTGameState_ProgramFaction(NewGameState.ModifyStateObject(Program.class, Program.ObjectID));
 	XComHQ = XComGameState_HeadquartersXCom(NewGameState.ModifyStateObject(XComHQ.class, XComHQ.ObjectID));
 	MissionState = XComGameState_MissionSite(NewGameState.ModifyStateObject(class'XComGameState_MissionSite', MissionState.ObjectID));
-
 
 	MissionState.TacticalGameplayTags.AddItem('RTOneSmallFavor');
 	Program.CashOneSmallFavor(NewGameState, MissionState);

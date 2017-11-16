@@ -8,9 +8,9 @@ struct UnitTextMapping
     var name ActorName;
     var UIText Text;
 };
- 
+
 var array<UnitTextMapping> Texts;
- 
+
 static function UIDebugStateMachines GetThisScreen()
 {
     local UIDebugStateMachines Scr;
@@ -23,8 +23,7 @@ static function UIDebugStateMachines GetThisScreen()
     `PRES.Get2DMovie().LoadScreen(Scr);
     return Scr;
 }
- 
- 
+
 event Tick(float fDeltaTime)
 {
     local XGUnit Unit;
@@ -37,7 +36,7 @@ event Tick(float fDeltaTime)
         UpdateFlagForUnit(Unit);
     }
 }
- 
+
 simulated function UpdateFlagForUnit(XGUnit Unit)
 {
     local int i;
@@ -126,7 +125,7 @@ simulated static function TryForceCachePerkContent(name AbilityName) {
 simulated static function TryForceBuildPerkContentCache() {
 	`CONTENT.BuildPerkPackageCache();
 }
- 
+
 defaultproperties
 {
     bIsVisible=false
