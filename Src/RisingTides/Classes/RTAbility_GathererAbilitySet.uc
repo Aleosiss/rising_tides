@@ -159,7 +159,7 @@ static function X2AbilityTemplate OverTheShoulder()
 	return Template;
 }
 
-static function X2AbilityTemplate CreateOverTheShoulderAbility(X2AbilityTemplate Template) {
+static function X2AbilityTemplate CreateOverTheShoulderAbility(X2AbilityTemplate Template, optional int AuraEffectDuration = 1) {
 	local X2AbilityCost_ActionPoints			ActionPoint;
 	local X2AbilityCooldown						Cooldown;
 	local X2AbilityMultiTarget_Radius			Radius;
@@ -301,9 +301,9 @@ static function X2AbilityTemplate CreateOverTheShoulderAbility(X2AbilityTemplate
 
 	// aura controller effect         ------------------------------------------
 	OTSEffect = new class'RTEffect_OverTheShoulder';
-	OTSEffect.BuildPersistentEffect(1,,,, eGameRule_PlayerTurnBegin);
+	OTSEffect.BuildPersistentEffect(AuraEffectDuration,,,, eGameRule_PlayerTurnBegin);
 	OTSEffect.SetDisplayInfo(ePerkBuff_Bonus, default.OTS_TITLE, default.OTS_DESC_SELF, Template.IconImage, true,,Template.AbilitySourceName);
-	OTSEffect.DuplicateResponse = eDupe_Ignore;
+	OTSEffect.DuplicateResponse = eDupe_Refresh;
 	OTSEffect.EffectName = default.OverTheShoulderSourceEffectName;
 	OTSEffect.VFXTemplateName = "RisingTidesContentPackage.fX.P_Nova_Psi_OTS";
 	OTSEffect.VFXSocket = 'None';
@@ -630,7 +630,7 @@ static function X2AbilityTemplate RTTheSixPathsOfPain() {
 	local X2Condition_UnitEffects FeedbackCondition;
 
 	`CREATE_X2TEMPLATE(class'RTAbilityTemplate', Template, 'RTTheSixPathsOfPain');
-	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_AlwaysShow;
+	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_NeverShow;
 	Template.Hostility = eHostility_Neutral;
 	Template.IconImage = "img:///RisingTidesContentPackage.PerkIcons.UIPerk_overwatch_blaze_spop";
 	Template.AbilitySourceName = 'eAbilitySource_Psionic';
@@ -708,7 +708,7 @@ static function X2AbilityTemplate RTTheSixPathsOfPainOverride() {
 	local X2AbilityTemplate Template;
 	`CREATE_X2TEMPLATE(class'RTAbilityTemplate', Template, 'RTTheSixPathsOfPainOverride');
 
-	Template = CreateOverTheShoulderAbility(Template);
+	Template = CreateOverTheShoulderAbility(Template, 2);
 
 	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_NeverShow;
 	Template.IconImage = "img:///RisingTidesContentPackage.PerkIcons.UIPerk_overwatch_blaze_spop";
