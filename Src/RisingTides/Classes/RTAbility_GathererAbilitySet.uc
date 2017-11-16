@@ -687,13 +687,12 @@ static function X2AbilityTemplate RTTheSixPathsOfPain() {
 	Template.AdditionalAbilities.AddItem('RTTheSixPathsOfPainIcon');
 	Template.AdditionalAbilities.AddItem('RTTheSixPathsOfPainOverride');
 
-	Template.AbilityTriggers.Length = 0;
-
 	EventTrigger = new class'X2AbilityTrigger_EventListener';
 	EventTrigger.ListenerData.Deferral = ELD_OnStateSubmitted;
 	EventTrigger.ListenerData.EventID = 'PlayerTurnBegun';
-	EventTrigger.ListenerData.Filter = eFilter_Player;
-	EventTrigger.ListenerData.EventFn = class'RTGameState_Ability'.static.AbilityTriggerEventListener_Self;
+	EventTrigger.ListenerData.Filter = eFilter_None;
+	EventTrigger.ListenerData.EventFn = class'XComGameState_Ability'.static.AbilityTriggerEventListener_Self;
+	EventTrigger.ListenerData.Priority = 35;
 	Template.AbilityTriggers.AddItem(EventTrigger);
 
 	return Template;
