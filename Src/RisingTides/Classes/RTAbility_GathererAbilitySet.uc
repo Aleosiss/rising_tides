@@ -676,10 +676,12 @@ static function X2AbilityTemplate RTTheSixPathsOfPain() {
 
 	ActivationEffect = new class'X2Effect_ImmediateAbilityActivation';
 	ActivationEffect.AbilityName = 'RTTheSixPathsOfPainOverride';
+	ActivationEffect.EffectName = 'RTTheSixPathsOfPainActivationEffect';
 	Template.AddTargetEffect(ActivationEffect);
 
 	MultiActivationEffect = new class'X2Effect_ImmediateMultiTargetAbilityActivation';
 	MultiActivationEffect.AbilityName = 'TriangulatedOverTheShoulder';
+	MultiActivationEffect.EffectName = 'RTTheSixPathsOfPainMultiActivationEffect';
 	Template.AddMultiTargetEffect(MultiActivationEffect);
 
 	//Template.AddTargetEffect(ActionPointEffect);				 // add this after activating OTS
