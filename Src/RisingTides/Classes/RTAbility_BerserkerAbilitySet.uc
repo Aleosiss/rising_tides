@@ -411,7 +411,7 @@ static function X2AbilityTemplate RTBurst() {
 	WorldDamage.bApplyToWorldOnHit = true;                          //obv
 	WorldDamage.bApplyToWorldOnMiss = true;                         //obv
 	WorldDamage.bHitAdjacentDestructibles = true;
-	WorldDamage.PlusNumZTiles = 2;                                 //determines how 'high' the world damage is applied
+	WorldDamage.PlusNumZTiles = 2;                                  //determines how 'high' the world damage is applied
 	WorldDamage.bHitTargetTile = false;
 	WorldDamage.ApplyChance = 100;
 	WorldDamage.bAllowDestructionOfDamageCauseCover = true;
