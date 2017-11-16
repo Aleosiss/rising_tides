@@ -35,3 +35,5 @@ _ReSharper*/
 %*
 .atom-build*
 /Notes/
+tasks.json
+**/.vscode/
