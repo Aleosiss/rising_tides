@@ -19,7 +19,6 @@ This would be a bare-bones content mod. I also have the following content in min
 
 	- Get One Small Favor Working
 		- button selector
-	- Fix SPoP bug (activates every other turn)
 
 ## Current Table
 
@@ -46,7 +45,7 @@ This would be a bare-bones content mod. I also have the following content in min
 		- figure out a way to either remove certain covert actions for the Program or simply template them as previously done
 		- Covert Action: One Small Favor: once per month, send a Program squad on a mission in place of an XCOM squad. Can't send on Golden Path missions.
 		- Covert Action: Just Passing Through: the Program equivalent to Volunteer Army and ADVENT Defectors, although with a lower chance to activate and no activations on One Small Favor missions or Golden Path missions.
-	- Precogniscator (New Class)
+	- Prognosticator (New Class)
 		- this word sounded cool, so I will make it into a class
 		- wtf will it do? not sure how "seeing the future" can work IRL
 
