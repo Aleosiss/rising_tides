@@ -999,10 +999,12 @@ static function X2AbilityTemplate RTCreateFireTrailAbility()
 
 	return Template;
 }
+
 function XComGameState Empty_BuildGameState( XComGameStateContext Context )
 {
 	return none;
 }
+
 static function EventListenerReturn BuildFireTrail_Self(Object EventData, Object EventSource, XComGameState GameState, Name EventID, Object CallbackData)
 {
 	local XComGameStateContext_Ability MoveContext;
