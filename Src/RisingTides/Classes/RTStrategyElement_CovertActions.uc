@@ -100,35 +100,35 @@ static function AddFactionToGeneratedTemplates() {
 
 	Manager = class'X2StrategyElementTemplateManager'.static.GetStrategyElementTemplateManager();
 
-	//class'RTHelpers'.static.RTLog("Adding faction Program to covert action CovertActionNarrative_FindFaction...");
+	//`LOG("Rising Tides: Adding faction Program to covert action CovertActionNarrative_FindFaction...");
 	//Manager.FindDataTemplateAllDifficulties('CovertAction_FindFaction', DataTemplates);
 	//AddFactionToCovertActionNarratives(DataTemplates, 'CovertActionNarrative_FindFaction_Program');
 
-	//class'RTHelpers'.static.RTLog("Adding faction Program to covert action CovertAction_FindFarthestFaction...");
+	//`LOG("Rising Tides: Adding faction Program to covert action CovertAction_FindFarthestFaction...");
 	//Manager.FindDataTemplateAllDifficulties('CovertAction_FindFarthestFaction', DataTemplates);
 	//AddFactionToCovertActionNarratives(DataTemplates, 'CovertActionNarrative_FindFaction_Program');
 
-	class'RTHelpers'.static.RTLog("Adding faction Program to covert action CovertAction_RemoveDoom...");
+	`LOG("Rising Tides: Adding faction Program to covert action CovertAction_RemoveDoom...");
 	Manager.FindDataTemplateAllDifficulties('CovertAction_RemoveDoom', DataTemplates);
 	AddFactionToCovertActionNarratives(DataTemplates, 'CovertActionNarrative_RemoveDoom_Program');
 
-	class'RTHelpers'.static.RTLog("Adding faction Program to covert action CovertAction_RecruitEngineer...");
+	`LOG("Rising Tides: Adding faction Program to covert action CovertAction_RecruitEngineer...");
 	Manager.FindDataTemplateAllDifficulties('CovertAction_RecruitEngineer', DataTemplates);
 	AddFactionToCovertActionNarratives(DataTemplates, 'CovertActionNarrative_RecruitEngineer_Program');
 
-	class'RTHelpers'.static.RTLog("Adding faction Program to covert action CovertAction_BreakthroughTech...");
+	`LOG("Rising Tides: Adding faction Program to covert action CovertAction_BreakthroughTech...");
 	Manager.FindDataTemplateAllDifficulties('CovertAction_BreakthroughTech', DataTemplates);
 	AddFactionToCovertActionNarratives(DataTemplates, 'CovertActionNarrative_BreakthroughTech_Program');
 
-	class'RTHelpers'.static.RTLog("Adding faction Program to covert action CovertAction_RevealChosenMovement...");
+	`LOG("Rising Tides: Adding faction Program to covert action CovertAction_RevealChosenMovement...");
 	Manager.FindDataTemplateAllDifficulties('CovertAction_RevealChosenMovement', DataTemplates);
 	AddFactionToCovertActionNarratives(DataTemplates, 'CovertActionNarrative_RevealChosenMovements_Program');
 
-	class'RTHelpers'.static.RTLog("Adding faction Program to covert action CovertAction_RevealChosenStrengths...");
+	`LOG("Rising Tides: Adding faction Program to covert action CovertAction_RevealChosenStrengths...");
 	Manager.FindDataTemplateAllDifficulties('CovertAction_RevealChosenStrengths', DataTemplates);
 	AddFactionToCovertActionNarratives(DataTemplates, 'CovertActionNarrative_RevealChosenStrengths_Program');
 
-	class'RTHelpers'.static.RTLog("Adding faction Program to covert action CovertAction_RevealChosenStronghold...");
+	`LOG("Rising Tides: Adding faction Program to covert action CovertAction_RevealChosenStronghold...");
 	Manager.FindDataTemplateAllDifficulties('CovertAction_RevealChosenStronghold', DataTemplates);
 	AddFactionToCovertActionNarratives(DataTemplates, 'CovertActionNarrative_RevealChosenStronghold_Program');
 

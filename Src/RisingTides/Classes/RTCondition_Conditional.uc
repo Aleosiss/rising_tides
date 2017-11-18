@@ -91,7 +91,7 @@ event name CallMeetsConditionWithSource(XComGameState_BaseObject kTarget, XComGa
 	RetCode = 'AA_Success';
 	CacheConditionInputs(kTarget, , XComGameState_Unit(kSource));
 	// check the conditionals
-	class'RTHelpers'.static.RTLog("Checking the conditionals with source...");
+	`LOG("Rising Tides: Checking the conditionals with source...");
 	foreach Conditionals(Condition) {
 		`LOG("Checking " @ Condition);
 		RetCode = Condition.MeetsConditionWithSource(kTarget, kSource);

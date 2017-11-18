@@ -16,11 +16,11 @@ simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffe
 		super.OnEffectAdded(ApplyEffectParameters, kNewTargetState, NewGameState, NewEffectState);
 		return;
 	}
-	class'RTHelpers'.static.RTLog("Purging " @ iStacksToRemove @ " stacks from " @ EffectNameToPurge);
+	`LOG("Rising Tides: Purging " @ iStacksToRemove @ " stacks from " @ EffectNameToPurge);
 	History = `XCOMHISTORY;
 	foreach TargetUnitState.AffectedByEffects(EffectRef) {
 		EffectState = XComGameState_Effect(History.GetGameStateForObjectID(EffectRef.ObjectID));
-		class'RTHelpers'.static.RTLog("found effect " @ EffectState.GetX2Effect().EffectName);
+		`LOG("Rising Tides: found effect " @ EffectState.GetX2Effect().EffectName);
 		if(EffectState.GetX2Effect().EffectName != EffectNameToPurge) {
 			continue;
 		}

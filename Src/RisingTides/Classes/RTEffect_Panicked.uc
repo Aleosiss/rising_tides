@@ -16,7 +16,7 @@ simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffe
 	local bool bCivilian;
 
 
-	class'RTHelpers'.static.RTLog("RTEffect_Panicked applied to unit!");
+	`LOG("Rising Tides: RTEffect_Panicked applied to unit!");
 	UnitState = XComGameState_Unit(kNewTargetState);
 	if (m_aStatChanges.Length > 0)
 	{

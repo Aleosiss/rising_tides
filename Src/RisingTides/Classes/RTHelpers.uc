@@ -23,27 +23,27 @@ static function ListDefaultAbilityLists() {
 	local name n;
 
 	foreach default.StandardShots(n) {
-		class'RTHelpers'.static.RTLog("Standard Shots: " @ n);
+		`LOG("Rising Tides: Standard Shots: " @ n);
 	}
 
 	foreach default.MeleeAbilities(n) {
-		class'RTHelpers'.static.RTLog("Melee Abilities: " @ n);
+		`LOG("Rising Tides: Melee Abilities: " @ n);
 	}
 
 	foreach default.SniperShots(n) {
-		class'RTHelpers'.static.RTLog("Sniper Shots: " @ n);
+		`LOG("Rising Tides: Sniper Shots: " @ n);
 	}
 
 	foreach default.OverwatchShots(n) {
-		class'RTHelpers'.static.RTLog("Overwatch Shots: " @ n);
+		`LOG("Rising Tides: Overwatch Shots: " @ n);
 	}
 
 	foreach default.PsionicAbilities(n) {
-		class'RTHelpers'.static.RTLog("Psionic Abilities: " @ n);
+		`LOG("Rising Tides: Psionic Abilities: " @ n);
 	}
 
 	foreach default.FreeActions(n) {
-		class'RTHelpers'.static.RTLog("Free Actions: " @ n);
+		`LOG("Rising Tides: Free Actions: " @ n);
 	}
 }
 
@@ -92,7 +92,7 @@ static function bool CheckAbilityActivated(name AbilityTemplateName, ERTChecklis
 	}
 
 	if(!b && d) {
-		class'RTHelpers'.static.RTLog("" @ AbilityTemplateName @ " was not found in " @ n);
+		`LOG("Rising Tides: " @ AbilityTemplateName @ " was not found in " @ n);
 	}
 
 	return b;
@@ -186,7 +186,7 @@ static function RTGameState_ProgramFaction GetNewProgramState(optional XComGameS
 static function RTLog(string message, optional bool bShouldRedScreenToo = false) {
 	if(!class'X2DownloadableContentInfo_RisingTides'.static.DebuggingEnabled())
 		return;
-	class'RTHelpers'.static.RTLog("" $ message);
+	`LOG("Rising Tides: " $ message);
 	if(bShouldRedScreenToo)
 		`RedScreen("Rising Tides: " $ message);
 }
