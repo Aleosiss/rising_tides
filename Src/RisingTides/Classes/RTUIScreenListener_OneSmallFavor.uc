@@ -18,6 +18,8 @@ simulated function OnReceiveFocus(UIMission(Screen)
 
 simulated function AddOneSmallFavorSelectionCheckBox(UIMission Screen) {
 	//TODO:: 
+	
+
 }
 
 simulated function bool AddOneSmallFavorSitrep(UIMission MissionScreen) {
