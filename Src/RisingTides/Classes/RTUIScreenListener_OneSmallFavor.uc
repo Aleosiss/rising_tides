@@ -50,10 +50,17 @@ simulated function AddOneSmallFavorSelectionCheckBox(UIScreen Screen) {
 
 	bOneSmallFavorAvailable = Program.bOneSmallFavorAvailable;
 
-	cb = Screen.Spawn(class'UICheckbox');	
-	cb.InitCheckbox('OSFActivateCheckbox', "Click to Activate One Small Favor", false, , true);	
+	cb = Screen.Spawn(class'UICheckbox', Screen);	
+	cb.InitCheckbox('OSFActivateCheckbox', "Click to Activate One Small Favor", false, , true).SetTextStyle(class'UICheckbox'.const.STYLE_TEXT_ON_THE_LEFT);	
 	cb.SetSize(32, 32);
-	cb.SetPosition(MissionScreen.ConfirmButton.X + 32, MissionScreen.ConfirmButton.Y);
+
+	if(MissionScreen.ConfirmButton.bIsInited) {
+		cb.SetPosition(MissionScreen.ConfirmButton.MC.GetNum("_x") - 64, MissionScreen.ConfirmButton.MC.GetNum("_y"));
+	} else {
+		`RedScreen("ConfirmButton wasn't inited, cannot place the checkbox!")
+		return;
+	}
+
 	class'RTHelpers'.static.RTLog("There should be a checkbox there now!");
 }
 
