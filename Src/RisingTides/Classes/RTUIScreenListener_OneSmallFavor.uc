@@ -1,25 +1,60 @@
 // This is an Unreal Script
 class RTUIScreenListener_OneSmallFavor extends UIScreenListener;
 
-simulated function OnInit(UIScreen Screen)
+var UICheckbox cb;
+
+event OnInit(UIScreen Screen)
 {
-	if(UIMission(Screen) != none) {
-		AddOneSmallFavorSelectionCheckBox(UIMission(Screen));
+	if(UIMission(Screen) == none) {
+		return;
 	}
+
+	AddOneSmallFavorSelectionCheckBox(UIMission(Screen));
 }
 
 // This event is triggered after a screen receives focus
-simulated function OnReceiveFocus(UIMission(Screen)
+event OnReceiveFocus(UIScreen Screen)
 {
-	if(UIMission(Screen) != none) {
-		AddOneSmallFavorSelectionCheckBox(UIMission(Screen));
+	if(UIMission(Screen) == none) {
+		return;
 	}
+	
+	AddOneSmallFavorSelectionCheckBox(UIMission(Screen));
+	
 }
 
-simulated function AddOneSmallFavorSelectionCheckBox(UIMission Screen) {
-	//TODO:: 
+event OnRemoved(UIScreen Screen) {
+	if(UIMission(Screen) == none) {
+		return;
+	}
 	
+	cb.Destroy();
+	RemoveOneSmallFavorSitrep(UIMission(Screen));
+}
 
+simulated function AddOneSmallFavorSelectionCheckBox(UIScreen Screen) {
+	local UIMission MissionScreen;
+	local bool bOneSmallFavorAvailable;
+	local RTGameState_ProgramFaction Program;
+
+	MissionScreen = UIMission(Screen);
+	if(MissionScreen == none) {
+		return;
+	}
+	
+	class'RTHelpers'.static.RTLog("Found a mission, trying to add a checkbox to its confirm button!");
+	Program = RTGameState_ProgramFaction(`XCOMHISTORY.GetSingleGameStateObjectForClass(class'RTGameState_ProgramFaction'));
+	if(Program == none) {
+		return;
+	}
+
+	bOneSmallFavorAvailable = Program.bOneSmallFavorAvailable;
+
+	cb = Screen.Spawn(class'UICheckbox');	
+	cb.InitCheckbox('OSFActivateCheckbox', "Click to Activate One Small Favor", false, , true);	
+	cb.SetSize(32, 32);
+	cb.SetPosition(MissionScreen.ConfirmButton.X + 32, MissionScreen.ConfirmButton.Y);
+	class'RTHelpers'.static.RTLog("There should be a checkbox there now!");
 }
 
 simulated function bool AddOneSmallFavorSitrep(UIMission MissionScreen) {
@@ -80,7 +115,7 @@ simulated function bool AddOneSmallFavorSitrep(UIMission MissionScreen) {
 
 	MissionState.TacticalGameplayTags.AddItem('RTOneSmallFavor');
 	Program.CashOneSmallFavor(NewGameState, MissionState);
-	AddOneSmallFavorSitrepToGeneratedMission(Program, MissionState);
+	ModifyOneSmallFavorSitrepForGeneratedMission(Program, MissionState, true);
 
 	ModifyMissionData(XComHQ, MissionState);
 
@@ -95,12 +130,56 @@ simulated function bool AddOneSmallFavorSitrep(UIMission MissionScreen) {
 	return true;
 }
 
+simulated function bool RemoveOneSmallFavorSitrep(UIMission MissionScreen) {
+	local RTGameState_ProgramFaction			Program;
+	local XComGameState_MissionSite				MissionState;
+	local XComGameState							NewGameState;
+	local GeneratedMissionData					MissionData;
+	local XComGameState_HeadquartersXCom		XComHQ; //because the game stores a copy of mission data and this is where its stored in
+	local XComGameStateHistory					History;
+	local int									iNumOperativesInSquad;
+
+	History = `XCOMHISTORY;
+	Program = RTGameState_ProgramFaction(History.GetSingleGameStateObjectForClass(class'RTGameState_ProgramFaction'));
+
+	XComHQ = class'UIUtilities_Strategy'.static.GetXComHQ();
+
+	MissionState = MissionScreen.GetMission();
+	if(MissionState.GeneratedMission.SitReps.Find('RTOneSmallFavor') != INDEX_NONE) {
+		MissionState.GeneratedMission.SitReps.RemoveItem('RTOneSmallFavor');
+	}
+
+	if(MissionState.TacticalGameplayTags.Find('RTOneSmallFavor') != INDEX_NONE) {
+		MissionState.TacticalGameplayTags.RemoveItem('RTOneSmallFavor');
+	}
+
+	NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("Rising Tides: Uncashing in One Small Favor");
+	Program = RTGameState_ProgramFaction(NewGameState.ModifyStateObject(Program.class, Program.ObjectID));
+	XComHQ = XComGameState_HeadquartersXCom(NewGameState.ModifyStateObject(XComHQ.class, XComHQ.ObjectID));
+	MissionState = XComGameState_MissionSite(NewGameState.ModifyStateObject(class'XComGameState_MissionSite', MissionState.ObjectID));
+
+	Program.UncashOneSmallFavor(NewGameState, MissionState);
+	ModifyOneSmallFavorSitrepForGeneratedMission(Program, MissionState, false);
+
+	ModifyMissionData(XComHQ, MissionState);
+
+	if (NewGameState.GetNumGameStateObjects() > 0) {
+		`XCOMGAME.GameRuleset.SubmitGameState(NewGameState);
+		MissionScreen.UpdateData();
+	} else {
+		History.CleanupPendingGameState(NewGameState);
+	}
+
+	return true;
+}
+
 simulated function bool CheckIsInvalidMission(X2MissionSourceTemplate Template) {
 	return class'RTGameState_ProgramFaction'.default.InvalidMissionNames.Find(Template.DataName) != INDEX_NONE;
 }
 
-simulated function AddOneSmallFavorSitrepToGeneratedMission(RTGameState_ProgramFaction Program, XComGameState_MissionSite MissionState) {
-	MissionState.GeneratedMission.SitReps.AddItem(Program.Deployed.AssociatedSitRepTemplateName);
+simulated function ModifyOneSmallFavorSitrepForGeneratedMission(RTGameState_ProgramFaction Program, XComGameState_MissionSite MissionState, bool bAdd = true) {
+	if(bAdd) { MissionState.GeneratedMission.SitReps.AddItem(Program.Deployed.AssociatedSitRepTemplateName); }
+	else { MissionState.GeneratedMission.SitReps.RemoveItem(Program.Deployed.AssociatedSitRepTemplateName); }
 }
 
 //---------------------------------------------------------------------------------------

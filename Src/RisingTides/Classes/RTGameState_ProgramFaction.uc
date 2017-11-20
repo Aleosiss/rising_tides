@@ -83,11 +83,14 @@ var bool														bSetupComplete;		// if we should rebuild the ghost array f
 
 
 // FACTION VARIABLES
-var bool														bOneSmallFavorAvailable;	// can send squad on a mission, replacing XCOM
-var bool														bOneSmallFavorActivated; 	// player has chosen to send squad on next mission
-var bool														bTemplarsDestroyed;
-var config array<name>											InvalidMissionNames; 		// list of mission types ineligible for Program support
+var bool																bOneSmallFavorAvailable;		// can send squad on a mission, replacing XCOM
+var bool																bOneSmallFavorActivated; 		// player has chosen to send squad on next mission
+var bool																bTemplarsDestroyed;
+var config array<name>													InvalidMissionNames; 			// list of mission types ineligible for Program support
 
+// ONE SMALL FAVOR HANDLING VARIABLES
+var private int															iPreviousMaxSoldiersForMission; // cache of the number of soldiers on a mission before OSF modfied it
+var private StateObjectReference										SelectedMissionRef;				// cache of the mission one small favor is going to go against
 
 /* *********************************************************************** */
 
@@ -453,11 +456,40 @@ simulated function bool CashOneSmallFavor(XComGameState NewGameState, XComGameSt
 		MissionSite.GeneratedMission.Mission.SpecialSoldiers.AddItem(GhostTemplateName);
 	}
 	
+	iPreviousMaxSoldiersForMission = MissionSite.GeneratedMission.Mission.MaxSoldiers;
 	MissionSite.GeneratedMission.Mission.MaxSoldiers = Deployed.Operatives.Length;
+	SelectedMissionRef = MissionSite.GetReference();
 
 	return true;
 }
 
+simulated function bool UncashOneSmallFavor(XComGameState NewGameState, XComGameState_MissionSite MissionSite) {
+	local StateObjectReference GhostRef, EmptyRef;
+	local name GhostTemplateName;
+	
+	if(MissionSite.GetReference().ObjectID != SelectedMissionRef.ObjectID) {
+		class'RTHelpers'.static.RTLog("MissionSite ObjectID is not the same as the SelectedMissionRef! Removing OSF from the SelectedMissionRef instead of the given one!");
+		MissionSite = XComGameState_MissionSite(`XCOMHISTORY.GetGameStateForObjectID(SelectedMissionRef.ObjectID));
+	}
+
+	if(Deployed == none) {
+		class'RTHelpers'.static.RTLog("The Program has no squads?", true);
+		return false; // we... have no squads?
+	}
+
+	MissionSite = XComGameState_MissionSite(NewGameState.ModifyStateObject(MissionSite.class, MissionSite.ObjectID));
+	foreach Deployed.Operatives(GhostRef) {
+		GhostTemplateName = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(GhostRef.ObjectID)).GetMyTemplateName();
+		class'RTHelpers'.static.RTLog("Removing a " $ GhostTemplateName $ " from the SpecialSoldiers for Mission " $ MissionSite.GeneratedMission.Mission.MissionName);
+		MissionSite.GeneratedMission.Mission.SpecialSoldiers.RemoveItem(GhostTemplateName);
+	}
+	
+	SelectedMissionRef = EmptyRef;
+	MissionSite.GeneratedMission.Mission.MaxSoldiers = iPreviousMaxSoldiersForMission;
+
+	return true;
+}
+	
 protected function RotateRandomSquadToDeploy() {
 	if(Squads.Length == 0)
 		return;
