@@ -61,7 +61,7 @@ simulated function AddOneSmallFavorSelectionCheckBox(UIScreen Screen) {
 
 function OnConfirmButtonInited(UIPanel Panel) {
 	local UIMission MissionScreen;
-	local bool bCanBeActivated;
+	local bool bReadOnly;
 	local RTGameState_ProgramFaction Program;
 
 	MissionScreen = ms;
