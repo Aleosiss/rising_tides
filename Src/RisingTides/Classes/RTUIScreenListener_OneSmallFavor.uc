@@ -1,7 +1,8 @@
 // This is an Unreal Script
 class RTUIScreenListener_OneSmallFavor extends UIScreenListener;
 
-var UICheckbox cb;
+var UICheckbox 	cb;
+var UIMission	ms;
 
 event OnInit(UIScreen Screen)
 {
@@ -9,6 +10,7 @@ event OnInit(UIScreen Screen)
 		return;
 	}
 
+	ms = UIMission(Screen);
 	AddOneSmallFavorSelectionCheckBox(UIMission(Screen));
 }
 
@@ -19,22 +21,25 @@ event OnReceiveFocus(UIScreen Screen)
 		return;
 	}
 	
-	AddOneSmallFavorSelectionCheckBox(UIMission(Screen));
+	//AddOneSmallFavorSelectionCheckBox(UIMission(Screen));
 	
 }
 
 event OnRemoved(UIScreen Screen) {
+	local UIMission EmptyScreen;
+	local UICheckbox EmptyCheckbox;
+
 	if(UIMission(Screen) == none) {
 		return;
 	}
 	
+	ms = EmptyScreen;
 	cb.Destroy();
 	RemoveOneSmallFavorSitrep(UIMission(Screen));
-}
+}	
 
 simulated function AddOneSmallFavorSelectionCheckBox(UIScreen Screen) {
 	local UIMission MissionScreen;
-	local bool bOneSmallFavorAvailable;
 	local RTGameState_ProgramFaction Program;
 
 	MissionScreen = UIMission(Screen);
@@ -42,26 +47,36 @@ simulated function AddOneSmallFavorSelectionCheckBox(UIScreen Screen) {
 		return;
 	}
 	
-	class'RTHelpers'.static.RTLog("Found a mission, trying to add a checkbox to its confirm button!");
 	Program = RTGameState_ProgramFaction(`XCOMHISTORY.GetSingleGameStateObjectForClass(class'RTGameState_ProgramFaction'));
 	if(Program == none) {
 		return;
 	}
 
 	bOneSmallFavorAvailable = Program.bOneSmallFavorAvailable;
-
-	cb = Screen.Spawn(class'UICheckbox', Screen);	
-	cb.InitCheckbox('OSFActivateCheckbox', "Click to Activate One Small Favor", false, , true).SetTextStyle(class'UICheckbox'.const.STYLE_TEXT_ON_THE_LEFT);	
-	cb.SetSize(32, 32);
-
 	if(MissionScreen.ConfirmButton.bIsInited) {
-		cb.SetPosition(MissionScreen.ConfirmButton.MC.GetNum("_x") - 64, MissionScreen.ConfirmButton.MC.GetNum("_y"));
+		OnConfirmButtonInited(MissionScreen.ConfirmButton);
 	} else {
-		`RedScreen("ConfirmButton wasn't inited, cannot place the checkbox!")
+		MissionScreen.ConfirmButton.AddOnInitDelegate(OnConfirmButtonInited);
+	}
+}
+
+function OnConfirmButtonInited(UIPanel Panel) {
+	local UIMission MissionScreen;
+	local bool bCanBeActivated;
+
+	MissionScreen = ms;
+	if(MissionScreen == none) {
+		`RedScreen("Error, parent is not of class 'UIMission'");
 		return;
 	}
 
-	class'RTHelpers'.static.RTLog("There should be a checkbox there now!");
+	Program = RTGameState_ProgramFaction(`XCOMHISTORY.GetSingleGameStateObjectForClass(class'RTGameState_ProgramFaction'));
+	bReadOnly = !Program.bOneSmallFavorAvailable;
+
+	cb = MissionScreen.Spawn(class'UICheckbox', MissionScreen);	
+	cb.InitCheckbox('OSFActivateCheckbox', "Click to Activate One Small Favor", false, , bReadOnly).SetTextStyle(class'UICheckbox'.const.STYLE_TEXT_TO_THE_LEFT);	
+	cb.SetSize(32, 32);
+	cb.SetPosition(Panel.MC.GetNum("_x") - 56, Panel.MC.GetNum("_y"));
 }
 
 simulated function bool AddOneSmallFavorSitrep(UIMission MissionScreen) {
