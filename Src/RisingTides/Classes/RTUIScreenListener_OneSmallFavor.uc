@@ -52,7 +52,6 @@ simulated function AddOneSmallFavorSelectionCheckBox(UIScreen Screen) {
 		return;
 	}
 
-	bOneSmallFavorAvailable = Program.bOneSmallFavorAvailable;
 	if(MissionScreen.ConfirmButton.bIsInited) {
 		OnConfirmButtonInited(MissionScreen.ConfirmButton);
 	} else {
@@ -63,6 +62,7 @@ simulated function AddOneSmallFavorSelectionCheckBox(UIScreen Screen) {
 function OnConfirmButtonInited(UIPanel Panel) {
 	local UIMission MissionScreen;
 	local bool bCanBeActivated;
+	local RTGameState_ProgramFaction Program;
 
 	MissionScreen = ms;
 	if(MissionScreen == none) {
