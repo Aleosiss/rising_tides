@@ -85,7 +85,7 @@ var bool														bSetupComplete;		// if we should rebuild the ghost array f
 // FACTION VARIABLES
 var bool																bOneSmallFavorAvailable;		// can send squad on a mission, replacing XCOM
 var bool																bTemplarsDestroyed;
-var config array<name>													InvalidMissionNames; 			// list of mission types ineligible for Program support
+var config array<name>													InvalidMissionSources; 			// list of mission types ineligible for Program support, usually story missions
 
 // ONE SMALL FAVOR HANDLING VARIABLES
 var private int															iPreviousMaxSoldiersForMission; // cache of the number of soldiers on a mission before OSF modfied it

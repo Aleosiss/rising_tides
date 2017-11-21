@@ -85,9 +85,15 @@ function OnConfirmButtonInited(UIPanel Panel) {
 	// Make the checkbox
 	Program = RTGameState_ProgramFaction(`XCOMHISTORY.GetSingleGameStateObjectForClass(class'RTGameState_ProgramFaction'));
 	bReadOnly = !Program.bOneSmallFavorAvailable;
+	if(!bReadOnly) {
+		bReadOnly = CheckIsInvalidMission(MissionState.GetMissionSource())
+		if(bReadOnly) {
+			class'RTHelpers'.static.RTLog("This MissionSource is invalid!", true);
+		}
+	}
 
 	cb = MissionScreen.Spawn(class'UICheckbox', MissionScreen);	
-	cb.InitCheckbox('OSFActivateCheckbox', "Click to Activate One Small Favor", false, , bReadOnly).SetTextStyle(class'UICheckbox'.const.STYLE_TEXT_TO_THE_LEFT);	
+	cb.InitCheckbox('OSFActivateCheckbox', "", false, , bReadOnly).SetTextStyle(class'UICheckbox'.const.STYLE_TEXT_TO_THE_LEFT);	
 	cb.SetSize(32, 32);
 	cb.SetPosition(Panel.MC.GetNum("_x") - 56, Panel.MC.GetNum("_y"));
 
@@ -136,7 +142,7 @@ simulated function bool AddOneSmallFavorSitrep(UIMission MissionScreen) {
 		class'RTHelpers'.static.RTLog("This map already has the One Small Favor tag!", true);
 		return false;
 	}
-
+	
 	if(CheckIsInvalidMission(MissionState.GetMissionSource())) {
 		class'RTHelpers'.static.RTLog("This map is invalid!", true);
 		return false;
@@ -213,7 +219,7 @@ simulated function bool RemoveOneSmallFavorSitrep(UIMission MissionScreen) {
 }
 
 simulated function bool CheckIsInvalidMission(X2MissionSourceTemplate Template) {
-	return class'RTGameState_ProgramFaction'.default.InvalidMissionNames.Find(Template.DataName) != INDEX_NONE;
+	return class'RTGameState_ProgramFaction'.default.InvalidMissionSources.Find(Template.DataName) != INDEX_NONE;
 }
 
 simulated function ModifyOneSmallFavorSitrepForGeneratedMission(RTGameState_ProgramFaction Program, XComGameState_MissionSite MissionState, bool bAdd = true) {
