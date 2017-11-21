@@ -30,16 +30,14 @@ event OnReceiveFocus(UIScreen Screen)
 }
 
 event OnRemoved(UIScreen Screen) {
+	local UIMission EmptyScreen;
+	local UICheckbox EmptyCheckbox;
 
-	if(UISquadSelect(Screen) != none) {
-		RemoveOneSmallFavorSitrep(ms);
-	}
-
-	if(UIMission(Screen) != none) {
-		ManualGC();
+	if(UIMission(Screen) == none) {
+		return;
 	}
 	
-	
+	ManualGC();
 }	
 
 simulated function ManualGC() {
