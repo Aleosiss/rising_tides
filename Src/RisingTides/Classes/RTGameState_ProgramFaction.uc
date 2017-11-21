@@ -84,7 +84,6 @@ var bool														bSetupComplete;		// if we should rebuild the ghost array f
 
 // FACTION VARIABLES
 var bool																bOneSmallFavorAvailable;		// can send squad on a mission, replacing XCOM
-var bool																bOneSmallFavorActivated; 		// player has chosen to send squad on next mission
 var bool																bTemplarsDestroyed;
 var config array<name>													InvalidMissionNames; 			// list of mission types ineligible for Program support
 
@@ -603,8 +602,7 @@ function MeetXCom(XComGameState NewGameState)
 
 
 function PreMissionUpdate(XComGameState NewGameState, XComGameState_MissionSite MissionSiteState) {
-	if(bOneSmallFavorActivated && bOneSmallFavorAvailable) {
+	if(bOneSmallFavorAvailable) {
 		bOneSmallFavorAvailable = false;
-		bOneSmallFavorActivated = false;
 	}
 }

@@ -3,12 +3,16 @@ class RTUIScreenListener_OneSmallFavor extends UIScreenListener;
 
 var UICheckbox 	cb;
 var UIMission	ms;
+var bool		bDebugging;
+
+delegate OldOnClickedDelegate(UIButton Button);
 
 event OnInit(UIScreen Screen)
 {
 	if(UIMission(Screen) == none) {
 		return;
 	}
+	bDebugging = true;
 
 	ms = UIMission(Screen);
 	AddOneSmallFavorSelectionCheckBox(UIMission(Screen));
@@ -33,10 +37,14 @@ event OnRemoved(UIScreen Screen) {
 		return;
 	}
 	
-	ms = EmptyScreen;
-	cb.Destroy();
-	RemoveOneSmallFavorSitrep(UIMission(Screen));
+	ManualGC();
 }	
+
+simulated function ManualGC() {
+	OldOnClickedDelegate = none;
+	ms = none;
+	cb = none;
+}
 
 simulated function AddOneSmallFavorSelectionCheckBox(UIScreen Screen) {
 	local UIMission MissionScreen;
@@ -55,8 +63,13 @@ simulated function AddOneSmallFavorSelectionCheckBox(UIScreen Screen) {
 	if(MissionScreen.ConfirmButton.bIsInited) {
 		OnConfirmButtonInited(MissionScreen.ConfirmButton);
 	} else {
-		MissionScreen.ConfirmButton.AddOnInitDelegate(OnConfirmButtonInited);
+		MissionScreen.ConfirmButton.AddOnInitDelegate(OnConfirmButtonInited);	
 	}
+}
+
+function ModifiedConfirmButtonClicked(UIButton Button) {
+	AddOneSmallFavorSitrep(ms);
+	OldOnClickedDelegate(Button);
 }
 
 function OnConfirmButtonInited(UIPanel Panel) {
@@ -69,7 +82,7 @@ function OnConfirmButtonInited(UIPanel Panel) {
 		`RedScreen("Error, parent is not of class 'UIMission'");
 		return;
 	}
-
+	// Make the checkbox
 	Program = RTGameState_ProgramFaction(`XCOMHISTORY.GetSingleGameStateObjectForClass(class'RTGameState_ProgramFaction'));
 	bReadOnly = !Program.bOneSmallFavorAvailable;
 
@@ -77,6 +90,10 @@ function OnConfirmButtonInited(UIPanel Panel) {
 	cb.InitCheckbox('OSFActivateCheckbox', "Click to Activate One Small Favor", false, , bReadOnly).SetTextStyle(class'UICheckbox'.const.STYLE_TEXT_TO_THE_LEFT);	
 	cb.SetSize(32, 32);
 	cb.SetPosition(Panel.MC.GetNum("_x") - 56, Panel.MC.GetNum("_y"));
+
+	// Modify the OnButtonClicked Delegate
+	OldOnClickedDelegate = MissionScreen.ConfirmButton.OnClickedDelegate;
+	MissionScreen.ConfirmButton.OnClickedDelegate = ModifiedConfirmButtonClicked;
 }
 
 simulated function bool AddOneSmallFavorSitrep(UIMission MissionScreen) {
@@ -98,12 +115,12 @@ simulated function bool AddOneSmallFavorSitrep(UIMission MissionScreen) {
 		return false;
 	}
 
-	if(!class'RTHelpers'.static.DebuggingEnabled()) {
+	if(!bDebugging) {
 		if(!Program.bOneSmallFavorAvailable) {
 			return false;
 		}
 	
-		if(!Program.bOneSmallFavorActivated) {
+		if(!cb.bIsChecked) {
 			return false;
 		}
 
