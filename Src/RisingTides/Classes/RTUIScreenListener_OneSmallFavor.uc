@@ -86,7 +86,7 @@ function OnConfirmButtonInited(UIPanel Panel) {
 	Program = RTGameState_ProgramFaction(`XCOMHISTORY.GetSingleGameStateObjectForClass(class'RTGameState_ProgramFaction'));
 	bReadOnly = !Program.bOneSmallFavorAvailable;
 	if(!bReadOnly) {
-		bReadOnly = CheckIsInvalidMission(MissionScreen.GetMission().GetMissionSource())
+		bReadOnly = CheckIsInvalidMission(MissionScreen.GetMission().GetMissionSource());
 		if(bReadOnly) {
 			class'RTHelpers'.static.RTLog("This MissionSource is invalid!", true);
 		}
