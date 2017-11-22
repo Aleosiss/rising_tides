@@ -131,7 +131,6 @@ function CreateRTOperative(RTGhostOperative IteratorGhostTemplate, XComGameState
 	CharTemplate = CharMgr.FindCharacterTemplate(IteratorGhostTemplate.CharacterTemplateName);
 
 	UnitState = CharTemplate.CreateInstanceFromTemplate(StartState);
-	
 
 	UnitState.SetCharacterName(IteratorGhostTemplate.FirstName, IteratorGhostTemplate.LastName, IteratorGhostTemplate.NickName);
 	UnitState.SetCountry(CharTemplate.DefaultAppearance.nmFlag);

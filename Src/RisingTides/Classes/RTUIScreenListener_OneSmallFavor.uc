@@ -34,13 +34,7 @@ event OnRemoved(UIScreen Screen) {
 	if(UISquadSelect(Screen) != none) {
 		`SCREENSTACK.PrintScreenStack();
 		RemoveOneSmallFavorSitrep(ms);
-	}
-
-	if(UIMission(Screen) != none) {
-		`SCREENSTACK.PrintScreenStack();
-		if(!`SCREENSTACK.HasInstanceOf(class'UISquadSelect')) {
-			ManualGC();
-		}
+		ManualGC();
 	}
 }	
 
