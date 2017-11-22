@@ -32,14 +32,16 @@ event OnReceiveFocus(UIScreen Screen)
 event OnRemoved(UIScreen Screen) {
 
 	if(UISquadSelect(Screen) != none) {
+		`SCREENSTACK.PrintScreenStack();
 		RemoveOneSmallFavorSitrep(ms);
 	}
 
 	if(UIMission(Screen) != none) {
-		ManualGC();
+		`SCREENSTACK.PrintScreenStack();
+		if(!`SCREENSTACK.HasInstanceOf(class'UISquadSelect')) {
+			ManualGC();
+		}
 	}
-	
-	
 }	
 
 simulated function ManualGC() {
