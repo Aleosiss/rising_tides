@@ -37,10 +37,10 @@ static event InstallNewCampaign(XComGameState StartState)
 
 static event OnPostTemplatesCreated()
 {
-	if (`notdefined(FINAL_RELEASE)) {
+	`if (`notdefined(FINAL_RELEASE)) 
 		class'RTHelpers'.static.RTLog("This is not a final release!");
-	}
-	
+	`endif
+
 	MakePsiAbilitiesInterruptable();
 	AddProgramFactionCovertActions();
 }
