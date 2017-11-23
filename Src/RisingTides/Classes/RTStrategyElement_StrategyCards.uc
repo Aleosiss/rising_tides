@@ -55,6 +55,8 @@ static function ActivateJustPassingThrough(XComGameState StartState) {
 	local XComGameState_HeadquartersXCom XComHQ;
 	local array<StateObjectReference> AvailableSoldiers;
 	local StateObjectReference SoldierObjRef;
+	local XComGameState_MissionSite MissionState;
+	
 
 	if (IsSplitMission( StartState ))
 		return;
@@ -71,11 +73,14 @@ static function ActivateJustPassingThrough(XComGameState StartState) {
 		`LOG("Couldn't find the HQ boss");
 		return;
 	}
+	MissionState = XComGameState_MissionSite(History.GetGameStateForObjectID(XComHQ.MissionRef.ObjectID));
+	if(!class'RTHelpers'.static.CheckIsInvalidMission(MissionState.GetMissionSource()))
+		return;
 
 	if(XComHQ.TacticalGameplayTags.Find( 'NoVolunteerArmy' ) != INDEX_NONE)
 		return;
 
-	if(XComHQ.TacticalGameplayTags.Find( 'NoRisingTides' ) != INDEX_NONE)
+	if(XComHQ.TacticalGameplayTags.Find( 'RTOneSmallFavor' ) != INDEX_NONE)
 		return;
 
 

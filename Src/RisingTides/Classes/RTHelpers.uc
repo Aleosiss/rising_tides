@@ -243,3 +243,7 @@ static function XComGameState_HeadquartersXCom GetXComHQState()
 
 	return NewXComHQ;
 }
+
+simulated static function bool CheckIsInvalidMission(X2MissionSourceTemplate Template) {
+	return class'RTGameState_ProgramFaction'.default.InvalidMissionSources.Find(Template.DataName) != INDEX_NONE;
+}
