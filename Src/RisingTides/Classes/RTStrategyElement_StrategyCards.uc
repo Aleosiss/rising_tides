@@ -73,7 +73,7 @@ static function ActivateJustPassingThrough(XComGameState StartState) {
 		`LOG("Couldn't find the HQ boss");
 		return;
 	}
-	MissionState = XComGameState_MissionSite(History.GetGameStateForObjectID(XComHQ.MissionRef.ObjectID));
+	MissionState = XComGameState_MissionSite(`XCOMHISTORY.GetGameStateForObjectID(XComHQ.MissionRef.ObjectID));
 	if(!class'RTHelpers'.static.CheckIsInvalidMission(MissionState.GetMissionSource()))
 		return;
 

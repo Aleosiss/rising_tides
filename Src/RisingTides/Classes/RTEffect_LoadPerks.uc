@@ -22,19 +22,19 @@ simulated function LoadPerks(XComGameState VisualizeGameState, out Visualization
 	local XComGameState_Unit		UnitState;
 	local name n;
 
-	Content = `CONTENT;
 	UnitState = XComGameState_Unit(ActionMetadata.StateObject_NewState);
 	if(UnitState == none) {
-		`RedScreen("Warning, was unable to find a UnitState for X2Effect_LoadPerks!");
+		`RedScreen("Warning, was unable to find a UnitState for RTEffect_LoadPerks!");
 		return;
 	}
 
 	UnitPawnNativeBase = XGUnit(UnitState.GetVisualizer()).GetPawn();
 	if(UnitPawnNativeBase == none) {
-		`RedScreen("Warning, was unable to find a UnitPawnNativeBase for X2Effect_LoadPerks!");
+		`RedScreen("Warning, was unable to find a UnitPawnNativeBase for RTEffect_LoadPerks!");
 		return;
 	}
-
+	
+	Content = `CONTENT;
 	Content.BuildPerkPackageCache();
 	foreach AbilitiesToLoad(n) {
 		if(n == ReservedName)
