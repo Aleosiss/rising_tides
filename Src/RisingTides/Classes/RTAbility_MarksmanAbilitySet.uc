@@ -326,7 +326,7 @@ static function X2AbilityTemplate RTOverwatch()
 	CoveringFireEffect.AbilityToActivate = 'RTOverwatchShot';
 	CoveringFireEffect.BuildPersistentEffect(1, false, true, false, eGameRule_PlayerTurnBegin);
 	CoveringFireCondition = new class'X2Condition_AbilityProperty';
-	CoveringFireCondition.OwnerHasSoldierAbilities.AddItem('CoveringFire');
+	CoveringFireCondition.OwnerHasSoldierAbilities.AddItem('EyeInTheSky');
 	CoveringFireEffect.TargetConditions.AddItem(CoveringFireCondition);
 	Template.AddTargetEffect(CoveringFireEffect);
 
@@ -2004,8 +2004,6 @@ static function X2AbilityTemplate EyeInTheSky()
 	ReactionFire.BuildPersistentEffect(1, true, true, true);
 	ReactionFire.SetDisplayInfo(ePerkBuff_Passive, Template.LocFriendlyName, Template.GetMyLongDescription(), Template.IconImage,,,Template.AbilitySourceName);
 	Template.AddTargetEffect(ReactionFire);
-
-	Template.AdditionalAbilities.AddItem('CoveringFire');
 
 	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
 	//  NOTE: No visualization on purpose!
