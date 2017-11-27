@@ -6,7 +6,7 @@ static function SetUpStrategyCards(XComGameState StartState)
 	local X2StrategyElementTemplateManager StratMgr;
 	local array<X2StrategyElementTemplate> AllCardTemplates;
 	local RTProgramStrategyCardTemplate CardTemplate;
-	local RTGameState_StrategyCard CardState;
+	local XComGameState_StrategyCard CardState;
 	local array<XComGameState_StrategyCard> PossibleContinentBonusCards;
 	local XComGameState_Continent ContinentState;
 	local int idx, RandIndex;
