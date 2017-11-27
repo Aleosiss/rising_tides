@@ -156,7 +156,25 @@ exec function RT_ActivateOneSmallFavor() {
 
 	NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("CHEAT: Force One Small Favor!");
 	ProgramState = class'RTHelpers'.static.GetNewProgramState(NewGameState);
+
 	ProgramState.bOneSmallFavorAvailable = true;
+	
+	`GAMERULES.SubmitGameState(NewGameState);
+}
+
+exec function RT_GenerateProgramCards() {
+	local RTGameState_ProgramFaction	ProgramState;
+	local XComGameState					NewGameState;
+	local int							idx;
+
+	NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("CHEAT: Add Program Faction Cards!");
+	ProgramState = class'RTHelpers'.static.GetNewProgramState(NewGameState);
+
+	for(idx = 0; idx < class'RTGameState_ProgramFaction'.default.NumCardsOnMeet; idx++)
+	{
+		ProgramState.GenerateNewPlayableCard(NewGameState);
+	}
+
 	`GAMERULES.SubmitGameState(NewGameState);
 }
 

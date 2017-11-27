@@ -167,3 +167,15 @@ Descriptors_Suffix[5]="- 006"
 Descriptors_Suffix[6]="- 007"
 Descriptors_Suffix[7]="- 008"
 Descriptors_Suffix[8]="- 009"
+
+[ResCard_RTOneSmallFavor RTProgramStrategyCardTemplate]
+DisplayName="One Small Favor"
+SummaryText="Call in a small favor from the Program. They will send one of their squads in the place of XCOM's for a mission."
+QuoteText="Getting authorization for something like this would be... difficult, but a favor, for a friend? Eh, I can make something happen..."
+QuoteTextAuthor="Dr. Hadley"
+
+[ResCard_RTJustPassingThrough RTProgramStrategyCardTemplate]
+DisplayName="Just Passing Through"
+SummaryText="There is a small chance that a Program operative will join the squad for any non-story mission."
+QuoteText="Oh, that engagement in He-guang? I was... just... passing through, yeah..."
+QuoteTextAuthor="'Whisper'"

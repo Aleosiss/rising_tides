@@ -896,10 +896,22 @@ RewardDetails="Uncover signal source."
 
 [ResistanceMode_PsiTraining X2ResistanceModeTemplate]
 DisplayName="Scanning Bonus: Psionic Expertise"
-SummaryText="Resistance scientists assist with operating the psi-lab while the Avenger is scanning at this location, decreasing the training time of soldiers inside it.\n\nWARNING: Purchasing this ability will overwrite the current Resistance HQ scanning bonus. The Scanning Bonus may only be modified once per month."
+SummaryText="Program scientists assist with operating the psi-lab while the Avenger is scanning at this location, decreasing the training time of soldiers inside it.\n\nWARNING: Purchasing this ability will overwrite the current Resistance HQ scanning bonus. The Scanning Bonus may only be modified once per month."
 ScanLabel="TRAIN PSI FASTER"
 ScanTooltip="Scanning at this site speeds up the rate at which we can train our psi-operatives."
 
 [RTOneSmallFavor_SPECTRE X2SitRepTemplate]
 FriendlyName="One Small Favor"
 Description="The Program has lent one of their squads to handle this operation."
+
+[ResCard_RTOneSmallFavor X2StrategyCardTemplate]
+DisplayName="One Small Favor"
+SummaryText="Call in a small favor from the Program. They will send one of their squads in the place of XCOM's for a mission."
+QuoteText="Getting authorization for something like this would be... difficult, but a favor, for a friend? Eh, I can make something happen..."
+QuoteTextAuthor="Dr. Hadley"
+
+[ResCard_RTJustPassingThrough X2StrategyCardTemplate]
+DisplayName="Just Passing Through"
+SummaryText="There is a small chance that a Program operative will join the squad for any non-story mission."
+QuoteText="Oh, that engagement in He-guang? I was... just... passing through, yeah..."
+QuoteTextAuthor="'Whisper'"

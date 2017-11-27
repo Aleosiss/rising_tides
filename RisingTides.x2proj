@@ -449,7 +449,13 @@
     <Content Include="Src\RisingTides\Classes\RTGameState_ProgramFaction.uc">
       <SubType>Content</SubType>
     </Content>
+    <Content Include="Src\RisingTides\Classes\RTGameState_StrategyCard.uc">
+      <SubType>Content</SubType>
+    </Content>
     <Content Include="Src\RisingTides\Classes\RTProgramFactionTemplate.uc">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Src\RisingTides\Classes\RTProgramStrategyCardTemplate.uc">
       <SubType>Content</SubType>
     </Content>
     <Content Include="Src\RisingTides\Classes\RTStrategyElement_ProgramFaction.uc">

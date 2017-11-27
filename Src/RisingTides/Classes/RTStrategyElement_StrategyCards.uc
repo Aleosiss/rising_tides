@@ -18,7 +18,7 @@ static function X2DataTemplate RTCreateOneSmallFavorTemplate()
 {
 	local X2StrategyCardTemplate Template;
 
-	`CREATE_X2TEMPLATE(class'X2StrategyCardTemplate', Template, 'RTResCard_OneSmallFavor');
+	`CREATE_X2TEMPLATE(class'X2StrategyCardTemplate', Template, 'ResCard_RTOneSmallFavor');
 	Template.Category = "ResistanceCard";
 	Template.OnActivatedFn = ActivateOneSmallFavor;
 	Template.OnDeactivatedFn = DeactivateOneSmallFavor;
@@ -43,7 +43,7 @@ static function DeactivateOneSmallFavor(XComGameState NewGameState, StateObjectR
 static function X2DataTemplate RTCreateJustPassingThrough() {
 	local X2StrategyCardTemplate Template;
 
-	`CREATE_X2TEMPLATE(class'X2StrategyCardTemplate', Template, 'RTResCard_JustPassingThrough');
+	`CREATE_X2TEMPLATE(class'X2StrategyCardTemplate', Template, 'ResCard_RTJustPassingThrough');
 	Template.Category = "ResistanceCard";
 	Template.ModifyTacticalStartStateFn = ActivateJustPassingThrough;
 
@@ -56,7 +56,6 @@ static function ActivateJustPassingThrough(XComGameState StartState) {
 	local array<StateObjectReference> AvailableSoldiers;
 	local StateObjectReference SoldierObjRef;
 	local XComGameState_MissionSite MissionState;
-	
 
 	if (IsSplitMission( StartState ))
 		return;
@@ -82,7 +81,6 @@ static function ActivateJustPassingThrough(XComGameState StartState) {
 
 	if(XComHQ.TacticalGameplayTags.Find( 'RTOneSmallFavor' ) != INDEX_NONE)
 		return;
-
 
 	XComHQ.Squad.AddItem(SoldierObjRef);
 	XComHQ.AllSquads[0].SquadMembers.AddItem(SoldierObjRef);
