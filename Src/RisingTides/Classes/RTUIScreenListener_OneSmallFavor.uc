@@ -19,23 +19,13 @@ event OnInit(UIScreen Screen)
 	AddOneSmallFavorSelectionCheckBox(UIMission(Screen));
 }
 
-// This event is triggered after a screen receives focus
-event OnReceiveFocus(UIScreen Screen)
-{
-	if(UIMission(Screen) == none) {
-		return;
-	}
-	
-	//AddOneSmallFavorSelectionCheckBox(UIMission(Screen));
-	
-}
-
 event OnRemoved(UIScreen Screen) {
 	local UISquadSelect ss;
 	local StateObjectReference EmptyRef;
 
 	if(UISquadSelect(Screen) != none) {
 		ss = UISquadSelect(Screen);
+		// If the mission was launched, we don't want to clean up the XCGS_MissionSite
 		if(!ss.bLaunched) {
 			RemoveOneSmallFavorSitrep(XComGameState_MissionSite(`XCOMHISTORY.GetGameStateForObjectID(mr.ObjectID)));
 			mr = EmptyRef;
@@ -44,7 +34,11 @@ event OnRemoved(UIScreen Screen) {
 	}
 
 	if(UIStrategyMap(Screen) != none) {
-		RemoveOneSmallFavorSitrep(XComGameState_MissionSite(`XCOMHISTORY.GetGameStateForObjectID(mr.ObjectID)));
+		// Just avoiding a RedScreen here, not necessarily a useful check
+		if(mr.ObjectID != 0) {
+			RemoveOneSmallFavorSitrep(XComGameState_MissionSite(`XCOMHISTORY.GetGameStateForObjectID(mr.ObjectID)));	
+		}
+
 		mr = EmptyRef;
 		ManualGC();
 	}
@@ -70,9 +64,12 @@ simulated function AddOneSmallFavorSelectionCheckBox(UIScreen Screen) {
 		return;
 	}
 
+
+	// immediately execute the init code if we're somehow late to the initialization party
 	if(MissionScreen.ConfirmButton.bIsInited) {
 		OnConfirmButtonInited(MissionScreen.ConfirmButton);
 	} else {
+		// otherwise add the button to the init delegates
 		MissionScreen.ConfirmButton.AddOnInitDelegate(OnConfirmButtonInited);	
 	}
 }
@@ -87,8 +84,10 @@ function OnConfirmButtonInited(UIPanel Panel) {
 		`RedScreen("Error, parent is not of class 'UIMission'");
 		return;
 	}
-	// Make the checkbox
+
 	Program = RTGameState_ProgramFaction(`XCOMHISTORY.GetSingleGameStateObjectForClass(class'RTGameState_ProgramFaction'));
+
+	// the checkbox shouldn't be clickable if the favor isn't available
 	bReadOnly = !Program.bOneSmallFavorAvailable;
 	if(!bReadOnly) {
 		bReadOnly = class'RTHelpers'.static.CheckIsInvalidMission(MissionScreen.GetMission().GetMissionSource());
