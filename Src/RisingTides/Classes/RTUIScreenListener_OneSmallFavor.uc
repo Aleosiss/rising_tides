@@ -64,6 +64,9 @@ simulated function AddOneSmallFavorSelectionCheckBox(UIScreen Screen) {
 		return;
 	}
 
+	if(!Program.bMetXCom) {
+		return;
+	}
 
 	// immediately execute the init code if we're somehow late to the initialization party
 	if(MissionScreen.ConfirmButton.bIsInited) {
@@ -123,10 +126,6 @@ simulated function bool AddOneSmallFavorSitrep(XComGameState_MissionSite Mission
 	History = `XCOMHISTORY;
 	Program = RTGameState_ProgramFaction(History.GetSingleGameStateObjectForClass(class'RTGameState_ProgramFaction'));
 	if(Program == none) {
-		return false;
-	}
-
-	if(!Program.bMetXCom) {
 		return false;
 	}
 
