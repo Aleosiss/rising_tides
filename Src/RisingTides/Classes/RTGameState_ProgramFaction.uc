@@ -189,20 +189,26 @@ simulated function UpdateNumDeaths(name CharacterTemplateName, StateObjectRefere
 	local bool				bFoundDeathRecord, bFoundKillCount;
 
 	foreach DeathRecordData(IteratorDeathRecord) {
+
+		// is this the death record for this unit type?
 		if(IteratorDeathRecord.CharacterTemplateName != CharacterTemplateName) {
 			continue;
 		}
 
+		// yes
 		bFoundDeathRecord = true;
 		IteratorDeathRecord.NumDeaths++;
 
+		// is the individual death record for the killer?
 		foreach IteratorDeathRecord.IndividualKillCounts(IteratorKillCount) {
+			// yes
 			if(IteratorKillCount.UnitRef.ObjectID == UnitRef.ObjectID) {
 				bFoundKillCount = true;
 				IteratorKillCount.KillCount++;
 			}
 		}
-
+		
+		// no, create a new one
 		if(!bFoundKillCount) {
 			NewKillCount.UnitRef = UnitRef;
 			NewKillCount.KillCount = 1;
@@ -211,6 +217,7 @@ simulated function UpdateNumDeaths(name CharacterTemplateName, StateObjectRefere
 
 	}
 
+	// no
 	// new character. make a new death record and increment the number of deaths.
 	// also, create a new kill count and increment the number of kills.
 	if(!bFoundDeathRecord) {
@@ -247,7 +254,6 @@ simulated function UpdateNumCrits(name CharacterTemplateName) {
 
 }
 
-// Creates the killtracker object if it doesn't exist
 // RTGameState_ProgramFaction GetProgramFaction()
 static function RTGameState_ProgramFaction GetProgramFaction() {
 	local XComGameStateHistory History;
