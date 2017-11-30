@@ -356,7 +356,7 @@ static function X2AbilityTemplate OverTheShoulderPassives() {
 	LoadPerks = new class'RTEffect_LoadPerks';
 	LoadPerks.BuildPersistentEffect(1, true, false, true);
 	LoadPerks.AbilitiesToLoad = default.AbilityPerksToLoad;
-	Template.AddShooterEffect(LoadPerks);
+	//Template.AddShooterEffect(LoadPerks);
 
 	Template.AbilityTriggers.AddItem(default.UnitPostBeginPlayTrigger);
 

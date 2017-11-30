@@ -13,6 +13,7 @@ event OnInit(UIScreen Screen)
 	if(UIMission(Screen) == none) {
 		return;
 	}
+	
 	bDebugging = false;
 
 	ms = UIMission(Screen);

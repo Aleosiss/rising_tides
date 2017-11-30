@@ -150,7 +150,7 @@ static function X2AbilityTemplate ScopedAndDropped()
 	LoadPerks = new class'RTEffect_LoadPerks';
 	LoadPerks.BuildPersistentEffect(1, true, false, true);
 	LoadPerks.AbilitiesToLoad = default.AbilityPerksToLoad;
-	Template.AddShooterEffect(LoadPerks);
+	//Template.AddShooterEffect(LoadPerks);
 
 
 	// standard ghost abilities

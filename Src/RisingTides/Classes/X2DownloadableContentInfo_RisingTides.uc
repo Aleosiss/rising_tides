@@ -8,9 +8,10 @@
 //  Copyright (c) 2016 Firaxis Games, Inc. All rights reserved.
 //---------------------------------------------------------------------------------------
 
-class X2DownloadableContentInfo_RisingTides extends X2DownloadableContentInfo;
+class X2DownloadableContentInfo_RisingTides extends X2DownloadableContentInfo config(RisingTides);
 
 var bool bDebugOutputDisabled;
+var config array<name> AbilityPerksToLoad;
 
 defaultproperties
 {
@@ -43,6 +44,19 @@ static event OnPostTemplatesCreated()
 
 	MakePsiAbilitiesInterruptable();
 	AddProgramFactionCovertActions();
+	RebuildPerkContentCache();
+}
+
+simulated function RebuildPerkContentCache() {
+	local XComContentManager		Content;
+	local name n;
+
+	Content = `CONTENT;
+	Content.BuildPerkPackageCache();
+	foreach AbilityPerksToLoad(n) {
+		class'RTHelpers'.static.RTLog("CachingPerkContent for " $ n $ "!");
+		Content.CachePerkContent(n);
+	}
 }
 
 /// <summary>
