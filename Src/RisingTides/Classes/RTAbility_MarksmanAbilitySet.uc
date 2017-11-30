@@ -120,7 +120,6 @@ static function X2AbilityTemplate ScopedAndDropped()
 	local X2AbilityTemplate						Template;
 	local RTEffect_ScopedAndDropped				ScopedEffect;
 	local RTEffect_Squadsight					SSEffect;
-	local RTEffect_LoadPerks					LoadPerks;
 
 	// Icon Properties
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'ScopedAndDropped');
@@ -146,12 +145,6 @@ static function X2AbilityTemplate ScopedAndDropped()
 	SSEffect = new class'RTEffect_Squadsight';
 	SSEffect.BuildPersistentEffect(1, true, true, true);
 	Template.AddTargetEffect(SSEffect);
-
-	LoadPerks = new class'RTEffect_LoadPerks';
-	LoadPerks.BuildPersistentEffect(1, true, false, true);
-	LoadPerks.AbilitiesToLoad = default.AbilityPerksToLoad;
-	//Template.AddShooterEffect(LoadPerks);
-
 
 	// standard ghost abilities
 	Template.AdditionalAbilities.AddItem('GhostPsiSuite');

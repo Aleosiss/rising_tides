@@ -98,7 +98,6 @@ static function X2AbilityTemplate BumpInTheNight()
 	local X2AbilityTemplate                 Template;
 	local RTEffect_BumpInTheNight			BumpEffect;
 	local X2Effect_AdditionalAnimSets		AnimSets;
-	local RTEffect_LoadPerks				LoadPerks;
 
 	// Icon Properties
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'BumpInTheNight');
@@ -125,11 +124,6 @@ static function X2AbilityTemplate BumpInTheNight()
 	AnimSets.BuildPersistentEffect(1, true, false, false);
 	AnimSets.EffectName = 'RTQueenAnimSet';
 	Template.AddShooterEffect(AnimSets);
-
-	LoadPerks = new class'RTEffect_LoadPerks';
-	LoadPerks.BuildPersistentEffect(1, true, false, true);
-	LoadPerks.AbilitiesToLoad = default.AbilityPerksToLoad;
-	//Template.AddShooterEffect(LoadPerks);
 
 	// standard ghost abilities
 	Template.AdditionalAbilities.AddItem('GhostPsiSuite');

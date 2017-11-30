@@ -329,9 +329,6 @@
     <Content Include="Src\RisingTides\Classes\RTEffect_LinkedIntelligence.uc">
       <SubType>Content</SubType>
     </Content>
-    <Content Include="Src\RisingTides\Classes\RTEffect_LoadPerks.uc">
-      <SubType>Content</SubType>
-    </Content>
     <Content Include="Src\RisingTides\Classes\RTEffect_MarkValidActivationTiles.uc">
       <SubType>Content</SubType>
     </Content>

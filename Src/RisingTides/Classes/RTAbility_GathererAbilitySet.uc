@@ -341,7 +341,6 @@ static function X2AbilityTemplate CreateOverTheShoulderAbility(X2AbilityTemplate
 
 static function X2AbilityTemplate OverTheShoulderPassives() {
 	local X2AbilityTemplate                     Template;
-	local RTEffect_LoadPerks					LoadPerks;
 
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'OverTheShoulderPassives')
 
@@ -352,11 +351,6 @@ static function X2AbilityTemplate OverTheShoulderPassives() {
 
 	Template.AbilityToHitCalc = default.DeadEye;
 	Template.AbilityTargetStyle = default.SelfTarget;
-
-	LoadPerks = new class'RTEffect_LoadPerks';
-	LoadPerks.BuildPersistentEffect(1, true, false, true);
-	LoadPerks.AbilitiesToLoad = default.AbilityPerksToLoad;
-	//Template.AddShooterEffect(LoadPerks);
 
 	Template.AbilityTriggers.AddItem(default.UnitPostBeginPlayTrigger);
 
