@@ -53,7 +53,7 @@ simulated static function RebuildPerkContentCache() {
 
 	Content = `CONTENT;
 	Content.BuildPerkPackageCache();
-	foreach AbilityPerksToLoad(n) {
+	foreach default.AbilityPerksToLoad(n) {
 		class'RTHelpers'.static.RTLog("CachingPerkContent for " $ n $ "!");
 		Content.CachePerkContent(n);
 	}
