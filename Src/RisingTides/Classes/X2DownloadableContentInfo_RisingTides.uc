@@ -47,7 +47,7 @@ static event OnPostTemplatesCreated()
 	RebuildPerkContentCache();
 }
 
-simulated function RebuildPerkContentCache() {
+simulated static function RebuildPerkContentCache() {
 	local XComContentManager		Content;
 	local name n;
 
