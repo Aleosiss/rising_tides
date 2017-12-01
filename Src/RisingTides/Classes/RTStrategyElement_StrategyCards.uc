@@ -63,8 +63,12 @@ static function ActivateJustPassingThrough(XComGameState StartState) {
 	Program = class'RTHelpers'.static.GetNewProgramState(StartState);
 	SoldierObjRef = Program.Master[`SYNC_RAND_STATIC(Program.Master.Length)].StateObjectRef;
 	
-	if(default.JustPassingThroughChance * Program.InfluenceScore < `SYNC_RAND_STATIC(100)) //TODO: Refactor to include an Operative-based modifer (location + personality)
-		return;
+	if(!class'RTHelpers'.static.DebuggingEnabled()) {
+		if(default.JustPassingThroughChance * Program.InfluenceScore < `SYNC_RAND_STATIC(100)) //TODO: Refactor to include an Operative-based modifer (location + personality)
+			return;
+	} else {
+		class'RTHelpers'.static.RTLog("Activating Just Passing Through via Debug Override!");
+	}
 
 	foreach StartState.IterateByClassType( class'XComGameState_HeadquartersXCom', XComHQ )
 		break;
