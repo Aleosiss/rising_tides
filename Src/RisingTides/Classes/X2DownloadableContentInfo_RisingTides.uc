@@ -44,7 +44,7 @@ static event OnPostTemplatesCreated()
 
 	MakePsiAbilitiesInterruptable();
 	AddProgramFactionCovertActions();
-	RebuildPerkContentCache();
+	//RebuildPerkContentCache();
 }
 
 simulated static function RebuildPerkContentCache() {
@@ -54,7 +54,6 @@ simulated static function RebuildPerkContentCache() {
 	Content = `CONTENT;
 	Content.BuildPerkPackageCache();
 	foreach default.AbilityPerksToLoad(n) {
-		class'RTHelpers'.static.RTLog("CachingPerkContent for " $ n $ "!");
 		Content.CachePerkContent(n);
 	}
 }
