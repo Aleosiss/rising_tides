@@ -11,6 +11,7 @@
 class X2DownloadableContentInfo_RisingTides extends X2DownloadableContentInfo config(RisingTides);
 
 var bool bDebugOutputDisabled;
+var config array<name> AbilityPerksToLoad;
 
 defaultproperties
 {
