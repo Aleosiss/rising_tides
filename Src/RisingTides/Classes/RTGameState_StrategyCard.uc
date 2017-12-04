@@ -13,17 +13,18 @@ static function SetUpStrategyCards(XComGameState StartState)
 	local bool bReplace;
 	
 	StratMgr = class'X2StrategyElementTemplateManager'.static.GetStrategyElementTemplateManager();
+	class'RTHelpers'.static.RTLog("Creating Strategy Cards!");
 	AllCardTemplates = StratMgr.GetAllTemplatesOfClass(class'RTProgramStrategyCardTemplate');
 
 	for(idx = 0; idx < AllCardTemplates.Length; idx++)
 	{
 		CardTemplate = RTProgramStrategyCardTemplate(AllCardTemplates[idx]);
-
+		class'RTHelpers'.static.RTLog("Creating StrategyCard with TemplateName" $ CardTemplate.DataName );
 		// Only Create Resistance Cards here, Chosen cards need to be created on the fly
 		if(CardTemplate != none && CardTemplate.Category == "ResistanceCard")
 		{
 			CardState = CardTemplate.CreateInstanceFromTemplate(StartState);
-
+			
 			if (CardTemplate.bContinentBonus)
 			{
 				PossibleContinentBonusCards.AddItem(CardState);
@@ -70,9 +71,8 @@ function XComGameState_ResistanceFaction GetAssociatedFaction()
 	}
 
 	foreach `XCOMHISTORY.IterateByClassType(class'RTGameState_ProgramFaction', Program) {
-		if(Program.GetMyTemplateName() == GetAssociatedFactionName()) {
-			return Program;
-		}
+		return Program;
+		
 	}
 
 	return none;

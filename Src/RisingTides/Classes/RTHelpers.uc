@@ -231,6 +231,17 @@ static function PrintMiscInfoForFaction(XComGameState_ResistanceFaction Faction)
 	RTLog("It's " $ XComHQ.PsiTrainingRate);
 }
 
+static function SubmitGameState(XComGameState NewGameState) {
+	if(NewGameState.GetNumGameStateObjects() > 0)
+	{
+		`XCOMGAME.GameRuleset.SubmitGameState(NewGameState);
+	}
+	else
+	{
+		`XCOMHISTORY.CleanupPendingGameState(NewGameState);
+	}
+}
+
 static function XComGameState_HeadquartersXCom GetXComHQState()
 {
 	local XComGameState_HeadquartersXCom NewXComHQ;

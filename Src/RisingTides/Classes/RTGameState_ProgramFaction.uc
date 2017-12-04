@@ -97,12 +97,12 @@ var private StateObjectReference										SelectedMissionRef;				// cache of the
  function SetUpProgramFaction(XComGameState StartState)
 {
 	InitListeners();
-	if(!bSetupComplete) {
-		CreateRTOperatives(StartState);
-		CreateRTSquads(StartState);
-		//Program.CreateRTDeathRecord(StartState);
-		bSetupComplete = true;
-	}
+	class'RTGameState_StrategyCard'.static.SetUpStrategyCards(StartState);
+}
+
+function InitializeHQ(XComGameState NewGameState, int idx) {
+	super.InitializeHQ(NewGameState, idx);
+	SetUpProgramFaction(NewGameState);
 }
 
 // CreateRTOperatives(XComGameState NewGameState)
@@ -371,6 +371,7 @@ function OnEndTacticalPlay(XComGameState NewGameState)
 	if(!IsRelevantMission(MissionState)) {
 		return;
 	}
+
 	foreach NewGameState.IterateByClassType(class'XComGameState_Unit', UnitState) {
 		if(Master.Find('NickName', UnitState.GetNickName()) != INDEX_NONE) {
 			if(UnitState.bCaptured) {
@@ -560,12 +561,30 @@ function CreateGoldenPathActions(XComGameState NewGameState)
 //#############################################################################################
 //----------------- GENERAL FACTION METHODS ---------------------------------------------------
 //#############################################################################################
+simulated function X2ResistanceFactionTemplate GetMyTemplate()
+{ 
+	if(m_Template == none)
+	{
+		m_Template = RTProgramFactionTemplate(GetMyTemplateManager().FindStrategyElementTemplate(m_TemplateName));
+	}
+	return m_Template;
+}
+
+//---------------------------------------------------------------------------------------
 event OnCreation(optional X2DataTemplate Template)
 {
 	local int idx;
 
 	super.OnCreation( Template );
 
+	m_Template = X2ResistanceFactionTemplate(Template);
+	m_TemplateName = Template.DataName;
+
+	for(idx = 0; idx < default.StartingCardSlots; idx++)
+	{
+		// Add Slots with empty entries
+		AddCardSlot();
+	}
 }
 
 function MeetXCom(XComGameState NewGameState)
@@ -586,8 +605,12 @@ function MeetXCom(XComGameState NewGameState)
 	CreateGoldenPathActions(NewGameState);
 	GenerateCovertActions(NewGameState, ExclusionList);
 	
-	// Program-specfic startup
-	SetUpProgramFaction(NewGameState);
+	
+	CreateRTOperatives(NewGameState);
+	CreateRTSquads(NewGameState);
+	//CreateRTDeathRecord(StartState);
+	bSetupComplete = true;	
+	
 
 	for(idx = 0; idx < default.NumCardsOnMeet; idx++)
 	{
