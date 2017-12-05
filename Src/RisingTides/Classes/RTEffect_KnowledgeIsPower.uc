@@ -66,8 +66,7 @@ simulated function bool OnEffectTicked(const out EffectAppliedData ApplyEffectPa
 	if(UnitState.AffectedByEffectNames.Find(class'RTAbility_GathererAbilitySet'.default.OverTheShoulderEffectName) == INDEX_NONE) {
 		kNewEffectState.iStacks = 0;
 	}
-
-
+	
 	kNewEffectState.iStacks++;
 
     return super.OnEffectTicked(ApplyEffectParameters, kNewEffectState, NewGameState, FirstApplication, PlayerState);

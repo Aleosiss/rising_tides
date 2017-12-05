@@ -13,7 +13,6 @@ enum ERTChecklist {
 	eChecklist_FreeActions
 };
 
-
 // copied here from X2Helpers_DLC_Day60.uc
 static function bool IsUnitAlienRuler(XComGameState_Unit UnitState)
 {
@@ -96,7 +95,6 @@ static function bool CheckAbilityActivated(name AbilityTemplateName, ERTChecklis
 		`LOG("Rising Tides: " @ AbilityTemplateName @ " was not found in " @ n);
 	}
 
-
 	return b;
 }
 
@@ -115,7 +113,6 @@ static function bool MultiCatCheckAbilityActivated (name AbilityTemplateName, ar
 	return b;
 }
 
-
 static function GetAdjacentTiles(TTile TargetTile, out array<TTile> AdjacentTiles) {
 	local int x, y;
 	local TTile Tile;
@@ -131,7 +128,6 @@ static function GetAdjacentTiles(TTile TargetTile, out array<TTile> AdjacentTile
 			AdjacentTiles.AddItem(Tile);
 		}
 	}
-
 }
 
 static function PanicLoopBeginFn( X2Effect_Persistent PersistentEffect, const out EffectAppliedData ApplyEffectParameters, XComGameState_BaseObject kNewTargetState, XComGameState NewGameState )
@@ -195,6 +191,10 @@ static function RTLog(string message, optional bool bShouldRedScreenToo = false)
 		`RedScreen("Rising Tides: " $ message);
 }
 
+static function bool DebuggingEnabled() {
+	return class'X2DownloadableContentInfo_RisingTides'.static.DebuggingEnabled();
+}
+
 static function PrintCovertActionsForFaction(XComGameState_ResistanceFaction Faction) {
 	local StateObjectReference StateObjRef;
 	local XComGameState_CovertAction CovertActionState;
@@ -231,6 +231,16 @@ static function PrintMiscInfoForFaction(XComGameState_ResistanceFaction Faction)
 	RTLog("It's " $ XComHQ.PsiTrainingRate);
 }
 
+static function SubmitGameState(XComGameState NewGameState) {
+	if(NewGameState.GetNumGameStateObjects() > 0)
+	{
+		`XCOMGAME.GameRuleset.SubmitGameState(NewGameState);
+	}
+	else
+	{
+		`XCOMHISTORY.CleanupPendingGameState(NewGameState);
+	}
+}
 
 static function XComGameState_HeadquartersXCom GetXComHQState()
 {
@@ -243,4 +253,8 @@ static function XComGameState_HeadquartersXCom GetXComHQState()
 	}
 
 	return NewXComHQ;
+}
+
+simulated static function bool CheckIsInvalidMission(X2MissionSourceTemplate Template) {
+	return class'RTGameState_ProgramFaction'.default.InvalidMissionSources.Find(Template.DataName) != INDEX_NONE;
 }

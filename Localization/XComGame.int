@@ -46,8 +46,8 @@ LocPromotionPopupText="<Bullet/> Minimum of 1 Shield HP if overkill damage is de
 
 [RTPrecisionShot X2AbilityTemplate]
 LocFriendlyName="Precision Shot"
-LocLongDescription="A carefully aimed shot, suffering decreased aim but increased critical chance and critical damage."
-LocHelpText="Shoot with decreased aim, but increased critical chance and critical damage."
+LocLongDescription="A carefully aimed shot, suffering decreased chance to hit, but increased critical chance and critical damage."
+LocHelpText="Shoot with decreased chance to hit, but increased critical chance and critical damage."
 LocFlyOverText="Precision Shot"
 LocPromotionPopupText="<Bullet> <Ability:SelfCooldown/> turn cooldown.<br/><Bullet/> Shoot a precision shot, suffering from decreased chance to hit, but increased critical chance and critical damage.<br/>"
 
@@ -157,10 +157,10 @@ LocPromotionPopupText="<Bullet/>Pyrokinetically-enhanced rounds punch through co
 
 [YourHandsMyEyes X2AbilityTemplate]
 LocFriendlyName="Your Hands, My Eyes"
-LocLongDescription="Whisper can use the meld to hack targets he can't himself reach."
-LocHelpText="Whisper can use the meld to hack targets he can't himself reach."
+LocLongDescription="Mind Meld shares the owner's hacking stat in addition to the normal will bonuses."
+LocHelpText="Mind Meld shares the owner's hacking stat in addition to the normal will bonuses."
 LocFlyOverText="Your Hands, My Eyes"
-LocPromotionPopupText="<Bullet/>Whisper can use the meld to hack targets he can't himself reach.<br/>"
+LocPromotionPopupText="<Bullet/>Mind Meld shares the owner's hacking stat in addition to the normal will bonuses.<br/>"
 
 [RTKubikuri X2AbilityTemplate]
 LocFriendlyName="Kubikiri"
@@ -205,11 +205,11 @@ LocFlyOverText="Mind Control"
 LocPromotionPopupText="<Bullet><Ability:SelfCooldown/> turn cooldown.<br/>"
 
 [LinkedIntelligence X2AbilityTemplate]
-LocFriendlyName="Networked OI"
-LocLongDescription="Units within the meld can react instantaneously to fire commands. When a unit in the Meld takes a reaction shot, all melded units attempt to fire against the target."
+LocFriendlyName="Possibility Mapping"
+LocLongDescription="Units within the meld can react instantaneously to firing commands. When a unit in the Meld takes a reaction shot, all melded units attempt to fire against the target."
 LocHelpText="When a unit in the Meld takes a reaction shot, all melded units attempt to fire against the target."
-LocFlyOverText="Networked OI"
-LocPromotionPopupText="<Bullet/> Networked OI will trigger at squadsight range.<br/><Bullet/> Units will not break concealment in order to fire.<br/>"
+LocFlyOverText="Possibility Mapped"
+LocPromotionPopupText="<Bullet/> Possibility Mapping will trigger at squadsight range.<br/><Bullet/> Units will not break concealment in order to fire.<br/>"
 
 [TwitchReaction X2AbilityTemplate]
 LocFriendlyName="Twitch Reaction"
@@ -350,7 +350,7 @@ LocPromotionPopupText="<Bullet/> You can trigger the Slash ability by placing th
 LocFriendlyName="Siphon"
 LocLongDescription="This unit will siphon health from organic enemies based on the damage it deals to them."
 LocHelpText="This unit will siphon health from organic enemies based on the damage it deals to them."
-LocFlyOverText="Bump In The Night"
+LocFlyOverText="Siphon"
 LocPromotionPopupText="<Bullet/> This unit will siphon health from organic enemies based on the damage it deals to them. <br/><Bullet/> Minimum health gain per attack is 2. <br/>"
 
 [RTAcidicBlade X2AbilityTemplate]
@@ -530,15 +530,15 @@ LocPromotionPopupText="<Bullet/> Lunge forward, dealing damage to all enemies in
 [RTCloseCombatSpecialist X2AbilityTemplate]
 LocFriendlyName="Close Combat Specialist"
 LocFlyOverText="Close Combat Specialist"
-LocLongDescription="During enemy turns, fire a free reaction shot with your primary weapon at any visible enemy within four tiles who moves or fires."
-LocHelpText="During enemy turns, Fire a free reaction shot at any visible enemy within four tiles who moves or fires."
-LocPromotionPopupText="<Bullet/> Will not trigger if soldier is concealed.<br/><Bullet/> You may shoot at each enemy with this ability once per turn.<br/><Bullet/> Each shot requires 2 ammo.<br/>""
+LocLongDescription="Fire a free reaction shot with your primary weapon at any visible enemy within four tiles who moves or fires."
+LocHelpText="Fire a free reaction shot at any visible enemy within four tiles who moves or fires."
+LocPromotionPopupText="<Bullet/> Will not trigger if soldier is concealed.<br/><Bullet/> You may shoot at each enemy with this ability once per turn.<br/><Bullet/> Each shot requires 1 ammo.<br/>""
 
 [RTCloseCombatSpecialistAttack X2AbilityTemplate]
 LocFriendlyName="Close Combat Specialist"
 LocFlyOverText="Close Combat Specialist"
-LocLongDescription="During enemy turns, fire a free reaction shot with your primary weapon at any visible enemy within four tiles who moves or fires."
-LocHelpText="During enemy turns, Fire a free reaction shot at any visible enemy within four tiles who moves or fires."
+LocLongDescription="Fire a free reaction shot with your primary weapon at any visible enemy within four tiles who moves or fires."
+LocHelpText="Fire a free reaction shot at any visible enemy within four tiles who moves or fires."
 LocPromotionPopupText="<Bullet/> Will not trigger if soldier is concealed.<br/><Bullet/> You may shoot at each enemy with this ability once per turn.<br/><Bullet/> Each shot requires 2 ammo.<br/>""
 
 
@@ -597,7 +597,7 @@ LocPromotionPopupText="<Bullet/> Grant an effect to allied units affected by Ove
 LocFriendlyName="Forced Introversion"
 LocLongDescription="When this unit recieves Feedback, it also recieves Stealth."
 LocHelpText="When this unit recieves Feedback, it also recieves Stealth."
-LocFlyOverText="Meld Induction"
+LocFlyOverText="Forced Introversion"
 LocPromotionPopupText="<Bullet/> When this unit recieves Feedback, it also recieves Stealth.<br/><Bullet/> Stealth usually lasts for the duration of the Feedback event.<br/>"
 
 [RTRudimentaryCreatures X2AbilityTemplate]
@@ -896,6 +896,22 @@ RewardDetails="Uncover signal source."
 
 [ResistanceMode_PsiTraining X2ResistanceModeTemplate]
 DisplayName="Scanning Bonus: Psionic Expertise"
-SummaryText="Resistance scientists assist with operating the psi-lab while the Avenger is scanning at this location, decreasing the training time of soldiers inside it.\n\nWARNING: Purchasing this ability will overwrite the current Resistance HQ scanning bonus. The Scanning Bonus may only be modified once per month."
+SummaryText="Program scientists assist with operating the psi-lab while the Avenger is scanning at this location, decreasing the training time of soldiers inside it.\n\nWARNING: Purchasing this ability will overwrite the current Resistance HQ scanning bonus. The Scanning Bonus may only be modified once per month."
 ScanLabel="TRAIN PSI FASTER"
 ScanTooltip="Scanning at this site speeds up the rate at which we can train our psi-operatives."
+
+[RTOneSmallFavor_SPECTRE X2SitRepTemplate]
+FriendlyName="One Small Favor"
+Description="The Program has lent one of their squads to handle this operation."
+
+[ResCard_RTOneSmallFavor X2StrategyCardTemplate]
+DisplayName="One Small Favor"
+SummaryText="Call in a small favor from the Program. They will send one of their squads in the place of XCOM's for a mission."
+QuoteText="Getting authorization for something like this would be... difficult, but a favor, for a friend? Eh, I can make something happen..."
+QuoteTextAuthor="Dr. Hadley"
+
+[ResCard_RTJustPassingThrough X2StrategyCardTemplate]
+DisplayName="Just Passing Through"
+SummaryText="There is a small chance that a Program operative will join the squad for any non-story mission."
+QuoteText="Oh, that engagement in He-guang? I was... just... passing through, yeah..."
+QuoteTextAuthor="'Whisper'"

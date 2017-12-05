@@ -176,9 +176,6 @@
     <Content Include="Localization\RisingTides.int">
       <SubType>Content</SubType>
     </Content>
-    <Content Include="Localization\TheProgram.int">
-      <SubType>Content</SubType>
-    </Content>
     <Content Include="ReadMe.txt" />
     <Content Include="ModPreview.jpg" />
     <Content Include="Config\XComEditor.ini" />
@@ -240,6 +237,9 @@
       <SubType>Content</SubType>
     </Content>
     <Content Include="Src\RisingTides\Classes\RTAction_RemoveMITV.uc">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Src\RisingTides\Classes\RTCharacter_DefaultCharacters.uc">
       <SubType>Content</SubType>
     </Content>
     <Content Include="Src\RisingTides\Classes\RTConditionBuilder.uc">
@@ -327,9 +327,6 @@
       <SubType>Content</SubType>
     </Content>
     <Content Include="Src\RisingTides\Classes\RTEffect_LinkedIntelligence.uc">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Src\RisingTides\Classes\RTEffect_LoadPerks.uc">
       <SubType>Content</SubType>
     </Content>
     <Content Include="Src\RisingTides\Classes\RTEffect_MarkValidActivationTiles.uc">
@@ -449,7 +446,13 @@
     <Content Include="Src\RisingTides\Classes\RTGameState_ProgramFaction.uc">
       <SubType>Content</SubType>
     </Content>
+    <Content Include="Src\RisingTides\Classes\RTGameState_StrategyCard.uc">
+      <SubType>Content</SubType>
+    </Content>
     <Content Include="Src\RisingTides\Classes\RTProgramFactionTemplate.uc">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Src\RisingTides\Classes\RTProgramStrategyCardTemplate.uc">
       <SubType>Content</SubType>
     </Content>
     <Content Include="Src\RisingTides\Classes\RTStrategyElement_ProgramFaction.uc">
@@ -470,13 +473,16 @@
     <Content Include="Src\RisingTides\Classes\RTSitRepEffects.uc">
       <SubType>Content</SubType>
     </Content>
-    <Content Include="Src\RisingTides\Classes\RTSitrep_OneSmallFavor.uc">
+    <Content Include="Src\RisingTides\Classes\RTSitrepEffect_OneSmallFavor.uc">
       <SubType>Content</SubType>
     </Content>
     <Content Include="Src\RisingTides\Classes\RTStrategyElement_CovertActions.uc">
       <SubType>Content</SubType>
     </Content>
-    <Content Include="Src\RisingTides\Classes\RTStrategyElement_ProgramActions.uc">
+    <Content Include="Src\RisingTides\Classes\RTStrategyElement_SitReps.uc">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Src\RisingTides\Classes\RTStrategyElement_StrategyCards.uc">
       <SubType>Content</SubType>
     </Content>
     <Content Include="Src\RisingTides\Classes\RTStrategyElement_ResistanceModes.uc">

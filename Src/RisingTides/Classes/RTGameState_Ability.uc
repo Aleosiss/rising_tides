@@ -71,7 +71,7 @@ simulated function name GatherAbilityTargets(out array<AvailableTarget> Targets,
 	{
 		if(m_TemplateName == 'RTShadowStrike')
 			bDebug = false;
-		
+
 		AvailableCode = m_Template.AbilityTargetStyle.GetPrimaryTargetOptions(self, Targets);
 		if (AvailableCode != 'AA_Success') {
 			if(bDebug)
@@ -315,22 +315,6 @@ function EventListenerReturn EchoedAgonyListener(Object EventData, Object EventS
 	NewGameState.AddStateObject(AbilityState);
 	`TACTICALRULES.SubmitGameState(NewGameState);
 
-	//bDebug = false;
-	// finally, activate the ability with the updated panic strength
-	//TacticalRules.GetGameRulesCache_Unit(SourceUnitState.GetReference(), UnitCache);
-	//for(i = 0; i < UnitCache.AvailableActions.Length; i++) {
-		//AbilityState = XComGameState_Ability(History.GetGameStateForObjectID(UnitCache.AvailableActions[i].AbilityObjectRef.ObjectID));
-		//if(AbilityState.m_TemplateName == m_TemplateName) {     // found myself
-			//bDebug = true;
-			//if(UnitCache.AvailableActions[i].AvailableCode == 'AA_Success') {
-				//class'XComGameStateContext_Ability'.static.ActivateAbility(UnitCache.AvailableActions[i]);
-			//} else {
-				//`LOG("Rising Tides: Could not activate Echoed Agony!");
-			//}
-			//break;
-		//}
-	//}
-
 	AbilityTriggerAgainstSingleTarget(OwnerStateObject, false);
 
 	if(!bDebug) {
@@ -431,25 +415,29 @@ function EventListenerReturn RTAbilityTriggerEventListener_ValidAbilityLocations
 	return ELR_NoInterrupt;
 }
 
+// mostly used for debugging
 function EventListenerReturn RTAbilityTriggerEventListener_Self(Object EventData, Object EventSource, XComGameState GameState, Name EventID, Object CallbackData)
 {
-	`LOG("Rising Tides: RTAbilityTriggerEventListener_Self");
-	`LOG(XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(OwnerStateObject.ObjectID)).GetFullName());
+	class'RTHelpers'.static.RTLog("RTAbilityTriggerEventListener_Self");
+	class'RTHelpers'.static.RTLog(XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(OwnerStateObject.ObjectID)).GetFullName());
+	//RTAbilityTriggerAgainstSingleTarget(OwnerStateObject, false);
 	ActivateAbility(OwnerStateObject);
+
 	return ELR_NoInterrupt;
 }
 
 // ActivateAbility
-protected function ActivateAbility(StateObjectReference TargetRef) {
+protected function bool ActivateAbility(StateObjectReference TargetRef) {
 	local XComGameStateContext_Ability	AbilityContext;
 	local XComGameState					NewGameState;
 	local name							AvailableCode;
 
 	AvailableCode = CanActivateAbilityForObserverEvent(XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(TargetRef.ObjectID)));
 	if(AvailableCode != 'AA_Success') {
-		`LOG("Rising Tides: Couldn't Activate "@ self.GetMyTemplateName() @ " for observer event, Code = "$ AvailableCode);
+		class'RTHelpers'.static.RTLog("Couldn't Activate "@ self.GetMyTemplateName() @ " for observer event, Code = "$ AvailableCode);
+		return false;
 	} else {
-		NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState(string(GetFuncName()));
+		NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("Activating Ability " $ GetMyTemplateName());
 		NewGameState.ModifyStateObject(self.Class, ObjectID);
 		`TACTICALRULES.SubmitGameState(NewGameState);
 	}
@@ -457,10 +445,69 @@ protected function ActivateAbility(StateObjectReference TargetRef) {
 	AbilityContext = class'XComGameStateContext_Ability'.static.BuildContextFromAbility(self, TargetRef.ObjectID);
 
 	if( AbilityContext.Validate() ) {
-		`TACTICALRULES.SubmitGameStateContext(AbilityContext);
+		class'RTHelpers'.static.RTLog("The AbilityContext was validated, submitting it!");
+		if(!`TACTICALRULES.SubmitGameStateContext(AbilityContext)) {
+			class'RTHelpers'.static.RTLog("The Context failed to be submitted!");
+			return false;
+		} else {
+			class'RTHelpers'.static.RTLog("The Context was submitted successfully!");
+			return true;
+		}
 	} else {
-		`LOG("Rising Tides: Couldn't validate AbilityContext, " @ self.GetMyTemplateName() @ " not activated.");
+		class'RTHelpers'.static.RTLog("Rising Tides: Couldn't validate AbilityContext, " @ self.GetMyTemplateName() @ " not activated.");
+		return false;
 	}
+}
+
+function bool RTAbilityTriggerAgainstSingleTarget(StateObjectReference TargetRef, bool bMustHaveAdditionalTargets, optional int VisualizeIndex = -1, optional array<vector> TargetLocations)
+{
+	return RTAbilityTriggerAgainstSingleTarget_Static(ObjectID, OwnerStateObject, TargetRef, bMustHaveAdditionalTargets, VisualizeIndex, TargetLocations);
+}
+
+static function bool RTAbilityTriggerAgainstSingleTarget_Static(int AbilityID, StateObjectReference SourceRef, StateObjectReference TargetRef, bool bMustHaveAdditionalTargets, optional int VisualizeIndex = -1, optional array<vector> TargetLocations)
+{
+	local GameRulesCache_Unit UnitCache;
+	local int i, j;
+	local X2TacticalGameRuleset TacticalRules;
+	local AvailableTarget AvailTarget;
+
+	TacticalRules = `TACTICALRULES;
+	`log("0");
+	if (TacticalRules.GetGameRulesCache_Unit(SourceRef, UnitCache))
+	{
+		`log("1");
+		for (i = 0; i < UnitCache.AvailableActions.Length; ++i)
+		{
+			`log("2");
+			if (UnitCache.AvailableActions[i].AbilityObjectRef.ObjectID == AbilityID)
+			{
+				`log("3");
+				for (j = 0; j < UnitCache.AvailableActions[i].AvailableTargets.Length; ++j)
+				{
+					`log("4");
+					AvailTarget = UnitCache.AvailableActions[i].AvailableTargets[j];
+					if (AvailTarget.PrimaryTarget.ObjectID == TargetRef.ObjectID)
+					{
+						`log("5");
+						if (UnitCache.AvailableActions[i].AvailableCode == 'AA_Success')
+						{
+							`log("6");
+							if (bMustHaveAdditionalTargets ? AvailTarget.AdditionalTargets.Length > 0 : true)
+							{
+								if(class'XComGameStateContext_Ability'.static.ActivateAbility(UnitCache.AvailableActions[i], j, TargetLocations,,,, VisualizeIndex)) {
+									`log("7");
+								} else `log("8");
+								return true;
+							}
+						}
+						break;
+					}
+				}
+				break;
+			}
+		}
+	}
+	return false;
 }
 
 defaultproperties

@@ -64,7 +64,7 @@ static function array<X2DataTemplate> CreateTemplates()
 {
 	local array<X2DataTemplate> Templates;
 
-	Templates.AddItem(ScopedAndDropped());							
+	Templates.AddItem(ScopedAndDropped());
 	Templates.AddItem(RTStandardSniperShot());
 	Templates.AddItem(RTOverwatch());
 	Templates.AddItem(RTOverwatchShot());
@@ -79,32 +79,32 @@ static function array<X2DataTemplate> CreateTemplates()
 	Templates.AddItem(SixOClockEffect());
 	//Templates.AddItem(VitalPointTargeting());
 	Templates.AddItem(RTDamnGoodGround());
-	Templates.AddItem(SlowIsSmooth());								
+	Templates.AddItem(SlowIsSmooth());
 	Templates.AddItem(SlowIsSmoothEffect());
-	Templates.AddItem(Sovereign());									
+	Templates.AddItem(Sovereign());
 	Templates.AddItem(SovereignEffect());
 	Templates.AddItem(DaybreakFlame());										// animation
-	Templates.AddItem(DaybreakFlameIcon());							
-	Templates.AddItem(YourHandsMyEyes());							
+	Templates.AddItem(DaybreakFlameIcon());
+	Templates.AddItem(YourHandsMyEyes());
 	Templates.AddItem(TimeStandsStill());									// animation
 	Templates.AddItem(TimeStandsStillInterruptListener());
 	Templates.AddItem(TimeStandsStillEndListener());
 	Templates.AddItem(TwitchReaction());
 	Templates.AddItem(TwitchReactionShot());
-	Templates.AddItem(LinkedIntelligence());						
+	Templates.AddItem(LinkedIntelligence());
 	Templates.AddItem(PsionicSurge());								     	// animation
-	Templates.AddItem(EyeInTheSky());								
+	Templates.AddItem(EyeInTheSky());
 	Templates.AddItem(HeatChannel());										// animation
-	Templates.AddItem(HeatChannelIcon());							
+	Templates.AddItem(HeatChannelIcon());
 	Templates.AddItem(HeatChannelCooldown());
-	Templates.AddItem(Harbinger());								
+	Templates.AddItem(Harbinger());
 	Templates.AddItem(RTHarbingerPsionicLance());
 	Templates.AddItem(HarbingerCleanseListener());
-	Templates.AddItem(ShockAndAwe());								
+	Templates.AddItem(ShockAndAwe());
 	Templates.AddItem(ShockAndAweListener());
 	Templates.AddItem(RTKillzone());								// icon
-	Templates.AddItem(RTEveryMomentMatters());						
-	Templates.AddItem(RTOverflowBarrier());							
+	Templates.AddItem(RTEveryMomentMatters());
+	Templates.AddItem(RTOverflowBarrier());
 	Templates.AddItem(RTOverflowBarrierEvent());
 	Templates.AddItem(RTKubikuri());
 	Templates.AddItem(RTKubikuriDamage());
@@ -120,7 +120,6 @@ static function X2AbilityTemplate ScopedAndDropped()
 	local X2AbilityTemplate						Template;
 	local RTEffect_ScopedAndDropped				ScopedEffect;
 	local RTEffect_Squadsight					SSEffect;
-	local RTEffect_LoadPerks					LoadPerks;
 
 	// Icon Properties
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'ScopedAndDropped');
@@ -147,11 +146,6 @@ static function X2AbilityTemplate ScopedAndDropped()
 	SSEffect.BuildPersistentEffect(1, true, true, true);
 	Template.AddTargetEffect(SSEffect);
 
-	LoadPerks = new class'RTEffect_LoadPerks';
-	LoadPerks.AbilitiesToLoad = default.AbilityPerksToLoad;
-	Template.AddShooterEffect(LoadPerks);
-
-
 	// standard ghost abilities
 	Template.AdditionalAbilities.AddItem('GhostPsiSuite');
 	Template.AdditionalAbilities.AddItem('JoinMeld');
@@ -174,7 +168,8 @@ static function X2AbilityTemplate ScopedAndDropped()
 
 	// Probably required
 	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
-	//  NOTE: No visualization on purpose!
+	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
+	Template.bSkipFireAction = true;
 
 	return Template;
 }
@@ -324,7 +319,7 @@ static function X2AbilityTemplate RTOverwatch()
 	CoveringFireEffect.AbilityToActivate = 'RTOverwatchShot';
 	CoveringFireEffect.BuildPersistentEffect(1, false, true, false, eGameRule_PlayerTurnBegin);
 	CoveringFireCondition = new class'X2Condition_AbilityProperty';
-	CoveringFireCondition.OwnerHasSoldierAbilities.AddItem('CoveringFire');
+	CoveringFireCondition.OwnerHasSoldierAbilities.AddItem('EyeInTheSky');
 	CoveringFireEffect.TargetConditions.AddItem(CoveringFireCondition);
 	Template.AddTargetEffect(CoveringFireEffect);
 
@@ -822,14 +817,8 @@ static function X2AbilityTemplate SixOClockEffect()
 	Template.eAbilityIconBehaviorHUD = EAbilityIconBehavior_NeverShow;
 	Template.Hostility = eHostility_Neutral;
 
-
 	Template.AbilityToHitCalc = default.DeadEye;
 	Template.AbilityTargetStyle = default.SelfTarget;
-
-	// Apply perk when we go on overwatch.
-	//Trigger = new class 'X2AbilityTrigger_OnAbilityActivated';
-	//Trigger.SetListenerData('RTOverwatch');
-	//Template.AbilityTriggers.AddItem(Trigger);
 
 	// Apply perk when we go on overwatch (ATTEMPT 2)
 	Trigger = new class'X2AbilityTrigger_EventListener';
@@ -843,7 +832,6 @@ static function X2AbilityTemplate SixOClockEffect()
 	// Multi target
 	MultiTarget = new class'X2AbilityMultiTarget_Radius';
 	MultiTarget.fTargetRadius = 500;
-
 	MultiTarget.bIgnoreBlockingCover = true;
 	Template.AbilityMultiTargetStyle = MultiTarget;
 
@@ -2010,8 +1998,6 @@ static function X2AbilityTemplate EyeInTheSky()
 	ReactionFire.SetDisplayInfo(ePerkBuff_Passive, Template.LocFriendlyName, Template.GetMyLongDescription(), Template.IconImage,,,Template.AbilitySourceName);
 	Template.AddTargetEffect(ReactionFire);
 
-	Template.AdditionalAbilities.AddItem('CoveringFire');
-
 	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
 	//  NOTE: No visualization on purpose!
 
@@ -2680,7 +2666,7 @@ static function X2AbilityTemplate RTKubikuri()
 	Template.AbilityCosts.AddItem(AmmoCost);
 
 	Template.AdditionalAbilities.AddItem('RTKubikuriDamage');
-	
+
 	KnockbackEffect = new class'X2Effect_Knockback';
 	KnockbackEffect.KnockbackDistance = 2;
 	Template.AddTargetEffect(KnockbackEffect);

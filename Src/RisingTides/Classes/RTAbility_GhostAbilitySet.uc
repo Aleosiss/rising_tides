@@ -333,7 +333,6 @@ static function X2AbilityTemplate JoinMeld()
 	MeldEffect = class'RTEffectBuilder'.static.RTCreateMeldEffect(1, true);
 	Template.AddTargetEffect(MeldEffect);
 
-
 	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
 	// Note: no visualization on purpose!
 	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;

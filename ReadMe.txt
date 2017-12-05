@@ -50,8 +50,8 @@ nooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
 
 [h1]Special Thanks[/h1]
 Pavonis Interactive, for several helpful classes and perks that my classes use.
-robojumper and Musashi for technical support.
-xylthixlm for technical support and icon pack.
+robojumper, xylthixlm, Musashi, and bountygiver for technical support.
+xylthixlm for icon pack.
 LurkerGG for the mod preview image and class icons.
 Davis Productions for a certain sound effect.
 GITS: First Assault Online for a perk icon.
