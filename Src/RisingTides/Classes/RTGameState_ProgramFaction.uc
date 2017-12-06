@@ -368,7 +368,7 @@ function OnEndTacticalPlay(XComGameState NewGameState)
 	XComHQ = XComGameState_HeadquartersXCom(NewGameState.ModifyStateObject(class'XComGameState_HeadquartersXCom', XComHQ.GetReference().ObjectID));
 
 	MissionState = XComGameState_MissionSite(History.GetGameStateForObjectID(XComHQ.MissionRef.ObjectID));
-	if(!IsRelevantMission(MissionState)) {
+	if(!IsOSFMission(MissionState)) {
 		return;
 	}
 
@@ -389,18 +389,20 @@ function OnEndTacticalPlay(XComGameState NewGameState)
 
 }
 
-protected static function bool IsRelevantMission(XComGameState_MissionSite MissionState) {
+protected static function bool IsOSFMission(XComGameState_MissionSite MissionState) {
 	// TODO:: this
 	return true;
 }
 
 protected function RecalculateActiveOperativesAndSquads(XComGameState NewGameState) {
 	//TODO:: this
+	// Have to tell all of the RTGameState_PersistentSquads about what members of theirs were captured/rescued
 	return;
 }
 
 protected function PromoteAllOperatives(XComGameState NewGameState) {
 	//TODO:: this
+	// Promote all operatives after a OSF mission.
 	return;
 }
 
