@@ -5,7 +5,7 @@ properties properties: [
 node('master') {
   stage('Code Checkout'){
     checkout([$class: 'GitSCM',
-    branches: [[name: '*/${env.BRANCH_NAME}']],
+    branches: [[name: '*/${BRANCH_NAME}']],
     doGenerateSubmoduleConfigurations: false,
     extensions: [], gitTool: 'Default',
     submoduleCfg: [],
