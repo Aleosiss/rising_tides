@@ -1,6 +1,6 @@
 class RTGameState_ProgramFaction extends XComGameState_ResistanceFaction config(ProgramFaction);
 
-// a lot of the DeathRecordData code is from Xyl's Anatomist Perk. Thanks to him!
+// a lot of the DeathRecordData code is from Xyl's Anatomist Perk. Thanks to him.
 
 /* *********************************************************************** */
 
@@ -50,9 +50,9 @@ struct RTGhostOperative
 	var StateObjectReference 		StateObjectRef;
 
 	var name						ExternalID;
-	var string						FirstName;
-	var string						NickName;
-	var string						LastName;
+	var localized string			FirstName;
+	var localized string			NickName;
+	var localized string			LastName;
 	var localized string			preBackground;
 	var localized string			finBackGround;
 };
@@ -137,7 +137,7 @@ function CreateRTOperative(RTGhostOperative IteratorGhostTemplate, XComGameState
 	UnitState.RankUpSoldier(StartState, IteratorGhostTemplate.SoldierClassTemplateName);
 	UnitState.ApplyInventoryLoadout(StartState, CharTemplate.DefaultLoadout);
 	UnitState.StartingRank = 1;
-	UnitState.SetXPForRank(1);
+	UnitState.SetXPForRank(10000);
 	UnitState.SetBackground(IteratorGhostTemplate.preBackground);
 
 	WeaponState = UnitState.GetPrimaryWeapon();
@@ -373,11 +373,12 @@ function OnEndTacticalPlay(XComGameState NewGameState)
 	}
 
 	foreach NewGameState.IterateByClassType(class'XComGameState_Unit', UnitState) {
-		if(Master.Find('NickName', UnitState.GetNickName()) != INDEX_NONE) {
+		if(Master.Find('CharacterTemplateName', UnitState.GetMyTemplateName()) != INDEX_NONE) {
 			if(UnitState.bCaptured) {
 				Captured.AddItem(UnitState.GetReference());
+				Active.RemoveItem(UnitState.GetReference());
 			} else {
-				Active.AddItem(UnitState.GetReference());
+				
 			}
 		}
 	}

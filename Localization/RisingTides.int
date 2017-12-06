@@ -138,7 +138,28 @@ MeldFriendlyDesc="This unit has joined the Meld, receiving and delivering psioni
 
 [RTGameState_ProgramFaction]
 SquadOneName="SPECTRE"
-SquadOneBackground"SPECTRE is the highest echelon, the golden standard, the last line. Each member, almost by definition, is ranked solidly at ten (and perhaps even above that) on the psi-index, and each brings unrivaled skills and power to the area of operations."
+SquadOneBackground="SPECTRE is the highest echelon, the golden standard, the last line. Each member, almost by definition, is ranked solidly at ten (and perhaps even above that) on the psi-index, and each brings unrivaled skills and power to the local area of operations."
+RTGhostOperative[0]=(
+    FirstName="<REDACTED>", 
+    LastName="<REDACTED>", 
+    NickName="Queen", 
+    preBackground="TEST_STRING_PREBAC_QUEEN",
+    finBackground="TEST_STRING_FINBAC_QUEEN"
+)
+RTGhostOperative[1]=(
+    FirstName="<REDACTED>", 
+    LastName="<REDACTED>", 
+    NickName="Whisper", 
+    preBackground="TEST_STRING_PREBAC_WHISPER",
+    finBackground="TEST_STRING_FINBAC_WHISPER"
+)
+RTGhostOperative[2]=(
+    FirstName="<REDACTED>", 
+    LastName="<REDACTED>", 
+    NickName="Nova", 
+    preBackground="TEST_STRING_PREBAC_NOVA",
+    finBackground="TEST_STRING_FINBAC_NOVA"
+)
 
 [Faction_Program RTProgramFactionTemplate]
 FactionTitle="The Program"
