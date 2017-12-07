@@ -385,8 +385,6 @@ function OnEndTacticalPlay(XComGameState NewGameState)
 	
 	RecalculateActiveOperativesAndSquads(NewGameState);
 	PromoteAllOperatives(NewGameState);
-
-
 }
 
 protected static function bool IsOSFMission(XComGameState_MissionSite MissionState) {
@@ -405,7 +403,7 @@ protected function RecalculateActiveOperativesAndSquads(XComGameState NewGameSta
 	History = `XCOMHISTORY;
 	foreach Squads(SquadIteratorObjRef) {
 		pgs = RTGameState_PersistentGhostSquad(History.GetGameStateForObjectID(SquadIteratorObjRef.ObjectID));
-		NewGameState.ModifyStateObject(pgs);
+		NewGameState.ModifyStateObject(class'RTGameState_PersistentGhostSquad', pgs.ObjectID);
 		if(pgs != none) {
 			foreach pgs.InitOperatives(UnitIteratorObjRef) {
 				UnitState = XComGameState_Unit(History.GetGameStateForObjectID(UnitIteratorObjRef.ObjectID));
@@ -447,8 +445,11 @@ protected function PromoteAllOperatives(XComGameState NewGameState) {
 	//TODO:: this
 	// Promote all operatives after a OSF mission.
 	local XComGameState_Unit UnitState;
+	local StateObjectReference UnitIteratorObjRef;
 
-	foreach
+	foreach Active(UnitIteratorObjRef) {
+
+	}
 	return;
 }
 

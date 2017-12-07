@@ -225,8 +225,8 @@ simulated function bool RemoveOneSmallFavorSitrep(XComGameState_MissionSite Miss
 }
 
 simulated function ModifyOneSmallFavorSitrepForGeneratedMission(RTGameState_ProgramFaction Program, XComGameState_MissionSite MissionState, bool bAdd = true) {
-	if(bAdd) { MissionState.GeneratedMission.SitReps.AddItem(Program.Deployed.AssociatedSitRepTemplateName); }
-	else { MissionState.GeneratedMission.SitReps.RemoveItem(Program.Deployed.AssociatedSitRepTemplateName); }
+	if(bAdd) { MissionState.GeneratedMission.SitReps.AddItem(Program.Deployed.GetAssociatedSitRepTemplateName()); }
+	else { MissionState.GeneratedMission.SitReps.RemoveItem(Program.Deployed.GetAssociatedSitRepTemplateName()); }
 }
 
 //---------------------------------------------------------------------------------------

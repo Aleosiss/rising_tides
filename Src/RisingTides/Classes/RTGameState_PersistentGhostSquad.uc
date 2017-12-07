@@ -23,3 +23,7 @@ function CreateSquad(int ID, String LocName, String LocBackground, name LocSitRe
 function bool IsFullStrength() {
 	return (InitOperatives.length == Operatives.length);
 }
+
+function name GetAssociatedSitRepTemplateName() {
+	return AssociatedSitRepTemplateName;
+}
