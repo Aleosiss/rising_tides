@@ -397,12 +397,58 @@ protected static function bool IsOSFMission(XComGameState_MissionSite MissionSta
 protected function RecalculateActiveOperativesAndSquads(XComGameState NewGameState) {
 	//TODO:: this
 	// Have to tell all of the RTGameState_PersistentSquads about what members of theirs were captured/rescued
+	local RTGameState_PersistentGhostSquad pgs;
+	local StateObjectReference SquadIteratorObjRef, UnitIteratorObjRef;
+	local XComGameStateHistory History;
+	local XComGameState_Unit UnitState;
+
+	History = `XCOMHISTORY;
+	foreach Squads(SquadIteratorObjRef) {
+		pgs = RTGameState_PersistentGhostSquad(History.GetGameStateForObjectID(SquadIteratorObjRef.ObjectID));
+		NewGameState.ModifyStateObject(pgs);
+		if(pgs != none) {
+			foreach pgs.InitOperatives(UnitIteratorObjRef) {
+				UnitState = XComGameState_Unit(History.GetGameStateForObjectID(UnitIteratorObjRef.ObjectID));
+				if(UnitState == none) {
+					class'RTHelpers'.static.RTLog("Couldn't find UnitState for ObjectID" $ UnitIteratorObjRef.ObjectID);
+					continue;
+				}
+
+				if(UnitState.bCaptured) {
+					// unfort
+					pgs.Operatives.RemoveItem(UnitIteratorObjRef);
+					pgs.CapturedOperatives.RemoveItem(UnitIteratorObjRef);	// maybe paranoid, remove duplicates
+					pgs.CapturedOperatives.AddItem(UnitIteratorObjRef);
+				} else if(UnitState.IsDead()) {
+					// LEGENDS NEVER DIE
+					// WHEN THE WORLD IS CALLING YOU
+					// CAN YOU HEAR THEM SCREAMING OUT YOUR NAME?
+					// LEGENDS NEVER DIE
+					// EVERYTIME YOU BLEED FOR REACHING GREATNESS
+					// RELENTLESS YOU SURVIVE
+					UnitState.SetStatus(eStatus_Alive);
+					UnitState.SetCurrentStat(eStat_HP, GetMaxStat(eStat_HP));
+					UnitState.SetCurrentStat(eStat_Will, GetMaxStat(eStat_Will));
+				} else {
+					// good job cmdr
+					pgs.Operatives.RemoveItem(UnitIteratorObjRef);
+					pgs.Operatives.AddItem(UnitIteratorObjRef);
+					pgs.CapturedOperatives.RemoveItem(UnitIteratorObjRef);
+				}
+
+			}
+		}
+	}
+	
 	return;
 }
 
 protected function PromoteAllOperatives(XComGameState NewGameState) {
 	//TODO:: this
 	// Promote all operatives after a OSF mission.
+	local XComGameState_Unit UnitState;
+
+	foreach
 	return;
 }
 
@@ -418,7 +464,7 @@ function int GetNumFactionSoldiers(optional XComGameState NewGameState)
 	local int i;
 	local RTGhostOperative g;
 
-	i = 0 ;
+	i = 0;
 	foreach Master(g) {
 		i++;
 	}
