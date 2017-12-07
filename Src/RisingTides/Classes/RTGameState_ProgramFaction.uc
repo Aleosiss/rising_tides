@@ -425,8 +425,8 @@ protected function RecalculateActiveOperativesAndSquads(XComGameState NewGameSta
 					// EVERYTIME YOU BLEED FOR REACHING GREATNESS
 					// RELENTLESS YOU SURVIVE
 					UnitState.SetStatus(eStatus_Active);
-					UnitState.SetCurrentStat(eStat_HP, GetMaxStat(eStat_HP));
-					UnitState.SetCurrentStat(eStat_Will, GetMaxStat(eStat_Will));
+					UnitState.SetCurrentStat(eStat_HP, UnitState.GetMaxStat(eStat_HP));
+					UnitState.SetCurrentStat(eStat_Will, UnitState.GetMaxStat(eStat_Will));
 				} else {
 					// good job cmdr
 					pgs.Operatives.RemoveItem(UnitIteratorObjRef);
