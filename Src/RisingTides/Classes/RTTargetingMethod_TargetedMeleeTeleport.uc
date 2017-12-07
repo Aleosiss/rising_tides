@@ -131,6 +131,7 @@ function DirectSetTarget(int TargetIndex)
 	local XComGameStateHistory History;
 	local XComGameState_BaseObject Target;
 	local int NewTarget;
+	local array<TTile> Tiles;
 
 	// advance the target counter
 	NewTarget = TargetIndex % Action.AvailableTargets.Length;
@@ -153,6 +154,10 @@ function DirectSetTarget(int TargetIndex)
 	Target = History.GetGameStateForObjectID(Action.AvailableTargets[LastTarget].PrimaryTarget.ObjectID);
 	PathingPawn.HideRenderablePath(true);
 	PathingPawn.UpdateMeleeTarget(Target);
+
+	Tiles = PathingPawn.PossibleTiles;
+	class'RTAbilityTarget_TeleportMelee'.static.SelectAttackTile(PathingPawn.UnitState, Target, PathingPawn.AbilityTemplate, PathingPawn.PossibleTiles);
+	DrawAOETiles(Tiles);
 	PathingPawn.HideRenderablePath(true);
 
 	TargetUnit = XGUnit(Target.GetVisualizer());
