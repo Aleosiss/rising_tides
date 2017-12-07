@@ -103,7 +103,8 @@ function OnConfirmButtonInited(UIPanel Panel) {
 	cb = MissionScreen.Spawn(class'UICheckbox', MissionScreen);	
 	cb.InitCheckbox('OSFActivateCheckbox', "", false, , bReadOnly).SetTextStyle(class'UICheckbox'.const.STYLE_TEXT_TO_THE_LEFT);	
 	cb.SetSize(32, 30);
-	cb.SetPosition(Panel.MC.GetNum("_x") - 56, Panel.MC.GetNum("_y"));
+	cb.SetPosition(Panel.MC.GetNum("_x") - 64, Panel.MC.GetNum("_y"));
+	cb.SetColor(class'UIUtilities_Color'.static.ColorToFlashHex(Program.GetMyTemplate().FactionColor));
 
 	// Modify the OnButtonClicked Delegate
 	OldOnClickedDelegate = MissionScreen.ConfirmButton.OnClickedDelegate;
