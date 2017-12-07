@@ -424,7 +424,7 @@ protected function RecalculateActiveOperativesAndSquads(XComGameState NewGameSta
 					// LEGENDS NEVER DIE
 					// EVERYTIME YOU BLEED FOR REACHING GREATNESS
 					// RELENTLESS YOU SURVIVE
-					UnitState.SetStatus(eStatus_Alive);
+					UnitState.SetStatus(eStatus_Active);
 					UnitState.SetCurrentStat(eStat_HP, GetMaxStat(eStat_HP));
 					UnitState.SetCurrentStat(eStat_Will, GetMaxStat(eStat_Will));
 				} else {
