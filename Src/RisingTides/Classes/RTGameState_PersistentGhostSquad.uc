@@ -1,13 +1,14 @@
 class RTGameState_PersistentGhostSquad extends XComGameState_BaseObject;
 
 
-var array<StateObjectReference> 	InitOperatives;
-var array<StateObjectReference> 	Operatives;
-var string							SquadName;
-var string							SquadBackground;
-var int								SquadID;
-var bool							bIsDeployed;
-var name							AssociatedSitRepTemplateName;
+var array<StateObjectReference> 			InitOperatives;
+var array<StateObjectReference> 			Operatives;
+var array<StateObjectReference> 			CapturedOperatives;
+var private string							SquadName;
+var private string							SquadBackground;
+var private int								SquadID;
+var bool									bIsDeployed;
+var private name							AssociatedSitRepTemplateName;
 
 
 
