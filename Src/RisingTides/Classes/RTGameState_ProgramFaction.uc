@@ -389,7 +389,11 @@ function OnEndTacticalPlay(XComGameState NewGameState)
 
 protected static function bool IsOSFMission(XComGameState_MissionSite MissionState) {
 	// TODO:: this
-	return true;
+	if(MissionState.TacticalGameplayTags.Find('RTOneSmallFavor') != INDEX_NONE) {
+		return true;
+	}
+
+	return false;
 }
 
 protected function RecalculateActiveOperativesAndSquads(XComGameState NewGameState) {
@@ -446,10 +450,16 @@ protected function PromoteAllOperatives(XComGameState NewGameState) {
 	// Promote all operatives after a OSF mission.
 	local XComGameState_Unit UnitState;
 	local StateObjectReference UnitIteratorObjRef;
+	local XComGameStateHistory History;
 
+	History = `XCOMHISTORY;
 	foreach Active(UnitIteratorObjRef) {
-
+		UnitState = XComGameState_Unit(History.GetGameStateForObjectID(UnitIteratorObjRef.ObjectID));
+		if(UnitState.GetRank() <= 8) {
+			UnitState.RankUpSoldier(NewGameState, ''); // they already have a class
+		}
 	}
+
 	return;
 }
 
