@@ -155,8 +155,8 @@ function DirectSetTarget(int TargetIndex)
 	PathingPawn.HideRenderablePath(true);
 	PathingPawn.UpdateMeleeTarget(Target);
 
-	Tiles = PathingPawn.PossibleTiles;
-	class'RTAbilityTarget_TeleportMelee'.static.SelectAttackTile(PathingPawn.UnitState, Target, PathingPawn.AbilityTemplate, PathingPawn.PossibleTiles);
+	Tiles = PathingPawn.GetPossibleTiles();
+	class'RTAbilityTarget_TeleportMelee'.static.SelectAttackTile(PathingPawn.GetUnitState(), Target, PathingPawn.GetAbilityTemplate(), Tiles);
 	DrawAOETiles(Tiles);
 	PathingPawn.HideRenderablePath(true);
 
