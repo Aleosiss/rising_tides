@@ -208,3 +208,15 @@ simulated event Tick(float DeltaTime)
 		}
 	}
 }
+
+simulated function array<TTile> GetPossibleTiles() {
+	return PossibleTiles;
+}
+
+simulated function X2AbilityTemplate GetAbilityTemplate() {
+	return AbilityTemplate;
+}
+
+simulated function XComGameState_Unit GetUnitState() {
+	return UnitState;
+}
