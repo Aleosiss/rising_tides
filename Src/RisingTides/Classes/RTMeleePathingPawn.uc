@@ -214,7 +214,7 @@ simulated function array<TTile> GetPossibleTiles() {
 }
 
 simulated function X2AbilityTemplate GetAbilityTemplate() {
-	return AbilityTemplate;
+	return AbilityState.GetMyTemplate();
 }
 
 simulated function XComGameState_Unit GetUnitState() {
