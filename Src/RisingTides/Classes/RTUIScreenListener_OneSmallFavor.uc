@@ -104,6 +104,7 @@ function OnConfirmButtonInited(UIPanel Panel) {
 	cb.InitCheckbox('OSFActivateCheckbox', "", false, , bReadOnly).SetTextStyle(class'UICheckbox'.const.STYLE_TEXT_TO_THE_LEFT);	
 	cb.SetSize(32, 30);
 	cb.SetPosition(Panel.MC.GetNum("_x") - 64, Panel.MC.GetNum("_y"));
+	class'RTHelpers'.static.RTLog("Setting the Checkbox color to " $ class'UIUtilities_Colors'.static.ColorToFlashHex(Program.GetMyTemplate().FactionColor));
 	cb.SetColor(class'UIUtilities_Colors'.static.ColorToFlashHex(Program.GetMyTemplate().FactionColor));
 
 	// Modify the OnButtonClicked Delegate
