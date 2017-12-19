@@ -276,7 +276,7 @@ LocPromotionPopupText="<Bullet/> When using Psionic abilities, this unit can cha
 
 [HeatChannelCooldown X2AbilityTemplate]
 LocFriendlyName="Heat Channel"
-LocLongDescription="When using Psionic abilities, this unit can channel heat from its weapon to fuel the ability, reloading the weapon and reducing the cooldown of the ability by one per ammo reloaded."
+LocLongDescription="Heat Channel is on cooldown!"
 LocHelpText="When using Psionic abilities, this unit can channel heat from its weapon to fuel the ability, reloading the weapon and reducing the cooldown of the ability by one per ammo reloaded."
 LocFlyOverText="Heat Channel"
 LocPromotionPopupText="<Bullet/> When using Psionic abilities, this unit can channel heat from its weapon to fuel the ability, reloading the weapon and reducing the cooldown of the ability by one per ammo reloaded.<br/><Bullet/> 2 turn cooldown.<br/>"
