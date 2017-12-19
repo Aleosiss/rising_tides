@@ -198,29 +198,47 @@ Descriptors_Suffix[8]="- 009"
 [ResCard_RTOneSmallFavor RTProgramStrategyCardTemplate]
 DisplayName="One Small Favor"
 SummaryText="Call in a small favor from the Program. They will send one of their squads in the place of XCOM's for a mission."
-QuoteText="Getting authorization for something like this would be... difficult, but a favor, for a friend? Eh, I can make something happen..."
+QuoteText="...Getting authorization for something like this would be... difficult, but a favor, for a friend? Eh, I can make something happen..."
 QuoteTextAuthor="Dr. Elizabeth Hadley"
 
-[ResCard_RT RTProgramStrategyCardTemplate]
-DisplayName=""
-SummaryText=""
-QuoteText="The operatives understand their place in the world. In time, you will, as well..."
+[ResCard_RTTransientSalvation RTProgramStrategyCardTemplate]
+DisplayName="Transient Salvation"
+SummaryText="Shared knowledge of UFO flight patterns reduces the chance that a UFO will begin or successfully complete an Avenger hunt by <XGParam:IntValue0/>%."
+QuoteText="...The operatives understand their place in the world. I hope that in time, you will, as well..."
 QuoteTextAuthor="Dr. Ezekial Fierling"
 
 [ResCard_RTJustPassingThrough RTProgramStrategyCardTemplate]
 DisplayName="Just Passing Through"
 SummaryText="There is a small chance that a Program operative will join the squad for any non-story mission."
-QuoteText="Oh, that engagement in He-guang? I was just... passing through..."
-QuoteTextAuthor="'Queen'"
+QuoteText="...Oh, that engagement in He-guang? I was just... passing through..."
+QuoteTextAuthor="\"Queen\""
 
-[ResCard_RTNeuralInhibition RTProgramStrategyCardTemplate]
-DisplayName="Neural Inhibition"
-SummaryText=""
-QuoteText="That is the price we pay for our lives. It means we will never forget that we are not gods walking alongside mortals..."
-QuoteTextAuthor="'Nova'"
+[ResCard_RTFortyYearsOfWar RTProgramStrategyCardTemplate]
+DisplayName="Forty Years of War"
+SummaryText="The Black Market will hold an additional item for each region XCOM has contacted."
+QuoteText="..I've been around... a long time. Long enough to have friends in places of all elevations..."
+QuoteTextAuthor="\"Queen\""
 
-[ResCard_RTOldWorldKnowledge RTProgramStrategyCardTemplate]
-DisplayName="Old World Knowledge"
-SummaryText=""
-QuoteText="In the years since the governments fell, it's fallen to us to preserve the knowledge needed to take up the reins of self-governance once again."
-QuoteTextAuthor="'Whisper'"
+[ResCard_RTNeuralManipulation RTProgramStrategyCardTemplate]
+DisplayName="Direct Neural Manipulation"
+SummaryText="Bonded Soldiers gain <XGParam:IntValue/0> more experience on missions underwent with the bondmate."
+QuoteText="...That is the price we pay for our lives. It means we will never forget that we are not gods walking alongside mortals..."
+QuoteTextAuthor="\"Nova\""
+
+[ResCard_RTPsionicJamming RTProgramStrategyCardTemplate]
+DisplayName="Wideband Psionic Jamming"
+SummaryText="The will of enemy units is reduced by <XGParam:IntValue0/>."
+QuoteText="...Lanning is my mistake. My problem. My solution..."
+QuoteTextAuthor="\"Nova\""
+
+[ResCard_RTResistanceSabotage RTProgramStrategyCardTemplate]
+DisplayName="Faction Sabotage"
+SummaryText="All influence requirements are reduced by <XGParam:IntValue0/>."
+QuoteText="...Remember that we are not the good guys. Remember that trust you had in Hadley. Remember that, because it's the only thing keeping you alive..."
+QuoteTextAuthor="\"Whisper\""
+
+[ResCard_RTProfessionalsHaveStandards RTProgramStrategyCardTemplate]
+DisplayName="Old World Training"
+SummaryText="Detection range of enemy forces is reduced by <XGParam:IntValue0/>%."
+QuoteText="...Relax. Keep your hands steady and heart steeled. Hesitation has killed more soldiers than the deadliest of shooters..."
+QuoteTextAuthor="\"Whisper\""
