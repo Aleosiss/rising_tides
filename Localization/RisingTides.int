@@ -199,7 +199,13 @@ Descriptors_Suffix[8]="- 009"
 DisplayName="One Small Favor"
 SummaryText="Call in a small favor from the Program. They will send one of their squads in the place of XCOM's for a mission."
 QuoteText="Getting authorization for something like this would be... difficult, but a favor, for a friend? Eh, I can make something happen..."
-QuoteTextAuthor="Dr. Hadley"
+QuoteTextAuthor="Dr. Elizabeth Hadley"
+
+[ResCard_RT RTProgramStrategyCardTemplate]
+DisplayName=""
+SummaryText=""
+QuoteText="The operatives understand their place in the world. In time, you will, as well..."
+QuoteTextAuthor="Dr. Ezekial Fierling"
 
 [ResCard_RTJustPassingThrough RTProgramStrategyCardTemplate]
 DisplayName="Just Passing Through"
@@ -209,12 +215,12 @@ QuoteTextAuthor="'Queen'"
 
 [ResCard_RTNeuralInhibition RTProgramStrategyCardTemplate]
 DisplayName="Neural Inhibition"
-SummaryText="XCOM soldiers will no longer attempt to harm allies while afflicted by negative mental conditions."
-QuoteText="That is the price we pay for our lives. It means we will never forget that we are gods walking alongside 'mere' mortals..."
+SummaryText=""
+QuoteText="That is the price we pay for our lives. It means we will never forget that we are not gods walking alongside mortals..."
 QuoteTextAuthor="'Nova'"
 
-[ResCard_RT RTProgramStrategyCardTemplate]
-DisplayName=""
+[ResCard_RTOldWorldKnowledge RTProgramStrategyCardTemplate]
+DisplayName="Old World Knowledge"
 SummaryText=""
-QuoteText="I hate ADVENT. All of our missions used to take place in military bases. Now, every place is a hospital. In one way or another."
+QuoteText="In the years since the governments fell, it's fallen to us to preserve the knowledge needed to take up the reins of self-governance once again."
 QuoteTextAuthor="'Whisper'"
