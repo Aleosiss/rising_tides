@@ -38,3 +38,4 @@ _ReSharper*/
 **/.vscode/
 settings\.json
 .AlternateModLauncher*
+**/.DS_Store
