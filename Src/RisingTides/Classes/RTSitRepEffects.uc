@@ -25,7 +25,3 @@ static function X2SitRepEffectTemplate RTCreateOneSmallFavorSitrepEffect(name Te
 
 	return Template;
 }
-
-static function X2SitRepEffectTemplate RTCreateProfessionalsHaveStandardsSitrepEffect(name TemplateName, int _DetectionMalus) {
-	local 
-}
