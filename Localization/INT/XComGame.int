@@ -826,8 +826,8 @@ DescriptionTitle="Program"
 DescriptionEntry="The Program, seemingly led by the illusive Dr. Hadley, are an offshoot of XCOM, branching off in the 1970's. Their primary focus is ensuring that when ADVENT falls, they-- at the expense of any other, even XCOM-- stand on top of the pile of rubble."
 
 [ProgramGhosts X2EncyclopediaTemplate]
-ListTitle="Program Classes"
-DescriptionTitle="Program Classes"
+ListTitle="Program Operatives"
+DescriptionTitle="Program Soldier Classes"
 DescriptionEntry="The Program fields a small number of psionic operatives. Augmented cybernetically and genetically through a substance known as \"MELD"\, they are truly elite, each a veteran of twenty, thirty, or even forty years of combat against both human and alien threats. Each has a unique skillset, but they share a common base of psionic abilities, such as Mind Control, Mind Wrack, and Mind Meld."
 
 [CovertAction_FindProgramFaction X2CovertActionTemplate]
@@ -883,8 +883,8 @@ ActionPostNarrative="All too easy."
 
 [CovertActionNarrative_BreakthroughTech_Program X2CovertActionNarrativeTemplate]
 ActionName="Technical Advances"
-ActionPreNarrative="I'm surprised you guys don't know about this. Let me dig through the old archives for the reports."
-ActionPostNarrative="Thanks, Commander. Going through those files is a pleasant trip down memory lane. Happy to do it for you."
+ActionPreNarrative="I'm surprised you guys don't know about this. If you send me a team, I can organize a raid on the old archives for the reports."
+ActionPostNarrative="Here you are, Commander. Going through those files is a pleasant trip down memory lane. Happy to do it for you."
 
 [Reward_RTProgram_FindFaction X2RewardTemplate]
 DisplayName="Unknown"
@@ -903,15 +903,3 @@ ScanTooltip="Scanning at this site speeds up the rate at which we can train our 
 [RTOneSmallFavor_SPECTRE X2SitRepTemplate]
 FriendlyName="One Small Favor"
 Description="The Program has lent one of their squads to handle this operation."
-
-[ResCard_RTOneSmallFavor X2StrategyCardTemplate]
-DisplayName="One Small Favor"
-SummaryText="Call in a small favor from the Program. They will send one of their squads in the place of XCOM's for a mission."
-QuoteText="Getting authorization for something like this would be... difficult, but a favor, for a friend? Eh, I can make something happen..."
-QuoteTextAuthor="Dr. Hadley"
-
-[ResCard_RTJustPassingThrough X2StrategyCardTemplate]
-DisplayName="Just Passing Through"
-SummaryText="There is a small chance that a Program operative will join the squad for any non-story mission."
-QuoteText="Oh, that engagement in He-guang? I was... just... passing through, yeah..."
-QuoteTextAuthor="'Whisper'"

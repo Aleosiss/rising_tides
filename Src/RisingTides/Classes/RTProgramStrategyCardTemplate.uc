@@ -1,5 +1,6 @@
 class RTProgramStrategyCardTemplate extends X2StrategyCardTemplate;
 
+var localized string QuoteTextLong;
 //---------------------------------------------------------------------------------------
 function XComGameState_StrategyCard CreateInstanceFromTemplate(XComGameState NewGameState)
 {

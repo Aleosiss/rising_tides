@@ -138,7 +138,7 @@ MeldFriendlyDesc="This unit has joined the Meld, receiving and delivering psioni
 
 [RTGameState_ProgramFaction]
 SquadOneName="SPECTRE"
-SquadOneBackground="SPECTRE is the highest echelon, the golden standard, the last line. Each member, almost by definition, is ranked solidly at ten (and perhaps even above that) on the psi-index, and each brings unrivaled skills and power to the local area of operations."
+SquadOneBackground="SPECTRE is the highest echelon, the golden standard, the last line. Each member, almost by definition, is ranked solidly at ten (and perhaps even above that) on the psi-index, and each brings unrivaled skill and capabilities to the local area of operations."
 RTGhostOperative[0]=(
     FirstName="<REDACTED>", 
     LastName="<REDACTED>", 
@@ -193,18 +193,21 @@ Descriptors_Suffix[8]="- 009"
 #DisplayName=""
 #SummaryText=""
 #QuoteText=""
+#QuoteTextLong=""
 #QuoteTextAuthor=""
 
 [ResCard_RTOneSmallFavor RTProgramStrategyCardTemplate]
 DisplayName="One Small Favor"
 SummaryText="Call in a small favor from the Program. They will send one of their squads in the place of XCOM's for a mission."
-QuoteText="...Getting authorization for something like this would be... difficult, but a favor, for a friend? Eh, I can make something happen..."
+QuoteText="...if they can cover for us, we certainly can cover for them..."
+QuoteTextLong="...Getting authorization for something like this would be... difficult, but a favor, for a friend? I can make something happen..."
 QuoteTextAuthor="Dr. Elizabeth Hadley"
 
 [ResCard_RTTransientSalvation RTProgramStrategyCardTemplate]
 DisplayName="Transient Salvation"
-SummaryText="Shared knowledge of UFO flight patterns reduces the chance that a UFO will begin or successfully complete an Avenger hunt by <XGParam:IntValue0/>%."
-QuoteText="...The operatives understand their place in the world. I hope that in time, you will, as well..."
+SummaryText="Shared knowledge of UFO flight patterns reduces the chance that a UFO will begin an Avenger hunt by <XGParam:IntValue0/>%."
+QuoteText="...standard evasion pattern. Exploits the Avenger's unique signature..."
+QuoteTextLong="...the operatives understand their place in the world. I hope that in time, you will, as well..."
 QuoteTextAuthor="Dr. Ezekial Fierling"
 
 [ResCard_RTJustPassingThrough RTProgramStrategyCardTemplate]
@@ -216,29 +219,58 @@ QuoteTextAuthor="\"Queen\""
 [ResCard_RTFortyYearsOfWar RTProgramStrategyCardTemplate]
 DisplayName="Forty Years of War"
 SummaryText="The Black Market will hold an additional item for each region XCOM has contacted."
-QuoteText="..I've been around... a long time. Long enough to have friends in places of all elevations..."
+QuoteText="...here's a little secret: always keep something extra for emergencies..."
+QuoteTextLong="...I've been around... a long time. Long enough to have friends in places of all elevations..."
 QuoteTextAuthor="\"Queen\""
 
 [ResCard_RTNeuralManipulation RTProgramStrategyCardTemplate]
 DisplayName="Direct Neural Manipulation"
 SummaryText="Bonded Soldiers gain <XGParam:IntValue/0> more experience on missions underwent with the bondmate."
-QuoteText="...That is the price we pay for our lives. It means we will never forget that we are not gods walking alongside mortals..."
+QuoteText="...this is the price we pay for our lives..."
+QuoteTextLong="...that is the price we pay for our lives. It means we will never forget that we are not gods walking alongside mortals..."
 QuoteTextAuthor="\"Nova\""
 
 [ResCard_RTPsionicJamming RTProgramStrategyCardTemplate]
 DisplayName="Wideband Psionic Jamming"
 SummaryText="The will of enemy units is reduced by <XGParam:IntValue0/>."
-QuoteText="...Lanning is my mistake. My problem. My solution..."
+QuoteText="...once, a nightmare. Now, a reality. Time to wake up..."
+QuoteTextLong="...Lanning is my mistake. My problem. My solution..."
 QuoteTextAuthor="\"Nova\""
 
 [ResCard_RTResistanceSabotage RTProgramStrategyCardTemplate]
 DisplayName="Faction Sabotage"
 SummaryText="All influence requirements are reduced by <XGParam:IntValue0/>."
-QuoteText="...Remember that we are not the good guys. Remember that trust you had in Hadley. Remember that, because it's the only thing keeping you alive..."
+QuoteText="...keep the others in line. Make them dependent on us..."
+QuoteTextLong="...remember that we are not the good guys. Remember that trust you had in Hadley. Remember that, because it's the only thing keeping you alive..."
 QuoteTextAuthor="\"Whisper\""
 
 [ResCard_RTProfessionalsHaveStandards RTProgramStrategyCardTemplate]
 DisplayName="Old World Training"
 SummaryText="Detection range of enemy forces is reduced by <XGParam:IntValue0/>%."
-QuoteText="...Relax. Keep your hands steady and heart steeled. Hesitation has killed more soldiers than the deadliest of shooters..."
+QuoteText="...the resistance has its vets, but there's more to training than just knowledge..."
+QuoteTextLong="...relax. Keep your hands steady and heart steeled. Hesitation has killed more soldiers than the deadliest of shooters..."
 QuoteTextAuthor="\"Whisper\""
+
+[RTOneSmallFavor_Size1 RTSitRepEffect_OneSmallFavor]
+FriendlyName="One Small Favor"
+Description="The Program will send one of its squads in the place of XCOM for this mission."
+
+[RTOneSmallFavor_Size2 RTSitRepEffect_OneSmallFavor]
+FriendlyName="One Small Favor"
+Description="The Program will send one of its squads in the place of XCOM for this mission."
+
+[RTOneSmallFavor_Size3 RTSitRepEffect_OneSmallFavor]
+FriendlyName="One Small Favor"
+Description="The Program will send one of its squads in the place of XCOM for this mission."
+
+[RTOneSmallFavor_Size4 RTSitRepEffect_OneSmallFavor]
+FriendlyName="One Small Favor"
+Description="The Program will send one of its squads in the place of XCOM for this mission."
+
+[RTOneSmallFavor_Size5 RTSitRepEffect_OneSmallFavor]
+FriendlyName="One Small Favor"
+Description="The Program will send one of its squads in the place of XCOM for this mission."
+
+[RTOneSmallFavor_Size6 RTSitRepEffect_OneSmallFavor]
+FriendlyName="One Small Favor"
+Description="The Program will send one of its squads in the place of XCOM for this mission."
