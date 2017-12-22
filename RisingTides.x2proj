@@ -215,6 +215,9 @@
     <Content Include="Src\RisingTides\Classes\RTAbility_MarksmanAbilitySet.uc">
       <SubType>Content</SubType>
     </Content>
+    <Content Include="Src\RisingTides\Classes\RTAbility_Program.uc">
+      <SubType>Content</SubType>
+    </Content>
     <Content Include="Src\RisingTides\Classes\RTAction_ApplyMITV.uc">
       <SubType>Content</SubType>
     </Content>

@@ -7,14 +7,15 @@ static function array<X2DataTemplate> CreateTemplates()
 {
 	local array<X2DataTemplate> Cards;
 
-	Cards.AddItem(RTCreateOneSmallFavorTemplate());
+	Cards.AddItem(RTCreateOneSmallFavor());
 	Cards.AddItem(RTCreateJustPassingThrough());
+	Cards.AddItem(RTCreateProfessionalsHaveStandards());
 
 	return Cards;
 
 }
 
-static function X2DataTemplate RTCreateOneSmallFavorTemplate()
+static function X2DataTemplate RTCreateOneSmallFavor()
 {
 	local RTProgramStrategyCardTemplate Template;
 
@@ -45,12 +46,12 @@ static function X2DataTemplate RTCreateJustPassingThrough() {
 
 	`CREATE_X2TEMPLATE(class'RTProgramStrategyCardTemplate', Template, 'ResCard_RTJustPassingThrough');
 	Template.Category = "ResistanceCard";
-	Template.ModifyTacticalStartStateFn = ActivateJustPassingThrough;
+	Template.ModifyTacticalStartStateFn = JustPassingThroughModifyTacStartState;
 
 	return Template;
 }
 
-static function ActivateJustPassingThrough(XComGameState StartState) {
+static function JustPassingThroughModifyTacStartState(XComGameState StartState) {
 	local RTGameState_ProgramFaction Program;
 	local XComGameState_HeadquartersXCom XComHQ;
 	local array<StateObjectReference> AvailableSoldiers;
@@ -98,4 +99,21 @@ static function bool IsSplitMission( XComGameState StartState )
 		break;
 
 	return (BattleData != none) && BattleData.DirectTransferInfo.IsDirectMissionTransfer;
+}
+
+static function X2DataTemplate RTCreateProfessionalsHaveStandards()
+{
+	local RTProgramStrategyCardTemplate Template;
+
+	`CREATE_X2TEMPLATE(class'RTProgramStrategyCardTemplate', Template, 'ResCard_RTProfessionalsHaveStandards');
+	Template.Category = "ResistanceCard";
+	Template.GetAbilitiesToGrantFn = ProfessionalsHaveStandardsAbility;
+
+	return Template;
+}
+
+static function ProfessionalsHaveStandardsModifyTacStartState(XComGameState_Unit UnitState, out array<name> AbilitiesToGrant) {
+	if (UnitState.GetTeam() == eTeam_XCom && UnitState.GetSoldierClassTemplateName() != 'Reaper' /* Whisper's training would mess up a Reaper's 'mojo' */)	{
+		AbilitiesToGrant.AddItem( 'RTProfessionalsHaveStandards' );
+	}
 }
