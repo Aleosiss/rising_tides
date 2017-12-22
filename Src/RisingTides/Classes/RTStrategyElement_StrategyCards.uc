@@ -13,7 +13,6 @@ static function array<X2DataTemplate> CreateTemplates()
 	Cards.AddItem(RTCreatePsionicJamming());
 
 	return Cards;
-
 }
 
 static function X2DataTemplate RTCreateOneSmallFavor()
