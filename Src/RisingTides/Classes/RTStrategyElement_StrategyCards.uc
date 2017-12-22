@@ -10,6 +10,7 @@ static function array<X2DataTemplate> CreateTemplates()
 	Cards.AddItem(RTCreateOneSmallFavor());
 	Cards.AddItem(RTCreateJustPassingThrough());
 	Cards.AddItem(RTCreateProfessionalsHaveStandards());
+	Cards.AddItem(RTCreatePsionicJamming());
 
 	return Cards;
 
@@ -112,8 +113,25 @@ static function X2DataTemplate RTCreateProfessionalsHaveStandards()
 	return Template;
 }
 
-static function ProfessionalsHaveStandardsModifyTacStartState(XComGameState_Unit UnitState, out array<name> AbilitiesToGrant) {
+static function ProfessionalsHaveStandardsAbility(XComGameState_Unit UnitState, out array<name> AbilitiesToGrant) {
 	if (UnitState.GetTeam() == eTeam_XCom && UnitState.GetSoldierClassTemplateName() != 'Reaper' /* Whisper's training would mess up a Reaper's 'mojo' */)	{
 		AbilitiesToGrant.AddItem( 'RTProfessionalsHaveStandards' );
+	}
+}
+
+static function X2DataTemplate RTCreatePsionicJamming()
+{
+	local RTProgramStrategyCardTemplate Template;
+
+	`CREATE_X2TEMPLATE(class'RTProgramStrategyCardTemplate', Template, 'ResCard_RTPsionicJamming');
+	Template.Category = "ResistanceCard";
+	Template.GetAbilitiesToGrantFn = PsionicJammingAbility;
+
+	return Template;
+}
+
+static function PsionicJammingAbility(XComGameState_Unit UnitState, out array<name> AbilitiesToGrant) {
+	if (UnitState.GetTeam() == eTeam_Alien)	{
+		AbilitiesToGrant.AddItem( 'RTPsionicJamming' );
 	}
 }
