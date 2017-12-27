@@ -1,6 +1,6 @@
 class RTGameState_ProgramFaction extends XComGameState_ResistanceFaction config(ProgramFaction);
 
-// a lot of the DeathRecordData code is from Xyl's Anatomist Perk. Thanks to him!
+// a lot of the DeathRecordData code is from Xyl's Anatomist Perk. Thanks to him.
 
 /* *********************************************************************** */
 
@@ -50,9 +50,9 @@ struct RTGhostOperative
 	var StateObjectReference 		StateObjectRef;
 
 	var name						ExternalID;
-	var string						FirstName;
-	var string						NickName;
-	var string						LastName;
+	var localized string			FirstName;
+	var localized string			NickName;
+	var localized string			LastName;
 	var localized string			preBackground;
 	var localized string			finBackGround;
 };
@@ -137,7 +137,7 @@ function CreateRTOperative(RTGhostOperative IteratorGhostTemplate, XComGameState
 	UnitState.RankUpSoldier(StartState, IteratorGhostTemplate.SoldierClassTemplateName);
 	UnitState.ApplyInventoryLoadout(StartState, CharTemplate.DefaultLoadout);
 	UnitState.StartingRank = 1;
-	UnitState.SetXPForRank(1);
+	UnitState.SetXPForRank(10000);
 	UnitState.SetBackground(IteratorGhostTemplate.preBackground);
 
 	WeaponState = UnitState.GetPrimaryWeapon();
@@ -368,38 +368,98 @@ function OnEndTacticalPlay(XComGameState NewGameState)
 	XComHQ = XComGameState_HeadquartersXCom(NewGameState.ModifyStateObject(class'XComGameState_HeadquartersXCom', XComHQ.GetReference().ObjectID));
 
 	MissionState = XComGameState_MissionSite(History.GetGameStateForObjectID(XComHQ.MissionRef.ObjectID));
-	if(!IsRelevantMission(MissionState)) {
+	if(!IsOSFMission(MissionState)) {
 		return;
 	}
 
 	foreach NewGameState.IterateByClassType(class'XComGameState_Unit', UnitState) {
-		if(Master.Find('NickName', UnitState.GetNickName()) != INDEX_NONE) {
+		if(Master.Find('CharacterTemplateName', UnitState.GetMyTemplateName()) != INDEX_NONE) {
 			if(UnitState.bCaptured) {
 				Captured.AddItem(UnitState.GetReference());
+				Active.RemoveItem(UnitState.GetReference());
 			} else {
-				Active.AddItem(UnitState.GetReference());
+				
 			}
 		}
 	}
 	
 	RecalculateActiveOperativesAndSquads(NewGameState);
 	PromoteAllOperatives(NewGameState);
-
-
 }
 
-protected static function bool IsRelevantMission(XComGameState_MissionSite MissionState) {
+protected static function bool IsOSFMission(XComGameState_MissionSite MissionState) {
 	// TODO:: this
-	return true;
+	if(MissionState.TacticalGameplayTags.Find('RTOneSmallFavor') != INDEX_NONE) {
+		return true;
+	}
+
+	return false;
 }
 
 protected function RecalculateActiveOperativesAndSquads(XComGameState NewGameState) {
 	//TODO:: this
+	// Have to tell all of the RTGameState_PersistentSquads about what members of theirs were captured/rescued
+	local RTGameState_PersistentGhostSquad pgs;
+	local StateObjectReference SquadIteratorObjRef, UnitIteratorObjRef;
+	local XComGameStateHistory History;
+	local XComGameState_Unit UnitState;
+
+	History = `XCOMHISTORY;
+	foreach Squads(SquadIteratorObjRef) {
+		pgs = RTGameState_PersistentGhostSquad(History.GetGameStateForObjectID(SquadIteratorObjRef.ObjectID));
+		NewGameState.ModifyStateObject(class'RTGameState_PersistentGhostSquad', pgs.ObjectID);
+		if(pgs != none) {
+			foreach pgs.InitOperatives(UnitIteratorObjRef) {
+				UnitState = XComGameState_Unit(History.GetGameStateForObjectID(UnitIteratorObjRef.ObjectID));
+				if(UnitState == none) {
+					class'RTHelpers'.static.RTLog("Couldn't find UnitState for ObjectID" $ UnitIteratorObjRef.ObjectID);
+					continue;
+				}
+
+				if(UnitState.bCaptured) {
+					// unfort
+					pgs.Operatives.RemoveItem(UnitIteratorObjRef);
+					pgs.CapturedOperatives.RemoveItem(UnitIteratorObjRef);	// maybe paranoid, remove duplicates
+					pgs.CapturedOperatives.AddItem(UnitIteratorObjRef);
+				} else if(UnitState.IsDead()) {
+					// LEGENDS NEVER DIE
+					// WHEN THE WORLD IS CALLING YOU
+					// CAN YOU HEAR THEM SCREAMING OUT YOUR NAME?
+					// LEGENDS NEVER DIE
+					// EVERYTIME YOU BLEED FOR REACHING GREATNESS
+					// RELENTLESS YOU SURVIVE
+					UnitState.SetStatus(eStatus_Active);
+					UnitState.SetCurrentStat(eStat_HP, UnitState.GetMaxStat(eStat_HP));
+					UnitState.SetCurrentStat(eStat_Will, UnitState.GetMaxStat(eStat_Will));
+				} else {
+					// good job cmdr
+					pgs.Operatives.RemoveItem(UnitIteratorObjRef);
+					pgs.Operatives.AddItem(UnitIteratorObjRef);
+					pgs.CapturedOperatives.RemoveItem(UnitIteratorObjRef);
+				}
+
+			}
+		}
+	}
+	
 	return;
 }
 
 protected function PromoteAllOperatives(XComGameState NewGameState) {
 	//TODO:: this
+	// Promote all operatives after a OSF mission.
+	local XComGameState_Unit UnitState;
+	local StateObjectReference UnitIteratorObjRef;
+	local XComGameStateHistory History;
+
+	History = `XCOMHISTORY;
+	foreach Active(UnitIteratorObjRef) {
+		UnitState = XComGameState_Unit(History.GetGameStateForObjectID(UnitIteratorObjRef.ObjectID));
+		if(UnitState.GetRank() <= 8) {
+			UnitState.RankUpSoldier(NewGameState, ''); // they already have a class
+		}
+	}
+
 	return;
 }
 
@@ -415,7 +475,7 @@ function int GetNumFactionSoldiers(optional XComGameState NewGameState)
 	local int i;
 	local RTGhostOperative g;
 
-	i = 0 ;
+	i = 0;
 	foreach Master(g) {
 		i++;
 	}
