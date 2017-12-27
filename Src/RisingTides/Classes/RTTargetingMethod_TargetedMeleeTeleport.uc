@@ -87,9 +87,11 @@ private function DirectSelectNearestTarget()
 
 function Canceled()
 {
+	super.Canceled();
 	PathingPawn.Destroy();
 	IconManager.ShowIcons(false);
 	LevelBorderManager.ShowBorder(false);
+	ClearTargetedActors();
 
 	if(LookAtCamera != none && LookAtCamera.LookAtDuration < 0)
 	{
@@ -133,9 +135,11 @@ function DirectSetTarget(int TargetIndex)
 	local int NewTarget;
 	local array<TTile> Tiles;
 
+	
 	// advance the target counter
 	NewTarget = TargetIndex % Action.AvailableTargets.Length;
 	if(NewTarget < 0) NewTarget = Action.AvailableTargets.Length + NewTarget;
+	
 
 	// put the targeting reticle on the new target
 	Pres = `PRES;
@@ -157,6 +161,7 @@ function DirectSetTarget(int TargetIndex)
 
 	Tiles = PathingPawn.GetPossibleTiles();
 	class'RTAbilityTarget_TeleportMelee'.static.SelectAttackTile(PathingPawn.GetUnitState(), Target, PathingPawn.GetAbilityTemplate(), Tiles);
+	ClearTargetedActors();
 	DrawAOETiles(Tiles);
 	PathingPawn.HideRenderablePath(true);
 
