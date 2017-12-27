@@ -41,37 +41,17 @@ var() array<RTDeathRecord> DeathRecordData;					// Program Datavault contianing 
 
 /* BEGIN OPERATIVE RECORD */
 
-struct RTGhostOperative
-{
-	var name 						SoldierClassTemplateName;
-	var name						CharacterTemplateName;
-	var array<name>					WeaponUpgrades;
-
-	var StateObjectReference 		StateObjectRef;
-
-	var name						ExternalID;
-	var localized string			FirstName;
-	var localized string			NickName;
-	var localized string			LastName;
-	var localized string			preBackground;
-	var localized string			finBackGround;
-};
-
 // SPECTRE
 var localized string SquadOneName;
 var localized string SquadOneBackground;
 var config array<name> SquadOneMembers;
 var config name SquadOneSitRepName;
+var config array<name> BerserkerWeaponUpgrades;
+var config array<name> MarksmanWeaponUpgrades;
+var config array<name> GathererWeaponUpgrades;
 
 
-struct Squad
-{
-
-};
-
-var const config array<RTGhostOperative>	GhostTemplates;
-
-var() array<RTGhostOperative>									Master; 			// master list of operatives
+var() array<StateObjectReference>								Master; 			// master list of operatives
 var() array<StateObjectReference> 								Active;				// ghosts active
 var() RTGameState_PersistentGhostSquad							Deployed; 			// ghosts that will be on the next mission
 var() array<StateObjectReference>								Captured;			// ghosts not available
@@ -107,75 +87,96 @@ function InitializeHQ(XComGameState NewGameState, int idx) {
 
 // CreateRTOperatives(XComGameState NewGameState)
 function CreateRTOperatives(XComGameState StartState) {
-	local RTGhostOperative IteratorGhostTemplate;
-
-	foreach default.GhostTemplates(IteratorGhostTemplate) {
-		CreateRTOperative(IteratorGhostTemplate, StartState);
-
-	}
+	CreateRTOperative('RTGhostBerserker', StartState);
+	CreateRTOperative('RTGhostMarksman', StartState);
+	CreateRTOperative('RTGhostGatherer', StartState);
 }
 
-function CreateRTOperative(RTGhostOperative IteratorGhostTemplate, XComGameState StartState) {
+function CreateRTOperative(name GhostTemplateName, XComGameState StartState) {
 	local XComGameState_Unit UnitState;
-	local X2ItemTemplateManager ItemTemplateMgr;
+	
 	local X2CharacterTemplateManager CharMgr;
 	local X2CharacterTemplate CharTemplate;
 	local XComGameState_Item WeaponState;
-	local X2WeaponUpgradeTemplate UpgradeTemplate;
+
 	local name WeaponUpgradeName;
-	local RTGhostOperative Ghost;
 
 	CharMgr = class'X2CharacterTemplateManager'.static.GetCharacterTemplateManager();
-	ItemTemplateMgr = class'X2ItemTemplateManager'.static.GetItemTemplateManager();
 
-	CharTemplate = CharMgr.FindCharacterTemplate(IteratorGhostTemplate.CharacterTemplateName);
+	CharTemplate = CharMgr.FindCharacterTemplate(GhostTemplateName);
 
 	UnitState = CharTemplate.CreateInstanceFromTemplate(StartState);
 
-	UnitState.SetCharacterName(IteratorGhostTemplate.FirstName, IteratorGhostTemplate.LastName, IteratorGhostTemplate.NickName);
 	UnitState.SetCountry(CharTemplate.DefaultAppearance.nmFlag);
-	UnitState.RankUpSoldier(StartState, IteratorGhostTemplate.SoldierClassTemplateName);
+	UnitState.RankUpSoldier(StartState, CharTemplate.DefaultSoldierClass);
 	UnitState.ApplyInventoryLoadout(StartState, CharTemplate.DefaultLoadout);
 	UnitState.StartingRank = 1;
-	UnitState.SetXPForRank(10000);
-	UnitState.SetBackground(IteratorGhostTemplate.preBackground);
+	UnitState.SetUnitName(CharTemplate.strForcedFirstName, CharTemplate.strForcedLastName, CharTemplate.strForcedNickName);
+	UnitState.SetBackground(UnitState.GetMyTemplate().strCharacterBackgroundMale[0]); // the first background is the classified one, the second one is the unclassified one
 
 	WeaponState = UnitState.GetPrimaryWeapon();
-	foreach IteratorGhostTemplate.WeaponUpgrades(WeaponUpgradeName) {
-		UpgradeTemplate = X2WeaponUpgradeTemplate(ItemTemplateMgr.FindItemTemplate(WeaponUpgradeName));
-		if (UpgradeTemplate != none) {
-			WeaponState.ApplyWeaponUpgradeTemplate(UpgradeTemplate);
-		}
-	}
-
-	Ghost = IteratorGhostTemplate;
-	Ghost.StateObjectRef = UnitState.GetReference();
+	ApplyWeaponUpgrades(GhostTemplateName, WeaponState);
 
 	Active.AddItem(UnitState.GetReference());
-	Master.AddItem(Ghost);
+	Master.AddItem(UnitState.GetReference());
 
-	class'RTHelpers'.static.RTLog( "Creating Ghost Operative " $ UnitState.GetFullName() $ 
+	class'RTHelpers'.static.RTLog( "Creating Program Operative " $ UnitState.GetFullName() $ 
 							", with ObjectID " $ UnitState.GetReference().ObjectID $
 							", and CharacterTemplateName " $ UnitState.GetMyTemplateName()
 						);
 }
 
+function ApplyWeaponUpgrades(name GhostTemplateName, XComGameState_Item WeaponState) {
+	local X2WeaponUpgradeTemplate UpgradeTemplate;
+	local X2ItemTemplateManager ItemTemplateMgr;
+	local name WeaponUpgradeName;
+
+	ItemTemplateMgr = class'X2ItemTemplateManager'.static.GetItemTemplateManager();
+	switch(GhostTemplateName) {
+		case 'RTGhostBerserker':
+			foreach default.BerserkerWeaponUpgrades(WeaponUpgradeName) {
+				UpgradeTemplate = X2WeaponUpgradeTemplate(ItemTemplateMgr.FindItemTemplate(WeaponUpgradeName));
+				if (UpgradeTemplate != none) {
+					WeaponState.ApplyWeaponUpgradeTemplate(UpgradeTemplate);
+				}
+			}
+		case 'RTGhostMarksman':
+			foreach default.MarksmanWeaponUpgrades(WeaponUpgradeName) {
+				UpgradeTemplate = X2WeaponUpgradeTemplate(ItemTemplateMgr.FindItemTemplate(WeaponUpgradeName));
+				if (UpgradeTemplate != none) {
+					WeaponState.ApplyWeaponUpgradeTemplate(UpgradeTemplate);
+				}
+			}
+		case 'RTGhostGatherer':
+			foreach default.GathererWeaponUpgrades(WeaponUpgradeName) {
+				UpgradeTemplate = X2WeaponUpgradeTemplate(ItemTemplateMgr.FindItemTemplate(WeaponUpgradeName));
+				if (UpgradeTemplate != none) {
+					WeaponState.ApplyWeaponUpgradeTemplate(UpgradeTemplate);
+				}
+			}
+	}
+}
 
 
 function CreateRTSquads(XComGameState StartState) {
 
 	local RTGameState_PersistentGhostSquad one;
-	local RTGhostOperative Ghost;
+	local StateObjectReference OperativeRef;
+	local XComGameStateHistory History;
+	local XComGameState_Unit UnitState;
+
+	History = `XCOMHISTORY;
 
 	one = RTGameState_PersistentGhostSquad(StartState.CreateNewStateObject(class'RTGameState_PersistentGhostSquad'));
 	one.CreateSquad(1, default.SquadOneName, default.SquadOneBackground, default.SquadOneSitRepName);
 	Squads.AddItem(one.GetReference());
 
-	foreach Master(Ghost) {
+	foreach Master(OperativeRef) {
 		// team 1 "SPECTRE"
-		if(SquadOneMembers.Find(Ghost.ExternalID) != INDEX_NONE) {
-			one.Operatives.AddItem(Ghost.StateObjectRef);
-			one.initOperatives.AddItem(Ghost.StateObjectRef);
+		UnitState = XComGameState_Unit(History.GetGameStateForObjectID(OperativeRef.ObjectID));
+		if(SquadOneMembers.Find(UnitState.GetMyTemplateName()) != INDEX_NONE) {
+			one.Operatives.AddItem(OperativeRef);
+			one.initOperatives.AddItem(OperativeRef);
 		}
 	}
 
@@ -373,7 +374,7 @@ function OnEndTacticalPlay(XComGameState NewGameState)
 	}
 
 	foreach NewGameState.IterateByClassType(class'XComGameState_Unit', UnitState) {
-		if(Master.Find('CharacterTemplateName', UnitState.GetMyTemplateName()) != INDEX_NONE) {
+		if(Master.Find('ObjectID', UnitState.ObjectID) != INDEX_NONE) {
 			if(UnitState.bCaptured) {
 				Captured.AddItem(UnitState.GetReference());
 				Active.RemoveItem(UnitState.GetReference());
@@ -473,10 +474,10 @@ protected function PromoteAllOperatives(XComGameState NewGameState) {
 function int GetNumFactionSoldiers(optional XComGameState NewGameState)
 {
 	local int i;
-	local RTGhostOperative g;
+	local StateObjectReference Ref;
 
 	i = 0;
-	foreach Master(g) {
+	foreach Master(Ref) {
 		i++;
 	}
 

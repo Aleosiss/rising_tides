@@ -3,7 +3,8 @@ class RTCharacter_DefaultCharacters extends X2Character_DefaultCharacters config
 static function array<X2DataTemplate> CreateTemplates()
 {
     local array<X2DataTemplate> Templates;
-    
+	
+	// SPECTRE
     Templates.AddItem(CreateWhisperTemplate());
     Templates.AddItem(CreateQueenTemplate());
     Templates.AddItem(CreateNovaTemplate());

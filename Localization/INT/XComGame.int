@@ -903,3 +903,27 @@ ScanTooltip="Scanning at this site speeds up the rate at which we can train our 
 [RTOneSmallFavor_SPECTRE X2SitRepTemplate]
 FriendlyName="One Small Favor"
 Description="The Program has lent one of their squads to handle this operation."
+
+[RTGhostBerserker X2CharacterTemplate]
+strCharacterName="Program Operative"
+strCharacterBackgroundMale[0]="[REDACTED] C.O. Bradford Note: Don't pry."
+strCharacterBackgroundMale[1]="<not writen>"
+strForcedFirstName="[REDACTED]"
+strForcedLastName="[REDACTED]"
+strForcedNickName="Queen" 
+
+[RTGhostMarksman X2CharacterTemplate]
+strCharacterName="Program Operative"
+strCharacterBackgroundMale[0]="[REDACTED] C.O. Bradford Note: Don't pry."
+strCharacterBackgroundMale[1]="<not writen>"
+strForcedFirstName="[REDACTED]"
+strForcedLastName="[REDACTED]"
+strForcedNickName="Whisper" 
+
+[RTGhostGatherer X2CharacterTemplate]
+strCharacterName="Program Operative"
+strCharacterBackgroundMale[0]="[REDACTED] C.O. Bradford Note: This one seems... too familiar. Don't pry. I'll look into it."
+strCharacterBackgroundMale[1]="\<not writen\>"
+strForcedFirstName="[REDACTED]"
+strForcedLastName="[REDACTED]"
+strForcedNickName="Nova"

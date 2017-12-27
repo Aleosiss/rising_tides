@@ -62,7 +62,7 @@ static function JustPassingThroughModifyTacStartState(XComGameState StartState) 
 		return;
 
 	Program = class'RTHelpers'.static.GetNewProgramState(StartState);
-	SoldierObjRef = Program.Master[`SYNC_RAND_STATIC(Program.Master.Length)].StateObjectRef;
+	SoldierObjRef = Program.Master[`SYNC_RAND_STATIC(Program.Master.Length)];
 	
 	if(!class'RTHelpers'.static.DebuggingEnabled()) {
 		if(default.JustPassingThroughChance * Program.InfluenceScore < `SYNC_RAND_STATIC(100)) //TODO: Refactor to include an Operative-based modifer (location + personality)
