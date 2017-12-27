@@ -165,7 +165,7 @@ RTGhostOperative[2]=(
 FactionTitle="The Program"
 FactionHQDisplayName="PROGRAM FOB"
 LeaderQuote="\"We fight against the subtle threats. Including you, Commander.\" - Dr. Hadley"
-InfluenceMediumQuote="\"It is good to work with you again, Commander. Reminds me of the good old days, when the threats fell from the stars and did not rise up all around us.\" - Dr. Hadley"
+InfluenceMediumQuote="\"It is good to work with you again, Commander. Reminds me of the good old days, when the threat fell from the stars and did not rise up all around us.\" - Dr. Hadley"
 InfluenceHighQuote="\"With the Templars gone, there will be only one lasting threat to the stability of our society. Commander. You know what must be done.\" - Dr. Hadley"
 GroupNames[0]="SPECTRE"
 GroupNames[1]="GHOST"
@@ -189,14 +189,38 @@ Descriptors_Suffix[6]="- 007"
 Descriptors_Suffix[7]="- 008"
 Descriptors_Suffix[8]="- 009"
 
+#[ResCard_RT RTProgramStrategyCardTemplate]
+#DisplayName=""
+#SummaryText=""
+#QuoteText=""
+#QuoteTextAuthor=""
+
 [ResCard_RTOneSmallFavor RTProgramStrategyCardTemplate]
 DisplayName="One Small Favor"
 SummaryText="Call in a small favor from the Program. They will send one of their squads in the place of XCOM's for a mission."
 QuoteText="Getting authorization for something like this would be... difficult, but a favor, for a friend? Eh, I can make something happen..."
-QuoteTextAuthor="Dr. Hadley"
+QuoteTextAuthor="Dr. Elizabeth Hadley"
+
+[ResCard_RT RTProgramStrategyCardTemplate]
+DisplayName=""
+SummaryText=""
+QuoteText="The operatives understand their place in the world. In time, you will, as well..."
+QuoteTextAuthor="Dr. Ezekial Fierling"
 
 [ResCard_RTJustPassingThrough RTProgramStrategyCardTemplate]
 DisplayName="Just Passing Through"
 SummaryText="There is a small chance that a Program operative will join the squad for any non-story mission."
-QuoteText="Oh, that engagement in He-guang? I was... just... passing through, yeah..."
+QuoteText="Oh, that engagement in He-guang? I was just... passing through..."
+QuoteTextAuthor="'Queen'"
+
+[ResCard_RTNeuralInhibition RTProgramStrategyCardTemplate]
+DisplayName="Neural Inhibition"
+SummaryText=""
+QuoteText="That is the price we pay for our lives. It means we will never forget that we are not gods walking alongside mortals..."
+QuoteTextAuthor="'Nova'"
+
+[ResCard_RTOldWorldKnowledge RTProgramStrategyCardTemplate]
+DisplayName="Old World Knowledge"
+SummaryText=""
+QuoteText="In the years since the governments fell, it's fallen to us to preserve the knowledge needed to take up the reins of self-governance once again."
 QuoteTextAuthor="'Whisper'"

@@ -857,8 +857,8 @@ ActionPreNarrative="Mobilizing enough operatives to assault the base head-on and
 ActionPostNarrative="With the help of your soldiers, I have managed to place several operatives as civilians within the Templar compound. One step at a time."
 
 [CovertActionNarrative_HuntTemplars_P3_Program X2CovertActionNarrativeTemplate]
-ActionName="Annihilate Them"
-ActionPreNarrative="I have directed my operatives on the inside to attempt to set up a meeting with Geist. When that happens, Commander, I hope you will send your best."
+ActionName="Lure Them Out"
+ActionPreNarrative="Geist is extremely paranoid, and revealing a vunerablity remains a challenge. If you have some soldiers to spare, we can use them to conduct a false-flag operation and draw him out."
 ActionPostNarrative="The trap is set. The bait is ready. All that remains is spring it. I will send my best, and if you do the same, victory is assured."
 
 [CovertActionNarrative_RevealChosenMovements_Program X2CovertActionNarrativeTemplate]
