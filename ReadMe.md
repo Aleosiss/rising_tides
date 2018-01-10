@@ -17,8 +17,7 @@ This would be a bare-bones content mod. I also have the following content in min
 
 ## Current TODOs
 
-	- Get One Small Favor Working
-		- button selector
+	- New Strategy Cards
 
 ## Current Table
 
@@ -43,8 +42,10 @@ This would be a bare-bones content mod. I also have the following content in min
 		- get new icon and faceplate
 		- create customizations for all ghosts
 		- figure out a way to either remove certain covert actions for the Program or simply template them as previously done
-		- Covert Action: One Small Favor: once per month, send a Program squad on a mission in place of an XCOM squad. Can't send on Golden Path missions.
-		- Covert Action: Just Passing Through: the Program equivalent to Volunteer Army and ADVENT Defectors, although with a lower chance to activate and no activations on One Small Favor missions or Golden Path missions.
+		- Strategy Card: One Small Favor: once per month, send a Program squad on a mission in place of an XCOM squad. Can't send on Golden Path missions.
+		- Strategy Card: Just Passing Through: the Program equivalent to Volunteer Army and ADVENT Defectors, although with a lower chance to activate and no activations on 	One Small Favor missions or Golden Path missions.
+		- Strategy Card: Wideband Psionic Jamming: Reduce the will of enemy units by a flat static value.
+		- Strategy Card: Old World Training: Increase the detection modifier of XCom by a flat static value.
 	- Prognosticator (New Class)
 		- this word sounded cool, so I will make it into a class
 		- wtf will it do? not sure how "seeing the future" can work IRL

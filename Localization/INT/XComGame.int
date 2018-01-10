@@ -797,6 +797,20 @@ AbilityAvailabilityStrings[95]="There are too many stacks for the ability to fun
 AbilityAvailabilityStrings[96]="The effect was not found."
 
 ;----------------------------------------------------------------------------------------------------------------------------
+[RTProfessionalsHaveStandards X2AbilityTemplate]
+LocFriendlyName="Old World Training"
+LocLongDescription="Old World training techniques improve the soldier's ability to remain concealed at a distance."
+LocHelpText="Decrease range at which enemy units will can reveal this unit."
+LocFlyOverText="Old World Training"
+LocPromotionPopupText="<Bullet/> Decrease range at which enemy units will can reveal this unit.<br/>"
+
+[RTPsionicJamming X2AbilityTemplate]
+LocFriendlyName="Psionic Jamming"
+LocLongDescription="Psionic jamming reduces the will of ADVENT units."
+LocHelpText="Psionic jamming reduces the will of ADVENT units."
+LocFlyOverText="Psionic Jamming"
+LocPromotionPopupText="<Bullet/> Psionic jamming reduces the will of ADVENT units.<br/>"
+;----------------------------------------------------------------------------------------------------------------------------
 
 [TestAbility X2AbilityTemplate]
 LocFriendlyName="Test"

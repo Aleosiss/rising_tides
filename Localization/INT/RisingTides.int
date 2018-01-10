@@ -198,36 +198,31 @@ QuoteTextAuthor="\"Queen\""
 [ResCard_RTFortyYearsOfWar RTProgramStrategyCardTemplate]
 DisplayName="Forty Years of War"
 SummaryText="The Black Market will hold an additional item for each region XCOM has contacted."
-QuoteText="...here's a little secret: always keep something extra for emergencies..."
 QuoteTextLong="...I've been around... a long time. Long enough to have friends in places of all elevations..."
 QuoteTextAuthor="\"Queen\""
 
 [ResCard_RTNeuralManipulation RTProgramStrategyCardTemplate]
 DisplayName="Direct Neural Manipulation"
 SummaryText="Bonded Soldiers gain <XGParam:IntValue/0> more experience on missions underwent with the bondmate."
-QuoteText="...this is the price we pay for our lives..."
-QuoteTextLong="...that is the price we pay for our lives. It means we will never forget that we are not gods walking alongside mortals..."
+QuoteText="...that is the price we pay for our lives. It means we will never forget that we are not gods walking alongside mortals..."
 QuoteTextAuthor="\"Nova\""
 
 [ResCard_RTPsionicJamming RTProgramStrategyCardTemplate]
 DisplayName="Wideband Psionic Jamming"
 SummaryText="The will of enemy units is reduced by <XGParam:IntValue0/>."
 QuoteText="...once, a nightmare. Now, a reality. Time to wake up..."
-QuoteTextLong="...Lanning is my mistake. My problem. My solution..."
 QuoteTextAuthor="\"Nova\""
 
 [ResCard_RTResistanceSabotage RTProgramStrategyCardTemplate]
-DisplayName="Faction Sabotage"
+DisplayName="Resistance Sabotage"
 SummaryText="All influence requirements are reduced by <XGParam:IntValue0/>."
-QuoteText="...keep the others in line. Make them dependent on us..."
-QuoteTextLong="...remember that we are not the good guys. Remember that trust you had in Hadley. Remember that, because it's the only thing keeping you alive..."
+QuoteText="...remember that we are not the good guys. Remember that trust you had in Hadley. Remember that, because it's the only thing keeping us alive..."
 QuoteTextAuthor="\"Whisper\""
 
 [ResCard_RTProfessionalsHaveStandards RTProgramStrategyCardTemplate]
 DisplayName="Old World Training"
 SummaryText="Detection range of enemy forces is reduced by <XGParam:IntValue0/>%."
-QuoteText="...the resistance has its vets, but there's more to training than just knowledge..."
-QuoteTextLong="...relax. Keep your hands steady and heart steeled. Hesitation has killed more soldiers than the deadliest of shooters..."
+QuoteText="...relax. Keep your hands steady and heart steeled. Hesitation has killed more soldiers than the deadliest of shooters..."
 QuoteTextAuthor="\"Whisper\""
 
 [RTOneSmallFavor_Size1 RTSitRepEffect_OneSmallFavor]

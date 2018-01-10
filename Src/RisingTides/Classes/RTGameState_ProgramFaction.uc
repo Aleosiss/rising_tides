@@ -157,7 +157,6 @@ function ApplyWeaponUpgrades(name GhostTemplateName, XComGameState_Item WeaponSt
 	}
 }
 
-
 function CreateRTSquads(XComGameState StartState) {
 
 	local RTGameState_PersistentGhostSquad one;
@@ -389,16 +388,13 @@ function OnEndTacticalPlay(XComGameState NewGameState)
 }
 
 protected static function bool IsOSFMission(XComGameState_MissionSite MissionState) {
-	// TODO:: this
 	if(MissionState.TacticalGameplayTags.Find('RTOneSmallFavor') != INDEX_NONE) {
 		return true;
 	}
-
 	return false;
 }
 
 protected function RecalculateActiveOperativesAndSquads(XComGameState NewGameState) {
-	//TODO:: this
 	// Have to tell all of the RTGameState_PersistentSquads about what members of theirs were captured/rescued
 	local RTGameState_PersistentGhostSquad pgs;
 	local StateObjectReference SquadIteratorObjRef, UnitIteratorObjRef;
@@ -648,6 +644,46 @@ event OnCreation(optional X2DataTemplate Template)
 	}
 }
 
+function GenerateNewPlayableCard(XComGameState NewGameState)
+{
+	local XComGameState_StrategyCard NewCardState, IteratorCardState;
+	local StateObjectReference IteratorRef;
+	local XComGameStateHistory History;
+
+	NewCardState = GetRandomCardToMakePlayable(NewGameState);
+	if(NewCardState == none) {
+		//class'RTHelpers'.static.RTLog("Couldn't make a random card playable!");
+		return;
+	}
+
+	History = `XCOMHISTORY;
+	foreach PlayableCards(IteratorRef) {
+		IteratorCardState = XComGameState_StrategyCard(History.GetGameStateForObjectID(IteratorRef.ObjectID));
+		if(IteratorCardState == none) {
+			continue;
+		}
+
+		if(NewCardState.GetMyTemplateName() == IteratorCardState.GetMyTemplateName()) {
+			class'RTHelpers'.static.RTLog("Created a duplicate card, returning none!");
+			return;
+		}
+	}
+
+	foreach NewPlayableCards(IteratorRef) {
+		IteratorCardState = XComGameState_StrategyCard(History.GetGameStateForObjectID(IteratorRef.ObjectID));
+		if(IteratorCardState == none) {
+			continue;
+		}
+
+		if(NewCardState.GetMyTemplateName() == IteratorCardState.GetMyTemplateName()) {
+			class'RTHelpers'.static.RTLog("Created a duplicate card, returning none!");
+			return;
+		}
+	}
+
+	AddPlayableCard(NewGameState, NewCardState.GetReference());
+}
+
 function MeetXCom(XComGameState NewGameState)
 {
 	local XComGameState_HeadquartersResistance ResHQ;
@@ -688,7 +724,6 @@ function MeetXCom(XComGameState NewGameState)
 		ResHQ.CreateRookieCovertAction(NewGameState);
 	}
 }
-
 
 function PreMissionUpdate(XComGameState NewGameState, XComGameState_MissionSite MissionSiteState) {
 	if(bOneSmallFavorAvailable) {

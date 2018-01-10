@@ -11,7 +11,6 @@
 class X2DownloadableContentInfo_RisingTides extends X2DownloadableContentInfo config(RisingTides);
 
 var bool bDebugOutputDisabled;
-var config array<name> AbilityPerksToLoad;
 
 defaultproperties
 {
@@ -57,18 +56,6 @@ static event OnPostTemplatesCreated()
 
 	MakePsiAbilitiesInterruptable();
 	AddProgramFactionCovertActions();
-	RebuildPerkContentCache();
-}
-
-simulated static function RebuildPerkContentCache() {
-	local XComContentManager		Content;
-	local name n;
-
-	Content = `CONTENT;
-	Content.BuildPerkPackageCache();
-	foreach default.AbilityPerksToLoad(n) {
-		Content.CachePerkContent(n);
-	}
 }
 
 /// <summary>
@@ -83,7 +70,7 @@ static event OnPreMission(XComGameState NewGameState, XComGameState_MissionSite 
 }
 
 simulated static function ModifyInitialFactionState(XComGameState StartState) {
-	local RTGameState_ProgramFaction Faction;
+local RTGameState_ProgramFaction Faction;
 
 	foreach StartState.IterateByClassType(class'RTGameState_ProgramFaction', Faction) {
 		if(Faction.GetMyTemplateName() == 'Faction_Program') { break; }
