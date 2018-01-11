@@ -758,7 +758,7 @@ static function EventListenerReturn FortyYearsOfWarEventListener(Object EventDat
 	}
 
 	NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("FortyYearsOfWar modifying outpost build time!");
-	NewGameState.ModifyStateObject(class'XComGameState_WorldRegion', RegionState);
+	NewGameState.ModifyStateObject(class'XComGameState_WorldRegion', RegionState.ObjectID);
 	RegionState.ModifyRemainingScanTime(0.0001);
 	`GAMERULES.SubmitGameState(NewGameState);
 
