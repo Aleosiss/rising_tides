@@ -11,6 +11,7 @@ static function array<X2DataTemplate> CreateTemplates()
 	Cards.AddItem(RTCreateJustPassingThrough());
 	Cards.AddItem(RTCreateProfessionalsHaveStandards());
 	Cards.AddItem(RTCreatePsionicJamming());
+	Cards.AddItem(RTCreateFortyYearsOfWar());
 
 	return Cards;
 }
@@ -133,4 +134,37 @@ static function PsionicJammingAbility(XComGameState_Unit UnitState, out array<na
 	if (UnitState.GetTeam() == eTeam_Alien)	{
 		AbilitiesToGrant.AddItem( 'RTPsionicJamming' );
 	}
+}
+
+static function X2DataTemplate RTCreateFortyYearsOfWar()
+{
+	local RTProgramStrategyCardTemplate Template;
+
+	`CREATE_X2TEMPLATE(class'RTProgramStrategyCardTemplate', Template, 'ResCard_RTFortyYearsOfWar');
+	Template.Category = "ResistanceCard";
+
+	Template.OnActivatedFn = ActivateFortyYearsOfWar;
+	Template.OnDeactivatedFn = DeactivateFortyYearsOfWar;
+
+	return Template;
+}
+
+static function ActivateFortyYearsOfWar(XComGameState NewGameState, StateObjectReference InRef, optional bool bReactivate = false) {
+	local RTGameState_ProgramFaction Program;
+	local Object Obj;
+
+	Program = class'RTHelpers'.static.GetNewProgramState(NewGameState);
+	Obj = Program;
+
+	`XEVENTMGR.RegisterForEvent(Obj, 'AvengerLandedScanRegion', Program.FortyYearsOfWarEventListener, ELD_OnStateSubmitted);
+}
+
+static function DeactivateFortyYearsOfWar(XComGameState NewGameState, StateObjectReference InRef) {
+	local RTGameState_ProgramFaction Program;
+	local Object Obj;
+
+	Program = class'RTHelpers'.static.GetNewProgramState(NewGameState);
+	Obj = Program;
+
+	`XEVENTMGR.UnRegisterFromEvent(Obj, 'AvengerLandedScanRegion');
 }

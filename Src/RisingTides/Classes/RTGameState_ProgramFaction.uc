@@ -730,3 +730,37 @@ function PreMissionUpdate(XComGameState NewGameState, XComGameState_MissionSite 
 		bOneSmallFavorAvailable = false;
 	}
 }
+
+// Listen for AvengerLandedScanRegion, recieves a NewGameState
+// can pull an XComGameState_ScanningSite from XComHQ.CurrentLocation attached to the NewGameState
+// check to see if the resistance is building an outpost
+// set ScanHoursRemaining, and TotalScanHours to 1
+static function EventListenerReturn FortyYearsOfWarEventListener(Object EventData, Object EventSource, XComGameState GameState, Name EventID, Object CallbackData) {
+	local XComGameState NewGameState;
+	local XComGameState_WorldRegion RegionState;
+	local XComGameState_HeadquartersXCom XComHQ;
+
+	foreach GameState.IterateByClassType(class'XComGameState_HeadquartersXCom', XComHQ) {
+		if(XComHQ != none) {
+			break;
+		}
+	}
+
+	RegionState = XComGameState_WorldRegion(`XCOMHISTORY.GetGameStateForObjectID(XComHQ.CurrentLocation.ObjectID));
+	if(RegionState == none) {
+		class'RTHelpers'.static.RTLog("FortyYearsOfWarEventListener did not recieve a region!", true);
+		return ELR_NoInterrupt;
+	}
+
+	if(!RegionState.bCanScanForOutpost) {
+		class'RTHelpers'.static.RTLog("Can't modify outpost build time, since we aren't scanning for one!");
+		return ELR_NoInterrupt;
+	}
+
+	NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("FortyYearsOfWar modifying outpost build time!");
+	NewGameState.ModifyStateObject(class'XComGameState_WorldRegion', RegionState);
+	RegionState.ModifyRemainingScanTime(0.0001);
+	`GAMERULES.SubmitGameState(NewGameState);
+
+	return ELR_NoInterrupt;
+}
