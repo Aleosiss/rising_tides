@@ -24,6 +24,10 @@ function StageDirectory ([string]$directoryName, [string]$srcDirectory, [string]
 
 function CheckErrorCode([string] $message) {
     if ($LASTEXITCODE -ne 0) {
+        $stopwatch.stop()
+        $ts = $stopwatch.Elapsed.TotalSeconds;
+
+        Write-Host "Build failed in $ts seconds."
         throw $message;
     }
 }
