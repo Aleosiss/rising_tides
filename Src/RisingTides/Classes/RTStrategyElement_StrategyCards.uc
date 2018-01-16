@@ -156,6 +156,7 @@ static function ActivateFortyYearsOfWar(XComGameState NewGameState, StateObjectR
 	Program = class'RTHelpers'.static.GetNewProgramState(NewGameState);
 	Obj = Program;
 
+	class'RTHelpers'.static.RTLog("Activating Forty Years of War!");
 	`XEVENTMGR.RegisterForEvent(Obj, 'AvengerLandedScanRegion', Program.FortyYearsOfWarEventListener, ELD_OnStateSubmitted);
 }
 
@@ -165,6 +166,6 @@ static function DeactivateFortyYearsOfWar(XComGameState NewGameState, StateObjec
 
 	Program = class'RTHelpers'.static.GetNewProgramState(NewGameState);
 	Obj = Program;
-
+	class'RTHelpers'.static.RTLog("Deactivating Forty Years of War!");
 	`XEVENTMGR.UnRegisterFromEvent(Obj, 'AvengerLandedScanRegion');
 }

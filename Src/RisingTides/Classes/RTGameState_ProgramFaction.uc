@@ -740,6 +740,7 @@ static function EventListenerReturn FortyYearsOfWarEventListener(Object EventDat
 	local XComGameState_WorldRegion RegionState;
 	local XComGameState_HeadquartersXCom XComHQ;
 
+	class'RTHelpers'.static.RTLog("Forty Years of War Triggered!");
 	foreach GameState.IterateByClassType(class'XComGameState_HeadquartersXCom', XComHQ) {
 		if(XComHQ != none) {
 			break;
@@ -758,9 +759,9 @@ static function EventListenerReturn FortyYearsOfWarEventListener(Object EventDat
 	}
 
 	NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("FortyYearsOfWar modifying outpost build time!");
-	NewGameState.ModifyStateObject(class'XComGameState_WorldRegion', RegionState.ObjectID);
+	RegionState = XComGameState_WorldRegion(NewGameState.ModifyStateObject(class'XComGameState_WorldRegion', RegionState.ObjectID));
 	RegionState.ModifyRemainingScanTime(0.0001);
 	`GAMERULES.SubmitGameState(NewGameState);
-
+	class'RTHelpers'.static.RTLog("Forty Years of War successfully executed!");
 	return ELR_NoInterrupt;
 }

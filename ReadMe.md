@@ -46,6 +46,7 @@ This would be a bare-bones content mod. I also have the following content in min
 		- Strategy Card: Just Passing Through: the Program equivalent to Volunteer Army and ADVENT Defectors, although with a lower chance to activate and no activations on 	One Small Favor missions or Golden Path missions.
 		- Strategy Card: Wideband Psionic Jamming: Reduce the will of enemy units by a flat static value.
 		- Strategy Card: Old World Training: Increase the detection modifier of XCom by a flat static value.
+		- Strategy Card: Forty Years of War: Instantly construct Resistance Outposts.
 	- Prognosticator (New Class)
 		- this word sounded cool, so I will make it into a class
 		- wtf will it do? not sure how "seeing the future" can work IRL
@@ -58,3 +59,4 @@ This would be a bare-bones content mod. I also have the following content in min
 	- Psionic Storm only plays sound from one storm at a time, due to a base-game issue where a looping soundcue can only be played once per ObjectID
 	- Networked OI does not work with CloseCombatSpecialistAttack or KillzoneShot. Unsure of exact cause, appears that CCS does not tick AbilityActivated
 	- Shadow Strike does not highlight the tiles it can activate to
+	- Have to travel to a region that is building an outpost to activate Forty Years of War
