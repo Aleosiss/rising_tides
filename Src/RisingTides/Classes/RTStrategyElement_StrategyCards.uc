@@ -169,3 +169,35 @@ static function DeactivateFortyYearsOfWar(XComGameState NewGameState, StateObjec
 	class'RTHelpers'.static.RTLog("Deactivating Forty Years of War!");
 	`XEVENTMGR.UnRegisterFromEvent(Obj, 'AvengerLandedScanRegion');
 }
+
+static function X2DataTemplate RTCreateDirectNeuralManipulation()
+{
+	local RTProgramStrategyCardTemplate Template;
+
+	`CREATE_X2TEMPLATE(class'RTProgramStrategyCardTemplate', Template, 'ResCard_RTDirectNeuralManipulation');
+	Template.Category = "ResistanceCard";
+
+	Template.OnActivatedFn = ActivateDirectNeuralManipulation;
+	Template.OnDeactivatedFn = DeactivateDirectNeuralManipulation;
+
+	return Template;
+}
+
+static function ActivateDirectNeuralManipulation(XComGameState NewGameState, StateObjectReference InRef, optional bool bReactivate = false) {
+	local RTGameState_ProgramFaction Program;
+
+	Program = class'RTHelpers'.static.GetNewProgramState(NewGameState);
+	class'RTHelpers'.static.RTLog("Activating Direct Neural Manipulation!");
+	Program.bDirectNeuralManipulation = true;
+
+}
+
+static function DeactivateDirectNeuralManipulation(XComGameState NewGameState, StateObjectReference InRef) {
+	local RTGameState_ProgramFaction Program;
+
+	Program = class'RTHelpers'.static.GetNewProgramState(NewGameState);
+	class'RTHelpers'.static.RTLog("Deactivating Direct Neural Manipulation!");
+	Program.bDirectNeuralManipulation = false;
+
+
+}

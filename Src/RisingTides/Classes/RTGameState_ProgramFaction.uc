@@ -65,6 +65,7 @@ var bool														bSetupComplete;		// if we should rebuild the ghost array f
 // FACTION VARIABLES
 var bool																bOneSmallFavorAvailable;		// can send squad on a mission, replacing XCOM
 var bool																bTemplarsDestroyed;
+var bool																bDirectNeuralManipulation;
 var config array<name>													InvalidMissionSources; 			// list of mission types ineligible for Program support, usually story missions
 
 // ONE SMALL FAVOR HANDLING VARIABLES
@@ -368,23 +369,18 @@ function OnEndTacticalPlay(XComGameState NewGameState)
 	XComHQ = XComGameState_HeadquartersXCom(NewGameState.ModifyStateObject(class'XComGameState_HeadquartersXCom', XComHQ.GetReference().ObjectID));
 
 	MissionState = XComGameState_MissionSite(History.GetGameStateForObjectID(XComHQ.MissionRef.ObjectID));
-	if(!IsOSFMission(MissionState)) {
-		return;
+
+	if(bDirectNeuralManipulation) {
+		AddDNMExperience(NewGamestate);
 	}
 
-	foreach NewGameState.IterateByClassType(class'XComGameState_Unit', UnitState) {
-		if(Master.Find('ObjectID', UnitState.ObjectID) != INDEX_NONE) {
-			if(UnitState.bCaptured) {
-				Captured.AddItem(UnitState.GetReference());
-				Active.RemoveItem(UnitState.GetReference());
-			} else {
-				
-			}
-		}
+	if(IsOSFMission(MissionState)) {
+		RecalculateActiveOperativesAndSquads(NewGameState);
+		PromoteAllOperatives(NewGameState);
 	}
-	
-	RecalculateActiveOperativesAndSquads(NewGameState);
-	PromoteAllOperatives(NewGameState);
+
+
+
 }
 
 protected static function bool IsOSFMission(XComGameState_MissionSite MissionState) {
@@ -399,12 +395,12 @@ protected function RecalculateActiveOperativesAndSquads(XComGameState NewGameSta
 	local RTGameState_PersistentGhostSquad pgs;
 	local StateObjectReference SquadIteratorObjRef, UnitIteratorObjRef;
 	local XComGameStateHistory History;
-	local XComGameState_Unit UnitState;
+	local XComGameState_Unit UnitState, NewUnitState;
 
 	History = `XCOMHISTORY;
 	foreach Squads(SquadIteratorObjRef) {
 		pgs = RTGameState_PersistentGhostSquad(History.GetGameStateForObjectID(SquadIteratorObjRef.ObjectID));
-		NewGameState.ModifyStateObject(class'RTGameState_PersistentGhostSquad', pgs.ObjectID);
+		pgs = RTGameState_PersistentGhostSquad(NewGameState.ModifyStateObject(class'RTGameState_PersistentGhostSquad', pgs.ObjectID));
 		if(pgs != none) {
 			foreach pgs.InitOperatives(UnitIteratorObjRef) {
 				UnitState = XComGameState_Unit(History.GetGameStateForObjectID(UnitIteratorObjRef.ObjectID));
@@ -412,6 +408,8 @@ protected function RecalculateActiveOperativesAndSquads(XComGameState NewGameSta
 					class'RTHelpers'.static.RTLog("Couldn't find UnitState for ObjectID" $ UnitIteratorObjRef.ObjectID);
 					continue;
 				}
+
+				NewUnitState = XComGameState_Unit(NewGameState.ModifyStateObject(class'XComGameState_Unit', UnitState.ObjectID))
 
 				if(UnitState.bCaptured) {
 					// unfort
@@ -423,11 +421,11 @@ protected function RecalculateActiveOperativesAndSquads(XComGameState NewGameSta
 					// WHEN THE WORLD IS CALLING YOU
 					// CAN YOU HEAR THEM SCREAMING OUT YOUR NAME?
 					// LEGENDS NEVER DIE
-					// EVERYTIME YOU BLEED FOR REACHING GREATNESS
+					// EVERY TIME YOU BLEED FOR REACHING GREATNESS
 					// RELENTLESS YOU SURVIVE
-					UnitState.SetStatus(eStatus_Active);
-					UnitState.SetCurrentStat(eStat_HP, UnitState.GetMaxStat(eStat_HP));
-					UnitState.SetCurrentStat(eStat_Will, UnitState.GetMaxStat(eStat_Will));
+					NewUnitState.SetStatus(eStatus_Active);
+					NewUnitState.SetCurrentStat(eStat_HP, UnitState.GetMaxStat(eStat_HP));
+					NewUnitState.SetCurrentStat(eStat_Will, UnitState.GetMaxStat(eStat_Will));
 				} else {
 					// good job cmdr
 					pgs.Operatives.RemoveItem(UnitIteratorObjRef);
@@ -458,6 +456,52 @@ protected function PromoteAllOperatives(XComGameState NewGameState) {
 	}
 
 	return;
+}
+
+protected function AddDNMExperience(XComGameState NewGameState) {
+	local XComGameState_Unit UnitState, BondMateState;
+	local array<XComGameState_Unit> ActiveSquadUnitStates;
+
+	foreach NewGameState.IterateByClassType(class'XComGameState_Unit', UnitState) {
+		if(UnitState.GetTeam() == eTeam_XCom && !UnitState.isDead() && !UnitState.bCaptured) {
+			ActiveSquadUnitStates.AddItem(UnitState)
+		}
+	}
+
+	if(ActiveSquadUnitStates.Length == 0) {
+		class'RTHelpers'.static.RTLog("Didn't find any active XCOM units on the GameState!", true);
+		return;
+	}
+
+	foreach ActiveSquadUnitStates(UnitState) {
+		foreach ActiveSquadUnitStates(BondMateState) {
+			if(UnitState.HasSoldierBond(BondMateState.GetReference())) {
+				// don't want to double dip on the sweet gainz bro
+				ActiveSquadUnitStates.RemoveItem(BondMateState);
+				
+				UnitState = XComGameState_Unit(NewGameState.ModifyStateObject(class'XComGameState_Unit', UnitState));
+				BondMateState = XComGameState_Unit(NewGameState.ModifyStateObject(class'XComGameState_Unit', BondMateState));
+				UnitState.AddXP(GetDNMXPForRank(UnitState));
+				BondMateState.AddXP(GetDNMXPForRank(BondMateState));
+
+				// don't need to keep iterating since bonds are 1-to-1
+				break;
+			}
+		}
+	}
+
+}
+
+simulated function int GetDNMXPForRank(XComGameState_Unit UnitState) {
+	local int xp;
+
+	if(UnitState.GetSoldierClassTemplate().GetMaxConfiguredRank() >= UnitState.GetRank()) {
+		// we're at max rank, no need to grant xp
+		return 0;
+	}
+
+	xp = max(UnitState.GetRank() - 2, 0);
+	return xp;
 }
 
 // Faction Stuff
@@ -701,7 +745,6 @@ function MeetXCom(XComGameState NewGameState)
 	CleanUpFactionCovertActions(NewGameState);
 	CreateGoldenPathActions(NewGameState);
 	GenerateCovertActions(NewGameState, ExclusionList);
-	
 	
 	CreateRTOperatives(NewGameState);
 	CreateRTSquads(NewGameState);
