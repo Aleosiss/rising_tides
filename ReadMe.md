@@ -15,9 +15,10 @@ This would be a bare-bones content mod. I also have the following content in min
 >- High-quality 2D artwork (Producing icons is possible ATM, but not much more)
 >- New enemy units, possible returns from EW
 
-## Current TODOs
+## Current To Test
 
-	- New Strategy Cards
+	- Direct Neural Manipulation
+	- Just Passing Through
 
 ## Current Table
 
@@ -30,7 +31,7 @@ This would be a bare-bones content mod. I also have the following content in min
 				- Gain Stealth while preparing a massive psionic rift. On the following turn, the Stealth is broken and a rift is formed. Friendly units can use the rift to evac from the mission. The rift will end after two turns, or if caster's connection is broken.
 	- Marksman:
 		- Maybe rework time stop to only take place over 1 turn
-		- rework boring perks
+		- rework boring perks (Knock Them Down, Your Hands, My Eyes, Eye in the Sky, )
 	- Gatherer:
 		- Redo Guardian Angel (?, no one has told me if it actually works or not)
 		- Add Over the Shoulder exception for civilians that are actually faceless
@@ -47,9 +48,11 @@ This would be a bare-bones content mod. I also have the following content in min
 		- Strategy Card: Wideband Psionic Jamming: Reduce the will of enemy units by a flat static value.
 		- Strategy Card: Old World Training: Increase the detection modifier of XCom by a flat static value.
 		- Strategy Card: Forty Years of War: Instantly construct Resistance Outposts.
+		- Strategy Card: Direct Neural Manipulation: Bonded Soldiers recieve bonus experience if they survive a mission together.
 	- Prognosticator (New Class)
 		- this word sounded cool, so I will make it into a class
-		- wtf will it do? not sure how "seeing the future" can work IRL
+		- wtf will it do? not sure how "seeing the future" can work in real life
+			- is it possible to force the AI to use a behavior tree?
 
 ## Current Bugs
 

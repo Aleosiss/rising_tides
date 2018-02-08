@@ -39,3 +39,5 @@ _ReSharper*/
 settings\.json
 .AlternateModLauncher*
 **/.DS_Store
+
+*.code-workspace

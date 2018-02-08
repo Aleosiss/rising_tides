@@ -204,7 +204,7 @@ QuoteTextAuthor="\"Queen\""
 [ResCard_RTNeuralManipulation RTProgramStrategyCardTemplate]
 DisplayName="Direct Neural Manipulation"
 SummaryText="Bonded Soldiers gain <XGParam:IntValue/0> more experience on missions underwent with the bondmate."
-QuoteText="...that is the price we pay for our lives. It means we will never forget that we are not gods walking alongside mortals..."
+QuoteText="...that is the price we pay for our lives. It means we will never forget that we are not gods walking alongside 'mere' mortals..."
 QuoteTextAuthor="\"Nova\""
 
 [ResCard_RTPsionicJamming RTProgramStrategyCardTemplate]
@@ -215,8 +215,8 @@ QuoteTextAuthor="\"Nova\""
 
 [ResCard_RTResistanceSabotage RTProgramStrategyCardTemplate]
 DisplayName="Resistance Sabotage"
-SummaryText="All influence requirements are reduced by <XGParam:IntValue0/>."
-QuoteText="...remember that we are not the good guys. Remember that trust you had in Hadley. Remember that, because it's the only thing keeping us alive..."
+SummaryText="All other resistance factions gain an additional card slot."
+QuoteText="...remember that we are not the good guys. Remember that trust you had in Hadley. Remember, because it's the only thing keeping us alive..."
 QuoteTextAuthor="\"Whisper\""
 
 [ResCard_RTProfessionalsHaveStandards RTProgramStrategyCardTemplate]
