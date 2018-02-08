@@ -174,7 +174,7 @@ static function RTGameState_ProgramFaction GetProgramState(optional XComGameStat
 	return Program;
 }
 
-static function RTGameState_ProgramFaction GetNewProgramState(optional XComGameState NewGameState) {
+static function RTGameState_ProgramFaction GetNewProgramState(XComGameState NewGameState) {
 	local RTGameState_ProgramFaction Program;
 
 	Program = GetProgramState(NewGameState);

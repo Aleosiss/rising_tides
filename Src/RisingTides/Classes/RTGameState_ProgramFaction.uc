@@ -409,7 +409,7 @@ protected function RecalculateActiveOperativesAndSquads(XComGameState NewGameSta
 					continue;
 				}
 
-				NewUnitState = XComGameState_Unit(NewGameState.ModifyStateObject(class'XComGameState_Unit', UnitState.ObjectID))
+				NewUnitState = XComGameState_Unit(NewGameState.ModifyStateObject(class'XComGameState_Unit', UnitState.ObjectID));
 
 				if(UnitState.bCaptured) {
 					// unfort
@@ -461,10 +461,11 @@ protected function PromoteAllOperatives(XComGameState NewGameState) {
 protected function AddDNMExperience(XComGameState NewGameState) {
 	local XComGameState_Unit UnitState, BondMateState;
 	local array<XComGameState_Unit> ActiveSquadUnitStates;
+	local StateObjectReference BondMateRef, EmptyRef;
 
 	foreach NewGameState.IterateByClassType(class'XComGameState_Unit', UnitState) {
 		if(UnitState.GetTeam() == eTeam_XCom && !UnitState.isDead() && !UnitState.bCaptured) {
-			ActiveSquadUnitStates.AddItem(UnitState)
+			ActiveSquadUnitStates.AddItem(UnitState);
 		}
 	}
 
@@ -475,18 +476,26 @@ protected function AddDNMExperience(XComGameState NewGameState) {
 
 	foreach ActiveSquadUnitStates(UnitState) {
 		foreach ActiveSquadUnitStates(BondMateState) {
-			if(UnitState.HasSoldierBond(BondMateState.GetReference())) {
+			BondMateRef = EmptyRef;
+			UnitState.HasSoldierBond(BondMateRef);
+			if(BondMateRef == EmptyRef) {
+				// this soldier has no bond
+				continue;
+			}
+			
+			if(BondMateRef.ObjectID == BondMateState.ObjectID) {
 				// don't want to double dip on the sweet gainz bro
 				ActiveSquadUnitStates.RemoveItem(BondMateState);
 				
-				UnitState = XComGameState_Unit(NewGameState.ModifyStateObject(class'XComGameState_Unit', UnitState));
-				BondMateState = XComGameState_Unit(NewGameState.ModifyStateObject(class'XComGameState_Unit', BondMateState));
+				UnitState = XComGameState_Unit(NewGameState.ModifyStateObject(class'XComGameState_Unit', UnitState.ObjectID));
+				BondMateState = XComGameState_Unit(NewGameState.ModifyStateObject(class'XComGameState_Unit', BondMateState.ObjectID));
 				UnitState.AddXP(GetDNMXPForRank(UnitState));
 				BondMateState.AddXP(GetDNMXPForRank(BondMateState));
 
-				// don't need to keep iterating since bonds are 1-to-1
+				// don't need to keep iterating since bonds are 1-to-1`
 				break;
 			}
+
 		}
 	}
 

@@ -12,6 +12,8 @@ static function array<X2DataTemplate> CreateTemplates()
 	Cards.AddItem(RTCreateProfessionalsHaveStandards());
 	Cards.AddItem(RTCreatePsionicJamming());
 	Cards.AddItem(RTCreateFortyYearsOfWar());
+	Cards.AddItem(RTCreateDirectNeuralManipulation());
+	Cards.AddItem(RTCreateResistanceSabotage());
 
 	return Cards;
 }
@@ -199,5 +201,71 @@ static function DeactivateDirectNeuralManipulation(XComGameState NewGameState, S
 	class'RTHelpers'.static.RTLog("Deactivating Direct Neural Manipulation!");
 	Program.bDirectNeuralManipulation = false;
 
+}
 
+static function X2DataTemplate RTCreateResistanceSabotage()
+{
+	local RTProgramStrategyCardTemplate Template;
+
+	`CREATE_X2TEMPLATE(class'RTProgramStrategyCardTemplate', Template, 'ResCard_RTResistanceSabotage');
+	Template.Category = "ResistanceCard";
+
+	Template.OnActivatedFn = ActivateResistanceSabotage;
+	Template.OnDeactivatedFn = DeactivateResistanceSabotage;
+
+	return Template;
+}
+
+static function ActivateResistanceSabotage(XComGameState NewGameState, StateObjectReference InRef, optional bool bReactivate = false) {
+	local XComGameStateHistory History;
+	local XComGameState_ResistanceFaction IteratorFactionState;
+	local RTGameState_ProgramFaction ProgramState;
+
+	History = `XCOMHISTORY;
+	ProgramState = class'RTHelpers'.static.GetProgramState(NewGameState);
+	foreach History.IterateByClassType(class'XComGameState_ResistanceFaction', IteratorFactionState) {
+		if(IteratorFactionState.ObjectID == ProgramState.ObjectID) {
+			continue;
+		}
+
+		IteratorFactionState.AddCardSlot();
+	}
+
+	
+
+}
+
+static function DeactivateResistanceSabotage(XComGameState NewGameState, StateObjectReference InRef) {
+	local XComGameStateHistory History;
+	local XComGameState_ResistanceFaction IteratorFactionState;
+	local RTGameState_ProgramFaction ProgramState;
+	local StateObjectReference CardRef, EmptyRef; 
+	local bool bFoundEmptySlot;
+
+	History = `XCOMHISTORY;
+	ProgramState = class'RTHelpers'.static.GetProgramState(NewGameState);
+	foreach History.IterateByClassType(class'XComGameState_ResistanceFaction', IteratorFactionState) {
+		if(IteratorFactionState.ObjectID == ProgramState.ObjectID) {
+			continue;
+		}
+
+		foreach IteratorFactionState.CardSlots(CardRef) {
+			if(CardRef.ObjectID == 0) {
+				// found an empty slot, can remove
+				bFoundEmptySlot = true;
+				break;
+			}
+		}
+
+		if(bFoundEmptySlot) {
+			// remove the empty slot
+			IteratorFactionState.CardSlots.RemoveItem(EmptyRef);
+		} else {
+			// remove the last slot
+			CardRef = IteratorFactionState.CardSlots[IteratorFactionState.CardSlots.Length - 1];
+			IteratorFactionState.PlayableCards.AddItem(CardRef);
+			IteratorFactionState.CardSlots.RemoveItem(CardRef);
+		}
+		
+	}
 }
