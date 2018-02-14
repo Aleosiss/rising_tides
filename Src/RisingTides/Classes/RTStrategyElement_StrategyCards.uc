@@ -228,11 +228,9 @@ static function ActivateResistanceSabotage(XComGameState NewGameState, StateObje
 			continue;
 		}
 
+		NewGameState.ModifyStateObject(class'XComGameState_ResistanceFaction', IteratorFactionState.ObjectID);
 		IteratorFactionState.AddCardSlot();
 	}
-
-	
-
 }
 
 static function DeactivateResistanceSabotage(XComGameState NewGameState, StateObjectReference InRef) {
@@ -257,6 +255,7 @@ static function DeactivateResistanceSabotage(XComGameState NewGameState, StateOb
 			}
 		}
 
+		NewGameState.ModifyStateObject(class'XComGameState_ResistanceFaction', IteratorFactionState.ObjectID);
 		if(bFoundEmptySlot) {
 			// remove the empty slot
 			IteratorFactionState.CardSlots.RemoveItem(EmptyRef);
