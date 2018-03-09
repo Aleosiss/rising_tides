@@ -218,7 +218,7 @@ static function X2DataTemplate RTCreateResistanceSabotage()
 
 static function ActivateResistanceSabotage(XComGameState NewGameState, StateObjectReference InRef, optional bool bReactivate = false) {
 	local XComGameStateHistory History;
-	local XComGameState_ResistanceFaction IteratorFactionState;
+	local XComGameState_ResistanceFaction IteratorFactionState, NewFactionState;
 	local RTGameState_ProgramFaction ProgramState;
 
 	History = `XCOMHISTORY;
@@ -228,14 +228,14 @@ static function ActivateResistanceSabotage(XComGameState NewGameState, StateObje
 			continue;
 		}
 
-		NewGameState.ModifyStateObject(class'XComGameState_ResistanceFaction', IteratorFactionState.ObjectID);
-		IteratorFactionState.AddCardSlot();
+		NewFactionState = XComGameState_ResistanceFaction(NewGameState.ModifyStateObject(class'XComGameState_ResistanceFaction', IteratorFactionState.ObjectID));
+		NewFactionState.AddCardSlot();
 	}
 }
 
 static function DeactivateResistanceSabotage(XComGameState NewGameState, StateObjectReference InRef) {
 	local XComGameStateHistory History;
-	local XComGameState_ResistanceFaction IteratorFactionState;
+	local XComGameState_ResistanceFaction IteratorFactionState, NewFactionState;
 	local RTGameState_ProgramFaction ProgramState;
 	local StateObjectReference CardRef, EmptyRef; 
 	local bool bFoundEmptySlot;
@@ -255,15 +255,15 @@ static function DeactivateResistanceSabotage(XComGameState NewGameState, StateOb
 			}
 		}
 
-		NewGameState.ModifyStateObject(class'XComGameState_ResistanceFaction', IteratorFactionState.ObjectID);
+		NewFactionState = XComGameState_ResistanceFaction(NewGameState.ModifyStateObject(class'XComGameState_ResistanceFaction', IteratorFactionState.ObjectID));
 		if(bFoundEmptySlot) {
 			// remove the empty slot
-			IteratorFactionState.CardSlots.RemoveItem(EmptyRef);
+			NewFactionState.CardSlots.RemoveItem(EmptyRef);
 		} else {
 			// remove the last slot
 			CardRef = IteratorFactionState.CardSlots[IteratorFactionState.CardSlots.Length - 1];
-			IteratorFactionState.PlayableCards.AddItem(CardRef);
-			IteratorFactionState.CardSlots.RemoveItem(CardRef);
+			NewFactionState.PlayableCards.AddItem(CardRef);
+			NewFactionState.CardSlots.RemoveItem(CardRef);
 		}
 		
 	}
