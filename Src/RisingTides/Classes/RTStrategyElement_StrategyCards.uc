@@ -60,6 +60,10 @@ static function JustPassingThroughModifyTacStartState(XComGameState StartState) 
 	local array<StateObjectReference> AvailableSoldiers;
 	local StateObjectReference SoldierObjRef;
 	local XComGameState_MissionSite MissionState;
+	local XComGameState_Unit CopyUnitState, OriginalUnitState;
+	local name CharTemplateName;
+	local X2CharacterTemplate Template;
+	local XComGameState_Player PlayerState;
 
 	if (IsSplitMission( StartState ))
 		return;
@@ -81,17 +85,45 @@ static function JustPassingThroughModifyTacStartState(XComGameState StartState) 
 		return;
 	}
 	MissionState = XComGameState_MissionSite(`XCOMHISTORY.GetGameStateForObjectID(XComHQ.MissionRef.ObjectID));
-	if(!class'RTHelpers'.static.CheckIsInvalidMission(MissionState.GetMissionSource()))
+	if(class'RTHelpers'.static.IsInvalidMission(MissionState.GetMissionSource())) {
+		//class'RTHelpers'.static.RTLog("Invalid Mission Type for JPT!");
 		return;
+	}
 
-	if(XComHQ.TacticalGameplayTags.Find( 'NoVolunteerArmy' ) != INDEX_NONE)
+	if(XComHQ.TacticalGameplayTags.Find( 'NoVolunteerArmy' ) != INDEX_NONE) {
+		//class'RTHelpers'.static.RTLog("JPT: No Volunteer Army allowed!");
 		return;
+	}
 
-	if(XComHQ.TacticalGameplayTags.Find( 'RTOneSmallFavor' ) != INDEX_NONE)
+	if(XComHQ.TacticalGameplayTags.Find( 'RTOneSmallFavor' ) != INDEX_NONE) {
+		//class'RTHelpers'.static.RTLog("JPT: One Small Favor already active!");
 		return;
+	}
 
-	XComHQ.Squad.AddItem(SoldierObjRef);
-	XComHQ.AllSquads[0].SquadMembers.AddItem(SoldierObjRef);
+	//class'RTHelpers'.static.RTLog("All checks passed, adding a operative to the XCOM squad!");
+	OriginalUnitState = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(SoldierObjRef.ObjectID));
+	CharTemplateName = OriginalUnitState.GetMyTemplateName();
+
+	Template = class'X2CharacterTemplateManager'.static.GetCharacterTemplateManager().FindCharacterTemplate( CharTemplateName );
+
+	CopyUnitState = Program.CreateRTOperative(CharTemplateName, StartState);
+	CopyUnitState.bMissionProvided = true;
+
+	// assign to player
+	foreach StartState.IterateByClassType(class'XComGameState_Player', PlayerState)
+	{
+		if(PlayerState.GetTeam() == eTeam_XCom)
+		{
+			CopyUnitState.SetControllingPlayer(PlayerState.GetReference());
+			break;
+		}
+	}
+	CopyUnitState.SetSoldierProgression(OriginalUnitState.m_SoldierProgressionAbilties);
+	//class'RTHelpers'.static.RTLog("Successfully built a copy of an operative!");
+
+
+	XComHQ.Squad.AddItem(CopyUnitState.GetReference());
+	XComHQ.AllSquads[0].SquadMembers.AddItem(CopyUnitState.GetReference());
 }
 
 static function bool IsSplitMission( XComGameState StartState )
@@ -221,6 +253,7 @@ static function ActivateResistanceSabotage(XComGameState NewGameState, StateObje
 	local XComGameState_ResistanceFaction IteratorFactionState, NewFactionState;
 	local RTGameState_ProgramFaction ProgramState;
 
+	class'RTHelpers'.static.RTLog("Activating Resistance Sabotage!");
 	History = `XCOMHISTORY;
 	ProgramState = class'RTHelpers'.static.GetProgramState(NewGameState);
 	foreach History.IterateByClassType(class'XComGameState_ResistanceFaction', IteratorFactionState) {
@@ -240,6 +273,7 @@ static function DeactivateResistanceSabotage(XComGameState NewGameState, StateOb
 	local StateObjectReference CardRef, EmptyRef; 
 	local bool bFoundEmptySlot;
 
+	class'RTHelpers'.static.RTLog("Deactivating Resistance Sabotage!");
 	History = `XCOMHISTORY;
 	ProgramState = class'RTHelpers'.static.GetProgramState(NewGameState);
 	foreach History.IterateByClassType(class'XComGameState_ResistanceFaction', IteratorFactionState) {

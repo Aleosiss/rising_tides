@@ -201,7 +201,7 @@ SummaryText="Relay Outposts are constructed instantly."
 QuoteTextLong="...I've been around... a long time. Long enough to have friends in places of all elevations..."
 QuoteTextAuthor="\"Queen\""
 
-[ResCard_RTNeuralManipulation RTProgramStrategyCardTemplate]
+[ResCard_RTDirectNeuralManipulation RTProgramStrategyCardTemplate]
 DisplayName="Direct Neural Manipulation"
 SummaryText="Bonded Soldiers gain <XGParam:IntValue/0> more experience on missions underwent with the bondmate."
 QuoteText="...that is the price we pay for our lives. It means we will never forget that we are not gods walking alongside 'mere' mortals..."

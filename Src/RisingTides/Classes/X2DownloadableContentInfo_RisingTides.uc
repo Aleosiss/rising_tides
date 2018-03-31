@@ -10,11 +10,14 @@
 
 class X2DownloadableContentInfo_RisingTides extends X2DownloadableContentInfo config(RisingTides);
 
-var bool bDebugOutputDisabled;
+var bool bDebuggingEnabled;
+var config int MajorVer;
+var config int MinorVer;
+var config int PatchVer;
 
 defaultproperties
 {
-	bDebugOutputDisabled = false;
+	bDebuggingEnabled = true;
 }
 
 /// <summary>
@@ -183,7 +186,7 @@ exec function RT_GenerateProgramCards() {
 	NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("CHEAT: Add Program Faction Cards!");
 	ProgramState = class'RTHelpers'.static.GetNewProgramState(NewGameState);
 
-	for(idx = 0; idx < class'RTGameState_ProgramFaction'.default.NumCardsOnMeet; idx++)
+	for(idx = 0; idx < 7; idx++)
 	{
 		ProgramState.GenerateNewPlayableCard(NewGameState);
 	}
@@ -253,10 +256,7 @@ exec function RT_TriggerEvent(name EventID) {
 }
 
 exec function RT_DebugModVersion() {
-	local int ModVersion;
-
-	ModVersion = 4;
-	class'RTHelpers'.static.RTLog("Mod Version is: " $ ModVersion);
+	class'RTHelpers'.static.RTLog("Mod Version is: " $ default.MajorVer $ "." $ default.MinorVer $ "." $ default.PatchVer);
 }
 
 exec function RT_ToggleCustomDebugOutput() {
@@ -350,5 +350,5 @@ exec function RT_PrintAppearence(int ObjectID) {
 }
 
 static function bool DebuggingEnabled() {
-	return !default.bDebugOutputDisabled;
+	return default.bDebuggingEnabled;
 }

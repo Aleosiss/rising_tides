@@ -18,8 +18,6 @@ This would be a bare-bones content mod. I also have the following content in min
 ## Current To Test
 
 	- Direct Neural Manipulation
-	- Just Passing Through
-	- Resistance Sabotage
 
 ## Current Table
 

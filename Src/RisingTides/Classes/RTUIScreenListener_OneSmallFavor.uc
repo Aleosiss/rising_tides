@@ -94,7 +94,7 @@ function OnConfirmButtonInited(UIPanel Panel) {
 	// the checkbox shouldn't be clickable if the favor isn't available
 	bReadOnly = !Program.bOneSmallFavorAvailable;
 	if(!bReadOnly) {
-		bReadOnly = class'RTHelpers'.static.CheckIsInvalidMission(MissionScreen.GetMission().GetMissionSource());
+		bReadOnly = class'RTHelpers'.static.IsInvalidMission(MissionScreen.GetMission().GetMissionSource());
 		if(bReadOnly) {
 			class'RTHelpers'.static.RTLog("This MissionSource is invalid!", true);
 		}
@@ -153,7 +153,7 @@ simulated function bool AddOneSmallFavorSitrep(XComGameState_MissionSite Mission
 		return false;
 	}
 	
-	if(class'RTHelpers'.static.CheckIsInvalidMission(MissionState.GetMissionSource())) {
+	if(class'RTHelpers'.static.IsInvalidMission(MissionState.GetMissionSource())) {
 		class'RTHelpers'.static.RTLog("This map is invalid!", true);
 		return false;
 	}

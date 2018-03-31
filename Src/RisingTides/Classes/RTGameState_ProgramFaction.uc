@@ -88,12 +88,21 @@ function InitializeHQ(XComGameState NewGameState, int idx) {
 
 // CreateRTOperatives(XComGameState NewGameState)
 function CreateRTOperatives(XComGameState StartState) {
-	CreateRTOperative('RTGhostBerserker', StartState);
-	CreateRTOperative('RTGhostMarksman', StartState);
-	CreateRTOperative('RTGhostGatherer', StartState);
+	AddRTOperativeToProgram('RTGhostBerserker', StartState);
+	AddRTOperativeToProgram('RTGhostMarksman', StartState);
+	AddRTOperativeToProgram('RTGhostGatherer', StartState);
 }
 
-function CreateRTOperative(name GhostTemplateName, XComGameState StartState) {
+// Seperated this out of CreateRTOperative in order to allow the creation of duplicate operatives in Just Passing Through
+function AddRTOperativeToProgram(name GhostTemplateName, XComGameState StartState) {
+	local XComGameState_Unit UnitState;
+
+	UnitState = CreateRTOperative(GhostTemplateName, StartState);
+	Active.AddItem(UnitState.GetReference());
+	Master.AddItem(UnitState.GetReference());
+}
+
+function XComGameState_Unit CreateRTOperative(name GhostTemplateName, XComGameState StartState) {
 	local XComGameState_Unit UnitState;
 	
 	local X2CharacterTemplateManager CharMgr;
@@ -118,13 +127,12 @@ function CreateRTOperative(name GhostTemplateName, XComGameState StartState) {
 	WeaponState = UnitState.GetPrimaryWeapon();
 	ApplyWeaponUpgrades(GhostTemplateName, WeaponState);
 
-	Active.AddItem(UnitState.GetReference());
-	Master.AddItem(UnitState.GetReference());
-
 	class'RTHelpers'.static.RTLog( "Creating Program Operative " $ UnitState.GetFullName() $ 
 							", with ObjectID " $ UnitState.GetReference().ObjectID $
 							", and CharacterTemplateName " $ UnitState.GetMyTemplateName()
 						);
+
+	return UnitState;
 }
 
 function ApplyWeaponUpgrades(name GhostTemplateName, XComGameState_Item WeaponState) {
@@ -363,11 +371,9 @@ function OnEndTacticalPlay(XComGameState NewGameState)
 	local XComGameState_MissionSite MissionState;
 
 	super.OnEndTacticalPlay(NewGameState);
+
 	History = class'XComGameStateHistory'.static.GetGameStateHistory();
-
-	XComHQ = XComGameState_HeadquartersXCom(History.GetSingleGameStateObjectForClass(class'XComGameState_HeadquartersXCom'));
-	XComHQ = XComGameState_HeadquartersXCom(NewGameState.ModifyStateObject(class'XComGameState_HeadquartersXCom', XComHQ.GetReference().ObjectID));
-
+	XComHQ = XComGameState_HeadquartersXCom(History.GetSingleGameStateObjectForClass(class'XComGameState_HeadquartersXCom'));	
 	MissionState = XComGameState_MissionSite(History.GetGameStateForObjectID(XComHQ.MissionRef.ObjectID));
 
 	if(bDirectNeuralManipulation) {
@@ -375,12 +381,10 @@ function OnEndTacticalPlay(XComGameState NewGameState)
 	}
 
 	if(IsOSFMission(MissionState)) {
+		XComHQ = XComGameState_HeadquartersXCom(NewGameState.ModifyStateObject(class'XComGameState_HeadquartersXCom', XComHQ.GetReference().ObjectID));
 		RecalculateActiveOperativesAndSquads(NewGameState);
 		PromoteAllOperatives(NewGameState);
 	}
-
-
-
 }
 
 protected static function bool IsOSFMission(XComGameState_MissionSite MissionState) {
@@ -492,7 +496,7 @@ protected function AddDNMExperience(XComGameState NewGameState) {
 				UnitState.AddXP(GetDNMXPForRank(UnitState));
 				BondMateState.AddXP(GetDNMXPForRank(BondMateState));
 
-				// don't need to keep iterating since bonds are 1-to-1`
+				// don't need to keep iterating since bonds are 1-to-1
 				break;
 			}
 
@@ -509,7 +513,7 @@ simulated function int GetDNMXPForRank(XComGameState_Unit UnitState) {
 		return 0;
 	}
 
-	xp = max(UnitState.GetRank() - 2, 0);
+	xp = max(UnitState.GetRank() - 2, 1);
 	return xp;
 }
 
@@ -709,6 +713,7 @@ function GenerateNewPlayableCard(XComGameState NewGameState)
 		return;
 	}
 
+	// No duplicates please
 	History = `XCOMHISTORY;
 	foreach PlayableCards(IteratorRef) {
 		IteratorCardState = XComGameState_StrategyCard(History.GetGameStateForObjectID(IteratorRef.ObjectID));

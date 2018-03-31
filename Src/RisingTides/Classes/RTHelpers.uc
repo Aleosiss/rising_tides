@@ -186,9 +186,9 @@ static function RTGameState_ProgramFaction GetNewProgramState(XComGameState NewG
 static function RTLog(string message, optional bool bShouldRedScreenToo = false) {
 	if(!class'X2DownloadableContentInfo_RisingTides'.static.DebuggingEnabled())
 		return;
-	`LOG("Rising Tides: " $ message);
+	`LOG("RisingTides: " $ message);
 	if(bShouldRedScreenToo)
-		`RedScreen("Rising Tides: " $ message);
+		`RedScreen("RisingTides: " $ message);
 }
 
 static function bool DebuggingEnabled() {
@@ -255,6 +255,6 @@ static function XComGameState_HeadquartersXCom GetXComHQState()
 	return NewXComHQ;
 }
 
-simulated static function bool CheckIsInvalidMission(X2MissionSourceTemplate Template) {
+simulated static function bool IsInvalidMission(X2MissionSourceTemplate Template) {
 	return class'RTGameState_ProgramFaction'.default.InvalidMissionSources.Find(Template.DataName) != INDEX_NONE;
 }
