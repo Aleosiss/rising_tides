@@ -226,9 +226,6 @@ static function PrintGoldenPathActionsForFaction(XComGameState_ResistanceFaction
 static function PrintMiscInfoForFaction(XComGameState_ResistanceFaction Faction) {
 	local XComGameState_HeadquartersXCom XComHQ;
 
-	RTLog("Getting the Psi Training Rate...");
-	XComHQ = GetXComHQState();
-	RTLog("It's " $ XComHQ.PsiTrainingRate);
 }
 
 static function SubmitGameState(XComGameState NewGameState) {
