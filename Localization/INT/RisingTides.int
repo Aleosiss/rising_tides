@@ -139,6 +139,8 @@ MeldFriendlyDesc="This unit has joined the Meld, receiving and delivering psioni
 [RTGameState_ProgramFaction]
 SquadOneName="SPECTRE"
 SquadOneBackground="SPECTRE is the highest echelon, the golden standard, the last line. Each member, almost by definition, is ranked solidly at ten (and perhaps even above that) on the psi-index, and each brings unrivaled skill and capabilities to the local area of operations."
+OSFCheckboxAvailable="Call in one small favor from the Program."
+OSFCheckboxUnavailable="The Program is not available to assist."
 
 [Faction_Program RTProgramFactionTemplate]
 FactionTitle="The Program"

@@ -72,6 +72,10 @@ var config array<name>													InvalidMissionSources; 			// list of mission 
 var private int															iPreviousMaxSoldiersForMission; // cache of the number of soldiers on a mission before OSF modfied it
 var private StateObjectReference										SelectedMissionRef;				// cache of the mission one small favor is going to go against
 
+// ONE SMALL FAVOR LOCALIZED STRINGS
+var localized string OSFCheckboxAvailable;
+var localized string OSFCheckboxUnavailable;
+
 /* *********************************************************************** */
 
 // SetUpProgramFaction(XComGameState StartState)

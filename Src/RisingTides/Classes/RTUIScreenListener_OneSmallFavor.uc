@@ -1,10 +1,12 @@
 // This is an Unreal Script
-class RTUIScreenListener_OneSmallFavor extends UIScreenListener;
+class RTUIScreenListener_OneSmallFavor extends UIScreenListener config(ProgramFaction);
 
 var UICheckbox 	cb;
 var UIMission	ms;
 var StateObjectReference mr;
 var bool		bDebugging;
+
+var config array<name> FatLaunchButtonMissionTypes;
 
 delegate OldOnClickedDelegate(UIButton Button);
 
@@ -48,6 +50,7 @@ event OnRemoved(UIScreen Screen) {
 simulated function ManualGC() {
 	OldOnClickedDelegate = none;
 	ms = none;
+	cb.Remove();
 	cb = none;
 }
 
@@ -70,11 +73,26 @@ simulated function AddOneSmallFavorSelectionCheckBox(UIScreen Screen) {
 	}
 
 	// immediately execute the init code if we're somehow late to the initialization party
-	if(MissionScreen.ConfirmButton.bIsInited) {
-		OnConfirmButtonInited(MissionScreen.ConfirmButton);
-	} else {
-		// otherwise add the button to the init delegates
-		MissionScreen.ConfirmButton.AddOnInitDelegate(OnConfirmButtonInited);	
+	if(MissionScreen.ConfirmButton.bIsVisible) {
+		if(MissionScreen.ConfirmButton.bIsInited && MissionScreen.ConfirmButton.bIsVisible) {
+			OnConfirmButtonInited(MissionScreen.ConfirmButton);
+		} else {
+			// otherwise add the button to the init delegates
+			MissionScreen.ConfirmButton.AddOnInitDelegate(OnConfirmButtonInited);	
+		}
+	}
+	// immediately execute the init code if we're somehow late to the initialization party
+	else if(MissionScreen.Button1.bIsVisible) {
+		if(MissionScreen.Button1.bIsInited) {
+			OnConfirmButtonInited(MissionScreen.Button1);
+		} else {
+			// otherwise add the button to the init delegates
+			MissionScreen.Button1.AddOnInitDelegate(OnConfirmButtonInited);	
+		}
+	}
+	
+	else {
+		class'RTHelpers'.static.RTLog("Could not find a confirm button for the mission!", true);
 	}
 }
 
@@ -82,6 +100,9 @@ function OnConfirmButtonInited(UIPanel Panel) {
 	local UIMission MissionScreen;
 	local bool bReadOnly;
 	local RTGameState_ProgramFaction Program;
+	local UIButton Button;
+	local float PosX, PosY;
+	local string strCheckboxDesc;
 
 	MissionScreen = ms;
 	if(MissionScreen == none) {
@@ -90,6 +111,10 @@ function OnConfirmButtonInited(UIPanel Panel) {
 	}
 
 	Program = RTGameState_ProgramFaction(`XCOMHISTORY.GetSingleGameStateObjectForClass(class'RTGameState_ProgramFaction'));
+	Button = UIButton(Panel);
+	if(Button == none) {
+		class'RTHelpers'.static.RTLog("This isn't a button!");
+	}
 
 	// the checkbox shouldn't be clickable if the favor isn't available
 	bReadOnly = !Program.bOneSmallFavorAvailable;
@@ -99,20 +124,36 @@ function OnConfirmButtonInited(UIPanel Panel) {
 			class'RTHelpers'.static.RTLog("This MissionSource is invalid!", true);
 		}
 	}
-	
-	cb = MissionScreen.Spawn(class'UICheckbox', MissionScreen);	
-	cb.InitCheckbox('OSFActivateCheckbox', "", false, , bReadOnly).SetTextStyle(class'UICheckbox'.const.STYLE_TEXT_TO_THE_LEFT);	
-	cb.SetSize(32, 30);
-	cb.SetPosition(Panel.MC.GetNum("_x") - 64, Panel.MC.GetNum("_y"));
-	class'RTHelpers'.static.RTLog("Setting the Checkbox color to " $ class'UIUtilities_Colors'.static.ColorToFlashHex(Program.GetMyTemplate().FactionColor));
-	cb.SetColor(class'UIUtilities_Colors'.static.ColorToFlashHex(Program.GetMyTemplate().FactionColor));
 
-	// Modify the OnButtonClicked Delegate
-	OldOnClickedDelegate = MissionScreen.ConfirmButton.OnClickedDelegate;
-	MissionScreen.ConfirmButton.OnClickedDelegate = ModifiedConfirmButtonClicked;
+
+	if(bReadOnly) {
+		strCheckboxDesc = class'RTGameState_ProgramFaction'.default.OSFCheckboxUnavailable;
+	} else {
+		strCheckboxDesc = class'RTGameState_ProgramFaction'.default.OSFCheckboxAvailable;
+	}
+
+	GetPositionByMissionType(MissionScreen.GetMission().GetMissionSource().DataName, PosX, PosY);
+
+	cb = MissionScreen.Spawn(class'UICheckbox', MissionScreen.ButtonGroup);	
+	cb.InitCheckbox('OSFActivateCheckbox', , false, , bReadOnly)
+		.SetSize(Button.Height, Button.Height)
+		.OriginTopLeft()
+		.SetPosition(PosX, PosY)
+		.SetColor(class'UIUtilities_Colors'.static.ColorToFlashHex(Program.GetMyTemplate().FactionColor))
+		.SetTooltipText(strCheckboxDesc,,4,-4,,,,0.0f);
+	class'RTHelpers'.static.RTLog("Created a checkbox at position " $ PosX $ " x and " $ PosY $ " y.");
+
+	// Modify the OnLaunchButtonClicked Delegate
+
+	if(Button != none) {
+		OldOnClickedDelegate = Button.OnClickedDelegate;
+		Button.OnClickedDelegate = ModifiedLaunchButtonClicked;
+	} else {
+		class'RTHelpers'.static.RTLog("Panel was not a button?", true);
+	}
 }
 
-function ModifiedConfirmButtonClicked(UIButton Button) {
+function ModifiedLaunchButtonClicked(UIButton Button) {
 	mr = ms.GetMission().GetReference();
 	AddOneSmallFavorSitrep(XComGameState_MissionSite(`XCOMHISTORY.GetGameStateForObjectID(mr.ObjectID)));
 	OldOnClickedDelegate(Button);
@@ -241,6 +282,29 @@ function ModifyMissionData(XComGameState_HeadquartersXCom NewXComHQ, XComGameSta
 	if(MissionDataIndex != INDEX_NONE)
 	{
 		NewXComHQ.arrGeneratedMissionData[MissionDataIndex] = NewMissionState.GeneratedMission;
+	}
+}
+
+simulated function PrintUIMissionButtonPositions(UIMission MissionScreen) {
+	
+}
+
+simulated function GetPositionByMissionType(name MissionSource, out float PosX, out float PosY) {
+	// WOTC missions have these really fat launch buttons
+	if(default.FatLaunchButtonMissionTypes.Find(MissionSource) != INDEX_NONE) {
+		PosX = -192;
+		PosY = -30;
+		if(MissionSource == 'MissionSource_ChosenStronghold') {
+			PosX = -172;
+		}
+	} else {
+		PosX = -98;
+		PosY = -18;
+	}
+
+	if(MissionSource == 'MissionSource_GuerillaOp') {
+		PosX = -198;
+		PosY = 125;
 	}
 }
 
