@@ -214,7 +214,7 @@ exec function RT_DebugActiveOperatives() {
 
 }
 
-exec function RT_AddSPECTREToXCOMCrew() {
+exec function RT_AddProgramOperativeToXCOMCrew() {
 	local XComGameStateHistory History;
 	local XComGameState NewGameState;
 	local XComGameState_HeadquartersXCom XComHQ;
@@ -351,4 +351,65 @@ exec function RT_PrintAppearence(int ObjectID) {
 
 static function bool DebuggingEnabled() {
 	return default.bDebuggingEnabled;
+}
+
+
+// Courtesy of bountygiver
+exec function TestPanel(int X, int Y, int Width, int Height, optional name PanelName = 'TestDebugPanel')
+{
+	local UIScreen Screen;
+	local UIBGBox BGPanel;
+
+	Screen = `SCREENSTACK.GetCurrentScreen();
+
+	BGPanel = UIBGBox(Screen.GetChildByName(PanelName, false));
+
+	if (BGPanel != none)
+	{
+		BGPanel.SetPosition(X, Y);
+		BGPanel.SetSize(Width, Height);
+	}
+	else
+	{
+		BGPanel = Screen.Spawn(class'UIBGBox', Screen);
+		BGPanel.InitBG('TestDebugPanel', X, Y, Width, Height);
+		BGPanel.SetBGColor("FF0000");
+		BGPanel.AnimateIn(0);
+	}
+}
+
+exec function DestroyTestPanel(optional name PanelName = 'TestDebugPanel') {
+	local UIScreen Screen;
+	local UIBGBox BGPanel;
+
+	Screen = `SCREENSTACK.GetCurrentScreen();
+
+	BGPanel = UIBGBox(Screen.GetChildByName(PanelName, false));
+	BGPanel.Remove();
+}
+
+exec function ReportTestPanelLocation(optional name PanelName = 'TestDebugPanel') {
+	local UIScreen Screen;
+	local UIPanel TestPanel;
+	local string MissionType, LogOutput;
+	local float PosX, PosY;
+	local StateObjectReference MissionRef;
+
+	Screen = `SCREENSTACK.GetCurrentScreen();
+
+	TestPanel = Screen.GetChildByName(PanelName, false);
+	PosX = TestPanel.MC.GetNum("_x");
+	PosY = TestPanel.MC.GetNum("_y");
+
+	if(UIMission(Screen) != none) {
+		MissionType = string(UIMission(Screen).GetMission().GetMissionSource().DataName);
+		LogOutput = ("" $ PanelName $ " located at (" $ PosX $ ", " $ PosY $ ") for MissionType " $ MissionType);
+		class'RTHelpers'.static.RTLog(LogOutput);
+
+	} else {
+		LogOutput = ("" $ PanelName $ " located at (" $ PosX $ ", " $ PosY $ ")");
+		class'RTHelpers'.static.RTLog(LogOutput);
+
+	}
+
 }
