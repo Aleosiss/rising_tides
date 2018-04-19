@@ -19,6 +19,10 @@ This would be a bare-bones content mod. I also have the following content in min
 
 	- Direct Neural Manipulation
 
+## Current Bugs (High Priority)
+	- The Program still has many of the base-game Covert Actions
+	- The Program cannot complete the Golden Path actions related to their Chosen
+
 ## Current Table
 
 	- Berserker:
@@ -30,7 +34,7 @@ This would be a bare-bones content mod. I also have the following content in min
 				- Gain Stealth while preparing a massive psionic rift. On the following turn, the Stealth is broken and a rift is formed. Friendly units can use the rift to evac from the mission. The rift will end after two turns, or if caster's connection is broken.
 	- Marksman:
 		- Maybe rework time stop to only take place over 1 turn
-		- rework boring perks (Knock Them Down, Your Hands, My Eyes, Eye in the Sky, )
+		- rework boring perks (Knock Them Down, Your Hands, My Eyes, Eye in the Sky)
 	- Gatherer:
 		- Redo Guardian Angel (?, no one has told me if it actually works or not)
 		- Add Over the Shoulder exception for civilians that are actually faceless
@@ -54,7 +58,7 @@ This would be a bare-bones content mod. I also have the following content in min
 		- wtf will it do? not sure how "seeing the future" can work in real life
 			- is it possible to force the AI to use a behavior tree?
 
-## Current Bugs
+## Current Bugs (low priority)
 
 	- Time Stop damage calculation isn't visualized properly
 	- Time Stop damage calculation is fucked, use code from X2Effect_DLC_3AbsorptionField.uc to rewrite
