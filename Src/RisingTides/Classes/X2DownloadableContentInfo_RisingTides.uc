@@ -353,6 +353,33 @@ static function bool DebuggingEnabled() {
 	return default.bDebuggingEnabled;
 }
 
+exec function RT_PrintCrew()
+{
+	local XComGameState_HeadquartersXCom XComHQ;
+	local int idx;
+	local XComGameStateHistory History;
+	local XComGameState_Unit UnitState;
+	local string CrewString;
+
+	History = `XCOMHISTORY;
+	
+	XComHQ = XComGameState_HeadquartersXCom(History.GetSingleGameStateObjectForClass(class'XComGameState_HeadquartersXCom'));
+
+	`LOG("Logging XCOM Crew...");
+	CrewString = "\nXCom Crew";
+
+	for(idx = 0; idx < XComHQ.Crew.Length; idx++)
+	{
+		UnitState = XComGameState_Unit(History.GetGameStateForObjectID(XComHQ.Crew[idx].ObjectID));
+
+		if(UnitState != none)
+		{
+			CrewString $= "\n" $ UnitState.GetName(eNameType_Full) @ "ObjectID:" @ UnitState.ObjectID;
+		}
+	}
+
+	`LOG(CrewString);
+}
 
 // Courtesy of bountygiver
 exec function TestPanel(int X, int Y, int Width, int Height, optional name PanelName = 'TestDebugPanel')
