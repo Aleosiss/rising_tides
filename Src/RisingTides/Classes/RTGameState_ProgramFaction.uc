@@ -129,6 +129,7 @@ function XComGameState_Unit CreateRTOperative(name GhostTemplateName, XComGameSt
 	UnitState.SetBackground(UnitState.GetMyTemplate().strCharacterBackgroundMale[0]); // the first background is the classified one, the second one is the unclassified one
 
 	WeaponState = UnitState.GetPrimaryWeapon();
+	WeaponState = XComGameState_Item(StartState.ModifyStateObject(class'XComGameState_Item', WeaponState.ObjectID));
 	ApplyWeaponUpgrades(GhostTemplateName, WeaponState);
 
 	class'RTHelpers'.static.RTLog( "Creating Program Operative " $ UnitState.GetFullName() $ 
@@ -139,37 +140,47 @@ function XComGameState_Unit CreateRTOperative(name GhostTemplateName, XComGameSt
 	return UnitState;
 }
 
-function ApplyWeaponUpgrades(name GhostTemplateName, XComGameState_Item WeaponState) {
+function ApplyWeaponUpgrades(name GhostTemplateName, XComGameState_Item NewWeaponState) {
 	local X2WeaponUpgradeTemplate UpgradeTemplate;
 	local X2ItemTemplateManager ItemTemplateMgr;
 	local name WeaponUpgradeName;
+	local int idx;
 
+	local name DebugIteratorName;
+	local array<name> DebuggingNames;
+
+	// I'm forgetting to reset some variable somewhere, causing the first operative to get one set of upgrades, the second to get two, and so on...
 	ItemTemplateMgr = class'X2ItemTemplateManager'.static.GetItemTemplateManager();
+	NewWeaponState.WipeUpgradeTemplates();
 	switch(GhostTemplateName) {
 		case 'RTGhostBerserker':
-			foreach default.BerserkerWeaponUpgrades(WeaponUpgradeName) {
-				UpgradeTemplate = X2WeaponUpgradeTemplate(ItemTemplateMgr.FindItemTemplate(WeaponUpgradeName));
+			for(idx = 0; idx < default.BerserkerWeaponUpgrades.Length; idx++) {
+				UpgradeTemplate = X2WeaponUpgradeTemplate(ItemTemplateMgr.FindItemTemplate(default.BerserkerWeaponUpgrades[idx]));
 				if (UpgradeTemplate != none) {
-					WeaponState.ApplyWeaponUpgradeTemplate(UpgradeTemplate);
+					NewWeaponState.ApplyWeaponUpgradeTemplate(UpgradeTemplate, idx);
 				}
 			}
+
 		case 'RTGhostMarksman':
-			foreach default.MarksmanWeaponUpgrades(WeaponUpgradeName) {
-				UpgradeTemplate = X2WeaponUpgradeTemplate(ItemTemplateMgr.FindItemTemplate(WeaponUpgradeName));
+			for(idx = 0; idx < default.MarksmanWeaponUpgrades.Length; idx++) {
+				UpgradeTemplate = X2WeaponUpgradeTemplate(ItemTemplateMgr.FindItemTemplate(default.MarksmanWeaponUpgrades[idx]));
 				if (UpgradeTemplate != none) {
-					WeaponState.ApplyWeaponUpgradeTemplate(UpgradeTemplate);
+					NewWeaponState.ApplyWeaponUpgradeTemplate(UpgradeTemplate, idx);
 				}
 			}
+
 		case 'RTGhostGatherer':
-			foreach default.GathererWeaponUpgrades(WeaponUpgradeName) {
-				UpgradeTemplate = X2WeaponUpgradeTemplate(ItemTemplateMgr.FindItemTemplate(WeaponUpgradeName));
+			for(idx = 0; idx < default.GathererWeaponUpgrades.Length; idx++) {
+				UpgradeTemplate = X2WeaponUpgradeTemplate(ItemTemplateMgr.FindItemTemplate(default.GathererWeaponUpgrades[idx]));
 				if (UpgradeTemplate != none) {
-					WeaponState.ApplyWeaponUpgradeTemplate(UpgradeTemplate);
+					NewWeaponState.ApplyWeaponUpgradeTemplate(UpgradeTemplate, idx);
 				}
 			}
 	}
 }
-
+//---------------------------------------------------------------------------------------
+//---Create Program Squads---------------------------------------------------------------
+//---------------------------------------------------------------------------------------
 function CreateRTSquads(XComGameState StartState) {
 
 	local RTGameState_PersistentGhostSquad one;
@@ -267,6 +278,9 @@ simulated function UpdateNumCrits(name CharacterTemplateName) {
 
 }
 
+//---------------------------------------------------------------------------------------
+//---Getter------------------------------------------------------------------------------
+//---------------------------------------------------------------------------------------
 // RTGameState_ProgramFaction GetProgramFaction()
 static function RTGameState_ProgramFaction GetProgramFaction() {
 	local XComGameStateHistory History;
@@ -367,11 +381,14 @@ function EventListenerReturn OnUnitAttacked(Object EventData, Object EventSource
 	return ELR_NoInterrupt;
 }
 
+//---------------------------------------------------------------------------------------
+//---OnEndTacticalPlay-------------------------------------------------------------------
+//---------------------------------------------------------------------------------------
 function OnEndTacticalPlay(XComGameState NewGameState)
 {
 	local XComGameStateHistory History;
 	local XComGameState_Unit UnitState;
-	local XComGameState_HeadquartersXCom XComHQ, NewXComHQ;
+	local XComGameState_HeadquartersXCom XComHQ;
 	local XComGameState_MissionSite MissionState;
 
 	super.OnEndTacticalPlay(NewGameState);
@@ -391,6 +408,9 @@ function OnEndTacticalPlay(XComGameState NewGameState)
 	}
 }
 
+//---------------------------------------------------------------------------------------
+//---IsOSFMission------------------------------------------------------------------------
+//---------------------------------------------------------------------------------------
 protected static function bool IsOSFMission(XComGameState_MissionSite MissionState) {
 	if(MissionState.TacticalGameplayTags.Find('RTOneSmallFavor') != INDEX_NONE) {
 		return true;
@@ -398,6 +418,9 @@ protected static function bool IsOSFMission(XComGameState_MissionSite MissionSta
 	return false;
 }
 
+//---------------------------------------------------------------------------------------
+//---Recalculate Active Operatives and Squads--------------------------------------------
+//---------------------------------------------------------------------------------------
 protected function RecalculateActiveOperativesAndSquads(XComGameState NewGameState) {
 	// Have to tell all of the RTGameState_PersistentSquads about what members of theirs were captured/rescued
 	local RTGameState_PersistentGhostSquad pgs;
@@ -434,8 +457,10 @@ protected function RecalculateActiveOperativesAndSquads(XComGameState NewGameSta
 					NewUnitState.SetStatus(eStatus_Active);
 					NewUnitState.SetCurrentStat(eStat_HP, UnitState.GetMaxStat(eStat_HP));
 					NewUnitState.SetCurrentStat(eStat_Will, UnitState.GetMaxStat(eStat_Will));
+					NewUnitState.bCaptured = false;
 				} else {
 					// good job cmdr
+					NewUnitState.bCaptured = false;
 					pgs.Operatives.RemoveItem(UnitIteratorObjRef);
 					pgs.Operatives.AddItem(UnitIteratorObjRef);
 					pgs.CapturedOperatives.RemoveItem(UnitIteratorObjRef);
@@ -448,6 +473,9 @@ protected function RecalculateActiveOperativesAndSquads(XComGameState NewGameSta
 	return;
 }
 
+//---------------------------------------------------------------------------------------
+//---Promote All Operatives--------------------------------------------------------------
+//---------------------------------------------------------------------------------------
 protected function PromoteAllOperatives(XComGameState NewGameState) {
 	//TODO:: this
 	// Promote all operatives after a OSF mission.
@@ -458,6 +486,7 @@ protected function PromoteAllOperatives(XComGameState NewGameState) {
 	History = `XCOMHISTORY;
 	foreach Active(UnitIteratorObjRef) {
 		UnitState = XComGameState_Unit(History.GetGameStateForObjectID(UnitIteratorObjRef.ObjectID));
+		UnitState = XComGameState_Unit(NewGameState.ModifyStateObject(class'XComGameState_Unit', UnitState.ObjectID));
 		if(UnitState.GetRank() <= 8) {
 			UnitState.RankUpSoldier(NewGameState, ''); // they already have a class
 		}
@@ -466,6 +495,9 @@ protected function PromoteAllOperatives(XComGameState NewGameState) {
 	return;
 }
 
+//---------------------------------------------------------------------------------------
+//---Add Direct Neural Manpulation Experience--------------------------------------------
+//---------------------------------------------------------------------------------------
 protected function AddDNMExperience(XComGameState NewGameState) {
 	local XComGameState_Unit UnitState, BondMateState;
 	local array<XComGameState_Unit> ActiveSquadUnitStates;
@@ -491,6 +523,7 @@ protected function AddDNMExperience(XComGameState NewGameState) {
 				continue;
 			}
 			
+
 			if(BondMateRef.ObjectID == BondMateState.ObjectID) {
 				// don't want to double dip on the sweet gainz bro
 				ActiveSquadUnitStates.RemoveItem(BondMateState);
@@ -507,6 +540,79 @@ protected function AddDNMExperience(XComGameState NewGameState) {
 		}
 	}
 
+}
+
+
+//---------------------------------------------------------------------------------------
+//---Retrieve Rescued Program Operatives-------------------------------------------------
+//---------------------------------------------------------------------------------------
+// If a Program Operative is rescued, they won't be considered a 'special soldier' and will be added to XCOM's Barracks
+simulated function RetrieveRescuedProgramOperatives(XComGameState NewGameState) {
+	local RTGameState_PersistentGhostSquad pgs;
+	local StateObjectReference SquadIteratorObjRef, UnitIteratorObjRef;
+	local XComGameStateHistory History;
+	local XComGameState_Unit UnitState, NewUnitState;
+	local XComGameState_HeadquartersXCom XComHQ;
+
+	History = `XCOMHISTORY;
+	XComHQ = XComGameState_HeadquartersXCom(History.GetSingleGameStateObjectForClass(class'XComGameState_HeadquartersXCom'));	
+	XComHQ = XComGameState_HeadquartersXCom(NewGameState.ModifyStateObject(class'XComGameState_HeadquartersXCom', XComHQ.GetReference().ObjectID));
+	foreach Squads(SquadIteratorObjRef) {
+		pgs = RTGameState_PersistentGhostSquad(History.GetGameStateForObjectID(SquadIteratorObjRef.ObjectID));
+		pgs = RTGameState_PersistentGhostSquad(NewGameState.ModifyStateObject(class'RTGameState_PersistentGhostSquad', pgs.ObjectID));
+		if(pgs != none) {
+			foreach pgs.InitOperatives(UnitIteratorObjRef) {
+				UnitState = XComGameState_Unit(History.GetGameStateForObjectID(UnitIteratorObjRef.ObjectID));
+				if(UnitState == none) {
+					class'RTHelpers'.static.RTLog("Couldn't find UnitState for ObjectID" $ UnitIteratorObjRef.ObjectID);
+					continue;
+				}
+
+				// time to clean up
+				if(XComHQ.Crew.Find('ObjectID', UnitIteratorObjRef.ObjectID) != INDEX_NONE) {
+					XComHQ.RemoveFromCrew(UnitIteratorObjRef);
+					pgs.Operatives.RemoveItem(UnitIteratorObjRef);
+					pgs.Operatives.AddItem(UnitIteratorObjRef);
+					pgs.CapturedOperatives.RemoveItem(UnitIteratorObjRef);
+				}
+			}
+		}
+	}
+}
+
+//---------------------------------------------------------------------------------------
+//---Reload Operative Armaments----------------------------------------------------------
+//---------------------------------------------------------------------------------------
+// Something is getting fucked up with the operative armaments... just gonna reset them after every mission
+simulated function ReloadOperativeArmaments(XComGameState NewGameState) {
+	local XComGameStateHistory History;
+	local StateObjectReference SquadIteratorObjRef, UnitIteratorObjRef;
+	local XComGameState_Unit UnitState, NewUnitState;
+	local XComGameState_Item ItemState, RemoveItemState;
+	local X2ItemTemplateManager	ItemTemplateManager;
+	local InventoryLoadout Loadout, EmptyLoadout;
+	local InventoryLoadoutItem LoadoutItem;
+	local X2EquipmentTemplate EquipmentTemplate;
+	local int idx;
+	local XComGameState_Item WeaponState;
+	
+
+	History = `XCOMHISTORY;
+	ItemTemplateManager = class'X2ItemTemplateManager'.static.GetItemTemplateManager();
+	foreach Active(UnitIteratorObjRef) {
+		Loadout = EmptyLoadout;
+		UnitState = XComGameState_Unit(History.GetGameStateForObjectID(UnitIteratorObjRef.ObjectID));
+		class'RTHelpers'.static.RTLog("Reloading Arsenal for " $ UnitState.GetFullName() $ ".");
+
+		NewUnitState = XComGameState_Unit(NewGameState.ModifyStateObject(class'XComGameState_Unit', UnitState.ObjectID));
+		NewUnitState.BlastLoadout(NewGameState);
+		NewUnitState.ApplyInventoryLoadout(NewGameState, UnitState.GetMyTemplate().DefaultLoadout);
+		
+		WeaponState = NewUnitState.GetPrimaryWeapon();
+		WeaponState = XComGameState_Item(NewGameState.ModifyStateObject(class'XComGameState_Item', WeaponState.ObjectID));
+		ApplyWeaponUpgrades(UnitState.GetMyTemplateName(), WeaponState);
+
+	}
 }
 
 simulated function int GetDNMXPForRank(XComGameState_Unit UnitState) {

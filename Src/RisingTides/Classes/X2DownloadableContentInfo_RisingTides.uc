@@ -72,8 +72,24 @@ static event OnPreMission(XComGameState NewGameState, XComGameState_MissionSite 
 	ProgramState.PreMissionUpdate(NewGameState, MissionState);
 }
 
+/// <summary>
+/// Called after the player exits the post-mission sequence while this DLC / Mod is installed.
+/// </summary>
+static event OnExitPostMissionSequence()
+{
+	local XComGameState NewGameState;
+	local RTGameState_ProgramFaction ProgramState;
+
+	NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("Cleanup Program Operatives from XCOMHQ!");
+	ProgramState = class'RTHelpers'.static.GetNewProgramState(NewGameState);
+	ProgramState.RetrieveRescuedProgramOperatives(NewGameState);
+	ProgramState.ReloadOperativeArmaments(NewGameState);
+	`GAMERULES.SubmitGameState(NewGameState);
+}
+
+
 simulated static function ModifyInitialFactionState(XComGameState StartState) {
-local RTGameState_ProgramFaction Faction;
+	local RTGameState_ProgramFaction Faction;
 
 	foreach StartState.IterateByClassType(class'RTGameState_ProgramFaction', Faction) {
 		if(Faction.GetMyTemplateName() == 'Faction_Program') { break; }
@@ -82,7 +98,7 @@ local RTGameState_ProgramFaction Faction;
 	if(Faction == none) {
 		class'RTHelpers'.static.RTLog("Could not find an ProgramFactionState in the start state!", true);
 		return;
-	} else { class'RTHelpers'.static.RTLog("Modifying Golden Path Actions for the Program...", false); }
+	} else { class'RTHelpers'.static.RTLog("Modifying Golden Path Actions for the Program in the start state...", false); }
 
 	Faction.ModifyGoldenPathActions(StartState);
 }
