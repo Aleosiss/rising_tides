@@ -132,7 +132,7 @@ function XComGameState_Unit CreateRTOperative(name GhostTemplateName, XComGameSt
 	WeaponState = XComGameState_Item(StartState.ModifyStateObject(class'XComGameState_Item', WeaponState.ObjectID));
 	ApplyWeaponUpgrades(GhostTemplateName, WeaponState);
 
-	class'RTHelpers'.static.RTLog( "Creating Program Operative " $ UnitState.GetFullName() $ 
+	class'RTHelpers'.static.RTLog( "Creating Program Operative " $ UnitState.GetName(eNameType_Nick) $ 
 							", with ObjectID " $ UnitState.GetReference().ObjectID $
 							", and CharacterTemplateName " $ UnitState.GetMyTemplateName()
 						);
@@ -149,7 +149,6 @@ function ApplyWeaponUpgrades(name GhostTemplateName, XComGameState_Item NewWeapo
 	local name DebugIteratorName;
 	local array<name> DebuggingNames;
 
-	// I'm forgetting to reset some variable somewhere, causing the first operative to get one set of upgrades, the second to get two, and so on...
 	ItemTemplateMgr = class'X2ItemTemplateManager'.static.GetItemTemplateManager();
 	NewWeaponState.WipeUpgradeTemplates();
 	switch(GhostTemplateName) {
@@ -160,7 +159,7 @@ function ApplyWeaponUpgrades(name GhostTemplateName, XComGameState_Item NewWeapo
 					NewWeaponState.ApplyWeaponUpgradeTemplate(UpgradeTemplate, idx);
 				}
 			}
-
+			break;
 		case 'RTGhostMarksman':
 			for(idx = 0; idx < default.MarksmanWeaponUpgrades.Length; idx++) {
 				UpgradeTemplate = X2WeaponUpgradeTemplate(ItemTemplateMgr.FindItemTemplate(default.MarksmanWeaponUpgrades[idx]));
@@ -168,7 +167,8 @@ function ApplyWeaponUpgrades(name GhostTemplateName, XComGameState_Item NewWeapo
 					NewWeaponState.ApplyWeaponUpgradeTemplate(UpgradeTemplate, idx);
 				}
 			}
-
+			NewWeaponState.Nickname = "Heartspan";
+			break;
 		case 'RTGhostGatherer':
 			for(idx = 0; idx < default.GathererWeaponUpgrades.Length; idx++) {
 				UpgradeTemplate = X2WeaponUpgradeTemplate(ItemTemplateMgr.FindItemTemplate(default.GathererWeaponUpgrades[idx]));
@@ -176,6 +176,7 @@ function ApplyWeaponUpgrades(name GhostTemplateName, XComGameState_Item NewWeapo
 					NewWeaponState.ApplyWeaponUpgradeTemplate(UpgradeTemplate, idx);
 				}
 			}
+			break;
 	}
 }
 //---------------------------------------------------------------------------------------
@@ -403,6 +404,7 @@ function OnEndTacticalPlay(XComGameState NewGameState)
 
 	if(IsOSFMission(MissionState)) {
 		XComHQ = XComGameState_HeadquartersXCom(NewGameState.ModifyStateObject(class'XComGameState_HeadquartersXCom', XComHQ.GetReference().ObjectID));
+		BlastOperativeLoadouts(NewGameState);
 		RecalculateActiveOperativesAndSquads(NewGameState);
 		PromoteAllOperatives(NewGameState);
 	}
@@ -418,6 +420,25 @@ protected static function bool IsOSFMission(XComGameState_MissionSite MissionSta
 	return false;
 }
 
+//---------------------------------------------------------------------------------------
+//---Blast Operative Loadouts------------------------------------------------------------
+//---------------------------------------------------------------------------------------
+// need to blast operative loadouts before they hit post-game, because otherwise XCOM
+// will scoop up their gear
+protected function BlastOperativeLoadouts(XComGameState NewGameState) {
+	local XComGameState_Unit UnitState;
+	local XComGameStateHistory History;
+	local XComGameState_Item ItemState;
+
+	foreach NewGameState.IterateByClassType(class'XComGameState_Unit', UnitState) {
+		UnitState = XComGameState_Unit(NewGameState.ModifyStateObject(class'XComGameState_Unit', UnitState.ObjectID));
+		if(Master.Find('ObjectID', UnitState.ObjectID) != INDEX_NONE) {
+			ItemState = UnitState.GetPrimaryWeapon();
+			UnitState.BlastLoadout(NewGameState);
+			UnitState.AddItemToInventory(ItemState, eInvSlot_PrimaryWeapon, NewGameState); // add the primary back, since it's an infinite copy, it won't make it back to strategy anyways
+		}
+	}
+}
 //---------------------------------------------------------------------------------------
 //---Recalculate Active Operatives and Squads--------------------------------------------
 //---------------------------------------------------------------------------------------
@@ -455,15 +476,17 @@ protected function RecalculateActiveOperativesAndSquads(XComGameState NewGameSta
 					// EVERY TIME YOU BLEED FOR REACHING GREATNESS
 					// RELENTLESS YOU SURVIVE
 					NewUnitState.SetStatus(eStatus_Active);
-					NewUnitState.SetCurrentStat(eStat_HP, UnitState.GetMaxStat(eStat_HP));
-					NewUnitState.SetCurrentStat(eStat_Will, UnitState.GetMaxStat(eStat_Will));
+					NewUnitState.SetCurrentStat(eStat_HP, UnitState.GetBaseStat(eStat_HP));
+					NewUnitState.SetCurrentStat(eStat_Will, UnitState.GetBaseStat(eStat_Will));
 					NewUnitState.bCaptured = false;
 				} else {
 					// good job cmdr
-					NewUnitState.bCaptured = false;
+					NewUnitState.SetCurrentStat(eStat_HP, UnitState.GetBaseStat(eStat_HP));
+					NewUnitState.SetCurrentStat(eStat_Will, UnitState.GetBaseStat(eStat_Will));
 					pgs.Operatives.RemoveItem(UnitIteratorObjRef);
 					pgs.Operatives.AddItem(UnitIteratorObjRef);
 					pgs.CapturedOperatives.RemoveItem(UnitIteratorObjRef);
+					NewUnitState.bCaptured = false;
 				}
 
 			}
@@ -477,8 +500,6 @@ protected function RecalculateActiveOperativesAndSquads(XComGameState NewGameSta
 //---Promote All Operatives--------------------------------------------------------------
 //---------------------------------------------------------------------------------------
 protected function PromoteAllOperatives(XComGameState NewGameState) {
-	//TODO:: this
-	// Promote all operatives after a OSF mission.
 	local XComGameState_Unit UnitState;
 	local StateObjectReference UnitIteratorObjRef;
 	local XComGameStateHistory History;
@@ -602,7 +623,7 @@ simulated function ReloadOperativeArmaments(XComGameState NewGameState) {
 	foreach Active(UnitIteratorObjRef) {
 		Loadout = EmptyLoadout;
 		UnitState = XComGameState_Unit(History.GetGameStateForObjectID(UnitIteratorObjRef.ObjectID));
-		class'RTHelpers'.static.RTLog("Reloading Arsenal for " $ UnitState.GetFullName() $ ".");
+		class'RTHelpers'.static.RTLog("Reloading Arsenal for " $ UnitState.GetName(eNameType_Nick) $ ".");
 
 		NewUnitState = XComGameState_Unit(NewGameState.ModifyStateObject(class'XComGameState_Unit', UnitState.ObjectID));
 		NewUnitState.BlastLoadout(NewGameState);
@@ -931,4 +952,20 @@ static function EventListenerReturn FortyYearsOfWarEventListener(Object EventDat
 	`GAMERULES.SubmitGameState(NewGameState);
 	class'RTHelpers'.static.RTLog("Forty Years of War successfully executed!");
 	return ELR_NoInterrupt;
+}
+
+simulated function PrintOperativeEffects() {
+	local XComGameState_Unit UnitState;
+	local StateObjectReference UnitIteratorObjRef;
+	local XComGameStateHistory History;
+	local name IteratorEffectName;
+
+	History = `XCOMHISTORY;
+	foreach Active(UnitIteratorObjRef) {
+		UnitState = XComGameState_Unit(History.GetGameStateForObjectID(UnitIteratorObjRef.ObjectID));
+		class'RTHelpers'.static.RTLog("Printing Effects affecting " $ UnitState.GetName(eNameType_Nick));
+		foreach UnitState.AffectedByEffectNames(IteratorEffectName) {
+			class'RTHelpers'.static.RTLog("" $ IteratorEffectName);
+		}
+	}
 }

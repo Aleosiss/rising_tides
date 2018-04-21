@@ -47,7 +47,7 @@ static event OnLoadedSavedGameToStrategy() {
 static event InstallNewCampaign(XComGameState StartState)
 {
 	//class'RTGameState_ProgramFaction'.static.SetUpProgramFaction(StartState);
-	ModifyInitialFactionState(StartState);
+	//ModifyInitialFactionState(StartState);
 }
 
 
@@ -84,6 +84,7 @@ static event OnExitPostMissionSequence()
 	ProgramState = class'RTHelpers'.static.GetNewProgramState(NewGameState);
 	ProgramState.RetrieveRescuedProgramOperatives(NewGameState);
 	ProgramState.ReloadOperativeArmaments(NewGameState);
+
 	`GAMERULES.SubmitGameState(NewGameState);
 }
 

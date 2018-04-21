@@ -17,7 +17,7 @@ LocHelpText="Fire a shot at a target. <Ability:CANNOTBEDODGED/>"
 LocLongDescription="<Bullet/>Firing the primary weapon always ends a unit's turn."
 
 [RT_Marksman X2SoldierClassTemplate]
-DisplayName="GHOST Infiltrator"
+DisplayName="Program Infiltrator"
 ClassSummary="Whisper is the unit's designated marksman and tech expert."
 LeftAbilityTreeTitle="Fire Support"
 RightAbilityTreeTitle="Watcher"
@@ -170,11 +170,11 @@ LocHelpText="Crits automatically kill enemies at less than full hit points. Regu
 LocPromotionPopupText="<Bullet/> Special shot against enemies with less than full hit points: Any critical hit kills them, but regular hits do half damage.<br/><Bullet/> Requires two actions.<br/><Bullet> <Ability:SelfCooldown/> turn cooldown.<br/><Bullet/> Against alien rulers, a critical hit will do double normal crit damage instead of killing the enemy outright."
 
 [GhostPsiSuite X2AbilityTemplate]
-LocFriendlyName="Program GHOST Veterancy"
-LocLongDescription="The Program trains GHOSTs in mind control, telepathy, telekinesis, and the art of war."
+LocFriendlyName="Program Operative Veterancy"
+LocLongDescription="The Program trains their operatives in mind control, telepathy, telekinesis, and the art of war."
 LocHelpText="Standard Ghost ability set."
-LocFlyOverText="Program GHOST Veterancy"
-LocPromotionPopupText="<Bullet/>Ghosts are trained in mind control, telepathy, telekinesis, and usage of the meld.<br/>"
+LocFlyOverText="Program Operative Veterancy"
+LocPromotionPopupText="<Bullet/>Program operatives are trained in mind control, telepathy, telekinesis, and usage of the meld.<br/>"
 
 [JoinMeld X2AbilityTemplate]
 LocFriendlyName="Enter Meld"
@@ -313,7 +313,7 @@ LocPromotionPopupText="<Bullet/> Bonus damage is equal to 35% of the target's mi
 ; <Bullet/><br/>
 
 [RT_Berserker X2SoldierClassTemplate]
-DisplayName="GHOST Berserker"
+DisplayName="Program Berserker"
 ClassSummary="Queen is the unit's leader and close-combat specialist."
 LeftAbilityTreeTitle="Rampager"
 RightAbilityTreeTitle="Operator"
@@ -545,7 +545,7 @@ LocPromotionPopupText="<Bullet/> Will not trigger if soldier is concealed.<br/><
 ; <Bullet/><br/>
 
 [RT_Gatherer X2SoldierClassTemplate]
-DisplayName="GHOST Gatherer"
+DisplayName="Program Gatherer"
 ClassSummary="Nova is the team's HUMINT expert and primary psionic support."
 LeftAbilityTreeTitle="Clairvoyant"
 RightAbilityTreeTitle="Telepath"
