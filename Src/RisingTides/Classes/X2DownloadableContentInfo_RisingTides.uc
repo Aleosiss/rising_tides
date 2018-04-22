@@ -26,28 +26,18 @@ defaultproperties
 /// create without the content installed. Subsequent saves will record that the content was installed.
 /// </summary>
 static event OnLoadedSavedGame() {
-	//local XComGameState NewGameState;
-
-	//NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("Rising Tides loading into new save...");
-	//class'RTGameState_StrategyCard'.static.SetUpStrategyCards(NewGameState);
-	//class'RTHelpers'.static.SubmitGameState(NewGameState);
+	class'RTGameState_ProgramFaction'.static.InitFaction();
 }
 
 static event OnLoadedSavedGameToStrategy() {
-	//local XComGameState NewGameState;
-	
-	//NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("Rising Tides loading into strategy...");
-	//class'RTGameState_StrategyCard'.static.SetUpStrategyCards(NewGameState);
-	//class'RTHelpers'.static.SubmitGameState(NewGameState);
+	class'RTGameState_ProgramFaction'.static.InitFaction();
 }
 
 /// <summary>
 /// Called when the player starts a new campaign while this DLC / Mod is installed
 /// </summary>
-static event InstallNewCampaign(XComGameState StartState)
-{
-	//class'RTGameState_ProgramFaction'.static.SetUpProgramFaction(StartState);
-	//ModifyInitialFactionState(StartState);
+static event InstallNewCampaign(XComGameState StartState) {
+	class'RTGameState_ProgramFaction'.static.InitFaction(StartState);
 }
 
 
@@ -89,20 +79,20 @@ static event OnExitPostMissionSequence()
 }
 
 
-simulated static function ModifyInitialFactionState(XComGameState StartState) {
-	local RTGameState_ProgramFaction Faction;
-
-	foreach StartState.IterateByClassType(class'RTGameState_ProgramFaction', Faction) {
-		if(Faction.GetMyTemplateName() == 'Faction_Program') { break; }
-	}
-
-	if(Faction == none) {
-		class'RTHelpers'.static.RTLog("Could not find an ProgramFactionState in the start state!", true);
-		return;
-	} else { class'RTHelpers'.static.RTLog("Modifying Golden Path Actions for the Program in the start state...", false); }
-
-	Faction.ModifyGoldenPathActions(StartState);
-}
+//simulated static function ModifyInitialFactionState(XComGameState StartState) {
+//	local RTGameState_ProgramFaction Faction;
+//
+//	foreach StartState.IterateByClassType(class'RTGameState_ProgramFaction', Faction) {
+//		if(Faction.GetMyTemplateName() == 'Faction_Program') { break; }
+//	}
+//
+//	if(Faction == none) {
+//		class'RTHelpers'.static.RTLog("Could not find an ProgramFactionState in the start state!", true);
+//		return;
+//	} else { class'RTHelpers'.static.RTLog("Modifying Golden Path Actions for the Program in the start state...", false); }
+//
+//	Faction.ModifyGoldenPathActions(StartState);
+//}
 
 exec function RT_PrintResistanceFactionNames() {
 	local XComGameStateHistory 					History;
@@ -399,24 +389,29 @@ exec function RT_PrintCrew()
 }
 
 // Courtesy of bountygiver
-exec function TestPanel(int X, int Y, int Width, int Height, optional name PanelName = 'TestDebugPanel')
+exec function TestPanel(int X, int Y, optional int Width = -1, optional int Height = -1, optional name PanelName = 'TestDebugPanel')
 {
 	local UIScreen Screen;
 	local UIBGBox BGPanel;
+	local UIPanel Panel;
 
 	Screen = `SCREENSTACK.GetCurrentScreen();
 
-	BGPanel = UIBGBox(Screen.GetChildByName(PanelName, false));
+	Panel = Screen.GetChildByName(PanelName, false);
+	if(Width == -1 || Height == -1) {
+		Width = 32;
+		Height = 32;
+	}
 
-	if (BGPanel != none)
+	if (Panel != none)
 	{
-		BGPanel.SetPosition(X, Y);
-		BGPanel.SetSize(Width, Height);
+		Panel.SetPosition(X, Y);
+		Panel.SetSize(Width, Height);
 	}
 	else
 	{
 		BGPanel = Screen.Spawn(class'UIBGBox', Screen);
-		BGPanel.InitBG('TestDebugPanel', X, Y, Width, Height);
+		BGPanel.InitBG(PanelName, X, Y, Width, Height);
 		BGPanel.SetBGColor("FF0000");
 		BGPanel.AnimateIn(0);
 	}

@@ -52,12 +52,12 @@ var config array<name> GathererWeaponUpgrades;
 
 
 var() array<StateObjectReference>								Master; 			// master list of operatives
-var() array<StateObjectReference> 								Active;				// ghosts active
-var() RTGameState_PersistentGhostSquad							Deployed; 			// ghosts that will be on the next mission
-var() array<StateObjectReference>								Captured;			// ghosts not available
+var() array<StateObjectReference> 								Active;				// operatives active
+var() RTGameState_PersistentGhostSquad							Deployed; 			// operatives that will be on the next mission
+var() array<StateObjectReference>								Captured;			// operatives not available
 var() array<StateObjectReference>								Squads;				// list of ghost teams (only one for now)
-var() int 														iOperativeLevel;	// all ghosts get level ups after a mission, even if they weren't on it. lorewise, they're constantly running missions; the player only sees a fraction of them
-var bool														bSetupComplete;		// if we should rebuild the ghost array from config
+var() int 														iOperativeLevel;	// all operatives get level ups after a mission, even if they weren't on it. lorewise, they're constantly running missions; the player only sees a fraction of them
+var bool														bSetupComplete;		// if we should rebuild the operative array from config
 
 /* END OPERATIVE RECORD   */
 
@@ -67,6 +67,7 @@ var bool																bOneSmallFavorAvailable;		// can send squad on a mission
 var bool																bTemplarsDestroyed;
 var bool																bDirectNeuralManipulation;
 var config array<name>													InvalidMissionSources; 			// list of mission types ineligible for Program support, usually story missions
+var config array<name>													UnavailableCovertActions;		// list of covert actions that the program cannot carry out
 
 // ONE SMALL FAVOR HANDLING VARIABLES
 var private int															iPreviousMaxSoldiersForMission; // cache of the number of soldiers on a mission before OSF modfied it
@@ -752,29 +753,45 @@ protected function RotateRandomSquadToDeploy() {
 
 //---------------------------------------------------------------------------------------
 // Remove vanilla actions for modded faction where the modded action should override
-function ModifyGoldenPathActions(XComGameState NewGameState)
+function AddNewCovertActions(XComGameState NewGameState, int NumActionsToCreate, out array<Name> ExclusionList)
 {
 	local X2StrategyElementTemplateManager StratMgr;
-	local array<X2StrategyElementTemplate> AllActionTemplates;
-	local X2StrategyElementTemplate DataTemplate;
 	local X2CovertActionTemplate ActionTemplate;
-	local XComGameState_CovertAction ActionState;
-	local XComGameStateHistory History;
-	local StateObjectReference ActionRef;
+	local int idx, iRand;
 
-	//class'RTHelpers'.static.RTLog("Modifying Golden Path actions for The Program...");
-	if(GoldenPathActions.Length == 0) {
-		//class'RTHelpers'.static.RTLog("ModifyGoldenPathActions failed, no GoldenPathActions available!", true);
-	} else {
-		History = `XCOMHISTORY;
-		foreach GoldenPathActions(ActionRef)
+	StratMgr = class'X2StrategyElementTemplateManager'.static.GetStrategyElementTemplateManager();
+
+	// First iterate through the available actions list and check for any that are forced to be created
+	for (idx = AvailableCovertActions.Length - 1; idx >= 0; idx--)
+	{
+		ActionTemplate = X2CovertActionTemplate(StratMgr.FindStrategyElementTemplate(AvailableCovertActions[idx]));
+		if (ActionTemplate != none && ActionTemplate.bForceCreation && ExclusionList.Find(ActionTemplate.DataName) == INDEX_NONE)
 		{
-			//class'RTHelpers'.static.RTLOG("Found Covert Action " $ ActionState.GetMyTemplateName $ "...", false);
-			ActionState = XComGameState_CovertAction(History.GetGameStateForObjectID(ActionRef.ObjectID));
-			if(ActionState.GetMyTemplateName() == 'CovertAction_FindFaction' || ActionState.GetMyTemplateName() == 'CovertAction_FindFarthestFaction') {
-				RemoveCovertAction(ActionRef);
+			if(default.UnavailableCovertActions.Find(ActionTemplate.DataName) == INDEX_NONE)
+			{
+				AddCovertAction(NewGameState, ActionTemplate, ExclusionList);
+				NumActionsToCreate--;
+				
+				AvailableCovertActions.Remove(idx, 1); // Remove the name from the available actions list
 			}
 		}
+	}
+
+	// Randomly choose available actions from the deck
+	while (AvailableCovertActions.Length > 0 && NumActionsToCreate > 0)
+	{
+		iRand = `SYNC_RAND(AvailableCovertActions.Length);
+		ActionTemplate = X2CovertActionTemplate(StratMgr.FindStrategyElementTemplate(AvailableCovertActions[iRand]));
+		if (ActionTemplate != none && ExclusionList.Find(ActionTemplate.DataName) == INDEX_NONE)
+		{
+			if(default.UnavailableCovertActions.Find(ActionTemplate.DataName) == INDEX_NONE)
+			{
+				AddCovertAction(NewGameState, ActionTemplate, ExclusionList);
+				NumActionsToCreate--;			
+			}
+		}
+		
+		AvailableCovertActions.Remove(iRand, 1); // Remove the name from the available actions list
 	}
 }
 
@@ -798,9 +815,30 @@ function PrintGoldenPathActionInformation() {
 
 function CreateGoldenPathActions(XComGameState NewGameState)
 {
-	super.CreateGoldenPathActions(NewGameState);
-	//PrintGoldenPathActionInformation();
-	ModifyGoldenPathActions(NewGameState);
+	local X2StrategyElementTemplateManager StratMgr;
+	local array<X2StrategyElementTemplate> AllActionTemplates;
+	local X2StrategyElementTemplate DataTemplate;
+	local X2CovertActionTemplate ActionTemplate;
+
+	// Only perform this setup if there's no more GP actions remaining
+	if (GoldenPathActions.Length == 0)
+	{
+		StratMgr = class'X2StrategyElementTemplateManager'.static.GetStrategyElementTemplateManager();
+		AllActionTemplates = StratMgr.GetAllTemplatesOfClass(class'X2CovertActionTemplate');
+
+		foreach AllActionTemplates(DataTemplate)
+		{
+			ActionTemplate = X2CovertActionTemplate(DataTemplate);
+
+			if(ActionTemplate.DataName == 'CovertAction_FindFaction' || ActionTemplate.DataName == 'CovertAction_FindFarthestFaction')
+				continue; //actively skip this one
+
+			if (ActionTemplate != none && ActionTemplate.bGoldenPath) //we do this so we follow the requirements of Spectres' med to high requirement
+			{
+				GoldenPathActions.AddItem(CreateCovertAction(NewGameState, ActionTemplate, ActionTemplate.RequiredFactionInfluence));
+			}
+		}
+	}
 }
 
 //#############################################################################################
@@ -954,18 +992,69 @@ static function EventListenerReturn FortyYearsOfWarEventListener(Object EventDat
 	return ELR_NoInterrupt;
 }
 
-simulated function PrintOperativeEffects() {
-	local XComGameState_Unit UnitState;
-	local StateObjectReference UnitIteratorObjRef;
+// RealityMachina's code
+static function InitFaction(optional XComGameState StartState) {
 	local XComGameStateHistory History;
-	local name IteratorEffectName;
+	local XComGameState NewGameState;
+	local RTProgramFactionTemplate FactionTemplate;
+	local X2StrategyElementTemplateManager StratMgr;
+	local X2StrategyElementTemplate DataTemplate;
+	local RTGameState_ProgramFaction FactionState;
+	local array<StateObjectReference> AllHavens;
+	local XComGameState_Haven HavenState;
+	local XComGameState_HeadquartersResistance ResHQ;
 
-	History = `XCOMHISTORY;
-	foreach Active(UnitIteratorObjRef) {
-		UnitState = XComGameState_Unit(History.GetGameStateForObjectID(UnitIteratorObjRef.ObjectID));
-		class'RTHelpers'.static.RTLog("Printing Effects affecting " $ UnitState.GetName(eNameType_Nick));
-		foreach UnitState.AffectedByEffectNames(IteratorEffectName) {
-			class'RTHelpers'.static.RTLog("" $ IteratorEffectName);
+	History = class'XComGameStateHistory'.static.GetGameStateHistory();
+	ResHQ = XComGameState_HeadquartersResistance(History.GetSingleGameStateObjectForClass(class'XComGameState_HeadquartersResistance'));
+	StratMgr = class'X2StrategyElementTemplateManager'.static.GetStrategyElementTemplateManager();
+	if(StartState == none) {
+		NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("Adding the Program Faction Object...");
+	} else  {
+		NewGameState = StartState;
+	}
+
+	if(ResHQ.GetFactionByTemplateName('Faction_Program') == none) {  //no faction, add it ourselves 
+		ResHQ = XComGameState_HeadquartersResistance(NewGameState.ModifyStateObject(class'XComGameState_HeadquartersResistance', ResHQ.ObjectID)); 
+		DataTemplate = StratMgr.FindStrategyElementTemplate('Faction_Program');
+		if(DataTemplate != none)
+		{
+			FactionTemplate = RTProgramFactionTemplate(DataTemplate);
+			FactionState = RTGameState_ProgramFaction(FactionTemplate.CreateInstanceFromTemplate(NewGameState));
+			ResHQ.Factions.AddItem(FactionState.GetReference());
+
+			FactionState.FactionName = FactionTemplate.GenerateFactionName();
+			FactionState.FactionIconData = FactionTemplate.GenerateFactionIcon();
+
 		}
+
+		foreach History.IterateByClassType(class'XComGameState_Haven', HavenState)
+		{
+			if(!HavenState.IsFactionHQ())
+				AllHavens.AddItem(HavenState.GetReference());
+		}
+
+		if(AllHavens.Length == 0) {
+			class'RTHelpers'.static.RTLog("Couldn't find a Haven to attach the Faction to!");
+		}
+
+		HavenState = XComGameState_Haven(NewGameState.ModifyStateObject(class'XComGameState_Haven', AllHavens[`SYNC_RAND_STATIC(AllHavens.Length)].ObjectID));
+
+		FactionState.HomeRegion = HavenState.Region;
+		FactionState.Region = FactionState.HomeRegion;
+		FactionState.Continent = FactionState.GetWorldRegion().Continent;
+		HavenState.FactionRef = FactionState.GetReference();
+		HavenState.SetScanHoursRemaining(`ScaleStrategyArrayInt(HavenState.MinScanDays), `ScaleStrategyArrayInt(HavenState.MaxScanDays));
+		HavenState.MakeScanRepeatable();
+	
+		FactionState.FactionHQ = HavenState.GetReference();
+		FactionState.SetUpProgramFaction(NewGameState);
+		FactionState.CreateGoldenPathActions(NewGameState);
+	}
+
+	if(NewGameState.GetNumGameStateObjects() > 0) {
+		`XCOMGAME.GameRuleset.SubmitGameState(NewGameState);
+	}
+	else {
+		History.CleanupPendingGameState(NewGameState);
 	}
 }

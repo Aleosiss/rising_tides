@@ -852,53 +852,122 @@ ActionObjective="Investigate Transmissions"
 
 [CovertActionNarrative_FindFaction_Program X2CovertActionNarrativeTemplate]
 ActionName="Old Signals"
-ActionPreNarrative="Commander, we've been picking up scattered transmissions on an old XCOM frequency. With your permission, I'd like to take a squad and investigate."
-ActionPostNarrative="Commander, I managed to locate the source of the signals-- a old FOB, manned by an unknown faction. When I introduced myself, they told me that Dr. Hadley, of all people, was waiting to talk."
+ActionPreNarrative="Commander, we've been picking up scattered transmissions on an old XCOM frequency. With your permission, I'd like to take a squad and investigate. - CO Bradford"
+ActionPostNarrative="Commander, I managed to locate the source of the signals-- a old FOB, manned by an unknown faction. When I introduced myself, they told me that Dr. Hadley, of all people, was waiting to talk. - CO Bradford"
 
 [CovertActionNarrative_RecruitEngineer_Program X2CovertActionNarrativeTemplate]
 ActionName="Tech Support"
-ActionPreNarrative="We have made contact with resistance sympathizer in one of the megacities. Allowing him to join us would be a security breach, but they're all yours."
+ActionPreNarrative="We have made contact with resistance sympathizer in one of the megacities. Allowing him to join us would be a security breach, but they're all yours. - Dr. Hadley"
 ActionPostNarrative="The sympathizer turned out to be technically-minded, having worked extensively in an ADVENT Mech Bay. They'll be a boon to engineering."
 
-[CovertActionNarrative_HuntTemplars_P1_Program X2CovertActionNarrativeTemplate]
-ActionName="Find Them"
-ActionPreNarrative="As you might recall, Commander, six days after the Temple Ship crash-landed, I initiated Operation: Brave New World. Unfortunately, there was a lone survivor. Staff Sergeant Lanner was left a mangled wreck, his mind in shambles from my operative's psionic assault, but he managed to limp away during the chaos of the beginning of Operation: Ashes and Temples part three. Only recently have we managed to pinpoint his general location, but we need your manpower to figure out where he's hiding."
-ActionPostNarrative="Excellent. You should be proud of your soldiers, Commander. Keeping up with my operatives is not an easy task."
+[CovertActionNarrative_RecruitScientist_Program X2CovertActionNarrativeTemplate]
+ActionName="Higher Learning"
+ActionPreNarrative="Another day, another turncoat. ADVENT is bleeding in the shadows... - Dr. Hadley"
+ActionPostNarrative="The sympathizer turned out to be technically-minded, having spearheaded new experimental methodology in an ADVENT Gene Therapy Clinic. They'll be a boon to the labs."
 
-[CovertActionNarrative_HuntTemplars_P2_Program X2CovertActionNarrativeTemplate]
-ActionName="Gain Their Trust"
-ActionPreNarrative="Mobilizing enough operatives to assault the base head-on and ensure no survivors would take far too long. I have a better idea, and I'll need more of your men to accomplish it."
-ActionPostNarrative="With the help of your soldiers, I have managed to place several operatives as civilians within the Templar compound. One step at a time."
+[CovertActionNarrative_GatherSupplies_Program X2CovertActionNarrativeTemplate]
+ActionName="Supply Drop"
+ActionPreNarrative="One of the teams recently 'liberated' a supply cache but lacked the manpower to retrive it. Send a squad to these coordinates. - 'Handler 9'"
+ActionPostNarrative="The supply drop was recieved successfully."
 
-[CovertActionNarrative_HuntTemplars_P3_Program X2CovertActionNarrativeTemplate]
-ActionName="Lure Them Out"
-ActionPreNarrative="Geist is extremely paranoid, and revealing a vunerablity remains a challenge. If you have some soldiers to spare, we can use them to conduct a false-flag operation and draw him out."
-ActionPostNarrative="The trap is set. The bait is ready. All that remains is spring it. I will send my best, and if you do the same, victory is assured."
+[CovertActionNarrative_GatherIntel_Program X2CovertActionNarrativeTemplate]
+ActionName="Data Tap"
+ActionPreNarrative="The Program has a storied background in communications intelligence. An opportunity has arisen to take advantage of this proficiency."
+ActionPostNarrative="The datatap went off without a hitch. - 'Handler 9'"
 
-[CovertActionNarrative_RevealChosenMovements_Program X2CovertActionNarrativeTemplate]
-ActionName="Behind Enemy Lines"
-ActionPreNarrative="My operative onboard the Avenger has informed me that the Chosen have been hunting for you in particular, Commander. Troubling, but not unexpected in light of recent events. I have a man with information on <XGParam:StrValue2/!ChosenClass/>'s base of operations, but communications with him are patchy and sporadic. I recommend that you send some soldiers to rendezvous with him and retrieve that intelligence."
-ActionPostNarrative="The data indicates <XGParam:StrValue1/!ChosenName/>'s' stronghold is located in <XGParam:StrValue3/!ContinentName/>."
+[CovertActionNarrative_IncreaseIncome_Program X2CovertActionNarrativeTemplate]
+ActionName="Helping Hand"
+ActionPreNarrative="Even people in the ADVENT megacities will help. One way, or another. Send a squad to this location and cause a ruckus-- we'll handle the rest. - Dr. Hadley"
+ActionPostNarrative="Thanks to your distraction, we secured a number of incursions into enemy dataframes and are prepared to relocate supplies to resistance sites. - 'Handler 9'"
 
-[CovertActionNarrative_RevealChosenStrengths_Program X2CovertActionNarrativeTemplate]
-ActionName="Find the Stronghold"
-ActionPreNarrative="Now that we have the general location, I can bring the full might of the Program against <XGParam:StrValue2/!ChosenClass/>'s stronghold. However, the RECSATs are old and need maintenance. If you can send some men on a raid for parts, we can make this happen."
-ActionPostNarrative="We now have satellite confirmation of ADVENT transports entering and leaving a covert base of operations located in <XGParam:StrValue3/!ContinentName/>. We will begin planning for the strike immediately."
+[CovertActionNarrative_RescueSoldier_Program X2CovertActionNarrativeTemplate]
+ActionName="Personnel Extraction"
+ActionPreNarrative="We recently got wind of a captured XCOM operative being moved into my zone. I could use a few more boots on the ground to sniff them out. - 'Handler 9'"
+ActionPostNarrative="Operative located. Transmitting coordinates. - 'Handler 9'"
 
-[CovertActionNarrative_RevealChosenStronghold_Program X2CovertActionNarrativeTemplate]
-ActionName="Into the Fire"
-ActionPreNarrative="In order to enable the strike against the Chosen Stronghold, we'll need to figure out of to breach it. Send some of your men along with my own Operatives to get a feel for the base."
-ActionPostNarrative="We have determined the best plan of entry to <XGParam:StrValue1/!ChosenName/>'s stronghold. Transmitting now."
+[CovertActionNarrative_RescueSoldier_Program X2CovertActionNarrativeTemplate]
+ActionName="Personnel Extraction"
+ActionPreNarrative="We recently got wind of a captured XCOM operative being moved into my zone. I could use a few more boots on the ground to sniff them out. - 'Handler 9'"
+ActionPostNarrative="Operative located. Transmitting coordinates. - 'Handler 9'"
+
+[CovertActionNarrative_CancelChosenActivity_Program X2CovertActionNarrativeTemplate]
+ActionName="Counterintelligence"
+ActionPreNarrative="The Chosen <XGParam:StrValue1/!ChosenName/>'s plans for you are troubling the resistance. If we can spoil the plot, we can kill two birds with one stone. - 'Handler 9'"
+ActionPostNarrative="The plans were exposed and the plot was scrapped. All in a day's work. - 'Handler 9'"
+
+[CovertActionNarrative_CancelChosenActivity_Program X2CovertActionNarrativeTemplate]
+ActionName="Counterintelligence"
+ActionPreNarrative="The Chosen <XGParam:StrValue1/!ChosenName/>'s plans for you are troubling the resistance. If we can spoil the plot, we can kill two birds with one stone. - 'Handler 9'"
+ActionPostNarrative="The plans were exposed and the plot was scrapped. All in a day's work. - 'Handler 9'"
 
 [CovertActionNarrative_RemoveDoom_Program X2CovertActionNarrativeTemplate]
 ActionName="Sabotage AVATAR Facility"
-ActionPreNarrative="Sabotage is one of many specialties."
-ActionPostNarrative="All too easy."
+ActionPreNarrative="Sabotage is one of many specialties. - 'Handler 9'"
+ActionPostNarrative="All too easy. - 'Handler 9'"
+
+[CovertActionNarrative_ImproveComInt_Program X2CovertActionNarrativeTemplate]
+ActionName="Tactical Education"
+ActionPreNarrative="Training is not just about technique, but resources. And the only place in the world with Old-World levels of both is the Program. - 'Handler 9'"
+ActionPostNarrative="The Resistance will be well-served by these soldiers, Commander. - 'Handler 9'"
+
+[CovertActionNarrative_ResistanceContact_Program X2CovertActionNarrativeTemplate]
+ActionName="Signal Boost"
+ActionPreNarrative="We know of several abandoned radio towers in the area. If you can get them running, the resistance might find more support. - 'Handler 9'"
+ActionPostNarrative="The resistance broadcasts come at all hours of the day in this zone. As they should. - 'Handler 9'"
 
 [CovertActionNarrative_BreakthroughTech_Program X2CovertActionNarrativeTemplate]
 ActionName="Technical Advances"
-ActionPreNarrative="I'm surprised you guys don't know about this. If you send me a team, I can organize a raid on the old archives for the reports."
-ActionPostNarrative="Here you are, Commander. Going through those files is a pleasant trip down memory lane. Happy to do it for you."
+ActionPreNarrative="I'm surprised you guys don't know about this. If you send me a team, I can organize a raid on the old archives for the reports. - Dr. Hadley"
+ActionPostNarrative="Here you are, Commander. Going through those files is a pleasant trip down memory lane. Happy to do it for you. - Dr. Hadley"
+
+[CovertActionNarrative_ResistanceCard_Program X2CovertActionNarrativeTemplate]
+ActionName="New Orders"
+ActionPreNarrative="Ultimately, we share the same goal. Let's talk capabilities, and... favors curried. - Dr. Hadley"
+ActionPostNarrative="You will find our reach troublingly long-- but for now, it's yours. - Dr. Hadley"
+
+[CovertActionNarrative_AlienLoot_Program X2CovertActionNarrativeTemplate]
+ActionName="Scavenge Alien Loot"
+ActionPreNarrative="The Program regularly trims the fat off ADVENT patrols for future operations. We ran an op nearby a haven recently; you could send a squad to secure area and its resources. - 'Handler 9'"
+ActionPostNarrative="ADVENT tech is rarely useful for us-- hopefully you will find it valuable. - 'Handler 9'"
+
+[CovertActionNarrative_FacilityLead_Program X2CovertActionNarrativeTemplate]
+ActionName="Facility Lead"
+ActionPreNarrative="Got a lead on an ADVENT Facility in my local AO, but all of my squads are tied up. Send me some of yours and together we can sniff it out. - 'Handler 9'"
+ActionPostNarrative="Generally, Hadley prefers we leave the facilities online, but this is your op. - 'Handler 9'"
+
+[CovertActionNarrative_RevealChosenMovements_Program X2CovertActionNarrativeTemplate]
+ActionName="Behind Enemy Lines"
+ActionPreNarrative="My operative onboard the Avenger has informed me that the Chosen have been hunting for you in particular, Commander. Troubling, but not unexpected in light of recent events. I have a man with information on <XGParam:StrValue2/!ChosenClass/>'s base of operations, but communications with him are patchy and sporadic. I recommend that you send some soldiers to rendezvous with him and retrieve that intelligence. - 'Handler 9'"
+ActionPostNarrative="The data indicates <XGParam:StrValue1/!ChosenName/>'s' stronghold is located in <XGParam:StrValue3/!ContinentName/>. - 'Handler 9'"
+
+[CovertActionNarrative_RevealChosenStrengths_Program X2CovertActionNarrativeTemplate]
+ActionName="Find the Stronghold"
+ActionPreNarrative="Now that we have the general location, I can bring the full might of the Program against <XGParam:StrValue2/!ChosenClass/>'s stronghold. However, the RECSATs are old and need maintenance. If you can send some men on a raid for parts, we can make this happen. - 'Handler 9'"
+ActionPostNarrative="We now have satellite confirmation of ADVENT transports entering and leaving a covert base of operations located in <XGParam:StrValue3/!ContinentName/>. We will begin planning for the strike immediately.- 'Handler 9'"
+
+[CovertActionNarrative_RevealChosenStronghold_Program X2CovertActionNarrativeTemplate]
+ActionName="Into the Fire"
+ActionPreNarrative="In order to enable the strike against the Chosen Stronghold, we'll need to figure out of to breach it. Send some of your men along with my own Operatives to get a feel for the base. - 'Handler 9'"
+ActionPostNarrative="We have determined the best plan of entry to <XGParam:StrValue1/!ChosenName/>'s stronghold. Transmitting now. - 'Handler 9'"
+
+
+
+
+[CovertActionNarrative_HuntTemplars_P1_Program X2CovertActionNarrativeTemplate]
+ActionName="Find Them"
+ActionPreNarrative="As you might recall, Commander, six days after the Temple Ship crash-landed, I initiated Operation: New World. Unfortunately, there was a lone survivor. Staff Sergeant Lanner was left a mangled wreck, his mind in shambles from my operative's psionic assault, but he managed to limp away during the chaos of the beginning of Operation: Ashes and Temples part three. Only recently have we managed to pinpoint his general location, but we need your manpower to figure out where he's hiding. - Dr. Hadley"
+ActionPostNarrative="Excellent. You should be proud of your soldiers, Commander. Keeping up with my operatives is not an easy task. - Dr. Hadley"
+
+[CovertActionNarrative_HuntTemplars_P2_Program X2CovertActionNarrativeTemplate]
+ActionName="Gain Their Trust"
+ActionPreNarrative="Mobilizing enough operatives to assault the base head-on and ensure no survivors would take far too long. I have a better idea, and I'll need more of your men to accomplish it. - Dr. Hadley"
+ActionPostNarrative="With the help of your soldiers, I have managed to place several operatives as civilians within the Templar compound. One step at a time. - Dr. Hadley"
+
+[CovertActionNarrative_HuntTemplars_P3_Program X2CovertActionNarrativeTemplate]
+ActionName="Lure Them Out"
+ActionPreNarrative="Geist is extremely paranoid, and revealing a vunerablity remains a challenge. If you have some soldiers to spare, we can use them to conduct a false-flag operation and draw him out. - Dr. Hadley"
+ActionPostNarrative="The trap is set. The bait is ready. All that remains is spring it. I will send my best, and if you do the same, victory is assured. - Dr. Hadley"
+
 
 [Reward_RTProgram_FindFaction X2RewardTemplate]
 DisplayName="Unknown"
