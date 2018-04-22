@@ -55,13 +55,11 @@ class RTAbility_GathererAbilitySet extends RTAbility_GhostAbilitySet config(Risi
 	var name PsionicStormSustainedDamageEvent;
 	var name PsistormMarkedEffectName;
 
-
 	var config string ExtinctionEventChargingParticleString;
 	var config string ExtinctionEventReleaseParticleString;
 	var config string PsionicInterruptParticleString;
 	var config string UnwillingConduitDamageParticleString;
 	var config string UnwillingConduitRestoreParticleString;
-
 
 	var localized string GuardianAngelHealText;
 	var localized string KIPFriendlyName;
@@ -78,7 +76,6 @@ class RTAbility_GathererAbilitySet extends RTAbility_GhostAbilitySet config(Risi
 static function array<X2DataTemplate> CreateTemplates()
 {
 	local array<X2DataTemplate> Templates;
-
 
 	Templates.AddItem(OverTheShoulder());
 	Templates.AddItem(OverTheShoulderPassives());

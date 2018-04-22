@@ -203,6 +203,9 @@
     <Content Include="Src\RisingTides\Classes\RTAbilityToHitCalc_StatCheck_UnitVsUnit.uc">
       <SubType>Content</SubType>
     </Content>
+    <Content Include="Src\RisingTides\Classes\RTEventListener.uc">
+      <SubType>Content</SubType>
+    </Content>
     <Content Include="Src\RisingTides\Classes\RTAbility_BerserkerAbilitySet.uc">
       <SubType>Content</SubType>
     </Content>
@@ -213,6 +216,9 @@
       <SubType>Content</SubType>
     </Content>
     <Content Include="Src\RisingTides\Classes\RTAbility_MarksmanAbilitySet.uc">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Src\RisingTides\Classes\RTAbility_Program.uc">
       <SubType>Content</SubType>
     </Content>
     <Content Include="Src\RisingTides\Classes\RTAction_ApplyMITV.uc">

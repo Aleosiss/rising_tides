@@ -97,41 +97,76 @@ static function AddFactionToGeneratedTemplates() {
 	local array<X2DataTemplate>			DataTemplates;
 	local X2DataTemplate				IteratorTemplate;
 	local X2CovertActionTemplate		TestTemplate;
+	local array<X2StrategyElementTemplate> AllActionTemplates;
+	local X2StrategyElementTemplate DataTemplate;
+	local X2CovertActionTemplate ActionTemplate;
 
 	Manager = class'X2StrategyElementTemplateManager'.static.GetStrategyElementTemplateManager();
+	AllActionTemplates = Manager.GetAllTemplatesOfClass(class'X2CovertActionTemplate');
 
-	//`LOG("Rising Tides: Adding faction Program to covert action CovertActionNarrative_FindFaction...");
-	//Manager.FindDataTemplateAllDifficulties('CovertAction_FindFaction', DataTemplates);
-	//AddFactionToCovertActionNarratives(DataTemplates, 'CovertActionNarrative_FindFaction_Program');
+	foreach AllActionTemplates(DataTemplate)
+	{
+		ActionTemplate = X2CovertActionTemplate(DataTemplate);
+		if (ActionTemplate != none) //valid template, so we start  adding our narratives
+		{
+			if(ActionTemplate.DataName == 'CovertAction_RecruitScientist')
+				ActionTemplate.Narratives.AddItem('CovertActionNarrative_RecruitScientist_Program');
 
-	//`LOG("Rising Tides: Adding faction Program to covert action CovertAction_FindFarthestFaction...");
-	//Manager.FindDataTemplateAllDifficulties('CovertAction_FindFarthestFaction', DataTemplates);
-	//AddFactionToCovertActionNarratives(DataTemplates, 'CovertActionNarrative_FindFaction_Program');
+			if(ActionTemplate.DataName == 'CovertAction_RecruitEngineer')
+				ActionTemplate.Narratives.AddItem('CovertActionNarrative_RecruitEnginer_Program');
 
-	`LOG("Rising Tides: Adding faction Program to covert action CovertAction_RemoveDoom...");
-	Manager.FindDataTemplateAllDifficulties('CovertAction_RemoveDoom', DataTemplates);
-	AddFactionToCovertActionNarratives(DataTemplates, 'CovertActionNarrative_RemoveDoom_Program');
+			if(ActionTemplate.DataName == 'CovertAction_GatherSupplies')
+				ActionTemplate.Narratives.AddItem('CovertActionNarrative_GatherSupplies_Program');
 
-	`LOG("Rising Tides: Adding faction Program to covert action CovertAction_RecruitEngineer...");
-	Manager.FindDataTemplateAllDifficulties('CovertAction_RecruitEngineer', DataTemplates);
-	AddFactionToCovertActionNarratives(DataTemplates, 'CovertActionNarrative_RecruitEngineer_Program');
+			if(ActionTemplate.DataName == 'CovertAction_GatherIntel')
+				ActionTemplate.Narratives.AddItem('CovertActionNarrative_GatherIntel_Program');
 
-	`LOG("Rising Tides: Adding faction Program to covert action CovertAction_BreakthroughTech...");
-	Manager.FindDataTemplateAllDifficulties('CovertAction_BreakthroughTech', DataTemplates);
-	AddFactionToCovertActionNarratives(DataTemplates, 'CovertActionNarrative_BreakthroughTech_Program');
+			if(ActionTemplate.DataName == 'CovertAction_IncreaseIncome')
+				ActionTemplate.Narratives.AddItem('CovertActionNarrative_IncreaseIncome_Program');
 
-	`LOG("Rising Tides: Adding faction Program to covert action CovertAction_RevealChosenMovement...");
-	Manager.FindDataTemplateAllDifficulties('CovertAction_RevealChosenMovement', DataTemplates);
-	AddFactionToCovertActionNarratives(DataTemplates, 'CovertActionNarrative_RevealChosenMovements_Program');
+			if(ActionTemplate.DataName == 'CovertAction_RemoveDoom')
+				ActionTemplate.Narratives.AddItem('CovertActionNarrative_RemoveDoom_Program');
 
-	`LOG("Rising Tides: Adding faction Program to covert action CovertAction_RevealChosenStrengths...");
-	Manager.FindDataTemplateAllDifficulties('CovertAction_RevealChosenStrengths', DataTemplates);
-	AddFactionToCovertActionNarratives(DataTemplates, 'CovertActionNarrative_RevealChosenStrengths_Program');
+			if(ActionTemplate.DataName == 'CovertAction_ImproveComInt')
+				ActionTemplate.Narratives.AddItem('CovertActionNarrative_ImproveComInt_Program');
 
-	`LOG("Rising Tides: Adding faction Program to covert action CovertAction_RevealChosenStronghold...");
-	Manager.FindDataTemplateAllDifficulties('CovertAction_RevealChosenStronghold', DataTemplates);
-	AddFactionToCovertActionNarratives(DataTemplates, 'CovertActionNarrative_RevealChosenStronghold_Program');
+			if(ActionTemplate.DataName == 'CovertAction_FormSoldierBond')
+				ActionTemplate.Narratives.AddItem('CovertActionNarrative_FormSoldierBond_Program');
 
+			if(ActionTemplate.DataName == 'CovertAction_ResistanceContact')
+				ActionTemplate.Narratives.AddItem('CovertActionNarrative_ResistanceContact_Program');
+
+			if(ActionTemplate.DataName == 'CovertAction_SharedAbilityPoints')
+				ActionTemplate.Narratives.AddItem('CovertActionNarrative_SharedAbilityPoints_Program');
+
+			if(ActionTemplate.DataName == 'CovertAction_BreakthroughTech')
+				ActionTemplate.Narratives.AddItem('CovertActionNarrative_BreakthroughTech_Program');
+
+			if(ActionTemplate.DataName == 'CovertAction_SuperiorWeaponUpgrade')
+				ActionTemplate.Narratives.AddItem('CovertActionNarrative_SuperiorWeaponUpgrade_Program');
+
+			if(ActionTemplate.DataName == 'CovertAction_SuperiorPCS')
+				ActionTemplate.Narratives.AddItem('CovertActionNarrative_SuperiorPCS_Program');
+
+			if(ActionTemplate.DataName == 'CovertAction_AlienLoot')
+				ActionTemplate.Narratives.AddItem('CovertActionNarrative_AlienLoot_Program');
+
+			if(ActionTemplate.DataName == 'CovertAction_FacilityLead')
+				ActionTemplate.Narratives.AddItem('CovertActionNarrative_FacilityLead_Program');
+
+			if(ActionTemplate.DataName == 'CovertAction_ResistanceCard')
+				ActionTemplate.Narratives.AddItem('CovertActionNarrative_ResistanceCard_Program');
+
+			if(ActionTemplate.DataName == 'CovertAction_RevealChosenMovement')
+				ActionTemplate.Narratives.AddItem('CovertActionNarrative_RevealChosenMovements_Program');
+
+			if(ActionTemplate.DataName == 'CovertAction_RevealChosenStrengths')
+				ActionTemplate.Narratives.AddItem('CovertActionNarrative_RevealChosenStrengths_Program');
+
+			if(ActionTemplate.DataName == 'CovertAction_RevealChosenStronghold')
+				ActionTemplate.Narratives.AddItem('CovertActionNarrative_RevealChosenStronghold_Program');
+		}
+	}
 }
 
 private static function AddFactionToCovertActionNarratives(array<X2DataTemplate> DataTemplates, name CovertActionNarrativeName) {

@@ -1232,42 +1232,41 @@ static function X2AbilityTemplate SovereignEffect()
 	Template.AddTargetEffect(WeaponDamageEffect);
 	Template.AddMultiTargetEffect(WeaponDamageEffect);
 
-	BurningEffect = class'X2StatusEffects'.static.CreateBurningStatusEffect(3, 2);   //Adds Burning Effect for 3 damage, 2 spread
-	BurningEffect.ApplyChance = 100;                                         //Should be a 100% chance to actually apply burning
+	BurningEffect = class'X2StatusEffects'.static.CreateBurningStatusEffect(3, 2);	//Adds Burning Effect for 3 damage, 2 spread
+	BurningEffect.ApplyChance = 100;												//Should be a 100% chance to actually apply burning
 	Template.AddTargetEffect(BurningEffect);
-	Template.AddMultiTargetEffect(BurningEffect);                                    //Adds the burning effect to the targeted area
+	Template.AddMultiTargetEffect(BurningEffect);									//Adds the burning effect to the targeted area
 
-	WorldDamage = new class'X2Effect_ApplyDirectionalWorldDamage';  //creates the framework to apply damage to the world
-	WorldDamage.bUseWeaponDamageType = False;                       //overrides the normal weapon damage type
-	WorldDamage.bUseWeaponEnvironmentalDamage = false;              //replaces the weapon's environmental damage with the abilities
-	WorldDamage.EnvironmentalDamageAmount = 250;                    //determines the amount of enviornmental damage the ability applies
-	WorldDamage.bApplyOnHit = true;                                 //obv
-	WorldDamage.bApplyOnMiss = true;                                //obv
-	WorldDamage.bApplyToWorldOnHit = true;                          //obv
-	WorldDamage.bApplyToWorldOnMiss = true;                         //obv
-	WorldDamage.bHitAdjacentDestructibles = false;                   //applies environmental damage to things adjacent to the Line
-	WorldDamage.PlusNumZTiles = 1;                                 //determines how 'high' the world damage is applied
-	WorldDamage.bHitTargetTile = true;                              //Makes sure that everthing that is targetted is hit
+	WorldDamage = new class'X2Effect_ApplyDirectionalWorldDamage';	//creates the framework to apply damage to the world
+	WorldDamage.bUseWeaponDamageType = False;						//overrides the normal weapon damage type
+	WorldDamage.bUseWeaponEnvironmentalDamage = false;				//replaces the weapon's environmental damage with the abilities
+	WorldDamage.EnvironmentalDamageAmount = 250;					//determines the amount of enviornmental damage the ability applies
+	WorldDamage.bApplyOnHit = true;									//obv
+	WorldDamage.bApplyOnMiss = true;								//obv
+	WorldDamage.bApplyToWorldOnHit = true;							//obv
+	WorldDamage.bApplyToWorldOnMiss = true;							//obv
+	WorldDamage.bHitAdjacentDestructibles = false;					//applies environmental damage to things adjacent to the Line
+	WorldDamage.PlusNumZTiles = 1;									//determines how 'high' the world damage is applied
+	WorldDamage.bHitTargetTile = true;								//Makes sure that everthing that is targetted is hit
 	WorldDamage.bHitSourceTile = false;
 	WorldDamage.ApplyChance = 100;
-	Template.AddMultiTargetEffect(WorldDamage);                     //May be redundant
+	Template.AddMultiTargetEffect(WorldDamage);		//May be redundant
 
-	FireToWorldEffect = new class'X2Effect_ApplyFireToWorld';                //This took a while to find
+	FireToWorldEffect = new class'X2Effect_ApplyFireToWorld';	//This took a while to find
 	FireToWorldEffect.bUseFireChanceLevel = true;
 	FireToWorldEffect.bDamageFragileOnly = false;
 	FireToWorldEffect.bCheckForLOSFromTargetLocation = false;
-	FireToWorldEffect.FireChance_Level1 = 0.95f;                             //%chance of fire to catch
+	FireToWorldEffect.FireChance_Level1 = 0.95f;				//%chance of fire to catch
 	FireToWorldEffect.FireChance_Level2 = 0.95f;
 	FireToWorldEffect.FireChance_Level3 = 0.95f;
 	Template.AddTargetEffect(FireToWorldEffect);
-	Template.AddMultiTargetEffect(FireToWorldEffect);                        //this is required to add the fire effect
+	Template.AddMultiTargetEffect(FireToWorldEffect);			//this is required to add the fire effect
 
 	Template.OverrideAbilities.AddItem('SniperStandardFire');
 	Template.OverrideAbilities.AddItem('RTStandardSniperShot');
 
 	// MAKE IT LIVE!
 	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
-
 
 	// TODO: VISUALIZATION
 	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
@@ -1408,13 +1407,14 @@ static function X2AbilityTemplate TimeStandsStill()
 	CounterEffect.EffectName = 'TimeStandsStillCounterEffect';
 	Template.AddShooterEffect(CounterEffect);
 
+	// should nab everyone
 	MultiTarget = new class'X2AbilityMultiTarget_Radius';
 	MultiTarget.fTargetRadius = 500 * class'XComWorldData'.const.WORLD_StepSize * class'XComWorldData'.const.WORLD_UNITS_TO_METERS_MULTIPLIER;
 	MultiTarget.bExcludeSelfAsTargetIfWithinRadius = true;
 	MultiTarget.bIgnoreBlockingCover = true;
 	Template.AbilityMultiTargetStyle = MultiTarget;
 
-	// TODO: experiment with renabling this.
+	// no one can escape
 	UnitPropertyCondition = new class'X2Condition_UnitProperty';
 	UnitPropertyCondition.FailOnNonUnits = true;
 	UnitPropertyCondition.ExcludeInStasis = false;
@@ -1957,7 +1957,7 @@ static function X2AbilityTemplate HeatChannelCooldown()
 
 	AgroEffect = new class'X2Effect_Persistent';
 	AgroEffect.BuildPersistentEffect(1, true, true, true, eGameRule_PlayerTurnEnd);
-	AgroEffect.SetDisplayInfo(ePerkBuff_Penalty, Template.LocFriendlyName, "Heat Channel is on cooldown!", Template.IconImage, true,,Template.AbilitySourceName);
+	AgroEffect.SetDisplayInfo(ePerkBuff_Penalty, Template.LocFriendlyName, Template.LocLongDescription, Template.IconImage, true,,Template.AbilitySourceName);
 	AgroEffect.EffectName = 'HeatChannelCooldownTrackerEffect';
 	Template.AddTargetEffect(AgroEffect);
 

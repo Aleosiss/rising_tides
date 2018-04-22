@@ -19,7 +19,7 @@ static function SetUpStrategyCards(XComGameState StartState)
 	for(idx = 0; idx < AllCardTemplates.Length; idx++)
 	{
 		CardTemplate = RTProgramStrategyCardTemplate(AllCardTemplates[idx]);
-		class'RTHelpers'.static.RTLog("Creating StrategyCard with TemplateName" $ CardTemplate.DataName );
+		class'RTHelpers'.static.RTLog("Creating StrategyCard with TemplateName " $ CardTemplate.DataName );
 		// Only Create Resistance Cards here, Chosen cards need to be created on the fly
 		if(CardTemplate != none && CardTemplate.Category == "ResistanceCard")
 		{

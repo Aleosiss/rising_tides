@@ -113,6 +113,24 @@ function Launch-Make([string] $makeCmd, [string] $makeFlags, [string] $sdkPath, 
     $global:LASTEXITCODE = $process.ExitCode
 }
 
+function HaveDirectoryContentsChanged ([string] $srcDirPath, [string] $destDirPath) {
+    $srcDir = Get-ChildItem $srcDirPath
+    $destDir = Get-ChildItem $destDirPath
+
+    # quick check, obviously if there's more files in one location, there's been a change
+    # also the code below doesn't check to see if a file has been removed
+    if($srcDir.Length -ne $destDir.Length) {
+        return $true
+    }
+
+    # cp'd directly from stackoverflow
+    $DiffFound = Get-ChildItem $srcDirPath | Where-Object {
+        ($_ | Get-FileHash).Hash -ne (Get-FileHash (Join-Path $destDirPath $_.Name)).Hash
+    } 
+
+    return $DiffFound
+}
+
 # Let's see how long this takes...
 $stopwatch = New-Object System.Diagnostics.Stopwatch
 $stopwatch.Start()
@@ -124,6 +142,50 @@ $modNameCanonical = $mod
 $modSrcRoot = "$srcDirectory/$modNameCanonical"
 # build the staging path
 $stagingPath = "{0}/XComGame/Mods/{1}/" -f $sdkPath, $modNameCanonical
+
+# determine whether or not there are changes to the Content directory before we clean
+# used later to determine if we can skip shader precompilation
+$shaderCachePath = "{0}/Content/{1}_ModShaderCache.upk" -f $stagingPath, $modNameCanonical
+$tempCachePath = "{0}/tmp/{1}_ModShaderCache.upk" -f $modSrcRoot, $modNameCanonical
+
+$canSkipShaderPrecompliation = $false
+
+# Need to store the ModShaderCache before we compare the Content directories, it will interfere with the check.
+# Also, if there are no changes and we skip precompliation, we will need a backup of the ModShaderCache since it won't be regenerated after the stagingPath is cleaned.
+if(Test-Path $tempCachePath) {
+    # if we found a shadercache in here, that means that we found it last time and cached it, but the build failed and /tmp wasn't cleaned up... we can skip precompliation.
+    $canSkipShaderPrecompliation = $true
+    Write-Host "Found previously-stashed ModShaderCache. Shader precompliation can be skipped."
+} elseif(Test-Path $shaderCachePath) {
+    Write-Host "Found ModShaderCache, stashing it..."
+    
+    if(-not (Test-Path -Path $modSrcRoot/tmp)) {
+        New-Item $modSrcRoot/tmp -type Directory
+    } 
+    
+    Copy-Item -Path $shaderCachePath -Destination $tempCachePath
+    Remove-Item -Path $shaderCachePath
+    $canSkipShaderPrecompliation = $true
+    
+    Write-Host "Stashed."
+} else {
+    Write-Host "Unable to find a ModShaderCache. Shader precompliation is required."
+}
+
+# check to see if the files changed
+if($canSkipShaderPrecompliation) {
+    $canSkipShaderPrecompliation = -not (HaveDirectoryContentsChanged $modSrcRoot/Content $stagingPath/Content)
+}
+
+if($canSkipShaderPrecompliation) {
+    Write-Host "Can skip shader precompliation."
+} else {
+    Write-Host "Can't skip shader precompliation."
+    if(Test-Path $tempCachePath) {
+        Remove-Item -Path $tempCachePath
+        Remove-Item -path $modSrcRoot/tmp
+    }
+}
 
 # clean
 Write-Host "Cleaning mod project at $stagingPath...";
@@ -193,8 +255,15 @@ Launch-Make "$sdkPath/binaries/Win64/XComGame.com" "make -nopause -mods $modName
 CheckErrorCode "Failed to compile mod scripts."
 Write-Host "Compiled."
 
-
-if (Test-Path -Path "$stagingPath/Content/*" -Include *.upk, *.umap) {
+# build the mod's shader cache
+if ($canSkipShaderPrecompliation) {
+    Write-Host "There were no changes to content. Reloading previous ModShaderCache and skipping shader precompliation."
+    Copy-Item -Path $tempCachePath -Destination $shaderCachePath
+    Remove-Item -Path $tempCachePath
+    Remove-Item -path $modSrcRoot/tmp
+    Write-Host "Reloaded."
+} 
+elseif (Test-Path -Path "$stagingPath/Content/*" -Include *.upk, *.umap) {
     Write-Host "Precompiling mod shaders..."
     &"$sdkPath/binaries/Win64/XComGame.com" precompileshaders -nopause platform=pc_sm4 DLC=$modNameCanonical
     CheckErrorCode "Failed to precompile mod shaders."

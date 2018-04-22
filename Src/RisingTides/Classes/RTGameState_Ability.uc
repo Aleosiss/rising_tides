@@ -51,8 +51,7 @@ function EventListenerReturn ReprobateWaltzListener( Object EventData, Object Ev
 }
 
 // credits to /u/robojumper
-
-//This function is native for performance reasons, the script code below describes its function
+// This function is native for performance reasons, the script code below describes its function
 // NO LONGER AM I SHACKLED BY NATIVE CODE
 simulated function name GatherAbilityTargets(out array<AvailableTarget> Targets, optional XComGameState_Unit OverrideOwnerState) {
 	local int i, j;
@@ -409,7 +408,6 @@ function EventListenerReturn RTAbilityTriggerEventListener_ValidAbilityLocations
 			i++;
 		}
 
-
 	}
 
 	return ELR_NoInterrupt;
@@ -459,13 +457,11 @@ protected function bool ActivateAbility(StateObjectReference TargetRef) {
 	}
 }
 
-function bool RTAbilityTriggerAgainstSingleTarget(StateObjectReference TargetRef, bool bMustHaveAdditionalTargets, optional int VisualizeIndex = -1, optional array<vector> TargetLocations)
-{
+function bool RTAbilityTriggerAgainstSingleTarget(StateObjectReference TargetRef, bool bMustHaveAdditionalTargets, optional int VisualizeIndex = -1, optional array<vector> TargetLocations) {
 	return RTAbilityTriggerAgainstSingleTarget_Static(ObjectID, OwnerStateObject, TargetRef, bMustHaveAdditionalTargets, VisualizeIndex, TargetLocations);
 }
 
-static function bool RTAbilityTriggerAgainstSingleTarget_Static(int AbilityID, StateObjectReference SourceRef, StateObjectReference TargetRef, bool bMustHaveAdditionalTargets, optional int VisualizeIndex = -1, optional array<vector> TargetLocations)
-{
+static function bool RTAbilityTriggerAgainstSingleTarget_Static(int AbilityID, StateObjectReference SourceRef, StateObjectReference TargetRef, bool bMustHaveAdditionalTargets, optional int VisualizeIndex = -1, optional array<vector> TargetLocations) {
 	local GameRulesCache_Unit UnitCache;
 	local int i, j;
 	local X2TacticalGameRuleset TacticalRules;

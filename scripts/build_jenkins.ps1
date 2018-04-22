@@ -24,9 +24,17 @@ function StageDirectory ([string]$directoryName, [string]$srcDirectory, [string]
 
 function CheckErrorCode([string] $message) {
     if ($LASTEXITCODE -ne 0) {
+        $stopwatch.stop()
+        $ts = $stopwatch.Elapsed.TotalSeconds;
+
+        Write-Host "Build failed in $ts seconds."
         throw $message;
     }
 }
+
+# let's see how long this takes...
+$stopwatch = New-Object System.Diagnostics.Stopwatch
+$stopwatch.Start()
 
 # alias params for clarity in the script (we don't want the person invoking this script to have to type the name -modNameCanonical)
 $modNameCanonical = $mod
@@ -128,5 +136,8 @@ Copy-Item $stagingPath $productionPath -Force -Recurse -WarningAction SilentlyCo
 Write-Host "Copied."
 
 # we made it!
+$stopwatch.stop()
+$ts = $stopwatch.Elapsed.TotalSeconds;
+
 Write-Host "*** SUCCESS! ***"
-Write-Host "$modNameCanonical ready to run."
+Write-Host "$modNameCanonical ready to run in $ts seconds."

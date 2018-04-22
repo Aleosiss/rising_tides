@@ -174,7 +174,7 @@ static function RTGameState_ProgramFaction GetProgramState(optional XComGameStat
 	return Program;
 }
 
-static function RTGameState_ProgramFaction GetNewProgramState(optional XComGameState NewGameState) {
+static function RTGameState_ProgramFaction GetNewProgramState(XComGameState NewGameState) {
 	local RTGameState_ProgramFaction Program;
 
 	Program = GetProgramState(NewGameState);
@@ -186,9 +186,9 @@ static function RTGameState_ProgramFaction GetNewProgramState(optional XComGameS
 static function RTLog(string message, optional bool bShouldRedScreenToo = false) {
 	if(!class'X2DownloadableContentInfo_RisingTides'.static.DebuggingEnabled())
 		return;
-	`LOG("Rising Tides: " $ message);
+	`LOG("RisingTides: " $ message);
 	if(bShouldRedScreenToo)
-		`RedScreen("Rising Tides: " $ message);
+		`RedScreen("RisingTides: " $ message);
 }
 
 static function bool DebuggingEnabled() {
@@ -226,9 +226,6 @@ static function PrintGoldenPathActionsForFaction(XComGameState_ResistanceFaction
 static function PrintMiscInfoForFaction(XComGameState_ResistanceFaction Faction) {
 	local XComGameState_HeadquartersXCom XComHQ;
 
-	RTLog("Getting the Psi Training Rate...");
-	XComHQ = GetXComHQState();
-	RTLog("It's " $ XComHQ.PsiTrainingRate);
 }
 
 static function SubmitGameState(XComGameState NewGameState) {
@@ -255,6 +252,6 @@ static function XComGameState_HeadquartersXCom GetXComHQState()
 	return NewXComHQ;
 }
 
-simulated static function bool CheckIsInvalidMission(X2MissionSourceTemplate Template) {
+simulated static function bool IsInvalidMission(X2MissionSourceTemplate Template) {
 	return class'RTGameState_ProgramFaction'.default.InvalidMissionSources.Find(Template.DataName) != INDEX_NONE;
 }

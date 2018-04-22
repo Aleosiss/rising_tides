@@ -10,12 +10,14 @@
 
 class X2DownloadableContentInfo_RisingTides extends X2DownloadableContentInfo config(RisingTides);
 
-var bool bDebugOutputDisabled;
-var config array<name> AbilityPerksToLoad;
+var bool bDebuggingEnabled;
+var config int MajorVer;
+var config int MinorVer;
+var config int PatchVer;
 
 defaultproperties
 {
-	bDebugOutputDisabled = false;
+	bDebuggingEnabled = true;
 }
 
 /// <summary>
@@ -24,28 +26,18 @@ defaultproperties
 /// create without the content installed. Subsequent saves will record that the content was installed.
 /// </summary>
 static event OnLoadedSavedGame() {
-	//local XComGameState NewGameState;
-
-	//NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("Rising Tides loading into new save...");
-	//class'RTGameState_StrategyCard'.static.SetUpStrategyCards(NewGameState);
-	//class'RTHelpers'.static.SubmitGameState(NewGameState);
+	class'RTGameState_ProgramFaction'.static.InitFaction();
 }
 
 static event OnLoadedSavedGameToStrategy() {
-	//local XComGameState NewGameState;
-	
-	//NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("Rising Tides loading into strategy...");
-	//class'RTGameState_StrategyCard'.static.SetUpStrategyCards(NewGameState);
-	//class'RTHelpers'.static.SubmitGameState(NewGameState);
+	class'RTGameState_ProgramFaction'.static.InitFaction();
 }
 
 /// <summary>
 /// Called when the player starts a new campaign while this DLC / Mod is installed
 /// </summary>
-static event InstallNewCampaign(XComGameState StartState)
-{
-	//class'RTGameState_ProgramFaction'.static.SetUpProgramFaction(StartState);
-	ModifyInitialFactionState(StartState);
+static event InstallNewCampaign(XComGameState StartState) {
+	class'RTGameState_ProgramFaction'.static.InitFaction(StartState);
 }
 
 
@@ -57,18 +49,6 @@ static event OnPostTemplatesCreated()
 
 	MakePsiAbilitiesInterruptable();
 	AddProgramFactionCovertActions();
-	RebuildPerkContentCache();
-}
-
-simulated static function RebuildPerkContentCache() {
-	local XComContentManager		Content;
-	local name n;
-
-	Content = `CONTENT;
-	Content.BuildPerkPackageCache();
-	foreach default.AbilityPerksToLoad(n) {
-		Content.CachePerkContent(n);
-	}
 }
 
 /// <summary>
@@ -82,20 +62,37 @@ static event OnPreMission(XComGameState NewGameState, XComGameState_MissionSite 
 	ProgramState.PreMissionUpdate(NewGameState, MissionState);
 }
 
-simulated static function ModifyInitialFactionState(XComGameState StartState) {
-	local RTGameState_ProgramFaction Faction;
+/// <summary>
+/// Called after the player exits the post-mission sequence while this DLC / Mod is installed.
+/// </summary>
+static event OnExitPostMissionSequence()
+{
+	local XComGameState NewGameState;
+	local RTGameState_ProgramFaction ProgramState;
 
-	foreach StartState.IterateByClassType(class'RTGameState_ProgramFaction', Faction) {
-		if(Faction.GetMyTemplateName() == 'Faction_Program') { break; }
-	}
+	NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("Cleanup Program Operatives from XCOMHQ!");
+	ProgramState = class'RTHelpers'.static.GetNewProgramState(NewGameState);
+	ProgramState.RetrieveRescuedProgramOperatives(NewGameState);
+	ProgramState.ReloadOperativeArmaments(NewGameState);
 
-	if(Faction == none) {
-		class'RTHelpers'.static.RTLog("Could not find an ProgramFactionState in the start state!", true);
-		return;
-	} else { class'RTHelpers'.static.RTLog("Modifying Golden Path Actions for the Program...", false); }
-
-	Faction.ModifyGoldenPathActions(StartState);
+	`GAMERULES.SubmitGameState(NewGameState);
 }
+
+
+//simulated static function ModifyInitialFactionState(XComGameState StartState) {
+//	local RTGameState_ProgramFaction Faction;
+//
+//	foreach StartState.IterateByClassType(class'RTGameState_ProgramFaction', Faction) {
+//		if(Faction.GetMyTemplateName() == 'Faction_Program') { break; }
+//	}
+//
+//	if(Faction == none) {
+//		class'RTHelpers'.static.RTLog("Could not find an ProgramFactionState in the start state!", true);
+//		return;
+//	} else { class'RTHelpers'.static.RTLog("Modifying Golden Path Actions for the Program in the start state...", false); }
+//
+//	Faction.ModifyGoldenPathActions(StartState);
+//}
 
 exec function RT_PrintResistanceFactionNames() {
 	local XComGameStateHistory 					History;
@@ -196,7 +193,7 @@ exec function RT_GenerateProgramCards() {
 	NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("CHEAT: Add Program Faction Cards!");
 	ProgramState = class'RTHelpers'.static.GetNewProgramState(NewGameState);
 
-	for(idx = 0; idx < class'RTGameState_ProgramFaction'.default.NumCardsOnMeet; idx++)
+	for(idx = 0; idx < 7; idx++)
 	{
 		ProgramState.GenerateNewPlayableCard(NewGameState);
 	}
@@ -224,7 +221,7 @@ exec function RT_DebugActiveOperatives() {
 
 }
 
-exec function RT_AddSPECTREToXCOMCrew() {
+exec function RT_AddProgramOperativeToXCOMCrew() {
 	local XComGameStateHistory History;
 	local XComGameState NewGameState;
 	local XComGameState_HeadquartersXCom XComHQ;
@@ -266,10 +263,7 @@ exec function RT_TriggerEvent(name EventID) {
 }
 
 exec function RT_DebugModVersion() {
-	local int ModVersion;
-
-	ModVersion = 4;
-	class'RTHelpers'.static.RTLog("Mod Version is: " $ ModVersion);
+	class'RTHelpers'.static.RTLog("Mod Version is: " $ default.MajorVer $ "." $ default.MinorVer $ "." $ default.PatchVer);
 }
 
 exec function RT_ToggleCustomDebugOutput() {
@@ -363,5 +357,98 @@ exec function RT_PrintAppearence(int ObjectID) {
 }
 
 static function bool DebuggingEnabled() {
-	return !default.bDebugOutputDisabled;
+	return default.bDebuggingEnabled;
+}
+
+exec function RT_PrintCrew()
+{
+	local XComGameState_HeadquartersXCom XComHQ;
+	local int idx;
+	local XComGameStateHistory History;
+	local XComGameState_Unit UnitState;
+	local string CrewString;
+
+	History = `XCOMHISTORY;
+	
+	XComHQ = XComGameState_HeadquartersXCom(History.GetSingleGameStateObjectForClass(class'XComGameState_HeadquartersXCom'));
+
+	`LOG("Logging XCOM Crew...");
+	CrewString = "\nXCom Crew";
+
+	for(idx = 0; idx < XComHQ.Crew.Length; idx++)
+	{
+		UnitState = XComGameState_Unit(History.GetGameStateForObjectID(XComHQ.Crew[idx].ObjectID));
+
+		if(UnitState != none)
+		{
+			CrewString $= "\n" $ UnitState.GetName(eNameType_Full) @ "ObjectID:" @ UnitState.ObjectID;
+		}
+	}
+
+	`LOG(CrewString);
+}
+
+// Courtesy of bountygiver
+exec function TestPanel(int X, int Y, optional int Width = -1, optional int Height = -1, optional name PanelName = 'TestDebugPanel')
+{
+	local UIScreen Screen;
+	local UIBGBox BGPanel;
+	local UIPanel Panel;
+
+	Screen = `SCREENSTACK.GetCurrentScreen();
+
+	Panel = Screen.GetChildByName(PanelName, false);
+	if(Width == -1 || Height == -1) {
+		Width = 32;
+		Height = 32;
+	}
+
+	if (Panel != none)
+	{
+		Panel.SetPosition(X, Y);
+		Panel.SetSize(Width, Height);
+	}
+	else
+	{
+		BGPanel = Screen.Spawn(class'UIBGBox', Screen);
+		BGPanel.InitBG(PanelName, X, Y, Width, Height);
+		BGPanel.SetBGColor("FF0000");
+		BGPanel.AnimateIn(0);
+	}
+}
+
+exec function DestroyTestPanel(optional name PanelName = 'TestDebugPanel') {
+	local UIScreen Screen;
+	local UIBGBox BGPanel;
+
+	Screen = `SCREENSTACK.GetCurrentScreen();
+
+	BGPanel = UIBGBox(Screen.GetChildByName(PanelName, false));
+	BGPanel.Remove();
+}
+
+exec function ReportTestPanelLocation(optional name PanelName = 'TestDebugPanel') {
+	local UIScreen Screen;
+	local UIPanel TestPanel;
+	local string MissionType, LogOutput;
+	local float PosX, PosY;
+	local StateObjectReference MissionRef;
+
+	Screen = `SCREENSTACK.GetCurrentScreen();
+
+	TestPanel = Screen.GetChildByName(PanelName, false);
+	PosX = TestPanel.MC.GetNum("_x");
+	PosY = TestPanel.MC.GetNum("_y");
+
+	if(UIMission(Screen) != none) {
+		MissionType = string(UIMission(Screen).GetMission().GetMissionSource().DataName);
+		LogOutput = ("" $ PanelName $ " located at (" $ PosX $ ", " $ PosY $ ") for MissionType " $ MissionType);
+		class'RTHelpers'.static.RTLog(LogOutput);
+
+	} else {
+		LogOutput = ("" $ PanelName $ " located at (" $ PosX $ ", " $ PosY $ ")");
+		class'RTHelpers'.static.RTLog(LogOutput);
+
+	}
+
 }

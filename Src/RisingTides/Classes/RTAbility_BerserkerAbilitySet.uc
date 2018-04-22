@@ -54,34 +54,34 @@ static function array<X2DataTemplate> CreateTemplates()
 {
 	local array<X2DataTemplate> Templates;
 
-	Templates.AddItem(BumpInTheNight());																							  // icon	// animation
+	Templates.AddItem(BumpInTheNight());																							 // icon	// animation
 	Templates.AddItem(BumpInTheNightBloodlustListener());
 	Templates.AddItem(BumpInTheNightStealthListener());
-	Templates.AddItem(RTBerserkerKnifeAttack());																					  // icon
+	Templates.AddItem(RTBerserkerKnifeAttack());																					// icon
 	Templates.AddItem(PurePassive('RTAcidicBlade', "img:///RisingTidesContentPackage.PerkIcons.UIPerk_stim_knife", false, 'eAbilitySource_Perk'));
 	Templates.AddItem(PurePassive('RTPsionicBlade', "img:///RisingTidesContentPackage.PerkIcons.UIPerk_psi_knife", false, 'eAbilitySource_Psionic'));
 	Templates.AddItem(PurePassive('RTHiddenBlade', "img:///RisingTidesContentPackage.PerkIcons.UIPerk_stealth_knife", false, 'eAbilitySource_Perk'));
-	Templates.AddItem(PurePassive('RTSiphon', "img:///RisingTidesContentPackage.PerkIcons.UIPerk_medkit_knife_siphon", false, 'eAbilitySource_Psionic'));			  // icon
-	Templates.AddItem(RTBurst());																									  // icon	// animation
-	Templates.AddItem(RTBlur());																									  // icon
-	Templates.AddItem(RTPurge());																									  // icon	// animation
-	Templates.AddItem(RTMentor());																									  // icon	// animation
+	Templates.AddItem(PurePassive('RTSiphon', "img:///RisingTidesContentPackage.PerkIcons.UIPerk_medkit_knife_siphon", false, 'eAbilitySource_Psionic'));			// icon
+	Templates.AddItem(RTBurst());																									// icon		// animation
+	Templates.AddItem(RTBlur());																									// icon
+	Templates.AddItem(RTPurge());																									// icon		// animation
+	Templates.AddItem(RTMentor());																									// icon		// animation
 	Templates.AddItem(RTReprobateWaltz());
-	Templates.AddItem(RTReprobateWaltzIcon());																						  // icon
-	Templates.AddItem(RTPyroclasticFlow());																							  // icon
+	Templates.AddItem(RTReprobateWaltzIcon());																						// icon
+	Templates.AddItem(RTPyroclasticFlow());																							// icon
 	Templates.AddItem(RTCreateFireTrailAbility());
-	Templates.AddItem(RTPyroclasticSlash());																						  // icon
+	Templates.AddItem(RTPyroclasticSlash());																						// icon
 	Templates.AddItem(RTContainedFuryMeldJoin());
-	Templates.AddItem(RTContainedFury());																							  // icon
-	Templates.AddItem(RTUnstableConduit());																							  			// animation
-	Templates.AddItem(RTUnstableConduitIcon());																						  // icon
-	Templates.AddItem(RTUnstableConduitBurst());																					  // icon
+	Templates.AddItem(RTContainedFury());																							// icon
+	Templates.AddItem(RTUnstableConduit());																							// animation
+	Templates.AddItem(RTUnstableConduitIcon());																						// icon
+	Templates.AddItem(RTUnstableConduitBurst());																					// icon
 	Templates.AddItem(RTPersistingImages());
-	Templates.AddItem(RTPersistingImagesIcon());																					  // icon
+	Templates.AddItem(RTPersistingImagesIcon());																					// icon
 	Templates.AddItem(RTGhostInTheShell());
 	Templates.AddItem(RTGhostInTheShellEffect());
-	Templates.AddItem(RTQueenOfBlades());																							  // icon
-	Templates.AddItem(RTShadowStrike());																							  // icon
+	Templates.AddItem(RTQueenOfBlades());																							// icon
+	Templates.AddItem(RTShadowStrike());																							// icon
 	Templates.AddItem(RTDashingStrike());
 	Templates.AddItem(RTPsionicLance());
 	Templates.AddItem(RTCloseCombatSpecialist());
