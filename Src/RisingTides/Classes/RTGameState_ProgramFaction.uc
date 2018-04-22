@@ -914,6 +914,7 @@ function GenerateNewPlayableCard(XComGameState NewGameState)
 function MeetXCom(XComGameState NewGameState)
 {
 	local XComGameState_HeadquartersResistance ResHQ;
+	local XComGameState_ResistanceFaction TemplarFaction;
 	local array<Name> ExclusionList;
 	local int idx;
 
@@ -934,6 +935,14 @@ function MeetXCom(XComGameState NewGameState)
 	//CreateRTDeathRecord(StartState);
 	bSetupComplete = true;	
 	
+
+	// adopt the templar's rival
+	foreach `XCOMHISTORY.IterateByClassType(class'XComGameState_ResistanceFaction', TemplarFaction) {
+		if(TemplarFaction.GetMyTemplateName() == 'Faction_Templars') {
+			RivalChosen = TemplarFaction.GetRivalChosen().GetReference();
+			break;
+		}
+	}
 
 	for(idx = 0; idx < default.NumCardsOnMeet; idx++)
 	{

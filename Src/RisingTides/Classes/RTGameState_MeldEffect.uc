@@ -5,7 +5,7 @@
 //  PURPOSE: Extended GameState_Effect that holds custom listeners for per-unit MeldEffects.
 //---------------------------------------------------------------------------------------
 
-class RTGameState_MeldEffect extends RTGameState_Effect config(RTGhost);
+class RTGameState_MeldEffect extends RTGameState_Effect config(RisingTides);
 
 var array<StateObjectReference> Members;
 var StateObjectReference		MeldHost, GameStateHost;
@@ -375,9 +375,12 @@ simulated function EventListenerReturn RemoveUnitFromMeld(Object EventData, Obje
 	MeldWillModifier = UpdatedMeldEffect.MeldStrength - GameStateHostUnit.GetBaseStat(eStat_Will);
 	MeldPsiOffModifier = UpdatedMeldEffect.MeldStrength - GameStateHostUnit.GetBaseStat(eStat_PsiOffense);
 
+	
+
 	UpdatedMeldEffect.StatChanges.Length = 0;
 	AddPersistentStatChange(UpdatedMeldEffect.StatChanges, eStat_Will, MeldWillModifier);
-	AddPersistentStatChange(UpdatedMeldEffect.StatChanges, eStat_Hacking, HackModifier);
+	if(HackModifier > 0)
+		AddPersistentStatChange(UpdatedMeldEffect.StatChanges, eStat_Hacking, HackModifier);
 	AddPersistentStatChange(UpdatedMeldEffect.StatChanges, eStat_PsiOffense, MeldPsiOffModifier);
 
 

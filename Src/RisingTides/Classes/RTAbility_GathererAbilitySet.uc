@@ -232,7 +232,7 @@ static function X2AbilityTemplate CreateOverTheShoulderAbility(X2AbilityTemplate
 
 	// Vision Effect
 	VisionEffect = new class'RTEffect_MobileSquadViewer';
-	VisionEffect.BuildPersistentEffect(1, false, true, false, eGameRule_PlayerTurnBegin);
+	VisionEffect.BuildPersistentEffect(1, false, true, false, eGameRule_PlayerTurnEnd);
 	VisionEffect.SetDisplayInfo(ePerkBuff_Penalty, default.OTS_TITLE, default.OTS_DESC_ENEMY, Template.IconImage, true,,Template.AbilitySourceName);
 	VisionEffect.TargetConditions.AddItem(default.PsionicTargetingProperty);
 	VisionEffect.DuplicateResponse = eDupe_Ignore;
@@ -247,7 +247,7 @@ static function X2AbilityTemplate CreateOverTheShoulderAbility(X2AbilityTemplate
 
 	// Unsettling Voices
 	VoiceEffect = new class'RTEffect_UnsettlingVoices';
-	VoiceEffect.BuildPersistentEffect(1, false, true, false, eGameRule_PlayerTurnBegin);
+	VoiceEffect.BuildPersistentEffect(1, false, true, false, eGameRule_PlayerTurnEnd);
 	VoiceEffect.TargetConditions.AddItem(default.PsionicTargetingProperty);
 	VoiceEffect.SetDisplayInfo(ePerkBuff_Penalty,default.UV_TITLE, default.UV_DESC, Template.IconImage, true,,Template.AbilitySourceName);	// TODO: ICON
 	VoiceEffect.DuplicateResponse = eDupe_Ignore;

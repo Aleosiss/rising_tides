@@ -8,7 +8,7 @@
 //
 //---------------------------------------------------------------------------------------
 
-class RTEffect_Meld extends X2Effect_PersistentStatChange config(RTGhost);
+class RTEffect_Meld extends X2Effect_PersistentStatChange config(RisingTides);
 
 function bool IsThisEffectBetterThanExistingEffect(const out XComGameState_Effect ExistingEffect)
 {

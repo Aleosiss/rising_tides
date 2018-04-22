@@ -31,7 +31,7 @@ function RollForAbilityHit(XComGameState_Ability kAbility, AvailableTarget kTarg
 	UnitState = XComGameState_Unit(History.GetGameStateForObjectID(kTarget.PrimaryTarget.ObjectID));
 	foreach default.FeedbackImmunityEffects(ImmuneName)
 	{
-		if (UnitState.IsAffectedByEffectName.Find(ImmuneName) != INDEX_NONE)
+		if (UnitState.AffectedByEffectNames.Find(ImmuneName) != INDEX_NONE)
 		{
 			`log("Unit has effect" @ ImmuneName @ "which provides feedback immunity. No feedback allowed.",,'XCom_HitRolls');
 			ResultContext.HitResult = eHit_Miss;
