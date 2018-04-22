@@ -770,6 +770,7 @@ static function X2AbilityTemplate RTMentor() {
 	MentorEffect.SetDisplayInfo(ePerkBuff_Bonus, Template.LocFriendlyName, Template.GetMyHelpText(), Template.IconImage, true, , Template.AbilitySourceName);
 	MentorEffect.AddPersistentStatChange(eStat_Will, default.MENTOR_BONUS);
 	MentorEffect.AddPersistentStatChange(eStat_PsiOffense, default.MENTOR_BONUS);
+	MentorEffect.EffectName = 'RTMentorEffect';
 	Template.AddTargetEffect(MentorEffect);
 
 	// melded
