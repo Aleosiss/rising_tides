@@ -1097,7 +1097,7 @@ defaultproperties
 	ForcePsionicAbilityEvent = "ForcePsionicAbilityEvent"
 
 
-	RTMindControlEffectName = "RTMindControlEffect"
+	RTMindControlEffectName = "MindControl"
 	RTGhostTagEffectName = "RTGhostOperative"
 
 	RTMindControlTemplateName = "RTMindControl"
