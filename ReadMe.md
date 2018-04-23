@@ -20,8 +20,12 @@ This would be a bare-bones content mod. I also have the following content in min
 	- Direct Neural Manipulation
 
 ## Current Bugs (High Priority)
-	- The Program still has many of the base-game Covert Actions
-	- The Program cannot complete the Golden Path actions related to their Chosen
+
+	- The Program cannot gain influence/cardslots
+
+## Current Issues 
+	- (Predicted) The Program cannot complete the Golden Path actions related to their Chosen
+	- Mind Wrack range cap -- 6 tiles
 
 ## Current Table
 
