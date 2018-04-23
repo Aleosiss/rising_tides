@@ -927,7 +927,7 @@ ActionPostNarrative="You will find our reach troublingly long-- but for now, it'
 
 [CovertActionNarrative_AlienLoot_Program X2CovertActionNarrativeTemplate]
 ActionName="Scavenge Alien Loot"
-ActionPreNarrative="The Program regularly trims the fat off ADVENT patrols for future operations. We ran an op nearby a haven recently; you could send a squad to secure area and its resources. - 'Handler 9'"
+ActionPreNarrative="The Program regularly trims the fat off ADVENT patrols for future operations. We ran an op nearby a haven recently; you could send a squad to secure the area and its resources. - 'Handler 9'"
 ActionPostNarrative="ADVENT tech is rarely useful for us-- hopefully you will find it valuable. - 'Handler 9'"
 
 [CovertActionNarrative_FacilityLead_Program X2CovertActionNarrativeTemplate]
