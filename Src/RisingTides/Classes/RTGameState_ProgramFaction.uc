@@ -408,6 +408,9 @@ function OnEndTacticalPlay(XComGameState NewGameState)
 	if(IsOSFMission(MissionState)) {
 		XComHQ = XComGameState_HeadquartersXCom(NewGameState.ModifyStateObject(class'XComGameState_HeadquartersXCom', XComHQ.GetReference().ObjectID));
 		BlastOperativeLoadouts(NewGameState);
+
+		// only want to promote if its a osf mission, so do it here, while we have access to the missionsite not in PostMissionCleanup
+		PromoteAllOperatives(NewGameState);
 	}
 }
 
@@ -433,7 +436,6 @@ function MakeOneSmallFavorAvailable() {
 function PerformPostMissionCleanup(XComGameState NewGameState) {
 	RecalculateActiveOperativesAndSquads(NewGameState);
 	RetrieveRescuedProgramOperatives(NewGameState);
-	PromoteAllOperatives(NewGameState);
 	ReloadOperativeArmaments(NewGameState);
 	bShouldPerformPostMissionCleanup = false;
 }
