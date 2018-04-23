@@ -72,8 +72,9 @@ static event OnExitPostMissionSequence()
 
 	NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("Cleanup Program Operatives from XCOMHQ!");
 	ProgramState = class'RTHelpers'.static.GetNewProgramState(NewGameState);
-	ProgramState.RetrieveRescuedProgramOperatives(NewGameState);
-	ProgramState.ReloadOperativeArmaments(NewGameState);
+	if(ProgramState.bShouldPerformPostMissionCleanup) {
+		ProgramState.PerformPostMissionCleanup(NewGameState);
+	}
 
 	`GAMERULES.SubmitGameState(NewGameState);
 }
@@ -180,7 +181,7 @@ exec function RT_ActivateOneSmallFavor() {
 	NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("CHEAT: Force One Small Favor!");
 	ProgramState = class'RTHelpers'.static.GetNewProgramState(NewGameState);
 
-	ProgramState.bOneSmallFavorAvailable = true;
+	ProgramState.MakeOneSmallFavorAvailable();
 	
 	`GAMERULES.SubmitGameState(NewGameState);
 }
@@ -450,5 +451,14 @@ exec function ReportTestPanelLocation(optional name PanelName = 'TestDebugPanel'
 		class'RTHelpers'.static.RTLog(LogOutput);
 
 	}
+}
 
+exec function RTDebugVisibilityAll()
+{	
+	local XComGameState_Unit ItUnit;
+	foreach `XCOMHISTORY.IterateByClassType(class'XComGameState_Unit', ItUnit)
+	{
+		class'RTHelpers'.static.RTLog("" $ ItUnit.GetFullName());
+		class'RTCondition_VisibleToPlayer'.static.IsTargetVisibleToLocalPlayer(ItUnit.GetReference());
+	}
 }

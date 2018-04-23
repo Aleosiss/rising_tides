@@ -34,7 +34,7 @@ static function ActivateOneSmallFavor(XComGameState NewGameState, StateObjectRef
 	local RTGameState_ProgramFaction Program;
 
 	Program = class'RTHelpers'.static.GetNewProgramState(NewGameState);
-	Program.bOneSmallFavorAvailable = true;
+	Program.MakeOneSmallFavorAvailable();
 }
 
 static function DeactivateOneSmallFavor(XComGameState NewGameState, StateObjectReference InRef) {
@@ -69,6 +69,7 @@ static function JustPassingThroughModifyTacStartState(XComGameState StartState) 
 		return;
 
 	Program = class'RTHelpers'.static.GetNewProgramState(StartState);
+	Program.bShouldPerformPostMissionCleanup = true;
 	SoldierObjRef = Program.Master[`SYNC_RAND_STATIC(Program.Master.Length)];
 	
 	if(!class'RTHelpers'.static.DebuggingEnabled()) {

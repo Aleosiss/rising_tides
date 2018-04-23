@@ -63,15 +63,17 @@ var bool														bSetupComplete;		// if we should rebuild the operative arr
 
 
 // FACTION VARIABLES
-var bool																bOneSmallFavorAvailable;		// can send squad on a mission, replacing XCOM
+var bool																bShouldPerformPostMissionCleanup;	// should cleanup the program's roster after a mission-- set during OSF and JPT missions
+var bool																bOneSmallFavorAvailable;			// can send squad on a mission, replacing XCOM
+var bool																bOneSmallFavorActivated;			// actively sending a squad on the next mission
 var bool																bTemplarsDestroyed;
 var bool																bDirectNeuralManipulation;
-var config array<name>													InvalidMissionSources; 			// list of mission types ineligible for Program support, usually story missions
-var config array<name>													UnavailableCovertActions;		// list of covert actions that the program cannot carry out
+var config array<name>													InvalidMissionSources; 				// list of mission types ineligible for Program support, usually story missions
+var config array<name>													UnavailableCovertActions;			// list of covert actions that the program cannot carry out
 
 // ONE SMALL FAVOR HANDLING VARIABLES
-var private int															iPreviousMaxSoldiersForMission; // cache of the number of soldiers on a mission before OSF modfied it
-var private StateObjectReference										SelectedMissionRef;				// cache of the mission one small favor is going to go against
+var private int															iPreviousMaxSoldiersForMission; 	// cache of the number of soldiers on a mission before OSF modfied it
+var private StateObjectReference										SelectedMissionRef;					// cache of the mission one small favor is going to go against
 
 // ONE SMALL FAVOR LOCALIZED STRINGS
 var localized string OSFCheckboxAvailable;
@@ -406,8 +408,6 @@ function OnEndTacticalPlay(XComGameState NewGameState)
 	if(IsOSFMission(MissionState)) {
 		XComHQ = XComGameState_HeadquartersXCom(NewGameState.ModifyStateObject(class'XComGameState_HeadquartersXCom', XComHQ.GetReference().ObjectID));
 		BlastOperativeLoadouts(NewGameState);
-		RecalculateActiveOperativesAndSquads(NewGameState);
-		PromoteAllOperatives(NewGameState);
 	}
 }
 
@@ -419,6 +419,23 @@ protected static function bool IsOSFMission(XComGameState_MissionSite MissionSta
 		return true;
 	}
 	return false;
+}
+
+function MakeOneSmallFavorAvailable() {
+	// add some checks here...
+	if(Deployed == none) {
+		RotateRandomSquadToDeploy();
+	}
+
+	bOneSmallFavorAvailable = true;
+}
+
+function PerformPostMissionCleanup(XComGameState NewGameState) {
+	RecalculateActiveOperativesAndSquads(NewGameState);
+	RetrieveRescuedProgramOperatives(NewGameState);
+	PromoteAllOperatives(NewGameState);
+	ReloadOperativeArmaments(NewGameState);
+	bShouldPerformPostMissionCleanup = false;
 }
 
 //---------------------------------------------------------------------------------------
@@ -449,8 +466,15 @@ protected function RecalculateActiveOperativesAndSquads(XComGameState NewGameSta
 	local StateObjectReference SquadIteratorObjRef, UnitIteratorObjRef;
 	local XComGameStateHistory History;
 	local XComGameState_Unit UnitState, NewUnitState;
+	local XComGameState_AdventChosen ChosenState;
+	local StateObjectReference EmptyRef;
+	local XComGameState_HeadquartersXCom XComHQ;
 
 	History = `XCOMHISTORY;
+
+	XComHQ = XComGameState_HeadquartersXCom(History.GetSingleGameStateObjectForClass(class'XComGameState_HeadquartersXCom'));
+	XComHQ = XComGameState_HeadquartersXCom(NewGameState.ModifyStateObject(class'XComGameState_HeadquartersXCom', XComHQ.ObjectID));
+
 	foreach Squads(SquadIteratorObjRef) {
 		pgs = RTGameState_PersistentGhostSquad(History.GetGameStateForObjectID(SquadIteratorObjRef.ObjectID));
 		pgs = RTGameState_PersistentGhostSquad(NewGameState.ModifyStateObject(class'RTGameState_PersistentGhostSquad', pgs.ObjectID));
@@ -463,30 +487,47 @@ protected function RecalculateActiveOperativesAndSquads(XComGameState NewGameSta
 				}
 
 				NewUnitState = XComGameState_Unit(NewGameState.ModifyStateObject(class'XComGameState_Unit', UnitState.ObjectID));
-
-				if(UnitState.bCaptured) {
-					// unfort
-					pgs.Operatives.RemoveItem(UnitIteratorObjRef);
-					pgs.CapturedOperatives.RemoveItem(UnitIteratorObjRef);	// maybe paranoid, remove duplicates
-					pgs.CapturedOperatives.AddItem(UnitIteratorObjRef);
-				} else if(UnitState.IsDead()) {
+				// TODO: Capture/Rescue of Program Operatives
+				// for now, we'll assume the program rescues them on their own time
+				// it also doesn't make any sense that a program operative would be able to give any information about the Avenger to ADVENT anyway
+				if(UnitState.IsDead() || UnitState.bCaptured) {
 					// LEGENDS NEVER DIE
 					// WHEN THE WORLD IS CALLING YOU
 					// CAN YOU HEAR THEM SCREAMING OUT YOUR NAME?
 					// LEGENDS NEVER DIE
 					// EVERY TIME YOU BLEED FOR REACHING GREATNESS
 					// RELENTLESS YOU SURVIVE
+					if(XComHQ.DeadCrew.Find('ObjectID', UnitIteratorObjRef.ObjectID) != INDEX_NONE) {
+						XComHQ.DeadCrew.RemoveItem(UnitIteratorObjRef);
+					}
+
+					Active.RemoveItem(UnitIteratorObjRef);
+					Active.AddItem(UnitIteratorObjRef);
+					pgs.Operatives.RemoveItem(UnitIteratorObjRef);
+					pgs.Operatives.AddItem(UnitIteratorObjRef);
+
 					NewUnitState.SetStatus(eStatus_Active);
 					NewUnitState.SetCurrentStat(eStat_HP, UnitState.GetBaseStat(eStat_HP));
 					NewUnitState.SetCurrentStat(eStat_Will, UnitState.GetBaseStat(eStat_Will));
 					NewUnitState.bCaptured = false;
+
+					if(NewUnitState.ChosenCaptorRef != EmptyRef) {
+						ChosenState = XComGameState_AdventChosen(History.GetGameStateForObjectID(NewUnitState.ChosenCaptorRef.ObjectID));
+						ChosenState = XComGameState_AdventChosen(NewGameState.ModifyStateObject(class'XComGameState_AdventChosen', ChosenState.ObjectID));
+						ChosenState.ReleaseSoldier(NewGameState, NewUnitState.GetReference());
+					}
+
+					UnitState.ChosenCaptorRef = EmptyRef;
+
 				} else {
 					// good job cmdr
 					NewUnitState.SetCurrentStat(eStat_HP, UnitState.GetBaseStat(eStat_HP));
 					NewUnitState.SetCurrentStat(eStat_Will, UnitState.GetBaseStat(eStat_Will));
+					
 					pgs.Operatives.RemoveItem(UnitIteratorObjRef);
 					pgs.Operatives.AddItem(UnitIteratorObjRef);
-					pgs.CapturedOperatives.RemoveItem(UnitIteratorObjRef);
+					Active.RemoveItem(UnitIteratorObjRef);
+					Active.AddItem(UnitIteratorObjRef);
 					NewUnitState.bCaptured = false;
 				}
 
@@ -690,11 +731,11 @@ private function AddRisingTidesTacticalTags(XComGameState_HeadquartersXCom XComH
 simulated function bool CashOneSmallFavor(XComGameState NewGameState, XComGameState_MissionSite MissionSite) {
 	local StateObjectReference GhostRef, EmptyRef;
 	local name GhostTemplateName;
-
+	
 	if(Deployed == none) {
 		RotateRandomSquadToDeploy();
 	}
-	
+
 	if(Deployed == none) {
 		class'RTHelpers'.static.RTLog("The Program has no squads?", true);
 		return false; // we... have no squads?
@@ -961,8 +1002,10 @@ function MeetXCom(XComGameState NewGameState)
 }
 
 function PreMissionUpdate(XComGameState NewGameState, XComGameState_MissionSite MissionSiteState) {
-	if(bOneSmallFavorAvailable) {
+	if(bOneSmallFavorActivated) {
 		bOneSmallFavorAvailable = false;
+		bOneSmallFavorActivated = false;
+		bShouldPerformPostMissionCleanup = true;
 	}
 }
 
