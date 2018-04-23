@@ -779,7 +779,7 @@ AbilityAvailabilityStrings[89]="The Unit is not in the meld."
 AbilityAvailabilityStrings[90]="The Unit is already melded."
 
 ; +AbilityAvailabilityCodes="AA_UnitMustBeGhost"
-AbilityAvailabilityStrings[91]="The Unit is not a Program operative."
+AbilityAvailabilityStrings[91]="The Unit is not a Ghost."
 
 ; +AbilityAvailabilityCodes="AA_UnitAlreadyUsedAbility"
 AbilityAvailabilityStrings[92]="The Unit has already used that ability."
@@ -832,7 +832,7 @@ TacticalText="<Bullet/> A placeholder that allows Rising Tides classes to use ba
 [PersonnelHadley X2EncyclopediaTemplate]
 ListTitle="Personnel Dossier: Dr. Hadley"
 DescriptionTitle="Dr. Hadley - STATUS: ACTIVE"
-DescriptionEntry="Dr. Elizabeth Hadley, born on October 3rd, 1968, is a certified genius. Earning her Ph.D at the age of 19, it was assumed by academia at large that she had a bright future ahead of her. However, she fell off the face of the planet shortly afterwards, leaving many to speculate that she had been snatched up by the R&D branch of the government. Although that seems obvious now, remember that whatever she has been working on for the past thirty-five years is still unknown, and that she has been transferred to XCOM only now, with Aliens on our proverbial doorstep, speaks for its importance. \nC.O. Bradford Note: Yes, this is the exact file I gave you last time. Hopefully it's still good."
+DescriptionEntry="Dr. Elizabeth Hadley, born on October 3rd, 1968, is a certified genius. Earning her Ph.D at the age of 19, it was assumed by academia at large that she had a bright future ahead of her. However, she fell off the face of the planet shortly afterwards, leaving many to speculate that she had been snatched up by the R&D branch of the government. Although it seems obvious now, whatever she has been working on for the past thirty-five years is unknown, and that she has been transferred to XCOM only now, with Aliens on own proverbial doorstep, speaks for its importance. \nC.O. Bradford Note: Yes, this is the exact file I gave you last time. Hopefully it's still good."
 
 [FactionProgram X2EncyclopediaTemplate]
 ListTitle="The Program"
@@ -950,6 +950,9 @@ ActionName="Into the Fire"
 ActionPreNarrative="In order to enable the strike against the Chosen Stronghold, we'll need to figure out of to breach it. Send some of your men along with my own Operatives to get a feel for the base. - 'Handler 9'"
 ActionPostNarrative="We have determined the best plan of entry to <XGParam:StrValue1/!ChosenName/>'s stronghold. Transmitting now. - 'Handler 9'"
 
+
+
+
 [CovertActionNarrative_HuntTemplars_P1_Program X2CovertActionNarrativeTemplate]
 ActionName="Find Them"
 ActionPreNarrative="As you might recall, Commander, six days after the Temple Ship crash-landed, I initiated Operation: New World. Unfortunately, there was a lone survivor. Staff Sergeant Lanner was left a mangled wreck, his mind in shambles from my operative's psionic assault, but he managed to limp away during the chaos of the beginning of Operation: Ashes and Temples part three. Only recently have we managed to pinpoint his general location, but we need your manpower to figure out where he's hiding. - Dr. Hadley"
@@ -964,6 +967,7 @@ ActionPostNarrative="With the help of your soldiers, I have managed to place sev
 ActionName="Lure Them Out"
 ActionPreNarrative="Geist is extremely paranoid, and revealing a vunerablity remains a challenge. If you have some soldiers to spare, we can use them to conduct a false-flag operation and draw him out. - Dr. Hadley"
 ActionPostNarrative="The trap is set. The bait is ready. All that remains is spring it. I will send my best, and if you do the same, victory is assured. - Dr. Hadley"
+
 
 [Reward_RTProgram_FindFaction X2RewardTemplate]
 DisplayName="Unknown"
@@ -985,7 +989,7 @@ Description="The Program has lent one of their squads to handle this operation."
 
 [RTGhostBerserker X2CharacterTemplate]
 strCharacterName="Program Operative"
-strCharacterBackgroundMale[0]="[REDACTED] \nC.O. Bradford Note: Don't pry."
+strCharacterBackgroundMale[0]="[REDACTED] C.O. Bradford Note: Don't pry."
 strCharacterBackgroundMale[1]="<not writen>"
 strForcedFirstName="[REDACTED]"
 strForcedLastName="[REDACTED]"
@@ -993,7 +997,7 @@ strForcedNickName="Queen"
 
 [RTGhostMarksman X2CharacterTemplate]
 strCharacterName="Program Operative"
-strCharacterBackgroundMale[0]="[REDACTED] \nC.O. Bradford Note: Don't pry."
+strCharacterBackgroundMale[0]="[REDACTED] C.O. Bradford Note: Don't pry."
 strCharacterBackgroundMale[1]="<not writen>"
 strForcedFirstName="[REDACTED]"
 strForcedLastName="[REDACTED]"
@@ -1001,7 +1005,7 @@ strForcedNickName="Whisper"
 
 [RTGhostGatherer X2CharacterTemplate]
 strCharacterName="Program Operative"
-strCharacterBackgroundMale[0]="[REDACTED] \nC.O. Bradford Note: This one seems... too familiar. Don't pry. I'll look into it."
+strCharacterBackgroundMale[0]="[REDACTED] C.O. Bradford Note: This one seems... too familiar. Don't pry. I'll look into it."
 strCharacterBackgroundMale[1]="\<not writen\>"
 strForcedFirstName="[REDACTED]"
 strForcedLastName="[REDACTED]"
