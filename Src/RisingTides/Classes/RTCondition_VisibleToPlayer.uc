@@ -42,11 +42,11 @@ simulated static function bool IsTargetVisibleToLocalPlayer(StateObjectReference
 	if( UnitState != none ) {
 		ForceVisibleSetting = UnitState.ForceModelVisible(); // Checks if local player, among other things.
 		if( ForceVisibleSetting == eForceVisible ) {
-			class'RTHelpers'.static.RTLog("Unit is visible! Reason: eForceVisible!");
+			//class'RTHelpers'.static.RTLog("Unit is visible! Reason: eForceVisible!");
 			return true;
 		}
 		else if( ForceVisibleSetting == eForceNotVisible || UnitState.IsConcealed() ) { // Have to find a better way, because we might want to shoot things only visible through OverTheShoulder
-			class'RTHelpers'.static.RTLog("Unit is not visible! Reason: eForceNotVisible or concealed!");
+			//class'RTHelpers'.static.RTLog("Unit is not visible! Reason: eForceNotVisible or concealed!");
 			return false;
 		}
 
@@ -54,19 +54,19 @@ simulated static function bool IsTargetVisibleToLocalPlayer(StateObjectReference
 		// overly verbose code for debugging
 		if(class'X2TacticalVisibilityHelpers'.static.GetNumEnemyViewersOfTarget(TargetUnitRef.ObjectID) > 0) {
 			b = true;
-			class'RTHelpers'.static.RTLog("Unit is visible! Reason: GetNumEnemyViewersOfTarget(TargetUnitRef.ObjectID) > 0!");
+			//class'RTHelpers'.static.RTLog("Unit is visible! Reason: GetNumEnemyViewersOfTarget(TargetUnitRef.ObjectID) > 0!");
 		} else {
 			b = false;
-			class'RTHelpers'.static.RTLog("Unit is not visible! Reason: GetNumEnemyViewersOfTarget(TargetUnitRef.ObjectID) < 0!");
+			//class'RTHelpers'.static.RTLog("Unit is not visible! Reason: GetNumEnemyViewersOfTarget(TargetUnitRef.ObjectID) < 0!");
 		}
 		return b;
 	} else { // the target was not a unit. in this case, all we can do is a general target check
 		 // because interactive objects and destructables are always technically visible to the player through the FOW
-		 class'RTHelpers'.static.RTLog("Target not a unit!");
+		 //class'RTHelpers'.static.RTLog("Target not a unit!");
 		if(SourceUnitObjectID != -2) {
 			class'X2TacticalVisibilityHelpers'.static.GetAllVisibleEnemyTargetsForUnit( SourceUnitObjectID, VisibleTargets );
 			if(VisibleTargets.Find('ObjectID', TargetUnitRef.ObjectID) != INDEX_NONE) {
-				class'RTHelpers'.static.RTLog("NonUnit is visible! Enemies Visible!");
+				//class'RTHelpers'.static.RTLog("NonUnit is visible! Enemies Visible!");
 				return true;
 			}
 		}
@@ -76,7 +76,7 @@ simulated static function bool IsTargetVisibleToLocalPlayer(StateObjectReference
 
 	}
 
-	class'RTHelpers'.static.RTLog("NonUnit not visible! EndofFunction Reached!");
+	//class'RTHelpers'.static.RTLog("NonUnit not visible! EndofFunction Reached!");
 	return false;
 }
 
