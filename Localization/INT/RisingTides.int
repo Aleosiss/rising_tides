@@ -155,9 +155,9 @@ GroupNames[3]="SHADE"
 GroupNames[4]="REAPER"
 GroupNames[5]="MIRAGE"
 GroupNames[6]="FORECASTER"
-Descriptors_Prefix[0]="OSC -"
+Descriptors_Prefix[0]="CSC -"
 Descriptors_Prefix[1]="RTT -"
-Descriptors_Prefix[2]="MPA -"
+Descriptors_Prefix[2]="NEI -"
 Descriptors_Prefix[3]="TDK -"
 Descriptors_Prefix[4]="SRX -"
 Descriptors_Suffix[0]="- 001"
@@ -180,13 +180,12 @@ Descriptors_Suffix[8]="- 009"
 [ResCard_RTOneSmallFavor RTProgramStrategyCardTemplate]
 DisplayName="One Small Favor"
 SummaryText="Call in a small favor from the Program. They will send one of their squads in the place of XCOM's for a mission."
-QuoteText="...if they can cover for us, we certainly can cover for them..."
-QuoteTextLong="...Getting authorization for something like this would be... difficult, but a favor, for a friend? I can make something happen..."
+QuoteText="...Getting authorization for something like this would be... difficult, but a favor, for a friend? I can make something happen..."
 QuoteTextAuthor="Dr. Elizabeth Hadley"
 
 [ResCard_RTTransientSalvation RTProgramStrategyCardTemplate]
 DisplayName="Transient Salvation"
-SummaryText="Shared knowledge of UFO flight patterns reduces the chance that a UFO will begin an Avenger hunt by <XGParam:IntValue0/>%."
+SummaryText="Shared knowledge of UFO flight patterns reduces the chance that a UFO will begin an Avenger hunt by 40%."
 QuoteText="...standard evasion pattern. Exploits the Avenger's unique signature..."
 QuoteTextLong="...the operatives understand their place in the world. I hope that in time, you will, as well..."
 QuoteTextAuthor="Dr. Ezekial Fierling"
@@ -200,18 +199,18 @@ QuoteTextAuthor="\"Queen\""
 [ResCard_RTFortyYearsOfWar RTProgramStrategyCardTemplate]
 DisplayName="Forty Years of War"
 SummaryText="Relay Outposts are constructed instantly."
-QuoteTextLong="...I've been around... a long time. Long enough to have friends in places of all elevations..."
+QuoteText="...I've been around... a long time. Long enough to have friends at all elevations..."
 QuoteTextAuthor="\"Queen\""
 
 [ResCard_RTDirectNeuralManipulation RTProgramStrategyCardTemplate]
 DisplayName="Direct Neural Manipulation"
-SummaryText="Bonded Soldiers gain <XGParam:IntValue/0> more experience on missions underwent with the bondmate."
+SummaryText="Bonded Soldiers gain additional experience on missions underwent with the bondmate."
 QuoteText="...that is the price we pay for our lives. It means we will never forget that we are not gods walking alongside 'mere' mortals..."
 QuoteTextAuthor="\"Nova\""
 
 [ResCard_RTPsionicJamming RTProgramStrategyCardTemplate]
 DisplayName="Wideband Psionic Jamming"
-SummaryText="The will of enemy units is reduced by <XGParam:IntValue0/>."
+SummaryText="The will of enemy units is reduced by 20."
 QuoteText="...once, a nightmare. Now, a reality. Time to wake up..."
 QuoteTextAuthor="\"Nova\""
 
@@ -223,7 +222,7 @@ QuoteTextAuthor="\"Whisper\""
 
 [ResCard_RTProfessionalsHaveStandards RTProgramStrategyCardTemplate]
 DisplayName="Old World Training"
-SummaryText="Detection range of enemy forces is reduced by <XGParam:IntValue0/>%."
+SummaryText="Detection range of enemy forces is reduced by 20%."
 QuoteText="...relax. Keep your hands steady and heart steeled. Hesitation has killed more soldiers than the deadliest of shooters..."
 QuoteTextAuthor="\"Whisper\""
 
