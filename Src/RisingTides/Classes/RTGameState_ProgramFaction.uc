@@ -469,6 +469,7 @@ protected function RecalculateActiveOperativesAndSquads(XComGameState NewGameSta
 	local XComGameState_AdventChosen ChosenState;
 	local StateObjectReference EmptyRef;
 	local XComGameState_HeadquartersXCom XComHQ;
+	local XComGameState_HeadquartersAlien AlienHeadquarters;
 
 	History = `XCOMHISTORY;
 
@@ -515,6 +516,10 @@ protected function RecalculateActiveOperativesAndSquads(XComGameState NewGameSta
 						ChosenState = XComGameState_AdventChosen(History.GetGameStateForObjectID(NewUnitState.ChosenCaptorRef.ObjectID));
 						ChosenState = XComGameState_AdventChosen(NewGameState.ModifyStateObject(class'XComGameState_AdventChosen', ChosenState.ObjectID));
 						ChosenState.ReleaseSoldier(NewGameState, NewUnitState.GetReference());
+					} else {
+						AlienHeadquarters = XComGameState_HeadquartersAlien(History.GetSingleGameStateObjectForClass(class'XComGameState_HeadquartersAlien'));
+						AlienHeadquarters = XComGameState_HeadquartersAlien(NewGameState.ModifyStateObject(class'XComGameState_HeadquartersAlien', AlienHeadquarters.ObjectID));
+						AlienHeadquarters.CapturedSoldiers.RemoveItem(NewUnitState.GetReference());
 					}
 
 					UnitState.ChosenCaptorRef = EmptyRef;
