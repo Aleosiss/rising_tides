@@ -114,12 +114,12 @@ simulated function bool OnEffectTicked(const out EffectAppliedData ApplyEffectPa
 
 simulated function AddX2ActionsForVisualization_Tick(XComGameState VisualizeGameState, out VisualizationActionMetadata ActionMetadata, const int TickIndex, XComGameState_Effect EffectState)
 {
-	local RTAction_ForceVisibility VisAction;
+	local X2Action_ForceUnitVisiblity ForceVisiblityAction;
 
 	if (XComGameState_Unit(ActionMetadata.StateObject_NewState) != none)
 	{
-		VisAction = RTAction_ForceVisibility( class'RTAction_ForceVisibility'.static.AddToVisualizationTree(ActionMetadata, VisualizeGameState.GetContext(), false, ActionMetadata.LastActionAdded));
-		VisAction.Visibility = eForceVisible;
+		ForceVisiblityAction = X2Action_ForceUnitVisiblity(class'X2Action_ForceUnitVisiblity'.static.AddToVisualizationTree(ActionMetadata, VisualizeGameState.GetContext()));
+		ForceVisiblityAction.ForcedVisible = eForceVisible;
 	}
 }
 
@@ -154,12 +154,14 @@ simulated function AddX2ActionsForVisualization(XComGameState VisualizeGameState
 {
 	local XComGameState_Effect EffectState, VisualizeEffect;
 	local XComGameState_SquadViewer SquadViewer;
-	local RTAction_ForceVisibility VisAction;
+	local X2Action_ForceUnitVisiblity ForceVisiblityAction;
+
+	super.AddX2ActionsForVisualization(VisualizeGameState, ActionMetadata, EffectApplyResult);
 
 	if (EffectApplyResult == 'AA_Success' && XComGameState_Unit(ActionMetadata.StateObject_NewState) != none)
 	{
-		VisAction = RTAction_ForceVisibility( class'RTAction_ForceVisibility'.static.AddToVisualizationTree(ActionMetadata, VisualizeGameState.GetContext(), false, ActionMetadata.LastActionAdded));
-		VisAction.Visibility = eForceVisible;
+		ForceVisiblityAction = X2Action_ForceUnitVisiblity(class'X2Action_ForceUnitVisiblity'.static.AddToVisualizationTree(ActionMetadata, VisualizeGameState.GetContext()));
+		ForceVisiblityAction.ForcedVisible = eForceVisible;
 	}
 
 
@@ -190,10 +192,10 @@ simulated function AddX2ActionsForVisualization(XComGameState VisualizeGameState
 
 simulated function AddX2ActionsForVisualization_Sync( XComGameState VisualizeGameState, out VisualizationActionMetadata ActionMetadata )
 {
-	local RTAction_ForceVisibility VisAction;
+	local X2Action_ForceUnitVisiblity ForceVisiblityAction;
 
-	VisAction = RTAction_ForceVisibility( class'RTAction_ForceVisibility'.static.AddToVisualizationTree(ActionMetadata, VisualizeGameState.GetContext(), false, ActionMetadata.LastActionAdded));
-	VisAction.Visibility = eForceVisible;
+	ForceVisiblityAction = X2Action_ForceUnitVisiblity(class'X2Action_ForceUnitVisiblity'.static.AddToVisualizationTree(ActionMetadata, VisualizeGameState.GetContext()));
+	ForceVisiblityAction.ForcedVisible = eForceVisible;
 
 
 }
@@ -202,7 +204,12 @@ simulated function AddX2ActionsForVisualization_Removed(XComGameState VisualizeG
 {
 	local XComGameState_SquadViewer SquadViewer;
 	local X2Action_AbilityPerkDurationEnd PerkEnded;
-	// local RTAction_ForceVisibility VisAction;
+	//local X2Action_ForceUnitVisiblity ForceVisiblityAction_Hide, ForceVisiblityAction_Reset;
+	local RTAction_ForceVisibility RTForceVisibilityAction_Reset;
+	local XComGameState_Unit EffectedUnitState;
+
+	local XGUnit			RobotUnit;
+	local TTile				CurrentTile;
 
 	SquadViewer = XComGameState_SquadViewer(`XCOMHISTORY.GetGameStateForObjectID(RemovedEffect.CreatedObjectReference.ObjectID));
 	if (SquadViewer != none)
@@ -214,9 +221,20 @@ simulated function AddX2ActionsForVisualization_Removed(XComGameState VisualizeG
 	PerkEnded = X2Action_AbilityPerkDurationEnd( class'X2Action_AbilityPerkDurationEnd'.static.AddToVisualizationTree(ActionMetadata, VisualizeGameState.GetContext(), false, ActionMetadata.LastActionAdded));
 	PerkEnded.EndingEffectState = RemovedEffect;
 
-	if (XComGameState_Unit(ActionMetadata.StateObject_NewState) != none)
+	EffectedUnitState = XComGameState_Unit(ActionMetadata.StateObject_NewState);
+
+	if (EffectedUnitState != none)
 	{
-		class'RTAction_ForceVisibility'.static.AddToVisualizationTree(ActionMetadata, VisualizeGameState.GetContext(), false, ActionMetadata.LastActionAdded);
+		super.AddX2ActionsForVisualization_Removed(VisualizeGameState, ActionMetadata, EffectApplyResult, RemovedEffect);
+
+		//ForceVisiblityAction_Hide = X2Action_ForceUnitVisiblity(class'X2Action_ForceUnitVisiblity'.static.AddToVisualizationTree(ActionMetadata, VisualizeGameState.GetContext()));
+		//ForceVisiblityAction_Hide.ForcedVisible = eForceNotVisible;
+
+		//ForceVisiblityAction_Reset = X2Action_ForceUnitVisiblity(class'X2Action_ForceUnitVisiblity'.static.AddToVisualizationTree(ActionMetadata, VisualizeGameState.GetContext()));
+		//ForceVisiblityAction_Reset.ForcedVisible = eForceNone;
+
+		RTForceVisibilityAction_Reset = RTAction_ForceVisibility(class'RTAction_ForceVisibility'.static.AddToVisualizationTree(ActionMetadata, VisualizeGameState.GetContext()));
+		RTForceVisibilityAction_Reset.bResetVisibility = true;
 	}
 }
 
