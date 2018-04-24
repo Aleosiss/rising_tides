@@ -59,9 +59,12 @@ simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffe
 	MeldPsiOff = MeldEffectState.GetMeldStrength() - EffectTargetUnit.GetBaseStat(eStat_PsiOffense);
 	MeldHacking = MeldEffectState.SharedHack - EffectTargetUnit.GetBaseStat(eStat_Hacking);
 
-	AddPersistentStatChange(eStat_Will, MeldWill);
-	AddPersistentStatChange(eStat_Hacking, MeldHacking);
-	AddPersistentStatChange(eStat_PsiOffense, MeldPsiOff);
+	if(MeldWill > 0)
+		AddPersistentStatChange(eStat_Will, MeldWill);
+	if(MeldHacking > 0)
+		AddPersistentStatChange(eStat_Hacking, MeldHacking);
+	if(MeldPsiOff > 0)
+		AddPersistentStatChange(eStat_PsiOffense, MeldPsiOff);
 
 	MeldEffectState.StatChanges = m_aStatChanges;
 
