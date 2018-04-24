@@ -170,6 +170,30 @@ Descriptors_Suffix[6]="- 007"
 Descriptors_Suffix[7]="- 008"
 Descriptors_Suffix[8]="- 009"
 
+[RTGhostBerserker RTCharacterTemplate]
+strCharacterName="Program Operative"
+strCharacterBackgroundMale[0]="[REDACTED] \nC.O. Bradford Note: Don't pry."
+strCharacterBackgroundMale[1]="<not writen>"
+strForcedFirstName="[REDACTED]"
+strForcedLastName="[REDACTED]"
+strForcedNickName="Queen" 
+
+[RTGhostMarksman RTCharacterTemplate]
+strCharacterName="Program Operative"
+strCharacterBackgroundMale[0]="[REDACTED] \nC.O. Bradford Note: Don't pry."
+strCharacterBackgroundMale[1]="<not writen>"
+strForcedFirstName="[REDACTED]"
+strForcedLastName="[REDACTED]"
+strForcedNickName="Whisper" 
+
+[RTGhostGatherer RTCharacterTemplate]
+strCharacterName="Program Operative"
+strCharacterBackgroundMale[0]="[REDACTED] \nC.O. Bradford Note: This one seems... too familiar. Don't pry. I'll look into it."
+strCharacterBackgroundMale[1]="\<not writen\>"
+strForcedFirstName="[REDACTED]"
+strForcedLastName="[REDACTED]"
+strForcedNickName="Nova"
+
 #[ResCard_RT RTProgramStrategyCardTemplate]
 #DisplayName=""
 #SummaryText=""

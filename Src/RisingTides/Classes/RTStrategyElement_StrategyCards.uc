@@ -35,6 +35,7 @@ static function ActivateOneSmallFavor(XComGameState NewGameState, StateObjectRef
 
 	Program = class'RTHelpers'.static.GetNewProgramState(NewGameState);
 	Program.MakeOneSmallFavorAvailable();
+	Program.bShouldResetOSFMonthly = true;
 }
 
 static function DeactivateOneSmallFavor(XComGameState NewGameState, StateObjectReference InRef) {
@@ -42,6 +43,7 @@ static function DeactivateOneSmallFavor(XComGameState NewGameState, StateObjectR
 
 	Program = class'RTHelpers'.static.GetNewProgramState(NewGameState);
 	Program.bOneSmallFavorAvailable = false;
+	Program.bShouldResetOSFMonthly = false;
 }
 
 static function X2DataTemplate RTCreateJustPassingThrough() {

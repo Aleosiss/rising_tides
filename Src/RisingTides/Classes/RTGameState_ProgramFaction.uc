@@ -64,16 +64,20 @@ var bool														bSetupComplete;		// if we should rebuild the operative arr
 
 // FACTION VARIABLES
 var bool																bShouldPerformPostMissionCleanup;	// should cleanup the program's roster after a mission-- set during OSF and JPT missions
-var bool																bOneSmallFavorAvailable;			// can send squad on a mission, replacing XCOM
-var bool																bOneSmallFavorActivated;			// actively sending a squad on the next mission
 var bool																bTemplarsDestroyed;
 var bool																bDirectNeuralManipulation;
-var config array<name>													InvalidMissionSources; 				// list of mission types ineligible for Program support, usually story missions
+var config array<name>													InvalidMissionSources;				// list of mission types ineligible for Program support, usually story missions
 var config array<name>													UnavailableCovertActions;			// list of covert actions that the program cannot carry out
+var config int															iNumberOfFavorsRequiredToIncreaseInfluence;
+var array<X2DataTemplate>												OperativeTemplates;
 
 // ONE SMALL FAVOR HANDLING VARIABLES
-var private int															iPreviousMaxSoldiersForMission; 	// cache of the number of soldiers on a mission before OSF modfied it
+var private int															iPreviousMaxSoldiersForMission;		// cache of the number of soldiers on a mission before OSF modfied it
 var private StateObjectReference										SelectedMissionRef;					// cache of the mission one small favor is going to go against
+var bool																bShouldResetOSFMonthly;
+var bool																bOneSmallFavorAvailable;			// can send squad on a mission, replacing XCOM
+var bool																bOneSmallFavorActivated;			// actively sending a squad on the next mission
+var int																	iNumberOfFavorsCalledIn;			
 
 // ONE SMALL FAVOR LOCALIZED STRINGS
 var localized string OSFCheckboxAvailable;
@@ -86,6 +90,8 @@ var localized string OSFCheckboxUnavailable;
 {
 	InitListeners();
 	class'RTGameState_StrategyCard'.static.SetUpStrategyCards(StartState);
+	OperativeTemplates = class'RTCharacter_DefaultCharacters'.static.CreateTemplates();
+	iNumberOfFavorsCalledIn = 0;
 }
 
 function InitializeHQ(XComGameState NewGameState, int idx) {
@@ -102,27 +108,26 @@ function CreateRTOperatives(XComGameState StartState) {
 
 // Seperated this out of CreateRTOperative in order to allow the creation of duplicate operatives in Just Passing Through
 function AddRTOperativeToProgram(name GhostTemplateName, XComGameState StartState) {
-	local XComGameState_Unit UnitState;
+	local RTGameState_Unit UnitState;
 
 	UnitState = CreateRTOperative(GhostTemplateName, StartState);
 	Active.AddItem(UnitState.GetReference());
 	Master.AddItem(UnitState.GetReference());
 }
 
-function XComGameState_Unit CreateRTOperative(name GhostTemplateName, XComGameState StartState) {
-	local XComGameState_Unit UnitState;
-	
-	local X2CharacterTemplateManager CharMgr;
-	local X2CharacterTemplate CharTemplate;
+function RTGameState_Unit CreateRTOperative(name GhostTemplateName, XComGameState StartState) {
+	local RTGameState_Unit UnitState;
+	local X2CharacterTemplate TempTemplate;
+	local RTCharacterTemplate CharTemplate;
+	local X2DataTemplate IteratorTemplate;
 	local XComGameState_Item WeaponState;
-
 	local name WeaponUpgradeName;
+	local X2CharacterTemplateManager CharMgr;
 
 	CharMgr = class'X2CharacterTemplateManager'.static.GetCharacterTemplateManager();
-
-	CharTemplate = CharMgr.FindCharacterTemplate(GhostTemplateName);
-
-	UnitState = CharTemplate.CreateInstanceFromTemplate(StartState);
+	TempTemplate = CharMgr.FindCharacterTemplate(GhostTemplateName);
+	CharTemplate = RTCharacterTemplate(TempTemplate);
+	UnitState = RTGameState_Unit(CharTemplate.CreateInstanceFromTemplate(StartState));
 
 	UnitState.SetCountry(CharTemplate.DefaultAppearance.nmFlag);
 	UnitState.RankUpSoldier(StartState, CharTemplate.DefaultSoldierClass);
@@ -409,7 +414,7 @@ function OnEndTacticalPlay(XComGameState NewGameState)
 		XComHQ = XComGameState_HeadquartersXCom(NewGameState.ModifyStateObject(class'XComGameState_HeadquartersXCom', XComHQ.GetReference().ObjectID));
 		BlastOperativeLoadouts(NewGameState);
 
-		// only want to promote if its a osf mission, so do it here, while we have access to the missionsite not in PostMissionCleanup
+		// only want to promote if its a osf mission, so do it here, while we have access to the missionsite, not in PostMissionCleanup
 		PromoteAllOperatives(NewGameState);
 	}
 }
@@ -431,13 +436,6 @@ function MakeOneSmallFavorAvailable() {
 	}
 
 	bOneSmallFavorAvailable = true;
-}
-
-function PerformPostMissionCleanup(XComGameState NewGameState) {
-	RecalculateActiveOperativesAndSquads(NewGameState);
-	RetrieveRescuedProgramOperatives(NewGameState);
-	ReloadOperativeArmaments(NewGameState);
-	bShouldPerformPostMissionCleanup = false;
 }
 
 //---------------------------------------------------------------------------------------
@@ -889,6 +887,15 @@ function CreateGoldenPathActions(XComGameState NewGameState)
 	}
 }
 
+function OnEndOfMonth(XComGameState NewGameState, out array<Name> ActionExclusionList)
+{
+	super.OnEndOfMonth(NewGamestate, ActionExclusionList);
+
+	if(bShouldResetOSFMonthly) {
+		MakeOneSmallFavorAvailable();
+	}
+}
+
 //#############################################################################################
 //----------------- GENERAL FACTION METHODS ---------------------------------------------------
 //#############################################################################################
@@ -1010,10 +1017,37 @@ function MeetXCom(XComGameState NewGameState)
 
 function PreMissionUpdate(XComGameState NewGameState, XComGameState_MissionSite MissionSiteState) {
 	if(bOneSmallFavorActivated) {
-		bOneSmallFavorAvailable = false;
-		bOneSmallFavorActivated = false;
 		bShouldPerformPostMissionCleanup = true;
 	}
+}
+
+function PerformPostMissionCleanup(XComGameState NewGameState) {
+	local X2RewardTemplate RewardTemplate;
+	local X2StrategyElementTemplateManager StratMgr;
+	local XComGameState_Reward RewardState;
+
+	RecalculateActiveOperativesAndSquads(NewGameState);
+	RetrieveRescuedProgramOperatives(NewGameState);
+	ReloadOperativeArmaments(NewGameState);
+	bShouldPerformPostMissionCleanup = false;
+
+	if(bOneSmallFavorActivated) {
+		bOneSmallFavorAvailable = false;
+		bOneSmallFavorActivated = false;
+		iNumberOfFavorsCalledIn++;
+
+		if(iNumberOfFavorsCalledIn >= default.iNumberOfFavorsRequiredToIncreaseInfluence || true) {
+			// Award influence increase
+			StratMgr = class'X2StrategyElementTemplateManager'.static.GetStrategyElementTemplateManager();
+			RewardTemplate = X2RewardTemplate(StratMgr.FindStrategyElementTemplate('Reward_RTProgram_IncreaseFactionInfluence'));
+			RewardState = RewardTemplate.CreateInstanceFromTemplate(NewGameState);
+			RewardState.GenerateReward(NewGameState);
+			RewardState.GiveReward(NewGameState, GetReference());
+			// Reset number of favors
+			iNumberOfFavorsCalledIn = 0;
+		}
+	}
+
 }
 
 // Listen for AvengerLandedScanRegion, recieves a NewGameState

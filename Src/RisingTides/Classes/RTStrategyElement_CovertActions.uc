@@ -5,8 +5,11 @@ static function array<X2DataTemplate> CreateTemplates()
 {
 	local array<X2DataTemplate> CovertActions;
 
+	// Find Faction Templates
 	CovertActions.AddItem(CreateFindProgramFactionTemplate());
 	CovertActions.AddItem(CreateFindProgramFarAwayFactionTemplate());
+
+	// TODO: Hunt Templars
 
 	return CovertActions;
 }

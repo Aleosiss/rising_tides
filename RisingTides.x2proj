@@ -248,6 +248,9 @@
     <Content Include="Src\RisingTides\Classes\RTCharacter_DefaultCharacters.uc">
       <SubType>Content</SubType>
     </Content>
+    <Content Include="Src\RisingTides\Classes\RTCharacterTemplate.uc">
+      <SubType>Content</SubType>
+    </Content>
     <Content Include="Src\RisingTides\Classes\RTConditionBuilder.uc">
       <SubType>Content</SubType>
     </Content>
@@ -470,7 +473,13 @@
     <Content Include="Src\RisingTides\Classes\RTGameState_TimeStopEffect.uc">
       <SubType>Content</SubType>
     </Content>
+    <Content Include="Src\RisingTides\Classes\RTGameState_Unit.uc">
+      <SubType>Content</SubType>
+    </Content>
     <Content Include="Src\RisingTides\Classes\RTHelpers.uc">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Src\RisingTides\Classes\RTItem.uc">
       <SubType>Content</SubType>
     </Content>
     <Content Include="Src\RisingTides\Classes\RTMeleePathingPawn.uc">
