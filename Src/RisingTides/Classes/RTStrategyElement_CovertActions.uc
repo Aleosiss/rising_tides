@@ -116,7 +116,7 @@ static function AddFactionToGeneratedTemplates() {
 				ActionTemplate.Narratives.AddItem('CovertActionNarrative_RecruitScientist_Program');
 
 			if(ActionTemplate.DataName == 'CovertAction_RecruitEngineer')
-				ActionTemplate.Narratives.AddItem('CovertActionNarrative_RecruitEnginer_Program');
+				ActionTemplate.Narratives.AddItem('CovertActionNarrative_RecruitEngineer_Program');
 
 			if(ActionTemplate.DataName == 'CovertAction_GatherSupplies')
 				ActionTemplate.Narratives.AddItem('CovertActionNarrative_GatherSupplies_Program');
