@@ -32,6 +32,7 @@ static function X2DataTemplate RTCreateOneSmallFavor()
 
 static function ActivateOneSmallFavor(XComGameState NewGameState, StateObjectReference InRef, optional bool bReactivate = false) {
 	local RTGameState_ProgramFaction Program;
+	local DynamicPropertySet PropertySet; //need to delay it when the player can see it
 
 	Program = class'RTHelpers'.static.GetNewProgramState(NewGameState);
 	Program.MakeOneSmallFavorAvailable();

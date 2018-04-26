@@ -244,7 +244,8 @@ simulated function EventListenerReturn AddUnitToMeld(Object EventData, Object Ev
 
 	UpdatedMeldEffect.StatChanges.Length = 0;
 	AddPersistentStatChange(UpdatedMeldEffect.StatChanges, eStat_Will, MeldWillModifier);
-	AddPersistentStatChange(UpdatedMeldEffect.StatChanges, eStat_Hacking, HackModifier);
+	if(HackModifier > 0)
+		AddPersistentStatChange(UpdatedMeldEffect.StatChanges, eStat_Hacking, HackModifier);
 	AddPersistentStatChange(UpdatedMeldEffect.StatChanges, eStat_PsiOffense, MeldPsiOffModifier);
 
 

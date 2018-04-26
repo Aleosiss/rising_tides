@@ -1,8 +1,25 @@
 
 Todo:
-  ☑ Add RTCharacterTemplate
-    ☑ Add to x2proj
-    ☑ Create
-  ☑ Add RTGameState_Unit
-    ☑ Add to x2proj
-    ☑ Override ApplyBestGear method
+  ✔ Add RTCharacterTemplate
+    ✔ Add to x2proj
+    ✔ Create
+  ✔ Add RTGameState_Unit
+    ✔ Add to x2proj
+    ✔ Override ApplyBestGear method
+  ✔ Add method of increasing infuence @done(18-04-24 23:18)
+    ✔ Track number of OSFs granted @done(18-04-24 23:18)
+    ✔ Add influence reward template @done(18-04-24 23:18)
+    ✔ Add Faction influence popup after grant @done(18-04-24 23:18)
+  ☐ Add Program Equipment
+    ☐ Add Program DMR
+    ☐ Add Program Shotgun
+    ☐ Add Program Carbine
+    ✔ Add Program Pistol @done(18-04-24 23:18)
+    ☐ Add Program Armor
+  ☐ Add supporting UI to new stuff
+    ☐ Add Tooltip to OSF checkbox
+    ✔ Add Popup after meeting the Program @done(18-04-26 14:43)
+  ✔ Add Encyclopedia Entries @done(18-04-26 16:40)
+  ✔ Add a range limit to mind wrack @done(18-04-26 17:32)
+  ✔ Replace Extinction Event with Unwilling Conduits, replace Unwilling Conduits with Fortress @done(18-04-26 18:44)
+  ✔ Switch SPoP spot with KiP @done(18-04-26 17:28)

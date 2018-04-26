@@ -67,8 +67,8 @@ static function X2DataTemplate CreateProgramIncreaseInfluenceTemplate()
 	`CREATE_X2Reward_TEMPLATE(Template, 'Reward_RTProgram_IncreaseFactionInfluence');
 
 	Template.IsRewardAvailableFn = IsProgramFactionReward_IncreaseInfluence_Available;
-	Template.GenerateRewardFn = GenerateFactionInfluenceReward;
-	Template.GiveRewardFn = GiveFactionInfluenceReward;
+	Template.GenerateRewardFn = GenerateProgramFactionInfluenceReward;
+	Template.GiveRewardFn = GiveProgramFactionInfluenceReward;
 	//Template.GetRewardImageFn = GetFactionInfluenceRewardImage;
 	//Template.GetRewardStringFn = GetFactionInfluenceRewardString;
 	Template.CleanUpRewardFn = CleanUpRewardWithoutRemoval;
@@ -156,7 +156,7 @@ static function GenerateMeetFactionReward(XComGameState_Reward RewardState, XCom
 	return;
 }
 
-static function GenerateFactionInfluenceReward(XComGameState_Reward RewardState, XComGameState NewGameState, optional float RewardScalar = 1.0, optional StateObjectReference AuxRef) {
+static function GenerateProgramFactionInfluenceReward(XComGameState_Reward RewardState, XComGameState NewGameState, optional float RewardScalar = 1.0, optional StateObjectReference AuxRef) {
 	RewardState.RewardObjectReference = AuxRef; //hold the faction state here
 }
 

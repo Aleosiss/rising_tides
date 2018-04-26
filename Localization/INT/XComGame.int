@@ -825,9 +825,15 @@ FriendlyNamePlural="Rising Tides Animation Placeholder"
 BriefSummary=""
 TacticalText="<Bullet/> A placeholder that allows Rising Tides classes to use base-game psi animations. Users of the mod should never see this.<br/>."
 
-;----------------------------------------------------------------------------------------------------------------------------
-; PROGRAM FACTION
-;----------------------------------------------------------------------------------------------------------------------------
+;///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+;//---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+;//---Encyclopedia------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+;//---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+;///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+;[FactionProgramFavors X2EncyclopediaTemplate]
+;ListTitle=""
+;DescriptionTitle=""
+;DescriptionEntry=""
 
 [PersonnelHadley X2EncyclopediaTemplate]
 ListTitle="Personnel Dossier: Dr. Hadley"
@@ -836,13 +842,24 @@ DescriptionEntry="Dr. Elizabeth Hadley, born on October 3rd, 1968, is a certifie
 
 [FactionProgram X2EncyclopediaTemplate]
 ListTitle="The Program"
-DescriptionTitle="Program"
-DescriptionEntry="The Program, seemingly led by the illusive Dr. Hadley, are an offshoot of XCOM, branching off in the 1970's. Their primary focus is ensuring that when ADVENT falls, they-- at the expense of any other, even XCOM-- stand on top of the pile of rubble."
+DescriptionTitle="Faction"
+DescriptionEntry="The Program, seemingly led by the illusive Dr. Hadley, are an offshoot of XCOM, branching off in the 1970's. In the original invasion, they sent a single operative and Dr. Hadley to assist, which proved instrumental to the war effort, but when the base was lost, those personnel went MIA. In the time since, little has escaped; even now, the Program goes unnamed, and details related to the organization remain frighteningly obscure. What is evident is that their primary focus is ensuring that when ADVENT falls, they- at the expense of any other, even XCOM- stand on top of the pile of rubble. In other words, be careful when dealing with them. Their technology is advanced, and their operatives elite, but they are not on your side, Commander, and your goals may not always align."
 
-[ProgramGhosts X2EncyclopediaTemplate]
+[FactionProgramOperatives X2EncyclopediaTemplate]
 ListTitle="Program Operatives"
 DescriptionTitle="Program Soldier Classes"
-DescriptionEntry="The Program fields a small number of psionic operatives. Augmented cybernetically and genetically through a substance known as \"MELD"\, they are truly elite, each a veteran of twenty, thirty, or even forty years of combat against both human and alien threats. Each has a unique skillset, but they share a common base of psionic abilities, such as Mind Control, Mind Wrack, and Mind Meld."
+DescriptionEntry="The Program fields a small number of psionic operatives. Augmented cybernetically and genetically through a substance known as \"MELD\", they are truly elite, each a veteran of twenty, thirty, or even forty years of combat against both human and alien threats. Each has a unique skillset, but they share a common base of psionic abilities, such as Mind Control, Mind Wrack, and Mind Meld."
+
+[FactionProgramFavors X2EncyclopediaTemplate]
+ListTitle="Program Support"
+DescriptionTitle="One Small Favor"
+DescriptionEntry="The Program can spare enough time to send one of their squads in the place of XCOM's once per month. Doing so will help build your relationship with them, eventually increasing your influence with them and unlocking new Resistance Orders. If a favor is a available, a white checkbox will be present above the mission launch button. Checking it will call in the favor. Note that favors cannot be called in on narrative missions."
+
+;///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+;//---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+;//---Covert Actions----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+;//---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+;///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 [CovertAction_FindProgramFaction X2CovertActionTemplate]
 ActionObjective="Investigate Transmissions"
@@ -964,7 +981,11 @@ ActionPostNarrative="With the help of your soldiers, I have managed to place sev
 ActionName="Lure Them Out"
 ActionPreNarrative="Geist is extremely paranoid, and revealing a vunerablity remains a challenge. If you have some soldiers to spare, we can use them to conduct a false-flag operation and draw him out. - Dr. Hadley"
 ActionPostNarrative="The trap is set. The bait is ready. All that remains is spring it. I will send my best, and if you do the same, victory is assured. - Dr. Hadley"
-
+;///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+;//---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+;//---Misc-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+;//---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+;///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 [Reward_RTProgram_FindFaction X2RewardTemplate]
 DisplayName="Unknown"
 RewardDetails="Uncover signal source."
@@ -983,8 +1004,20 @@ ScanTooltip="Scanning at this site speeds up the rate at which we can train our 
 FriendlyName="One Small Favor"
 Description="The Program has lent one of their squads to handle this operation."
 
+;///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+;//---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+;//---Weapons-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+;//---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+;///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 [ProgramPistol X2WeaponTemplate]
 FriendlyName="Program Shadowkeeper"
 FriendlyNamePlural="Program Shadowkeepers"
 BriefSummary="The Program Shadowkeeper is most popular sidearm of choice for Program operatives." 
 TacticalText="<Bullet/> The Program Shadowkeeper's strength is comparable to a Beam Pistol, but has improved aim and chance to critical hit.\n<Bullet/> Pistols can be fired with a single action."
+
+[RTCosmetic_Suppressor X2WeaponUpgradeTemplate]
+FriendlyName="Cosmetic Silencer"
+FriendlyNamePlural="Cosmetic Silencers"
+BriefSummary="Does nothing, but looks cool."
+TinySummary="Cosmetic Only"
+LootTooltip="This weapon upgrade, when installed, does nothing except look cool."

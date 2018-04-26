@@ -77,23 +77,10 @@ static event OnExitPostMissionSequence()
 	}
 
 	`GAMERULES.SubmitGameState(NewGameState);
+
+	// This method creates and submits two newgamestates
+	ProgramState.TryIncreaseInfluence();
 }
-
-
-//simulated static function ModifyInitialFactionState(XComGameState StartState) {
-//	local RTGameState_ProgramFaction Faction;
-//
-//	foreach StartState.IterateByClassType(class'RTGameState_ProgramFaction', Faction) {
-//		if(Faction.GetMyTemplateName() == 'Faction_Program') { break; }
-//	}
-//
-//	if(Faction == none) {
-//		class'RTHelpers'.static.RTLog("Could not find an ProgramFactionState in the start state!", true);
-//		return;
-//	} else { class'RTHelpers'.static.RTLog("Modifying Golden Path Actions for the Program in the start state...", false); }
-//
-//	Faction.ModifyGoldenPathActions(StartState);
-//}
 
 /// <summary>
 /// Calls DLC specific popup handlers to route messages to correct display functions
@@ -104,6 +91,11 @@ static function bool DisplayQueuedDynamicPopup(DynamicPropertySet PropertySet)
 	if (PropertySet.PrimaryRoutingKey == 'UIAlert_ProgramLevelup')
 	{
 		CallUIFactionPopup(PropertySet);
+		return true;
+	}
+
+	if(PropertySet.PrimaryRoutingKey == 'UIAlert_OSFFirstTime') {
+		class'RTGameState_ProgramFaction'.static.DisplayFirstTimePopup();
 		return true;
 	}
 
@@ -493,7 +485,7 @@ exec function ReportTestPanelLocation(optional name PanelName = 'TestDebugPanel'
 	}
 }
 
-exec function RTDebugVisibilityAll()
+exec function RT_DebugVisibilityAll()
 {	
 	local XComGameState_Unit ItUnit;
 	foreach `XCOMHISTORY.IterateByClassType(class'XComGameState_Unit', ItUnit)
@@ -501,4 +493,14 @@ exec function RTDebugVisibilityAll()
 		class'RTHelpers'.static.RTLog("" $ ItUnit.GetFullName());
 		class'RTCondition_VisibleToPlayer'.static.IsTargetVisibleToLocalPlayer(ItUnit.GetReference());
 	}
+}
+
+exec function RT_TestUIPopup() {
+	local string Title; 
+	local string alertText;
+
+	Title = "ALERT: One Small Favor";
+	alertText = "The Program fields small squads of elite operatives. As a result of their alliance with XCOM, you may ask them to run a mission for you.\n NOTE: that this favor can only be called in once per month. \n \nCall in One Small Favor by toggling the white checkbox now shown on Mission Launch screens.";
+
+	`PRESBASE.UITutorialBox(Title, alertText, "img:///RisingTidesContentPackage.UIImages.osf_tutorial");
 }

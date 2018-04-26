@@ -78,10 +78,14 @@ var bool																bShouldResetOSFMonthly;
 var bool																bOneSmallFavorAvailable;			// can send squad on a mission, replacing XCOM
 var bool																bOneSmallFavorActivated;			// actively sending a squad on the next mission
 var int																	iNumberOfFavorsCalledIn;			
+var bool																bOSF_FirstTimeDisplayed;
 
 // ONE SMALL FAVOR LOCALIZED STRINGS
 var localized string OSFCheckboxAvailable;
 var localized string OSFCheckboxUnavailable;
+var localized string OSFFirstTime_Title;
+var localized string OSFFirstTime_Text;
+var localized string OSFFirstTime_ImagePath;
 
 /* *********************************************************************** */
 
@@ -412,7 +416,7 @@ function OnEndTacticalPlay(XComGameState NewGameState)
 
 	if(IsOSFMission(MissionState)) {
 		XComHQ = XComGameState_HeadquartersXCom(NewGameState.ModifyStateObject(class'XComGameState_HeadquartersXCom', XComHQ.GetReference().ObjectID));
-		BlastOperativeLoadouts(NewGameState);
+		//BlastOperativeLoadouts(NewGameState);
 
 		// only want to promote if its a osf mission, so do it here, while we have access to the missionsite, not in PostMissionCleanup
 		PromoteAllOperatives(NewGameState);
@@ -430,7 +434,14 @@ protected static function bool IsOSFMission(XComGameState_MissionSite MissionSta
 }
 
 function MakeOneSmallFavorAvailable() {
+	local DynamicPropertySet PropertySet;
 	// add some checks here...
+	if(!bOSF_FirstTimeDisplayed) {
+		bOSF_FirstTimeDisplayed = true;
+		class'X2StrategyGameRulesetDataStructures'.static.BuildDynamicPropertySet(PropertySet, 'UIAlert_OSFFirstTime', 'UITutorialBox', none, false, false, true, false);
+		class'XComPresentationLayerBase'.static.QueueDynamicPopup(PropertySet);
+	}
+
 	if(Deployed == none) {
 		RotateRandomSquadToDeploy();
 	}
@@ -651,7 +662,7 @@ simulated function RetrieveRescuedProgramOperatives(XComGameState NewGameState) 
 //---------------------------------------------------------------------------------------
 //---Reload Operative Armaments----------------------------------------------------------
 //---------------------------------------------------------------------------------------
-// Something is getting fucked up with the operative armaments... just gonna reset them after every mission
+// Reset Consumables
 simulated function ReloadOperativeArmaments(XComGameState NewGameState) {
 	local XComGameStateHistory History;
 	local StateObjectReference SquadIteratorObjRef, UnitIteratorObjRef;
@@ -1022,32 +1033,45 @@ function PreMissionUpdate(XComGameState NewGameState, XComGameState_MissionSite 
 }
 
 function PerformPostMissionCleanup(XComGameState NewGameState) {
-	local X2RewardTemplate RewardTemplate;
-	local X2StrategyElementTemplateManager StratMgr;
-	local XComGameState_Reward RewardState;
+	bShouldPerformPostMissionCleanup = false;
 
 	RecalculateActiveOperativesAndSquads(NewGameState);
 	RetrieveRescuedProgramOperatives(NewGameState);
 	ReloadOperativeArmaments(NewGameState);
-	bShouldPerformPostMissionCleanup = false;
 
 	if(bOneSmallFavorActivated) {
 		bOneSmallFavorAvailable = false;
 		bOneSmallFavorActivated = false;
 		iNumberOfFavorsCalledIn++;
-
-		if(iNumberOfFavorsCalledIn >= default.iNumberOfFavorsRequiredToIncreaseInfluence || true) {
-			// Award influence increase
-			StratMgr = class'X2StrategyElementTemplateManager'.static.GetStrategyElementTemplateManager();
-			RewardTemplate = X2RewardTemplate(StratMgr.FindStrategyElementTemplate('Reward_RTProgram_IncreaseFactionInfluence'));
-			RewardState = RewardTemplate.CreateInstanceFromTemplate(NewGameState);
-			RewardState.GenerateReward(NewGameState);
-			RewardState.GiveReward(NewGameState, GetReference());
-			// Reset number of favors
-			iNumberOfFavorsCalledIn = 0;
-		}
 	}
+}
 
+function TryIncreaseInfluence() {
+	local X2RewardTemplate RewardTemplate;
+	local X2StrategyElementTemplateManager StratMgr;
+	local XComGameState_Reward RewardState;
+	local XComGameState NewGameState;
+	local RTGameState_ProgramFaction Program;
+
+	if(iNumberOfFavorsCalledIn >= default.iNumberOfFavorsRequiredToIncreaseInfluence) {
+		// Award influence increase
+		NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("RisingTides: Increasing Influence");
+		Program = RTGameState_ProgramFaction(NewGameState.ModifyStateObject(class'RTGameState_ProgramFaction', self.ObjectID));
+		StratMgr = class'X2StrategyElementTemplateManager'.static.GetStrategyElementTemplateManager();
+		
+		RewardTemplate = X2RewardTemplate(StratMgr.FindStrategyElementTemplate('Reward_RTProgram_IncreaseFactionInfluence'));
+		
+		RewardState = RewardTemplate.CreateInstanceFromTemplate(NewGameState);
+		RewardState.GetMyTemplate().GenerateRewardFn(RewardState, NewGameState,,GetReference()); 
+		RewardState.GiveReward(NewGameState, GetReference());
+		
+		// Reset number of favors
+		Program.iNumberOfFavorsCalledIn = 0;
+		`XCOMGAME.GameRuleset.SubmitGameState(NewGameState);
+
+		// This method creates and submits another new game state
+		RewardState.DisplayRewardPopup();
+	}
 }
 
 // Listen for AvengerLandedScanRegion, recieves a NewGameState
@@ -1150,4 +1174,8 @@ static function InitFaction(optional XComGameState StartState) {
 	else {
 		History.CleanupPendingGameState(NewGameState);
 	}
+}
+
+static function DisplayFirstTimePopup() {
+	`PRESBASE.UITutorialBox(default.OSFFirstTime_Title, default.OSFFirstTime_Text, default.OSFFirstTime_ImagePath);
 }

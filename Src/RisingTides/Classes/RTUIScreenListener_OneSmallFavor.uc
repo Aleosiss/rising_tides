@@ -140,7 +140,7 @@ function OnConfirmButtonInited(UIPanel Panel) {
 		.OriginTopLeft()
 		.SetPosition(PosX, PosY)
 		.SetColor(class'UIUtilities_Colors'.static.ColorToFlashHex(Program.GetMyTemplate().FactionColor))
-		.SetTooltipText(strCheckboxDesc,,4,-4,,,,0.0f);
+		.SetTooltipText(strCheckboxDesc, , , 10, , , true, 0.0f);
 	class'RTHelpers'.static.RTLog("Created a checkbox at position " $ PosX $ " x and " $ PosY $ " y.");
 
 	// Modify the OnLaunchButtonClicked Delegate

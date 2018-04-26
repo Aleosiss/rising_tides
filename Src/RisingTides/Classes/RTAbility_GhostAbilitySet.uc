@@ -49,6 +49,7 @@ class RTAbility_GhostAbilitySet extends X2Ability
 	var config int OVERLOAD_CHARGES;
 	var config int OVERLOAD_BASE_COOLDOWN;
 	var config int OVERLOAD_PANIC_CHECK;
+	var config float OVERLOAD_MAX_RANGE;
 	var config int FADE_DURATION;
 	var config int FADE_COOLDOWN;
 	var config int MAX_BLOODLUST_MELDJOIN;
@@ -56,6 +57,7 @@ class RTAbility_GhostAbilitySet extends X2Ability
 	var config int MIND_CONTROL_AI_TURNS_DURATION;
 	var config int MIND_CONTROL_COOLDOWN;
 	var config int GHOST_CHARGES;
+
 
 	var name RTFeedbackEffectName;
 	var name RTFeedbackWillDebuffName;
@@ -114,8 +116,9 @@ static function array<X2DataTemplate> CreateTemplates()
 static function X2AbilityTemplate GhostPsiSuite()
 {
 	local X2AbilityTemplate						Template;
-	local X2Effect_Persistent		Effect;
-	local X2Effect_AdditionalAnimSets AnimSetEffect;
+	local X2Effect_Persistent					Effect;
+	local X2Effect_AdditionalAnimSets 			AnimSetEffect;
+	local X2Effect_StayConcealed				PhantomEffect;
 
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'GhostPsiSuite');
 	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_adventpsiwitch_mindcontrol"; //TODO: Change this
@@ -132,6 +135,10 @@ static function X2AbilityTemplate GhostPsiSuite()
 	Effect.BuildPersistentEffect(1, true, true, true);
 	Effect.SetDisplayInfo(ePerkBuff_Passive, Template.LocFriendlyName, Template.LocLongDescription, Template.IconImage, true,, Template.AbilitySourceName);
 	Template.AddTargetEffect(Effect);
+
+	PhantomEffect = new class'X2Effect_StayConcealed';
+	PhantomEffect.BuildPersistentEffect(1, true, false);
+	Template.AddTargetEffect(PhantomEffect);
 
 	AnimSetEffect = new class'X2Effect_AdditionalAnimSets';
 	//AnimSetEffect.AddAnimSetWithPath("RisingTidesContentPackage.Anims.AS_Psi_X2");
@@ -399,6 +406,7 @@ static function X2AbilityTemplate PsiOverload()
 	local X2AbilityCooldown									Cooldown;
 	local X2Effect_KillUnit									KillUnitEffect;
 	local X2AbilityCost_ActionPoints						ActionPointCost;
+	local X2Condition_UnitProperty							TargetUnitPropertyCondition;
 
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'PsiOverload');
 	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_hunter";
@@ -416,6 +424,11 @@ static function X2AbilityTemplate PsiOverload()
 	ActionPointCost.bConsumeAllPoints = true;
 	Template.AbilityCosts.AddItem(ActionPointCost);
 
+	UnitPropertyCondition = new class'X2Condition_UnitProperty';
+	UnitPropertyCondition.RequireWithinRange = true;
+	UnitPropertyCondition.WithinRange = default.OVERLOAD_MAX_RANGE;
+
+	Template.AbilityTargetConditions.AddItem(TargetUnitPropertyCondition);
 	Template.AbilityTargetConditions.AddItem(default.PsionicTargetingProperty);
 	Template.AbilityTargetConditions.AddItem(default.GameplayVisibilityCondition);
 

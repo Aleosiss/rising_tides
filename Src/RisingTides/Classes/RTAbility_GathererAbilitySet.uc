@@ -19,6 +19,8 @@ class RTAbility_GathererAbilitySet extends RTAbility_GhostAbilitySet config(Risi
 	var config int SIBYL_STRENGTH;
 	var config int GUILTY_BUILDUP_TURNS;
 	var config int GUARDIAN_ANGEL_HEAL_VALUE;
+	var config float GUARDIAN_ANGEL_WILL_THRESHOLD;
+	var config float GUARDIAN_ANGEL_WILL_RECOVERY_AMOUNT;
 	var config int MELD_INDUCTION_ACTION_POINT_COST;
 	var config int MELD_INDUCTION_COOLDOWN;
 	var config int MELD_INDUCTION_DURATION;
@@ -792,7 +794,32 @@ static function CreateGuardianAngel(out X2AbilityTemplate Template) {
 	  Template.AddMultiTargetEffect(CreateGuardianAngelStabilizeEffectPartOne());
 	  Template.AddMultiTargetEffect(CreateGuardianAngelStabilizeEffectPartTwo());
 	  Template.AddMultiTargetEffect(CreateGuardianAngelImmunitiesEffect());
+	  Template.AddMultiTargetEffect(CreateGuardianAngelMentalRecoveryEffect());
 }
+
+
+static function X2Effect CreateGuardianAngelMentalRecoveryEffect() {
+	local X2Effect_Persistent Effect;
+
+	Effect = new class'X2Effect_Persistent';
+	Effect.BuildPersistentEffect(1, false, true, false, eGameRule_PlayerTurnEnd);
+
+	AbilityProperty = new class'X2Condition_AbilityProperty';
+	AbilityProperty.OwnerHasSoldierAbilities.AddItem('RTGuardianAngel');
+	Effect.TargetConditions.AddItem(AbilityProperty);
+	Effect.TargetConditions.AddItem(default.LivingFriendlyUnitOnlyProperty);
+
+	Effect.EffectAddedFn = GuardianAngelMentalRecoveryAdded;
+
+	return Effect;
+}
+
+function GuardianAngelMentalRecoveryAdded(X2Effect_Persistent PersistentEffect, const out EffectAppliedData ApplyEffectParameters, XComGameState_BaseObject kNewTargetState, XComGameState NewGameState) {
+	if(XComGameState_Unit(kNewTargetState).GetCurrentStat(eStat_Will) / XComGameState_Unit(kNewTargetState).GetBaseStat(eStat_Will) <= default.GUARDIAN_ANGEL_WILL_THRESHOLD) { // if we have lost half of will (default threshold)
+		XComGameState_Unit(kNewTargetState).ModifyCurrentStat(eStat_Will, default.GUARDIAN_ANGEL_WILL_RECOVERY_AMOUNT);
+	}
+}
+
 static function RTEffect_SimpleHeal CreateGuardianAngelHealEffect() {
 		local RTEffect_SimpleHeal Effect;
 		local X2Condition_AbilityProperty AbilityProperty;
