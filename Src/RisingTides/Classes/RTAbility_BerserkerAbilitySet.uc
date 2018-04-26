@@ -1581,35 +1581,31 @@ static function X2AbilityTemplate RTPersistingImagesIcon() {
 //---------------------------------------------------------------------------------------
 static function X2AbilityTemplate RTGhostInTheShell()
 {
-	local X2AbilityTemplate		Template;
-	local RTEffect_GhostInTheShell	Effect;
-	local X2Effect_StayConcealed PhantomEffect;
+	local X2AbilityTemplate					Template;
+	local RTEffect_GhostInTheShell			Effect;
+	local X2Effect_StayConcealed			PhantomEffect;
 
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'RTGhostInTheShell');
-		Template.IconImage = "img:///RisingTidesContentPackage.PerkIcons.rt_ghostintheshell";	   // TODO: THIS
-		Template.AbilitySourceName = 'eAbilitySource_Psionic';
-		Template.eAbilityIconBehaviorHUD = EAbilityIconBehavior_NeverShow;
-		Template.Hostility = eHostility_Neutral;
+	Template.IconImage = "img:///RisingTidesContentPackage.PerkIcons.rt_ghostintheshell";	   // TODO: THIS
+	Template.AbilitySourceName = 'eAbilitySource_Psionic';
+	Template.eAbilityIconBehaviorHUD = EAbilityIconBehavior_NeverShow;
+	Template.Hostility = eHostility_Neutral;
 
 	// Apply perk at the start of the mission.
-		Template.AbilityToHitCalc = default.DeadEye;
-		Template.AbilityTargetStyle = default.SelfTarget;
-		Template.AbilityTriggers.AddItem(default.UnitPostBeginPlayTrigger);
+	Template.AbilityToHitCalc = default.DeadEye;
+	Template.AbilityTargetStyle = default.SelfTarget;
+	Template.AbilityTriggers.AddItem(default.UnitPostBeginPlayTrigger);
 
-		// Effect to apply
-		Effect = new class'RTEffect_GhostInTheShell';
-		Effect.BuildPersistentEffect(1, true, true, true);
+	// Effect to apply
+	Effect = new class'RTEffect_GhostInTheShell';
+	Effect.BuildPersistentEffect(1, true, true, true);
 	Effect.EffectName = 'RTGhostInTheShell';
-		Effect.SetDisplayInfo(ePerkBuff_Passive, Template.LocFriendlyName, Template.LocLongDescription, Template.IconImage, true,,Template.AbilitySourceName);
-		Template.AddTargetEffect(Effect);
+	Effect.SetDisplayInfo(ePerkBuff_Passive, Template.LocFriendlyName, Template.LocLongDescription, Template.IconImage, true,,Template.AbilitySourceName);
+	Template.AddTargetEffect(Effect);
 
-	PhantomEffect = new class'X2Effect_StayConcealed';
-	PhantomEffect.BuildPersistentEffect(1, true, false);
-	Template.AddTargetEffect(PhantomEffect);
-
-		// Probably required
-		Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
-		//  NOTE: No visualization on purpose!
+	// Probably required
+	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
+	//  NOTE: No visualization on purpose!
 
 	Template.AdditionalAbilities.AddItem('RTGhostInTheShellEffect');
 

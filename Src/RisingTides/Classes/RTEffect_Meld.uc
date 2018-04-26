@@ -8,7 +8,7 @@
 //
 //---------------------------------------------------------------------------------------
 
-class RTEffect_Meld extends X2Effect_PersistentStatChange config(RTGhost);
+class RTEffect_Meld extends X2Effect_PersistentStatChange config(RisingTides);
 
 function bool IsThisEffectBetterThanExistingEffect(const out XComGameState_Effect ExistingEffect)
 {
@@ -60,7 +60,8 @@ simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffe
 	MeldHacking = MeldEffectState.SharedHack - EffectTargetUnit.GetBaseStat(eStat_Hacking);
 
 	AddPersistentStatChange(eStat_Will, MeldWill);
-	AddPersistentStatChange(eStat_Hacking, MeldHacking);
+	if(MeldHacking > 0)
+		AddPersistentStatChange(eStat_Hacking, MeldHacking);
 	AddPersistentStatChange(eStat_PsiOffense, MeldPsiOff);
 
 	MeldEffectState.StatChanges = m_aStatChanges;

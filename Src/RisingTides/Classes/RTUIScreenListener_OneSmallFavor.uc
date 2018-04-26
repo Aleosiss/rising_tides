@@ -140,11 +140,10 @@ function OnConfirmButtonInited(UIPanel Panel) {
 		.OriginTopLeft()
 		.SetPosition(PosX, PosY)
 		.SetColor(class'UIUtilities_Colors'.static.ColorToFlashHex(Program.GetMyTemplate().FactionColor))
-		.SetTooltipText(strCheckboxDesc,,4,-4,,,,0.0f);
+		.SetTooltipText(strCheckboxDesc, , , 10, , , true, 0.0f);
 	class'RTHelpers'.static.RTLog("Created a checkbox at position " $ PosX $ " x and " $ PosY $ " y.");
 
 	// Modify the OnLaunchButtonClicked Delegate
-
 	if(Button != none) {
 		OldOnClickedDelegate = Button.OnClickedDelegate;
 		Button.OnClickedDelegate = ModifiedLaunchButtonClicked;
@@ -187,6 +186,7 @@ simulated function bool AddOneSmallFavorSitrep(XComGameState_MissionSite Mission
 		class'RTHelpers'.static.RTLog("Adding One Small Favor SITREP via debug override!"); 
 	}
 
+
 	XComHQ = class'UIUtilities_Strategy'.static.GetXComHQ();
 
 	if(MissionState.GeneratedMission.SitReps.Find('RTOneSmallFavor') != INDEX_NONE) {
@@ -209,6 +209,7 @@ simulated function bool AddOneSmallFavorSitrep(XComGameState_MissionSite Mission
 	XComHQ = XComGameState_HeadquartersXCom(NewGameState.ModifyStateObject(XComHQ.class, XComHQ.ObjectID));
 	MissionState = XComGameState_MissionSite(NewGameState.ModifyStateObject(class'XComGameState_MissionSite', MissionState.ObjectID));
 
+	Program.bOneSmallFavorActivated = true; // we're doing it boys
 	MissionState.TacticalGameplayTags.AddItem('RTOneSmallFavor');
 	Program.CashOneSmallFavor(NewGameState, MissionState);
 	ModifyOneSmallFavorSitrepForGeneratedMission(Program, MissionState, true);
@@ -251,7 +252,7 @@ simulated function bool RemoveOneSmallFavorSitrep(XComGameState_MissionSite Miss
 	Program = RTGameState_ProgramFaction(NewGameState.ModifyStateObject(Program.class, Program.ObjectID));
 	XComHQ = XComGameState_HeadquartersXCom(NewGameState.ModifyStateObject(XComHQ.class, XComHQ.ObjectID));
 	MissionState = XComGameState_MissionSite(NewGameState.ModifyStateObject(class'XComGameState_MissionSite', MissionState.ObjectID));
-
+	Program.bOneSmallFavorActivated = false;
 	Program.UncashOneSmallFavor(NewGameState, MissionState);
 	ModifyOneSmallFavorSitrepForGeneratedMission(Program, MissionState, false);
 

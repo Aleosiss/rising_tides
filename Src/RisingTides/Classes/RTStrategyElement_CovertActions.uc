@@ -5,8 +5,11 @@ static function array<X2DataTemplate> CreateTemplates()
 {
 	local array<X2DataTemplate> CovertActions;
 
+	// Find Faction Templates
 	CovertActions.AddItem(CreateFindProgramFactionTemplate());
 	CovertActions.AddItem(CreateFindProgramFarAwayFactionTemplate());
+
+	// TODO: Hunt Templars
 
 	return CovertActions;
 }
@@ -14,8 +17,7 @@ static function array<X2DataTemplate> CreateTemplates()
 //---------------------------------------------------------------------------------------
 // FIND FACTION
 //-------------------------------------------------     --------------------------------------
-static function X2DataTemplate CreateFindProgramFactionTemplate()
-{
+static function X2DataTemplate CreateFindProgramFactionTemplate() {
 	local X2CovertActionTemplate Template;
 	`CREATE_X2TEMPLATE(class'X2CovertActionTemplate', Template, 'CovertAction_FindProgramFaction');
 
@@ -40,8 +42,7 @@ static function X2DataTemplate CreateFindProgramFactionTemplate()
 //---------------------------------------------------------------------------------------
 // FIND FARTHEST FACTION
 //---------------------------------------------------------------------------------------
-static function X2DataTemplate CreateFindProgramFarAwayFactionTemplate()
-{
+static function X2DataTemplate CreateFindProgramFarAwayFactionTemplate() {
 	local X2CovertActionTemplate Template;
 
 	`CREATE_X2TEMPLATE(class'X2CovertActionTemplate', Template, 'CovertAction_FindProgramFarAwayFaction');
@@ -64,8 +65,7 @@ static function X2DataTemplate CreateFindProgramFarAwayFactionTemplate()
 	return Template;
 }
 
-private static function CovertActionSlot _CreateDefaultSoldierSlot(name SlotName, optional int iMinRank, optional bool bRandomClass, optional bool bFactionClass)
-{
+private static function CovertActionSlot _CreateDefaultSoldierSlot(name SlotName, optional int iMinRank, optional bool bRandomClass, optional bool bFactionClass) {
 	local CovertActionSlot SoldierSlot;
 
 	SoldierSlot.StaffSlot = SlotName;
@@ -113,7 +113,7 @@ static function AddFactionToGeneratedTemplates() {
 				ActionTemplate.Narratives.AddItem('CovertActionNarrative_RecruitScientist_Program');
 
 			if(ActionTemplate.DataName == 'CovertAction_RecruitEngineer')
-				ActionTemplate.Narratives.AddItem('CovertActionNarrative_RecruitEnginer_Program');
+				ActionTemplate.Narratives.AddItem('CovertActionNarrative_RecruitEngineer_Program');
 
 			if(ActionTemplate.DataName == 'CovertAction_GatherSupplies')
 				ActionTemplate.Narratives.AddItem('CovertActionNarrative_GatherSupplies_Program');

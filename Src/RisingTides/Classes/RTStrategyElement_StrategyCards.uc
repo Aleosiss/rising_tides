@@ -32,9 +32,11 @@ static function X2DataTemplate RTCreateOneSmallFavor()
 
 static function ActivateOneSmallFavor(XComGameState NewGameState, StateObjectReference InRef, optional bool bReactivate = false) {
 	local RTGameState_ProgramFaction Program;
+	local DynamicPropertySet PropertySet; //need to delay it when the player can see it
 
 	Program = class'RTHelpers'.static.GetNewProgramState(NewGameState);
-	Program.bOneSmallFavorAvailable = true;
+	Program.MakeOneSmallFavorAvailable();
+	Program.bShouldResetOSFMonthly = true;
 }
 
 static function DeactivateOneSmallFavor(XComGameState NewGameState, StateObjectReference InRef) {
@@ -42,6 +44,7 @@ static function DeactivateOneSmallFavor(XComGameState NewGameState, StateObjectR
 
 	Program = class'RTHelpers'.static.GetNewProgramState(NewGameState);
 	Program.bOneSmallFavorAvailable = false;
+	Program.bShouldResetOSFMonthly = false;
 }
 
 static function X2DataTemplate RTCreateJustPassingThrough() {
@@ -69,6 +72,7 @@ static function JustPassingThroughModifyTacStartState(XComGameState StartState) 
 		return;
 
 	Program = class'RTHelpers'.static.GetNewProgramState(StartState);
+	Program.bShouldPerformPostMissionCleanup = true;
 	SoldierObjRef = Program.Master[`SYNC_RAND_STATIC(Program.Master.Length)];
 	
 	if(!class'RTHelpers'.static.DebuggingEnabled()) {
