@@ -96,7 +96,7 @@ LocFriendlyName="Overwatch Shot"
 
 [SixOClock X2AbilityTemplate]
 LocFriendlyName="Six O'Clock"
-LocLongDescription="When this unit uses overwatch, allied units within it's range gain bonuses to defense, psi, and will."
+LocLongDescription="Gain an additional overwatch shot. Additionally, when this unit uses overwatch, allied units within it's range gain bonuses to defense, psi, and will."
 LocHelpText=" "
 LocFlyOverText="Six O'Clock"
 LocPromotionPopupText="<Bullet/> This affects units that do not have direct line of sight to the the overwatching unit.<br/>"

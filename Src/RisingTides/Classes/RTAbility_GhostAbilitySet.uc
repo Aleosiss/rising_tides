@@ -424,9 +424,9 @@ static function X2AbilityTemplate PsiOverload()
 	ActionPointCost.bConsumeAllPoints = true;
 	Template.AbilityCosts.AddItem(ActionPointCost);
 
-	UnitPropertyCondition = new class'X2Condition_UnitProperty';
-	UnitPropertyCondition.RequireWithinRange = true;
-	UnitPropertyCondition.WithinRange = default.OVERLOAD_MAX_RANGE;
+	TargetUnitPropertyCondition = new class'X2Condition_UnitProperty';
+	TargetUnitPropertyCondition.RequireWithinRange = true;
+	TargetUnitPropertyCondition.WithinRange = default.OVERLOAD_MAX_RANGE;
 
 	Template.AbilityTargetConditions.AddItem(TargetUnitPropertyCondition);
 	Template.AbilityTargetConditions.AddItem(default.PsionicTargetingProperty);

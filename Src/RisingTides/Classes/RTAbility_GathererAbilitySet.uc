@@ -800,6 +800,7 @@ static function CreateGuardianAngel(out X2AbilityTemplate Template) {
 
 static function X2Effect CreateGuardianAngelMentalRecoveryEffect() {
 	local X2Effect_Persistent Effect;
+	local X2Condition_AbilityProperty AbilityProperty;
 
 	Effect = new class'X2Effect_Persistent';
 	Effect.BuildPersistentEffect(1, false, true, false, eGameRule_PlayerTurnEnd);
