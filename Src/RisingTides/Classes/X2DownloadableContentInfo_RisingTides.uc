@@ -504,3 +504,20 @@ exec function RT_TestUIPopup() {
 
 	`PRESBASE.UITutorialBox(Title, alertText, "img:///RisingTidesContentPackage.UIImages.osf_tutorial");
 }
+
+exec function RT_ReduceSoldierCurrentWill(int MinusWill) {
+	local XComTacticalController TacticalController;
+	local XGUnit ActiveUnit;
+	local XComGameState_Unit ActiveUnitState;
+	local XComGameState NewGameState;
+	// Pawn is the CURSOR in the Combat game
+	TacticalController = XComTacticalController(class'WorldInfo'.static.GetWorldInfo().GetALocalPlayerController());
+
+	if (TacticalController != none) {
+		ActiveUnit = TacticalController.GetActiveUnit();
+		NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState( "Cheat: Reduce Unit Will" );
+		ActiveUnitState = XComGameState_Unit(NewGameState.ModifyStateObject(class'XComGameState_Unit', ActiveUnit.ObjectID));
+		ActiveUnitState.ModifyCurrentStat(eStat_Will, float(MinusWill));
+		`TACTICALRULES.SubmitGameState(NewGameState);
+	}
+}
