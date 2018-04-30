@@ -836,8 +836,8 @@ TacticalText="<Bullet/> A placeholder that allows Rising Tides classes to use ba
 ;DescriptionEntry=""
 
 [PersonnelHadley X2EncyclopediaTemplate]
-ListTitle="Personnel Dossier: Dr. Hadley"
-DescriptionTitle="Dr. Hadley - STATUS: ACTIVE"
+ListTitle="Personnel Dossier: Dr. Elizabeth Hadley"
+DescriptionTitle="Dr. Elizabeth Hadley - STATUS: ACTIVE"
 DescriptionEntry="Dr. Elizabeth Hadley, born on October 3rd, 1968, is a certified genius. Earning her Ph.D at the age of 19, it was assumed by academia at large that she had a bright future ahead of her. However, she fell off the face of the planet shortly afterwards, leaving many to speculate that she had been snatched up by the R&D branch of the government. Although that seems obvious now, remember that whatever she has been working on for the past thirty-five years is still unknown, and that she has been transferred to XCOM only now, with Aliens on our proverbial doorstep, speaks for its importance. \n\nC.O. Bradford Note: Yes, this is the exact file I gave you last time. Hopefully it's still good."
 
 [FactionProgram X2EncyclopediaTemplate]

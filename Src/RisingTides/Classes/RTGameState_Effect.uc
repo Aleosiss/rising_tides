@@ -3,6 +3,7 @@ class RTGameState_Effect extends XComGameState_Effect;
 var array<StateObjectReference> EffectsAddedList;
 var array<StateObjectReference> EffectsRemovedList;
 var bool bCanTrigger;
+var bool bWasPreviouslyConcealed;
 
 var localized string LocPsionicallyInterruptedName;
 
