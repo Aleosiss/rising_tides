@@ -12,6 +12,9 @@
         - Direct Neural Manipulation: Bonded Soldiers recieve bonus experience if they survive a mission together.
         - Resistance Sabotage: Other Resistance Factions gain an additional Card Slot.
     - Added new equipment (only for Program operatives)
+        - Program Assault Rifle (8-10 dmg)
+        - Program Sniper Rifle (10-12 dmg)
+        - Program Shotgun (10-12 dmg)
         - Program Shadowkeeper (4-6 dmg, no Shadowfall)
         - Cosmetic Silencer (for those who like the look of the suppressors but don't like recheaters)
     - Added Encyclopedia entries for the Program

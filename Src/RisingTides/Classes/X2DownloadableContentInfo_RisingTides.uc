@@ -49,6 +49,7 @@ static event OnPostTemplatesCreated()
 
 	MakePsiAbilitiesInterruptable();
 	AddProgramFactionCovertActions();
+	class'RTItem'.static.AddProgramAttachmentTemplates();
 }
 
 /// <summary>
@@ -125,13 +126,13 @@ simulated static function AddProgramFactionCovertActions() {
 simulated static function MakePsiAbilitiesInterruptable() {
 	local array<name> AbilityTemplateNames, PsionicTemplateNames;
 	local name AbilityTemplateName;
-    local X2AbilityTemplate AbilityTemplate;
+	local X2AbilityTemplate AbilityTemplate;
 	local array<X2AbilityTemplate> AbilityTemplates;
 	local X2AbilityTemplateManager AbilityTemplateMgr;
 	local int i;
 
-	// first unreserved index
-	for(i = 26; i < class'RTHelpers'.default.PsionicAbilities.Length; ++i) {
+
+	for(i = 0; i < class'RTHelpers'.default.PsionicAbilities.Length; ++i) {
 		PsionicTemplateNames.AddItem(class'RTHelpers'.default.PsionicAbilities[i]);
 	}
 

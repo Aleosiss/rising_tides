@@ -1010,10 +1010,31 @@ Description="The Program has lent one of their squads to handle this operation."
 ;//---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 ;///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 [ProgramPistol X2WeaponTemplate]
-FriendlyName="Program Shadowkeeper"
-FriendlyNamePlural="Program Shadowkeepers"
-BriefSummary="The Program Shadowkeeper is most popular sidearm of choice for Program operatives." 
-TacticalText="<Bullet/> The Program Shadowkeeper's strength is comparable to a Beam Pistol, but has improved aim and chance to critical hit.\n<Bullet/> Pistols can be fired with a single action."
+FriendlyName="Program XSK33"
+FriendlyNamePlural="Program XSK33s"
+BriefSummary="The Program XSK33, or Shadowkeeper, is most popular sidearm of choice for Program operatives." 
+TacticalText="<Bullet/> The Program XSK33, or Shadowkeeper, is most popular sidearm of choice for Program operatives.\n<Bullet/> The Program XSK33 has improved aim and chance to critical hit.\n<Bullet/> Pistols can be fired with a single action."
+
+[ProgramSniperRifle X2WeaponTemplate]
+FriendlyName="Program XSR37"
+FriendlyNamePlural="Program XSR37s"
+BriefSummary="The Program XSR37 is the latest and greatest in long-range-projection-of-directed-energy weaponry, based off of fusion lances deployed by Elder Battleships." 
+TacticalText="<Bullet/> The Program XSR37 is the latest and greatest in long-range-projection-of-directed-energy weaponry, based off of fusion lances deployed by Elder Battleships.\n<Bullet/> Sniper rifles always require both actions to fire.\n<Bullet/> They are less accurate at close range, but deadly at a distance."
+AbilityDescName="sniper rifle"
+
+[ProgramShotgun X2WeaponTemplate]
+FriendlyName="Program XSG31"
+FriendlyNamePlural="Program XSG31s"
+BriefSummary="The Program XSG31 is a devastating evolution of decades of research in both conventional and extraterrestrial weapon systems." 
+TacticalText="<Bullet/> The Program XSG31 is a devastating evolution of decades of research in both conventional and extraterrestrial weapon systems.\n<Bullet/> Shotgun-style weapons are extremely effective at close range, but their accuracy drops off quickly at longer range."
+AbilityDescName="shotgun"
+
+[ProgramAssaultRifle X2WeaponTemplate]
+FriendlyName="Program XCR29"
+FriendlyNamePlural="Program XCR29s"
+BriefSummary="The Program XCR29 is previous-generation Program combat rifle technology." 
+TacticalText="<Bullet/> The Program XCR29 is previous-generation Program combat rifle technology.\n<Bullet/> Firing the primary weapon always ends the soldier's turn."
+AbilityDescName="assault rifle"
 
 [RTCosmetic_Suppressor X2WeaponUpgradeTemplate]
 FriendlyName="Cosmetic Silencer"
