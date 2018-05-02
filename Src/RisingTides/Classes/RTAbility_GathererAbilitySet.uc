@@ -308,7 +308,7 @@ static function X2AbilityTemplate CreateOverTheShoulderAbility(X2AbilityTemplate
 	OTSEffect.VFXTemplateName = "RisingTidesContentPackage.fX.P_Nova_Psi_OTS";
 	OTSEffect.VFXSocket = 'None';
 	OTSEffect.VFXSocketsArrayName = 'None';
-	OTSEffect.Scale = 1.5;
+	OTSEffect.Scale = 2.5;
 	Template.AddTargetEffect(OTSEffect);
 
 	// tag effect. add this last
