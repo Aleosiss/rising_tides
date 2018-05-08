@@ -1003,6 +1003,9 @@ function MeetXCom(XComGameState NewGameState)
 		}
 	}
 
+
+	// Need one for One Small Favor
+	AddCardSlot();
 	for(idx = 0; idx < default.NumCardsOnMeet; idx++)
 	{
 		GenerateNewPlayableCard(NewGameState);
