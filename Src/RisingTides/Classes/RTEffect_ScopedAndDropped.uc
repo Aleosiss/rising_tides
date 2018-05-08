@@ -110,8 +110,8 @@ function bool PostAbilityCostPaid(XComGameState_Effect EffectState, XComGameStat
 					Attacker.SetUnitFloatValue('ShockAndAweCounter', iTotalDamageDealt, eCleanup_BeginTurn);
 				}
 			}
-
-			if(TargetUnit.IsDead()) {
+			// Here. We. Go.
+			if(TargetUnit.IsDead() || TargetUnit.IsBleedingOut()) {
 				// Sovereign check
 				if(Attacker.HasSoldierAbility('Sovereign')) {
 					TargetUnit.GetUnitValue('LastEffectDamage', DamageDealt);

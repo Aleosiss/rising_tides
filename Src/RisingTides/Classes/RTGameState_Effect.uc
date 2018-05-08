@@ -1471,6 +1471,9 @@ function EventListenerReturn RTBumpInTheNight(Object EventData, Object EventSour
 	if (OldTargetUnitState != none && OldTargetUnitState.ObjectID > 0 &&
 		TargetUnit != none && TargetUnit.ObjectID > 0) {
 			bTargetIsDead = TargetUnit.IsDead();
+			if(!bTargetIsDead) {
+				bTargetIsDead = TargetUnit.IsBleedingOut(); // not going to fuck around with a oneliner if im not ever gonna test this code LUL
+			}
 	}
 
 	Attacker = XComGameState_Unit(EventSource);
