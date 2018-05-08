@@ -29,6 +29,10 @@
 - Fixed several bugs related to how the Meld applies its stats
 - Added a small will recovery to Guardian Angel
 - Guardian Angel now affects the caster
+- Changed effects that refund action points on kill to also refund action points on bleedout
+- Increased the radius of Over the Shoulder to 23 tiles (from 17)
+- Over the Shoulder now forces a concealment break on units it affects
+- Moved Over The Shoulder visual effect to foot level
 
 1.1.2
 
