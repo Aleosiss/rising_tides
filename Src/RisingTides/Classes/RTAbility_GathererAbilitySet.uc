@@ -233,7 +233,7 @@ static function X2AbilityTemplate CreateOverTheShoulderAbility(X2AbilityTemplate
 
 	// begin enemy aura effects	---------------------------------------
 
-	// Vision Effect
+	// The Default "Can see through walls" Vision Effect
 	VisionEffect = new class'RTEffect_MobileSquadViewer';
 	VisionEffect.BuildPersistentEffect(1, false, true, false, eGameRule_PlayerTurnEnd);
 	VisionEffect.SetDisplayInfo(ePerkBuff_Penalty, default.OTS_TITLE, default.OTS_DESC_ENEMY, Template.IconImage, true,,Template.AbilitySourceName);
@@ -306,7 +306,7 @@ static function X2AbilityTemplate CreateOverTheShoulderAbility(X2AbilityTemplate
 	OTSEffect.DuplicateResponse = eDupe_Refresh;
 	OTSEffect.EffectName = default.OverTheShoulderSourceEffectName;
 	OTSEffect.VFXTemplateName = "RisingTidesContentPackage.fX.P_Nova_Psi_OTS";
-	OTSEffect.VFXSocket = 'None';
+	OTSEffect.VFXSocket = 'CIN_Root';
 	OTSEffect.VFXSocketsArrayName = 'None';
 	OTSEffect.Scale = 2.5;
 	Template.AddTargetEffect(OTSEffect);
