@@ -895,6 +895,71 @@ static function X2AbilityTemplate CreateRTPassiveAbilityCooldown(name TemplateNa
 		return Template;
 }
 
+static function X2AbilityTemplate RTCreateChargeUpAbility(name TemplateName, name PartTwoAbilityTemplateName, int ChargeTime, name IconImage,
+															optional bool StealthTime = -1,
+															optional int iNumCharges = -1,
+															optional int iCooldown = -1
+															) {
+	local X2AbilityTemplate Template;
+	local RTEffect_Stealth StealthEffect;
+	local X2Effect_DelayedAbilityActivation ActivationEffect;
+	local X2AbilityCost_ActionPoints ActionPointCost;
+	local X2AbiltyCharges Charges;
+	local X2Effect_Persistent VFXEffect;
+
+	`CREATE_X2TEMPLATE(TemplateName, class'RTAbilityTemplate', Template);
+	Template.IconImage = IconImage;
+	Template.AbilitySourceName = 'eAbilitySource_Psionic';
+	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_AlwaysShow;
+	Template.Hostility = eHostility_Neutral;
+
+	Template.AbilityTriggers.AddItem(default.PlayerInputTrigger);
+	Template.AbilityTargetStyle = default.SelfTarget;
+	Template.AbilityToHitCalc = default.Deadeye;
+
+	if(iCooldown > 0) {
+		ActionPointCost = new class'X2AbilityCost_ActionPoints';
+		ActionPointCost.iNumPoints = iCooldown;
+		ActionPointCost.bConsumeAllPoints = true;
+		Template.AbilityCosts.AddItem(ActionPointCost);
+	}
+
+	if(iNumCharges > 0) {
+		Charges = new class'X2AbilityCharges';
+		Charges.InitialCharges = iNumCharges;
+		Template.AbilityCharges = Charges;
+	}
+
+	Template.AbilityShooterConditions.AddItem(default.LivingShooterProperty);
+	Template.AddShooterEffectExclusions();
+
+	if(StealthTime > 0) {
+		StealthEffect = class'RTEffectBuilder'.static.RTCreateStealthEffect(StealthTime, false, 1.0f, eGameRule_PlayerTurnBegin, Template.AbilitySourceName);
+		Template.AddTargetEffect(StealthEffect);
+	}
+
+	if(ChargeTime > 0) {
+		VFXEffect = new class'X2Effect_Persistent';
+		VFXEffect.BuildPersistentEffect(ChargeTime, false, false, , eGameRule_PlayerTurnBegin);
+		VFXEffect.VFXTemplateName = class'RTAbility_GathererAbilitySet'.default.ExtinctionEventChargingParticleString;
+		VFXEffect.EffectAddedFn = class'RTHelpers'.static.PanicLoopBeginFn;
+		VFXEffect.EffectRemovedFn = class'RTHelpers'.static.PanicLoopEndFn;
+		Template.AddTargetEffect(VFXEffect);
+
+		ActivationEffect = new class'X2Effect_DelayedAbilityActivation';
+		ActivationEffect.BuildPersistentEffect(ChargeTime, false, false, , eGameRule_PlayerTurnBegin);
+		ActivationEffect.TriggerEventName = PartTwoAbilityTemplateName;
+		Template.AddTargetEffect(ActivationEffect);
+	}
+
+	Template.AdditionalAbilities.AddItem(PartTwoAbilityTemplateName);
+	Template.bCrossClassEligible = false;
+	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
+	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
+
+	return Template;
+}
+
 //---------------------------------------------------------------------------------------
 //---Test Ability=-----------------------------------------------------------------------
 //---------------------------------------------------------------------------------------

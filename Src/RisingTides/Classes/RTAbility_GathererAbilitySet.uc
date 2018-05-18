@@ -488,56 +488,56 @@ static function X2AbilityTemplate RTExtinctionEventPartOne() {
 	Template.AdditionalAbilities.AddItem('RTExtinctionEventPartThree');
 
 	return Template;
-  }
+}
 
 static function X2AbilityTemplate RTExtinctionEventPartTwo() {
-	  local X2AbilityTemplate Template;
-	  local RTEffect_Stealth StealthEffect;
-	  local X2Effect_DelayedAbilityActivation ActivationEffect;
-	  local X2AbilityTrigger_EventListener Trigger;
-	  local X2Effect_Persistent			VFXEffect;
+		local X2AbilityTemplate Template;
+		local RTEffect_Stealth StealthEffect;
+		local X2Effect_DelayedAbilityActivation ActivationEffect;
+		local X2AbilityTrigger_EventListener Trigger;
+		local X2Effect_Persistent			VFXEffect;
 
-	  `CREATE_X2ABILITY_TEMPLATE(Template, 'RTExtinctionEventPartTwo');
-	  Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_NeverShow;
-	  Template.Hostility = eHostility_Neutral;
-	  Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_swordSlash";
-	  Template.AbilitySourceName = 'eAbilitySource_Psionic';
+		`CREATE_X2ABILITY_TEMPLATE(Template, 'RTExtinctionEventPartTwo');
+		Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_NeverShow;
+		Template.Hostility = eHostility_Neutral;
+		Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_swordSlash";
+		Template.AbilitySourceName = 'eAbilitySource_Psionic';
 
-	  Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
+		Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
 		Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
 		Template.bSkipFireAction = true;
 		Template.bCrossClassEligible = false;
 
-	  Trigger = new class'X2AbilityTrigger_EventListener';
-	  Trigger.ListenerData.EventID = 'RTExtinctionEventPartTwo';
-	  Trigger.ListenerData.EventFn = class'XComGameState_Ability'.static.AbilityTriggerEventListener_Self;
-	  Trigger.ListenerData.Filter = eFilter_Unit;
-	  Trigger.ListenerData.Deferral = ELD_OnStateSubmitted;
-	  Trigger.ListenerData.Priority = 50;
-	  Template.AbilityTriggers.AddItem(Trigger);
+		Trigger = new class'X2AbilityTrigger_EventListener';
+		Trigger.ListenerData.EventID = 'RTExtinctionEventPartTwo';
+		Trigger.ListenerData.EventFn = class'XComGameState_Ability'.static.AbilityTriggerEventListener_Self;
+		Trigger.ListenerData.Filter = eFilter_Unit;
+		Trigger.ListenerData.Deferral = ELD_OnStateSubmitted;
+		Trigger.ListenerData.Priority = 50;
+		Template.AbilityTriggers.AddItem(Trigger);
 
-	  Template.AbilityTargetStyle = default.SelfTarget;
-	  Template.AbilityToHitCalc = default.Deadeye;
+		Template.AbilityTargetStyle = default.SelfTarget;
+		Template.AbilityToHitCalc = default.Deadeye;
 
-	  StealthEffect = class'RTEffectBuilder'.static.RTCreateStealthEffect(1, false, 1.0f, eGameRule_PlayerTurnBegin, Template.AbilitySourceName);
-	  Template.AddTargetEffect(StealthEffect);
+		StealthEffect = class'RTEffectBuilder'.static.RTCreateStealthEffect(1, false, 1.0f, eGameRule_PlayerTurnBegin, Template.AbilitySourceName);
+		Template.AddTargetEffect(StealthEffect);
 
-	  VFXEffect = new class'X2Effect_Persistent';
-	  VFXEffect.BuildPersistentEffect(1, false, false, , eGameRule_PlayerTurnBegin);
-	  VFXEffect.VFXTemplateName = default.ExtinctionEventChargingParticleString;
-	  VFXEffect.EffectAddedFn = class'RTHelpers'.static.PanicLoopBeginFn;
-	  VFXEffect.EffectRemovedFn = class'RTHelpers'.static.PanicLoopEndFn;
-	  Template.AddTargetEffect(VFXEffect);
+		VFXEffect = new class'X2Effect_Persistent';
+		VFXEffect.BuildPersistentEffect(1, false, false, , eGameRule_PlayerTurnBegin);
+		VFXEffect.VFXTemplateName = default.ExtinctionEventChargingParticleString;
+		VFXEffect.EffectAddedFn = class'RTHelpers'.static.PanicLoopBeginFn;
+		VFXEffect.EffectRemovedFn = class'RTHelpers'.static.PanicLoopEndFn;
+		Template.AddTargetEffect(VFXEffect);
 
-	  ActivationEffect = new class'X2Effect_DelayedAbilityActivation';
-	  ActivationEffect.BuildPersistentEffect(1, false, false, , eGameRule_PlayerTurnBegin);
-	  ActivationEffect.TriggerEventName = default.ExtinctionEventStageThreeEventName;
-	  Template.AddTargetEffect(ActivationEffect);
+		ActivationEffect = new class'X2Effect_DelayedAbilityActivation';
+		ActivationEffect.BuildPersistentEffect(1, false, false, , eGameRule_PlayerTurnBegin);
+		ActivationEffect.TriggerEventName = default.ExtinctionEventStageThreeEventName;
+		Template.AddTargetEffect(ActivationEffect);
 
-	  Template.AbilityShooterConditions.AddItem(default.LivingShooterProperty);
+		Template.AbilityShooterConditions.AddItem(default.LivingShooterProperty);
 
-	  return Template;
-  }
+	return Template;
+}
 
 static function X2AbilityTemplate RTExtinctionEventPartThree() {
 	local X2AbilityTemplate Template;

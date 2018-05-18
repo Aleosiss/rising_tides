@@ -47,6 +47,8 @@ class RTAbility_BerserkerAbilitySet extends RTAbility_GhostAbilitySet config(Ris
 
 	var config array<name> AbilityPerksToLoad;
 
+	var name OrpheusWarpActiveEffect;
+
 //---------------------------------------------------------------------------------------
 //---CreateTemplates---------------------------------------------------------------------
 //---------------------------------------------------------------------------------------
@@ -86,6 +88,9 @@ static function array<X2DataTemplate> CreateTemplates()
 	Templates.AddItem(RTPsionicLance());
 	Templates.AddItem(RTCloseCombatSpecialist());
 	Templates.AddItem(RTCloseCombatSpecialistAttack());
+	Templates.AddItem(RTOrpheusWarp());
+	Templates.AddItem(RTOrpheusWarpPartTwo());
+	Templates.AddItem(RTEnterOrpheusWarp());
 
 	return Templates;
 }
@@ -2738,7 +2743,7 @@ static function X2AbilityTemplate RTCloseCombatSpecialistAttack()
 	//(This effect does nothing, but enables many-to-many marking of which CCS attacks have already occurred each turn.)
 	CloseCombatSpecialistTargetEffect = new class'X2Effect_Persistent';
 	CloseCombatSpecialistTargetEffect.BuildPersistentEffect(1, false, true, true, eGameRule_PlayerTurnEnd);
-	CloseCombatSpecialistTargetEffect.EffectName = 'CloseCombatSpecialistTarget';
+	CloseCombatSpecialistTargedsafadftEffect.EffectName = 'CloseCombatSpecialistTarget';
 	CloseCombatSpecialistTargetEffect.bApplyOnMiss = true; //Only one chance, even if you miss (prevents crazy flailing counter-attack chains with a Muton, for example)
 	Template.AddTargetEffect(CloseCombatSpecialistTargetEffect);
 
@@ -2784,4 +2789,117 @@ static function EventListenerReturn RTCloseCombatSpecialistConcealmentListener(O
 
 	CloseCombatSpecialistState.AbilityTriggerAgainstSingleTarget(ConcealmentBrokenUnit.ConcealmentBrokenByUnitRef, false);
 	return ELR_NoInterrupt;
+}
+
+//---------------------------------------------------------------------------------------
+//---Orpheus Warp------------------------------------------------------------------------
+//---------------------------------------------------------------------------------------
+static function X2AbilityTemplate RTOrpheusWarp() {
+	local X2AbilityTemplate Template;
+
+	Template = RTCreateChargeUpAbility('RTOrpheusWarp', 'RTOrpheusWarpPartTwo', 1, "img:///RisingTidesContentPackage.PerkIcons.rt_orpheuswarp", 1, default.ORPHEUS_WARP_CHARGES, default.ORPHEUS_WARP_ACTION_POINT_COST);
+
+	return Template;
+}
+
+static function X2AbilityTemplate RTOrpheusWarpPartTwo() {
+	local X2AbilityTemplate Template;
+
+	`CREATE_X2TEMPLATE('RTOrpheusWarpPartTwo', class'RTAbilityTemplate', Template);
+	Template.IconImage = "img:///RisingTidesContentPackage.PerkIcons.rt_orpheuswarp";
+	Template.AbilitySourceName = 'eAbilitySource_Psionic';
+	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_NeverShow;
+	Template.Hostility = eHostility_Neutral;
+
+	Template.AbilityToHitCalc = default.DeadEye;
+	Template.AbilityTriggers.AddItem(new class'X2AbilityTrigger_Placeholder');
+
+	Template.TargetingMethod = class'X2TargetingMethod_Teleport';
+
+	CursorTarget = new class'X2AbilityTarget_Cursor';
+	Template.AbilityTargetStyle = CursorTarget;
+
+	Template.AbilityMultiTargetStyle = new class'X2AbilityMultiTarget_AllAllies';
+
+	Template.AbilityShooterConditions.AddItem(default.LivingShooterProperty);
+	
+	RemoveEffects = new class'X2Effect_RemoveEffects';
+	RemoveEffects.EffectNamesToRemove.AddItem(default.OrpheusWarpActiveEffect);
+	Template.AddShooterEffect(RemoveEffects);
+	Template.AddMultiTargetEffect(RemoveEffects);
+
+	EscapeEffect = new class'X2Effect_PersistentStatChange';
+	EscapeEffect.BuildPersistentEffect(1, true, true, true);
+	EscapeEffect.EffectName = default.OrpheusWarpActiveEffect;
+	EscapeEffect.AddPersistentStatChange(eStat_Dodge, 25);
+	EscapeEffect.AddPersistentStatChange(eStat_Mobility, 1.25, MODOP_Multiplication);
+	EscapeEffect.VisualizationFn = class'X2Ability_DLC_Day60AlienRulers'.static.EscapeEffectVisualization;
+	Template.AddShooterEffect(EscapeEffect);
+	Template.AddMultiTargetEffect(EscapeEffect);
+
+	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
+	Template.BuildVisualizationFn = class'X2Ability_DLC_Day60AlienRulers'.static.CallForEscape_BuildVisualization;
+
+	Template.CustomFireAnim = 'HL_Psi_SelfCast';
+	Template.bSkipPerkActivationActions = true;
+	Template.bSkipPerkActivationActionsSync = false;
+	Template.CinescriptCameraType = "AlienRulers_CallForEscape";
+
+	Template.PostActivationEvents.AddItem(default.UnitUsedPsionicAbilityEvent);
+
+	return Template;
+}
+
+// the actual action of running into the portal
+static function X2AbilityTemplate RTEnterOrpheusWarp() {
+	local X2AbilityTemplate Template;
+
+	`CREATE_X2TEMPLATE('RTEnterOrpheusWarp', class'RTAbilityTemplate', Template);
+	Template.IconImage = "img:///RisingTidesContentPackage.PerkIcons.rt_enterorpheuswarp";
+	Template.AbilitySourceName = 'eAbilitySource_Psionic';
+	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_ShowIfAvailable;
+	Template.Hostility = eHostility_Neutral;
+
+	Template.AbilityShooterConditions.AddItem(default.LivingShooterProperty);
+
+	EffectsCondition = new class'X2Condition_UnitEffects';
+	EffectsCondition.AddRequireEffect(default.OrpheusWarpActiveEffect, 'AA_UnitIsEscaping');
+	Template.AbilityShooterConditions.AddItem(EffectsCondition);
+
+	Template.AbilityTargetConditions.AddItem(new class'X2Condition_DLC_2_UnitInEscapePortal');
+
+	Template.AbilityToHitCalc = default.DeadEye;
+	Template.AbilityTargetStyle = default.SelfTarget;
+
+	//Trigger on movement - interrupt the move
+	Trigger = new class'X2AbilityTrigger_EventListener';
+	Trigger.ListenerData.EventID = 'ObjectMoved';
+	Trigger.ListenerData.Deferral = ELD_OnStateSubmitted;
+	Trigger.ListenerData.Filter = eFilter_Unit;
+	Trigger.ListenerData.EventFn = class'XComGameState_Ability'.static.AbilityTriggerEventListener_Self;
+	Template.AbilityTriggers.AddItem(Trigger);
+
+	RemoveEffects = new class'X2Effect_RemoveEffects';
+	RemoveEffects.EffectNamesToRemove.AddItem(default.OrpheusWarpActiveEffect);
+	Template.AddShooterEffect(RemoveEffects);
+
+	EscapeEffect = new class'X2Effect_Persistent';
+	EscapeEffect.EffectName = 'Escaped';
+	EscapeEffect.EffectAddedFn = class'X2Ability_DLC_Day60AlienRulers'.static.AlienRulerEscape_AddedFn;
+	EscapeEffect.VisualizationFn = class'X2Ability_DLC_Day60AlienRulers'.static.AlienRulerEscape_Visualization;
+	Template.AddShooterEffect(EscapeEffect);	
+
+	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
+	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
+	Template.bSkipFireAction = true;
+	Template.bShowActivation = true;
+
+	Template.CinescriptCameraType = "AlienRulers_Escape";
+
+	return Template;
+}
+
+defaultproperties
+{
+	OrpheusWarpActiveEffect = 'RTOrpheusWarpPortalActive'
 }
