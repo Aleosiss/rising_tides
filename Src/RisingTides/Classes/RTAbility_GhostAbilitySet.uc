@@ -904,7 +904,7 @@ static function X2AbilityTemplate RTCreateChargeUpAbility(name TemplateName, nam
 	local RTEffect_Stealth StealthEffect;
 	local X2Effect_DelayedAbilityActivation ActivationEffect;
 	local X2AbilityCost_ActionPoints ActionPointCost;
-	local X2AbiltyCharges Charges;
+	local X2AbilityCharges Charges;
 	local X2Effect_Persistent VFXEffect;
 
 	`CREATE_X2TEMPLATE(TemplateName, class'RTAbilityTemplate', Template);
