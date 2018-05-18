@@ -2808,7 +2808,7 @@ static function X2AbilityTemplate RTOrpheusWarpPartTwo() {
 	local X2AbilityTemplate Template;
 	local X2AbilityTarget_Cursor CursorTarget;
 	local X2Effect_RemoveEffects RemoveEffects;
-	local X2Effect_Persistent EScapeEffect;
+	local X2Effect_PersistentStatChange EscapeEffect;
 
 	`CREATE_X2TEMPLATE(class'RTAbilityTemplate', Template, 'RTOrpheusWarpPartTwo');
 	Template.IconImage = "img:///RisingTidesContentPackage.PerkIcons.rt_orpheuswarp";
