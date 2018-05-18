@@ -922,18 +922,11 @@ simulated function X2ResistanceFactionTemplate GetMyTemplate()
 //---------------------------------------------------------------------------------------
 event OnCreation(optional X2DataTemplate Template)
 {
-	local int idx;
-
 	super.OnCreation( Template );
 
 	m_Template = X2ResistanceFactionTemplate(Template);
 	m_TemplateName = Template.DataName;
 
-	for(idx = 0; idx < default.StartingCardSlots; idx++)
-	{
-		// Add Slots with empty entries
-		AddCardSlot();
-	}
 }
 
 function GenerateNewPlayableCard(XComGameState NewGameState)
@@ -1010,6 +1003,9 @@ function MeetXCom(XComGameState NewGameState)
 		}
 	}
 
+
+	// Need one for One Small Favor
+	AddCardSlot();
 	for(idx = 0; idx < default.NumCardsOnMeet; idx++)
 	{
 		GenerateNewPlayableCard(NewGameState);

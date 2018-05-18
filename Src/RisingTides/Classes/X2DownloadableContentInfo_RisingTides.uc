@@ -49,6 +49,7 @@ static event OnPostTemplatesCreated()
 
 	MakePsiAbilitiesInterruptable();
 	AddProgramFactionCovertActions();
+	class'RTItem'.static.AddProgramAttachmentTemplates();
 }
 
 /// <summary>
@@ -125,13 +126,13 @@ simulated static function AddProgramFactionCovertActions() {
 simulated static function MakePsiAbilitiesInterruptable() {
 	local array<name> AbilityTemplateNames, PsionicTemplateNames;
 	local name AbilityTemplateName;
-    local X2AbilityTemplate AbilityTemplate;
+	local X2AbilityTemplate AbilityTemplate;
 	local array<X2AbilityTemplate> AbilityTemplates;
 	local X2AbilityTemplateManager AbilityTemplateMgr;
 	local int i;
 
-	// first unreserved index
-	for(i = 26; i < class'RTHelpers'.default.PsionicAbilities.Length; ++i) {
+
+	for(i = 0; i < class'RTHelpers'.default.PsionicAbilities.Length; ++i) {
 		PsionicTemplateNames.AddItem(class'RTHelpers'.default.PsionicAbilities[i]);
 	}
 
@@ -503,4 +504,21 @@ exec function RT_TestUIPopup() {
 	alertText = "The Program fields small squads of elite operatives. As a result of their alliance with XCOM, you may ask them to run a mission for you.\n NOTE: that this favor can only be called in once per month. \n \nCall in One Small Favor by toggling the white checkbox now shown on Mission Launch screens.";
 
 	`PRESBASE.UITutorialBox(Title, alertText, "img:///RisingTidesContentPackage.UIImages.osf_tutorial");
+}
+
+exec function RT_ReduceSoldierCurrentWill(int MinusWill) {
+	local XComTacticalController TacticalController;
+	local XGUnit ActiveUnit;
+	local XComGameState_Unit ActiveUnitState;
+	local XComGameState NewGameState;
+	// Pawn is the CURSOR in the Combat game
+	TacticalController = XComTacticalController(class'WorldInfo'.static.GetWorldInfo().GetALocalPlayerController());
+
+	if (TacticalController != none) {
+		ActiveUnit = TacticalController.GetActiveUnit();
+		NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState( "Cheat: Reduce Unit Will" );
+		ActiveUnitState = XComGameState_Unit(NewGameState.ModifyStateObject(class'XComGameState_Unit', ActiveUnit.ObjectID));
+		ActiveUnitState.ModifyCurrentStat(eStat_Will, float(MinusWill));
+		`TACTICALRULES.SubmitGameState(NewGameState);
+	}
 }

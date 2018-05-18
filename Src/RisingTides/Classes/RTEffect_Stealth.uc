@@ -12,15 +12,14 @@ class RTEffect_Stealth extends X2Effect_PersistentStatChange;
 
 var float fStealthModifier;
 
-var name StealthPreviousUnitValName;
-
 simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffectParameters, XComGameState_BaseObject kNewTargetState, XComGameState NewGameState, XComGameState_Effect NewEffectState)
 {
 	local XComGameState_Unit UnitState;
 	local bool bWasPreviouslyConcealed;
 	local float fCurrentModifier, fFinalModifier;
+	local RTGameState_Effect StealthEffectState;
 
-	UnitState = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(ApplyEffectParameters.SourceStateObjectRef.ObjectID));
+	UnitState = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(ApplyEffectParameters.TargetStateObjectRef.ObjectID));
 	fCurrentModifier = UnitState.GetCurrentStat(eStat_DetectionModifier);
 	fFinalModifier = fStealthModifier - fCurrentModifier; // newcurrentstat = currentstat + finalmodifier
 
@@ -28,15 +27,14 @@ simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffe
 	AddPersistentStatChange(eStat_DetectionModifier, fFinalModifier);
 	super.OnEffectAdded(ApplyEffectParameters, kNewTargetState, NewGameState, NewEffectState);
 
-
-	bWasPreviouslyConcealed = UnitState.IsConcealed();
-	if(bWasPreviouslyConcealed) {
-		UnitState.SetUnitFloatValue(StealthPreviousUnitValName, 1, eCleanUp_BeginTactical);
-	} else {
-		UnitState.SetUnitFloatValue(StealthPreviousUnitValName, 0, eCleanUp_BeginTactical);
+	StealthEffectState = RTGameState_Effect(NewEffectState);
+	if(StealthEffectState == none) {
+		class'RTHelpers'.static.RTLog("Couldn't find RTGameState_Effect for RTEffect_Stealth!", true);
 	}
 
-	if (UnitState != none && !bWasPreviouslyConcealed) {
+	StealthEffectState.bWasPreviouslyConcealed = UnitState.IsConcealed();
+
+	if (UnitState != none && !StealthEffectState.bWasPreviouslyConcealed) {
 		// special stealth-only notification for abilities that trigger on stealth gain.
 		// in this block so that we don't have Persisting Images procing when ghosting
 		`XEVENTMGR.TriggerEvent('UnitEnteredRTSTealth', UnitState, UnitState, NewGameState);
@@ -50,27 +48,22 @@ simulated function OnEffectRemoved(const out EffectAppliedData ApplyEffectParame
 	local XComGameState_Unit OldUnitState, NewUnitState;
 	local bool bWasPreviouslyConcealed;
 	local UnitValue PreviousValue;
+	local RTGameState_Effect StealthEffectState;
 
 	super.OnEffectRemoved(ApplyEffectParameters, NewGameState, bCleansed, RemovedEffectState);
 
 	OldUnitState = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(ApplyEffectParameters.TargetStateObjectRef.ObjectID));
-	OldUnitState.GetUnitValue(StealthPreviousUnitValName, PreviousValue);
-	if(PreviousValue.fValue == 1) {
-		bWasPreviouslyConcealed = true;
-	} else {
-		bWasPreviouslyConcealed = false;
+	StealthEffectState = RTGameState_Effect(RemovedEffectState);
+	if(StealthEffectState == none) {
+		class'RTHelpers'.static.RTLog("Couldn't find RTGameState_Effect for RTEffect_Stealth!", true);
 	}
 
-	NewUnitState = XComGameState_Unit(NewGameState.CreateStateObject(class'XComGameState_Unit', OldUnitState.ObjectID));
-	NewUnitState.SetUnitFloatValue(StealthPreviousUnitValName, 0, eCleanUp_BeginTactical);
+	NewUnitState = XComGameState_Unit(NewGameState.ModifyStateObject(class'XComGameState_Unit', OldUnitState.ObjectID));
 
 	// Stealth can wear off naturally and not break concealment
-	if (NewUnitState != none && !bWasPreviouslyConcealed && OldUnitState.IsConcealed()) {
+	if (NewUnitState != none && !StealthEffectState.bWasPreviouslyConcealed && OldUnitState.IsConcealed()) {
 		`XEVENTMGR.TriggerEvent('EffectBreakUnitConcealment', NewUnitState, NewUnitState, NewGameState);
 	}
-
-	NewGameState.AddStateObject(NewUnitState);
-
 }
 
 simulated function AddX2ActionsForVisualization(XComGameState VisualizeGameState, out VisualizationActionMetadata ActionMetadata, name EffectApplyResult)
@@ -110,5 +103,5 @@ DefaultProperties
 	DuplicateResponse = eDupe_Refresh
 	bStackOnRefresh = true
 	bRemoveWhenTargetConcealmentBroken = true
-	StealthPreviousUnitValName= "UnitPreviouslyConcealed"
+	GameStateEffectClass = class'RTGameState_Effect'
 }

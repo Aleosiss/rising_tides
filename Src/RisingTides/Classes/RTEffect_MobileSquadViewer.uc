@@ -36,6 +36,7 @@ simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffe
 	// should find a better way soon, since the chosen can conceal, but for now, this will work
 	`XEVENTMGR.TriggerEvent(class'X2Ability_Chryssalid'.default.UnburrowTriggerEventName, kNewTargetState, kNewTargetState, NewGameState);
 	`XEVENTMGR.TriggerEvent(class'X2Ability_Faceless'.default.ChangeFormTriggerEventName, kNewTargetState, kNewTargetState, NewGameState);
+	`XEVENTMGR.TriggerEvent('EffectBreakUnitConcealment', kNewTargetState, kNewTargetState, NewGameState);
 	// end unconceal unit
 
 	// create the spotlight around the unit

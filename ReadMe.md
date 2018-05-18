@@ -21,15 +21,12 @@ This would be a bare-bones content mod. I also have the following content in min
 
 ## Current Bugs (High Priority)
 
-	- The Program cannot gain influence/cardslots
 
 ## Current Issues 
-	- (Predicted) The Program cannot complete the Golden Path actions related to their Chosen
-	- Mind Wrack range cap -- 6 tiles
 
 ## Current Table
 
-	- Berserker:
+	- Berserker: 
 		- Shadow Strike: Idea: Target allies (no damage), implement by having a helper ability which activates subabilities based on selection
 		- GFX for Bloodlust
 		- SFX for Burst

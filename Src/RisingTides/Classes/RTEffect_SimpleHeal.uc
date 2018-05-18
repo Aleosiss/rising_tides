@@ -1,4 +1,4 @@
-class RTEffect_SimpleHeal extends X2Effect;
+class RTEffect_SimpleHeal extends X2Effect_Persistent;
 
 var int HEAL_AMOUNT;
 var bool bUseWeaponDamage;

@@ -51,6 +51,7 @@ function bool ShotsCannotGraze()
 {
 	return true;
 }
+
 // Register for events
 function RegisterForEvents(XComGameState_Effect EffectGameState)
 {
@@ -78,7 +79,7 @@ function bool PostAbilityCostPaid(XComGameState_Effect EffectState, XComGameStat
 	local bool								bIsStandardFire, bHitTarget;
 
 	bIsStandardFire = false;
-	if(kAbility.GetMyTemplateName() == 'RTStandardSniperShot' || kAbility.GetMyTemplateName() == 'DaybreakFlame' || kAbility.GetMyTemplateName() == 'RTPrecisionShot' || kAbility.GetMyTemplateName() == 'RTDisablingShot')
+	if(kAbility.GetMyTemplateName() == 'RTStandardSniperShot' || kAbility.GetMyTemplateName() == 'DaybreakFlame' || kAbility.GetMyTemplateName() == 'RTPrecisionShot' || kAbility.GetMyTemplateName() == 'RTDisablingShot' || kAbility.GetMyTemplateName() == 'RTKubikuri' || kAbility.GetMyTemplateName() == 'PistolStandardShot')
 		bIsStandardFire = true;
 	if(AbilityContext.ResultContext.HitResult == eHit_Crit || AbilityContext.ResultContext.HitResult == eHit_Graze || AbilityContext.ResultContext.HitResult == eHit_Success)
 		bHitTarget = true;
@@ -109,8 +110,8 @@ function bool PostAbilityCostPaid(XComGameState_Effect EffectState, XComGameStat
 					Attacker.SetUnitFloatValue('ShockAndAweCounter', iTotalDamageDealt, eCleanup_BeginTurn);
 				}
 			}
-
-			if(TargetUnit.IsDead()) {
+			// Here. We. Go.
+			if(TargetUnit.IsDead() || TargetUnit.IsBleedingOut()) {
 				// Sovereign check
 				if(Attacker.HasSoldierAbility('Sovereign')) {
 					TargetUnit.GetUnitValue('LastEffectDamage', DamageDealt);

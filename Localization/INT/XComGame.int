@@ -96,7 +96,7 @@ LocFriendlyName="Overwatch Shot"
 
 [SixOClock X2AbilityTemplate]
 LocFriendlyName="Six O'Clock"
-LocLongDescription="When this unit uses overwatch, allied units within it's range gain bonuses to defense, psi, and will."
+LocLongDescription="Gain an additional overwatch shot. Additionally, when this unit uses overwatch, allied units within it's range gain bonuses to defense, psi, and will."
 LocHelpText=" "
 LocFlyOverText="Six O'Clock"
 LocPromotionPopupText="<Bullet/> This affects units that do not have direct line of sight to the the overwatching unit.<br/>"
@@ -836,8 +836,8 @@ TacticalText="<Bullet/> A placeholder that allows Rising Tides classes to use ba
 ;DescriptionEntry=""
 
 [PersonnelHadley X2EncyclopediaTemplate]
-ListTitle="Personnel Dossier: Dr. Hadley"
-DescriptionTitle="Dr. Hadley - STATUS: ACTIVE"
+ListTitle="Personnel Dossier: Dr. Elizabeth Hadley"
+DescriptionTitle="Dr. Elizabeth Hadley - STATUS: ACTIVE"
 DescriptionEntry="Dr. Elizabeth Hadley, born on October 3rd, 1968, is a certified genius. Earning her Ph.D at the age of 19, it was assumed by academia at large that she had a bright future ahead of her. However, she fell off the face of the planet shortly afterwards, leaving many to speculate that she had been snatched up by the R&D branch of the government. Although that seems obvious now, remember that whatever she has been working on for the past thirty-five years is still unknown, and that she has been transferred to XCOM only now, with Aliens on our proverbial doorstep, speaks for its importance. \n\nC.O. Bradford Note: Yes, this is the exact file I gave you last time. Hopefully it's still good."
 
 [FactionProgram X2EncyclopediaTemplate]
@@ -1010,10 +1010,31 @@ Description="The Program has lent one of their squads to handle this operation."
 ;//---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 ;///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 [ProgramPistol X2WeaponTemplate]
-FriendlyName="Program Shadowkeeper"
-FriendlyNamePlural="Program Shadowkeepers"
-BriefSummary="The Program Shadowkeeper is most popular sidearm of choice for Program operatives." 
-TacticalText="<Bullet/> The Program Shadowkeeper's strength is comparable to a Beam Pistol, but has improved aim and chance to critical hit.\n<Bullet/> Pistols can be fired with a single action."
+FriendlyName="Program XSK33"
+FriendlyNamePlural="Program XSK33s"
+BriefSummary="The Program XSK33, or Shadowkeeper, is most popular sidearm of choice for Program operatives." 
+TacticalText="<Bullet/> The Program XSK33, or Shadowkeeper, is most popular sidearm of choice for Program operatives.\n<Bullet/> The Program XSK33 has improved aim and chance to critical hit.\n<Bullet/> Pistols can be fired with a single action."
+
+[ProgramSniperRifle X2WeaponTemplate]
+FriendlyName="Program XSR37"
+FriendlyNamePlural="Program XSR37s"
+BriefSummary="The Program XSR37 is the latest and greatest in long-range-projection-of-directed-energy weaponry, based off of fusion lances deployed by Elder Battleships." 
+TacticalText="<Bullet/> The Program XSR37 is the latest and greatest in long-range-projection-of-directed-energy weaponry, based off of fusion lances deployed by Elder Battleships.\n<Bullet/> Sniper rifles always require both actions to fire.\n<Bullet/> They are less accurate at close range, but deadly at a distance."
+AbilityDescName="sniper rifle"
+
+[ProgramShotgun X2WeaponTemplate]
+FriendlyName="Program XSG31"
+FriendlyNamePlural="Program XSG31s"
+BriefSummary="The Program XSG31 is a devastating evolution of decades of research in both conventional and extraterrestrial weapon systems." 
+TacticalText="<Bullet/> The Program XSG31 is a devastating evolution of decades of research in both conventional and extraterrestrial weapon systems.\n<Bullet/> Shotgun-style weapons are extremely effective at close range, but their accuracy drops off quickly at longer range."
+AbilityDescName="shotgun"
+
+[ProgramAssaultRifle X2WeaponTemplate]
+FriendlyName="Program XCR29"
+FriendlyNamePlural="Program XCR29s"
+BriefSummary="The Program XCR29 is previous-generation Program combat rifle technology." 
+TacticalText="<Bullet/> The Program XCR29 is previous-generation Program combat rifle technology.\n<Bullet/> Firing the primary weapon always ends the soldier's turn."
+AbilityDescName="assault rifle"
 
 [RTCosmetic_Suppressor X2WeaponUpgradeTemplate]
 FriendlyName="Cosmetic Silencer"

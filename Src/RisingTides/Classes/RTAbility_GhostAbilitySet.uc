@@ -167,17 +167,14 @@ static function X2AbilityTemplate StandardGhostShot()
 	local X2Condition_UnitProperty			TargetUnitPropertyCondition;
 	local RTEffect_Siphon					SiphonEffect;
 
-	// Macro to do localisation and stuffs
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'StandardGhostShot');
 
-	// Icon Properties
 	Template.bDontDisplayInAbilitySummary = true;
 	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_standard";
 	Template.ShotHUDPriority = class'UIUtilities_Tactical'.const.STANDARD_SHOT_PRIORITY;
 	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_AlwaysShow;
 	Template.DisplayTargetHitChance = true;
-	Template.AbilitySourceName = 'eAbilitySource_Standard';                                       // color of the icon
-	// Activated by a button press; additionally, tells the AI this is an activatable
+	Template.AbilitySourceName = 'eAbilitySource_Standard';
 	Template.AbilityTriggers.AddItem(default.PlayerInputTrigger);
 
 	SkipExclusions.AddItem(class'X2AbilityTemplateManager'.default.DisorientedName);
