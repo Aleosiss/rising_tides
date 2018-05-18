@@ -896,7 +896,7 @@ static function X2AbilityTemplate CreateRTPassiveAbilityCooldown(name TemplateNa
 }
 
 static function X2AbilityTemplate RTCreateChargeUpAbility(name TemplateName, name PartTwoAbilityTemplateName, int ChargeTime, name IconImage,
-															optional bool StealthTime = -1,
+															optional int StealthTime = -1,
 															optional int iNumCharges = -1,
 															optional int iCooldown = -1
 															) {
@@ -906,8 +906,8 @@ static function X2AbilityTemplate RTCreateChargeUpAbility(name TemplateName, nam
 	local X2AbilityCost_ActionPoints ActionPointCost;
 	local X2AbilityCharges Charges;
 	local X2Effect_Persistent VFXEffect;
-
-	`CREATE_X2TEMPLATE(TemplateName, class'RTAbilityTemplate', Template);
+	
+	`CREATE_X2TEMPLATE(class'RTAbilityTemplate', Template, TemplateName);
 	Template.IconImage = IconImage;
 	Template.AbilitySourceName = 'eAbilitySource_Psionic';
 	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_AlwaysShow;
