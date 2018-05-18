@@ -895,7 +895,7 @@ static function X2AbilityTemplate CreateRTPassiveAbilityCooldown(name TemplateNa
 		return Template;
 }
 
-static function X2AbilityTemplate RTCreateChargeUpAbility(name TemplateName, name PartTwoAbilityTemplateName, int ChargeTime, name IconImage,
+static function X2AbilityTemplate RTCreateChargeUpAbility(name TemplateName, name PartTwoAbilityTemplateName, int ChargeTime, string IconImage,
 															optional int StealthTime = -1,
 															optional int iNumCharges = -1,
 															optional int iCooldown = -1
