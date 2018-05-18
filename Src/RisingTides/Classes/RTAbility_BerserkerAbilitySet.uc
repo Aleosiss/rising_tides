@@ -44,6 +44,8 @@ class RTAbility_BerserkerAbilitySet extends RTAbility_GhostAbilitySet config(Ris
 	var config int CCS_AMMO_PER_SHOT;
 	var config int SHADOWSTRIKE_COOLDOWN;
 	var config string PurgeParticleString;
+	var config int ORPHEUS_WARP_CHARGES;
+	var config int ORPHEUS_WARP_ACTION_POINT_COST;
 
 	var config array<name> AbilityPerksToLoad;
 
@@ -2743,7 +2745,7 @@ static function X2AbilityTemplate RTCloseCombatSpecialistAttack()
 	//(This effect does nothing, but enables many-to-many marking of which CCS attacks have already occurred each turn.)
 	CloseCombatSpecialistTargetEffect = new class'X2Effect_Persistent';
 	CloseCombatSpecialistTargetEffect.BuildPersistentEffect(1, false, true, true, eGameRule_PlayerTurnEnd);
-	CloseCombatSpecialistTargedsafadftEffect.EffectName = 'CloseCombatSpecialistTarget';
+	CloseCombatSpecialistTargetEffect.EffectName = 'CloseCombatSpecialistTarget';
 	CloseCombatSpecialistTargetEffect.bApplyOnMiss = true; //Only one chance, even if you miss (prevents crazy flailing counter-attack chains with a Muton, for example)
 	Template.AddTargetEffect(CloseCombatSpecialistTargetEffect);
 
@@ -2804,8 +2806,11 @@ static function X2AbilityTemplate RTOrpheusWarp() {
 
 static function X2AbilityTemplate RTOrpheusWarpPartTwo() {
 	local X2AbilityTemplate Template;
+	local X2AbilityTarget_Cursor CursorTarget;
+	local X2Effect_RemoveEffects RemoveEffects;
+	local X2Effect_Persistent EScapeEffect;
 
-	`CREATE_X2TEMPLATE('RTOrpheusWarpPartTwo', class'RTAbilityTemplate', Template);
+	`CREATE_X2TEMPLATE(class'RTAbilityTemplate', Template, 'RTOrpheusWarpPartTwo');
 	Template.IconImage = "img:///RisingTidesContentPackage.PerkIcons.rt_orpheuswarp";
 	Template.AbilitySourceName = 'eAbilitySource_Psionic';
 	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_NeverShow;
@@ -2826,8 +2831,7 @@ static function X2AbilityTemplate RTOrpheusWarpPartTwo() {
 	RemoveEffects = new class'X2Effect_RemoveEffects';
 	RemoveEffects.EffectNamesToRemove.AddItem(default.OrpheusWarpActiveEffect);
 	Template.AddShooterEffect(RemoveEffects);
-	Template.AddMultiTargetEffect(RemoveEffects);
-
+	
 	EscapeEffect = new class'X2Effect_PersistentStatChange';
 	EscapeEffect.BuildPersistentEffect(1, true, true, true);
 	EscapeEffect.EffectName = default.OrpheusWarpActiveEffect;
@@ -2835,6 +2839,9 @@ static function X2AbilityTemplate RTOrpheusWarpPartTwo() {
 	EscapeEffect.AddPersistentStatChange(eStat_Mobility, 1.25, MODOP_Multiplication);
 	EscapeEffect.VisualizationFn = class'X2Ability_DLC_Day60AlienRulers'.static.EscapeEffectVisualization;
 	Template.AddShooterEffect(EscapeEffect);
+
+	// allies can also use the portal
+	Template.AddMultiTargetEffect(RemoveEffects);
 	Template.AddMultiTargetEffect(EscapeEffect);
 
 	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
@@ -2853,8 +2860,12 @@ static function X2AbilityTemplate RTOrpheusWarpPartTwo() {
 // the actual action of running into the portal
 static function X2AbilityTemplate RTEnterOrpheusWarp() {
 	local X2AbilityTemplate Template;
+	local X2Condition_UnitEffects EffectsCondition;
+	local X2AbilityTrigger_EventListener Trigger;
+	local X2Effect_RemoveEffects RemoveEffects;
+	local X2Effect_Persistent EscapeEffect;
 
-	`CREATE_X2TEMPLATE('RTEnterOrpheusWarp', class'RTAbilityTemplate', Template);
+	`CREATE_X2TEMPLATE(class'RTAbilityTemplate', Template, 'RTEnterOrpheusWarp');
 	Template.IconImage = "img:///RisingTidesContentPackage.PerkIcons.rt_enterorpheuswarp";
 	Template.AbilitySourceName = 'eAbilitySource_Psionic';
 	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_ShowIfAvailable;
