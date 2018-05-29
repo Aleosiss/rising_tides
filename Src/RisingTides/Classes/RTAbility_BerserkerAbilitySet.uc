@@ -2877,7 +2877,7 @@ static function X2AbilityTemplate RTEnterOrpheusWarp() {
 	EffectsCondition.AddRequireEffect(default.OrpheusWarpActiveEffect, 'AA_UnitIsEscaping');
 	Template.AbilityShooterConditions.AddItem(EffectsCondition);
 
-	Template.AbilityTargetConditions.AddItem(new class'X2Condition_DLC_2_UnitInEscapePortal');
+	Template.AbilityTargetConditions.AddItem(new class'RTCondition_UnitInEscapePortal');
 
 	Template.AbilityToHitCalc = default.DeadEye;
 	Template.AbilityTargetStyle = default.SelfTarget;
