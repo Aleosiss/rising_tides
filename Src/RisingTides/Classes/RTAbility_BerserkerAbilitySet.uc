@@ -2864,6 +2864,7 @@ static function X2AbilityTemplate RTEnterOrpheusWarp() {
 	local X2AbilityTrigger_EventListener Trigger;
 	local X2Effect_RemoveEffects RemoveEffects;
 	local X2Effect_Persistent EscapeEffect;
+	local RTCondition_UnitInEscapePortal PortalInRangeCondition;
 
 	`CREATE_X2TEMPLATE(class'RTAbilityTemplate', Template, 'RTEnterOrpheusWarp');
 	Template.IconImage = "img:///RisingTidesContentPackage.PerkIcons.rt_enterorpheuswarp";
@@ -2877,6 +2878,8 @@ static function X2AbilityTemplate RTEnterOrpheusWarp() {
 	EffectsCondition.AddRequireEffect(default.OrpheusWarpActiveEffect, 'AA_UnitIsEscaping');
 	Template.AbilityShooterConditions.AddItem(EffectsCondition);
 
+	PortalInRangeCondition = new class'RTCondition_UnitInEscapePortal';
+	PortalInRangeCondition.EscapeRadiusTilesSquared = 4;
 	Template.AbilityTargetConditions.AddItem(new class'RTCondition_UnitInEscapePortal');
 
 	Template.AbilityToHitCalc = default.DeadEye;

@@ -29,7 +29,7 @@ event name CallMeetsCondition(XComGameState_BaseObject kTarget)
 
 		EscapeLocation = CallForEscapeEffect.ApplyEffectParameters.AbilityInputContext.TargetLocations[0];
 		EscapeTile = World.GetTileCoordinatesFromPosition(EscapeLocation);
-		if( class'Helpers'.static.IsTileInRange(RulerUnit.TileLocation, EscapeTile, default.EscapeRadiusTilesSquared) )
+		if(class'Helpers'.static.IsTileInRange(RulerUnit.TileLocation, EscapeTile, default.EscapeRadiusTilesSquared) )
 		{
 			// The Ruler is within the escape radius
 			return 'AA_Success';
