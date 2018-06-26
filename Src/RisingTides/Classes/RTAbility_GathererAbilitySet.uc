@@ -625,7 +625,7 @@ static function X2AbilityTemplate RTTheSixPathsOfPain() {
 	`CREATE_X2TEMPLATE(class'RTAbilityTemplate', Template, 'RTTheSixPathsOfPain');
 	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_NeverShow;
 	Template.Hostility = eHostility_Neutral;
-	Template.IconImage = "img:///RisingTidesContentPackage.PerkIcons.UIPerk_overwatch_blaze_spop";
+	Template.IconImage = "img:///RisingTidesContentPackage.PerkIcons.rt_thesixpathsofpain";
 	Template.AbilitySourceName = 'eAbilitySource_Psionic';
 
 	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
@@ -696,7 +696,7 @@ static function X2AbilityTemplate RTTheSixPathsOfPain() {
 }
 
 static function X2AbilityTemplate RTTheSixPathsOfPainIcon() {
-	return PurePassive('RTTheSixPathsOfPainIcon', "img:///RisingTidesContentPackage.PerkIcons.UIPerk_overwatch_blaze_spop", false, 'eAbilitySource_Psionic');
+	return PurePassive('RTTheSixPathsOfPainIcon', "img:///RisingTidesContentPackage.PerkIcons.rt_thesixpathsofpain", false, 'eAbilitySource_Psionic');
 }
 
 static function X2AbilityTemplate RTTheSixPathsOfPainOverride() {
@@ -706,7 +706,7 @@ static function X2AbilityTemplate RTTheSixPathsOfPainOverride() {
 	Template = CreateOverTheShoulderAbility(Template, 2);
 
 	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_NeverShow;
-	Template.IconImage = "img:///RisingTidesContentPackage.PerkIcons.UIPerk_overwatch_blaze_spop";
+	Template.IconImage = "img:///RisingTidesContentPackage.PerkIcons.rt_thesixpathsofpain";
 	Template.AbilityCosts.Length = 0;
 	Template.AbilityCooldown = none;
 

@@ -37,6 +37,7 @@ simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffe
 	`XEVENTMGR.TriggerEvent(class'X2Ability_Chryssalid'.default.UnburrowTriggerEventName, kNewTargetState, kNewTargetState, NewGameState);
 	`XEVENTMGR.TriggerEvent(class'X2Ability_Faceless'.default.ChangeFormTriggerEventName, kNewTargetState, kNewTargetState, NewGameState);
 	`XEVENTMGR.TriggerEvent('EffectBreakUnitConcealment', kNewTargetState, kNewTargetState, NewGameState);
+	`XEVENTMGR.TriggerEvent(class'X2Effect_ScanningProtocol'.default.ScanningProtocolTriggeredEventName, kNewTargetState, kNewTargetState, NewGameState);
 	// end unconceal unit
 
 	// create the spotlight around the unit
@@ -83,6 +84,8 @@ simulated function bool OnEffectTicked(const out EffectAppliedData ApplyEffectPa
 	// should find a better way soon, since the chosen can conceal, but for now, this will work
 	`XEVENTMGR.TriggerEvent(class'X2Ability_Chryssalid'.default.UnburrowTriggerEventName, TargetUnitState, TargetUnitState, NewGameState);
 	`XEVENTMGR.TriggerEvent(class'X2Ability_Faceless'.default.ChangeFormTriggerEventName, TargetUnitState, TargetUnitState, NewGameState);
+	`XEVENTMGR.TriggerEvent('EffectBreakUnitConcealment', TargetUnitState, TargetUnitState, NewGameState);
+	`XEVENTMGR.TriggerEvent(class'X2Effect_ScanningProtocol'.default.ScanningProtocolTriggeredEventName, TargetUnitState, TargetUnitState, NewGameState);
 
 	ViewerTile = TargetUnitState.TileLocation;
 

@@ -1,6 +1,5 @@
 class RTItem extends X2Item_DefaultUpgrades config(RisingTides);
 
-
 var config WeaponDamageValue PISTOL_PROGRAM_BASEDAMAGE;
 var config int PISTOL_PROGRAM_AIM;
 var config int PISTOL_PROGRAM_CRITCHANCE;
