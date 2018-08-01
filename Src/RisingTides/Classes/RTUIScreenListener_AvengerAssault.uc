@@ -23,7 +23,7 @@ event OnRemoved(UIScreen Screen) {
 	MissionState.BuildMission(MissionSource, `XCOMHQ.Get2DLocation(), `XCOMHQ.CurrentLocation, MissionRewards, true);
 	Program.AssembleProgramSquad(NewGameState,
 													 MissionState,
-													 RTGameState_PersistantGhostSquad(`XCOMHISTORY.GetGameStateForObjectID(Program.Squads[0].ObjectID)));
+													 RTGameState_PersistentGhostSquad(`XCOMHISTORY.GetGameStateForObjectID(Program.Squads[0].ObjectID)));
 	`GAMERULES.SubmitGameState(NewGameState);
 
 	MissionState.StartMission();
