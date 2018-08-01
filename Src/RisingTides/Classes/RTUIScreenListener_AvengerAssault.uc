@@ -11,7 +11,7 @@ event OnRemoved(UIScreen Screen) {
 	local array<XComGameState_Reward> MissionRewards;
 
 	NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("Launching Operation: Rising Tides");
-	Program = class'RTHelpers'.static.GetNewProgramFaction(NewGameState);
+	Program = class'RTHelpers'.static.GetNewProgramState(NewGameState);
 	StratMgr = class'X2StrategyElementTemplateManager'.static.GetStrategyElementTemplateManager();
 
 	RewardTemplate = X2RewardTemplate(StratMgr.FindStrategyElementTemplate('Reward_None'));
