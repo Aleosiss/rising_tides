@@ -15,7 +15,7 @@ event OnRemoved(UIScreen Screen) {
 	StratMgr = class'X2StrategyElementTemplateManager'.static.GetStrategyElementTemplateManager();
 
 	RewardTemplate = X2RewardTemplate(StratMgr.FindStrategyElementTemplate('Reward_None'));
-	RewardState = RewardTemplate.CreateInstanceFromTemplate(StartState);
+	RewardState = RewardTemplate.CreateInstanceFromTemplate(NewGameState);
 	MissionRewards.AddItem(RewardState);
 
 	MissionState = RTGameState_MissionSiteAvengerAssault(NewGameState.CreateNewStateObject(class'RTGameState_MissionSiteAvengerAssault'));
