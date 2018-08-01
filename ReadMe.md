@@ -41,6 +41,8 @@ This would be a bare-bones content mod. I also have the following content in min
 		- Add Over the Shoulder exception for civilians that are actually faceless
 		- Extinction Event needs to somehow stop revive units from reviving
 		- Come up with a better solution for Over The Shoulder vs. concealed units
+		- New Perk Idea:
+			- The Veil: If all active enemies are affected by Over The Shoulder, this ability can be activated to gain concealement.
 	- General:
 		- none
 	- The Program (New Faction):

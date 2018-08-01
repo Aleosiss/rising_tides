@@ -1,4 +1,4 @@
-class RTGameState_MissionSiteAvengerAssault extends XComGameState_MisisonSite config(ProgramFaction);
+class RTGameState_MissionSiteAvengerAssault extends XComGameState_MissionSite config(ProgramFaction);
 
 function bool RequiresAvenger() {
 	// this mission is not executed by XCOM
