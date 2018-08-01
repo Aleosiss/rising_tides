@@ -20,7 +20,7 @@ event OnRemoved(UIScreen Screen) {
 
 	MissionState = RTGameState_MissionSiteAvengerAssault(NewGameState.CreateNewStateObject(class'RTGameState_MissionSiteAvengerAssault'));
 	MissionSource = X2MissionSourceTemplate(StratMgr.FindStrategyElementTemplate('MissionSource_RTOperationRisingTides'));
-	MissionState.BuildMission(MissionSource, `XCOMHQ.Location, `XCOMHQ.CurrentLocation, MissionRewards, true);
+	MissionState.BuildMission(MissionSource, `XCOMHQ.Get2DLocation(), `XCOMHQ.CurrentLocation, MissionRewards, true);
 	Program.AssembleProgramSquad(NewGameState, MissionState, Program.Squads[0]);
 	`GAMERULES.SubmitGameState(NewGameState);
 
