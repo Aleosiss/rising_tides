@@ -11,9 +11,9 @@ Todo:
     ✔ Add influence reward template @done(18-04-24 23:18)
     ✔ Add Faction influence popup after grant @done(18-04-24 23:18)
   ☐ Add Program Equipment
-    ☐ Add Program DMR
-    ☐ Add Program Shotgun
-    ☐ Add Program Carbine
+    ✔ Add Program DMR @done(18-06-28 14:27)
+    ✔ Add Program Shotgun @done(18-06-28 14:27)
+    ✔ Add Program Carbine @done(18-06-28 14:27)
     ✔ Add Program Pistol @done(18-04-24 23:18)
     ☐ Add Program Armor
   ☐ Add supporting UI to new stuff

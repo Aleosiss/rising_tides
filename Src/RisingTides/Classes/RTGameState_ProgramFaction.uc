@@ -77,7 +77,7 @@ var private StateObjectReference										SelectedMissionRef;					// cache of th
 var bool																bShouldResetOSFMonthly;
 var bool																bOneSmallFavorAvailable;			// can send squad on a mission, replacing XCOM
 var bool																bOneSmallFavorActivated;			// actively sending a squad on the next mission
-var int																	iNumberOfFavorsCalledIn;			
+var int																	iNumberOfFavorsCalledIn;
 var bool																bOSF_FirstTimeDisplayed;
 
 // ONE SMALL FAVOR LOCALIZED STRINGS
@@ -144,7 +144,7 @@ function RTGameState_Unit CreateRTOperative(name GhostTemplateName, XComGameStat
 	WeaponState = XComGameState_Item(StartState.ModifyStateObject(class'XComGameState_Item', WeaponState.ObjectID));
 	ApplyWeaponUpgrades(GhostTemplateName, WeaponState);
 
-	class'RTHelpers'.static.RTLog( "Creating Program Operative " $ UnitState.GetName(eNameType_Nick) $ 
+	class'RTHelpers'.static.RTLog( "Creating Program Operative " $ UnitState.GetName(eNameType_Nick) $
 							", with ObjectID " $ UnitState.GetReference().ObjectID $
 							", and CharacterTemplateName " $ UnitState.GetMyTemplateName()
 						);
@@ -244,7 +244,7 @@ simulated function UpdateNumDeaths(name CharacterTemplateName, StateObjectRefere
 				IteratorKillCount.KillCount++;
 			}
 		}
-		
+
 		// no, create a new one
 		if(!bFoundKillCount) {
 			NewKillCount.UnitRef = UnitRef;
@@ -407,7 +407,7 @@ function OnEndTacticalPlay(XComGameState NewGameState)
 	super.OnEndTacticalPlay(NewGameState);
 
 	History = class'XComGameStateHistory'.static.GetGameStateHistory();
-	XComHQ = XComGameState_HeadquartersXCom(History.GetSingleGameStateObjectForClass(class'XComGameState_HeadquartersXCom'));	
+	XComHQ = XComGameState_HeadquartersXCom(History.GetSingleGameStateObjectForClass(class'XComGameState_HeadquartersXCom'));
 	MissionState = XComGameState_MissionSite(History.GetGameStateForObjectID(XComHQ.MissionRef.ObjectID));
 
 	if(bDirectNeuralManipulation) {
@@ -539,7 +539,7 @@ protected function RecalculateActiveOperativesAndSquads(XComGameState NewGameSta
 					// good job cmdr
 					NewUnitState.SetCurrentStat(eStat_HP, UnitState.GetBaseStat(eStat_HP));
 					NewUnitState.SetCurrentStat(eStat_Will, UnitState.GetBaseStat(eStat_Will));
-					
+
 					pgs.Operatives.RemoveItem(UnitIteratorObjRef);
 					pgs.Operatives.AddItem(UnitIteratorObjRef);
 					Active.RemoveItem(UnitIteratorObjRef);
@@ -550,7 +550,7 @@ protected function RecalculateActiveOperativesAndSquads(XComGameState NewGameSta
 			}
 		}
 	}
-	
+
 	return;
 }
 
@@ -601,12 +601,12 @@ protected function AddDNMExperience(XComGameState NewGameState) {
 				// this soldier has no bond
 				continue;
 			}
-			
+
 
 			if(BondMateRef.ObjectID == BondMateState.ObjectID) {
 				// don't want to double dip on the sweet gainz bro
 				ActiveSquadUnitStates.RemoveItem(BondMateState);
-				
+
 				UnitState = XComGameState_Unit(NewGameState.ModifyStateObject(class'XComGameState_Unit', UnitState.ObjectID));
 				BondMateState = XComGameState_Unit(NewGameState.ModifyStateObject(class'XComGameState_Unit', BondMateState.ObjectID));
 				UnitState.AddXP(GetDNMXPForRank(UnitState));
@@ -634,7 +634,7 @@ simulated function RetrieveRescuedProgramOperatives(XComGameState NewGameState) 
 	local XComGameState_HeadquartersXCom XComHQ;
 
 	History = `XCOMHISTORY;
-	XComHQ = XComGameState_HeadquartersXCom(History.GetSingleGameStateObjectForClass(class'XComGameState_HeadquartersXCom'));	
+	XComHQ = XComGameState_HeadquartersXCom(History.GetSingleGameStateObjectForClass(class'XComGameState_HeadquartersXCom'));
 	XComHQ = XComGameState_HeadquartersXCom(NewGameState.ModifyStateObject(class'XComGameState_HeadquartersXCom', XComHQ.GetReference().ObjectID));
 	foreach Squads(SquadIteratorObjRef) {
 		pgs = RTGameState_PersistentGhostSquad(History.GetGameStateForObjectID(SquadIteratorObjRef.ObjectID));
@@ -674,7 +674,7 @@ simulated function ReloadOperativeArmaments(XComGameState NewGameState) {
 	local X2EquipmentTemplate EquipmentTemplate;
 	local int idx;
 	local XComGameState_Item WeaponState;
-	
+
 
 	History = `XCOMHISTORY;
 	ItemTemplateManager = class'X2ItemTemplateManager'.static.GetItemTemplateManager();
@@ -686,7 +686,7 @@ simulated function ReloadOperativeArmaments(XComGameState NewGameState) {
 		NewUnitState = XComGameState_Unit(NewGameState.ModifyStateObject(class'XComGameState_Unit', UnitState.ObjectID));
 		NewUnitState.BlastLoadout(NewGameState);
 		NewUnitState.ApplyInventoryLoadout(NewGameState, UnitState.GetMyTemplate().DefaultLoadout);
-		
+
 		WeaponState = NewUnitState.GetPrimaryWeapon();
 		WeaponState = XComGameState_Item(NewGameState.ModifyStateObject(class'XComGameState_Item', WeaponState.ObjectID));
 		ApplyWeaponUpgrades(UnitState.GetMyTemplateName(), WeaponState);
@@ -740,14 +740,14 @@ function bool IsExtraFactionSoldierRewardAllowed(XComGameState NewGameState)
 	return false;
 }
 
-private function AddRisingTidesTacticalTags(XComGameState_HeadquartersXCom XComHQ) {// mark missions as being invalid for One Small Favor or Just Passing Through, usually story, (golden path or otherwise) 
+private function AddRisingTidesTacticalTags(XComGameState_HeadquartersXCom XComHQ) {// mark missions as being invalid for One Small Favor or Just Passing Through, usually story, (golden path or otherwise)
 
 }
 
 simulated function bool CashOneSmallFavor(XComGameState NewGameState, XComGameState_MissionSite MissionSite) {
 	local StateObjectReference GhostRef, EmptyRef;
 	local name GhostTemplateName;
-	
+
 	if(Deployed == none) {
 		RotateRandomSquadToDeploy();
 	}
@@ -757,13 +757,7 @@ simulated function bool CashOneSmallFavor(XComGameState NewGameState, XComGameSt
 		return false; // we... have no squads?
 	}
 
-	MissionSite = XComGameState_MissionSite(NewGameState.ModifyStateObject(MissionSite.class, MissionSite.ObjectID));
-	foreach Deployed.Operatives(GhostRef) {
-		GhostTemplateName = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(GhostRef.ObjectID)).GetMyTemplateName();
-		class'RTHelpers'.static.RTLog("Adding a " $ GhostTemplateName $ " to the SpecialSoldiers for Mission " $ MissionSite.GeneratedMission.Mission.MissionName);
-		MissionSite.GeneratedMission.Mission.SpecialSoldiers.AddItem(GhostTemplateName);
-	}
-	
+	AssembleProgramSquad(NewGamestate, MissionSite, Deployed);
 	iPreviousMaxSoldiersForMission = MissionSite.GeneratedMission.Mission.MaxSoldiers;
 	MissionSite.GeneratedMission.Mission.MaxSoldiers = Deployed.Operatives.Length;
 	SelectedMissionRef = MissionSite.GetReference();
@@ -774,7 +768,7 @@ simulated function bool CashOneSmallFavor(XComGameState NewGameState, XComGameSt
 simulated function bool UncashOneSmallFavor(XComGameState NewGameState, XComGameState_MissionSite MissionSite) {
 	local StateObjectReference GhostRef, EmptyRef;
 	local name GhostTemplateName;
-	
+
 	if(MissionSite.GetReference().ObjectID != SelectedMissionRef.ObjectID) {
 		class'RTHelpers'.static.RTLog("MissionSite ObjectID is not the same as the SelectedMissionRef! Removing OSF from the SelectedMissionRef instead of the given one!");
 		MissionSite = XComGameState_MissionSite(`XCOMHISTORY.GetGameStateForObjectID(SelectedMissionRef.ObjectID));
@@ -791,13 +785,13 @@ simulated function bool UncashOneSmallFavor(XComGameState NewGameState, XComGame
 		class'RTHelpers'.static.RTLog("Removing a " $ GhostTemplateName $ " from the SpecialSoldiers for Mission " $ MissionSite.GeneratedMission.Mission.MissionName);
 		MissionSite.GeneratedMission.Mission.SpecialSoldiers.RemoveItem(GhostTemplateName);
 	}
-	
+
 	SelectedMissionRef = EmptyRef;
 	MissionSite.GeneratedMission.Mission.MaxSoldiers = iPreviousMaxSoldiersForMission;
 
 	return true;
 }
-	
+
 protected function RotateRandomSquadToDeploy() {
 	if(Squads.Length == 0)
 		return;
@@ -828,7 +822,7 @@ function AddNewCovertActions(XComGameState NewGameState, int NumActionsToCreate,
 			{
 				AddCovertAction(NewGameState, ActionTemplate, ExclusionList);
 				NumActionsToCreate--;
-				
+
 				AvailableCovertActions.Remove(idx, 1); // Remove the name from the available actions list
 			}
 		}
@@ -844,10 +838,10 @@ function AddNewCovertActions(XComGameState NewGameState, int NumActionsToCreate,
 			if(default.UnavailableCovertActions.Find(ActionTemplate.DataName) == INDEX_NONE)
 			{
 				AddCovertAction(NewGameState, ActionTemplate, ExclusionList);
-				NumActionsToCreate--;			
+				NumActionsToCreate--;
 			}
 		}
-		
+
 		AvailableCovertActions.Remove(iRand, 1); // Remove the name from the available actions list
 	}
 }
@@ -911,7 +905,7 @@ function OnEndOfMonth(XComGameState NewGameState, out array<Name> ActionExclusio
 //----------------- GENERAL FACTION METHODS ---------------------------------------------------
 //#############################################################################################
 simulated function X2ResistanceFactionTemplate GetMyTemplate()
-{ 
+{
 	if(m_Template == none)
 	{
 		m_Template = RTProgramFactionTemplate(GetMyTemplateManager().FindStrategyElementTemplate(m_TemplateName));
@@ -988,12 +982,12 @@ function MeetXCom(XComGameState NewGameState)
 	CleanUpFactionCovertActions(NewGameState);
 	CreateGoldenPathActions(NewGameState);
 	GenerateCovertActions(NewGameState, ExclusionList);
-	
+
 	CreateRTOperatives(NewGameState);
 	CreateRTSquads(NewGameState);
 	//CreateRTDeathRecord(StartState);
-	bSetupComplete = true;	
-	
+	bSetupComplete = true;
+
 
 	// adopt the templar's rival
 	foreach `XCOMHISTORY.IterateByClassType(class'XComGameState_ResistanceFaction', TemplarFaction) {
@@ -1054,13 +1048,13 @@ function TryIncreaseInfluence() {
 		NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("RisingTides: Increasing Influence");
 		Program = RTGameState_ProgramFaction(NewGameState.ModifyStateObject(class'RTGameState_ProgramFaction', self.ObjectID));
 		StratMgr = class'X2StrategyElementTemplateManager'.static.GetStrategyElementTemplateManager();
-		
+
 		RewardTemplate = X2RewardTemplate(StratMgr.FindStrategyElementTemplate('Reward_RTProgram_IncreaseFactionInfluence'));
-		
+
 		RewardState = RewardTemplate.CreateInstanceFromTemplate(NewGameState);
-		RewardState.GetMyTemplate().GenerateRewardFn(RewardState, NewGameState,,GetReference()); 
+		RewardState.GetMyTemplate().GenerateRewardFn(RewardState, NewGameState,,GetReference());
 		RewardState.GiveReward(NewGameState, GetReference());
-		
+
 		// Reset number of favors
 		Program.iNumberOfFavorsCalledIn = 0;
 		`XCOMGAME.GameRuleset.SubmitGameState(NewGameState);
@@ -1126,8 +1120,8 @@ static function InitFaction(optional XComGameState StartState) {
 		NewGameState = StartState;
 	}
 
-	if(ResHQ.GetFactionByTemplateName('Faction_Program') == none) {  //no faction, add it ourselves 
-		ResHQ = XComGameState_HeadquartersResistance(NewGameState.ModifyStateObject(class'XComGameState_HeadquartersResistance', ResHQ.ObjectID)); 
+	if(ResHQ.GetFactionByTemplateName('Faction_Program') == none) {  //no faction, add it ourselves
+		ResHQ = XComGameState_HeadquartersResistance(NewGameState.ModifyStateObject(class'XComGameState_HeadquartersResistance', ResHQ.ObjectID));
 		DataTemplate = StratMgr.FindStrategyElementTemplate('Faction_Program');
 		if(DataTemplate != none)
 		{
@@ -1158,7 +1152,7 @@ static function InitFaction(optional XComGameState StartState) {
 		HavenState.FactionRef = FactionState.GetReference();
 		HavenState.SetScanHoursRemaining(`ScaleStrategyArrayInt(HavenState.MinScanDays), `ScaleStrategyArrayInt(HavenState.MaxScanDays));
 		HavenState.MakeScanRepeatable();
-	
+
 		FactionState.FactionHQ = HavenState.GetReference();
 		FactionState.SetUpProgramFaction(NewGameState);
 		FactionState.CreateGoldenPathActions(NewGameState);
@@ -1174,4 +1168,18 @@ static function InitFaction(optional XComGameState StartState) {
 
 static function DisplayFirstTimePopup() {
 	`PRESBASE.UITutorialBox(default.OSFFirstTime_Title, default.OSFFirstTime_Text, default.OSFFirstTime_ImagePath);
+}
+
+simulated function bool AssembleProgramSquad(XComGameState NewGameState, XComGameState_MissionSite MissionSite, RTGameState_PersistentGhostSquad Squad) {
+	local StateObjectReference GhostRef, EmptyRef;
+	local name GhostTemplateName;
+
+	MissionSite = XComGameState_MissionSite(NewGameState.ModifyStateObject(MissionSite.class, MissionSite.ObjectID));
+	foreach Squad.Operatives(GhostRef) {
+		GhostTemplateName = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(GhostRef.ObjectID)).GetMyTemplateName();
+		class'RTHelpers'.static.RTLog("Adding a " $ GhostTemplateName $ " to the SpecialSoldiers for Mission " $ MissionSite.GeneratedMission.Mission.MissionName);
+		MissionSite.GeneratedMission.Mission.SpecialSoldiers.AddItem(GhostTemplateName);
+	}
+
+	return true;
 }
