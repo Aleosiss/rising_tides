@@ -31,7 +31,7 @@ private function bool CheckTarget(XComGameState_BaseObject kTarget, optional XCo
 	}
 
 	foreach ActivatedUnits(IteratorState) {
-		if(!IteratorState.AffectedByEffectNames.Find(class'RTAbility_GathererAbilitySet'.default.OverTheShoulderEffectName)) {
+		if(IteratorState.AffectedByEffectNames.Find(class'RTAbility_GathererAbilitySet'.default.OverTheShoulderEffectName) == INDEX_NONE) {
 			return false;
 		}
 	}

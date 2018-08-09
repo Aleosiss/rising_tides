@@ -796,12 +796,12 @@ static function CreateGuardianAngel(out X2AbilityTemplate Template) {
 	Template.AddTargetEffect(CreateGuardianAngelCleanseEffect());
 	Template.AddTargetEffect(CreateGuardianAngelImmunitiesEffect());
 	Template.AddTargetEffect(CreateGuardianAngelMentalRecoveryEffect());
-	
+
 	Template.AddMultiTargetEffect(CreateGuardianAngelHealEffect());
 	Template.AddMultiTargetEffect(CreateGuardianAngelCleanseEffect());
 	Template.AddMultiTargetEffect(CreateGuardianAngelImmunitiesEffect());
 	Template.AddMultiTargetEffect(CreateGuardianAngelMentalRecoveryEffect());
-	
+
 	Template.AddMultiTargetEffect(CreateGuardianAngelStabilizeEffectPartOne());
 	Template.AddMultiTargetEffect(CreateGuardianAngelStabilizeEffectPartTwo());
 }
@@ -2735,11 +2735,11 @@ static simulated function PsionicLash_BuildVisualization(XComGameState Visualize
 }
 
 static function X2AbilityTemplate RTUnfurlTheVeil() {
-	local X2AbilityTemplate 					Template;
+	local X2AbilityTemplate						Template;
 	local X2Effect_RangerStealth			StealthEffect;
 	local RTCondition_UnfurlTheVeil			VeilCondition;
 	local X2AbilityCost_ActionPoints		Cost;
-
+	local X2AbilityCooldown						Cooldown;
 
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'RTUnfurlTheVeil');
 	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_swordSlash";
