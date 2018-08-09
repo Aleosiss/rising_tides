@@ -122,6 +122,7 @@ static function array<X2DataTemplate> CreateTemplates()
 	Templates.AddItem(RTSetPsistormCharges());
 	Templates.AddItem(RTPsionicLash());
 	Templates.AddItem(RTPsionicLashAnims());
+	Templates.AddItem(RTUnfurlTheVeil());
 
 	return Templates;
 }
@@ -2731,6 +2732,55 @@ static simulated function PsionicLash_BuildVisualization(XComGameState Visualize
 		SoundAndFlyOver.SetSoundAndFlyOverParameters(None, AbilityTemplate.LocMissMessage, '', eColor_Bad);
 	}
 	//****************************************************************************************
+}
+
+static function X2AbilityTemplate RTUnfurlTheVeil() {
+	local X2AbilityTemplate 					Template;
+	local X2Effect_RangerStealth			StealthEffect;
+	local RTCondition_UnfurlTheVeil			VeilCondition;
+	local X2AbilityCost_ActionPoints		Cost;
+
+
+	`CREATE_X2ABILITY_TEMPLATE(Template, 'RTUnfurlTheVeil');
+	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_swordSlash";
+
+	Template.AbilitySourceName = 'eAbilitySource_Psionic';
+	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_ShowIfAvailable;
+	Template.Hostility = eHostility_Defensive;
+
+	Template.AbilityToHitCalc = default.DeadEye;
+	Template.AbilityTargetStyle = default.SelfTarget;
+	Template.AbilityTriggers.AddItem(default.PlayerInputTrigger);
+
+	Cooldown = new class'X2AbilityCooldown';
+	Cooldown.iNumTurns = 6;
+	Template.AbilityCooldown = Cooldown;
+
+	Cost = new class'X2AbilityCost_ActionPoints';
+	Cost.iNumPoints = default.UTV_ACTION_POINT_COST;
+	Cost.bConsumeAllPoints = false;
+	Template.AbilityCosts.AddItem(Cost);
+
+	VeilCondition = new class'RTCondition_UnfurlTheVeil';
+	Template.AbilityShooterConditions.AddItem(VeilCondition);
+
+	Template.AbilityShooterConditions.AddItem(default.LivingShooterProperty);
+	Template.AbilityShooterConditions.AddItem(new class'X2Condition_Stealth');
+	Template.AddShooterEffectExclusions();
+
+	StealthEffect = new class'X2Effect_RangerStealth';
+	StealthEffect.BuildPersistentEffect(1, true, true, false, eGameRule_PlayerTurnEnd);
+	StealthEffect.SetDisplayInfo(ePerkBuff_Bonus, Template.LocFriendlyName, Template.GetMyHelpText(), Template.IconImage, true);
+	StealthEffect.bRemoveWhenTargetConcealmentBroken = true;
+	Template.AddTargetEffect(StealthEffect);
+
+	Template.AddTargetEffect(class'X2Effect_Spotted'.static.CreateUnspottedEffect());
+
+	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
+	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
+	Template.CustomFireAnim = 'HL_Psi_SelfCast';
+
+	return Template;
 }
 
 

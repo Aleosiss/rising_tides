@@ -257,6 +257,9 @@
     <Content Include="Src\RisingTides\Classes\RTCondition_Conditional.uc">
       <SubType>Content</SubType>
     </Content>
+    <Content Include="Src\RisingTides\Classes\RTCondition_UnfurlTheVeil.uc">
+      <SubType>Content</SubType>
+    </Content>
     <Content Include="Src\RisingTides\Classes\RTCondition_EffectStackCount.uc">
       <SubType>Content</SubType>
     </Content>
