@@ -21,9 +21,9 @@ static function X2CharacterTemplate CreateWhisperTemplate()
 	
 	CharTemplate.DefaultSoldierClass = 'RT_Marksman';
 	CharTemplate.DefaultLoadout = 'RT_Marksman';
-    CharTemplate.bIsPsionic = true;
+	CharTemplate.bIsPsionic = true;
 
-    CharTemplate.bForceAppearance = true;
+	CharTemplate.bForceAppearance = true;
 	CharTemplate.bAppearanceDefinesPawn = true;
 
 	CharTemplate.ForceAppearance.nmHead = 'ReaperMale_A';

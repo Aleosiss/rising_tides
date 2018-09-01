@@ -205,11 +205,11 @@ LocFlyOverText="Mind Control"
 LocPromotionPopupText="<Bullet><Ability:SelfCooldown/> turn cooldown.<br/>"
 
 [LinkedIntelligence X2AbilityTemplate]
-LocFriendlyName="Possibility Mapping"
+LocFriendlyName="Networked OI"
 LocLongDescription="Units within the meld can react instantaneously to firing commands. When a unit in the Meld takes a reaction shot, all melded units attempt to fire against the target."
 LocHelpText="When a unit in the Meld takes a reaction shot, all melded units attempt to fire against the target."
-LocFlyOverText="Possibility Mapped"
-LocPromotionPopupText="<Bullet/> Possibility Mapping will trigger at squadsight range.<br/><Bullet/> Units will not break concealment in order to fire.<br/>"
+LocFlyOverText="Networked OI"
+LocPromotionPopupText="<Bullet/> Networked OI will trigger at squadsight range.<br/><Bullet/> Units will not break concealment in order to fire.<br/>"
 
 [TwitchReaction X2AbilityTemplate]
 LocFriendlyName="Twitch Reaction"

@@ -53,10 +53,10 @@ var config array<name> GathererWeaponUpgrades;
 
 var() array<StateObjectReference>								Master; 			// master list of operatives
 var() array<StateObjectReference> 								Active;				// operatives active
-var() RTGameState_PersistentGhostSquad							Deployed; 			// operatives that will be on the next mission
+var() RTGameState_PersistentGhostSquad					Deployed; 			// operatives that will be on the next mission
 var() array<StateObjectReference>								Captured;			// operatives not available
 var() array<StateObjectReference>								Squads;				// list of ghost teams (only one for now)
-var() int 														iOperativeLevel;	// all operatives get level ups after a mission, even if they weren't on it. lorewise, they're constantly running missions; the player only sees a fraction of them
+var() int 																		iOperativeLevel;	// all operatives get level ups after a mission, even if they weren't on it. lorewise, they're constantly running missions; the player only sees a fraction of them
 var bool														bSetupComplete;		// if we should rebuild the operative array from config
 
 /* END OPERATIVE RECORD   */
@@ -66,14 +66,14 @@ var bool														bSetupComplete;		// if we should rebuild the operative arr
 var bool																bShouldPerformPostMissionCleanup;	// should cleanup the program's roster after a mission-- set during OSF and JPT missions
 var bool																bTemplarsDestroyed;
 var bool																bDirectNeuralManipulation;
-var config array<name>													InvalidMissionSources;				// list of mission types ineligible for Program support, usually story missions
-var config array<name>													UnavailableCovertActions;			// list of covert actions that the program cannot carry out
+var config array<name>											InvalidMissionSources;				// list of mission types ineligible for Program support, usually story missions
+var config array<name>											UnavailableCovertActions;			// list of covert actions that the program cannot carry out
 var config int															iNumberOfFavorsRequiredToIncreaseInfluence;
-var array<X2DataTemplate>												OperativeTemplates;
+var array<X2DataTemplate>									OperativeTemplates;
 
 // ONE SMALL FAVOR HANDLING VARIABLES
 var private int															iPreviousMaxSoldiersForMission;		// cache of the number of soldiers on a mission before OSF modfied it
-var private StateObjectReference										SelectedMissionRef;					// cache of the mission one small favor is going to go against
+var private StateObjectReference							SelectedMissionRef;			// cache of the mission one small favor is going to go against
 var bool																bShouldResetOSFMonthly;
 var bool																bOneSmallFavorAvailable;			// can send squad on a mission, replacing XCOM
 var bool																bOneSmallFavorActivated;			// actively sending a squad on the next mission

@@ -42,6 +42,8 @@ class RTAbility_GathererAbilitySet extends RTAbility_GhostAbilitySet config(Risi
 	var config int PSIONICSTORM_NUMSTORMS;
 	var int PSIONICSTORM_RADIUS;
 	var config int LASH_COOLDOWN;
+	var config int UTV_ACTION_POINT_COST;
+	var config int UTV_COOLDOWN;
 
 	var name ExtinctionEventStageThreeEventName;
 	var name OverTheShoulderTagName;
@@ -2753,7 +2755,7 @@ static function X2AbilityTemplate RTUnfurlTheVeil() {
 	Template.AbilityTriggers.AddItem(default.PlayerInputTrigger);
 
 	Cooldown = new class'X2AbilityCooldown';
-	Cooldown.iNumTurns = 6;
+	Cooldown.iNumTurns = default.UTV_COOLDOWN;
 	Template.AbilityCooldown = Cooldown;
 
 	Cost = new class'X2AbilityCost_ActionPoints';

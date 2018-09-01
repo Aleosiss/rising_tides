@@ -151,7 +151,6 @@ static function X2AbilityTemplate BumpInTheNight()
 	Template.bSkipFireAction = true;
 
 	return Template;
-
 }
 //---------------------------------------------------------------------------------------
 //---BumpInTheNightBloodlustListener-----------------------------------------------------
