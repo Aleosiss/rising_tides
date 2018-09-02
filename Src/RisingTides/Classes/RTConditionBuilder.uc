@@ -2,9 +2,7 @@
 
 class RTConditionBuilder extends Object config(RisingTides);
 
-
 defaultproperties 
 {
-
 
 }

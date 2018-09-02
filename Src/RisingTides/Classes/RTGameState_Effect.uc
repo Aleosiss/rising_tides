@@ -3,6 +3,7 @@ class RTGameState_Effect extends XComGameState_Effect;
 var array<StateObjectReference> EffectsAddedList;
 var array<StateObjectReference> EffectsRemovedList;
 var bool bCanTrigger;
+var bool bWasPreviouslyConcealed;
 
 var localized string LocPsionicallyInterruptedName;
 
@@ -1470,19 +1471,17 @@ function EventListenerReturn RTBumpInTheNight(Object EventData, Object EventSour
 	if (OldTargetUnitState != none && OldTargetUnitState.ObjectID > 0 &&
 		TargetUnit != none && TargetUnit.ObjectID > 0) {
 			bTargetIsDead = TargetUnit.IsDead();
+			if(!bTargetIsDead) {
+				bTargetIsDead = TargetUnit.IsBleedingOut(); // not going to fuck around with a oneliner if im not ever gonna test this code LUL
+			}
 	}
-
-
 
 	Attacker = XComGameState_Unit(EventSource);
 	if(Attacker != none && bShouldTriggerMelee) {
 		// trigger psionic activation if psionic blades were present and used or on shadow strike
 		if(Attacker.HasSoldierAbility('RTPsionicBlade') || AbilityState.GetMyTemplateName() == 'RTShadowStrike') {
-			//`LOG("Rising Tides: attempted to force a psionic ability event.");
 			InitializeAbilityForActivation(PsionicActivationAbilityState, Attacker, 'PsionicActivate', History);
 			ActivateAbility(PsionicActivationAbilityState, Attacker.GetReference());
-		} else {
-			//`LOG("Rising Tides: did not attempt to force a psionic ability event.");
 		}
 	}
 

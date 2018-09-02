@@ -64,7 +64,7 @@ static function array<X2DataTemplate> CreateTemplates()
 {
 	local array<X2DataTemplate> Templates;
 
-	Templates.AddItem(ScopedAndDropped());							
+	Templates.AddItem(ScopedAndDropped());
 	Templates.AddItem(RTStandardSniperShot());
 	Templates.AddItem(RTOverwatch());
 	Templates.AddItem(RTOverwatchShot());
@@ -79,32 +79,32 @@ static function array<X2DataTemplate> CreateTemplates()
 	Templates.AddItem(SixOClockEffect());
 	//Templates.AddItem(VitalPointTargeting());
 	Templates.AddItem(RTDamnGoodGround());
-	Templates.AddItem(SlowIsSmooth());								
+	Templates.AddItem(SlowIsSmooth());
 	Templates.AddItem(SlowIsSmoothEffect());
-	Templates.AddItem(Sovereign());									
+	Templates.AddItem(Sovereign());
 	Templates.AddItem(SovereignEffect());
 	Templates.AddItem(DaybreakFlame());										// animation
-	Templates.AddItem(DaybreakFlameIcon());							
-	Templates.AddItem(YourHandsMyEyes());							
+	Templates.AddItem(DaybreakFlameIcon());
+	Templates.AddItem(YourHandsMyEyes());
 	Templates.AddItem(TimeStandsStill());									// animation
 	Templates.AddItem(TimeStandsStillInterruptListener());
 	Templates.AddItem(TimeStandsStillEndListener());
 	Templates.AddItem(TwitchReaction());
 	Templates.AddItem(TwitchReactionShot());
-	Templates.AddItem(LinkedIntelligence());						
+	Templates.AddItem(LinkedIntelligence());
 	Templates.AddItem(PsionicSurge());								     	// animation
-	Templates.AddItem(EyeInTheSky());								
+	Templates.AddItem(EyeInTheSky());
 	Templates.AddItem(HeatChannel());										// animation
-	Templates.AddItem(HeatChannelIcon());							
+	Templates.AddItem(HeatChannelIcon());
 	Templates.AddItem(HeatChannelCooldown());
-	Templates.AddItem(Harbinger());								
+	Templates.AddItem(Harbinger());
 	Templates.AddItem(RTHarbingerPsionicLance());
 	Templates.AddItem(HarbingerCleanseListener());
-	Templates.AddItem(ShockAndAwe());								
+	Templates.AddItem(ShockAndAwe());
 	Templates.AddItem(ShockAndAweListener());
 	Templates.AddItem(RTKillzone());								// icon
-	Templates.AddItem(RTEveryMomentMatters());						
-	Templates.AddItem(RTOverflowBarrier());							
+	Templates.AddItem(RTEveryMomentMatters());
+	Templates.AddItem(RTOverflowBarrier());
 	Templates.AddItem(RTOverflowBarrierEvent());
 	Templates.AddItem(RTKubikuri());
 	Templates.AddItem(RTKubikuriDamage());
@@ -120,7 +120,6 @@ static function X2AbilityTemplate ScopedAndDropped()
 	local X2AbilityTemplate						Template;
 	local RTEffect_ScopedAndDropped				ScopedEffect;
 	local RTEffect_Squadsight					SSEffect;
-	local RTEffect_LoadPerks					LoadPerks;
 
 	// Icon Properties
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'ScopedAndDropped');
@@ -147,11 +146,6 @@ static function X2AbilityTemplate ScopedAndDropped()
 	SSEffect.BuildPersistentEffect(1, true, true, true);
 	Template.AddTargetEffect(SSEffect);
 
-	LoadPerks = new class'RTEffect_LoadPerks';
-	LoadPerks.AbilitiesToLoad = default.AbilityPerksToLoad;
-	Template.AddShooterEffect(LoadPerks);
-
-
 	// standard ghost abilities
 	Template.AdditionalAbilities.AddItem('GhostPsiSuite');
 	Template.AdditionalAbilities.AddItem('JoinMeld');
@@ -174,7 +168,8 @@ static function X2AbilityTemplate ScopedAndDropped()
 
 	// Probably required
 	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
-	//  NOTE: No visualization on purpose!
+	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
+	Template.bSkipFireAction = true;
 
 	return Template;
 }
@@ -324,7 +319,7 @@ static function X2AbilityTemplate RTOverwatch()
 	CoveringFireEffect.AbilityToActivate = 'RTOverwatchShot';
 	CoveringFireEffect.BuildPersistentEffect(1, false, true, false, eGameRule_PlayerTurnBegin);
 	CoveringFireCondition = new class'X2Condition_AbilityProperty';
-	CoveringFireCondition.OwnerHasSoldierAbilities.AddItem('CoveringFire');
+	CoveringFireCondition.OwnerHasSoldierAbilities.AddItem('EyeInTheSky');
 	CoveringFireEffect.TargetConditions.AddItem(CoveringFireCondition);
 	Template.AddTargetEffect(CoveringFireEffect);
 
@@ -822,14 +817,8 @@ static function X2AbilityTemplate SixOClockEffect()
 	Template.eAbilityIconBehaviorHUD = EAbilityIconBehavior_NeverShow;
 	Template.Hostility = eHostility_Neutral;
 
-
 	Template.AbilityToHitCalc = default.DeadEye;
 	Template.AbilityTargetStyle = default.SelfTarget;
-
-	// Apply perk when we go on overwatch.
-	//Trigger = new class 'X2AbilityTrigger_OnAbilityActivated';
-	//Trigger.SetListenerData('RTOverwatch');
-	//Template.AbilityTriggers.AddItem(Trigger);
 
 	// Apply perk when we go on overwatch (ATTEMPT 2)
 	Trigger = new class'X2AbilityTrigger_EventListener';
@@ -843,7 +832,6 @@ static function X2AbilityTemplate SixOClockEffect()
 	// Multi target
 	MultiTarget = new class'X2AbilityMultiTarget_Radius';
 	MultiTarget.fTargetRadius = 500;
-
 	MultiTarget.bIgnoreBlockingCover = true;
 	Template.AbilityMultiTargetStyle = MultiTarget;
 
@@ -1244,42 +1232,41 @@ static function X2AbilityTemplate SovereignEffect()
 	Template.AddTargetEffect(WeaponDamageEffect);
 	Template.AddMultiTargetEffect(WeaponDamageEffect);
 
-	BurningEffect = class'X2StatusEffects'.static.CreateBurningStatusEffect(3, 2);   //Adds Burning Effect for 3 damage, 2 spread
-	BurningEffect.ApplyChance = 100;                                         //Should be a 100% chance to actually apply burning
+	BurningEffect = class'X2StatusEffects'.static.CreateBurningStatusEffect(3, 2);	//Adds Burning Effect for 3 damage, 2 spread
+	BurningEffect.ApplyChance = 100;												//Should be a 100% chance to actually apply burning
 	Template.AddTargetEffect(BurningEffect);
-	Template.AddMultiTargetEffect(BurningEffect);                                    //Adds the burning effect to the targeted area
+	Template.AddMultiTargetEffect(BurningEffect);									//Adds the burning effect to the targeted area
 
-	WorldDamage = new class'X2Effect_ApplyDirectionalWorldDamage';  //creates the framework to apply damage to the world
-	WorldDamage.bUseWeaponDamageType = False;                       //overrides the normal weapon damage type
-	WorldDamage.bUseWeaponEnvironmentalDamage = false;              //replaces the weapon's environmental damage with the abilities
-	WorldDamage.EnvironmentalDamageAmount = 250;                    //determines the amount of enviornmental damage the ability applies
-	WorldDamage.bApplyOnHit = true;                                 //obv
-	WorldDamage.bApplyOnMiss = true;                                //obv
-	WorldDamage.bApplyToWorldOnHit = true;                          //obv
-	WorldDamage.bApplyToWorldOnMiss = true;                         //obv
-	WorldDamage.bHitAdjacentDestructibles = false;                   //applies environmental damage to things adjacent to the Line
-	WorldDamage.PlusNumZTiles = 1;                                 //determines how 'high' the world damage is applied
-	WorldDamage.bHitTargetTile = true;                              //Makes sure that everthing that is targetted is hit
+	WorldDamage = new class'X2Effect_ApplyDirectionalWorldDamage';	//creates the framework to apply damage to the world
+	WorldDamage.bUseWeaponDamageType = False;						//overrides the normal weapon damage type
+	WorldDamage.bUseWeaponEnvironmentalDamage = false;				//replaces the weapon's environmental damage with the abilities
+	WorldDamage.EnvironmentalDamageAmount = 250;					//determines the amount of enviornmental damage the ability applies
+	WorldDamage.bApplyOnHit = true;									//obv
+	WorldDamage.bApplyOnMiss = true;								//obv
+	WorldDamage.bApplyToWorldOnHit = true;							//obv
+	WorldDamage.bApplyToWorldOnMiss = true;							//obv
+	WorldDamage.bHitAdjacentDestructibles = false;					//applies environmental damage to things adjacent to the Line
+	WorldDamage.PlusNumZTiles = 1;									//determines how 'high' the world damage is applied
+	WorldDamage.bHitTargetTile = true;								//Makes sure that everthing that is targetted is hit
 	WorldDamage.bHitSourceTile = false;
 	WorldDamage.ApplyChance = 100;
-	Template.AddMultiTargetEffect(WorldDamage);                     //May be redundant
+	Template.AddMultiTargetEffect(WorldDamage);		//May be redundant
 
-	FireToWorldEffect = new class'X2Effect_ApplyFireToWorld';                //This took a while to find
+	FireToWorldEffect = new class'X2Effect_ApplyFireToWorld';	//This took a while to find
 	FireToWorldEffect.bUseFireChanceLevel = true;
 	FireToWorldEffect.bDamageFragileOnly = false;
 	FireToWorldEffect.bCheckForLOSFromTargetLocation = false;
-	FireToWorldEffect.FireChance_Level1 = 0.95f;                             //%chance of fire to catch
+	FireToWorldEffect.FireChance_Level1 = 0.95f;				//%chance of fire to catch
 	FireToWorldEffect.FireChance_Level2 = 0.95f;
 	FireToWorldEffect.FireChance_Level3 = 0.95f;
 	Template.AddTargetEffect(FireToWorldEffect);
-	Template.AddMultiTargetEffect(FireToWorldEffect);                        //this is required to add the fire effect
+	Template.AddMultiTargetEffect(FireToWorldEffect);			//this is required to add the fire effect
 
 	Template.OverrideAbilities.AddItem('SniperStandardFire');
 	Template.OverrideAbilities.AddItem('RTStandardSniperShot');
 
 	// MAKE IT LIVE!
 	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
-
 
 	// TODO: VISUALIZATION
 	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
@@ -1420,13 +1407,14 @@ static function X2AbilityTemplate TimeStandsStill()
 	CounterEffect.EffectName = 'TimeStandsStillCounterEffect';
 	Template.AddShooterEffect(CounterEffect);
 
+	// should nab everyone
 	MultiTarget = new class'X2AbilityMultiTarget_Radius';
 	MultiTarget.fTargetRadius = 500 * class'XComWorldData'.const.WORLD_StepSize * class'XComWorldData'.const.WORLD_UNITS_TO_METERS_MULTIPLIER;
 	MultiTarget.bExcludeSelfAsTargetIfWithinRadius = true;
 	MultiTarget.bIgnoreBlockingCover = true;
 	Template.AbilityMultiTargetStyle = MultiTarget;
 
-	// TODO: experiment with renabling this.
+	// no one can escape
 	UnitPropertyCondition = new class'X2Condition_UnitProperty';
 	UnitPropertyCondition.FailOnNonUnits = true;
 	UnitPropertyCondition.ExcludeInStasis = false;
@@ -1969,7 +1957,7 @@ static function X2AbilityTemplate HeatChannelCooldown()
 
 	AgroEffect = new class'X2Effect_Persistent';
 	AgroEffect.BuildPersistentEffect(1, true, true, true, eGameRule_PlayerTurnEnd);
-	AgroEffect.SetDisplayInfo(ePerkBuff_Penalty, Template.LocFriendlyName, "Heat Channel is on cooldown!", Template.IconImage, true,,Template.AbilitySourceName);
+	AgroEffect.SetDisplayInfo(ePerkBuff_Penalty, Template.LocFriendlyName, Template.LocLongDescription, Template.IconImage, true,,Template.AbilitySourceName);
 	AgroEffect.EffectName = 'HeatChannelCooldownTrackerEffect';
 	Template.AddTargetEffect(AgroEffect);
 
@@ -2009,8 +1997,6 @@ static function X2AbilityTemplate EyeInTheSky()
 	ReactionFire.BuildPersistentEffect(1, true, true, true);
 	ReactionFire.SetDisplayInfo(ePerkBuff_Passive, Template.LocFriendlyName, Template.GetMyLongDescription(), Template.IconImage,,,Template.AbilitySourceName);
 	Template.AddTargetEffect(ReactionFire);
-
-	Template.AdditionalAbilities.AddItem('CoveringFire');
 
 	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
 	//  NOTE: No visualization on purpose!
@@ -2680,7 +2666,7 @@ static function X2AbilityTemplate RTKubikuri()
 	Template.AbilityCosts.AddItem(AmmoCost);
 
 	Template.AdditionalAbilities.AddItem('RTKubikuriDamage');
-	
+
 	KnockbackEffect = new class'X2Effect_Knockback';
 	KnockbackEffect.KnockbackDistance = 2;
 	Template.AddTargetEffect(KnockbackEffect);

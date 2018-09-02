@@ -1,10 +1,7 @@
 class RTEffect_GhostInTheShell extends X2Effect_Persistent;
 
-
-
 function RegisterForEvents(XComGameState_Effect EffectGameState)
 {
-
 	local X2EventManager EventMgr;
 	local RTGameState_Effect GhostEffectState;
 	local Object EffectObj, FilterObj;

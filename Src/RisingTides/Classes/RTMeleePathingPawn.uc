@@ -104,14 +104,6 @@ simulated function UpdateMeleeTarget(XComGameState_BaseObject Target)
 	local X2AbilityTemplate AbilityTemplate;
 	local vector TileLocation;
 
-	//<workshop> Francois' Smooth Cursor AMS 2016/04/07
-	//INS:
-	//local TTile InvalidTile;
-	//InvalidTile.X = -1;
-	//InvalidTile.Y = -1;
-	//InvalidTile.Z = -1;
-	//</workshop>
-
 	if(Target == none)
 	{
 		`Redscreen("X2MeleePathingPawn::UpdateMeleeTarget: Target is none!");
@@ -125,17 +117,6 @@ simulated function UpdateMeleeTarget(XComGameState_BaseObject Target)
 
 	if(class'RTAbilityTarget_TeleportMelee'.static.SelectAttackTile(UnitState, Target, AbilityTemplate, PossibleTiles))
 	{
-		// build a path to the default (best) tile
-		//<workshop> Francois' Smooth Cursor AMS 2016/04/07
-		//WAS:
-		//RebuildPathingInformation(PossibleTiles[0], TargetVisualizer, AbilityTemplate);	
-		//RebuildPathingInformation(PossibleTiles[0], TargetVisualizer, AbilityTemplate, InvalidTile);
-		//</workshop>
-
-		// and update the tiles to reflect the new target options
-		
-		//UpdatePossibleTilesVisuals();
-
 		if(`ISCONTROLLERACTIVE)
 		{
 			// move the 3D cursor to the new target
@@ -150,11 +131,6 @@ simulated function UpdateMeleeTarget(XComGameState_BaseObject Target)
 		super(XComPathingPawn).SetActive(XGUnitNativeBase(Target.GetVisualizer()));
 		DoUpdatePuckVisuals(PossibleTiles[0], Target.GetVisualizer(), AbilityTemplate);
 	}
-	//<workshop> TACTICAL_CURSOR_PROTOTYPING AMS 2015/12/07
-	//INS:
-
-
-	//</workshop>
 }
 
 
@@ -231,4 +207,16 @@ simulated event Tick(float DeltaTime)
 			}
 		}
 	}
+}
+
+simulated function array<TTile> GetPossibleTiles() {
+	return PossibleTiles;
+}
+
+simulated function X2AbilityTemplate GetAbilityTemplate() {
+	return AbilityState.GetMyTemplate();
+}
+
+simulated function XComGameState_Unit GetUnitState() {
+	return UnitState;
 }

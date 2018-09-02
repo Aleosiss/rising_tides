@@ -7,7 +7,7 @@
 //
 //---------------------------------------------------------------------------------------
 
-class RTEffect_Panicked extends X2Effect_Panicked config(RTGhost);
+class RTEffect_Panicked extends X2Effect_Panicked config(RisingTides);
 
 simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffectParameters, XComGameState_BaseObject kNewTargetState, XComGameState NewGameState, XComGameState_Effect NewEffectState)
 {

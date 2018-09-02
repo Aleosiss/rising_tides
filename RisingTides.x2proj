@@ -176,9 +176,6 @@
     <Content Include="Localization\RisingTides.int">
       <SubType>Content</SubType>
     </Content>
-    <Content Include="Localization\TheProgram.int">
-      <SubType>Content</SubType>
-    </Content>
     <Content Include="ReadMe.txt" />
     <Content Include="ModPreview.jpg" />
     <Content Include="Config\XComEditor.ini" />
@@ -206,6 +203,9 @@
     <Content Include="Src\RisingTides\Classes\RTAbilityToHitCalc_StatCheck_UnitVsUnit.uc">
       <SubType>Content</SubType>
     </Content>
+    <Content Include="Src\RisingTides\Classes\RTEventListener.uc">
+      <SubType>Content</SubType>
+    </Content>
     <Content Include="Src\RisingTides\Classes\RTAbility_BerserkerAbilitySet.uc">
       <SubType>Content</SubType>
     </Content>
@@ -216,6 +216,9 @@
       <SubType>Content</SubType>
     </Content>
     <Content Include="Src\RisingTides\Classes\RTAbility_MarksmanAbilitySet.uc">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Src\RisingTides\Classes\RTAbility_Program.uc">
       <SubType>Content</SubType>
     </Content>
     <Content Include="Src\RisingTides\Classes\RTAction_ApplyMITV.uc">
@@ -242,10 +245,19 @@
     <Content Include="Src\RisingTides\Classes\RTAction_RemoveMITV.uc">
       <SubType>Content</SubType>
     </Content>
+    <Content Include="Src\RisingTides\Classes\RTCharacter_DefaultCharacters.uc">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Src\RisingTides\Classes\RTCharacterTemplate.uc">
+      <SubType>Content</SubType>
+    </Content>
     <Content Include="Src\RisingTides\Classes\RTConditionBuilder.uc">
       <SubType>Content</SubType>
     </Content>
     <Content Include="Src\RisingTides\Classes\RTCondition_Conditional.uc">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Src\RisingTides\Classes\RTCondition_UnfurlTheVeil.uc">
       <SubType>Content</SubType>
     </Content>
     <Content Include="Src\RisingTides\Classes\RTCondition_EffectStackCount.uc">
@@ -327,9 +339,6 @@
       <SubType>Content</SubType>
     </Content>
     <Content Include="Src\RisingTides\Classes\RTEffect_LinkedIntelligence.uc">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Src\RisingTides\Classes\RTEffect_LoadPerks.uc">
       <SubType>Content</SubType>
     </Content>
     <Content Include="Src\RisingTides\Classes\RTEffect_MarkValidActivationTiles.uc">
@@ -449,13 +458,31 @@
     <Content Include="Src\RisingTides\Classes\RTGameState_ProgramFaction.uc">
       <SubType>Content</SubType>
     </Content>
+    <Content Include="Src\RisingTides\Classes\RTGameState_StrategyCard.uc">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Src\RisingTides\Classes\RTProgramFactionTemplate.uc">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Src\RisingTides\Classes\RTProgramStrategyCardTemplate.uc">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Src\RisingTides\Classes\RTStrategyElement_ProgramFaction.uc">
+      <SubType>Content</SubType>
+    </Content>
     <Content Include="Src\RisingTides\Classes\RTGameState_SquadViewer.uc">
       <SubType>Content</SubType>
     </Content>
     <Content Include="Src\RisingTides\Classes\RTGameState_TimeStopEffect.uc">
       <SubType>Content</SubType>
     </Content>
+    <Content Include="Src\RisingTides\Classes\RTGameState_Unit.uc">
+      <SubType>Content</SubType>
+    </Content>
     <Content Include="Src\RisingTides\Classes\RTHelpers.uc">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Src\RisingTides\Classes\RTItem.uc">
       <SubType>Content</SubType>
     </Content>
     <Content Include="Src\RisingTides\Classes\RTMeleePathingPawn.uc">
@@ -464,16 +491,22 @@
     <Content Include="Src\RisingTides\Classes\RTSitRepEffects.uc">
       <SubType>Content</SubType>
     </Content>
-    <Content Include="Src\RisingTides\Classes\RTSitrep_OneSmallFavor.uc">
+    <Content Include="Src\RisingTides\Classes\RTSitrepEffect_OneSmallFavor.uc">
       <SubType>Content</SubType>
     </Content>
     <Content Include="Src\RisingTides\Classes\RTStrategyElement_CovertActions.uc">
       <SubType>Content</SubType>
     </Content>
-    <Content Include="Src\RisingTides\Classes\RTStrategyElement_ProgramActions.uc">
+    <Content Include="Src\RisingTides\Classes\RTStrategyElement_SitReps.uc">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Src\RisingTides\Classes\RTStrategyElement_StrategyCards.uc">
       <SubType>Content</SubType>
     </Content>
     <Content Include="Src\RisingTides\Classes\RTStrategyElement_ResistanceModes.uc">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Src\RisingTides\Classes\RTStrategyElement_Rewards.uc">
       <SubType>Content</SubType>
     </Content>
     <Content Include="Src\RisingTides\Classes\RTTacticalVisibilityHelpers.uc">

@@ -27,7 +27,7 @@ private function bool CheckTarget(XComGameState_BaseObject kTarget, optional XCo
 	TargetUnitState = XComGameState_Unit(kTarget);
 	SourceUnitState = XComGameState_Unit(kSource);
 	if(TargetUnitState == none) // I'm not sure if there are going to be any non-unit Psionic targets.
-		return false;           // Will need to revisit if that changes.
+		return false;		// Will need to revisit if that changes.
 								// Technopathy's hacking abilities won't use this condition.
 
 	if(TargetUnitState.GetMyTemplate().bIsCosmetic) {

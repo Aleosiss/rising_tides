@@ -2,6 +2,7 @@
 class RTHelpers extends Object config(RisingTides);
 
 var config array<name> StandardShots, MeleeAbilities, SniperShots, OverwatchShots, PsionicAbilities, FreeActions;
+var config name ProgramFactionName;
 
 enum ERTChecklist {
 	eChecklist_StandardShots,
@@ -11,7 +12,6 @@ enum ERTChecklist {
 	eChecklist_MeleeAbilities,
 	eChecklist_FreeActions
 };
-
 
 // copied here from X2Helpers_DLC_Day60.uc
 static function bool IsUnitAlienRuler(XComGameState_Unit UnitState)
@@ -95,7 +95,6 @@ static function bool CheckAbilityActivated(name AbilityTemplateName, ERTChecklis
 		`LOG("Rising Tides: " @ AbilityTemplateName @ " was not found in " @ n);
 	}
 
-
 	return b;
 }
 
@@ -114,7 +113,6 @@ static function bool MultiCatCheckAbilityActivated (name AbilityTemplateName, ar
 	return b;
 }
 
-
 static function GetAdjacentTiles(TTile TargetTile, out array<TTile> AdjacentTiles) {
 	local int x, y;
 	local TTile Tile;
@@ -126,11 +124,10 @@ static function GetAdjacentTiles(TTile TargetTile, out array<TTile> AdjacentTile
 			Tile.Y += y;
 			if(x == 0 && y == 0)
 				continue;
-			
+
 			AdjacentTiles.AddItem(Tile);
 		}
 	}
-
 }
 
 static function PanicLoopBeginFn( X2Effect_Persistent PersistentEffect, const out EffectAppliedData ApplyEffectParameters, XComGameState_BaseObject kNewTargetState, XComGameState NewGameState )
@@ -155,25 +152,106 @@ static function PanicLoopEndFn( X2Effect_Persistent PersistentEffect, const out 
 	NewGameState.AddStateObject( UnitState );
 }
 
-static function RTGameState_ProgramFaction GetNewProgramState(XComGameState NewGameState) {
+static function RTGameState_ProgramFaction GetProgramState(optional XComGameState NewGameState) {
 	local RTGameState_ProgramFaction Program;
 
-	foreach NewGameState.IterateByClassType(class'RTGameState_ProgramFaction', Program) {
-		break;
+	if(NewGameState != none) {
+		foreach NewGameState.IterateByClassType(class'RTGameState_ProgramFaction', Program) {
+			break;
+		}
+	}
+
+	if(Program == none) {
+		foreach `XCOMHISTORY.IterateByClassType(class'RTGameState_ProgramFaction', Program) {
+			break;
+		}
 	}
 
 	if(Program == none) {
 		Program = RTGameState_ProgramFaction(`XCOMHISTORY.GetSingleGameStateObjectForClass(class'RTGameState_ProgramFaction'));
-	} 
-	
+	}
+
+	return Program;
+}
+
+static function RTGameState_ProgramFaction GetNewProgramState(XComGameState NewGameState) {
+	local RTGameState_ProgramFaction Program;
+
+	Program = GetProgramState(NewGameState);
 	Program = RTGameState_ProgramFaction(NewGameState.ModifyStateObject(class'RTGameState_ProgramFaction', Program.ObjectID));
 	return Program;
 }
 
+
 static function RTLog(string message, optional bool bShouldRedScreenToo = false) {
 	if(!class'X2DownloadableContentInfo_RisingTides'.static.DebuggingEnabled())
 		return;
-	`LOG("Rising Tides: " $ message);
+	`LOG("RisingTides: " $ message);
 	if(bShouldRedScreenToo)
-		`RedScreen("Rising Tides: " $ message);
+		`RedScreen("RisingTides: " $ message);
+}
+
+static function bool DebuggingEnabled() {
+	return class'X2DownloadableContentInfo_RisingTides'.static.DebuggingEnabled();
+}
+
+static function PrintCovertActionsForFaction(XComGameState_ResistanceFaction Faction) {
+	local StateObjectReference StateObjRef;
+	local XComGameState_CovertAction CovertActionState;
+	local X2CovertActionTemplate CovertActionTemplate;
+
+	foreach Faction.CovertActions(StateObjRef) {
+		CovertActionState = XComGameState_CovertAction(`XCOMHISTORY.GetGameStateForObjectID(StateObjRef.ObjectID));
+		if(CovertActionState == none)
+			continue;
+		CovertActionTemplate = CovertActionState.GetMyTemplate();
+		RTLog("" $ CovertActionTemplate.DataName);
+	}
+}
+
+static function PrintGoldenPathActionsForFaction(XComGameState_ResistanceFaction Faction) {
+	local StateObjectReference StateObjRef;
+	local XComGameState_CovertAction CovertActionState;
+	local X2CovertActionTemplate CovertActionTemplate;
+
+	foreach Faction.GoldenPathActions(StateObjRef) {
+		CovertActionState = XComGameState_CovertAction(`XCOMHISTORY.GetGameStateForObjectID(StateObjRef.ObjectID));
+		if(CovertActionState == none)
+			continue;
+		CovertActionTemplate = CovertActionState.GetMyTemplate();
+		RTLog("" $ CovertActionTemplate.DataName);
+	}
+}
+
+static function PrintMiscInfoForFaction(XComGameState_ResistanceFaction Faction) {
+	local XComGameState_HeadquartersXCom XComHQ;
+
+}
+
+static function SubmitGameState(XComGameState NewGameState) {
+	if(NewGameState.GetNumGameStateObjects() > 0)
+	{
+		`XCOMGAME.GameRuleset.SubmitGameState(NewGameState);
+	}
+	else
+	{
+		`XCOMHISTORY.CleanupPendingGameState(NewGameState);
+	}
+}
+
+static function XComGameState_HeadquartersXCom GetXComHQState()
+{
+	local XComGameState_HeadquartersXCom NewXComHQ;
+
+	NewXComHQ = XComGameState_HeadquartersXCom(`XCOMHISTORY.GetSingleGameStateObjectForClass(class'XComGameState_HeadquartersXCom'));
+	if(NewXComHQ == none) {
+		RTLog("Warning, could not find the XCOM HQ, returning null!");
+		return none;
+	}
+
+	return NewXComHQ;
+}
+
+simulated static function bool IsInvalidMission(X2MissionSourceTemplate Template) {
+	return class'RTGameState_ProgramFaction'.default.InvalidMissionSources.Find(Template.DataName) != INDEX_NONE;
 }
