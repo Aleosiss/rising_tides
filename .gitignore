@@ -35,7 +35,6 @@ _ReSharper*/
 %*
 .atom-build*
 /Notes/
-**/.vscode/
 settings\.json
 .AlternateModLauncher*
 **/.DS_Store
