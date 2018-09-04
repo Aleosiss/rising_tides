@@ -204,9 +204,6 @@ exec function RT_PrintProgramFactionInformation(optional bool bShouldPrintFullIn
 	local XComGameStateHistory 				History;
 	local RTGameState_ProgramFaction 		Faction;
 
-
-
-
 	History = `XCOMHISTORY;
 
 	class'RTHelpers'.static.RTLog("Gathering Debug Information for the Program...");
@@ -523,7 +520,7 @@ exec function RT_ForceVisibilityUpdatesAll() {
 	local XComGameState NewGameState;
 
 	NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState( "Cheat: Refresh Unit visualizers" );
-	XComGameStateContext_ChangeContainer( NewGameState.GetContext() ).BuildVisualizationFn = CheatTeleport_BuildVisualization;
+	XComGameStateContext_ChangeContainer( NewGameState.GetContext() ).BuildVisualizationFn = ForceVisibilityUpdatesAll_BuildVisualization;
 
 	foreach `XCOMHISTORY.IterateByClassType(class'XComGameState_Unit', ItUnit)
 	{
@@ -535,7 +532,7 @@ exec function RT_ForceVisibilityUpdatesAll() {
 
 }
 
-static function CheatTeleport_BuildVisualization(XComGameState VisualizeGameState)
+static function ForceVisibilityUpdatesAll_BuildVisualization(XComGameState VisualizeGameState)
 {
 	local XComGameState_Unit UnitState;
 	local VisualizationActionMetadata BuildTrack;
@@ -547,8 +544,8 @@ static function CheatTeleport_BuildVisualization(XComGameState VisualizeGameStat
 		BuildTrack.StateObject_NewState = UnitState;
 		BuildTrack.StateObject_OldState = UnitState;
 		
-		RTForceVisibilityAction_Reset = RTAction_ForceVisibility(class'RTAction_ForceVisibility'.static.AddToVisualizationTree(BuildTrack, VisualizeGameState.GetContext()));
-		RTForceVisibilityAction_Reset.bResetVisibility = true;
+		//RTForceVisibilityAction_Reset = RTAction_ForceVisibility(class'RTAction_ForceVisibility'.static.AddToVisualizationTree(BuildTrack, VisualizeGameState.GetContext()));
+		//RTForceVisibilityAction_Reset.bResetVisibility = true;
 
 		class'X2Action_SyncVisualizer'.static.AddToVisualizationTree(BuildTrack, VisualizeGameState.GetContext());
 
