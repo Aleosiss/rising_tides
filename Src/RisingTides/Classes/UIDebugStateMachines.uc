@@ -61,7 +61,7 @@ simulated function UpdateFlagForUnit(XGUnit Unit)
         {
             Texts[i].Text.Show();
             Texts[i].Text.SetNormalizedPosition(TextLoc);
-            Texts[i].Text.SetText("<font color='#ffffff'>"$ GetFlagText(Unit) $ "</font>");
+            Texts[i].Text.SetText("<font color='#ffffff'>"$ Unit.Name @ Unit.GetPawn().arrPawnPerkContent[0].GetAbilityName() $ "</font>");
             //Texts[i].Text.SetText(Unit.Name @ Unit.IdleStateMachine.GetStateName());
         }
         else
@@ -69,10 +69,6 @@ simulated function UpdateFlagForUnit(XGUnit Unit)
             Texts[i].Text.Hide();
         }
     }
-}
-
-function string GetFlagText(XGUnit Unit) {
-    return Unit.Name @ Unit.GetPawn().arrPawnPerkContent[0].GetAbilityName();
 }
 
 

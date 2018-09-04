@@ -27,7 +27,6 @@ simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffe
 	// Oh.
 	AddPersistentStatChange(eStat_DetectionModifier, 1);
 	ToggleWOTCSpawns(NewGameState, false);
-	ToggleTimer(NewGameState, false);
 
 	super.OnEffectAdded(ApplyEffectParameters, kNewTargetState, NewGameState, NewEffectState);
 }
@@ -35,6 +34,7 @@ simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffe
 simulated function bool OnEffectTicked(const out EffectAppliedData ApplyEffectParameters, XComGameState_Effect kNewEffectState, XComGameState NewGameState, bool FirstApplication, XComGameState_Player Player)
 {
 	DelayReinforcementSpawners(NewGameState);
+	DelayTimer(NewGameState);
 	return true;
 }
 
@@ -42,7 +42,6 @@ simulated function OnEffectRemoved(const out EffectAppliedData ApplyEffectParame
 {
 	//ModifyTimer(!bShouldPauseTimer);
 	ToggleWOTCSpawns(NewGameState, true);
-	ToggleTimer(NewGameState, true);
 	super.OnEffectRemoved(ApplyEffectParameters, NewGameState, bCleansed, RemovedEffectState);
 }
 
@@ -59,8 +58,21 @@ simulated function DelayReinforcementSpawners(XComGameState NewGameState) {
 
 }
 
-simulated function ToggleTimer(XComGameState NewGameState, bool bResumeMissionTimer) {
-	class'XComGameState_UITimer'.static.SuspendTimer(bResumeMissionTimer, NewGameState);
+simulated function DelayTimer(XComGameState NewGameState) {
+	local XComGameState_UiTimer OldUiTimer, NewUiTimer;
+	local XComGameStateHistory History;
+
+	History = `XCOMHISTORY;
+	//update the mission timer, if there is one
+	OldUiTimer = XComGameState_UITimer(History.GetSingleGameStateObjectForClass(class 'XComGameState_UITimer', true));
+	if (OldUiTimer != none) {
+		NewUiTimer = XComGameState_UITimer(NewGameState.CreateStateObject(class 'XComGameState_UITimer', OldUiTimer.ObjectID));
+		NewGameState.AddStateObject(NewUiTimer);
+
+		NewUiTimer.TimerValue += 1; // hardcoded to one, since it is called every turn and would extend the timer instead of delay
+		if(NewUiTimer.TimerValue > 3) // the 3 value is hard-coded into the kismet mission maps, so we hard-code it here as well {
+			NewUiTimer.UiState = Normal_Blue;
+	}
 }
 
 simulated function ToggleWOTCSpawns(XComGameState NewGameState, bool ShouldSpawn) {

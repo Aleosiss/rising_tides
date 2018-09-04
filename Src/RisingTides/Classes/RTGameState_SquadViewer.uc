@@ -3,14 +3,15 @@ class RTGameState_SquadViewer extends XComGameState_SquadViewer;
 var StateObjectReference AssociatedUnit;
 
 
-function SyncVisualizer(optional XComGameState GameState = none)
+event UpdateGameplayVisibility(out GameRulesCache_VisibilityInfo InOutVisibilityInfo)
 {
-	DestroyVisualizer();
-	if(!bRemoved) {
-		FindOrCreateVisualizer(GameState);
-	} else {
-		RevealUnits = false;
-	}
+	InOutVisibilityInfo.bVisibleGameplay = InOutVisibilityInfo.bVisibleBasic;
+
+}
+
+event EForceVisibilitySetting ForceModelVisible()
+{
+	return eForceNone;
 }
 
 defaultproperties

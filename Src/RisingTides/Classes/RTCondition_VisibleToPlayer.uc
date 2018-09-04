@@ -29,7 +29,7 @@ simulated static function bool DoesSourceHaveLOS(XComGameState_BaseObject kTarge
 	return false;
 }
 
-simulated static function bool IsTargetVisibleToLocalPlayer(StateObjectReference TargetUnitRef, optional int SourceUnitObjectID = -2, optional bool bDebug = false)
+simulated static function bool IsTargetVisibleToLocalPlayer(StateObjectReference TargetUnitRef, optional int SourceUnitObjectID = -2)
 {
 	local XComGameStateHistory History;
 	local XComGameState_Unit UnitState;
@@ -37,20 +37,16 @@ simulated static function bool IsTargetVisibleToLocalPlayer(StateObjectReference
 	local array<StateObjectReference> VisibleTargets;
 	local bool b;
 
-	local XGUnit UnitVisualizer;
-	local XComUnitPawn UnitPawn;
-	local XComUnitPawnNativeBase NativeUnitPawn;
-
 	History = `XCOMHISTORY;
 	UnitState = XComGameState_Unit(History.GetGameStateForObjectID(TargetUnitRef.ObjectID));
 	if( UnitState != none ) {
 		ForceVisibleSetting = UnitState.ForceModelVisible(); // Checks if local player, among other things.
 		if( ForceVisibleSetting == eForceVisible ) {
-			if(bDebug) { class'RTHelpers'.static.RTLog("Unit is visible! Reason: eForceVisible!"); };
+			//class'RTHelpers'.static.RTLog("Unit is visible! Reason: eForceVisible!");
 			return true;
 		}
 		else if( ForceVisibleSetting == eForceNotVisible || UnitState.IsConcealed() ) { // Have to find a better way, because we might want to shoot things only visible through OverTheShoulder
-			if(bDebug) { class'RTHelpers'.static.RTLog("Unit is not visible! Reason: eForceNotVisible or concealed!"); };
+			//class'RTHelpers'.static.RTLog("Unit is not visible! Reason: eForceNotVisible or concealed!");
 			return false;
 		}
 
@@ -58,22 +54,11 @@ simulated static function bool IsTargetVisibleToLocalPlayer(StateObjectReference
 		// overly verbose code for debugging
 		if(class'X2TacticalVisibilityHelpers'.static.GetNumEnemyViewersOfTarget(TargetUnitRef.ObjectID) > 0) {
 			b = true;
-			if(bDebug) { class'RTHelpers'.static.RTLog("Unit is visible! Reason: GetNumEnemyViewersOfTarget(TargetUnitRef.ObjectID) > 0!"); };
+			//class'RTHelpers'.static.RTLog("Unit is visible! Reason: GetNumEnemyViewersOfTarget(TargetUnitRef.ObjectID) > 0!");
 		} else {
 			b = false;
-			if(bDebug) { class'RTHelpers'.static.RTLog("Unit is not visible! Reason: GetNumEnemyViewersOfTarget(TargetUnitRef.ObjectID) < 0!"); };
+			//class'RTHelpers'.static.RTLog("Unit is not visible! Reason: GetNumEnemyViewersOfTarget(TargetUnitRef.ObjectID) < 0!");
 		}
-		if(bDebug) { 
-			class'RTHelpers'.static.RTLog("The ForceVisibleSetting from ForceModelVisible is: " $ ForceVisibleSetting);
-
-			UnitVisualizer = XGUnit(UnitState.GetVisualizer());
-			UnitPawn = UnitVisualizer.GetPawn();
-			NativeUnitPawn = UnitPawn;
-			class'RTHelpers'.static.RTLog("The UnitVisualizer says... " $ UnitVisualizer.ForceVisibility);
-			if(NativeUnitPawn != none) {
-				class'RTHelpers'.static.RTLog("The IsPawnSeenInFOW says... " $ NativeUnitPawn.IsPawnSeenInFOW());
-			}
-		};
 		return b;
 	} else { // the target was not a unit. in this case, all we can do is a general target check
 		 // because interactive objects and destructables are always technically visible to the player through the FOW
@@ -81,7 +66,7 @@ simulated static function bool IsTargetVisibleToLocalPlayer(StateObjectReference
 		if(SourceUnitObjectID != -2) {
 			class'X2TacticalVisibilityHelpers'.static.GetAllVisibleEnemyTargetsForUnit( SourceUnitObjectID, VisibleTargets );
 			if(VisibleTargets.Find('ObjectID', TargetUnitRef.ObjectID) != INDEX_NONE) {
-				if(bDebug) { class'RTHelpers'.static.RTLog("NonUnit is visible! Enemies Visible!"); };
+				//class'RTHelpers'.static.RTLog("NonUnit is visible! Enemies Visible!");
 				return true;
 			}
 		}
@@ -91,10 +76,7 @@ simulated static function bool IsTargetVisibleToLocalPlayer(StateObjectReference
 
 	}
 
-	if(bDebug) { 
-		class'RTHelpers'.static.RTLog("NonUnit not visible! EndofFunction Reached!");
-	};
-
+	//class'RTHelpers'.static.RTLog("NonUnit not visible! EndofFunction Reached!");
 	return false;
 }
 
