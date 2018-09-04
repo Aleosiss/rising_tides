@@ -28,8 +28,26 @@ function CheckErrorCode([string] $message) {
         $ts = $stopwatch.Elapsed.TotalSeconds;
 
         Write-Host "Build failed in $ts seconds."
-        throw $message;
+        FailureMessage  $message;
+        
     }
+}
+
+#!!!!!!!!!!!! NOTE THESE MAY SOUND THE SAME IF NOT CONFIGURED !!!!!!!!!!!!!!!#
+function FailureMessage($message)
+{
+    [System.Media.SystemSounds]::Asterisk.Play();
+    throw $message
+}
+
+function SuccessMessage($message)
+{
+    $stopwatch.stop()
+    $ts = $stopwatch.Elapsed.TotalSeconds;
+
+    [System.Media.SystemSounds]::Exclamation.Play();
+    Write-Host $message
+    Write-Host "$modNameCanonical ready to run in $ts seconds."
 }
 
 # Helper for invoking the make cmdlet. Captures stdout/stderr and rewrites error and warning lines to fix up the
@@ -288,9 +306,5 @@ Copy-Item $stagingPath $productionPath -Force -Recurse -WarningAction SilentlyCo
 Write-Host "Copied."
 
 # we made it!
-
-$stopwatch.stop()
-$ts = $stopwatch.Elapsed.TotalSeconds;
-
-Write-Host "*** SUCCESS! ***"
-Write-Host "$modNameCanonical ready to run in $ts seconds."
+# we made it!
+SuccessMessage("*** SUCCESS! ***")
