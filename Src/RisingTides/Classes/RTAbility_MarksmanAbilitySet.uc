@@ -183,6 +183,7 @@ static function X2AbilityTemplate ScopedAndDropped()
 	local X2AbilityCost_Ammo				AmmoCost;
 	local X2AbilityToHitCalc_StandardAim    ToHitCalc;
 	local X2Condition_Visibility            TargetVisibilityCondition;
+	local RTCondition_VisibleToPlayer	VisibleToPlayerCondition;
 	local array<name>                       SkipExclusions;
 	local X2Effect_Knockback				KnockbackEffect;
 
@@ -208,11 +209,11 @@ static function X2AbilityTemplate ScopedAndDropped()
 	Template.AddShooterEffectExclusions(SkipExclusions);
 
 	// *** TARGETING PARAMETERS *** //
-	// Can only shoot visible enemies
-	TargetVisibilityCondition = new class'X2Condition_Visibility';
-	TargetVisibilityCondition.bRequireGameplayVisible = true;
-	TargetVisibilityCondition.bAllowSquadsight = true;
-	Template.AbilityTargetConditions.AddItem(TargetVisibilityCondition);
+	// can only shoot visible enemies, LOS required
+	VisibleToPlayerCondition = new class'RTCondition_VisibleToPlayer';
+	VisibleToPlayerCondition.bRequireLOS = true;
+	Template.AbilityTargetConditions.AddItem(VisibleToPlayerCondition);
+
 	// Can't target dead; Can't target friendlies
 	Template.AbilityTargetConditions.AddItem(default.LivingHostileTargetProperty);
 	// Can't shoot while dead
@@ -376,6 +377,7 @@ static function X2AbilityTemplate RTOverwatchShot()
 	local X2AbilityTrigger_Event	        Trigger;
 	local array<name>                       SkipExclusions;
 	local X2Condition_Visibility            TargetVisibilityCondition;
+	local RTCondition_VisibleToPlayer VisibleToPlayerCondition;
 
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'RTOverwatchShot');
 
@@ -395,9 +397,14 @@ static function X2AbilityTemplate RTOverwatchShot()
 
 	Template.AbilityTargetConditions.AddItem(default.LivingHostileUnitDisallowMindControlProperty);
 	TargetVisibilityCondition = new class'X2Condition_Visibility';
-	TargetVisibilityCondition.bRequireGameplayVisible = true;
+	TargetVisibilityCondition.bRequireLOS = true;
 	TargetVisibilityCondition.bDisablePeeksOnMovement = true;
 	TargetVisibilityCondition.bAllowSquadsight = true;
+
+	VisibleToPlayerCondition = new class'RTCondition_VisibleToPlayer';
+	VisibleToPlayerCondition.bRequireLOS = true;
+	Template.AbilityTargetConditions.AddItem(VisibleToPlayerCondition);
+
 	Template.AbilityTargetConditions.AddItem(TargetVisibilityCondition);
 	Template.AbilityTargetConditions.AddItem(new class'X2Condition_EverVigilant');
 	Template.AbilityTargetConditions.AddItem(class'X2Ability_DefaultAbilitySet'.static.OverwatchTargetEffectsCondition());
@@ -1164,7 +1171,7 @@ static function X2AbilityTemplate SovereignEffect()
 	//TargetVisibilityCondition.RequireGameplayVisibleTags.AddItem('OverTheShoulder');
 	//Template.AbilityTargetConditions.AddItem(TargetVisibilityCondition);
 
-	// can only shoot visible (to the player) enemies
+	// can only shoot visible (to the player) enemies, LOS NOT required
 	PlayerVisibilityCondition = new class'RTCondition_VisibleToPlayer';
 	Template.AbilityTargetConditions.AddItem(PlayerVisibilityCondition);
 
