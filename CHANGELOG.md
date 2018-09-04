@@ -1,3 +1,10 @@
+2.0.2
+- Fix a long-standing bug with Over The Shoulder erronously showing units FOW
+- Increase the range of Over the Shoulder a bit to match the VFX better
+- Fix a bug where OSF did not properly check for a victory
+- Add some compatibility configuration for NPSBD
+- Modify Infiltrator's custom sniper shots to allow for shots against targets affected by OTS
+
 2.0.1
 - Changed effects that refund action points on kill to also refund action points on bleedout
 - Increased the radius of Over the Shoulder to 23 tiles (from 17) 
