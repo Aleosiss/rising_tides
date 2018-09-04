@@ -23,6 +23,9 @@
     <Content Include="Config\XComClassData.ini">
       <SubType>Content</SubType>
     </Content>
+    <Content Include="Config\XComPromotionUIMod.ini">
+      <SubType>Content</SubType>
+    </Content>
     <Content Include="Config\XComGameBoard.ini">
       <SubType>Content</SubType>
     </Content>

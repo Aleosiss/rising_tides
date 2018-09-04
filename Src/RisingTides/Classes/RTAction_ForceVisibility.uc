@@ -13,11 +13,6 @@ event bool BlocksAbilityActivation() {
 simulated state Executing {
 	Begin:
 			if(bResetVisibility) {
-				Unit.SetForceVisibility(eForceNotVisible);
-				Unit.m_bForceHidden = true;
-				CurrentTile = `XWORLD.GetTileCoordinatesFromPosition(Unit.Location);
-				`TACTICALRULES.VisibilityMgr.ActorVisibilityMgr.VisualizerUpdateVisibility(Unit, CurrentTile);
-				Unit.GetPawn().UpdatePawnVisibility();
 				Unit.SetForceVisibility(eForceNone);
 				Unit.m_bForceHidden = false;
 				CurrentTile = `XWORLD.GetTileCoordinatesFromPosition(Unit.Location);
@@ -27,6 +22,7 @@ simulated state Executing {
 				Unit.SetForceVisibility(ForcedVisible);
 				Unit.GetPawn().UpdatePawnVisibility();
 			}
+
 			CompleteAction();
 }
 
