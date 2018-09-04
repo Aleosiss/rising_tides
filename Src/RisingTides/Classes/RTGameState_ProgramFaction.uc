@@ -546,7 +546,6 @@ protected function RecalculateActiveOperativesAndSquads(XComGameState NewGameSta
 					Active.AddItem(UnitIteratorObjRef);
 					NewUnitState.bCaptured = false;
 				}
-
 			}
 		}
 	}
@@ -1038,7 +1037,6 @@ function PerformPostMissionCleanup(XComGameState NewGameState) {
 	if(bOneSmallFavorActivated) {
 		bOneSmallFavorAvailable = false;
 		bOneSmallFavorActivated = false;
-		iNumberOfFavorsCalledIn++;
 	}
 }
 
@@ -1048,6 +1046,8 @@ function TryIncreaseInfluence() {
 	local XComGameState_Reward RewardState;
 	local XComGameState NewGameState;
 	local RTGameState_ProgramFaction Program;
+
+	iNumberOfFavorsCalledIn++;
 
 	if(iNumberOfFavorsCalledIn >= default.iNumberOfFavorsRequiredToIncreaseInfluence) {
 		// Award influence increase

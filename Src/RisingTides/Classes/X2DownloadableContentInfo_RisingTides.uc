@@ -64,23 +64,36 @@ static event OnPreMission(XComGameState NewGameState, XComGameState_MissionSite 
 }
 
 /// <summary>
+/// Called when the player completes a mission while this DLC / Mod is installed.
+/// </summary>
+static event OnPostMission()
+{
+
+}
+
+/// <summary>
 /// Called after the player exits the post-mission sequence while this DLC / Mod is installed.
 /// </summary>
 static event OnExitPostMissionSequence()
 {
 	local XComGameState NewGameState;
-	local RTGameState_ProgramFaction ProgramState;
+	local RTGameState_ProgramFaction ProgramState, Program;
+	local XComGameState_BattleData BattleData;
 
-	NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("Cleanup Program Operatives from XCOMHQ!");
-	ProgramState = class'RTHelpers'.static.GetNewProgramState(NewGameState);
-	if(ProgramState.bShouldPerformPostMissionCleanup) {
+	Program = class'RTHelpers'.static.GetProgramState(NewGameState);
+	if(Program.bShouldPerformPostMissionCleanup) {
+		NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("Cleanup Program Operatives from XCOMHQ!");
+		ProgramState = class'RTHelpers'.static.GetNewProgramState(NewGameState);
 		ProgramState.PerformPostMissionCleanup(NewGameState);
+
+		`GAMERULES.SubmitGameState(NewGameState);
+
+		BattleData = XComGameState_BattleData(`XCOMHISTORY.GetSingleGameStateObjectForClass(class'XComGameState_BattleData'));
+		if(BattleData.bLocalPlayerWon) {
+			// This method creates and submits two new xcgs's
+			ProgramState.TryIncreaseInfluence();
+		}
 	}
-
-	`GAMERULES.SubmitGameState(NewGameState);
-
-	// This method creates and submits two newgamestates
-	ProgramState.TryIncreaseInfluence();
 }
 
 /// <summary>
@@ -187,14 +200,22 @@ exec function RT_PrintResistanceFactionNames() {
 	}
 }
 
-exec function RT_PrintProgramFactionInformation() {
+exec function RT_PrintProgramFactionInformation(optional bool bShouldPrintFullInfo = false, optional bool bShouldPrintAllFields = false) {
 	local XComGameStateHistory 				History;
 	local RTGameState_ProgramFaction 		Faction;
+
+
+
 
 	History = `XCOMHISTORY;
 
 	class'RTHelpers'.static.RTLog("Gathering Debug Information for the Program...");
 	Faction = class'RTHelpers'.static.GetProgramState();
+
+	if(bShouldPrintFullInfo) {
+		class'RTHelpers'.static.RTLog(Faction.ToString(bShouldPrintAllFields), , true);
+		return;
+	}
 
 	class'RTHelpers'.static.RTLog("Printing Golden Path covert actions for the Program...");
 	class'RTHelpers'.static.PrintGoldenPathActionsForFaction(Faction);
@@ -202,11 +223,13 @@ exec function RT_PrintProgramFactionInformation() {
 	class'RTHelpers'.static.RTLog("Printing Standard covert actions for the Program...");
 	class'RTHelpers'.static.PrintCovertActionsForFaction(Faction);
 
+	class'RTHelpers'.static.RTLog("Printing Rival Chosen for the Program...");
+	class'RTHelpers'.static.RTLog("" $ XComGameState_AdventChosen(History.GetGameStateForObjectID(Faction.RivalChosen.ObjectID)).GetChosenClassName());
+
 	class'RTHelpers'.static.RTLog("Printing Misc Information for the Program...");
 	class'RTHelpers'.static.PrintMiscInfoForFaction(Faction);
 
-	class'RTHelpers'.static.RTLog("Printing Rival Chosen for the Program...");
-	class'RTHelpers'.static.RTLog("" $ XComGameState_AdventChosen(History.GetGameStateForObjectID(Faction.RivalChosen.ObjectID)).GetChosenClassName());
+
 }
 
 exec function RT_TriggerEvent(name EventID) {
@@ -486,15 +509,54 @@ exec function ReportTestPanelLocation(optional name PanelName = 'TestDebugPanel'
 	}
 }
 
-exec function RT_DebugVisibilityAll()
-{	
+exec function RT_DebugVisibilityAll() {	
 	local XComGameState_Unit ItUnit;
 	foreach `XCOMHISTORY.IterateByClassType(class'XComGameState_Unit', ItUnit)
 	{
 		class'RTHelpers'.static.RTLog("" $ ItUnit.GetFullName());
-		class'RTCondition_VisibleToPlayer'.static.IsTargetVisibleToLocalPlayer(ItUnit.GetReference());
+		class'RTCondition_VisibleToPlayer'.static.IsTargetVisibleToLocalPlayer(ItUnit.GetReference(), , true);
 	}
 }
+
+exec function RT_ForceVisibilityUpdatesAll() {
+	local XComGameState_Unit ItUnit;
+	local XComGameState NewGameState;
+
+	NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState( "Cheat: Refresh Unit visualizers" );
+	XComGameStateContext_ChangeContainer( NewGameState.GetContext() ).BuildVisualizationFn = CheatTeleport_BuildVisualization;
+
+	foreach `XCOMHISTORY.IterateByClassType(class'XComGameState_Unit', ItUnit)
+	{
+		ItUnit = XComGameState_Unit(NewGameState.ModifyStateObject(class'XComGameState_Unit', ItUnit.ObjectID));
+		ItUnit.bRequiresVisibilityUpdate = true;
+	}
+
+	`TACTICALRULES.SubmitGameState(NewGameState);
+
+}
+
+static function CheatTeleport_BuildVisualization(XComGameState VisualizeGameState)
+{
+	local XComGameState_Unit UnitState;
+	local VisualizationActionMetadata BuildTrack;
+	local X2Action_UpdateFOW FOWAction;
+	local RTAction_ForceVisibility RTForceVisibilityAction_Reset;
+
+	foreach VisualizeGameState.IterateByClassType(class'XComGameState_Unit', UnitState)
+	{
+		BuildTrack.StateObject_NewState = UnitState;
+		BuildTrack.StateObject_OldState = UnitState;
+		
+		RTForceVisibilityAction_Reset = RTAction_ForceVisibility(class'RTAction_ForceVisibility'.static.AddToVisualizationTree(BuildTrack, VisualizeGameState.GetContext()));
+		RTForceVisibilityAction_Reset.bResetVisibility = true;
+
+		class'X2Action_SyncVisualizer'.static.AddToVisualizationTree(BuildTrack, VisualizeGameState.GetContext());
+
+		FOWAction = X2Action_UpdateFOW( class'X2Action_UpdateFOW'.static.AddToVisualizationTree( BuildTrack, VisualizeGameState.GetContext()) );
+		FOWAction.ForceUpdate = true;
+	}
+}
+
 
 exec function RT_TestUIPopup() {
 	local string Title; 
@@ -520,5 +582,37 @@ exec function RT_ReduceSoldierCurrentWill(int MinusWill) {
 		ActiveUnitState = XComGameState_Unit(NewGameState.ModifyStateObject(class'XComGameState_Unit', ActiveUnit.ObjectID));
 		ActiveUnitState.ModifyCurrentStat(eStat_Will, float(MinusWill));
 		`TACTICALRULES.SubmitGameState(NewGameState);
+	}
+}
+
+exec function RT_GetVisibilityStatusOfClosestUnitToCursor() {
+	local XComGameState_Unit UnitState;
+	local EForceVisibilitySetting ForceVisibleSetting;
+	local XComTacticalCheatManager CheatsManager;
+
+	CheatsManager = `CHEATMGR;
+
+	UnitState = CheatsManager.GetClosestUnitToCursor();
+	ForceVisibleSetting = UnitState.ForceModelVisible();
+	class'RTHelpers'.static.RTLog(UnitState.GetFullName());
+	class'RTHelpers'.static.RTLog("" $ ForceVisibleSetting);
+}
+
+exec function RT_ListAllSquadViewers(optional bool bDetailedInfo = false) {
+	local XComGameState_SquadViewer XComSquadViewerState;
+	local RTGameState_SquadViewer RTSquadViewerState;
+	local XComGameStateHistory History;
+
+	History = `XCOMHISTORY;
+
+	foreach History.IterateByClassType(class'XComGameState_SquadViewer', XComSquadViewerState) {
+		class'RTHelpers'.static.RTLOG("" $ "Found a SquadViewer: " $ XComSquadViewerState.ToString(bDetailedInfo), , true);
+	}
+}
+
+exec function RT_ClearLog() {
+	local int i;
+	for(i = 0; i<50; i++) {
+		class'RTHelpers'.static.RTLog(" ", false, true);
 	}
 }
