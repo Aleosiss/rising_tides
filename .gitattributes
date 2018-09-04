@@ -3,3 +3,4 @@
 *.uc text eol=crlf
 *.ini text eol=crlf
 *.int text eol=crlf
+*.md text eol=crlf

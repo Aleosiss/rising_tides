@@ -1,3 +1,9 @@
+2.0.1
+- Changed effects that refund action points on kill to also refund action points on bleedout
+- Increased the radius of Over the Shoulder to 23 tiles (from 17) 
+- Over the Shoulder now forces a concealment break on units it affects 
+- Moved Over The Shoulder visual effect to foot level 
+- Added Program Shotgun, Assault Rifle, and Sniper Rifle (tier above Beam)
 
 2.0.0
 - Added new Faction: The Program
