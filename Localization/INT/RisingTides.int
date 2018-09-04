@@ -1,0 +1,277 @@
+;This is a text file.
+
+[RTEffect_ScopedAndDropped]
+RTFriendlyName="Scoped and Dropped"
+RTNotFriendlyName="Pressure"
+
+[RTEffect_PrecisionShotDamage]
+RTFriendlyName="Precision Shot"
+
+[RTEffect_Aggression]
+RTFriendlyName="Aggression"
+
+[RTEffect_SnapshotEffect]
+RTFriendlyName="Snapshot"
+
+[RTEffect_SixOClockEffect]
+RTFriendlyName="Six O'Clock"
+
+[RTEffect_DamnGoodGround]
+RTFriendlyName="Damn Good Ground"
+
+[RTEffect_SlowIsSmooth]
+RTFriendlyName="Slow is Smooth"
+
+[RTEffect_TimeStop]
+TimeStopName="Greyscaled"
+TimeStopDesc="This unit is frozen in time, unable to percieve changes to its environment."
+RulerTimeStopTickFlyover="Timelocked!"
+TimeStopEffectAddedString=""
+TimeStopEffectPersistsString="Timelocked!"
+TimeStopEffectRemovedString="Time Stop Ended!"
+TimeStopLostFlyover="Time Stop Ended!"
+LargeUnitTimeStopLostFlyover="Time Stop Ended!"
+
+[RTGameState_MeldEffect]
+MeldLeftText="Left the meld!"
+MeldJoinedText="Joined the meld!"
+
+[RTShadowStrike RTAbilityTemplate]
+LocFriendlyName="Shadow Strike"
+LocLongDescription="Leap through shadows to strike at a target."
+LocHelpText="Leap through shadows to strike at a target."
+LocFlyOverText="Shadow Strike"
+LocPromotionPopupText="<Bullet/> Leap through shadows to strike at a target.<br/><Bullet/> Squadsight range, direct path to target not required.<br/>"
+
+[DaybreakFlame RTAbilityTemplate]
+LocFriendlyName="Fire Sniper Rifle (Daybreak Flame)"
+LocHelpText="Fire your sniper rifle at a target."
+LocLongDescription="<Bullet/> The sniper rifle is powerful and accurate at long range, but usually requires two actions to fire.<br><Bullet/> Firing the primary weapon always ends a soldier's turn.<br>"
+
+[OverTheShoulder RTAbilityTemplate]
+LocFriendlyName="Over The Shoulder"
+LocLongDescription="Peer over the shoulder of enemy units in a large radius, seeing what they see."
+LocHelpText="Peer over the shoulder of enemy units, seeing what they see."
+LocFlyOverText="Over The Shoulder"
+LocPromotionPopupText="<Bullet/> Over the Shoulder grants vision of enemy units, but only certain abilities will be able to target them without direct line of sight.<br/>"
+
+[RTTheSixPathsOfPain RTAbilityTemplate]
+LocFriendlyName="The Six Paths of Pain"
+LocLongDescription="Automatically cast Over the Shoulder for free at the start of each turn."
+LocHelpText="Automatically cast Over the Shoulder for free at the start of each turn."
+LocFlyOverText="The Six Paths of Pain"
+LocPromotionPopupText="<Bullet/> Will not trigger if the unit can't cast Over the Shoulder.<br/>"
+
+[RTTheSixPathsOfPainOverride RTAbilityTemplate]
+LocFriendlyName="Over The Shoulder"
+LocLongDescription="Peer over the shoulder of enemy units in a large radius, seeing what they see."
+LocHelpText="Peer over the shoulder of enemy units, seeing what they see."
+LocFlyOverText="Over The Shoulder"
+LocPromotionPopupText="<Bullet/> Over the Shoulder grants vision of enemy units, but only certain abilities will be able to target them without direct line of sight.<br/>"
+
+[RTUnwillingConduits RTAbilityTemplate]
+LocFriendlyName="Unwilling Conduits"
+LocLongDescription="Whenever this unit casts a psionic ability, it drains energy from units affected by Over the Shoulder to fuel the action,  reducing the cooldown for each unit affected."
+LocHelpText="Whenever this unit casts a psionic ability, it drains energy from units affected by Over the Shoulder to fuel the action, reducing the cooldown for each unit affected."
+LocFlyOverText="Unwilling Conduits"
+LocPromotionPopupText="<Bullet/> Deals a small amount of damage to enemy and ally alike.<br/><Bullet/> Cooldown will be reduced to a minimum of 1; usable next turn.<br/>"
+
+[RTEchoedAgony RTAbilityTemplate]
+LocFriendlyName="Echoed Agony"
+LocLongDescription="This unit will echo panic attempts that affect to nearby enemies affected by Over the Shoulder."
+LocHelpText="This unit will echo panic attempts that affect to nearby enemies affected by Over the Shoulder."
+LocFlyOverText="Echoed Agony"
+LocPromotionPopupText="<Bullet/> Only affects enemy units.<br/><Bullet/> Feedback counts as a panic source and is much stronger than other sources of panic.<br/>"
+
+[RTTriangulation RTAbilityTemplate]
+LocFriendlyName="Triangulation"
+LocLongDescription="Melded allies will now serve as additional sources of Over the Shoulder's effect."
+LocHelpText="Melded allies will now serve as additional sources of Over the Shoulder's effect."
+LocFlyOverText="Triangulation"
+LocPromotionPopupText="<Bullet/> The effect lasts an entire turn, even if the meld is broken.<br/>"
+
+[RTAbility_GhostAbilitySet]
+FEEDBACK_NAME="AGugHGGHGH"
+FEEDBACK_DESC="This unit is suffering from psionic feedback! Protect them while they recover."
+OTS_TITLE="Over the Shoulder"
+OTS_DESC_SELF="I peer back."
+OTS_DESC_ALLY="I'll keep an eye out for you!"
+OTS_DESC_ENEMY="I see you... see me."
+BLOODLUST_TITLE="Bloodlust"
+BLOODLUST_DESC="This unit is experiencing the thrill of combat! Their melee critical strike chance and damage is increased."
+STEALTH_TITLE="Stealth"
+STEALTH_DESC="This unit is invisible, and cannot be seen by most units."
+MELD_TITLE="Mind Meld"
+MELD_DESC="This unit has joined the Meld, receiving and delivering psionic support."
+FADE_COOLDOWN_TITLE="Fade"
+FADE_COOLDOWN_DESC="Fade is on cooldown."
+UV_TITLE="Unsettling Voices"
+UV_DESC="Don't look behind you..."
+SOC_TITLE="Six O'Clock"
+SOC_DESC="I've got your six."
+GREYSCALED_TITLE="Greyscale"
+GREYSCALED_DESC="Frozen in time..."
+HARBINGER_BROKEN_ALERT="Shield lost!"
+OVERFLOW_READOUT="Overflow"
+
+[RTEffect_Bloodlust]
+BloodlustEffectTitle="Bloodlust"
+
+[RTAbility_GathererAbilitySet]
+GuardianAngelHealText="Guardian Angel"
+KIPFriendlyName="Knowledge Is Power"
+KIPFriendlyDesc="I'm onto you..."
+LocPsionicallyInterruptedName="Interrupted!"
+
+[RTAbility_MarksmanAbilitySet]
+TimeStopEffectTitle="Greyscaled"
+TimeStopEffectDescription="This unit has been frozen in time. It cannot take actions and is much easier to hit."
+EveryMomentMattersTitle="Every Moment Matters"
+
+[RTEffectBuilder]
+StealthFriendlyName="Stealth"
+StealthFriendlyDesc="This unit is invisible, and cannot be seen by most units."
+FeedbackFriendlyName="AGugHGGHGH"
+FeedbackFriendlyDesc="This unit is suffering from psionic feedback! Protect them while they recover."
+MeldFriendlyName="Mind Meld"
+MeldFriendlyDesc="This unit has joined the Meld, receiving and delivering psionic support."
+
+[RTGameState_ProgramFaction]
+SquadOneName="SPECTRE"
+SquadOneBackground="SPECTRE is the highest echelon, the golden standard, the last line. Each member, almost by definition, is ranked solidly at ten (and perhaps even above that) on the psi-index, and each brings unrivaled skill and capabilities to the local area of operations."
+OSFCheckboxAvailable="Call in one small favor from the Program."
+OSFCheckboxUnavailable="The Program is not available to assist."
+OSFFirstTime_Title = "One Small Favor"
+OSFFirstTime_Text = "The Program fields small squads of elite operatives. As a result of their alliance with XCOM, you may ask them to run a mission for you.\n\nCall in One Small Favor by toggling the white checkbox now shown on Mission Launch screens.\n\nNOTE: this favor can only be called in once per month, and is refreshed after the supply drop."
+OSFFirstTime_ImagePath = "img:///RisingTidesContentPackage.UIImages.osf_tutorial"
+
+[Faction_Program RTProgramFactionTemplate]
+FactionTitle="The Program"
+FactionHQDisplayName="PROGRAM"
+LeaderQuote="\"We fight against the subtle threats. Including you, Commander.\" - Dr. Hadley"
+InfluenceMediumQuote="\"It is good to work with you again, Commander. Reminds me of the good old days, when the threat fell from the stars and did not rise up all around us.\" - Dr. Hadley"
+#InfluenceHighQuote="\"With the Templars gone, there will be only one lasting threat to the stability of our society. Commander. You know what must be done.\" - Dr. Hadley"
+InfluenceHighQuote="\"Soon, there will be only one lasting threat to the stability of our society. Commander. You know what must be done.\" - Dr. Hadley"
+GroupNames[0]="SPECTRE"
+GroupNames[1]="GHOST"
+GroupNames[2]="PHANTOM"
+GroupNames[3]="SHADE"
+GroupNames[4]="REAPER"
+GroupNames[5]="MIRAGE"
+GroupNames[6]="FORECASTER"
+Descriptors_Prefix[0]="CSC -"
+Descriptors_Prefix[1]="RTT -"
+Descriptors_Prefix[2]="NEI -"
+Descriptors_Prefix[3]="TDK -"
+Descriptors_Prefix[4]="SRX -"
+Descriptors_Suffix[0]="- 001"
+Descriptors_Suffix[1]="- 002"
+Descriptors_Suffix[2]="- 003"
+Descriptors_Suffix[3]="- 004"
+Descriptors_Suffix[4]="- 005"
+Descriptors_Suffix[5]="- 006"
+Descriptors_Suffix[6]="- 007"
+Descriptors_Suffix[7]="- 008"
+Descriptors_Suffix[8]="- 009"
+
+[RTGhostBerserker RTCharacterTemplate]
+strCharacterName="Program Operative"
+strCharacterBackgroundMale[0]="[REDACTED] \nC.O. Bradford Note: Don't pry."
+strCharacterBackgroundMale[1]="\<not writen\>"
+strForcedFirstName="[REDACTED]"
+strForcedLastName="[REDACTED]"
+strForcedNickName="Queen" 
+
+[RTGhostMarksman RTCharacterTemplate]
+strCharacterName="Program Operative"
+strCharacterBackgroundMale[0]="[REDACTED] \nC.O. Bradford Note: Don't pry."
+strCharacterBackgroundMale[1]="\<not writen\>"
+strForcedFirstName="[REDACTED]"
+strForcedLastName="[REDACTED]"
+strForcedNickName="Whisper" 
+
+[RTGhostGatherer RTCharacterTemplate]
+strCharacterName="Program Operative"
+strCharacterBackgroundMale[0]="[REDACTED] \nC.O. Bradford Note: This one seems... too familiar. Don't pry. I'll look into it."
+strCharacterBackgroundMale[1]="\<not writen\>"
+strForcedFirstName="[REDACTED]"
+strForcedLastName="[REDACTED]"
+strForcedNickName="Nova"
+
+#[ResCard_RT RTProgramStrategyCardTemplate]
+#DisplayName=""
+#SummaryText=""
+#QuoteText=""
+#QuoteTextAuthor=""
+
+[ResCard_RTOneSmallFavor RTProgramStrategyCardTemplate]
+DisplayName="One Small Favor"
+SummaryText="Call in a small favor from the Program. They will send one of their squads in the place of XCOM's for a mission."
+QuoteText="...Getting authorization for something like this would be... difficult, but a favor, for a friend? I can make something happen..."
+QuoteTextAuthor="Dr. Elizabeth Hadley"
+
+[ResCard_RTTransientSalvation RTProgramStrategyCardTemplate]
+DisplayName="Transient Salvation"
+SummaryText="Shared knowledge of UFO flight patterns reduces the chance that a UFO will begin an Avenger hunt by 40%."
+QuoteText="...the operatives understand their place in the world. I hope that in time, you will, as well..."
+QuoteTextAuthor="Dr. Ezekial Fierling"
+
+[ResCard_RTJustPassingThrough RTProgramStrategyCardTemplate]
+DisplayName="Just Passing Through"
+SummaryText="There is a small chance that a Program operative will join the squad for any non-story mission."
+QuoteText="...Oh, that engagement in He-guang? I was just... passing through..."
+QuoteTextAuthor="\"Queen\""
+
+[ResCard_RTFortyYearsOfWar RTProgramStrategyCardTemplate]
+DisplayName="Forty Years of War"
+SummaryText="Relay Outposts are constructed instantly."
+QuoteText="...I've been around... a long time. Long enough to have friends at all elevations..."
+QuoteTextAuthor="\"Queen\""
+
+[ResCard_RTDirectNeuralManipulation RTProgramStrategyCardTemplate]
+DisplayName="Direct Neural Manipulation"
+SummaryText="Bonded Soldiers gain additional experience on missions underwent with the bondmate."
+QuoteText="...that is the price we pay for our lives. It means we will never forget that we are not gods walking alongside 'mere' mortals..."
+QuoteTextAuthor="\"Nova\""
+
+[ResCard_RTPsionicJamming RTProgramStrategyCardTemplate]
+DisplayName="Wideband Psionic Jamming"
+SummaryText="The will of enemy units is reduced by 20."
+QuoteText="...once, a nightmare. Now, a reality. Time to wake up..."
+QuoteTextAuthor="\"Nova\""
+
+[ResCard_RTResistanceSabotage RTProgramStrategyCardTemplate]
+DisplayName="Resistance Sabotage"
+SummaryText="All other resistance factions gain an additional card slot."
+QuoteText="...remember that we are not the good guys. Remember that trust you had in Hadley. Remember, because it's the only thing keeping us alive..."
+QuoteTextAuthor="\"Whisper\""
+
+[ResCard_RTProfessionalsHaveStandards RTProgramStrategyCardTemplate]
+DisplayName="Old World Training"
+SummaryText="Detection range of enemy forces is reduced by 20%."
+QuoteText="...relax. Keep your hands steady and heart steeled. Hesitation has killed more soldiers than the deadliest of shooters..."
+QuoteTextAuthor="\"Whisper\""
+
+[RTOneSmallFavor_Size1 RTSitRepEffect_OneSmallFavor]
+FriendlyName="One Small Favor"
+Description="The Program will send one of its squads in the place of XCOM for this mission."
+
+[RTOneSmallFavor_Size2 RTSitRepEffect_OneSmallFavor]
+FriendlyName="One Small Favor"
+Description="The Program will send one of its squads in the place of XCOM for this mission."
+
+[RTOneSmallFavor_Size3 RTSitRepEffect_OneSmallFavor]
+FriendlyName="One Small Favor"
+Description="The Program will send one of its squads in the place of XCOM for this mission."
+
+[RTOneSmallFavor_Size4 RTSitRepEffect_OneSmallFavor]
+FriendlyName="One Small Favor"
+Description="The Program will send one of its squads in the place of XCOM for this mission."
+
+[RTOneSmallFavor_Size5 RTSitRepEffect_OneSmallFavor]
+FriendlyName="One Small Favor"
+Description="The Program will send one of its squads in the place of XCOM for this mission."
+
+[RTOneSmallFavor_Size6 RTSitRepEffect_OneSmallFavor]
+FriendlyName="One Small Favor"
+Description="The Program will send one of its squads in the place of XCOM for this mission."

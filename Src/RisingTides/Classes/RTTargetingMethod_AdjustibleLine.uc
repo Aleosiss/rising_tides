@@ -33,7 +33,7 @@ function Init(AvailableAction InAction, int NewTargetIndex)
 		{
 			LineActor.MeshLocation = "UI_3D.Targeting.ConeRange";
 		}
-		LineActor.InitLineMesh( TileLength  );
+		LineActor.InitLineMesh( TileLength );
 		LineActor.SetLocation( FiringLocation );
 	}
 }

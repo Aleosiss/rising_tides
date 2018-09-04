@@ -1,0 +1,1044 @@
+﻿;Place localized text in this file
+
+; [ X2AbilityTemplate]
+; LocFriendlyName=""
+; LocLongDescription=""
+; LocHelpText=""
+; LocFlyOverText=""
+; LocPromotionPopupText="<Bullet/> <br/><Bullet/> <br/><Bullet/> <br/><Bullet/> <br/>"
+
+;----------------------------------------------------------------------------------------------------------------------------
+; RISING TIDES CLASSES
+;----------------------------------------------------------------------------------------------------------------------------
+
+[StandardGhostShot X2AbilityTemplate]
+LocFriendlyName="Fire Weapon"
+LocHelpText="Fire a shot at a target. <Ability:CANNOTBEDODGED/>"
+LocLongDescription="<Bullet/>Firing the primary weapon always ends a unit's turn."
+
+[RT_Marksman X2SoldierClassTemplate]
+DisplayName="Program Infiltrator"
+ClassSummary="Whisper is the unit's designated marksman and tech expert."
+LeftAbilityTreeTitle="Fire Support"
+RightAbilityTreeTitle="Watcher"
+RandomNickNames[0]="Whisper"
+
+[ScopedAndDropped X2AbilityTemplate]
+LocFriendlyName="Scoped And Dropped"
+LocLongDescription="Enhanced Squadsight. Killing a flanked or uncovered target with a sniper rifle does not cost an action."
+LocHelpText="Killing a flanked or uncovered target with a sniper rifle does not cost an action."
+LocFlyOverText="Scoped And Dropped"
+LocPromotionPopupText="<Bullet/> This unit does not suffer from squadsight penalties.<br/><Bullet/> Additional shots taken via this ability will suffer reduced chance to critically hit.<br/>"
+
+[RTOverflowBarrier X2AbilityTemplate]
+LocFriendlyName="Overflow Barrier"
+LocLongDescription="When this unit deals overkill damage, it converts that damage into shielding for itself and its melded allies."
+LocHelpText="When this unit deals overkill damage, it converts that damage into shielding for itself and its melded allies."
+LocFlyOverText="Overflow Barrier"
+LocPromotionPopupText="<Bullet/> Try to use in combination with powerful damage abilities such as Precision Shot or Time Stands Still.<br/><Bullet/> Minimum of 1 Shield HP if overkill damage is dealt.<br/><Bullet/> The unit with Overflow Barrier must be melded to generate any shielding.<br/><Bullet/> Shields persist even if the meld is lost.<br/>"
+
+[RTOverflowBarrierEvent X2AbilityTemplate]
+LocFriendlyName="Overflow Barrier"
+LocLongDescription="When this unit deals overkill damage, it converts that damage into shielding for itself and its melded allies."
+LocHelpText="When this unit deals overkill damage, it converts that damage into shielding for itself and its melded allies."
+LocFlyOverText="Overflow Barrier"
+LocPromotionPopupText="<Bullet/> Minimum of 1 Shield HP if overkill damage is dealt.<br/><Bullet/> The unit with Overflow Barrier must be melded to generate any shielding.<br/><Bullet/> Shields persist even if the meld is lost.<br/>"
+
+[RTPrecisionShot X2AbilityTemplate]
+LocFriendlyName="Precision Shot"
+LocLongDescription="A carefully aimed shot, suffering decreased chance to hit, but increased critical chance and critical damage."
+LocHelpText="Shoot with decreased chance to hit, but increased critical chance and critical damage."
+LocFlyOverText="Precision Shot"
+LocPromotionPopupText="<Bullet> <Ability:SelfCooldown/> turn cooldown.<br/><Bullet/> Shoot a precision shot, suffering from decreased chance to hit, but increased critical chance and critical damage.<br/>"
+
+[RTAggression X2AbilityTemplate]
+LocFriendlyName="Aggression"
+LocLongDescription="Gain 10% critical chance per visible enemy unit, up to 30%. (Squadsight included)"
+LocHelpText="Gain 10% critical chance per enemy spotted."
+LocFlyOverText="Aggression"
+LocPromotionPopupText="<Bullet/> Gain 10% critical chance per visible enemy unit, up to 30%. (Squadsight included).<br/>"
+
+[KnockThemDown X2AbilityTemplate]
+LocFriendlyName="Knock Them Down"
+LocLongDescription="Gain +2 Damage and +10% critical hit damage for each consecutive shot this unit takes."
+LocHelpText="Gain +2 Damage and +10% critical hit damage for each consecutive shot this unit takes."
+LocFlyOverText="Knock Them Down"
+LocPromotionPopupText="<Bullet/> Gain +2 Damage and +10% critical hit damage for each consecutive shot this unit takes.<br/><Bullet/> Certain passive actions will not break a Knock Them Down chain, such as Fade's activation or Overflow Barrier's proc.<br/>"
+
+[RTDisablingShot X2AbilityTemplate]
+LocFriendlyName="Disabling Shot"
+LocLongDescription="A carefully aimed shot, suffering decreased aim and damage but forcing the target to reload their primary weapon."
+LocHelpText="Weak and hard-to-hit shot that disables target enemy weapon for a turn."
+LocFlyOverText="Disabling Shot"
+LocPromotionPopupText="<Bullet> <Ability:SelfCooldown/> turn cooldown.<br/><Bullet/> Disabling Shot also removes one action point from the target.<br/>"
+
+[RTSnapshot X2AbilityTemplate]
+LocFriendlyName="Snapshot"
+LocLongDescription="Use primary weapon with only a single action point, but with a -15 aim penalty."
+LocHelpText="Fire primary weapon after moving at an aim penalty."
+LocFlyOverText="Snapshot"
+LocPromotionPopupText="<Bullet/> Use primary weapon with only a single action point, but with a -15 aim penalty.<br/>"
+
+[RTStandardSniperShot X2AbilityTemplate]
+LocFriendlyName="Fire Sniper Rifle"
+LocHelpText="Fire your sniper rifle at a target."
+LocLongDescription="<Bullet/> The sniper rifle is powerful and accurate at long range, but usually requires two actions to fire<br/><Bullet/>Firing the primary weapon always ends a soldier's turn<br/>"
+
+[RTOverwatch X2AbilityTemplate]
+LocFriendlyName="Overwatch"
+LocHelpText="Fire on the first enemy that moves within your line of sight, with a penalty to aim."
+LocLongDescriptionWhenConcealed="Fire on the first enemy that moves within your line of sight, but only if revealed."
+LocFlyOverText="Overwatch"
+LocFriendlyNameWhenConcealed="Overwatch (Concealed)"
+
+[OverwatchShot X2AbilityTemplate]
+LocFriendlyName="Overwatch Shot"
+
+[SixOClock X2AbilityTemplate]
+LocFriendlyName="Six O'Clock"
+LocLongDescription="Gain an additional overwatch shot. Additionally, when this unit uses overwatch, allied units within it's range gain bonuses to defense, psi, and will."
+LocHelpText=" "
+LocFlyOverText="Six O'Clock"
+LocPromotionPopupText="<Bullet/> This affects units that do not have direct line of sight to the the overwatching unit.<br/>"
+
+[SixOClockEffect X2AbilityTemplate]
+LocFriendlyName="Six O'Clock Effect"
+LocLongDescription="When this unit uses overwatch, allied units within it's range gain bonuses to defense, psi, and will."
+LocHelpText=" "
+LocFlyOverText="Six O'Clock Effect"
+LocPromotionPopupText="<Bullet/> This affects units that do not have direct line of sight to the the overwatching unit.<br/>"
+
+[RTVitalPointTargeting X2AbilityTemplate]
+LocFriendlyName="Vital Point Targeting"
+LocLongDescription="Knowledge of enemy vital points aids in targeting."
+LocHelpText=" "
+LocFlyOverText="Vital Point Targeting"
+LocPromotionPopupText="<Bullet/> Grants a damage and critical strike chance bonus.<br/><Bullet/> This bonus is different for each individual with the ability and the targeted enemy type.<br/><Bullet/> This bonus is generated by killing enemy units over the course of a campaign.<br/>"
+
+[RTDamnGoodGround X2AbilityTemplate]
+LocFriendlyName="Damn Good Ground"
+LocLongDescription="Confers +15 Aim and +15 Defense against enemies at lower elevation, in addition to the usual elevation bonuses."
+LocHelpText=" "
+LocFlyOverText="Damn Good Ground"
+LocPromotionPopupText="<Bullet/> Confers +15 Aim and +15 Defense against enemies at lower elevation, in addition to the usual elevation bonuses.<br/>"
+
+[SlowIsSmooth X2AbilityTemplate]
+LocFriendlyName="Slow Is Smooth"
+LocLongDescription="Shots taken from concealment have +25 Aim and Crit. Reenter Concealment after breaking LOS with all enemies for 4 turns."
+LocHelpText=" "
+LocFlyOverText="Slow Is Smooth"
+LocPromotionPopupText="<Bullet/> Shots taken from concealment have +25 Aim and Crit.<br/><Bullet/> Reenter Concealment after breaking LOS with all enemies for 4 turns.<br/>"
+
+[Sovereign X2AbilityTemplate]
+LocFriendlyName="UNUSED, SEE RUDIMENTARY CREATURES"
+LocLongDescription="Kill shots have a chance to inflict panic on nearby foes."
+LocHelpText="Kill shots have a chance to inflict panic on nearby foes."
+LocFlyOverText="Sovereign"
+LocPromotionPopupText="<Bullet/>Kill shots have a chance to inflict panic on nearby foes.<br/>"
+
+[SovereignEffect X2AbilityTemplate]
+LocFriendlyName="UNUSED, SEE RUDIMENTARY CREATURES"
+LocLongDescription="Kill shots have a chance to inflict panic on nearby foes."
+LocHelpText="Kill shots have a chance to inflict panic on nearby foes."
+LocFlyOverText="Sovereign"
+LocPromotionPopupText="<Bullet/>Kill shots have a small chance to inflict panic on nearby foes. Ineffective versus psionic or robotic enemies.<br/>"
+
+[DaybreakFlame X2AbilityTemplate]
+LocFriendlyName="Fire Sniper Rifle (Daybreak Flame)"
+LocHelpText="Fire your sniper rifle at a target."
+LocLongDescription="<Bullet/> The sniper rifle is powerful and accurate at long range, but usually requires two actions to fire<br/><Bullet/>Firing the primary weapon always ends a soldier's turn<br/>"
+
+[DaybreakFlameIcon X2AbilityTemplate]
+LocFriendlyName="Daybreak Flame"
+LocLongDescription="Pyrokinetically-enhanced rounds punch through cover, shredding armor, and ignoring line of sight."
+LocHelpText="Pyrokinetically-enhanced rounds punch through cover, shredding armor, and ignoring line of sight."
+LocFlyOverText="Daybreak Flame"
+LocPromotionPopupText="<Bullet/>Pyrokinetically-enhanced rounds punch through cover, shredding armor, and ignoring line of sight.<br/><Bullet/>This ability only augments standard sniper shots and does not add additional effects to other shots.<br/>"
+
+[YourHandsMyEyes X2AbilityTemplate]
+LocFriendlyName="Your Hands, My Eyes"
+LocLongDescription="Mind Meld shares the owner's hacking stat in addition to the normal will bonuses."
+LocHelpText="Mind Meld shares the owner's hacking stat in addition to the normal will bonuses."
+LocFlyOverText="Your Hands, My Eyes"
+LocPromotionPopupText="<Bullet/>Mind Meld shares the owner's hacking stat in addition to the normal will bonuses.<br/>"
+
+[RTKubikuri X2AbilityTemplate]
+LocFriendlyName="Kubikiri"
+LocFlyOverText="Kubikiri"
+LocLongDescription="Special shot against most enemies who have taken any damage: Any critical hit kills them, but regular hits do half damage. Requires two actions and has a 4-turn cooldown."
+LocHelpText="Crits automatically kill enemies at less than full hit points. Regular hits do half damage."
+LocPromotionPopupText="<Bullet/> Special shot against enemies with less than full hit points: Any critical hit kills them, but regular hits do half damage.<br/><Bullet/> Requires two actions.<br/><Bullet> <Ability:SelfCooldown/> turn cooldown.<br/><Bullet/> Against alien rulers, a critical hit will do double normal crit damage instead of killing the enemy outright."
+
+[GhostPsiSuite X2AbilityTemplate]
+LocFriendlyName="Program Operative Veterancy"
+LocLongDescription="The Program trains their operatives in mind control, telepathy, telekinesis, and the art of war."
+LocHelpText="Standard Ghost ability set."
+LocFlyOverText="Program Operative Veterancy"
+LocPromotionPopupText="<Bullet/>Program operatives are trained in mind control, telepathy, telekinesis, and usage of the meld.<br/>"
+
+[JoinMeld X2AbilityTemplate]
+LocFriendlyName="Enter Meld"
+LocLongDescription="Enter the meld, gaining increased will and sharing certain abilities."
+LocHelpText="Enter the meld, gaining increased will and sharing certain abilities."
+LocFlyOverText="Enter Meld"
+LocPromotionPopupText="<Bullet/>Enter the meld, gaining increased will and sharing certain abilities.<br/>"
+
+[LeaveMeld X2AbilityTemplate]
+LocFriendlyName="Leave Meld"
+LocLongDescription="Leave the meld, negating possible panic effects and removing shared effects."
+LocHelpText="Leave the meld, negating possible panic effects and removing shared effects."
+LocFlyOverText="Leave Meld"
+LocPromotionPopupText="<Bullet/>Leave the meld, negating possible panic effects and removing shared effects.<br/>"
+
+[PsiOverload X2AbilityTemplate]
+LocFriendlyName="Mind Wrack"
+LocLongDescription="Overload an organic unit's brain with pure psionic energy, killing it immediately."
+LocHelpText="Overload an organic unit's brain with pure psionic energy, killing it immediately."
+LocFlyOverText="Mind Wrack"
+LocPromotionPopupText="<Bullet> <Ability:SelfCooldown/> turn cooldown.<br/><Bullet/> Overload an organic unit's brain with pure psionic energy, killing it immediately. The feedback from the ability will cause a significant moment of panic.<br/>"
+
+[RTMindControl X2AbilityTemplate]
+LocFriendlyName="Mind Control"
+LocLongDescription="Temporarily dominate an enemy unit psionically."
+LocHelpText="Attempt to take control of an enemy."
+LocFlyOverText="Mind Control"
+LocPromotionPopupText="<Bullet><Ability:SelfCooldown/> turn cooldown.<br/>"
+
+[LinkedIntelligence X2AbilityTemplate]
+LocFriendlyName="Networked OI"
+LocLongDescription="Units within the meld can react instantaneously to firing commands. When a unit in the Meld takes a reaction shot, all melded units attempt to fire against the target."
+LocHelpText="When a unit in the Meld takes a reaction shot, all melded units attempt to fire against the target."
+LocFlyOverText="Networked OI"
+LocPromotionPopupText="<Bullet/> Networked OI will trigger at squadsight range.<br/><Bullet/> Units will not break concealment in order to fire.<br/>"
+
+[TwitchReaction X2AbilityTemplate]
+LocFriendlyName="Twitch Reaction"
+LocLongDescription="This unit can spontaneously take covering fire reaction shots at units attacking fellow melded allies."
+LocHelpText="Take an instant reaction shot when a melded ally is attacked."
+LocFlyOverText="Twitch Reaction"
+LocPromotionPopupText="<Bullet/> This unit can spontaneously take covering fire reaction shots at units attacking fellow melded allies.<br/>"
+
+[TimeStandsStill X2AbilityTemplate]
+LocFriendlyName="Time Stands Still"
+LocLongDescription="Throw a wrench in the gears of the universe for a brief moment. Allies and Enemies alike become Greyscaled, losing their ability to affect or perceive the world around them."
+LocHelpText="The World! Stop Time!"
+LocFlyOverText="Time Stands Still"
+LocPromotionPopupText="<Bullet> <Ability:SelfCooldown/> turn cooldown.<br/><Bullet/> Timers and Reinforcements will be delayed while time is stopped.<br/><Bullet/> Greyscaled units are easy to hit and critically hit.<br/>"
+
+[PsionicSurge X2AbilityTemplate]
+LocFriendlyName="Psionic Surge"
+LocLongDescription="Empower this unit's weapon with psionic energy, increasing its fire rate and energy throughput."
+LocHelpText="Empower this unit's weapon with psionic energy."
+LocFlyOverText="Psionic Surge"
+LocPromotionPopupText="<Bullet> <Ability:SelfCooldown/> turn cooldown.<br/><Bullet/> Standard shots do not end turn and cost one AP.<br/><Bullet/> Special shots do not have cooldowns while this effect is active.<br/>"
+
+[FadeIcon X2AbilityTemplate]
+LocFriendlyName="Fade"
+LocLongDescription="Fade from view whenever this unit takes damage."
+LocHelpText="Fade from view whenever this unit takes damage."
+LocFlyOverText="Fade"
+LocPromotionPopupText="<Bullet/> Gain stealth for a short duration whenever this unit takes damage. <Ability:SelfCooldown/> turn cooldown.<br/>"
+
+[Fade X2AbilityTemplate]
+LocFriendlyName="Fade"
+LocLongDescription="Fade from view whenever this unit takes damage."
+LocHelpText="Fade from view whenever this unit takes damage."
+LocFlyOverText="Fade"
+LocPromotionPopupText="<Bullet/> Gain stealth for a short duration whenever this unit takes damage. <Ability:SelfCooldown/> turn cooldown.<br/>"
+
+[Teek X2AbilityTemplate]
+LocFriendlyName="Teek"
+LocLongDescription="This unit has honed its telekinetic abilities, increasing its ability to dodge, and deflect enemy fire."
+LocHelpText="This unit has honed its telekinetic abilities, increasing its ability to dodge, and deflect enemy fire."
+LocFlyOverText="Teek"
+LocPromotionPopupText="<Bullet/> This unit has honed its telekinetic abilities, increasing its ability to dodge, and deflect enemy fire.<br/><Bullet/> + 10 Dodge, + 10 Defense.<br/>"
+
+[EyeInTheSky X2AbilityTemplate]
+LocFriendlyName="Eye In the Sky"
+LocLongDescription="This unit does not suffer penalties to reaction fire and is capable of reacting to enemy attacks."
+LocHelpText="This unit does not suffer penalties to reaction fire and is capable of reacting to enemy attacks."
+LocFlyOverText="Eye In the Sky"
+LocPromotionPopupText="<Bullet/> This unit does not suffer penalties to reaction fire and is capable of reacting to enemy attacks.<br/><Bullet/> +30 Aim during Reaction Fire + Covering Fire<br/>"
+
+[HeatChannel X2AbilityTemplate]
+LocFriendlyName="Heat Channel"
+LocLongDescription="When using Psionic abilities, this unit can channel heat from its weapon to fuel the ability, reloading the weapon and reducing the cooldown of the ability by one per ammo reloaded."
+LocHelpText="When using Psionic abilities, this unit can channel heat from its weapon to fuel the ability, reloading the weapon and reducing the cooldown of the ability by one per ammo reloaded."
+LocFlyOverText="Heat Channel"
+LocPromotionPopupText="<Bullet/> When using Psionic abilities, this unit can channel heat from its weapon to fuel the ability, reloading the weapon and reducing the cooldown of the ability by one per ammo reloaded.<br/><Bullet/> 2 turn cooldown.<br/>"
+
+[HeatChannelIcon X2AbilityTemplate]
+LocFriendlyName="Heat Channel"
+LocLongDescription="When using Psionic abilities, this unit can channel heat from its weapon to fuel the ability, reloading the weapon and reducing the cooldown of the ability by one per ammo reloaded."
+LocHelpText="When using Psionic abilities, this unit can channel heat from its weapon to fuel the ability, reloading the weapon and reducing the cooldown of the ability by one per ammo reloaded."
+LocFlyOverText="Heat Channel"
+LocPromotionPopupText="<Bullet/> When using Psionic abilities, this unit can channel heat from its weapon to fuel the ability, reloading the weapon and reducing the cooldown of the ability by one per ammo reloaded.<br/><Bullet/> 2 turn cooldown.<br/>"
+
+[HeatChannelCooldown X2AbilityTemplate]
+LocFriendlyName="Heat Channel"
+LocLongDescription="Heat Channel is on cooldown!"
+LocHelpText="When using Psionic abilities, this unit can channel heat from its weapon to fuel the ability, reloading the weapon and reducing the cooldown of the ability by one per ammo reloaded."
+LocFlyOverText="Heat Channel"
+LocPromotionPopupText="<Bullet/> When using Psionic abilities, this unit can channel heat from its weapon to fuel the ability, reloading the weapon and reducing the cooldown of the ability by one per ammo reloaded.<br/><Bullet/> 2 turn cooldown.<br/>"
+
+[Harbinger X2AbilityTemplate]
+LocFriendlyName="Assuming Direct Control"
+LocLongDescription="Empower a friendly melded unit, healing it fully and granting it significant combat bonuses."
+LocHelpText="Empower a friendly melded unit, healing it fully and granting it significant combat bonuses."
+LocFlyOverText="Assuming Direct Control"
+LocPromotionPopupText="<Bullet/> Empower a friendly melded unit, healing it fully and granting it significant combat bonuses.<br/><Bullet/> <Ability:SelfCooldown/> turn cooldown.<br/><Bullet/> +4 armor, +5 shield hp, + 10 aim, + 10 will.<br/><Bullet/> Effect is broken on meld loss.<br/>"
+
+[ShockAndAwe X2AbilityTemplate]
+LocFriendlyName="Shock And Awe"
+LocLongDescription="When this unit deals more than 25 damage in a single turn, it disorients all nearby enemies."
+LocHelpText="When this unit deals more than 25 damage in a single turn, it disorients all nearby enemies"
+LocFlyOverText="Shock And Awe"
+LocPromotionPopupText="<Bullet/> When this unit deals more than 25 damage in a single turn, it disorients all nearby enemies<br/>"
+
+[RTKillzone X2AbilityTemplate]
+LocFriendlyName="Psionic Killzone"
+LocLongDescription="Take a reaction shot against any enemy that moves or attacks within a cone of fire."
+LocHelpText="Enhanced overwatch in a cone of fire."
+LocFlyOverText="Psionic Killzone"
+LocPromotionPopupText="<Bullet/> There is no limit to the amount of Kill Zone shots a soldier can take outside of ammo counts.<br/><Bullet/> Kill Zone utilizes Squadsight, even if the soldier does not have the Long Watch ability.<br/><Bullet/> Kill Zone has a <Ability:SelfCooldown/> turn cooldown.<br/>"
+LocFriendlyNameWhenConcealed="Psionic Killzone (Concealed)"
+
+[RTEveryMomentMatters X2AbilityTemplate]
+LocFriendlyName="Every Moment Matters"
+LocLongDescription="The last bullet in this unit's magazine is guaranteed to Critically Hit and deals bonus damage based on the target's missing health."
+LocHelpText="The last bullet in this unit's magazine is guaranteed to Critically Hit and deals bonus damage based on the target's missing health."
+LocFlyOverText="Every Moment Matters"
+LocPromotionPopupText="<Bullet/> Bonus damage is equal to 35% of the target's missing HP.<br/><Bullet/> Shooting the last bullet additionally grants a movement-only action point.<br/>"
+
+; <Bullet/><br/>
+
+[RT_Berserker X2SoldierClassTemplate]
+DisplayName="Program Berserker"
+ClassSummary="Queen is the unit's leader and close-combat specialist."
+LeftAbilityTreeTitle="Rampager"
+RightAbilityTreeTitle="Operator"
+RandomNickNames[0]="Queen"
+
+[BumpInTheNight X2AbilityTemplate]
+LocFriendlyName="Bump In The Night"
+LocLongDescription="This unit gains Stealth after killing a unit within 3 tiles. If it was a melee kill, additionally gain a stack of Bloodlust."
+LocHelpText="Gain Stealth after killing a unit within 3 tiles. Melee kills additionally grant a stack of Bloodlust."
+LocFlyOverText="Bump In The Night"
+LocPromotionPopupText="<Bullet/> This unit gains Stealth after killing a unit within 3 tiles. <br/><Bullet/> If it was a melee kill, additionally gain a stack of Bloodlust. <br/>"
+
+[BumpInTheNightBloodlustListener X2AbilityTemplate]
+LocFriendlyName="Bump In The Night"
+LocLongDescription="This unit gains Stealth after killing a unit within 3 tiles. If it was a melee kill, additionally gain a stack of Bloodlust."
+LocHelpText="Gain Stealth after killing a unit within 3 tiles. Melee kills additionally grant a stack of Bloodlust."
+LocFlyOverText="Bump In The Night"
+LocPromotionPopupText="<Bullet/>This unit gains Stealth after killing a unit within 3 tiles. <br/><Bullet/>If it was a melee kill, additionally gain a stack of Bloodlust. <br/><Bullet/> <br/><Bullet/> <br/>"
+
+[BumpInTheNightStealthListener X2AbilityTemplate]
+LocFriendlyName="Bump In The Night"
+LocLongDescription="This unit gains Stealth after killing a unit within 3 tiles. If it was a melee kill, additionally gain a stack of Bloodlust."
+LocHelpText="Gain Stealth after killing a unit within 3 tiles. Melee kills additionally grant a stack of Bloodlust."
+LocFlyOverText="Bump In The Night"
+LocPromotionPopupText="<Bullet/>This unit gains Stealth after killing a unit within 3 tiles. <br/><Bullet/>If it was a melee kill, additionally gain a stack of Bloodlust. <br/><Bullet/> <br/><Bullet/> <br/>"
+
+[RTBerserkerKnifeAttack X2AbilityTemplate]
+LocFriendlyName="Slash (Berserker)"
+LocLongDescription="Attack any enemy within movement range with your <Ability:SecondaryWeaponName/>."
+LocHelpText="Attack an enemy within movement range with your <Ability:SecondaryWeaponName/>."
+LocPromotionPopupText="<Bullet/> You can trigger the Slash ability by placing the movement cursor over an enemy.<br/><Bullet/> A Berserker can perform a \"Dash\" move, using both actions to move, and still trigger a Slash against an adjacent enemy.<br/>"
+
+[RTSiphon X2AbilityTemplate]
+LocFriendlyName="Siphon"
+LocLongDescription="This unit will siphon health from organic enemies based on the damage it deals to them."
+LocHelpText="This unit will siphon health from organic enemies based on the damage it deals to them."
+LocFlyOverText="Siphon"
+LocPromotionPopupText="<Bullet/> This unit will siphon health from organic enemies based on the damage it deals to them. <br/><Bullet/> Minimum health gain per attack is 2. <br/>"
+
+[RTAcidicBlade X2AbilityTemplate]
+LocFriendlyName="Acid Blade"
+LocLongDescription="This unit's blade is covered in a classified acidic solution. It shreds armor and applies this solution to the target."
+LocHelpText="This unit's melee attacks deal additional acid damage."
+LocFlyOverText="Acid Blade"
+LocPromotionPopupText="<Bullet/> This unit's blade is covered in a classified acidic solution. It shreds armor and applies this solution to the target.<br/><Bullet/> Acid shreds additional armor and does damage per turn.<br/><Bullet/> Consecutive melee attacks will refresh the duration of the acid and increase its potency, stacking the damage and shredding effect.<br/>"
+
+[RTPsionicBlade X2AbilityTemplate]
+LocFriendlyName="Psiblade"
+LocLongDescription="This unit's blade is a manifestation of psionic energy. It pierces armor entirely and deals additional damage based on the target's will."
+LocHelpText="This unit's melee attacks deal pierce all armor and deal bonus damage based on the target's will."
+LocFlyOverText="Psiblade"
+LocPromotionPopupText="<Bullet/> This unit's blade is a manifestation of psionic energy. It pierces armor entirely.<br/>"
+
+[RTHiddenBlade X2AbilityTemplate]
+LocFriendlyName="Hidden Blade"
+LocLongDescription="This unit's blade is designed to deal additional damage to unaware targets. It deals additional critical damage from concealment."
+LocHelpText="This unit's melee attacks deal additional critical damage from concealment."
+LocFlyOverText="Psiblade"
+LocPromotionPopupText="<Bullet/> This unit's blade is designed to deal additional damage to unaware targets. It deals extra critical damage from concealment.<br/><Bullet/> Critical hits deal an additional 150% damage when the critera is met.<br/>"
+
+[RTBurst X2AbilityTemplate]
+LocFriendlyName="Burst"
+LocLongDescription="Unleash a burst of psionic energy, damaging surrounding enemies and tiles."
+LocHelpText="Unleash a burst of psionic energy, damaging surrounding enemies and tiles."
+LocFlyOverText="Burst"
+LocPromotionPopupText="<Bullet> <Ability:SelfCooldown/> turn cooldown.<br/><Bullet/> Unleash a burst of psionic energy, damaging surrounding enemies and tiles.<br/>"
+
+[RTBlur X2AbilityTemplate]
+LocFriendlyName="Blur"
+LocLongDescription="Gain additional dodge, movement, and defense."
+LocHelpText="Gain additional dodge, movement, and defense."
+LocFlyOverText=""
+LocPromotionPopupText="<Bullet/> Gain additional dodge, movement, and defense.<br/>"
+
+[RTPurge X2AbilityTemplate]
+LocFriendlyName="Purge"
+LocLongDescription="Purge your bloodlust and regain concealment."
+LocHelpText="Lose five stacks of bloodlust. Gain concealment."
+LocFlyOverText="Purge"
+LocPromotionPopupText="<Bullet/> Lose five stacks of bloodlust. Gain concealment.<br/>"
+
+[RTMentor X2AbilityTemplate]
+LocFriendlyName="Mentor"
+LocLongDescription="Lend a friendly melded unit psionic support though the meld."
+LocHelpText="Lend a friendly melded unit psionic support though the meld."
+LocFlyOverText="Mentor"
+LocPromotionPopupText="<Bullet> <Ability:SelfCooldown/> turn cooldown.<br/><Bullet/> Grants +60 Will and Psi Offense to targeted unit and cleanses their feedback.<br/>"
+
+[RTReprobateWaltz X2AbilityTemplate]
+LocFriendlyName="Reprobate Waltz"
+LocLongDescription="Whenever this unit uses a melee attack, there is a chance to attack again, increasing with Bloodlust stacks."
+LocHelpText="Whenever this unit uses a melee attack, there is a chance to attack again, increasing with Bloodlust stacks."
+LocFlyOverText="Reprobate Waltz"
+LocPromotionPopupText="<Bullet/> 20% Base Chance, +10% for each Bloodlust stack.<br/>"
+
+[RTReprobateWaltzIcon X2AbilityTemplate]
+LocFriendlyName="Reprobate Waltz"
+LocLongDescription="Whenever this unit uses a melee attack, there is a chance to attack again, increasing with Bloodlust stacks."
+LocHelpText="Whenever this unit uses a melee attack, there is a chance to attack again, increasing with Bloodlust stacks."
+LocFlyOverText="Reprobate Waltz"
+LocPromotionPopupText="<Bullet/> 20% Base Chance, +10% for each Bloodlust stack.<br/>"
+
+[RTPyroclasticFlow X2AbilityTemplate]
+LocFriendlyName="Pyroclastic Flow"
+LocLongDescription="This unit can now melee while it is burning, and while burning, it leaves a devastating trail of fire in its wake."
+LocHelpText="This unit can now melee while it is burning, and while burning, it leaves a devastating trail of fire in its wake."
+LocFlyOverText="Pyroclastic Flow"
+LocPromotionPopupText="<Bullet/> Does not give immunity to burning.<br/>"
+
+[RTPyroclasticSlash X2AbilityTemplate]
+LocFriendlyName="Slash (Pyroclastic)"
+LocLongDescription="Attack any enemy within movement range with your <Ability:SecondaryWeaponName/>."
+LocHelpText="Attack an enemy within movement range with your <Ability:SecondaryWeaponName/>."
+LocPromotionPopupText="<Bullet/> You can trigger the Slash ability by placing the movement cursor over an enemy.<br/><Bullet/> A Berserker can perform a \"Dash\" move, using both actions to move, and still trigger a Slash against an adjacent enemy.<br/>"
+
+[RTContainedFury X2AbilityTemplate]
+LocFriendlyName="Contained Fury"
+LocLongDescription="This unit's meld status is no longer affected by Bloodlust stacks."
+LocHelpText="This unit's meld status is no longer affected by Bloodlust stacks."
+LocFlyOverText="Contained Fury"
+LocPromotionPopupText=""
+
+[RTContainedFuryMeldJoin X2AbilityTemplate]
+LocFriendlyName="Enter Meld (Contained Fury)"
+LocLongDescription="Enter the meld, gaining increased will and sharing certain abilities."
+LocHelpText="Enter the meld, gaining increased will and sharing certain abilities."
+LocFlyOverText="Enter Meld"
+LocPromotionPopupText="<Bullet/> Enter the meld, gaining increased will and sharing certain abilities.<br/>"
+
+[RTUnstableConduit X2AbilityTemplate]
+LocFriendlyName="Unstable Tempest"
+LocLongDescription="Whenever this unit uses a psionic ability, it triggers a Burst around it and all melded allies."
+LocHelpText="Whenever this unit uses a psionic ability, it triggers a Burst around it and all melded allies."
+LocFlyOverText="Unstable Tempest"
+LocPromotionPopupText="<Bullet/> Whenever this unit uses a psionic ability, it triggers a Burst around it and all melded allies.<br/><Bullet/> Certain abilities are not considered to be Psionic for the purposes of this ability, like Join Meld and Leave Meld.<br/>"
+
+[RTUnstableConduitBurst X2AbilityTemplate]
+LocFriendlyName="Burst"
+LocLongDescription="Unleash a burst of psionic energy, damaging surrounding enemies and tiles."
+LocHelpText="Unleash a burst of psionic energy, damaging surrounding enemies and tiles."
+LocFlyOverText="Burst"
+LocPromotionPopupText="<Bullet/> Unleash a burst of psionic energy, damaging surrounding units and tiles.<br/>"
+
+[RTPersistingImages X2AbilityTemplate]
+LocFriendlyName="Persisting Images"
+LocLongDescription="Whenever this unit gains Stealth, it creates a afterimage of itself nearby."
+LocHelpText="Whenever this unit gains Stealth, it creates a afterimage of itself nearby."
+LocFlyOverText="Persisting Images"
+LocPromotionPopupText="<Bullet/> Afterimages will draw enemy attention, but have only one HP.<br/>"
+
+[RTUnstableConduitIcon X2AbilityTemplate]
+LocFriendlyName="Unstable Tempest"
+LocLongDescription="Whenever this unit uses a psionic ability, it triggers a Burst around it and all melded allies."
+LocHelpText="Whenever this unit uses a psionic ability, it triggers a Burst around it and all melded allies."
+LocFlyOverText="Unstable Tempest"
+LocPromotionPopupText="<Bullet/> Whenever this unit uses a psionic ability, it triggers a Burst around it and all melded allies.<br/><Bullet/>Certain abilities are not considered to be Psionic for the purposes of this ability, like Join Meld and Leave Meld.<br/>"
+
+[RTPersistingImagesIcon X2AbilityTemplate]
+LocFriendlyName="Persisting Images"
+LocLongDescription="Whenever this unit gains Stealth, it creates a afterimage of itself nearby."
+LocHelpText="Whenever this unit gains Stealth, it creates a afterimage of itself nearby."
+LocFlyOverText="Persisting Images"
+LocPromotionPopupText="<Bullet/> Whenever this unit gains Stealth, it creates a afterimage of itself nearby.<br/><Bullet/> Afterimages will draw enemy attention, but have only one HP.<br/>"
+
+[RTGhostInTheShell X2AbilityTemplate]
+LocFriendlyName="Ghost In The Shell"
+LocLongDescription="When this unit interacts with objectives, it gains short burst of Stealth."
+LocHelpText="When this unit interacts with objectives, it gains short burst of Stealth."
+LocFlyOverText="Ghost In The Shell"
+LocPromotionPopupText=""
+
+[RTGhostInTheShellListener X2AbilityTemplate]
+LocFriendlyName="Ghost In The Shell"
+LocLongDescription="When this unit interacts with objectives, it is not unconcealed."
+LocHelpText="When this unit interacts with objectives, it is not unconcealed."
+LocFlyOverText="Ghost In The Shell"
+LocPromotionPopupText="<Bullet/> When this unit interacts with objectives, it gains short burst of Stealth.<br/>"
+
+[RTQueenOfBlades X2AbilityTemplate]
+LocFriendlyName="The Queen of Blades"
+LocLongDescription="If a melee attack kills a unit, the action points for the attack are refunded. Additionally, Bloodlust stacks will increase mobility, instead of decreasing it."
+LocHelpText="If a melee attack kills a unit, the action points for the attack are refunded. Additionally, Bloodlust stacks will increase mobility, instead of decreasing it."
+LocFlyOverText="The Queen of Blades"
+LocPromotionPopupText=""
+
+[RTShadowStrike X2AbilityTemplate]
+LocFriendlyName="Shadow Strike"
+LocLongDescription="Leap through shadows to strike at a target."
+LocHelpText="Leap through shadows to strike at a target."
+LocFlyOverText="Shadow Strike"
+LocPromotionPopupText="<Bullet> <Ability:SelfCooldown/> turn cooldown.<br/><Bullet/> Unlimited range, direct path to target not required.<br/>"
+
+[RTPsionicLance X2AbilityTemplate]
+LocFriendlyName="Psionic Lance"
+LocLongDescription="Fire a lance of pure psionic energy."
+LocHelpText="Fire a lance of pure psionic energy."
+LocFlyOverText="Psionic Lance"
+LocPromotionPopupText="<Bullet> <Ability:SelfCooldown/> turn cooldown.<br/>"
+
+[RTHarbingerPsionicLance X2AbilityTemplate]
+LocFriendlyName="Psionic Lance (Assuming Direct Control)"
+LocLongDescription="Fire a lance of pure psionic energy."
+LocHelpText="Fire a lance of pure psionic energy."
+LocFlyOverText="Psionic Lance (Assuming Direct Control)"
+LocPromotionPopupText="<Bullet> <Ability:SelfCooldown/> turn cooldown.<br/>"
+
+[RTDashingStrike X2AbilityTemplate]
+LocFriendlyName="Dashing Strike"
+LocLongDescription="Lunge forward, dealing damage to all enemies in the path of the strike."
+LocHelpText="Lunge forward, dealing damage to all enemies in the path of the strike."
+LocFlyOverText="Dashing Strike"
+LocPromotionPopupText="<Bullet/> Lunge forward, dealing damage to all enemies in the path of the strike.<br/>"
+
+[RTCloseCombatSpecialist X2AbilityTemplate]
+LocFriendlyName="Close Combat Specialist"
+LocFlyOverText="Close Combat Specialist"
+LocLongDescription="Fire a free reaction shot with your primary weapon at any visible enemy within four tiles who moves or fires."
+LocHelpText="Fire a free reaction shot at any visible enemy within four tiles who moves or fires."
+LocPromotionPopupText="<Bullet/> Will not trigger if soldier is concealed.<br/><Bullet/> You may shoot at each enemy with this ability once per turn.<br/><Bullet/> Each shot requires 1 ammo.<br/>""
+
+[RTCloseCombatSpecialistAttack X2AbilityTemplate]
+LocFriendlyName="Close Combat Specialist"
+LocFlyOverText="Close Combat Specialist"
+LocLongDescription="Fire a free reaction shot with your primary weapon at any visible enemy within four tiles who moves or fires."
+LocHelpText="Fire a free reaction shot at any visible enemy within four tiles who moves or fires."
+LocPromotionPopupText="<Bullet/> Will not trigger if soldier is concealed.<br/><Bullet/> You may shoot at each enemy with this ability once per turn.<br/><Bullet/> Each shot requires 2 ammo.<br/>""
+
+
+; <Bullet/><br/>
+
+[RT_Gatherer X2SoldierClassTemplate]
+DisplayName="Program Gatherer"
+ClassSummary="Nova is the team's HUMINT expert and primary psionic support."
+LeftAbilityTreeTitle="Clairvoyant"
+RightAbilityTreeTitle="Telepath"
+RandomNickNames[0]="Nova"
+
+[OverTheShoulder X2AbilityTemplate]
+LocFriendlyName="Over The Shoulder"
+LocLongDescription="Peer over the shoulder of enemy units, seeing what they see."
+LocHelpText="Peer over the shoulder of enemy units, seeing what they see. "
+LocFlyOverText="Over The Shoulder"
+LocPromotionPopupText="<Bullet/> Peer over the shoulder of enemy units, seeing what they see.<br/>"
+
+[RTTheSixPathsOfPain X2AbilityTemplate]
+LocFriendlyName="The Six Paths of Pain"
+LocLongDescription="Automatically cast Over the Shoulder for free at the start of each turn."
+LocHelpText="Automatically cast Over the Shoulder for free at the start of each turn."
+LocFlyOverText="The Six Paths of Pain"
+LocPromotionPopupText="<Bullet/> Will not trigger if the unit can't cast Over the Shoulder.<br/>"
+
+[RTTheSixPathsOfPainIcon X2AbilityTemplate]
+LocFriendlyName="The Six Paths of Pain"
+LocLongDescription="Automatically cast Over the Shoulder for free at the start of each turn."
+LocHelpText="Automatically cast Over the Shoulder for free at the start of each turn."
+LocFlyOverText="The Six Paths of Pain"
+LocPromotionPopupText="<Bullet/> Will not trigger if the unit can't cast Over the Shoulder.<br/>"
+
+[RTMeldInduction X2AbilityTemplate]
+LocFriendlyName="Meld Induction"
+LocLongDescription="Force a unit into the Meld."
+LocHelpText="Force a unit into the Meld."
+LocFlyOverText="Meld Induction"
+LocPromotionPopupText="<Bullet> <Ability:SelfCooldown/> turn cooldown.<br/><Bullet/> This cannot be done if the unit using Meld Induction is not in the meld itself.<br/>"
+
+[RTUnsettlingVoices X2AbilityTemplate]
+LocFriendlyName="Unsettling Voices"
+LocLongDescription="Enemy units affected by Over The Shoulder suffer decreased stats, including Defense, Aim, and Will."
+LocHelpText="Enemy units affected by Over The Shoulder suffer decreased stats."
+LocFlyOverText="Unsettling Voices"
+LocPromotionPopupText="<Bullet/> Enemy units affected by Over The Shoulder suffer decreased stats, including Defense, Aim, and Will.<br/>"
+
+[RTGuardianAngel X2AbilityTemplate]
+LocFriendlyName="Guardian Angel"
+LocLongDescription="Grant an effect to allied units affected by Over the Shoulder which cleanses mental debuffs, and slowly heals them."
+LocHelpText="Grant an effect to allied units affected by Over the Shoulder which cleanses mental debuffs, and slowly heals them."
+LocFlyOverText="Guardian Angel"
+LocPromotionPopupText="<Bullet/> Grant an effect to allied units affected by Over the Shoulder which cleanses mental debuffs, and slowly heals them.<br/><Bullet/> The healing effect can only happen once per turn.<br/>"
+
+[RTForcedIntroversion X2AbilityTemplate]
+LocFriendlyName="Forced Introversion"
+LocLongDescription="When this unit recieves Feedback, it also recieves Stealth."
+LocHelpText="When this unit recieves Feedback, it also recieves Stealth."
+LocFlyOverText="Forced Introversion"
+LocPromotionPopupText="<Bullet/> When this unit recieves Feedback, it also recieves Stealth.<br/><Bullet/> Stealth usually lasts for the duration of the Feedback event.<br/>"
+
+[RTRudimentaryCreatures X2AbilityTemplate]
+LocFriendlyName="Sovereign"
+LocLongDescription="When units affected by Over the Shoulder attempt to use psionic abilities, this unit will attempt to interrupt the ability, stunning the user and dealing minor psionic damage."
+LocHelpText="When units affected by Over the Shoulder attempt to use psionic abilities, this unit will attempt to interrupt the ability, stunning the user and dealing minor psionic damage."
+LocFlyOverText="Sovereign"
+LocPromotionPopupText="<Bullet/> Not all psionic abilities can be interrupted. Notable exceptions include Over The Shoulder and Join/Leave Meld.<br/>"
+
+[RTRudimentaryCreaturesEvent X2AbilityTemplate]
+LocFriendlyName="Sovereign"
+LocLongDescription="When units affected by Over the Shoulder attempt to use psionic abilities, this unit will attempt to interrupt the ability, stunning the user and dealing minor psionic damage."
+LocHelpText="When units affected by Over the Shoulder attempt to use psionic abilities, this unit will attempt to interrupt the ability, stunning the user and dealing minor psionic damage."
+LocFlyOverText="Sovereign"
+LocPromotionPopupText="<Bullet/> When units affected by Over the Shoulder attempt to use psionic abilities, this unit will attempt to interrupt the ability, stunning the user and dealing minor psionic damage.<br/>"
+
+[RTExtinctionEventPartOne X2AbilityTemplate]
+LocFriendlyName="Extinction Event"
+LocLongDescription="Gain Stealth, charging a powerful attack. On the next turn, unleash an overwhelming psionic nova, obliterating everything in a massive radius."
+LocHelpText="Gain Stealth, charging a powerful attack. On the next turn, unleash an overwhelming psionic nova, obliterating everything in a massive radius."
+LocFlyOverText="Extinction Event"
+LocPromotionPopupText="<Bullet/> 350 tile radius.<br/><Bullet/> Friendly units should attempt to evac before this ability completes!<br/>"
+
+[RTExtinctionEventPartTwo X2AbilityTemplate]
+LocFriendlyName="Extinction Event"
+LocLongDescription="Gain Stealth, charging a powerful attack. On the next turn, unleash an overwhelming psionic nova, obliterating everything in a massive radius."
+LocHelpText="Gain Stealth, charging a powerful attack. On the next turn, unleash an overwhelming psionic nova, obliterating everything in a massive radius."
+LocFlyOverText="Extinction Event"
+LocPromotionPopupText="<Bullet/> 350 tile radius.<br/><Bullet/> Friendly units should attempt to evac before this ability completes!<br/>"
+
+[RTExtinctionEventPartThree X2AbilityTemplate]
+LocFriendlyName="Extinction Event"
+LocLongDescription="Gain Stealth, charging a powerful attack. On the next turn, unleash an overwhelming psionic nova, obliterating everything in a massive radius."
+LocHelpText="Gain Stealth, charging a powerful attack. On the next turn, unleash an overwhelming psionic nova, obliterating everything in a massive radius."
+LocFlyOverText="Extinction Event"
+LocPromotionPopupText="<Bullet/> 350 tile radius.<br/><Bullet/> Friendly units should attempt to evac before this ability completes!<br/>"
+
+[RTUnwillingConduitsIcon X2AbilityTemplate]
+LocFriendlyName="Unwilling Conduits"
+LocLongDescription="Whenever this unit casts a psionic ability, it drains energy from units affected by Over the Shoulder to fuel the action,  reducing the cooldown for each unit affected."
+LocHelpText="Whenever this unit casts a psionic ability, it drains energy from units affected by Over the Shoulder to fuel the action, reducing the cooldown for each unit affected."
+LocFlyOverText="Unwilling Conduits"
+LocPromotionPopupText="<Bullet/> Cooldown will be reduced to a minimum of 1; usable next turn.<br/>"
+
+[RTDomination X2AbilityTemplate]
+LocFriendlyName="Domination"
+LocLongDescription="The duration of this unit's mind control is greatly increased."
+LocHelpText="The duration of this unit's mind control is greatly increased."
+LocFlyOverText="Domination"
+LocPromotionPopupText="<Bullet/> Multiple mind controls can be active at once.<br/>"
+
+[RTTechnopathy X2AbilityTemplate]
+LocFriendlyName="Technopathy"
+LocLongDescription="This unit can affect robotic units with its psionic abilities and can hack objectives from range via telepathy."
+LocHelpText="This unit can affect robotic units with its psionic abilities and can hack objectives from range via telepathy."
+LocFlyOverText="Technopathy"
+LocPromotionPopupText="<Bullet/> The unit will hack with its Psi Offense stat instead of the Hack stat.<br/>"
+
+[RTSibyl X2AbilityTemplate]
+LocFriendlyName="Sibyl's Gaze"
+LocLongDescription="The vision component of Over The Shoulder lasts forever, even when the ability is inactive."
+LocHelpText="The vision component of Over The Shoulder lasts forever, even when the ability is inactive."
+LocFlyOverText="Sibyl's Gaze"
+LocPromotionPopupText="<Bullet/> Technically not infinite; only 10 million turns.<br/>"
+
+[RTEchoedAgonyIcon X2AbilityTemplate]
+LocFriendlyName="Echoed Agony"
+LocLongDescription="This unit will echo panic attempts that affect to nearby enemies affected by Over the Shoulder."
+LocHelpText="This unit will echo panic attempts that affect to nearby enemies affected by Over the Shoulder."
+LocFlyOverText="Echoed Agony"
+LocPromotionPopupText="<Bullet/> Only affects enemy units.<br/><Bullet/> Feedback is a panic effect and is much stronger than other sources of panic.<br/>"
+
+[RTGuiltyConscience X2AbilityTemplate]
+LocFriendlyName="Guilty Conscience"
+LocLongDescription="Enemies that are forced to suffer this unit's mental presence for too long will be disoriented by the experience."
+LocHelpText="Enemies that are forced to suffer this unit's mental presence for too long will be disoriented by the experience."
+LocFlyOverText="Guilty Conscience"
+LocPromotionPopupText="<Bullet/> This ability can activate against the same target multiple times if the engagement lasts that long.<br/>"
+
+[RTGuiltyConscienceEvent X2AbilityTemplate]
+LocFriendlyName="Guilty Conscience"
+LocLongDescription="Enemies that are forced to suffer this unit's mental presence for too long will be disoriented by the experience."
+LocHelpText="Enemies that are forced to suffer this unit's mental presence for too long will be disoriented by the experience."
+LocFlyOverText="Guilty Conscience"
+LocPromotionPopupText="<Bullet/> Enemy units that are affected by Over the Shoulder multiple turns in a row will be disoriented.<br/>"
+
+[RTTriangulationIcon X2AbilityTemplate]
+LocFriendlyName="Triangulation"
+LocLongDescription="Melded allies will now serve as additional sources of Over the Shoulder's effect."
+LocHelpText="Melded allies will now serve as additional sources of Over the Shoulder's effect."
+LocFlyOverText="Triangulation"
+LocPromotionPopupText="<Bullet/> The effect lasts an entire turn, even if the meld is broken.<br/><Bullet/> This is one of the very few ways for the Gatherer to affect itself with powerful Over the Shoulder effects.<br/>"
+
+[RTKnowledgeIsPower X2AbilityTemplate]
+LocFriendlyName="Knowledge is Power"
+LocLongDescription="Gain increasing damage and critical strike chance against units that endure Over the Shoulder for multiple turns."
+LocHelpText="Gain increasing damage and critical strike chance against units that endure Over the Shoulder for multiple turns."
+LocFlyOverText="Knowledge is Power"
+LocPromotionPopupText="<Bullet/> The effects of this ability accumulate over four turns.<br/>"
+
+[RTLift X2AbilityTemplate]
+LocFriendlyName="Lift"
+LocLongDescription="Lift small enemies into the air in a small area of effect."
+LocHelpText="Lift small enemies into the air in a small area of effect."
+LocFlyOverText="Lift"
+LocPromotionPopupText="<Bullet/> Lift is useful for gaining additional flanking bonuses and controlling enemies, but melee attacks will often be unavailable.<br/>"
+
+[RTCrushingGrasp X2AbilityTemplate]
+LocFriendlyName="Crushing Grasp"
+LocLongDescription="Telekinetically grip a small area, stunning enemy units and destroying their cover."
+LocHelpText="Telekinetically grip a small area, stunning enemy units and destroying their cover."
+LocFlyOverText="Crushing Grasp"
+LocPromotionPopupText="<Bullet> <Ability:SelfCooldown/> turn cooldown.<br/><Bullet/> Crushing Grasp should be used liberally to enable Whisper's Scoped and Dropped and to create flanking paths for Queen's Bump in the Night.<br/>"
+
+[RTPsionicStorm X2AbilityTemplate]
+LocFriendlyName="Psionic Storm"
+LocLongDescription="Create a damaging psionic storm that ravages a moderate area indefinitely."
+LocHelpText="Cast a psionic storm."
+LocFlyOverText="Psionic Storm"
+LocPromotionPopupText="<Bullet> <Ability:SelfCooldown/> turn cooldown.<br/><Bullet/> The unit can sustain three separate psionic storms at once.<br/><Bullet/> Stacking psionic storms does not increase their damage.<br/><Bullet/> Psionic storms must be manually canceled.<br/>"
+
+[RTPsionicStormSustained X2AbilityTemplate]
+LocFriendlyName="Psionic Storm Sustained"
+LocLongDescription="You shouldn't be able to see this"
+LocHelpText="Cast a psionic storm."
+LocFlyOverText="Psionic Storm"
+LocPromotionPopupText="<Bullet/> The unit can sustain three separate psionic storms at once.<br/><Bullet/> Stacking psionic storms does not increase their damage.<br/><Bullet/> Psionic storms must be manually canceled.<br/>"
+
+[RTEndPsistorms X2AbilityTemplate]
+LocFriendlyName="End Psionic Storms"
+LocLongDescription="End all psionic storms."
+LocHelpText="End all active psionic storms."
+LocFlyOverText="End active Psionic Storms."
+
+[RTTechnopathy_Hack X2AbilityTemplate]
+LocFriendlyName="Hack (Psionic)"
+LocLongDescription="Hack a target psionically from a distance."
+LocHelpText="Hack a target psionically from a distance."
+LocFlyOverText="Hack (Psionic)"
+
+[RTTechnopathy_Chest X2AbilityTemplate]
+LocFriendlyName="Hack (Psionic)"
+LocLongDescription="Hack a target psionically from a distance."
+LocHelpText="Hack a target psionically from a distance."
+LocFlyOverText="Hack (Psionic)"
+
+[RTTechnopathy_Workstation X2AbilityTemplate]
+LocFriendlyName="Hack (Psionic)"
+LocLongDescription="Hack a target psionically from a distance."
+LocHelpText="Hack a target psionically from a distance."
+LocFlyOverText="Hack (Psionic)"
+
+[RTTechnopathy_ObjectiveChest X2AbilityTemplate]
+LocFriendlyName="Hack (Psionic)"
+LocLongDescription="Hack a target psionically from a distance."
+LocHelpText="Hack a target psionically from a distance."
+LocFlyOverText="Hack (Psionic)"
+
+[RTPsionicLash X2AbilityTemplate]
+LocFriendlyName="Psionic Lash"
+LocLongDescription="Pull a humanoid unit to an adjacent tile psionically."
+LocHelpText="Pull a humanoid unit close."
+LocFlyOverText="Psionic Lash"
+LocPromotionPopupText="<Bullet> <Ability:SelfCooldown/> turn cooldown.<br/><Bullet/> Both hostile and friendly units can be pulled.<br/>"
+												  `
+[RTEnterStealth X2AbilityTemplate]
+LocFriendlyName="Enter Stealth"
+LocLongDescription="Cloak, becoming invisible to the enemy for a short duration."
+LocHelpText="Go invisible."
+LocFlyOverText="Enter Stealth"
+LocPromotionPopupText="<Bullet/> Unit will be revealed when the effect ends.<br/>"
+
+;----------------------------------------------------------------------------------------------------------------------------
+
+; +AbilityAvailabilityCodes="AA_UnitNotMelded"
+AbilityAvailabilityStrings[89]="The Unit is not in the meld."
+
+; +AbilityAvailabilityCodes="AA_MeldEffect_Active"
+AbilityAvailabilityStrings[90]="The Unit is already melded."
+
+; +AbilityAvailabilityCodes="AA_UnitMustBeGhost"
+AbilityAvailabilityStrings[91]="The Unit is not a Program operative."
+
+; +AbilityAvailabilityCodes="AA_UnitAlreadyUsedAbility"
+AbilityAvailabilityStrings[92]="The Unit has already used that ability."
+
+; +AbilityAvailabilityCodes="AA_NotStackableEffect"
+AbilityAvailabilityStrings[93]="The effect is not stackable, see Mod Author"
+
+; +AbilityAvailabilityCodes="AA_NotEnoughStacks"
+AbilityAvailabilityStrings[94]="The ability needs more stacks to function."
+
+; +AbilityAvailabilityCodes="AA_TooManyStacks"
+AbilityAvailabilityStrings[95]="There are too many stacks for the ability to function."
+
+; +AbilityAvailabilityCodes="AA_EffectNotFound"
+AbilityAvailabilityStrings[96]="The effect was not found."
+
+;----------------------------------------------------------------------------------------------------------------------------
+[RTProfessionalsHaveStandards X2AbilityTemplate]
+LocFriendlyName="Old World Training"
+LocLongDescription="Old World training techniques improve the soldier's ability to remain concealed at a distance."
+LocHelpText="Decrease range at which enemy units will can reveal this unit."
+LocFlyOverText="Old World Training"
+LocPromotionPopupText="<Bullet/> Decrease range at which enemy units will can reveal this unit.<br/>"
+
+[RTPsionicJamming X2AbilityTemplate]
+LocFriendlyName="Psionic Jamming"
+LocLongDescription="Psionic jamming reduces the will of ADVENT units."
+LocHelpText="Psionic jamming reduces the will of ADVENT units."
+LocFlyOverText="Psionic Jamming"
+LocPromotionPopupText="<Bullet/> Psionic jamming reduces the will of ADVENT units.<br/>"
+;----------------------------------------------------------------------------------------------------------------------------
+
+[TestAbility X2AbilityTemplate]
+LocFriendlyName="Test"
+LocLongDescription="You should never see this."
+LocHelpText="You should never see this."
+LocFlyOverText="Test"
+LocPromotionPopupText="<Bullet/> You should never see this.<br/>"
+
+[RT_Animation_Placeholder_CV X2WeaponTemplate]
+FriendlyName="Rising Tides Animation Placeholder"
+FriendlyNamePlural="Rising Tides Animation Placeholder"
+BriefSummary=""
+TacticalText="<Bullet/> A placeholder that allows Rising Tides classes to use base-game psi animations. Users of the mod should never see this.<br/>."
+
+;///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+;//---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+;//---Encyclopedia------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+;//---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+;///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+;[FactionProgramFavors X2EncyclopediaTemplate]
+;ListTitle=""
+;DescriptionTitle=""
+;DescriptionEntry=""
+
+[PersonnelHadley X2EncyclopediaTemplate]
+ListTitle="Personnel Dossier: Dr. Elizabeth Hadley"
+DescriptionTitle="Dr. Elizabeth Hadley - STATUS: ACTIVE"
+DescriptionEntry="Dr. Elizabeth Hadley, born on October 3rd, 1968, is a certified genius. Earning her Ph.D at the age of 19, it was assumed by academia at large that she had a bright future ahead of her. However, she fell off the face of the planet shortly afterwards, leaving many to speculate that she had been snatched up by the R&D branch of the government. Although that seems obvious now, remember that whatever she has been working on for the past thirty-five years is still unknown, and that she has been transferred to XCOM only now, with Aliens on our proverbial doorstep, speaks for its importance. \n\nC.O. Bradford Note: Yes, this is the exact file I gave you last time. Hopefully it's still good."
+
+[FactionProgram X2EncyclopediaTemplate]
+ListTitle="The Program"
+DescriptionTitle="Faction"
+DescriptionEntry="The Program, seemingly led by the illusive Dr. Hadley, are an offshoot of XCOM, branching off in the 1970's. In the original invasion, they sent a single operative and Dr. Hadley to assist, which proved instrumental to the war effort, but when the base was lost, those personnel went MIA. In the time since, little has escaped; even now, the Program goes unnamed, and details related to the organization remain frighteningly obscure. What is evident is that their primary focus is ensuring that when ADVENT falls, they- at the expense of any other, even XCOM- stand on top of the pile of rubble. In other words, be careful when dealing with them. Their technology is advanced, and their operatives elite, but they are not on your side, Commander, and your goals may not always align."
+
+[FactionProgramOperatives X2EncyclopediaTemplate]
+ListTitle="Program Operatives"
+DescriptionTitle="Program Soldier Classes"
+DescriptionEntry="The Program fields a small number of psionic operatives. Augmented cybernetically and genetically through a substance known as \"MELD\", they are truly elite, each a veteran of twenty, thirty, or even forty years of combat against both human and alien threats. Each has a unique skillset, but they share a common base of psionic abilities, such as Mind Control, Mind Wrack, and Mind Meld."
+
+[FactionProgramFavors X2EncyclopediaTemplate]
+ListTitle="Program Support"
+DescriptionTitle="One Small Favor"
+DescriptionEntry="The Program can spare enough time to send one of their squads in the place of XCOM's once per month. Doing so will help build your relationship with them, eventually increasing your influence with them and unlocking new Resistance Orders. If a favor is a available, a white checkbox will be present above the mission launch button. Checking it will call in the favor. Note that favors cannot be called in on narrative missions."
+
+;///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+;//---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+;//---Covert Actions----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+;//---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+;///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+[CovertAction_FindProgramFaction X2CovertActionTemplate]
+ActionObjective="Investigate Transmissions"
+
+[CovertAction_FindProgramFarAwayFaction X2CovertActionTemplate]
+ActionObjective="Investigate Transmissions"
+
+[CovertActionNarrative_FindFaction_Program X2CovertActionNarrativeTemplate]
+ActionName="Old Signals"
+ActionPreNarrative="Commander, we've been picking up scattered transmissions on an old XCOM frequency. With your permission, I'd like to take a squad and investigate. - CO Bradford"
+ActionPostNarrative="Commander, I managed to locate the source of the signals-- a old FOB, manned by an unknown faction. When I introduced myself, they told me that Dr. Hadley, of all people, was waiting to talk. - CO Bradford"
+
+[CovertActionNarrative_RecruitEngineer_Program X2CovertActionNarrativeTemplate]
+ActionName="Tech Support"
+ActionPreNarrative="We have made contact with resistance sympathizer in one of the megacities. Allowing him to join us would be a security breach, but they're all yours. - Dr. Hadley"
+ActionPostNarrative="The sympathizer turned out to be technically-minded, having worked extensively in an ADVENT Mech Bay. They'll be a boon to engineering."
+
+[CovertActionNarrative_RecruitScientist_Program X2CovertActionNarrativeTemplate]
+ActionName="Higher Learning"
+ActionPreNarrative="Another day, another turncoat. ADVENT is bleeding in the shadows... - Dr. Hadley"
+ActionPostNarrative="The sympathizer turned out to be technically-minded, having spearheaded new experimental methodology in an ADVENT Gene Therapy Clinic. They'll be a boon to the labs."
+
+[CovertActionNarrative_GatherSupplies_Program X2CovertActionNarrativeTemplate]
+ActionName="Supply Drop"
+ActionPreNarrative="One of the teams recently 'liberated' a supply cache but lacked the manpower to retrive it. Send a squad to these coordinates. - 'Handler 9'"
+ActionPostNarrative="The supply drop was recieved successfully."
+
+[CovertActionNarrative_GatherIntel_Program X2CovertActionNarrativeTemplate]
+ActionName="Data Tap"
+ActionPreNarrative="The Program has a storied background in communications intelligence. An opportunity has arisen to take advantage of this proficiency."
+ActionPostNarrative="The datatap went off without a hitch. - 'Handler 9'"
+
+[CovertActionNarrative_IncreaseIncome_Program X2CovertActionNarrativeTemplate]
+ActionName="Helping Hand"
+ActionPreNarrative="Even people in the ADVENT megacities will help. One way, or another. Send a squad to this location and cause a ruckus-- we'll handle the rest. - Dr. Hadley"
+ActionPostNarrative="Thanks to your distraction, we secured a number of incursions into enemy dataframes and are prepared to relocate supplies to resistance sites. - 'Handler 9'"
+
+[CovertActionNarrative_RescueSoldier_Program X2CovertActionNarrativeTemplate]
+ActionName="Personnel Extraction"
+ActionPreNarrative="We recently got wind of a captured XCOM operative being moved into my zone. I could use a few more boots on the ground to sniff them out. - 'Handler 9'"
+ActionPostNarrative="Operative located. Transmitting coordinates. - 'Handler 9'"
+
+[CovertActionNarrative_RescueSoldier_Program X2CovertActionNarrativeTemplate]
+ActionName="Personnel Extraction"
+ActionPreNarrative="We recently got wind of a captured XCOM operative being moved into my zone. I could use a few more boots on the ground to sniff them out. - 'Handler 9'"
+ActionPostNarrative="Operative located. Transmitting coordinates. - 'Handler 9'"
+
+[CovertActionNarrative_CancelChosenActivity_Program X2CovertActionNarrativeTemplate]
+ActionName="Counterintelligence"
+ActionPreNarrative="The Chosen <XGParam:StrValue1/!ChosenName/>'s plans for you are troubling the resistance. If we can spoil the plot, we can kill two birds with one stone. - 'Handler 9'"
+ActionPostNarrative="The plans were exposed and the plot was scrapped. All in a day's work. - 'Handler 9'"
+
+[CovertActionNarrative_CancelChosenActivity_Program X2CovertActionNarrativeTemplate]
+ActionName="Counterintelligence"
+ActionPreNarrative="The Chosen <XGParam:StrValue1/!ChosenName/>'s plans for you are troubling the resistance. If we can spoil the plot, we can kill two birds with one stone. - 'Handler 9'"
+ActionPostNarrative="The plans were exposed and the plot was scrapped. All in a day's work. - 'Handler 9'"
+
+[CovertActionNarrative_RemoveDoom_Program X2CovertActionNarrativeTemplate]
+ActionName="Sabotage AVATAR Facility"
+ActionPreNarrative="Sabotage is one of many specialties. - 'Handler 9'"
+ActionPostNarrative="All too easy. - 'Handler 9'"
+
+[CovertActionNarrative_ImproveComInt_Program X2CovertActionNarrativeTemplate]
+ActionName="Tactical Education"
+ActionPreNarrative="Training is not just about technique, but resources. And the only place in the world with Old-World levels of both is the Program. - 'Handler 9'"
+ActionPostNarrative="The Resistance will be well-served by these soldiers, Commander. - 'Handler 9'"
+
+[CovertActionNarrative_ResistanceContact_Program X2CovertActionNarrativeTemplate]
+ActionName="Signal Boost"
+ActionPreNarrative="We know of several abandoned radio towers in the area. If you can get them running, the resistance might find more support. - 'Handler 9'"
+ActionPostNarrative="The resistance broadcasts come at all hours of the day in this zone. As they should. - 'Handler 9'"
+
+[CovertActionNarrative_BreakthroughTech_Program X2CovertActionNarrativeTemplate]
+ActionName="Technical Advances"
+ActionPreNarrative="I'm surprised you guys don't know about this. If you send me a team, I can organize a raid on the old archives for the reports. - Dr. Hadley"
+ActionPostNarrative="Here you are, Commander. Going through those files is a pleasant trip down memory lane. Happy to do it for you. - Dr. Hadley"
+
+[CovertActionNarrative_ResistanceCard_Program X2CovertActionNarrativeTemplate]
+ActionName="New Orders"
+ActionPreNarrative="Ultimately, we share the same goal. Let's talk capabilities, and... favors curried. - Dr. Hadley"
+ActionPostNarrative="You will find our reach troublingly long-- but for now, it's yours. - Dr. Hadley"
+
+[CovertActionNarrative_AlienLoot_Program X2CovertActionNarrativeTemplate]
+ActionName="Scavenge Alien Loot"
+ActionPreNarrative="The Program regularly trims the fat off ADVENT patrols for future operations. We ran an op nearby a haven recently; you could send a squad to secure the area and its resources. - 'Handler 9'"
+ActionPostNarrative="ADVENT tech is rarely useful for us-- hopefully you will find it valuable. - 'Handler 9'"
+
+[CovertActionNarrative_FacilityLead_Program X2CovertActionNarrativeTemplate]
+ActionName="Facility Lead"
+ActionPreNarrative="Got a lead on an ADVENT Facility in my local AO, but all of my squads are tied up. Send me some of yours and together we can sniff it out. - 'Handler 9'"
+ActionPostNarrative="Generally, Hadley prefers we leave the facilities online, but this is your op. - 'Handler 9'"
+
+[CovertActionNarrative_RevealChosenMovements_Program X2CovertActionNarrativeTemplate]
+ActionName="Behind Enemy Lines"
+ActionPreNarrative="My operative onboard the Avenger has informed me that the Chosen have been hunting for you in particular, Commander. Troubling, but not unexpected in light of recent events. I have a man with information on <XGParam:StrValue2/!ChosenClass/>'s base of operations, but communications with him are patchy and sporadic. I recommend that you send some soldiers to rendezvous with him and retrieve that intelligence. - 'Handler 9'"
+ActionPostNarrative="The data indicates <XGParam:StrValue1/!ChosenName/>'s' stronghold is located in <XGParam:StrValue3/!ContinentName/>. - 'Handler 9'"
+
+[CovertActionNarrative_RevealChosenStrengths_Program X2CovertActionNarrativeTemplate]
+ActionName="Find the Stronghold"
+ActionPreNarrative="Now that we have the general location, I can bring the full might of the Program against <XGParam:StrValue2/!ChosenClass/>'s stronghold. However, the RECSATs are old and need maintenance. If you can send some men on a raid for parts, we can make this happen. - 'Handler 9'"
+ActionPostNarrative="We now have satellite confirmation of ADVENT transports entering and leaving a covert base of operations located in <XGParam:StrValue3/!ContinentName/>. We will begin planning for the strike immediately.- 'Handler 9'"
+
+[CovertActionNarrative_RevealChosenStronghold_Program X2CovertActionNarrativeTemplate]
+ActionName="Into the Fire"
+ActionPreNarrative="In order to enable the strike against the Chosen Stronghold, we'll need to figure out of to breach it. Send some of your men along with my own Operatives to get a feel for the base. - 'Handler 9'"
+ActionPostNarrative="We have determined the best plan of entry to <XGParam:StrValue1/!ChosenName/>'s stronghold. Transmitting now. - 'Handler 9'"
+
+[CovertActionNarrative_HuntTemplars_P1_Program X2CovertActionNarrativeTemplate]
+ActionName="Find Them"
+ActionPreNarrative="As you might recall, Commander, six days after the Temple Ship crash-landed, I initiated Operation: New World. Unfortunately, there was a lone survivor. Staff Sergeant Lanner was left a mangled wreck, his mind in shambles from my operative's psionic assault, but he managed to limp away during the chaos of the beginning of Operation: Ashes and Temples part three. Only recently have we managed to pinpoint his general location, but we need your manpower to figure out where he's hiding. - Dr. Hadley"
+ActionPostNarrative="Excellent. You should be proud of your soldiers, Commander. Keeping up with my operatives is not an easy task. - Dr. Hadley"
+
+[CovertActionNarrative_HuntTemplars_P2_Program X2CovertActionNarrativeTemplate]
+ActionName="Gain Their Trust"
+ActionPreNarrative="Mobilizing enough operatives to assault the base head-on and ensure no survivors would take far too long. I have a better idea, and I'll need more of your men to accomplish it. - Dr. Hadley"
+ActionPostNarrative="With the help of your soldiers, I have managed to place several operatives as civilians within the Templar compound. One step at a time. - Dr. Hadley"
+
+[CovertActionNarrative_HuntTemplars_P3_Program X2CovertActionNarrativeTemplate]
+ActionName="Lure Them Out"
+ActionPreNarrative="Geist is extremely paranoid, and revealing a vunerablity remains a challenge. If you have some soldiers to spare, we can use them to conduct a false-flag operation and draw him out. - Dr. Hadley"
+ActionPostNarrative="The trap is set. The bait is ready. All that remains is spring it. I will send my best, and if you do the same, victory is assured. - Dr. Hadley"
+;///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+;//---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+;//---Misc-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+;//---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+;///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+[Reward_RTProgram_FindFaction X2RewardTemplate]
+DisplayName="Unknown"
+RewardDetails="Uncover signal source."
+
+[Reward_RTProgram_FindFarthestFaction X2RewardTemplate]
+DisplayName="Unknown"
+RewardDetails="Uncover signal source."
+
+[ResistanceMode_PsiTraining X2ResistanceModeTemplate]
+DisplayName="Scanning Bonus: Psionic Expertise"
+SummaryText="Program scientists assist with operating the psi-lab while the Avenger is scanning at this location, decreasing the training time of soldiers inside it.\n\nWARNING: Purchasing this ability will overwrite the current Resistance HQ scanning bonus. The Scanning Bonus may only be modified once per month."
+ScanLabel="TRAIN PSI FASTER"
+ScanTooltip="Scanning at this site speeds up the rate at which we can train our psi-operatives."
+
+[RTOneSmallFavor_SPECTRE X2SitRepTemplate]
+FriendlyName="One Small Favor"
+Description="The Program has lent one of their squads to handle this operation."
+
+;///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+;//---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+;//---Weapons-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+;//---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+;///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+[ProgramPistol X2WeaponTemplate]
+FriendlyName="Program XSK33"
+FriendlyNamePlural="Program XSK33s"
+BriefSummary="The Program XSK33, or Shadowkeeper, is most popular sidearm of choice for Program operatives." 
+TacticalText="<Bullet/> The Program XSK33, or Shadowkeeper, is most popular sidearm of choice for Program operatives.\n<Bullet/> The Program XSK33 has improved aim and chance to critical hit.\n<Bullet/> Pistols can be fired with a single action."
+
+[ProgramSniperRifle X2WeaponTemplate]
+FriendlyName="Program XSR37"
+FriendlyNamePlural="Program XSR37s"
+BriefSummary="The Program XSR37 is the latest and greatest in long-range-projection-of-directed-energy weaponry, based off of fusion lances deployed by Elder Battleships." 
+TacticalText="<Bullet/> The Program XSR37 is the latest and greatest in long-range-projection-of-directed-energy weaponry, based off of fusion lances deployed by Elder Battleships.\n<Bullet/> Sniper rifles always require both actions to fire.\n<Bullet/> They are less accurate at close range, but deadly at a distance."
+AbilityDescName="sniper rifle"
+
+[ProgramShotgun X2WeaponTemplate]
+FriendlyName="Program XSG31"
+FriendlyNamePlural="Program XSG31s"
+BriefSummary="The Program XSG31 is a devastating evolution of decades of research in both conventional and extraterrestrial weapon systems." 
+TacticalText="<Bullet/> The Program XSG31 is a devastating evolution of decades of research in both conventional and extraterrestrial weapon systems.\n<Bullet/> Shotgun-style weapons are extremely effective at close range, but their accuracy drops off quickly at longer range."
+AbilityDescName="shotgun"
+
+[ProgramAssaultRifle X2WeaponTemplate]
+FriendlyName="Program XCR29"
+FriendlyNamePlural="Program XCR29s"
+BriefSummary="The Program XCR29 is previous-generation Program combat rifle technology." 
+TacticalText="<Bullet/> The Program XCR29 is previous-generation Program combat rifle technology.\n<Bullet/> Firing the primary weapon always ends the soldier's turn."
+AbilityDescName="assault rifle"
+
+[RTCosmetic_Suppressor X2WeaponUpgradeTemplate]
+FriendlyName="Cosmetic Silencer"
+FriendlyNamePlural="Cosmetic Silencers"
+BriefSummary="Does nothing, but looks cool."
+TinySummary="Cosmetic Only"
+LootTooltip="This weapon upgrade, when installed, does nothing except look cool."

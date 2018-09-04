@@ -8,7 +8,7 @@
 //
 //---------------------------------------------------------------------------------------
 
-class RTEffect_Meld extends X2Effect_PersistentStatChange config(RTGhost);
+class RTEffect_Meld extends X2Effect_PersistentStatChange config(RisingTides);
 
 function bool IsThisEffectBetterThanExistingEffect(const out XComGameState_Effect ExistingEffect)
 {
@@ -37,8 +37,6 @@ simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffe
 	EffectTargetUnit = XComGameState_Unit(kNewTargetState);
 	MeldEffectState = RTGameState_MeldEffect(NewEffectState);
 
-
-
 	EventMgr.TriggerEvent('RTAddToMeld', EffectTargetUnit, EffectTargetUnit, NewGameState);
 
 	ListenerObj = MeldEffectState;
@@ -53,7 +51,6 @@ simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffe
 	EventMgr.RegisterForEvent(ListenerObj, 'RTFeedback', MeldEffectState.RemoveUnitFromMeld,ELD_OnStateSubmitted,,,true,);
 	EventMgr.RegisterForEvent(ListenerObj, 'TacticalGameEnd', MeldEffectState.OnTacticalGameEnd, ELD_OnStateSubmitted);
 
-
 	MeldEffectState.Initialize(EffectTargetUnit);
 
 	m_aStatChanges.length = 0;
@@ -63,11 +60,11 @@ simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffe
 	MeldHacking = MeldEffectState.SharedHack - EffectTargetUnit.GetBaseStat(eStat_Hacking);
 
 	AddPersistentStatChange(eStat_Will, MeldWill);
-	AddPersistentStatChange(eStat_Hacking, MeldHacking);
+	if(MeldHacking > 0)
+		AddPersistentStatChange(eStat_Hacking, MeldHacking);
 	AddPersistentStatChange(eStat_PsiOffense, MeldPsiOff);
 
 	MeldEffectState.StatChanges = m_aStatChanges;
-
 
 	super.OnEffectAdded(ApplyEffectParameters, kNewTargetState, NewGameState, MeldEffectState);
 }
@@ -79,7 +76,6 @@ simulated function OnEffectRemoved(const out EffectAppliedData ApplyEffectParame
 	EffectTargetUnit = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(ApplyEffectParameters.TargetStateObjectRef.ObjectID));
 	`XEVENTMGR.TriggerEvent('RTRemoveFromMeld', EffectTargetUnit, EffectTargetUnit, NewGameState);
 	super.OnEffectRemoved(ApplyEffectParameters, NewGameState, bCleansed, RemovedEffectState);
-
 }
 
 DefaultProperties

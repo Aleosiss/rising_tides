@@ -1,4 +1,3 @@
-
 #ignore thumbnails created by windows
 Thumbs.db
 #Ignore files build by Visual Studio
@@ -33,3 +32,16 @@ _ReSharper*/
 /Content/NO*
 /Content/bak/*
 *.txt
+%*
+.atom-build*
+/Notes/
+**/.vscode/
+settings\.json
+.AlternateModLauncher*
+**/.DS_Store
+
+*.code-workspace
+
+tmp/
+
+PublishedFileId\.ID

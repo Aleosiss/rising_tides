@@ -2,8 +2,6 @@
 // Robotic units use hack defense in the place of will for mental psi attacks and defense for physical ones
 // Also Friendly Units should be deadeye nigga
 
-// 
-
 class RTAbilityToHitCalc_StatCheck_UnitVsUnit extends X2AbilityToHitCalc_StatCheck_UnitVsUnit;
 
 var bool bPhysical;

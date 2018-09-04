@@ -2,8 +2,6 @@
 
 class RTAbilityTarget_TeleportMelee extends X2AbilityTarget_MovingMelee;
 
-
-
 simulated function name GetPrimaryTargetOptions(const XComGameState_Ability Ability, out array<AvailableTarget> Targets) {
 	local name AvailableCode;
 	local AvailableTarget Target, EmptyTarget;
@@ -24,7 +22,6 @@ simulated function name GetPrimaryTargetOptions(const XComGameState_Ability Abil
 			Targets.AddItem(Target);
 		}
 	}
-
 
 	return AvailableCode;
 }
@@ -47,7 +44,7 @@ simulated static function bool SelectAttackTile(XComGameState_Unit UnitState,
 
 	if(XComGameState_Unit(TargetState) != none) {
 		Tile = XComGameState_Unit(TargetState).TileLocation;
-	}  else if(XComGameState_Destructible(TargetState) != none) {
+	} else if(XComGameState_Destructible(TargetState) != none) {
 		Tile = XComGameState_Destructible(TargetState).TileLocation;
 	} else return super.SelectAttackTile(UnitState, TargetState, MeleeAbilityTemplate, SortedPossibleTiles, IdealTile, Unsorted);
 

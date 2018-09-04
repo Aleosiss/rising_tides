@@ -1,0 +1,895 @@
+﻿;Place localized text in this file
+
+;[X2AbilityTemplate]
+; LocFriendlyName=""
+; LocLongDescription=""
+; LocHelpText=""
+; LocFlyOverText=""
+; LocPromotionPopupText="<Bullet/> <br/> <Bullet/> <br/> <Bullet/> <br/> <Bullet/> <br/>"
+
+[StandardGhostShot X2AbilityTemplate]
+LocFriendlyName="Arma de fuego"
+LocHelpText="Disparar un tiro a un objetivo. <Ability:CANNOTBEDODGED/>"
+LocLongDescription="<Bullet/> Disparar el arma primaria siempre termina el turno de una unidad."
+
+[RT_Marksman X2SoldierClassTemplate]
+DisplayName="GHOST Infiltrator"
+ClassSummary="Whisper es el tirador y experto tecnico designado de la unidad."
+LeftAbilityTreeTitle="Soporte de fuego"
+RightAbilityTreeTitle="Vigia"
+RandomNickNames[0]="Whisper"
+
+[ScopedAndDropped X2AbilityTemplate]
+LocFriendlyName="Alcance y abandono"
+LocLongDescription="Squadsight mejorado. Matar a un objetivo flanqueado o descubierto con un rifle de francotirador no cuesta una accion."
+LocHelpText="Matar a un objetivo flanqueado o descubierto con un rifle de francotirador no cuesta una accion."
+LocFlyOverText="Scoped And Dropped"
+LocPromotionPopupText="<Bullet/> Esta unidad no sufre penalizaciones de squadsight. <br/> <Bullet/> Las tomas adicionales tomadas a traves de esta habilidad tendran una posibilidad reducida de golpe critico. <br/>"
+
+[RTOverflowBarrier X2AbilityTemplate]
+LocFriendlyName="Barrera de desbordamiento"
+LocLongDescription="Cuando esta unidad hace daño excesivo, convierte ese daño en escudo para si mismo y sus aliados fusionados."
+LocHelpText="Cuando esta unidad hace daño excesivo, convierte ese daño en escudo para si mismo y sus aliados fusionados."
+LocFlyOverText="Barrera de desbordamiento"
+LocPromotionPopupText="<Bullet/> Trate de usarlo en combinacion con potentes habilidades de daño como Precision Shot o Time Stands Still. <br/> <Bullet/> Minimo de 1 Shield HP si se trata el daño de overkill. <br/> <Bullet/> La unidad con Barrera de desbordamiento debe fusionarse para generar cualquier blindaje. <br/> <Bullet/> Los escudos persisten incluso si se pierde la fusion. <br/> "
+
+[RTOverflowBarrierEvent X2AbilityTemplate]
+LocFriendlyName="Barrera de desbordamiento"
+LocLongDescription="Cuando esta unidad hace daño excesivo, convierte ese daño en escudo para si mismo y sus aliados fusionados."
+LocHelpText="Cuando esta unidad hace daño excesivo, convierte ese daño en escudo para si mismo y sus aliados fusionados."
+LocFlyOverText="Barrera de desbordamiento"
+LocPromotionPopupText="<Bullet/> Minimo de 1 Shield HP si se reparte el daño de overkill. <br/> <Bullet/> La unidad con Overflow Barrier debe fusionarse para generar cualquier blindaje. <br/> <Bullet/> Los escudos persisten incluso si la fusion se pierde. <br/> "
+
+[RTPrecisionShot X2AbilityTemplate]
+LocFriendlyName="Disparo de precision"
+LocLongDescription="Un disparo cuidadosamente dirigido, que sufre un objetivo disminuido pero aumenta la probabilidad critica y el daño critico."
+LocHelpText="Dispara con un objetivo disminuido, pero aumenta la probabilidad critica y el daño critico."
+LocFlyOverText="Disparo de precision"
+LocPromotionPopupText="<Bullet> <Ability:SelfCooldown/> tiempo de reutilizacion. <br/> <Bullet/> Dispara a un disparo de precision, que tiene menos posibilidades de golpear, pero aumenta la probabilidad critica y el daño critico. <br/>"
+
+[RTAggression X2AbilityTemplate]
+LocFriendlyName="Agresion"
+LocLongDescription="Obtiene un 10% de posibilidades criticas por unidad enemiga visible, hasta un 30%. (Vista de pantalla incluida)"
+LocHelpText="Obtienes un 10% de posibilidades criticas por enemigo detectado."
+LocFlyOverText="Agresion"
+LocPromotionPopupText="<Bullet/> Obtiene un 10% de probabilidad de critico por unidad enemiga visible, hasta un 30%. (Incluye Squadsight). <br/>"
+
+[KnockThemDown X2AbilityTemplate]
+LocFriendlyName="Derribarlos"
+LocLongDescription="Obtienes +2 de Daño y + 10% de daño de golpe critico por cada disparo consecutivo que tome esta unidad."
+LocHelpText="Obtienes +2 Daño y + 10% de daño por golpe critico por cada disparo consecutivo que tome esta unidad."
+LocFlyOverText="Derribarlos"
+LocPromotionPopupText="<Bullet/> Gane +2 Daño y + 10% de daño por golpe critico por cada disparo consecutivo que esta unidad tome. <br/> <Bullet/> Ciertas acciones pasivas no romperan una cadena Knock Them Down, como la activacion de Fade o el procedimiento de barrera de desbordamiento <br/> "
+
+[RTDisablingShot X2AbilityTemplate]
+LocFriendlyName="Desactivar tiro"
+LocLongDescription="Un disparo cuidadosamente dirigido, que sufre una disminucion de la punteria y el daño, pero obliga al objetivo a recargar su arma primaria."
+LocHelpText="Disparo debil y dificil de golpear que desactiva el arma enemiga objetivo durante un turno."
+LocFlyOverText="Desactivar tiro"
+LocPromotionPopupText="<Bullet> <Ability:SelfCooldown/> return cooldown. <br/> <Bullet/> Al desactivar Shot tambien se elimina un punto de accion del objetivo. <br/>"
+
+[RTSnapshot X2AbilityTemplate]
+LocFriendlyName="Instantanea"
+LocLongDescription="Utiliza el arma primaria con un solo punto de accion, pero con una penalizacion de objetivo de -15."
+LocHelpText="Disparar arma primaria despues de moverse con una penalizacion de objetivo."
+LocFlyOverText="Snapshot"
+LocPromotionPopupText="<Bullet/> Usa arma primaria con solo un punto de accion, pero con una penalizacion de objetivo de -15. <br/>"
+
+[RTStandardSniperShot X2AbilityTemplate]
+LocFriendlyName="Rifle de francotirador de fuego"
+LocHelpText="Dispara tu rifle de francotirador hacia un objetivo."
+LocLongDescription="<Bullet/> El rifle de francotirador es poderoso y preciso a larga distancia, pero por lo general requiere dos acciones para disparar <br/> <Bullet/> Disparar el arma primaria siempre termina el turno de un soldado <br/>"
+
+[RTOverwatch X2AbilityTemplate]
+LocFriendlyName="Overwatch"
+LocHelpText="Dispara al primer enemigo que se mueve dentro de tu linea de vision, con una penalizacion para apuntar."
+LocLongDescriptionWhenConcealed="Dispara al primer enemigo que se mueve dentro de tu linea de vision, pero solo si se revela."
+LocFlyOverText="Overwatch"
+LocFriendlyNameWhenConcealed="Overwatch (oculto)"
+
+[OverwatchShot X2AbilityTemplate]
+LocFriendlyName="Tiro de sobreviraje"
+
+[SixOClock X2AbilityTemplate]
+LocFriendlyName="Six O'Clock"
+LocLongDescription="Cuando esta unidad usa overwatch, las unidades aliadas dentro de su rango ganan bonificaciones para defensa, psi y will."
+LocHelpText=""
+LocFlyOverText="Six O'Clock"
+LocPromotionPopupText="<Bullet/> Esto afecta a las unidades que no tienen linea de vision directa a la unidad de sobreviraje. <br/>"
+
+[SixOClockEffect X2AbilityTemplate]
+LocFriendlyName="Efecto de las seis en punto"
+LocLongDescription="Cuando esta unidad usa overwatch, las unidades aliadas dentro de su rango ganan bonificaciones para defensa, psi y will."
+LocHelpText=""
+LocFlyOverText="Efecto de las seis en punto"
+LocPromotionPopupText="<Bullet/> Esto afecta a las unidades que no tienen linea de vision directa a la unidad de sobreviraje. <br/>"
+
+[RTVitalPointTargeting X2AbilityTemplate]
+LocFriendlyName="Orientacion de puntos vitales"
+LocLongDescription="El conocimiento de puntos vitales enemigos ayuda a la seleccion."
+LocHelpText=""
+LocFlyOverText="Orientacion de puntos vitales"
+LocPromotionPopupText="<Bullet/> Otorga un bonus de probabilidad de golpe critico y de daño. <br/> <Bullet/> Esta bonificacion es diferente para cada individuo con la habilidad y el tipo de enemigo objetivo. <br/> <Bullet/> Esta bonificacion se genera al matar unidades enemigas en el transcurso de una campaña. <br/> "
+
+[RTDamnGoodGround X2AbilityTemplate]
+LocFriendlyName="Maldito buen terreno"
+LocLongDescription="Confiere +15 Aim y +15 de Defensa contra los enemigos a menor altura, ademas de los bonos de elevacion habituales."
+LocHelpText=""
+LocFlyOverText="Maldito buen terreno"
+LocPromotionPopupText="<Bullet/> Confiere +15 Aim y +15 de Defensa contra los enemigos en menor elevacion, ademas de los bonos de elevacion habituales. <br/>"
+
+[SlowIsSimil X2AbilityTemplate]
+LocFriendlyName="Slow is Smooth"
+LocLongDescription="Las tomas tomadas de la ocultacion tienen +25 Aim y Crit. Vuelven a intentar la ocultacion despues de romper LOS con todos los enemigos durante 4 turnos."
+LocHelpText=""
+LocFlyOverText="Slow is Smooth"
+LocPromotionPopupText="<Bullet/> Las tomas tomadas de la ocultacion tienen +25 Aim y Crit. <br/> <Bullet/> Reentran la ocultacion despues de romper LOS con todos los enemigos durante 4 turnos. <br/>"
+
+[Sovereign X2AbilityTemplate]
+LocFriendlyName="NO USADO, VEA CRIATURAS RUDIMENTARIAS"
+LocLongDescription="Los disparos de muerte tienen la posibilidad de infundir panico a los enemigos cercanos."
+LocHelpText="Los disparos de muerte tienen la posibilidad de infundir panico a los enemigos cercanos."
+LocFlyOverText="Sovereign"
+LocPromotionPopupText="<Bullet/> Los disparos de muerte tienen la posibilidad de infundir panico a los enemigos cercanos. <br/>"
+
+[SovereignEffect X2AbilityTemplate]
+LocFriendlyName="NO USADO, VEA CRIATURAS RUDIMENTARIAS"
+LocLongDescription="Los disparos de muerte tienen la posibilidad de infundir panico a los enemigos cercanos."
+LocHelpText="Los disparos de muerte tienen la posibilidad de infundir panico a los enemigos cercanos."
+LocFlyOverText="Sovereign"
+LocPromotionPopupText="<Bullet/> Los asesinatos tienen una pequeña posibilidad de infundir panico a los enemigos cercanos. Ineficaces contra los enemigos psionicos o roboticos. <br/>"
+
+[DaybreakFlame X2AbilityTemplate]
+LocFriendlyName="Fire Sniper Rifle (Daybreak Flame)"
+LocHelpText="Dispara tu rifle de francotirador hacia un objetivo."
+LocLongDescription="<Bullet/> El rifle de francotirador es poderoso y preciso a larga distancia, pero por lo general requiere dos acciones para disparar <br/> <Bullet/> Disparar el arma primaria siempre termina el turno de un soldado <br/>"
+
+[DaybreakFlameIcon X2AbilityTemplate]
+LocFriendlyName="Llama de amanecer"
+LocLongDescription="Las rondas mejoradas pirokineticamente perforan la cobertura, destruyen la armadura e ignoran la linea de vision."
+LocHelpText="Las rondas mejoradas con Pyrokinetically perforan a traves de la cubierta, destrozando la armadura, e ignorando la linea de vision."
+LocFlyOverText="Llama de amanecer"
+LocPromotionPopupText="<Bullet/> Las rondas Pyrokinetically-enhance perforan a traves de la cubierta, destruyen la armadura e ignoran la linea de vision. <br/> <Bullet/> Esta habilidad solo aumenta las tomas estandar de los francotiradores y no agrega efectos adicionales a otras tomas. <br/> "
+
+[YourHandsMyEyes X2AbilityTemplate]
+LocFriendlyName="Tus manos, mis ojos"
+LocLongDescription="Whisper puede usar la fusion para hackear objetivos que el mismo no puede alcanzar."
+LocHelpText="Whisper puede usar la fusion para hackear objetivos que el mismo no puede alcanzar."
+LocFlyOverText="Tus manos, mis ojos"
+LocPromotionPopupText="<Bullet/> Whisper puede usar la fusion para hackear objetivos que el mismo no puede alcanzar. <br/>"
+
+[RTKubikuri X2AbilityTemplate]
+LocFriendlyName="Kubikiri"
+LocFlyOverText="Kubikiri"
+LocLongDescription="Disparo especial contra la mayoria de los enemigos que han sufrido daños: cualquier golpe critico los mata, pero los golpes regulares causan la mitad de daño. Requiere dos acciones y tiene un tiempo de reutilizacion de 4 vueltas."
+LocHelpText="Los Crits matan automaticamente a los enemigos a menos de puntos de golpe completos. Los golpes regulares causan la mitad de daño."
+LocPromotionPopupText="<Bullet/> Disparo especial contra enemigos con puntos de golpe no completos: cualquier golpe critico los mata, pero los golpes regulares causan la mitad de daño. <br/> <Bullet/> Requiere dos acciones. <br/> <Bullet> <Ability:SelfCooldown/> return cooldown. <br/> <Bullet/> Contra los gobernantes alienigenas, un golpe critico causara el doble de daño normal en lugar de matar al enemigo directamente ."
+
+[GhostPsiSuite X2AbilityTemplate]
+LocFriendlyName="Programa Veterano de GHOST"
+LocLongDescription="El Programa entrena GHOST en control mental, telepatia, telekinesis y el arte de la guerra."
+LocHelpText="Conjunto de habilidades estandar de fantasmas."
+LocFlyOverText="Program GHOST Veterancy"
+LocPromotionPopupText="<Bullet/> Los fantasmas estan entrenados en control mental, telepatia, telequinesis y uso de la fusion. <br/>"
+
+[JoinMeld X2AbilityTemplate]
+LocFriendlyName="Enter Meld"
+LocLongDescription="Ingresa la meld, ganando mayor voluntad y compartiendo ciertas habilidades."
+LocHelpText="Ingrese la meld, ganando mayor voluntad y compartiendo ciertas habilidades."
+LocFlyOverText="Enter Meld"
+LocPromotionPopupText="<Bullet/> Ingresa la meld, ganando mayor voluntad y compartiendo ciertas habilidades. <br/>"
+
+[LeaveMeld X2AbilityTemplate]
+LocFriendlyName="Dejar Meld"
+LocLongDescription="Deja la fusion, anulando los posibles efectos de panico y eliminando los efectos compartidos."
+LocHelpText="Deja la fusion, anulando los posibles efectos de panico y eliminando los efectos compartidos."
+LocFlyOverText="Leave Meld"
+LocPromotionPopupText="<Bullet/> Deje la fusion, anulando posibles efectos de panico y eliminando los efectos compartidos. <br/>"
+
+[PsiOverload X2AbilityTemplate]
+LocFriendlyName="Mind Wrack"
+LocLongDescription="Sobrecarga el cerebro de una unidad organica con energia psionica pura, matandolo de inmediato."
+LocHelpText="Sobrecarga el cerebro de una unidad organica con energia psionica pura, matandolo de inmediato."
+LocFlyOverText="Mind Wrack"
+LocPromotionPopupText="<Bullet> <Ability:SelfCooldown/> cooldown. <br/> <Bullet/> Sobrecarga el cerebro de una unidad organica con energia psionica pura, matandolo de inmediato. La retroalimentacion de la habilidad causara un momento significativo de panico. <br/> "
+
+[RTMindControl X2AbilityTemplate]
+LocFriendlyName="Control mental"
+LocLongDescription="Domina temporalmente una unidad enemiga psionicamente."
+LocHelpText="Intenta tomar el control de un enemigo."
+LocFlyOverText="Control mental"
+LocPromotionPopupText="<Bullet> <Ability:SelfCooldown/> tiempo de reutilizacion. <br/>"
+
+[LinkedIntelligence X2AbilityTemplate]
+LocFriendlyName="OI en red"
+LocLongDescription="Las unidades dentro de la fusion pueden reaccionar de forma instantanea a las ordenes de disparo. Cuando una unidad en Meld toma una toma de reaccion, todas las unidades fusionadas intentan disparar contra el objetivo."
+LocHelpText="Cuando una unidad en el Meld recibe un disparo de reaccion, todas las unidades fusionadas intentan disparar contra el objetivo."
+LocFlyOverText="OI en red"
+LocPromotionPopupText="<Bullet/> OI en red se activara en el rango de alcance. <br/> <Bullet/> Las unidades no romperan la ocultacion para disparar. <br/>"
+
+[TwitchReaction X2AbilityTemplate]
+LocFriendlyName="reaccion de contraccion"
+LocLongDescription="Esta unidad puede tomar espontaneamente disparos de reaccion de fuego de cobertura en unidades que atacan a compañeros aliados fusionados."
+LocHelpText="Toma una instantanea de reaccion cuando un aliado fusionado es atacado."
+LocFlyOverText="reaccion de contraccion"
+LocPromotionPopupText="<Bullet/> Esta unidad puede tomar espontaneamente disparos de reaccion de fuego de cobertura en unidades que atacan a compañeros aliados fusionados. <br/>"
+
+[TimeStandsStill X2AbilityTemplate]
+LocFriendlyName="El tiempo se queda quieto"
+LocLongDescription="Lanza una llave en los engranajes del universo por un breve momento. Aliados y Enemigos se vuelven Greyscaled, perdiendo su habilidad de afectar o percibir el mundo que los rodea."
+LocHelpText="¡El mundo! ¡Hora de parar!"
+LocFlyOverText="El tiempo se queda quieto"
+LocPromotionPopupText="<Bullet> <Ability:SelfCooldown/> tiempo de reutilizacion. <br/> <Bullet/> Los temporizadores y los refuerzos se retrasaran mientras se detiene el tiempo. <br/> <Bullet/> Las unidades greyscaled son faciles de golpear y criticamente golpear. <br/> "
+
+[PsionicSurge X2AbilityTemplate]
+LocFriendlyName="Oleada psionica"
+LocLongDescription="Potenciar el arma de esta unidad con energia psionica, aumentando su tasa de disparo y rendimiento energetico."
+LocHelpText="Potenciar el arma de esta unidad con energia psionica."
+LocFlyOverText="Surgeion Psionica"
+LocPromotionPopupText="<Bullet> <Ability:SelfCooldown/> cooldown. <br/> <Bullet/> Las tomas estandar no terminan de girar y cuestan un AP. <br/> <Bullet/> Las vacunas especiales no tienen reutilizaciones mientras esto el efecto esta activo. <br/> "
+
+[FadeIcon X2AbilityTemplate]
+LocFriendlyName="Fade"
+LocLongDescription="Se desvanece de la vista cuando esta unidad recibe daño."
+LocHelpText="Se desvanece de la vista cada vez que esta unidad recibe daño."
+LocFlyOverText="Fade"
+LocPromotionPopupText="<Bullet/> Gane sigilo por un corto tiempo siempre que esta unidad reciba daño. <Ability:SelfCooldown/> cooldown. <br/>"
+
+[Fade X2AbilityTemplate]
+LocFriendlyName="Fade"
+LocLongDescription="Se desvanece de la vista cuando esta unidad recibe daño."
+LocHelpText="Se desvanece de la vista cada vez que esta unidad recibe daño."
+LocFlyOverText="Fade"
+LocPromotionPopupText="<Bullet/> Gane sigilo por un corto tiempo siempre que esta unidad reciba daño. <Ability:SelfCooldown/> cooldown. <br/>"
+
+[Teek X2AbilityTemplate]
+LocFriendlyName="Teek"
+LocLongDescription="Esta unidad ha perfeccionado sus habilidades telequineticas, aumentando su capacidad de esquivar y desviar el fuego enemigo."
+LocHelpText="Esta unidad ha perfeccionado sus habilidades telequineticas, aumentando su capacidad de esquivar y desviar el fuego enemigo."
+LocFlyOverText="Teek"
+LocPromotionPopupText="<Bullet/> Esta unidad ha perfeccionado sus habilidades telekinetic, aumentando su capacidad de esquivar, y desviar el fuego enemigo. <br/> <Bullet/> + 10 Dodge, + 10 Defense. <br/>"
+
+[EyeInTheSky X2AbilityTemplate]
+LocFriendlyName="Ojo en el cielo"
+LocLongDescription="Esta unidad no sufre penalizaciones por disparos de reaccion y es capaz de reaccionar a ataques enemigos."
+LocHelpText="Esta unidad no sufre penalizaciones por disparos de reaccion y es capaz de reaccionar a ataques enemigos."
+LocFlyOverText="Ojo en el cielo"
+LocPromotionPopupText="<Bullet/> Esta unidad no sufre penalizaciones por el fuego de reaccion y es capaz de reaccionar a los ataques del enemigo. <br/> <Bullet/> +30 apuntar durante la reaccion Fuego + cubrir el fuego <br/>"
+
+[HeatChannel X2AbilityTemplate]
+LocFriendlyName="Heat Channel"
+LocLongDescription="Al usar habilidades psionicas, esta unidad puede canalizar el calor de su arma para alimentar la habilidad, recargando el arma y reduciendo el tiempo de reutilizacion de la habilidad en una por cada municion recargada."
+LocHelpText="Cuando se usan habilidades psionicas, esta unidad puede canalizar el calor de su arma para alimentar la habilidad, recargando el arma y reduciendo el tiempo de reutilizacion de la habilidad en una por cada municion recargada."
+LocFlyOverText="Heat Channel"
+LocPromotionPopupText="<Bullet/> Al usar habilidades psionicas, esta unidad puede canalizar el calor de su arma para alimentar la habilidad, recargando el arma y reduciendo el tiempo de reutilizacion de la habilidad en una por cada municion recargada. <br/> <Bullet/> 2 dar vuelta el enfriamiento. <br/> "
+
+[HeatChannelIcon X2AbilityTemplate]
+LocFriendlyName="Heat Channel"
+LocLongDescription="Al usar habilidades psionicas, esta unidad puede canalizar el calor de su arma para alimentar la habilidad, recargando el arma y reduciendo el tiempo de reutilizacion de la habilidad en una por cada municion recargada."
+LocHelpText="Cuando se usan habilidades psionicas, esta unidad puede canalizar el calor de su arma para alimentar la habilidad, recargando el arma y reduciendo el tiempo de reutilizacion de la habilidad en una por cada municion recargada."
+LocFlyOverText="Heat Channel"
+LocPromotionPopupText="<Bullet/> Al usar habilidades psionicas, esta unidad puede canalizar el calor de su arma para alimentar la habilidad, recargando el arma y reduciendo el tiempo de reutilizacion de la habilidad en una por cada municion recargada. <br/> <Bullet/> 2 dar vuelta el enfriamiento. <br/> "
+
+[HeatChannelCooldown X2AbilityTemplate]
+LocFriendlyName="Heat Channel"
+LocLongDescription="Al usar habilidades psionicas, esta unidad puede canalizar el calor de su arma para alimentar la habilidad, recargando el arma y reduciendo el tiempo de reutilizacion de la habilidad en una por cada municion recargada."
+LocHelpText="Cuando se usan habilidades psionicas, esta unidad puede canalizar el calor de su arma para alimentar la habilidad, recargando el arma y reduciendo el tiempo de reutilizacion de la habilidad en una por cada municion recargada."
+LocFlyOverText="Heat Channel"
+LocPromotionPopupText="<Bullet/> Al usar habilidades psionicas, esta unidad puede canalizar el calor de su arma para alimentar la habilidad, recargando el arma y reduciendo el tiempo de reutilizacion de la habilidad en una por cada municion recargada. <br/> <Bullet/> 2 dar vuelta el enfriamiento. <br/> "
+
+[Harbinger X2AbilityTemplate]
+LocFriendlyName="Asumiendo el control directo"
+LocLongDescription="Potenciar una unidad fusionada y amistosa, curacion completa y otorgarle importantes bonificaciones de combate."
+LocHelpText="Potenciar una unidad fusionada y amistosa, sanando completamente y otorgandole importantes bonificaciones de combate."
+LocFlyOverText="Asumiendo el control directo"
+LocPromotionPopupText="<Bullet/> Empoderar a una unidad amigable fusionada, curacion completa y otorgandole importantes bonificaciones de combate. <br/> <Bullet/> <Ability:SelfCooldown/> cooldown. <br/> <Bullet/> +4 armadura, +5 escudo hp, + 10 apunta, + 10 voluntad. <br/> <Bullet/> Efecto se rompe en la perdida de fusion. <br/> "
+
+[ShockAndAwe X2AbilityTemplate]
+LocFriendlyName="Shock And Awe"
+LocLongDescription="Cuando esta unidad causa mas de 25 daños en un solo turno, desorienta a todos los enemigos cercanos."
+LocHelpText="Cuando esta unidad causa mas de 25 daños en un solo turno, desorienta a todos los enemigos cercanos"
+LocFlyOverText="Shock And Awe"
+LocPromotionPopupText="<Bullet/> Cuando esta unidad hace mas de 25 daños en un solo turno, desorienta a todos los enemigos cercanos <br/>"
+
+[RTKillzone X2AbilityTemplate]
+LocFriendlyName="Psionic Killzone"
+LocLongDescription="Toma un tiro de reaccion contra cualquier enemigo que se mueva o ataque dentro de un cono de fuego."
+LocHelpText="Overwatch mejorado en un cono de fuego."
+LocFlyOverText="Psionic Killzone"
+LocPromotionPopupText="<Bullet/> No hay limite para la cantidad de disparos de Kill Zone que un soldado puede realizar fuera del recuento de municiones. <br/> <Bullet/> Kill Zone utiliza Squadsight, incluso si el soldado no tiene la Long Watch habilidad. <br/> <Bullet/> Kill Zone tiene un <Ability:SelfCooldown/> tiempo de reutilizacion. <br/> "
+LocFriendlyNameWhenConcealed="Psionic Killzone (oculto)"
+
+[RTEveryMomentMatters X2AbilityTemplate]
+LocFriendlyName="Todo momento importa"
+LocLongDescription="La ultima viñeta en la revista de esta unidad esta garantizada para golpear criticamente y causa daño adicional basado en la salud faltante del objetivo."
+LocHelpText="La ultima bala en la revista de esta unidad esta garantizada para golpear criticamente e inflige daño adicional en funcion de la salud faltante del objetivo."
+LocFlyOverText="Cada momento importa"
+LocPromotionPopupText="<Bullet/> El daño extra es igual al 35% del HP faltante del objetivo. <br/> <Bullet/> Disparar el ultimo punto adicionalmente otorga un punto de accion solo de movimiento. <br/>"
+
+; <Bullet/> <br/>
+
+[RT_Berserker X2SoldierClassTemplate]
+DisplayName="GHOST Berserker"
+ClassSummary="Queen es la lider de la unidad y especialista en combate cuerpo a cuerpo."
+LeftAbilityTreeTitle="Rampager"
+RightAbilityTreeTitle="Operador"
+RandomNickNames[0]="Reina"
+
+[BumpInTheNight X2AbilityTemplate]
+LocFriendlyName="Choque en la noche"
+LocLongDescription="Esta unidad gana sigilo luego de matar a una unidad dentro de 3 fichas. Si fue una muerte cuerpo a cuerpo, ademas gana una pila de sed de sangre."
+LocHelpText="Gana Stealth despues de matar a una unidad dentro de 3 tiles. Las muertes cuerpo a cuerpo tambien otorgan una acumulacion de Bloodlust."
+LocFlyOverText="Choque en la noche"
+LocPromotionPopupText="<Bullet/> Esta unidad gana sigilo luego de matar a una unidad dentro de 3 fichas. <br/> <Bullet/> Si fue una muerte cuerpo a cuerpo, adicionalmente ganas un stack de Bloodlust. <br/>"
+
+[BumpInTheNightBloodlustListener X2AbilityTemplate]
+LocFriendlyName="Choque en la noche"
+LocLongDescription="Esta unidad gana sigilo luego de matar a una unidad dentro de 3 fichas. Si fue una muerte cuerpo a cuerpo, ademas gana una pila de sed de sangre."
+LocHelpText="Gana Stealth despues de matar a una unidad dentro de 3 tiles. Las muertes cuerpo a cuerpo otorgan ademas una pila de Bloodlust."
+LocFlyOverText="Choque en la noche"
+LocPromotionPopupText="<Bullet/> Esta unidad gana sigilo luego de matar a una unidad dentro de 3 fichas. <br/> <Bullet/> Si fue una muerte cuerpo a cuerpo, adicionalmente gana una pila de Bloodlust. <br/> <Bullet/> <br/> <Bullet/> <br/> "
+
+[BumpInTheNightStealthListener X2AbilityTemplate]
+LocFriendlyName="Choque en la noche"
+LocLongDescription="Esta unidad gana sigilo luego de matar a una unidad dentro de 3 fichas. Si fue una muerte cuerpo a cuerpo, ademas gana una pila de sed de sangre."
+LocHelpText="Gana Stealth despues de matar a una unidad dentro de 3 tiles. Las muertes cuerpo a cuerpo otorgan ademas una pila de Bloodlust."
+LocFlyOverText="Choque en la noche"
+LocPromotionPopupText="<Bullet/> Esta unidad gana sigilo luego de matar a una unidad dentro de 3 fichas. <br/> <Bullet/> Si fue una muerte cuerpo a cuerpo, adicionalmente gana una pila de Bloodlust. <br/> <Bullet/> <br/> <Bullet/> <br/> "
+
+[RTBerserkerKnifeAttack X2AbilityTemplate]
+LocFriendlyName="Slash (Berserker)"
+LocLongDescription="Ataca a cualquier enemigo dentro del rango de movimiento con tu <Ability:SecondaryWeaponName/>."
+LocHelpText="Ataca a un enemigo dentro del rango de movimiento con tu <Ability:SecondaryWeaponName/>."
+LocPromotionPopupText="<Bullet/> Puedes disparar la habilidad Slash colocando el cursor de movimiento sobre un enemigo. <br/> <Bullet/> Un Berserker puede realizar un movimiento \"Dash\", usando ambas acciones para moverse, y aun asi disparar un Slash contra un enemigo adyacente. <br/> "
+
+[RTSiphon X2AbilityTemplate]
+LocFriendlyName="Siphon"
+LocLongDescription="Esta unidad desviara la salud de los enemigos organicos en funcion del daño que les ocasiona."
+LocHelpText="Esta unidad desviara la salud de los enemigos organicos en funcion del daño que les ocasiona."
+LocFlyOverText="Choque en la noche"
+LocPromotionPopupText="<Bullet/> Esta unidad desviara la salud de los enemigos organicos en funcion del daño que les ocasiona. <br/> <Bullet/> La ganancia minima de salud por ataque es 2. <br/>"
+
+[RTAcidicBlade X2AbilityTemplate]
+LocFriendlyName="Hoja acida"
+LocLongDescription="La cuchilla de esta unidad esta cubierta en una solucion acida clasificada. Tritura la armadura y aplica esta solucion al objetivo."
+LocHelpText="Los ataques cuerpo a cuerpo de esta unidad causan daño adicional por acido."
+LocFlyOverText="Hoja acida"
+LocPromotionPopupText="<Bullet/> La cuchilla de esta unidad esta cubierta por una solucion acida clasificada. Tritura la armadura y aplica esta solucion al objetivo. <br/> <Bullet/> El acido tritura la armadura adicional y hace daño por turno. <br/> <Bullet/> Los ataques cuerpo a cuerpo consecutivos refrescaran la duracion del acido y aumentaran su potencia, acumulando el daño y el efecto de trituracion. <br/> "
+
+[RTPsionicBlade X2AbilityTemplate]
+LocFriendlyName="Psiblade"
+LocLongDescription="La espada de esta unidad es una manifestacion de energia psionica. Atraviesa la armadura por completo y causa daño adicional segun la voluntad del objetivo."
+LocHelpText="Los ataques de combate cuerpo a cuerpo de esta unidad perforan todas las armaduras e infligen daño adicional en funcion de la voluntad del objetivo."
+LocFlyOverText="Psiblade"
+LocPromotionPopupText="<Bullet/> La hoja de esta unidad es una manifestacion de energia psionica. Atraviesa la armadura por completo. <br/>"
+
+[RTHiddenBlade X2AbilityTemplate]
+LocFriendlyName="Hoja oculta"
+LocLongDescription="La cuchilla de esta unidad esta diseñada para infligir daño adicional a los objetivos desprevenidos. Inflige daño critico adicional por ocultamiento."
+LocHelpText="Los ataques cuerpo a cuerpo de esta unidad causan daño critico adicional por ocultamiento."
+LocFlyOverText="Psiblade"
+LocPromotionPopupText="<Bullet/> La cuchilla de esta unidad esta diseñada para infligir daño adicional a objetivos desconocidos. Inflige daño critico adicional por ocultacion. <br/> <Bullet/> Los golpes criticos infligen un 150% de daño adicional cuando se cumple el critera. <br/> "
+
+[RTBurst X2AbilityTemplate]
+LocFriendlyName="Burst"
+LocLongDescription="Libera un estallido de energia psionica, dañando a los enemigos y las tejas circundantes."
+LocHelpText="Libera una explosion de energia psionica, dañando a los enemigos y las fichas de los alrededores."
+LocFlyOverText="Burst"
+LocPromotionPopupText="<Bullet> <Ability:SelfCooldown/> return cooldown. <br/> <Bullet/> Libera un estallido de energia psionica, dañando a los enemigos y fichas circundantes. <br/>"
+
+[RTBlur X2AbilityTemplate]
+LocFriendlyName="Blur"
+LocLongDescription="Obtener esquiva, movimiento y defensa adicionales."
+LocHelpText="Obtener esquiva, movimiento y defensa adicionales."
+LocFlyOverText=""
+LocPromotionPopupText="<Bullet/> Obtenga esquiva, movimiento y defensa adicionales. <br/>"
+
+[RTPurge X2AbilityTemplate]
+LocFriendlyName="Purgar"
+LocLongDescription="Purga tu sed de sangre y recupera la ocultacion."
+LocHelpText="Pierde cinco pilas de sed de sangre. Obtienes la ocultacion."
+LocFlyOverText="Purgar"
+LocPromotionPopupText="<Bullet/> Pierde cinco acumulaciones de sed de sangre. Gane ocultamiento. <br/>"
+
+[RTMentor X2AbilityTemplate]
+LocFriendlyName="Mentor"
+LocLongDescription="Presta un apoyo psionico unificado de unidad amigable a traves de la fusion."
+LocHelpText="Presta un apoyo psionico unificado de unidad amigable a traves de la fusion."
+LocFlyOverText="Mentor"
+LocPromotionPopupText="<Bullet> <Ability:SelfCooldown/> tiempo de reutilizacion. <br/> <Bullet/> Concede +60 de Voluntad y Psi a la unidad objetivo y limpia sus comentarios. <br/>"
+
+[RTReprobateWaltz X2AbilityTemplate]
+LocFriendlyName="Reprobate Waltz"
+LocLongDescription="Siempre que esta unidad use un ataque cuerpo a cuerpo, existe la posibilidad de atacar de nuevo, aumentando con las acumulaciones de sed de sangre."
+LocHelpText="Siempre que esta unidad use un ataque cuerpo a cuerpo, existe la posibilidad de atacar nuevamente, aumentando con las acumulaciones de sed de sangre."
+LocFlyOverText="Reprobate Waltz"
+LocPromotionPopupText="<Bullet/> 20% de probabilidad de base, + 10% por cada stack de Bloodlust. <br/>"
+
+[RTReprobateWaltzIcon X2AbilityTemplate]
+LocFriendlyName="Reprobate Waltz"
+LocLongDescription="Siempre que esta unidad use un ataque cuerpo a cuerpo, existe la posibilidad de atacar de nuevo, aumentando con las acumulaciones de sed de sangre."
+LocHelpText="Siempre que esta unidad use un ataque cuerpo a cuerpo, existe la posibilidad de atacar nuevamente, aumentando con las acumulaciones de sed de sangre."
+LocFlyOverText="Reprobate Waltz"
+LocPromotionPopupText="<Bullet/> 20% de probabilidad de base, + 10% por cada stack de Bloodlust. <br/>"
+
+[RTPyroclasticFlow X2AbilityTemplate]
+LocFriendlyName="Flujo piroclastico"
+LocLongDescription="Esta unidad ahora puede atacar cuerpo a cuerpo mientras se esta quemando, y mientras se quema, deja un devastador rastro de fuego a su paso."
+LocHelpText="Esta unidad ahora puede cuerpo a cuerpo mientras se esta quemando, y mientras se quema, deja un rastro devastador de fuego a su paso."
+LocFlyOverText="Flujo piroclastico"
+LocPromotionPopupText="<Bullet/> No da inmunidad a la grabacion. <br/>"
+
+[RTPyroclasticSlash X2AbilityTemplate]
+LocFriendlyName="Slash (Pyroclastic)"
+LocLongDescription="Ataca a cualquier enemigo dentro del rango de movimiento con tu <Ability:SecondaryWeaponName/>."
+LocHelpText="Ataca a un enemigo dentro del rango de movimiento con tu <Ability:SecondaryWeaponName/>."
+LocPromotionPopupText="<Bullet/> Puedes disparar la habilidad Slash colocando el cursor de movimiento sobre un enemigo. <br/> <Bullet/> Un Berserker puede realizar un movimiento \"Dash\", usando ambas acciones para moverse, y aun asi disparar un Slash contra un enemigo adyacente. <br/> "
+
+[RTContainedFury X2AbilityTemplate]
+LocFriendlyName="Furia contenida"
+LocLongDescription="El estado de fusion de esta unidad ya no se ve afectado por las acumulaciones de sed de sangre."
+LocHelpText="El estado de fusion de esta unidad ya no se ve afectado por las acumulaciones de sed de sangre."
+LocFlyOverText="Furia contenida"
+LocPromotionPopupText=""
+
+[RTContainedFuryMeldJoin X2AbilityTemplate]
+LocFriendlyName="Enter Meld (Fury contenida)"
+LocLongDescription="Ingresa la meld, ganando mayor voluntad y compartiendo ciertas habilidades."
+LocHelpText="Ingrese la meld, ganando mayor voluntad y compartiendo ciertas habilidades."
+LocFlyOverText="Enter Meld"
+LocPromotionPopupText="<Bullet/> Ingresa la meld, ganando mayor voluntad y compartiendo ciertas habilidades. <br/>"
+
+[RTUnstableConduit X2AbilityTemplate]
+LocFriendlyName="Tempestad inestable"
+LocLongDescription="Siempre que esta unidad use una habilidad psionica, desencadena una rafaga alrededor de ella y todos los aliados fusionados."
+LocHelpText="Siempre que esta unidad use una habilidad psionica, desencadena una rafaga alrededor de ella y todos los aliados fusionados."
+LocFlyOverText="Tempestad inestable"
+LocPromotionPopupText="<Bullet/> Siempre que esta unidad use una habilidad psionica, desencadena una Explosion a su alrededor y todos los aliados fusionados. <br/> <Bullet/> Ciertas habilidades no se consideran psionicas para los propositos de esta habilidad, como unete a Meld y deja Meld. <br/> "
+
+[RTUnstableConduitBurst X2AbilityTemplate]
+LocFriendlyName="Burst"
+LocLongDescription="Libera un estallido de energia psionica, dañando a los enemigos y las tejas circundantes."
+LocHelpText="Libera una explosion de energia psionica, dañando a los enemigos y las fichas de los alrededores."
+LocFlyOverText="Burst"
+LocPromotionPopupText="<Bullet/> Desencadenar una explosion de energia psionica, dañando las unidades y los cuadros circundantes. <br/>"
+
+[RTPersistingImages X2AbilityTemplate]
+LocFriendlyName="Imagenes persistentes"
+LocLongDescription="Siempre que esta unidad gana sigilo, crea una imagen secundaria de si mismo cerca."
+LocHelpText="Siempre que esta unidad gana sigilo, crea una imagen secundaria de si mismo cerca."
+LocFlyOverText="Imagenes persistentes"
+LocPromotionPopupText="<Bullet/> Afterimages atraera la atencion del enemigo, pero solo tendra un HP. <br/>"
+
+[RTUnstableConduitIcon X2AbilityTemplate]
+LocFriendlyName="Tempestad inestable"
+LocLongDescription="Siempre que esta unidad use una habilidad psionica, desencadena una rafaga alrededor de ella y todos los aliados fusionados."
+LocHelpText="Siempre que esta unidad use una habilidad psionica, desencadena una rafaga alrededor de ella y todos los aliados fusionados."
+LocFlyOverText="Tempestad inestable"
+LocPromotionPopupText="<Bullet/> Siempre que esta unidad use una habilidad psionica, desencadena una Explosion a su alrededor y todos los aliados fusionados. <br/> <Bullet/> Ciertas habilidades no se consideran psionicas para los propositos de esta habilidad, como unete a Meld y deja Meld. <br/> "
+
+[RTPersistingImagesIcon X2AbilityTemplate]
+LocFriendlyName="Imagenes persistentes"
+LocLongDescription="Siempre que esta unidad gana sigilo, crea una imagen secundaria de si mismo cerca."
+LocHelpText="Siempre que esta unidad gana sigilo, crea una imagen secundaria de si mismo cerca."
+LocFlyOverText="Imagenes persistentes"
+LocPromotionPopupText="<Bullet/> Siempre que esta unidad gane Stealth, crea una imagen secundaria de si mismo cerca. <br/> <Bullet/> Las Afterimages atraeran la atencion del enemigo, pero solo tienen un HP. <br/>"
+
+[RTGhostInTheShell X2AbilityTemplate]
+LocFriendlyName="Fantasma en el caparazon"
+LocLongDescription="Cuando esta unidad interactua con objetivos, obtiene una breve explosion de sigilo."
+LocHelpText="Cuando esta unidad interactua con los objetivos, obtiene una breve explosion de sigilo."
+LocFlyOverText="Fantasma en el caparazon"
+LocPromotionPopupText=""
+
+[RTGhostInTheShellListener X2AbilityTemplate]
+LocFriendlyName="Fantasma en el caparazon"
+LocLongDescription="Cuando esta unidad interactua con objetivos, no es revelada."
+LocHelpText="Cuando esta unidad interactua con objetivos, no es revelada."
+LocFlyOverText="Fantasma en el caparazon"
+LocPromotionPopupText="<Bullet/> Cuando esta unidad interactua con los objetivos, obtiene una breve explosion de Stealth. <br/>"
+
+[RTQueenOfBlades X2AbilityTemplate]
+LocFriendlyName="La reina de las espadas"
+LocLongDescription="Si un ataque cuerpo a cuerpo mata a una unidad, se reembolsan los puntos de accion para el ataque. Ademas, las acumulaciones de sed de sangre aumentaran la movilidad, en lugar de disminuirla."
+LocHelpText="Si un ataque cuerpo a cuerpo mata a una unidad, los puntos de accion para el ataque son reembolsados. Ademas, las acumulaciones de sed de sangre aumentaran la movilidad, en lugar de disminuirla."
+LocFlyOverText="La reina de las espadas"
+LocPromotionPopupText=""
+
+[RTShadowStrike X2AbilityTemplate]
+LocFriendlyName="Shadow Strike"
+LocLongDescription="Saltar a traves de las sombras para atacar a un objetivo."
+LocHelpText="Saltar a traves de las sombras para atacar a un objetivo."
+LocFlyOverText="Shadow Strike"
+LocPromotionPopupText="<Bullet> <Ability:SelfCooldown/> tiempo de reutilizacion. <br/> <Bullet/> Rango ilimitado, no se requiere una ruta directa al objetivo. <br/>"
+
+[RTPsionicLance X2AbilityTemplate]
+LocFriendlyName="Lanza Psionica"
+LocLongDescription="Dispara una lanza de pura energia psionica."
+LocHelpText="Dispara una lanza de pura energia psionica."
+LocFlyOverText="Lanza Psionica"
+LocPromotionPopupText="<Bullet> <Ability:SelfCooldown/> tiempo de reutilizacion. <br/>"
+
+[RTHarbingerPsionicLance X2AbilityTemplate]
+LocFriendlyName="Lanza psionica (asumiendo el control directo)"
+LocLongDescription="Dispara una lanza de pura energia psionica."
+LocHelpText="Dispara una lanza de pura energia psionica."
+LocFlyOverText="Lanza psionica (asumiendo el control directo)"
+LocPromotionPopupText="<Bullet> <Ability:SelfCooldown/> tiempo de reutilizacion. <br/>"
+
+[RTDashingStrike X2AbilityTemplate]
+LocFriendlyName="Ataque intermitente"
+LocLongDescription="Lunge forward, infligiendo daño a todos los enemigos en el camino del ataque."
+LocHelpText="Lanza hacia adelante, infligiendo daño a todos los enemigos en el camino del ataque."
+LocFlyOverText="Ataque intermitente"
+LocPromotionPopupText="<Bullet/> Lanza hacia adelante, infligiendo daño a todos los enemigos en el camino del ataque. <br/>"
+
+[RTCloseCombatSpecialist X2AbilityTemplate]
+LocFriendlyName="Especialista en combate cercano"
+LocFlyOverText="Especialista en combate cercano"
+LocLongDescription="Durante giros enemigos, dispara un tiro de reaccion libre con tu arma primaria a cualquier enemigo visible dentro de cuatro fichas que se mueva o dispare."
+LocHelpText="Durante giros enemigos, dispara un tiro de reaccion libre a cualquier enemigo visible dentro de cuatro fichas que se mueva o dispare."
+LocPromotionPopupText="<Bullet/> No se disparara si el soldado esta oculto. <br/> <Bullet/> Puedes dispararle a cada enemigo con esta habilidad una vez por turno. <br/> <Bullet/> Cada disparo requiere 2 municiones. <br/> ""
+
+[RTCloseCombatSpecialistAttack X2AbilityTemplate]
+LocFriendlyName="Especialista en combate cercano"
+LocFlyOverText="Especialista en combate cercano"
+LocLongDescription="Durante giros enemigos, dispara un tiro de reaccion libre con tu arma primaria a cualquier enemigo visible dentro de cuatro fichas que se mueva o dispare."
+LocHelpText="Durante giros enemigos, dispara un tiro de reaccion libre a cualquier enemigo visible dentro de cuatro fichas que se mueva o dispare."
+LocPromotionPopupText="<Bullet/> No se disparara si el soldado esta oculto. <br/> <Bullet/> Puedes dispararle a cada enemigo con esta habilidad una vez por turno. <br/> <Bullet/> Cada disparo requiere 2 municiones. <br/> ""
+
+
+; <Bullet/> <br/>
+
+[RT_Gatherer X2SoldierClassTemplate]
+DisplayName="GHOST Gatherer"
+ClassSummary="Nova es el experto HUMINT del equipo y el principal soporte psionico."
+LeftAbilityTreeTitle="Clairvoyant"
+RightAbilityTreeTitle="Telepath"
+RandomNickNames[0]="Nova"
+
+[OverTheShoulder X2AbilityTemplate]
+LocFriendlyName="Sobre el hombro"
+LocLongDescription="Mira por encima del hombro de las unidades enemigas, viendo lo que ven."
+LocHelpText="Mira por encima del hombro de las unidades enemigas, viendo lo que ven."
+LocFlyOverText="Sobre el hombro"
+LocPromotionPopupText="<Bullet/> Mira por encima del hombro de las unidades enemigas, viendo lo que ven. <br/>"
+
+[RTTheSixPathsOfPain X2AbilityTemplate]
+LocFriendlyName="Los seis caminos del dolor"
+LocLongDescription="Lanza automaticamente sobre el hombro de forma gratuita al comienzo de cada turno."
+LocHelpText="Lanza automaticamente sobre el hombro de forma gratuita al inicio de cada turno."
+LocFlyOverText="Los seis caminos del dolor"
+LocPromotionPopupText="<Bullet/> No se activara si la unidad no puede lanzar Over the Shoulder. <br/>"
+
+[RTTheSixPathsOfPainIcon X2AbilityTemplate]
+LocFriendlyName="Los seis caminos del dolor"
+LocLongDescription="Lanza automaticamente sobre el hombro de forma gratuita al comienzo de cada turno."
+LocHelpText="Lanza automaticamente sobre el hombro de forma gratuita al inicio de cada turno."
+LocFlyOverText="Los seis caminos del dolor"
+LocPromotionPopupText="<Bullet/> No se activara si la unidad no puede lanzar Over the Shoulder. <br/>"
+
+[RTMeldInduction X2AbilityTemplate]
+LocFriendlyName="Meld Induction"
+LocLongDescription="Forzar una unidad en Meld."
+LocHelpText="Forzar una unidad en Meld."
+LocFlyOverText="Meld Induction"
+LocPromotionPopupText="<Bullet> <Ability:SelfCooldown/> cooldown. <br/> <Bullet/> Esto no se puede hacer si la unidad que usa Meld Induction no esta en la fusion. <br/>"
+
+[RTUnsettlingVoices X2AbilityTemplate]
+LocFriendlyName="Voces Inquietas"
+LocLongDescription="Las unidades enemigas afectadas por Over The Shoulder sufren estadisticas reducidas, que incluyen Defensa, Objetivo y Voluntad."
+LocHelpText="Las unidades enemigas afectadas por Over The Shoulder sufren estadisticas disminuidas."
+LocFlyOverText="Voces irrelevantes"
+LocPromotionPopupText="<Bullet/> Las unidades enemigas afectadas por Over The Shoulder sufren estadisticas disminuidas, que incluyen Defensa, Objetivo y Voluntad. <br/>"
+
+[RTGuardianAngel X2AbilityTemplate]
+LocFriendlyName="angel de la guarda"
+LocLongDescription="Otorga un efecto a las unidades aliadas afectadas por Over the Shoulder que limpia los debuffs mentales y los sana lentamente."
+LocHelpText="Otorga un efecto a las unidades aliadas afectadas por Over the Shoulder que limpia los debuffs mentales y los sana lentamente."
+LocFlyOverText="angel de la guarda"
+LocPromotionPopupText="<Bullet/> Otorga un efecto a las unidades aliadas afectadas por Over the Shoulder que limpia los debuffs mentales y los sana lentamente. <br/> <Bullet/> El efecto de curacion solo puede ocurrir una vez por turno. <br/> "
+
+[RTForcedIntroversion X2AbilityTemplate]
+LocFriendlyName="Introversion Forzada"
+LocLongDescription="Cuando esta unidad recibe comentarios, tambien recibe sigilo."
+LocHelpText="Cuando esta unidad recibe comentarios, tambien recibe sigilo."
+LocFlyOverText="Meld Induction"
+LocPromotionPopupText="<Bullet/> Cuando esta unidad recibe comentarios, tambien recibe Stealth. <br/> <Bullet/> Stealth usualmente dura mientras dura el evento Feedback. <br/>"
+
+[RTRudimentaryCreatures X2AbilityTemplate]
+LocFriendlyName="Soberano"
+LocLongDescription="Cuando las unidades afectadas por Over the Shoulder intentan usar habilidades psionicas, esta unidad intentara interrumpir la habilidad, aturdiendo al usuario y causando un daño psionico menor."
+LocHelpText="Cuando unidades afectadas por Over the Shoulder intentan usar habilidades psionicas, esta unidad intentara interrumpir la habilidad, aturdiendo al usuario y causando un daño psionico menor."
+LocFlyOverText="Sovereign"
+LocPromotionPopupText="<Bullet/> No todas las habilidades psionicas pueden ser interrumpidas. Excepciones notables incluyen Over The Shoulder y Join / Leave Meld. <br/>"
+
+[RTRudimentaryCreaturesEvent X2AbilityTemplate]
+LocFriendlyName="Soberano"
+LocLongDescription="Cuando las unidades afectadas por Over the Shoulder intentan usar habilidades psionicas, esta unidad intentara interrumpir la habilidad, aturdiendo al usuario y causando un daño psionico menor."
+LocHelpText="Cuando unidades afectadas por Over the Shoulder intentan usar habilidades psionicas, esta unidad intentara interrumpir la habilidad, aturdiendo al usuario y causando un daño psionico menor."
+LocFlyOverText="Sovereign"
+LocPromotionPopupText="<Bullet/> Cuando las unidades afectadas por Over the Shoulder intenten usar habilidades psionicas, esta unidad intentara interrumpir la habilidad, aturdiendo al usuario y causando daños psionicos menores. <br/>"
+
+[RTExtinctionEventPartOne X2AbilityTemplate]
+LocFriendlyName="Evento de extincion"
+LocLongDescription="Gana Stealth, cargando un poderoso ataque. En el siguiente turno, libera una abrumadora nova psionica, borrando todo en un radio masivo."
+LocHelpText="Gana Stealth, cargando un poderoso ataque. En el siguiente turno, libera una abrumadora nova psionica, borrando todo en un radio masivo."
+LocFlyOverText="Evento de extincion"
+LocPromotionPopupText="<Bullet/> 350 radio de baldosas. <br/> <Bullet/> ¡Las unidades amigas deben intentar evacuar antes de que esta habilidad se complete! <br/>"
+
+[RTExtinctionEventPartTwo X2AbilityTemplate]
+LocFriendlyName="Evento de extincion"
+LocLongDescription="Gana Stealth, cargando un poderoso ataque. En el siguiente turno, libera una abrumadora nova psionica, borrando todo en un radio masivo."
+LocHelpText="Gana Stealth, cargando un poderoso ataque. En el siguiente turno, libera una abrumadora nova psionica, borrando todo en un radio masivo."
+LocFlyOverText="Evento de extincion"
+LocPromotionPopupText="<Bullet/> 350 radio de baldosas. <br/> <Bullet/> ¡Las unidades amigas deben intentar evacuar antes de que esta habilidad se complete! <br/>"
+
+[RTExtinctionEventPartThree X2AbilityTemplate]
+LocFriendlyName="Evento de extincion"
+LocLongDescription="Gana Stealth, cargando un poderoso ataque. En el siguiente turno, libera una abrumadora nova psionica, borrando todo en un radio masivo."
+LocHelpText="Gana Stealth, cargando un poderoso ataque. En el siguiente turno, libera una abrumadora nova psionica, borrando todo en un radio masivo."
+LocFlyOverText="Evento de extincion"
+LocPromotionPopupText="<Bullet/> 350 radio de baldosas. <br/> <Bullet/> ¡Las unidades amigas deben intentar evacuar antes de que esta habilidad se complete! <br/>"
+
+[RTUnwillingConduitsIcon X2AbilityTemplate]
+LocFriendlyName="Conductos no deseados"
+LocLongDescription="Siempre que esta unidad arroje una habilidad psionica, drena la energia de las unidades afectadas por Sobre el hombro para alimentar la accion, reduciendo el tiempo de reutilizacion de cada unidad afectada."
+LocHelpText="Siempre que esta unidad arroja una habilidad psionica, drena la energia de las unidades afectadas por Sobre el hombro para alimentar la accion, reduciendo el tiempo de reutilizacion de cada unidad afectada."
+LocFlyOverText="Conductos no deseados"
+LocPromotionPopupText="<Bullet/> El tiempo de reutilizacion se reducira a un minimo de 1; se puede usar el siguiente turno. <br/>"
+
+[RTDomination X2AbilityTemplate]
+LocFriendlyName="Dominacion"
+LocLongDescription="La duracion del control mental de esta unidad se incrementa enormemente."
+LocHelpText="La duracion del control mental de esta unidad se incrementa enormemente."
+LocFlyOverText="Dominacion"
+LocPromotionPopupText="<Bullet/> Multiples controles mentales pueden estar activos a la vez. <br/>"
+
+[RTTechnopathy X2AbilityTemplate]
+LocFriendlyName="Technopathy"
+LocLongDescription="Esta unidad puede afectar unidades roboticas con sus capacidades psionicas y puede hackear objetivos del alcance por telepatia."
+LocHelpText="Esta unidad puede afectar unidades roboticas con sus capacidades psionicas y puede hackear objetivos del alcance a traves de la telepatia."
+LocFlyOverText="Technopathy"
+LocPromotionPopupText="<Bullet/> La unidad pirateara con su estadistica de Ofensa Psi en lugar de la estadistica de Hack. <br/>"
+
+[RTSibyl X2AbilityTemplate]
+LocFriendlyName="Mirada de Sibyl"
+LocLongDescription="El componente de vision de Over The Shoulder dura para siempre, incluso cuando la habilidad esta inactiva."
+LocHelpText="El componente de vision de Over The Shoulder dura para siempre, incluso cuando la habilidad esta inactiva."
+LocFlyOverText="Mirada de Sibyl"
+LocPromotionPopupText="<Bullet/> Tecnicamente no infinito, solo 10 millones de vueltas. <br/>"
+
+[RtechoedAgonyIcon X2AbilityTemplate]
+LocFriendlyName="Agonia Echoed"
+LocLongDescription="Esta unidad hara eco de los intentos de panico que afecten a los enemigos cercanos afectados por Over the Shoulder."
+LocHelpText="Esta unidad hara eco de los intentos de panico que afecten a los enemigos cercanos afectados por Over the Shoulder."
+LocFlyOverText="Agonia Echoed"
+LocPromotionPopupText="<Bullet/> Solo afecta a las unidades enemigas. <br/> <Bullet/> La retroalimentacion es un efecto de panico y es mucho mas fuerte que otras fuentes de panico. <br/>"
+
+[RTGuiltyConscience X2AbilityTemplate]
+LocFriendlyName="Conciencia culpable"
+LocLongDescription="Los enemigos que se ven obligados a sufrir la presencia mental de esta unidad durante demasiado tiempo estaran desorientados por la experiencia."
+LocHelpText="Los enemigos que se ven obligados a sufrir la presencia mental de esta unidad durante demasiado tiempo estaran desorientados por la experiencia."
+LocFlyOverText="Conciencia culpable"
+LocPromotionPopupText="<Bullet/> Esta habilidad se puede activar contra el mismo objetivo varias veces si el compromiso dura tanto. <br/>"
+
+[RTGuiltyConscienceEvent X2AbilityTemplate]
+LocFriendlyName="Conciencia culpable"
+LocLongDescription="Los enemigos que se ven obligados a sufrir la presencia mental de esta unidad durante demasiado tiempo estaran desorientados por la experiencia."
+LocHelpText="Los enemigos que se ven obligados a sufrir la presencia mental de esta unidad durante demasiado tiempo estaran desorientados por la experiencia."
+LocFlyOverText="Conciencia culpable"
+LocPromotionPopupText="<Bullet/> Las unidades enemigas que se ven afectadas por Over the Shoulder multiples vueltas seguidas estaran desorientadas. <br/>"
+
+[RTTriangulationIcon X2AbilityTemplate]
+LocFriendlyName="Triangulacion"
+LocLongDescription="Los aliados fusionados ahora serviran como fuentes adicionales del efecto Over the Shoulder."
+LocHelpText="Los aliados fusionados ahora serviran como fuentes adicionales del efecto Over the Shoulder."
+LocFlyOverText="Triangulacion"
+LocPromotionPopupText="<Bullet/> El efecto dura un turno completo, incluso si la fusion se rompe. <br/> <Bullet/> Esta es una de las pocas formas en que el Gatherer se afecta con los poderosos efectos Over the Shoulder. <br/> "
+
+[RTKnowledgeIsPower X2AbilityTemplate]
+LocFriendlyName="El conocimiento es poder"
+LocLongDescription="Aumenta el daño y la posibilidad de golpe critico contra las unidades que soportan Over the Shoulder para multiples turnos."
+LocHelpText="Aumenta el daño y la probabilidad de golpe critico contra las unidades que soportan Over the Shoulder en multiples turnos."
+LocFlyOverText="El conocimiento es poder"
+LocPromotionPopupText="<Bullet/> Los efectos de esta habilidad se acumulan en cuatro turnos. <br/>"
+
+[RTLift X2AbilityTemplate]
+LocFriendlyName="Levantar"
+LocLongDescription="Levanta pequeños enemigos en el aire en un area pequeña de efecto."
+LocHelpText="Levanta pequeños enemigos en el aire en una pequeña area de efecto."
+LocFlyOverText="Levantar"
+LocPromotionPopupText="<Bullet/> Lift es util para obtener bonificaciones adicionales de flanqueo y controlar enemigos, pero los ataques cuerpo a cuerpo a menudo no estaran disponibles. <br/>"
+
+[RTCrushingGrasp X2AbilityTemplate]
+LocFriendlyName="Agarre aplastante"
+LocLongDescription="Agarre telequineticamente un area pequeña, aturde a las unidades enemigas y destruya su cobertura."
+LocHelpText="Agarre telequineticamente un area pequeña, aturde a las unidades enemigas y destruya su cobertura."
+LocFlyOverText="Agarre aplastante"
+LocPromotionPopupText="<Bullet> <Ability:SelfCooldown/> return cooldown. <br/> <Bullet/> Crushing Grasp debe usarse generosamente para habilitar Whisper's Scoped and Dropped y crear flancos para Queen's Bump en la noche. <br/> "
+
+[RTPsionicStorm X2AbilityTemplate]
+LocFriendlyName="Tormenta Psionica"
+LocLongDescription="Crea una tormenta psionica perjudicial que arrasa un area moderada indefinidamente."
+LocHelpText="Lanzar una tormenta psionica."
+LocFlyOverText="Tormenta Psionica"
+LocPromotionPopupText="<Bullet> <Ability:SelfCooldown/> cooldown. <br/> <Bullet/> La unidad puede soportar tres tormentas psionicas separadas a la vez. <br/> <Bullet/> El apilamiento de tormentas psionicas no aumenta su daño . <br/> <Bullet/> Las tormentas psionicas deben cancelarse manualmente. <br/> "
+
+[RTPsionicStormSustained X2AbilityTemplate]
+LocFriendlyName="Tormenta Psionica Sostenida"
+LocLongDescription="No deberias poder ver esto"
+LocHelpText="Lanzar una tormenta psionica."
+LocFlyOverText="Tormenta Psionica"
+LocPromotionPopupText="<Bullet/> La unidad puede soportar tres tormentas psionicas separadas a la vez. <br/> <Bullet/> El apilamiento de tormentas psionicas no aumenta su daño. <br/> <Bullet/> Las tormentas psionicas deben cancelarse manualmente. <br/> "
+
+[RTEndPsistorms X2AbilityTemplate]
+LocFriendlyName="Terminar Tormentas Psionicas"
+LocLongDescription="Terminar todas las tormentas psionicas."
+LocHelpText="Finaliza todas las tormentas psionicas activas."
+LocFlyOverText="Finalizar Tormentas Psionicas activas."
+
+[RTTechnopathy_Hack X2AbilityTemplate]
+LocFriendlyName="Hack (Psionic)"
+LocLongDescription="Hackear un objetivo psionicamente desde una distancia."
+LocHelpText="Corta un objetivo psionicamente desde una distancia."
+LocFlyOverText="Hack (Psionic)"
+
+[RTTechnopathy_Chest X2AbilityTemplate]
+LocFriendlyName="Hack (Psionic)"
+LocLongDescription="Hackear un objetivo psionicamente desde una distancia."
+LocHelpText="Corta un objetivo psionicamente desde una distancia."
+LocFlyOverText="Hack (Psionic)"
+
+[RTTechnopathy_Workstation X2AbilityTemplate]
+LocFriendlyName="Hack (Psionic)"
+LocLongDescription="Hackear un objetivo psionicamente desde una distancia."
+LocHelpText="Corta un objetivo psionicamente desde una distancia."
+LocFlyOverText="Hack (Psionic)"
+
+[RTTechnopathy_ObjectiveChest X2AbilityTemplate]
+LocFriendlyName="Hack (Psionic)"
+LocLongDescription="Hackear un objetivo psionicamente desde una distancia."
+LocHelpText="Corta un objetivo psionicamente desde una distancia."
+LocFlyOverText="Hack (Psionic)"
+
+[RTPsionicLash X2AbilityTemplate]
+LocFriendlyName="Psionic Lash"
+LocLongDescription="Tira psionicamente de una unidad humanoide a un mosaico adyacente."
+LocHelpText="Acerca una unidad humanoide."
+LocFlyOverText="Psionic Lash"
+LocPromotionPopupText="<Bullet> <Ability:SelfCooldown/> cooldown. <br/> <Bullet/> Se pueden tirar unidades hostiles y amigas. <br/>"
+`
+[RTEnterStealth X2AbilityTemplate]
+LocFriendlyName="Entrar en sigilo"
+LocLongDescription="Capa, volviendose invisible para el enemigo por un corto tiempo."
+LocHelpText="Ir invisible."
+LocFlyOverText="Entrar sigilosamente"
+LocPromotionPopupText="<Bullet/> La unidad se revelara cuando el efecto termine. <br/>"
+
+; ------------------------------------------------- -------------------------------------------------- -------------------------
+
+; + AbilityAvailabilityCodes="AA_UnitNotMelded"
+AbilityAvailabilityStrings[89]="La unidad no esta en fusion."
+
+; + AbilityAvailabilityCodes="AA_MeldEffect_Active"
+AbilityAvailabilityStrings[90]="La unidad ya esta fusionada."
+
+; + AbilityAvailabilityCodes="AA_UnitMustBeGhost"
+AbilityAvailabilityStrings[91]="La unidad no es un fantasma."
+
+; + AbilityAvailabilityCodes="AA_UnitAlreadyUsedAbility"
+AbilityAvailabilityStrings[92]="La Unidad ya uso esa habilidad."
+
+; + AbilityAvailabilityCodes="AA_NotStackableEffect"
+AbilityAvailabilityStrings[93]="El efecto no es apilable, vea Mod Author"
+
+; + AbilityAvailabilityCodes="AA_NotEnoughStacks"
+AbilityAvailabilityStrings[94]="La habilidad necesita mas pilas para funcionar."
+
+; + AbilityAvailabilityCodes="AA_TooManyStacks"
+AbilityAvailabilityStrings[95]="Hay demasiadas pilas para la capacidad de funcionar."
+
+; + AbilityAvailabilityCodes="AA_EffectNotFound"
+AbilityAvailabilityStrings[96]="No se encontro el efecto."
+
+; ------------------------------------------------- -------------------------------------------------- -------------------------
+
+[TestAbility X2AbilityTemplate]
+LocFriendlyName="Prueba"
+LocLongDescription="Nunca deberias ver esto."
+LocHelpText="Nunca deberias ver esto."
+LocFlyOverText="Prueba"
+LocPromotionPopupText="<Bullet/> Nunca deberias ver esto. <br/>"
+
+[RT_Animation_Placeholder_CV X2WeaponTemplate]
+FriendlyName="Marcador de posicion de animacion de Rising Tides"
+FriendlyNamePlural="Marcador de posicion de animacion de Rising Tides"
+BriefSummary=""
+TacticalText="<Bullet/> Un marcador de posicion que permite a las clases de Rising Tides usar animaciones psi de juegos base. Los usuarios del mod nunca deben ver esto. <br/>."
+
+;----------------------------------------------------------------------------------------------------------------------------
+; PROGRAM FACTION
+;----------------------------------------------------------------------------------------------------------------------------
+
+[PersonnelHadley X2EncyclopediaTemplate]
+ListTitle="Dossier de personal: Dr. Hadley"
+DescriptionTitle="Dr. Hadley - ESTADO: ACTIVO"
+DescriptionEntry="La Dra. Elizabeth Hadley, nacida el 3 de octubre de 1968, es una genio certificada. Al obtener su doctorado a la edad de 19 años, la academia en general asumio que tenia un futuro brillante por delante. ella se cayo de la faz de la tierra poco despues, dejando a muchos especular que la rama de I + D del gobierno la habia arrebatado. Aunque ahora parece obvio, no se sabe con certeza en que ha estado trabajando durante los ultimos treinta y cinco años. , y que ella ha sido transferida a XCOM solo ahora, con Aliens en su propia puerta proverbial, habla por su importancia. \nC.O. Bradford Nota: Si, este es el archivo exacto que te di la ultima vez. Afortunadamente todavia esta bien. "
+
+[FactionProgram X2EncyclopediaTemplate]
+ListTitle="El programa"
+DescriptionTitle="Programa"
+DescriptionEntry="El Programa, aparentemente dirigido por el ilusorio Dr. Hadley, es una rama de XCOM, que se separo en la decada de 1970. Su enfoque principal es garantizar que cuando ADVENT se reduzca, ellos - a expensas de cualquier otro, incluso XCOM- - Parate sobre la pila de escombros.
+
+[ProgramGhosts X2EncyclopediaTemplate]
+ListTitle="Clases de programa"
+DescriptionTitle="Clases de programa"
+DescriptionEntry="El Programa tiene un pequeño numero de operativos psionicos. Aumentados cibernetica y geneticamente a traves de una sustancia conocida como \"MELD"\, son verdaderamente elite, cada uno veterano de veinte, treinta o incluso cuarenta años de combate contra ambos humanos y amenazas alienigenas. Cada uno tiene un conjunto de habilidades unico, pero comparten una base comun de habilidades psionicas, como Mind Control, Mind Wrack y Mind Meld."
+
+[CovertActionNarrative_FindFaction_Program X2CovertActionNarrativeTemplate]
+ActionName="Señales antiguas"
+ActionPreNarrative="Comandante, hemos estado recogiendo transmisiones dispersas en una frecuencia antigua de XCOM. Con su permiso, me gustaria tomar un escuadron e investigar."
+ActionPostNarrative="Comandante, logre localizar el origen de las señales, un viejo FOB, tripulado por una faccion desconocida. Cuando me presente, me dijeron que el Dr. Hadley, entre todas las personas, estaba esperando para hablar."
+
+[CovertActionNRerative_RecruitEngineer_Program X2CovertActionNarrativeTemplate]
+ActionName="Soporte tecnico"
+ActionPreNarrative="Nos hemos contactado con simpatizantes de la resistencia en una de las megaciudades. Permitir que se una a nosotros seria una violacion de la seguridad, pero todos son tuyos."
+ActionPostNarrative="El simpatizante resulto tener una mentalidad tecnica, ya que trabajo mucho en ADVENT Mech Bay. Seran una gran ayuda para la ingenieria."
+
+[CovertActionNarrative_HuntTemplars_P1_Program X2CovertActionNarrativeTemplate]
+ActionName="Encontrarlos"
+ActionPreNarrative="Como recordaran, Comandante, seis dias despues de que el Barco del Templo se estrello, inicie la Operacion: Un mundo feliz. Desafortunadamente, habia un unico sobreviviente. El sargento Lanner quedo destrozado y su mente en ruinas. el ataque psionico de mi agente, pero se las arreglo para alejarse durante el caos del comienzo de la Operacion: Cenizas y Templos, la tercera parte. Hace poco hemos logrado localizar su ubicacion general, pero necesitamos su mano de obra para descubrir donde se esconde.
+ActionPostNarrative="Excelente. Debes estar orgulloso de tus soldados, Comandante. Mantenerme al dia con mis agentes no es una tarea facil."
+
+[CovertActionNarrative_HuntTemplars_P2_Program X2CovertActionNarrativeTemplate]
+ActionName="Gane su confianza"
+ActionPreNarrative="Movilizar suficientes operarios para atacar a la base de frente y asegurar que ningun sobreviviente tarde demasiado. Tengo una mejor idea y necesitare mas hombres para lograrlo."
+ActionPostNarrative="Con la ayuda de sus soldados, he logrado colocar varios operativos como civiles dentro del complejo Templario. Un paso a la vez."
+
+[CovertActionNarrative_HuntTemplars_P3_Program X2CovertActionNarrativeTemplate]
+ActionName="Aniquilarlos"
+ActionPreNarrative="He dirigido a mis operarios por dentro para intentar establecer una reunion con Geist. Cuando eso ocurra, Comandante, espero que envie lo mejor posible."
+ActionPostNarrative="La trampa esta lista. El cebo esta listo. Todo lo que queda es primavera. Enviare mi mejor esfuerzo, y si haces lo mismo, la victoria esta asegurada."
+
+[CovertActionNarrative_RevealChosenMovements_Program X2CovertActionNarrativeTemplate]
+ActionName="Detras de lineas enemigas"
+ActionPreNarrative="Mi agente a bordo del Vengador me ha informado que los Elegidos han estado cazando para ti en particular, Comandante. Es preocupante, pero no inesperado a la luz de los acontecimientos recientes. Tengo un hombre con informacion sobre <XGParam:StrValue2/!ChosenClass/>la base de operaciones, pero las comunicaciones con el son irregulares y esporadicas. Recomiendo que envies a algunos soldados para que se reunan con el y recuperen esa informacion ."
+ActionPostNarrative="Los datos indican que <XGParam:StrValue1/!ChosenName/> 's' stronghold esta ubicado en <XGParam:StrValue3/!ContinentName/>."
+
+[CovertActionNarrative_RevealChosenStrengths_Program X2CovertActionNarrativeTemplate]
+ActionName="Encontrar la Fortaleza"
+ActionPreNarrative="Ahora que tenemos la ubicacion general, puedo aprovechar todo el poder del programa contra la fortaleza de <XGParam:StrValue2/!ChosenClass/>. Sin embargo, los RECSAT son antiguos y necesitan mantenimiento. Si puede enviar a algunos hombres a una incursion por partes, podemos hacer que esto suceda ."
+ActionPostNarrative="Ahora tenemos una confirmacion por satelite de los transportes de ADVENT que entran y salen de una base encubierta de operaciones ubicada en <XGParam:StrValue3/!ContinentName/>. Comenzaremos a planificar la huelga de inmediato."
+
+[CovertActionNarrative_RevealChosenStronghold_Program X2CovertActionNarrativeTemplate]
+ActionName="En el fuego"
+ActionPreNarrative="Con el fin de habilitar el ataque contra la Fortaleza Elegida, tendremos que resolverlo para infringirlo. Envia a algunos de tus hombres junto con mis propios Operativos para obtener una idea de la base."
+ActionPostNarrative="Hemos determinado el mejor plan de entrada a la fortaleza de <XGParam:StrValue1/!ChosenName/>. Transmitiendo ahora."
+
+[CovertActionNarrative_RemoveDoom_Program X2CovertActionNarrativeTemplate]
+ActionName="Sabotaje"
+ActionPreNarrative="El sabotaje es una de muchas especialidades."
+ActionPostNarrative="Muy facil."
+
+[CovertActionNarrative_BreakthroughTech_Program X2CovertActionNarrativeTemplate]
+ActionName="Avances tecnicos"
+ActionPreNarrative="Me sorprende que ustedes no sepan esto. Permitanme buscar en los archivos antiguos los informes."
+ActionPostNarrative="Gracias, Comandante. Pasar por esos archivos es un viaje agradable por el camino de la memoria. Feliz de hacerlo por usted."
+
+[Reward_RTProgram_FindFaction X2RewardTemplate]
+DisplayName="Unknown"
+RewardDetails="Uncover signal source."
+
+[Reward_RTProgram_FindFarthestFaction X2RewardTemplate]
+DisplayName="Unknown"
+RewardDetails="Uncover signal source."
+
+[ResistanceMode_PsiTraining X2ResistanceModeTemplate]
+DisplayName="Scanning Bonus: Psionic Expertise"
+SummaryText="Program scientists assist with operating the psi-lab while the Avenger is scanning at this location, decreasing the training time of soldiers inside it.\n\nWARNING: Purchasing this ability will overwrite the current Resistance HQ scanning bonus. The Scanning Bonus may only be modified once per month."
+ScanLabel="TRAIN PSI FASTER"
+ScanTooltip="Scanning at this site speeds up the rate at which we can train our psi-operatives."
+
+[RTOneSmallFavor_SPECTRE X2SitRepTemplate]
+FriendlyName="One Small Favor"
+Description="The Program has lent one of their squads to handle this operation."

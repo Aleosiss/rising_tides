@@ -17,43 +17,6 @@ var private bool bMeetsCondition;
 var private bool bMeetsConditionWithSource;
 var private bool bAbilityMeetsCondition;
 
-
-event name CallAbilityMeetsCondition(XComGameState_Ability kAbility, XComGameState_BaseObject kTarget) {
-	local name RetCode;
-	local X2Condition Condition;
-
-	// this is usually called  last; for AbilityShooterConditions, the source is the target
-	CacheConditionInputs(kTarget, kAbility, );
-	bAbilityMeetsCondition = true;
-	RetCode = 'AA_Success';
-
-	// check the conditionals
-	foreach Conditionals(Condition) {
-		RetCode = Condition.AbilityMeetsCondition(kAbility, kTarget);
-		if(RetCode != 'AA_Success' && bConjunction) {
-			break;
-		}
-
-		if(RetCode == 'AA_Success' && !bConjunction) {
-			break;
-		}
-
-	}
-
-	if(RetCode != 'AA_Success') {
-			bAbilityMeetsCondition = false;
-	}
-
-	RetCode = CheckSubConditions();
-
-	// need to clear the cache
-
-	ClearConditionCache();
-
-	return RetCode;
-}
-
-
 event name CallMeetsCondition(XComGameState_BaseObject kTarget) {
 	local name RetCode;
 	local X2Condition Condition;
@@ -66,20 +29,21 @@ event name CallMeetsCondition(XComGameState_BaseObject kTarget) {
 	foreach Conditionals(Condition) {
 		RetCode = Condition.MeetsCondition(kTarget);
 		if(RetCode != 'AA_Success' && bConjunction) {
+			// one condition failed and we need all of them
 			break;
 		}
 
 		if(RetCode == 'AA_Success' && !bConjunction) {
+			// one condition passed and we only needed one
 			break;
 		}
-
 	}
 
 	if(RetCode != 'AA_Success') {
 		bMeetsCondition = false;
 	}
 
-
+	// return 'AA_Success' to continue on to next method CallMeetsConditionWithSource
 	return 'AA_Success';
 }
 
@@ -90,44 +54,79 @@ event name CallMeetsConditionWithSource(XComGameState_BaseObject kTarget, XComGa
 	bMeetsConditionWithSource = true;
 	RetCode = 'AA_Success';
 	CacheConditionInputs(kTarget, , XComGameState_Unit(kSource));
-	// check the conditionals
-	`LOG("Rising Tides: Checking the conditionals with source...");
 	foreach Conditionals(Condition) {
-		`LOG("Checking " @ Condition);
 		RetCode = Condition.MeetsConditionWithSource(kTarget, kSource);
-		`LOG(RetCode);
 		if(RetCode != 'AA_Success' && bConjunction) {
+			// one condition failed and we need all of them
 			break;
 		}
 
 		if(RetCode == 'AA_Success' && !bConjunction) {
+			// one condition passed and we only needed one
 			break;
 		}
-
 	}
 
 	if(RetCode != 'AA_Success') {
 		bMeetsConditionWithSource = false;
 	}
 
-
-	//RetCode = CheckSubConditions();
-
+	// return 'AA_Success' to continue on to next method CallAbilityMeetsCondition
 	return 'AA_Success';
 }
 
-protected function CacheConditionInputs(XComGameState_BaseObject kTarget, optional XComGameState_Ability kAbility, optional XComGameState_Unit kSource) {
-	if(kAbility != none)
-		CachedAbilityState = kAbility;
+event name CallAbilityMeetsCondition(XComGameState_Ability kAbility, XComGameState_BaseObject kTarget) {
+	local name RetCode;
+	local X2Condition Condition;
 
+	// this is usually called last; for AbilityShooterConditions, the source is the target
+	CacheConditionInputs(kTarget, kAbility, );
+	bAbilityMeetsCondition = true;
+	RetCode = 'AA_Success';
+
+	// check the conditionals
+	foreach Conditionals(Condition) {
+		RetCode = Condition.AbilityMeetsCondition(kAbility, kTarget);
+		if(RetCode != 'AA_Success' && bConjunction) {
+			// one condition failed and we need all of them
+			break;
+		}
+
+		if(RetCode == 'AA_Success' && !bConjunction) {
+			// one condition passed and we only needed one
+			break;
+		}
+	}
+
+	if(RetCode != 'AA_Success') {
+			bAbilityMeetsCondition = false;
+	}
+
+	// The real 'meat' of the condition
+	RetCode = CheckSubConditions();
+
+	// need to clear the cached XComGameState_BaseObjects to clean up
+	ClearConditionCache();
+
+	return RetCode;
+}
+
+// the source is always a unit, the target not nescessarily so
+protected function CacheConditionInputs(XComGameState_BaseObject kTarget, optional XComGameState_Ability kAbility, optional XComGameState_Unit kSource) {
+	
 	CachedTargetUnitState = kTarget;
+	
+	if(kAbility != none) {
+		CachedAbilityState = kAbility;
+	}
 
 	if(kSource == none) {
-		if(CachedAbilityState == none)
+		if(CachedAbilityState != none) {
 			CachedSourceUnitState = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(CachedAbilityState.OwnerStateObject.ObjectID));
-	} else
+		}
+	} else {
 		CachedSourceUnitState = kSource;
-
+	}
 }
 
 protected function ClearConditionCache() {
@@ -155,7 +154,7 @@ protected static function name MeetsAllConditions(X2Condition Condition, XComGam
 	if(RetCode != 'AA_Success') {
 		return RetCode;
 	}
-
+ 
 	RetCode = Condition.AbilityMeetsCondition(kAbility, kTarget);
 	if(RetCode != 'AA_Success') {
 		return RetCode;
@@ -170,6 +169,8 @@ protected function name CheckSubConditions() {
 
 	RetCode = 'AA_Success';
 
+	// in order to check the pass conditions we need all of these booleans to be true
+	// check the pass conditions
 	if(bAbilityMeetsCondition && bMeetsCondition && bMeetsConditionWithSource) {
 			foreach PassConditions(Condition) {
 					RetCode = MeetsAllConditions(Condition, CachedAbilityState, CachedTargetUnitState, CachedSourceUnitState);
@@ -197,10 +198,10 @@ protected function name CheckSubConditions() {
 	}
 
 	return RetCode;
-
 }
 
-defaultproperties {
+defaultproperties 
+{
 	bAbilityMeetsCondition = true
 	bMeetsCondition = true
 	bMeetsConditionWithSource = true

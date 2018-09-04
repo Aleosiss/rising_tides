@@ -19,14 +19,10 @@ function RegisterForEvents(XComGameState_Effect EffectGameState)
 
 	// Check when anything spawns.
 	EventMgr.RegisterForEvent(EffectObj, 'OnUnitBeginPlay', RTEffectState.OnUpdateAuraCheck, ELD_OnStateSubmitted, 40);
-
-	// Clean up MobileSquadViewers. Shouldn't actually need this.
-	// TODO: Verify that this is extraneous and remove.
-	//EventMgr.RegisterForEvent(EffectObj, 'PlayerTurnBegun', RTEffectState.CleanupMobileSquadViewers, ELD_OnStateSubmitted, 50);
 }
 
 protected function bool CheckAuraConditions(XComGameState_Unit SourceUnitState, XComGameState_Unit TargetUnitState, XComGameState_Effect SourceAuraEffectGameState, X2AbilityTemplate AuraEffectTemplate) {
-	if(class'Helpers'.static.IsTileInRange(SourceUnitState.TileLocation, TargetUnitState.TileLocation, class'RTAbility_GathererAbilitySet'.default.OTS_RADIUS ** 2, 100)) {
+	if(class'Helpers'.static.IsTileInRange(SourceUnitState.TileLocation, TargetUnitState.TileLocation, class'RTAbility_GathererAbilitySet'.default.OTS_RADIUS_SQ)) {
 		return true;
 	}
 	return false;
@@ -70,10 +66,7 @@ function UpdateBasedOnAuraTarget(XComGameState_Unit SourceUnitState, XComGameSta
 		`RedScreenOnce("The source aura isn't of type RTGameState_Effect! The Visualization may fail!");
 	}
 
-
 	if(CheckAuraConditions(SourceUnitState, NewTargetState, SourceAuraEffectGameState, AbilityTemplate)) {
-
-
 		for (i = 0; i < AbilityTemplate.AbilityMultiTargetEffects.Length; ++i)
 		{
 			// Apply each of the aura's effects to the target
@@ -91,6 +84,7 @@ function UpdateBasedOnAuraTarget(XComGameState_Unit SourceUnitState, XComGameSta
 
 		}
 
+		// Need a custom 'effects modified' buildvisualizationfn to handle both removing and adding effects in a single context
 		XComGameStateContext_ChangeContainer(NewGameState.GetContext()).BuildVisualizationFn = RTSourceAuraEffectGameState.EffectsModifiedBuildVisualizationFn;
 	}
 	else {
@@ -140,9 +134,9 @@ protected function RemoveAuraTargetEffects(XComGameState_Unit SourceUnitState, X
 		}
 	}
 
+	// Remove each of the aura's effects from the target
 	for (i = 0; i < EffectsToRemove.Length; ++i)
 	{
-		// Remove each of the aura's effects from the target
 		EffectsToRemove[i].RemoveEffect(NewGameState, NewGameState);
 	}
 	// Visualization

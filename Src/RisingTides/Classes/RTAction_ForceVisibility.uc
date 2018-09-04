@@ -2,7 +2,9 @@
 
 class RTAction_ForceVisibility extends X2Action;
 
-var EForceVisibilitySetting Visibility;
+var EForceVisibilitySetting ForcedVisible;
+var bool bResetVisibility;
+var protected TTile CurrentTile;
 
 event bool BlocksAbilityActivation() {
 	return false;
@@ -10,13 +12,22 @@ event bool BlocksAbilityActivation() {
 
 simulated state Executing {
 	Begin:
-			Unit.SetForceVisibility(Visibility);
-			Unit.GetPawn().UpdatePawnVisibility();
+			if(bResetVisibility) {
+				Unit.SetForceVisibility(eForceNone);
+				Unit.m_bForceHidden = false;
+				CurrentTile = `XWORLD.GetTileCoordinatesFromPosition(Unit.Location);
+				`TACTICALRULES.VisibilityMgr.ActorVisibilityMgr.VisualizerUpdateVisibility(Unit, CurrentTile);
+				Unit.GetPawn().UpdatePawnVisibility();
+			} else {
+				Unit.SetForceVisibility(ForcedVisible);
+				Unit.GetPawn().UpdatePawnVisibility();
+			}
 
 			CompleteAction();
 }
 
 defaultproperties
 {
-	Visibility = eForceNone;
+	ForcedVisible = eForceNone;
+	bResetVisibility = false;
 }

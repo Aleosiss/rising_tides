@@ -1,0 +1,62 @@
+2.0.2
+- Fix a long-standing bug with Over The Shoulder erronously showing units FOW
+- Increase the range of Over the Shoulder a bit to match the VFX better
+- Fix a bug where OSF did not properly check for a victory
+- Add some compatibility configuration for NPSBD
+- Modify Infiltrator's custom sniper shots to allow for shots against targets affected by OTS
+
+2.0.1
+- Changed effects that refund action points on kill to also refund action points on bleedout
+- Increased the radius of Over the Shoulder to 23 tiles (from 17) 
+- Over the Shoulder now forces a concealment break on units it affects 
+- Moved Over The Shoulder visual effect to foot level 
+- Added Program Shotgun, Assault Rifle, and Sniper Rifle (tier above Beam)
+
+2.0.0
+- Added new Faction: The Program
+    - Added new Strategy Cards:
+        - One Small Favor: once per month, send a Program squad on a mission in place of an XCOM squad. Can't send on story missions. Guaranteed to be the first card unlocked.
+            - Gain influence with the Program every 3 missions.
+            - Program operatives level up after every mission, and cannot be killed or captured.
+        - Just Passing Through: There is a small chance for a Program operative to join XCOM on a non-story mission.
+        - Wideband Psionic Jamming: Reduce the will of enemy units by 20.
+        - Old World Training: Increase the detection modifier of XCom by 20%.
+        - Forty Years of War: Instantly construct Resistance Outposts.
+        - Direct Neural Manipulation: Bonded Soldiers recieve bonus experience if they survive a mission together.
+        - Resistance Sabotage: Other Resistance Factions gain an additional Card Slot.
+    - Added new equipment (only for Program operatives)
+        - Program Assault Rifle (8-10 dmg)
+        - Program Sniper Rifle (10-12 dmg)
+        - Program Shotgun (10-12 dmg)
+        - Program Shadowkeeper (4-6 dmg, no Shadowfall)
+        - Cosmetic Silencer (for those who like the look of the suppressors but don't like recheaters)
+    - Added Encyclopedia entries for the Program
+- Removed Rising Tides classes from the class decks (cannot be gained normally)
+- Removed Extinction Event from Gatherer Ability Tree
+    - Moved Unwilling Conduits up as replacement
+    - Added Psionic Lance to fill Unwilling Conduits' spot
+- Fixed several bugs related to abilities still being able to be cast after death (Psionic Storm, Six Paths of Pain)
+- Swapped the position of Six Paths of Pain and Knowledge of Power on Gatherer Ability Tree
+- Scoped And Dropped now triggers off of kills made by pistols and Kubikuri
+- Added a range limit to Mind Wrack (6 tiles)
+- Fixed several bugs related to how the Meld applies its stats
+- Added a small will recovery to Guardian Angel
+- Guardian Angel now affects the caster
+- Changed effects that refund action points on kill to also refund action points on bleedout
+- Increased the radius of Over the Shoulder to 23 tiles (from 17)
+- Over the Shoulder now forces a concealment break on units it affects
+- Moved Over The Shoulder visual effect to foot level
+
+1.1.2
+
+- enabled WOTC class features such as bonding
+- made nearly every psionic ability interruptible (if you notice one that isn't, post it in the bugs discussion)
+- Sovereign actually works now, because of this.
+- fixed an issue where Feedback wasn't being applied properly
+- possibly some other random tweaks
+
+1.1.1
+
+- removed X2MeleePathingPawn override (should be fully compatible with Gotcha)
+- let Ghosts (Gatherer and Berserker) Headshot The Lost (Infiltrator already does this by default)
+- removed accidentally-included debugging loadouts (this is why they started with endgame armor/weapons)

@@ -1,3 +1,6 @@
+// maybe I shouldn't put all of my debugging code in this class? :thinking:
+// credits to robojumper for everything until the line saying 'Aleosiss code to follow'
+
 class UIDebugStateMachines extends UIScreen;
  
 struct UnitTextMapping
@@ -5,9 +8,9 @@ struct UnitTextMapping
     var name ActorName;
     var UIText Text;
 };
- 
+
 var array<UnitTextMapping> Texts;
- 
+
 static function UIDebugStateMachines GetThisScreen()
 {
     local UIDebugStateMachines Scr;
@@ -20,8 +23,7 @@ static function UIDebugStateMachines GetThisScreen()
     `PRES.Get2DMovie().LoadScreen(Scr);
     return Scr;
 }
- 
- 
+
 event Tick(float fDeltaTime)
 {
     local XGUnit Unit;
@@ -34,7 +36,7 @@ event Tick(float fDeltaTime)
         UpdateFlagForUnit(Unit);
     }
 }
- 
+
 simulated function UpdateFlagForUnit(XGUnit Unit)
 {
     local int i;
@@ -59,7 +61,7 @@ simulated function UpdateFlagForUnit(XGUnit Unit)
         {
             Texts[i].Text.Show();
             Texts[i].Text.SetNormalizedPosition(TextLoc);
-            Texts[i].Text.SetText("<font color='#ffffff'>"$ Unit.Name @ Unit.GetPawn().arrPawnPerkContent[0].GetAbilityName() $ "</font>");
+            Texts[i].Text.SetText("<font color='#ffffff'>"$ GetFlagText(Unit) $ "</font>");
             //Texts[i].Text.SetText(Unit.Name @ Unit.IdleStateMachine.GetStateName());
         }
         else
@@ -69,6 +71,12 @@ simulated function UpdateFlagForUnit(XGUnit Unit)
     }
 }
 
+function string GetFlagText(XGUnit Unit) {
+    return Unit.Name @ Unit.GetPawn().arrPawnPerkContent[0].GetAbilityName();
+}
+
+
+// Aleosiss code to follow
 // Trying to determine if my PerkContents are even managing to make it onto my units!
 simulated static function PrintOutPerkContentsForXComUnits() {
     local XGUnit Unit;
@@ -122,9 +130,6 @@ simulated static function TryForceBuildPerkContentCache() {
 	`CONTENT.BuildPerkPackageCache();
 }
 
-
- 
- 
 defaultproperties
 {
     bIsVisible=false

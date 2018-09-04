@@ -2,7 +2,7 @@
 //  FILE:    X2AbilityTarget_Single_CCS
 //  AUTHOR:  John Lumpkin / Amineri (Pavonis Interactive)
 //  PURPOSE: Custom Single Target class to limit range of CCS reaction fire
-//--------------------------------------------------------------------------------------- 
+//---------------------------------------------------------------------------------------
 
 class X2AbilityTarget_Single_CCS extends X2AbilityTarget_Single config (RisingTides);
 
@@ -14,7 +14,7 @@ simulated function name GetPrimaryTargetOptions(const XComGameState_Ability Abil
 	local XComGameState_Unit	CCS_ShooterUnit, TargetUnit;
 	local int					i;
 	local name					Code;
-		
+
 	Code = super.GetPrimaryTargetOptions(Ability,Targets);
 	CCS_ShooterUnit = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(Ability.OwnerStateObject.ObjectID));
 
@@ -24,12 +24,12 @@ simulated function name GetPrimaryTargetOptions(const XComGameState_Ability Abil
 		if (CCS_ShooterUnit.TileDistanceBetween(TargetUnit) > default.CCS_RANGE)
 		{
 			Targets.Remove(i,1);
-		}								
-	}	
+		}
+	}
 	if ((Code == 'AA_Success') && (Targets.Length < 1))
 	{
 		return 'AA_NoTargets';
-	}	
+	}
 	return code;
 }
 
