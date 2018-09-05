@@ -969,7 +969,7 @@ ActionPostNarrative="We have determined the best plan of entry to <XGParam:StrVa
 
 [CovertActionNarrative_HuntTemplars_P1_Program X2CovertActionNarrativeTemplate]
 ActionName="Find Them"
-ActionPreNarrative="As you might recall, Commander, six days after the Temple Ship crash-landed, I initiated Operation: New World. Unfortunately, there was a lone survivor. Staff Sergeant Lanner was left a mangled wreck, his mind in shambles from my operative's psionic assault, but he managed to limp away during the chaos of the beginning of Operation: Ashes and Temples part three. Only recently have we managed to pinpoint his general location, but we need your manpower to figure out where he's hiding. - Dr. Hadley"
+ActionPreNarrative="As you might recall, Commander, six days after the Temple Ship crash-landed, I initiated Operation: New World. Unfortunately, there was a lone survivor. Staff Sergeant Lanner was left a mangled wreck, his mind in shambles from my operative's psionic assault, but he managed to limp away during the chaos of the beginning of Operation: Ashes and Temples, Act Three. Only recently have we managed to pinpoint his general location, but we need your manpower to figure out where he's hiding. - Dr. Hadley"
 ActionPostNarrative="Excellent. You should be proud of your soldiers, Commander. Keeping up with my operatives is not an easy task. - Dr. Hadley"
 
 [CovertActionNarrative_HuntTemplars_P2_Program X2CovertActionNarrativeTemplate]
@@ -979,8 +979,8 @@ ActionPostNarrative="With the help of your soldiers, I have managed to place sev
 
 [CovertActionNarrative_HuntTemplars_P3_Program X2CovertActionNarrativeTemplate]
 ActionName="Lure Them Out"
-ActionPreNarrative="Geist is extremely paranoid, and revealing a vunerablity remains a challenge. If you have some soldiers to spare, we can use them to conduct a false-flag operation and draw him out. - Dr. Hadley"
-ActionPostNarrative="The trap is set. The bait is ready. All that remains is spring it. I will send my best, and if you do the same, victory is assured. - Dr. Hadley"
+ActionPreNarrative="Lanner--Geist, is extremely paranoid, and revealing a vulnerablity remains a challenge. If you have some soldiers to spare, we can use them to conduct a false-flag operation and draw him out. - Dr. Hadley"
+ActionPostNarrative="The trap is set. The bait is primed. All that remains is spring it. I will send my best, and if you do the same, victory is assured. - Dr. Hadley"
 ;///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ;//---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 ;//---Misc-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------

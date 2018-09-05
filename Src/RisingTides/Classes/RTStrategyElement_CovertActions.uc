@@ -183,3 +183,75 @@ private static function AddFactionToCovertActionNarratives(array<X2DataTemplate>
 		DataTemplates.Length = 0;
 	}
 }
+
+//---------------------------------------------------------------------------------------
+// TEMPLAR QUEST CHAIN P1
+//-------------------------------------------------     --------------------------------------
+static function X2DataTemplate CreateHuntTemplarsP1Template() {
+	local X2CovertActionTemplate Template;
+	`CREATE_X2TEMPLATE(class'X2CovertActionTemplate', Template, 'CovertAction_CreateHuntTemplarsP1Template');
+
+	Template.ChooseLocationFn = ChooseFactionRegion;
+	Template.OverworldMeshPath = "UI_3D.Overwold_Final.CovertAction";
+	Template.bGoldenPath = false;
+
+	Template.bDisplayRequiresAvailable = true;
+
+	Template.Narratives.AddItem('CovertActionNarrative_HuntTemplarsP1_Program');
+
+	Template.Slots.AddItem();
+	Template.Slots.AddItem();
+
+	Template.Risks.AddItem('');
+	Template.Rewards.AddItem('RTReward_HuntTemplarsP1');
+
+	return Template;
+}
+
+//---------------------------------------------------------------------------------------
+// TEMPLAR QUEST CHAIN P2
+//-------------------------------------------------     --------------------------------------
+static function X2DataTemplate CreateHuntTemplarsP2Template() {
+	local X2CovertActionTemplate Template;
+	`CREATE_X2TEMPLATE(class'X2CovertActionTemplate', Template, 'CovertAction_CreateHuntTemplarsP2Template');
+
+	Template.ChooseLocationFn = ChooseFactionRegion;
+	Template.OverworldMeshPath = "UI_3D.Overwold_Final.CovertAction";
+	Template.bGoldenPath = false;
+
+	Template.bDisplayRequiresAvailable = true;
+
+	Template.Narratives.AddItem('CovertActionNarrative_HuntTemplarsP2_Program');
+
+	Template.Slots.AddItem();
+	Template.Slots.AddItem();
+
+	Template.Risks.AddItem('');
+	Template.Rewards.AddItem('RTReward_HuntTemplarsP2');
+
+	return Template;
+}
+
+//---------------------------------------------------------------------------------------
+// TEMPLAR QUEST CHAIN P3
+//-------------------------------------------------     --------------------------------------
+static function X2DataTemplate CreateHuntTemplarsP3Template() {
+	local X2CovertActionTemplate Template;
+	`CREATE_X2TEMPLATE(class'X2CovertActionTemplate', Template, 'CovertAction_CreateHuntTemplarsP3Template');
+
+	Template.ChooseLocationFn = ChooseFactionRegion;
+	Template.OverworldMeshPath = "UI_3D.Overwold_Final.CovertAction";
+	Template.bGoldenPath = false;
+
+	Template.bDisplayRequiresAvailable = true;
+
+	Template.Narratives.AddItem('CovertActionNarrative_HuntTemplarsP3_Program');
+
+	Template.Slots.AddItem();
+	Template.Slots.AddItem();
+
+	Template.Risks.AddItem('');
+	Template.Rewards.AddItem('RTReward_HuntTemplarsP3');
+
+	return Template;
+}
