@@ -356,8 +356,14 @@ exec function RT_GenerateProgramCards() {
 
 	NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("CHEAT: Add Program Faction Cards!");
 	ProgramState = class'RTHelpers'.static.GetNewProgramState(NewGameState);
+	ProgramState.Influence = eFactionInfluence_Influential;
+	`GAMERULES.SubmitGameState(NewGameState);
 
-	for(idx = 0; idx < 7; idx++)
+
+	NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("CHEAT: Add Program Faction Cards!");
+	ProgramState = class'RTHelpers'.static.GetNewProgramState(NewGameState);
+	class'RTHelpers'.static.RTLog("Generating cards...", false, true);
+	for(idx = 0; idx < 20; idx++)
 	{
 		ProgramState.GenerateNewPlayableCard(NewGameState);
 	}

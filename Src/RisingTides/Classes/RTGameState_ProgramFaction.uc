@@ -66,6 +66,7 @@ var bool														bSetupComplete;		// if we should rebuild the operative arr
 var bool																bShouldPerformPostMissionCleanup;	// should cleanup the program's roster after a mission-- set during OSF and JPT missions
 var bool																bTemplarsDestroyed;
 var bool																bDirectNeuralManipulation;
+var bool																bResistanceSabotageActivated;
 var config array<name>											InvalidMissionSources;				// list of mission types ineligible for Program support, usually story missions
 var config array<name>											UnavailableCovertActions;			// list of covert actions that the program cannot carry out
 var config int															iNumberOfFavorsRequiredToIncreaseInfluence;
@@ -949,7 +950,7 @@ function GenerateNewPlayableCard(XComGameState NewGameState)
 		}
 
 		if(NewCardState.GetMyTemplateName() == IteratorCardState.GetMyTemplateName()) {
-			class'RTHelpers'.static.RTLog("Created a duplicate card, returning none!");
+			//class'RTHelpers'.static.RTLog("Created a duplicate card, returning none!");
 			return;
 		}
 	}
@@ -961,7 +962,7 @@ function GenerateNewPlayableCard(XComGameState NewGameState)
 		}
 
 		if(NewCardState.GetMyTemplateName() == IteratorCardState.GetMyTemplateName()) {
-			class'RTHelpers'.static.RTLog("Created a duplicate card, returning none!");
+			//class'RTHelpers'.static.RTLog("Created a duplicate card, returning none!");
 			return;
 		}
 	}
