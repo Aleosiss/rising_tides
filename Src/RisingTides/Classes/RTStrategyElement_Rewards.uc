@@ -77,6 +77,75 @@ static function X2DataTemplate CreateProgramIncreaseInfluenceTemplate()
 	return Template;
 }
 
+static function X2DataTemplate CreateProgramHuntTemplarsP1Reward() {
+	local X2RewardTemplate Template;
+
+	`CREATE_X2Reward_TEMPLATE(Template, '');
+	
+	Template.IsRewardAvailableFn = none; // allows logical augmentation of reward availability. For example, rescue rewards are only available if there are captured soldiers
+	Template.IsRewardNeededFn = none; // allows logical augmentation of reward availability. Used to indicate if the player desperately needs this resource
+	Template.GenerateRewardFn = none;
+	Template.SetRewardFn = none;
+	Template.GiveRewardFn = none;
+	Template.GetRewardStringFn = none;
+	Template.GetRewardPreviewStringFn = none;
+	Template.GetRewardDetailsStringFn = none;
+	Template.GetRewardImageFn = none;
+	Template.SetRewardByTemplateFn = none;
+	Template.GetBlackMarketStringFn = none;
+	Template.GetRewardIconFn = none;
+	Template.CleanUpRewardFn = none;
+	Template.RewardPopupFn = none;
+
+	return Template;
+}
+
+static function X2DataTemplate CreateProgramHuntTemplarsP2Reward() {
+	local X2RewardTemplate Template;
+
+	`CREATE_X2Reward_TEMPLATE(Template, '');
+	
+	Template.IsRewardAvailableFn = none; // allows logical augmentation of reward availability. For example, rescue rewards are only available if there are captured soldiers
+	Template.IsRewardNeededFn = none; // allows logical augmentation of reward availability. Used to indicate if the player desperately needs this resource
+	Template.GenerateRewardFn = none;
+	Template.SetRewardFn = none;
+	Template.GiveRewardFn = none;
+	Template.GetRewardStringFn = none;
+	Template.GetRewardPreviewStringFn = none;
+	Template.GetRewardDetailsStringFn = none;
+	Template.GetRewardImageFn = none;
+	Template.SetRewardByTemplateFn = none;
+	Template.GetBlackMarketStringFn = none;
+	Template.GetRewardIconFn = none;
+	Template.CleanUpRewardFn = none;
+	Template.RewardPopupFn = none;
+
+	return Template;
+}
+
+static function X2DataTemplate CreateProgramHuntTemplarsP3Reward() {
+	local X2RewardTemplate Template;
+
+	`CREATE_X2Reward_TEMPLATE(Template, '');
+	
+	Template.IsRewardAvailableFn = none; // allows logical augmentation of reward availability. For example, rescue rewards are only available if there are captured soldiers
+	Template.IsRewardNeededFn = none; // allows logical augmentation of reward availability. Used to indicate if the player desperately needs this resource
+	Template.GenerateRewardFn = none;
+	Template.SetRewardFn = none;
+	Template.GiveRewardFn = none;
+	Template.GetRewardStringFn = none;
+	Template.GetRewardPreviewStringFn = none;
+	Template.GetRewardDetailsStringFn = none;
+	Template.GetRewardImageFn = none;
+	Template.SetRewardByTemplateFn = none;
+	Template.GetBlackMarketStringFn = none;
+	Template.GetRewardIconFn = none;
+	Template.CleanUpRewardFn = none;
+	Template.RewardPopupFn = none;
+
+	return Template;
+}
+
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 //---Is Available Delegates--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------

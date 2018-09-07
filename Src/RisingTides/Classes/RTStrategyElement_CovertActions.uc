@@ -65,31 +65,6 @@ static function X2DataTemplate CreateFindProgramFarAwayFactionTemplate() {
 	return Template;
 }
 
-private static function CovertActionSlot _CreateDefaultSoldierSlot(name SlotName, optional int iMinRank, optional bool bRandomClass, optional bool bFactionClass) {
-	local CovertActionSlot SoldierSlot;
-
-	SoldierSlot.StaffSlot = SlotName;
-	SoldierSlot.Rewards.AddItem('Reward_StatBoostHP');
-	SoldierSlot.Rewards.AddItem('Reward_StatBoostAim');
-	SoldierSlot.Rewards.AddItem('Reward_StatBoostMobility');
-	SoldierSlot.Rewards.AddItem('Reward_StatBoostDodge');
-	SoldierSlot.Rewards.AddItem('Reward_StatBoostWill');
-	SoldierSlot.Rewards.AddItem('Reward_StatBoostHacking');
-	SoldierSlot.Rewards.AddItem('Reward_RankUp');
-	SoldierSlot.iMinRank = iMinRank;
-	SoldierSlot.bChanceFame = false;
-	SoldierSlot.bRandomClass = bRandomClass;
-	SoldierSlot.bFactionClass = bFactionClass;
-
-	if (SlotName == 'CovertActionRookieStaffSlot')
-	{
-		SoldierSlot.bChanceFame = false;
-	}
-
-	return SoldierSlot;
-}
-
-
 static function AddFactionToGeneratedTemplates() {
 	local array<name> CovertActionNames;
 	local X2StrategyElementTemplateManager Manager;
@@ -203,7 +178,7 @@ static function X2DataTemplate CreateHuntTemplarsP1Template() {
 	Template.Slots.AddItem();
 
 	Template.Risks.AddItem('');
-	Template.Rewards.AddItem('RTReward_HuntTemplarsP1');
+	Template.Rewards.AddItem('RTReward_ProgramHuntTemplarsP1');
 
 	return Template;
 }
@@ -227,7 +202,7 @@ static function X2DataTemplate CreateHuntTemplarsP2Template() {
 	Template.Slots.AddItem();
 
 	Template.Risks.AddItem('');
-	Template.Rewards.AddItem('RTReward_HuntTemplarsP2');
+	Template.Rewards.AddItem('RTReward_ProgramHuntTemplarsP2');
 
 	return Template;
 }
@@ -251,7 +226,70 @@ static function X2DataTemplate CreateHuntTemplarsP3Template() {
 	Template.Slots.AddItem();
 
 	Template.Risks.AddItem('');
-	Template.Rewards.AddItem('RTReward_HuntTemplarsP3');
+	Template.Rewards.AddItem('RTReward_ProgramHuntTemplarsP3');
 
 	return Template;
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//---Slot Constructors--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+private static function CovertActionSlot _CreateDefaultSoldierSlot(name SlotName, optional int iMinRank, optional bool bRandomClass, optional bool bFactionClass) {
+	local CovertActionSlot SoldierSlot;
+
+	SoldierSlot.StaffSlot = SlotName;
+	SoldierSlot.Rewards.AddItem('Reward_StatBoostHP');
+	SoldierSlot.Rewards.AddItem('Reward_StatBoostAim');
+	SoldierSlot.Rewards.AddItem('Reward_StatBoostMobility');
+	SoldierSlot.Rewards.AddItem('Reward_StatBoostDodge');
+	SoldierSlot.Rewards.AddItem('Reward_StatBoostWill');
+	SoldierSlot.Rewards.AddItem('Reward_StatBoostHacking');
+	SoldierSlot.Rewards.AddItem('Reward_RankUp');
+	SoldierSlot.iMinRank = iMinRank;
+	SoldierSlot.bChanceFame = false;
+	SoldierSlot.bRandomClass = bRandomClass;
+	SoldierSlot.bFactionClass = bFactionClass;
+
+	if (SlotName == 'CovertActionRookieStaffSlot')
+	{
+		SoldierSlot.bChanceFame = false;
+	}
+
+	return SoldierSlot;
+}
+
+private static function CovertActionSlot _CreateDefaultStaffSlot(name SlotName) {
+	local CovertActionSlot StaffSlot;
+	
+	// Same as Soldier Slot, but no rewards
+	StaffSlot.StaffSlot = SlotName;
+	StaffSlot.bReduceRisk = false;
+	
+	return StaffSlot;
+}
+
+private static function CovertActionSlot _CreateDefaultOptionalSlot(name SlotName, optional int iMinRank, optional bool bFactionClass) {
+	local CovertActionSlot OptionalSlot;
+
+	OptionalSlot.StaffSlot = SlotName;
+	OptionalSlot.bChanceFame = false;
+	OptionalSlot.bReduceRisk = true;
+	OptionalSlot.iMinRank = iMinRank;
+	OptionalSlot.bFactionClass = bFactionClass;
+
+	return OptionalSlot;
+}
+
+private static function StrategyCostReward _CreateOptionalCostSlot(name ResourceName, int Quantity) {
+	local StrategyCostReward ActionCost;
+	local ArtifactCost Resources;
+
+	Resources.ItemTemplateName = ResourceName;
+	Resources.Quantity = Quantity;
+	ActionCost.Cost.ResourceCosts.AddItem(Resources);
+	ActionCost.Reward = 'Reward_DecreaseRisk';
+	
+	return ActionCost;
 }

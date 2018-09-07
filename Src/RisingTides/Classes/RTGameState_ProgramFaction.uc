@@ -64,12 +64,13 @@ var bool														bSetupComplete;		// if we should rebuild the operative arr
 
 // FACTION VARIABLES
 var bool																bShouldPerformPostMissionCleanup;	// should cleanup the program's roster after a mission-- set during OSF and JPT missions
-var bool																bTemplarsDestroyed;
 var bool																bDirectNeuralManipulation;
 var config array<name>											InvalidMissionSources;				// list of mission types ineligible for Program support, usually story missions
 var config array<name>											UnavailableCovertActions;			// list of covert actions that the program cannot carry out
 var config int															iNumberOfFavorsRequiredToIncreaseInfluence;
 var array<X2DataTemplate>									OperativeTemplates;
+var bool																bTemplarsDestroyed;
+var int																	iTemplarQuestlineStage;
 
 // ONE SMALL FAVOR HANDLING VARIABLES
 var private int															iPreviousMaxSoldiersForMission;		// cache of the number of soldiers on a mission before OSF modfied it
