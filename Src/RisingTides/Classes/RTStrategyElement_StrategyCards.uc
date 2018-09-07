@@ -257,9 +257,16 @@ static function ActivateResistanceSabotage(XComGameState NewGameState, StateObje
 	local XComGameState_ResistanceFaction IteratorFactionState, NewFactionState;
 	local RTGameState_ProgramFaction ProgramState;
 
-	class'RTHelpers'.static.RTLog("Activating Resistance Sabotage!");
+	//class'RTHelpers'.static.RTLog("Activating Resistance Sabotage!");
 	History = `XCOMHISTORY;
-	ProgramState = class'RTHelpers'.static.GetProgramState(NewGameState);
+	ProgramState = class'RTHelpers'.static.GetNewProgramState(NewGameState);
+	if(ProgramState.bResistanceSabotageActivated) {
+		//class'RTHelpers'.static.RTLog("Oops, it's already activated. Aborting.");
+		return;
+	} else {
+		ProgramState.bResistanceSabotageActivated = true;
+	}
+
 	foreach History.IterateByClassType(class'XComGameState_ResistanceFaction', IteratorFactionState) {
 		if(IteratorFactionState.ObjectID == ProgramState.ObjectID) {
 			continue;
@@ -277,9 +284,16 @@ static function DeactivateResistanceSabotage(XComGameState NewGameState, StateOb
 	local StateObjectReference CardRef, EmptyRef; 
 	local bool bFoundEmptySlot;
 
-	class'RTHelpers'.static.RTLog("Deactivating Resistance Sabotage!");
+	//class'RTHelpers'.static.RTLog("Deactivating Resistance Sabotage!");
 	History = `XCOMHISTORY;
-	ProgramState = class'RTHelpers'.static.GetProgramState(NewGameState);
+	ProgramState = class'RTHelpers'.static.GetNewProgramState(NewGameState);
+	if(!ProgramState.bResistanceSabotageActivated) {
+		//class'RTHelpers'.static.RTLog("Wait, it's not activated. Aborting.");
+		return;
+	} else {
+		ProgramState.bResistanceSabotageActivated = false;
+	}
+
 	foreach History.IterateByClassType(class'XComGameState_ResistanceFaction', IteratorFactionState) {
 		if(IteratorFactionState.ObjectID == ProgramState.ObjectID) {
 			continue;
