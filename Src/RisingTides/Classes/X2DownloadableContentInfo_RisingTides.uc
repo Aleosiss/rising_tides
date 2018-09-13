@@ -17,7 +17,7 @@ var config int PatchVer;
 
 defaultproperties
 {
-	bDebuggingEnabled = true;
+	bDebuggingEnabled = false;
 }
 
 /// <summary>
