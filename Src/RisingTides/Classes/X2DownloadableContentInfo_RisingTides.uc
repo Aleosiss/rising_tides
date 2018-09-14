@@ -44,7 +44,7 @@ static event OnPostTemplatesCreated()
 
 	MakePsiAbilitiesInterruptable();
 	AddProgramFactionCovertActions();
-	class'RTItem'.static.AddProgramAttachmentTemplates();
+	AddProgramAttachmentTemplates();
 }
 
 /// <summary>
@@ -127,6 +127,10 @@ static function CallUIFactionPopup(const out DynamicPropertySet PropertySet)
 	}
 }
 
+simulated static funtion AddProgramAttachmentTemplates() {
+	class'RTItem'.static.AddProgramAttachmentTemplates();
+}
+
 simulated static function AddProgramFactionCovertActions() {
 	class'RTStrategyElement_CovertActions'.static.AddFactionToGeneratedTemplates();
 }
@@ -139,7 +143,7 @@ simulated static function MakePsiAbilitiesInterruptable() {
 	local X2AbilityTemplateManager AbilityTemplateMgr;
 	local int i;
 
-
+	class'RTHelpers'.static.RTLog("Patching Psionic Abilities...");
 	for(i = 0; i < class'RTHelpers'.default.PsionicAbilities.Length; ++i) {
 		PsionicTemplateNames.AddItem(class'RTHelpers'.default.PsionicAbilities[i]);
 	}
@@ -164,7 +168,6 @@ simulated static function MakePsiAbilitiesInterruptable() {
 		}
 	}
 }
-
 
 static function bool DebuggingEnabled() {
 	return default.bDebuggingEnabled;
@@ -331,7 +334,6 @@ exec function RT_PrintAppearence(int ObjectID) {
 	`LOG(a.bGhostPawn);
 }
 
-
 exec function RT_ActivateOneSmallFavor() {
 	local RTGameState_ProgramFaction	ProgramState;
 	local XComGameState					NewGameState;
@@ -413,7 +415,6 @@ exec function RT_AddProgramOperativeToXCOMCrew() {
 	if(!bFoundAtLeastOne)
 		`LOG("Rising Tides: Did not find any active operatives!");
 }
-
 
 exec function RT_PrintCrew()
 {
@@ -554,7 +555,6 @@ static function ForceVisibilityUpdatesAll_BuildVisualization(XComGameState Visua
 		FOWAction.ForceUpdate = true;
 	}
 }
-
 
 exec function RT_TestUIPopup() {
 	local string Title; 

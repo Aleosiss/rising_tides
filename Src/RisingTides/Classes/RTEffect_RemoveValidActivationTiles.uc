@@ -3,7 +3,7 @@ class RTEffect_RemoveValidActivationTiles extends X2Effect;
 // the default effect always reset the marked tiles. psi storm requires the opposite of that.
 
 
-var name AbilityToUnmark;		    
+var name AbilityToUnmark;		  
 
 simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffectParameters, XComGameState_BaseObject kNewTargetState, XComGameState NewGameState, XComGameState_Effect NewEffectState)
 {

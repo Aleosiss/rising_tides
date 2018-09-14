@@ -15,9 +15,9 @@ class RTTacticalVisibilityHelpers extends X2TacticalVisibilityHelpers;
 /// Returns an out param, VisibleUnits, containing all the allied units that a given unit can see
 /// </summary>
 simulated static function GetAllVisibleAlliesForUnit(int SourceStateObjectID,
-													  out array<StateObjectReference> VisibleUnits,
-													  optional array<X2Condition> RequiredConditions,
-													  int HistoryIndex = -1)
+													out array<StateObjectReference> VisibleUnits,
+													optional array<X2Condition> RequiredConditions,
+													int HistoryIndex = -1)
 {
 	local int Index;
 	local XComGameStateHistory History;

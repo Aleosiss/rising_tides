@@ -36,16 +36,16 @@ simulated function bool OnEffectTicked(const out EffectAppliedData ApplyEffectPa
 	local array<StateObjectReference>	VisibleUnits;
 
 	EffectTargetUnit = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(ApplyEffectParameters.TargetStateObjectRef.ObjectID));
-	if(!EffectTargetUnit.GetUnitValue('SISCounter', Count))		   // If there somehow is no SISCounter, make one
+	if(!EffectTargetUnit.GetUnitValue('SISCounter', Count))		 // If there somehow is no SISCounter, make one
 		EffectTargetUnit.SetUnitFloatValue('SISCounter', 0, eCleanup_BeginTactical);
 	if(!EffectTargetUnit.IsConcealed())
 	{
 		class'X2TacticalVisibilityHelpers'.static.GetEnemyViewersOfTarget(EffectTargetUnit.ObjectID, VisibleUnits);
-		if(VisibleUnits.Length < 1)								   // Don't tick if enemies have LOS
+		if(VisibleUnits.Length < 1)								 // Don't tick if enemies have LOS
 		{
 			EffectTargetUnit.GetUnitValue('SISCounter', Count);
 			EffectTargetUnit.SetUnitFloatValue('SISCounter', (Count.fValue + 1), eCleanup_BeginTactical);
-			if(Count.fValue > CONCEALMENT_DELAY_TURNS - 1)								   // Four turns of this and we reenter concealment
+			if(Count.fValue > CONCEALMENT_DELAY_TURNS - 1)								 // Four turns of this and we reenter concealment
 			{
 				//OnEffectAdded(ApplyEffectParameters, EffectTargetUnit, NewGameState, kNewEffectState);
 				`XEVENTMGR.TriggerEvent('EffectEnterUnitConcealment', EffectTargetUnit, EffectTargetUnit, NewGameState);

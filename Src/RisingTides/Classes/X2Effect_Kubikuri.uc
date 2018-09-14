@@ -21,7 +21,7 @@ function int GetAttackingDamageModifier(XComGameState_Effect EffectState, XComGa
 
 	if (AbilityState.GetMyTemplateName() == 'RTKubikuri')
 	{
-	    if(AppliedData.AbilityResultContext.HitResult == eHit_Crit)
+	  if(AppliedData.AbilityResultContext.HitResult == eHit_Crit)
 		{
 			SourceWeapon = AbilityState.GetSourceWeapon();
 			if(SourceWeapon != none) 

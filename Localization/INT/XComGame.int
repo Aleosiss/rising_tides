@@ -762,7 +762,7 @@ LocLongDescription="Pull a humanoid unit to an adjacent tile psionically."
 LocHelpText="Pull a humanoid unit close."
 LocFlyOverText="Psionic Lash"
 LocPromotionPopupText="<Bullet> <Ability:SelfCooldown/> turn cooldown.<br/><Bullet/> Both hostile and friendly units can be pulled.<br/>"
-												  `
+												`
 [RTEnterStealth X2AbilityTemplate]
 LocFriendlyName="Enter Stealth"
 LocLongDescription="Cloak, becoming invisible to the enemy for a short duration."
