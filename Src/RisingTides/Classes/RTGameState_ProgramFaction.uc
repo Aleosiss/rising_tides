@@ -69,6 +69,7 @@ var bool																bDirectNeuralManipulation;
 var bool																bResistanceSabotageActivated;
 var config array<name>											InvalidMissionSources;				// list of mission types ineligible for Program support, usually story missions
 var config array<name>											UnavailableCovertActions;			// list of covert actions that the program cannot carry out
+var config array<name>											ExcludedCovertActions;				// list of golden path covert actions the program cannot carry out (yet)
 var config int															iNumberOfFavorsRequiredToIncreaseInfluence;
 var array<X2DataTemplate>									OperativeTemplates;
 
@@ -887,8 +888,8 @@ function CreateGoldenPathActions(XComGameState NewGameState)
 		{
 			ActionTemplate = X2CovertActionTemplate(DataTemplate);
 
-			if(ActionTemplate.DataName == 'CovertAction_FindFaction' || ActionTemplate.DataName == 'CovertAction_FindFarthestFaction')
-				continue; //actively skip this one
+			if(default.ExcludedCovertActions.Find(ActionTemplate.DataName) != INDEX_NONE)
+				continue;
 
 			if (ActionTemplate != none && ActionTemplate.bGoldenPath) //we do this so we follow the requirements of Spectres' med to high requirement
 			{

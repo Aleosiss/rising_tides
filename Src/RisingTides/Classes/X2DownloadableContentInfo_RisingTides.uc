@@ -10,15 +10,10 @@
 
 class X2DownloadableContentInfo_RisingTides extends X2DownloadableContentInfo config(RisingTides);
 
-var bool bDebuggingEnabled;
+var config bool bDebuggingEnabled;
 var config int MajorVer;
 var config int MinorVer;
 var config int PatchVer;
-
-defaultproperties
-{
-	bDebuggingEnabled = false;
-}
 
 /// <summary>
 /// This method is run if the player loads a saved game that was created prior to this DLC / Mod being installed, and allows the
