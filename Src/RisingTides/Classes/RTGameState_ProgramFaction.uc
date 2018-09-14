@@ -68,9 +68,9 @@ var bool																bShouldPerformPostMissionCleanup;	// should cleanup the 
 var bool																bTemplarsDestroyed;
 var bool																bDirectNeuralManipulation;
 var bool																bResistanceSabotageActivated;
-var config array<name>											InvalidMissionSources;				// list of mission types ineligible for Program support, usually story missions
-var config array<name>											UnavailableCovertActions;			// list of covert actions that the program cannot carry out
-var config array<name>											ExcludedCovertActions;				// list of golden path covert actions the program cannot carry out (yet)
+var config array<name>													InvalidMissionSources;				// list of mission types ineligible for Program support, usually story missions
+var config array<name>													UnavailableCovertActions;			// list of covert actions that the program cannot carry out
+var config array<name>													ExcludedCovertActions;				// list of golden path covert actions the program cannot carry out (yet)
 var config int															iNumberOfFavorsRequiredToIncreaseInfluence;
 var array<X2DataTemplate>												OperativeTemplates;
 
@@ -147,9 +147,9 @@ function RTGameState_Unit CreateRTOperative(name GhostTemplateName, XComGameStat
 	WeaponState = XComGameState_Item(StartState.ModifyStateObject(class'XComGameState_Item', WeaponState.ObjectID));
 	ApplyWeaponUpgrades(GhostTemplateName, WeaponState);
 
-	class'RTHelpers'.static.RTLog( "Creating Program Operative " $ UnitState.GetName(eNameType_Nick) $ 
-							", with ObjectID " $ UnitState.GetReference().ObjectID $
-							", and CharacterTemplateName " $ UnitState.GetMyTemplateName()
+	class'RTHelpers'.static.RTLog(	"Creating Program Operative " $ UnitState.GetName(eNameType_Nick) $ 
+									", with ObjectID " $ UnitState.GetReference().ObjectID $
+									", and CharacterTemplateName " $ UnitState.GetMyTemplateName()
 						);
 
 	return UnitState;
@@ -616,10 +616,8 @@ protected function AddDNMExperience(XComGameState NewGameState) {
 				// don't need to keep iterating since bonds are 1-to-1
 				break;
 			}
-
 		}
 	}
-
 }
 
 
