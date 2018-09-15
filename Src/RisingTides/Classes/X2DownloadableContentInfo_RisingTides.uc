@@ -127,7 +127,7 @@ static function CallUIFactionPopup(const out DynamicPropertySet PropertySet)
 	}
 }
 
-simulated static funtion AddProgramAttachmentTemplates() {
+simulated static function AddProgramAttachmentTemplates() {
 	class'RTItem'.static.AddProgramAttachmentTemplates();
 }
 
@@ -183,10 +183,6 @@ exec function RT_PrintResistanceFactionNames() {
 	local XComGameStateHistory 					History;
 	local XComGameState_ResistanceFaction 		Faction;
 	local object 								obj;
-
-	if(!DebuggingEnabled()) {
-		return;
-	}
 
 	History = `XCOMHISTORY;
 

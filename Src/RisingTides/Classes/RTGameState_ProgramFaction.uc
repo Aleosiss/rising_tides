@@ -70,13 +70,13 @@ var bool																bDirectNeuralManipulation;
 var bool																bResistanceSabotageActivated;
 var config array<name>													InvalidMissionSources;				// list of mission types ineligible for Program support, usually story missions
 var config array<name>													UnavailableCovertActions;			// list of covert actions that the program cannot carry out
-var config array<name>													ExcludedCovertActions;				// list of golden path covert actions the program cannot carry out (yet)
+var config array<name>													ExcludedGoldenPathCovertActions;				// list of golden path covert actions the program cannot carry out (yet)
 var config int															iNumberOfFavorsRequiredToIncreaseInfluence;
 var array<X2DataTemplate>												OperativeTemplates;
 
 // ONE SMALL FAVOR HANDLING VARIABLES
 var private int															iPreviousMaxSoldiersForMission;		// cache of the number of soldiers on a mission before OSF modfied it
-var private StateObjectReference							S			electedMissionRef;					// cache of the mission one small favor is going to go against
+var private StateObjectReference										SelectedMissionRef;					// cache of the mission one small favor is going to go against
 var bool																bShouldResetOSFMonthly;
 var bool																bOneSmallFavorAvailable;			// can send squad on a mission, replacing XCOM
 var bool																bOneSmallFavorActivated;			// actively sending a squad on the next mission
@@ -886,7 +886,7 @@ function CreateGoldenPathActions(XComGameState NewGameState)
 		{
 			ActionTemplate = X2CovertActionTemplate(DataTemplate);
 
-			if(default.ExcludedCovertActions.Find(ActionTemplate.DataName) != INDEX_NONE)
+			if(default.ExcludedGoldenPathCovertActions.Find(ActionTemplate.DataName) != INDEX_NONE)
 				continue;
 
 			if (ActionTemplate != none && ActionTemplate.bGoldenPath) //we do this so we follow the requirements of Spectres' med to high requirement
