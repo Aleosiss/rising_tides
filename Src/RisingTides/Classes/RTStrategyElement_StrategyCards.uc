@@ -185,13 +185,26 @@ static function X2DataTemplate RTCreateFortyYearsOfWar()
 
 static function ActivateFortyYearsOfWar(XComGameState NewGameState, StateObjectReference InRef, optional bool bReactivate = false) {
 	local RTGameState_ProgramFaction Program;
+	local XComGameState_WorldRegion RegionState;
 	local Object Obj;
 
 	Program = class'RTHelpers'.static.GetNewProgramState(NewGameState);
 	Obj = Program;
 
 	class'RTHelpers'.static.RTLog("Activating Forty Years of War!");
-	`XEVENTMGR.RegisterForEvent(Obj, 'AvengerLandedScanRegion', Program.FortyYearsOfWarEventListener, ELD_OnStateSubmitted);
+	`XEVENTMGR.RegisterForEvent(Obj, 'RegionOutpostBuildStart', Program.FortyYearsOfWarEventListener, ELD_Immediate);
+
+	// Build outposts in any regions which are currently being scanned
+	foreach `XCOMHISTORY.IterateByClassType(class'XComGameState_WorldRegion', RegionState)
+	{
+		if (RegionState.bCanScanForOutpost)
+		{
+			RegionState = XComGameState_WorldRegion(NewGameState.ModifyStateObject(class'XComGameState_WorldRegion', RegionState.ObjectID));
+			RegionState.SetResistanceLevel(NewGameState, eResLevel_Outpost);
+			RegionState.bResLevelPopup = true;
+			RegionState.bCanScanForOutpost = false;
+		}
+	}
 }
 
 static function DeactivateFortyYearsOfWar(XComGameState NewGameState, StateObjectReference InRef) {
@@ -202,6 +215,7 @@ static function DeactivateFortyYearsOfWar(XComGameState NewGameState, StateObjec
 	Obj = Program;
 	class'RTHelpers'.static.RTLog("Deactivating Forty Years of War!");
 	`XEVENTMGR.UnRegisterFromEvent(Obj, 'AvengerLandedScanRegion');
+	`XEVENTMGR.UnRegisterFromEvent(Obj, 'RegionOutpostBuildStart');
 }
 
 static function X2DataTemplate RTCreateDirectNeuralManipulation()

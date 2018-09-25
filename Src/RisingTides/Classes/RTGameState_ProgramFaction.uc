@@ -1074,33 +1074,31 @@ function TryIncreaseInfluence() {
 // can pull an XComGameState_ScanningSite from XComHQ.CurrentLocation attached to the NewGameState
 // check to see if the resistance is building an outpost
 // set ScanHoursRemaining, and TotalScanHours to 1
+
+// List for Override Event, recieves a LWTuple
+// Event Data is the Tuple, the Event Source is the RegionState
+// Tuple should have one bool, set it to true
 static function EventListenerReturn FortyYearsOfWarEventListener(Object EventData, Object EventSource, XComGameState GameState, Name EventID, Object CallbackData) {
 	local XComGameState NewGameState;
 	local XComGameState_WorldRegion RegionState;
 	local XComGameState_HeadquartersXCom XComHQ;
+	local XComLWTuple Tuple;
 
 	class'RTHelpers'.static.RTLog("Forty Years of War Triggered!");
-	foreach GameState.IterateByClassType(class'XComGameState_HeadquartersXCom', XComHQ) {
-		if(XComHQ != none) {
-			break;
-		}
-	}
-
-	RegionState = XComGameState_WorldRegion(`XCOMHISTORY.GetGameStateForObjectID(XComHQ.CurrentLocation.ObjectID));
-	if(RegionState == none) {
-		class'RTHelpers'.static.RTLog("FortyYearsOfWarEventListener did not recieve a region!", true);
+	Tuple = XComLWTuple(EventData);
+	if(Tuple == none) {
+		class'RTHelpers'.static.RTLog("FYOW did not recieve a LWTuple, ending...", true);
+		class'RTHelpers'.static.RTLog("" $ EventData.class);
 		return ELR_NoInterrupt;
 	}
 
-	if(!RegionState.bCanScanForOutpost) {
-		class'RTHelpers'.static.RTLog("Can't modify outpost build time, since we aren't scanning for one!");
+	if(Tuple.Id != 'RegionOutpostBuildStart') {
+		class'RTHelpers'.static.RTLog("FYOW did not receive the correct Tuple, ending...", true);
 		return ELR_NoInterrupt;
 	}
 
-	NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("FortyYearsOfWar modifying outpost build time!");
-	RegionState = XComGameState_WorldRegion(NewGameState.ModifyStateObject(class'XComGameState_WorldRegion', RegionState.ObjectID));
-	RegionState.ModifyRemainingScanTime(0.0001);
-	`GAMERULES.SubmitGameState(NewGameState);
+	Tuple.Data[0].b = true;
+
 	class'RTHelpers'.static.RTLog("Forty Years of War successfully executed!");
 	return ELR_NoInterrupt;
 }
@@ -1126,7 +1124,7 @@ static function InitFaction(optional XComGameState StartState) {
 		NewGameState = StartState;
 	}
 
-	if(ResHQ.GetFactionByTemplateName('Faction_Program') == none) {  //no faction, add it ourselves 
+	if(ResHQ.GetFactionByTemplateName('Faction_Program') == none) { // no faction, add it ourselves 
 		ResHQ = XComGameState_HeadquartersResistance(NewGameState.ModifyStateObject(class'XComGameState_HeadquartersResistance', ResHQ.ObjectID)); 
 		DataTemplate = StratMgr.FindStrategyElementTemplate('Faction_Program');
 		if(DataTemplate != none)
