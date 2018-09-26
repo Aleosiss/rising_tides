@@ -69,6 +69,7 @@ var bool																bDirectNeuralManipulation;
 var bool																bResistanceSabotageActivated;
 var config array<name>													InvalidMissionSources;				// list of mission types ineligible for Program support, usually story missions
 var config array<name>													UnavailableCovertActions;			// list of covert actions that the program cannot carry out
+var config array<name>													ExcludedGoldenPathCovertActions;				// list of golden path covert actions the program cannot carry out (yet)
 var config int															iNumberOfFavorsRequiredToIncreaseInfluence;
 var array<X2DataTemplate>												OperativeTemplates;
 var bool																bTemplarsDestroyed;
@@ -147,9 +148,9 @@ function RTGameState_Unit CreateRTOperative(name GhostTemplateName, XComGameStat
 	WeaponState = XComGameState_Item(StartState.ModifyStateObject(class'XComGameState_Item', WeaponState.ObjectID));
 	ApplyWeaponUpgrades(GhostTemplateName, WeaponState);
 
-	class'RTHelpers'.static.RTLog( "Creating Program Operative " $ UnitState.GetName(eNameType_Nick) $ 
-							", with ObjectID " $ UnitState.GetReference().ObjectID $
-							", and CharacterTemplateName " $ UnitState.GetMyTemplateName()
+	class'RTHelpers'.static.RTLog(	"Creating Program Operative " $ UnitState.GetName(eNameType_Nick) $ 
+									", with ObjectID " $ UnitState.GetReference().ObjectID $
+									", and CharacterTemplateName " $ UnitState.GetMyTemplateName()
 						);
 
 	return UnitState;
@@ -616,10 +617,8 @@ protected function AddDNMExperience(XComGameState NewGameState) {
 				// don't need to keep iterating since bonds are 1-to-1
 				break;
 			}
-
 		}
 	}
-
 }
 
 
@@ -888,8 +887,8 @@ function CreateGoldenPathActions(XComGameState NewGameState)
 		{
 			ActionTemplate = X2CovertActionTemplate(DataTemplate);
 
-			if(ActionTemplate.DataName == 'CovertAction_FindFaction' || ActionTemplate.DataName == 'CovertAction_FindFarthestFaction')
-				continue; //actively skip this one
+			if(default.ExcludedGoldenPathCovertActions.Find(ActionTemplate.DataName) != INDEX_NONE)
+				continue;
 
 			if (ActionTemplate != none && ActionTemplate.bGoldenPath) //we do this so we follow the requirements of Spectres' med to high requirement
 			{
@@ -951,7 +950,7 @@ function GenerateNewPlayableCard(XComGameState NewGameState)
 		}
 
 		if(NewCardState.GetMyTemplateName() == IteratorCardState.GetMyTemplateName()) {
-			class'RTHelpers'.static.RTLog("Created a duplicate card, returning none!");
+			//class'RTHelpers'.static.RTLog("Created a duplicate card, returning none!");
 			return;
 		}
 	}
@@ -963,7 +962,7 @@ function GenerateNewPlayableCard(XComGameState NewGameState)
 		}
 
 		if(NewCardState.GetMyTemplateName() == IteratorCardState.GetMyTemplateName()) {
-			class'RTHelpers'.static.RTLog("Created a duplicate card, returning none!");
+			//class'RTHelpers'.static.RTLog("Created a duplicate card, returning none!");
 			return;
 		}
 	}
@@ -1076,33 +1075,31 @@ function TryIncreaseInfluence() {
 // can pull an XComGameState_ScanningSite from XComHQ.CurrentLocation attached to the NewGameState
 // check to see if the resistance is building an outpost
 // set ScanHoursRemaining, and TotalScanHours to 1
+
+// List for Override Event, recieves a LWTuple
+// Event Data is the Tuple, the Event Source is the RegionState
+// Tuple should have one bool, set it to true
 static function EventListenerReturn FortyYearsOfWarEventListener(Object EventData, Object EventSource, XComGameState GameState, Name EventID, Object CallbackData) {
 	local XComGameState NewGameState;
 	local XComGameState_WorldRegion RegionState;
 	local XComGameState_HeadquartersXCom XComHQ;
+	local XComLWTuple Tuple;
 
 	class'RTHelpers'.static.RTLog("Forty Years of War Triggered!");
-	foreach GameState.IterateByClassType(class'XComGameState_HeadquartersXCom', XComHQ) {
-		if(XComHQ != none) {
-			break;
-		}
-	}
-
-	RegionState = XComGameState_WorldRegion(`XCOMHISTORY.GetGameStateForObjectID(XComHQ.CurrentLocation.ObjectID));
-	if(RegionState == none) {
-		class'RTHelpers'.static.RTLog("FortyYearsOfWarEventListener did not recieve a region!", true);
+	Tuple = XComLWTuple(EventData);
+	if(Tuple == none) {
+		class'RTHelpers'.static.RTLog("FYOW did not recieve a LWTuple, ending...", true);
+		class'RTHelpers'.static.RTLog("" $ EventData.class);
 		return ELR_NoInterrupt;
 	}
 
-	if(!RegionState.bCanScanForOutpost) {
-		class'RTHelpers'.static.RTLog("Can't modify outpost build time, since we aren't scanning for one!");
+	if(Tuple.Id != 'RegionOutpostBuildStart') {
+		class'RTHelpers'.static.RTLog("FYOW did not receive the correct Tuple, ending...", true);
 		return ELR_NoInterrupt;
 	}
 
-	NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("FortyYearsOfWar modifying outpost build time!");
-	RegionState = XComGameState_WorldRegion(NewGameState.ModifyStateObject(class'XComGameState_WorldRegion', RegionState.ObjectID));
-	RegionState.ModifyRemainingScanTime(0.0001);
-	`GAMERULES.SubmitGameState(NewGameState);
+	Tuple.Data[0].b = true;
+
 	class'RTHelpers'.static.RTLog("Forty Years of War successfully executed!");
 	return ELR_NoInterrupt;
 }
@@ -1128,7 +1125,7 @@ static function InitFaction(optional XComGameState StartState) {
 		NewGameState = StartState;
 	}
 
-	if(ResHQ.GetFactionByTemplateName('Faction_Program') == none) {  //no faction, add it ourselves 
+	if(ResHQ.GetFactionByTemplateName('Faction_Program') == none) { // no faction, add it ourselves 
 		ResHQ = XComGameState_HeadquartersResistance(NewGameState.ModifyStateObject(class'XComGameState_HeadquartersResistance', ResHQ.ObjectID)); 
 		DataTemplate = StratMgr.FindStrategyElementTemplate('Faction_Program');
 		if(DataTemplate != none)

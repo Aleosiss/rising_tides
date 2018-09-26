@@ -75,12 +75,8 @@ static function JustPassingThroughModifyTacStartState(XComGameState StartState) 
 	Program.bShouldPerformPostMissionCleanup = true;
 	SoldierObjRef = Program.Master[`SYNC_RAND_STATIC(Program.Master.Length)];
 	
-	if(!class'RTHelpers'.static.DebuggingEnabled()) {
-		if(default.JustPassingThroughChance * Program.InfluenceScore < `SYNC_RAND_STATIC(100)) //TODO: Refactor to include an Operative-based modifer (location + personality)
-			return;
-	} else {
-		class'RTHelpers'.static.RTLog("Activating Just Passing Through via Debug Override!");
-	}
+	if(default.JustPassingThroughChance * (int(Program.Influence) + 1) < `SYNC_RAND_STATIC(100) /*|| true*/ ) //TODO: Refactor to include an Operative-based modifer (location + personality)
+		return;
 
 	foreach StartState.IterateByClassType( class'XComGameState_HeadquartersXCom', XComHQ )
 		break;
@@ -189,13 +185,26 @@ static function X2DataTemplate RTCreateFortyYearsOfWar()
 
 static function ActivateFortyYearsOfWar(XComGameState NewGameState, StateObjectReference InRef, optional bool bReactivate = false) {
 	local RTGameState_ProgramFaction Program;
+	local XComGameState_WorldRegion RegionState;
 	local Object Obj;
 
 	Program = class'RTHelpers'.static.GetNewProgramState(NewGameState);
 	Obj = Program;
 
 	class'RTHelpers'.static.RTLog("Activating Forty Years of War!");
-	`XEVENTMGR.RegisterForEvent(Obj, 'AvengerLandedScanRegion', Program.FortyYearsOfWarEventListener, ELD_OnStateSubmitted);
+	`XEVENTMGR.RegisterForEvent(Obj, 'RegionOutpostBuildStart', Program.FortyYearsOfWarEventListener, ELD_Immediate);
+
+	// Build outposts in any regions which are currently being scanned
+	foreach `XCOMHISTORY.IterateByClassType(class'XComGameState_WorldRegion', RegionState)
+	{
+		if (RegionState.bCanScanForOutpost)
+		{
+			RegionState = XComGameState_WorldRegion(NewGameState.ModifyStateObject(class'XComGameState_WorldRegion', RegionState.ObjectID));
+			RegionState.SetResistanceLevel(NewGameState, eResLevel_Outpost);
+			RegionState.bResLevelPopup = true;
+			RegionState.bCanScanForOutpost = false;
+		}
+	}
 }
 
 static function DeactivateFortyYearsOfWar(XComGameState NewGameState, StateObjectReference InRef) {
@@ -206,6 +215,7 @@ static function DeactivateFortyYearsOfWar(XComGameState NewGameState, StateObjec
 	Obj = Program;
 	class'RTHelpers'.static.RTLog("Deactivating Forty Years of War!");
 	`XEVENTMGR.UnRegisterFromEvent(Obj, 'AvengerLandedScanRegion');
+	`XEVENTMGR.UnRegisterFromEvent(Obj, 'RegionOutpostBuildStart');
 }
 
 static function X2DataTemplate RTCreateDirectNeuralManipulation()
@@ -257,9 +267,16 @@ static function ActivateResistanceSabotage(XComGameState NewGameState, StateObje
 	local XComGameState_ResistanceFaction IteratorFactionState, NewFactionState;
 	local RTGameState_ProgramFaction ProgramState;
 
-	class'RTHelpers'.static.RTLog("Activating Resistance Sabotage!");
+	//class'RTHelpers'.static.RTLog("Activating Resistance Sabotage!");
 	History = `XCOMHISTORY;
-	ProgramState = class'RTHelpers'.static.GetProgramState(NewGameState);
+	ProgramState = class'RTHelpers'.static.GetNewProgramState(NewGameState);
+	if(ProgramState.bResistanceSabotageActivated) {
+		//class'RTHelpers'.static.RTLog("Oops, it's already activated. Aborting.");
+		return;
+	} else {
+		ProgramState.bResistanceSabotageActivated = true;
+	}
+
 	foreach History.IterateByClassType(class'XComGameState_ResistanceFaction', IteratorFactionState) {
 		if(IteratorFactionState.ObjectID == ProgramState.ObjectID) {
 			continue;
@@ -277,9 +294,16 @@ static function DeactivateResistanceSabotage(XComGameState NewGameState, StateOb
 	local StateObjectReference CardRef, EmptyRef; 
 	local bool bFoundEmptySlot;
 
-	class'RTHelpers'.static.RTLog("Deactivating Resistance Sabotage!");
+	//class'RTHelpers'.static.RTLog("Deactivating Resistance Sabotage!");
 	History = `XCOMHISTORY;
-	ProgramState = class'RTHelpers'.static.GetProgramState(NewGameState);
+	ProgramState = class'RTHelpers'.static.GetNewProgramState(NewGameState);
+	if(!ProgramState.bResistanceSabotageActivated) {
+		//class'RTHelpers'.static.RTLog("Wait, it's not activated. Aborting.");
+		return;
+	} else {
+		ProgramState.bResistanceSabotageActivated = false;
+	}
+
 	foreach History.IterateByClassType(class'XComGameState_ResistanceFaction', IteratorFactionState) {
 		if(IteratorFactionState.ObjectID == ProgramState.ObjectID) {
 			continue;

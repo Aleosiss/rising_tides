@@ -42,5 +42,6 @@ settings\.json
 *.code-workspace
 
 tmp/
+Src/XComGame/*
 
 PublishedFileId\.ID

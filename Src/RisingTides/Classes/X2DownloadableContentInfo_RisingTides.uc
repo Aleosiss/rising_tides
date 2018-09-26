@@ -10,15 +10,10 @@
 
 class X2DownloadableContentInfo_RisingTides extends X2DownloadableContentInfo config(RisingTides);
 
-var bool bDebuggingEnabled;
+var config bool bDebuggingEnabled;
 var config int MajorVer;
 var config int MinorVer;
 var config int PatchVer;
-
-defaultproperties
-{
-	bDebuggingEnabled = true;
-}
 
 /// <summary>
 /// This method is run if the player loads a saved game that was created prior to this DLC / Mod being installed, and allows the
@@ -132,7 +127,7 @@ static function CallUIFactionPopup(const out DynamicPropertySet PropertySet)
 	}
 }
 
-simulated static funtion AddProgramAttachmentTemplates() {
+simulated static function AddProgramAttachmentTemplates() {
 	class'RTItem'.static.AddProgramAttachmentTemplates();
 }
 
@@ -189,16 +184,12 @@ exec function RT_PrintResistanceFactionNames() {
 	local XComGameState_ResistanceFaction 		Faction;
 	local object 								obj;
 
-	if(!DebuggingEnabled()) {
-		return;
-	}
-
 	History = `XCOMHISTORY;
 
 	class'RTHelpers'.static.RTLog("printing faction names...", false);
 	foreach History.IterateByClassType(class'XComGameState_ResistanceFaction', Faction) {
 		if(Faction != none) {
-			`LOG(Faction.GetMyTemplateName());
+			class'RTHelpers'.static.RTLog("" $ Faction.GetMyTemplateName());
 		}
 	}
 }
@@ -358,8 +349,14 @@ exec function RT_GenerateProgramCards() {
 
 	NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("CHEAT: Add Program Faction Cards!");
 	ProgramState = class'RTHelpers'.static.GetNewProgramState(NewGameState);
+	ProgramState.Influence = eFactionInfluence_Influential;
+	`GAMERULES.SubmitGameState(NewGameState);
 
-	for(idx = 0; idx < 7; idx++)
+
+	NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("CHEAT: Add Program Faction Cards!");
+	ProgramState = class'RTHelpers'.static.GetNewProgramState(NewGameState);
+	class'RTHelpers'.static.RTLog("Generating cards...", false, true);
+	for(idx = 0; idx < 20; idx++)
 	{
 		ProgramState.GenerateNewPlayableCard(NewGameState);
 	}
@@ -427,7 +424,7 @@ exec function RT_PrintCrew()
 	
 	XComHQ = XComGameState_HeadquartersXCom(History.GetSingleGameStateObjectForClass(class'XComGameState_HeadquartersXCom'));
 
-	`LOG("Logging XCOM Crew...");
+	class'RTHelpers'.static.RTLog("Logging XCOM Crew...");
 	CrewString = "\nXCom Crew";
 
 	for(idx = 0; idx < XComHQ.Crew.Length; idx++)
@@ -440,7 +437,7 @@ exec function RT_PrintCrew()
 		}
 	}
 
-	`LOG(CrewString);
+	class'RTHelpers'.static.RTLog(CrewString);
 }
 
 // Courtesy of bountygiver
@@ -609,7 +606,107 @@ exec function RT_ListAllSquadViewers(optional bool bDetailedInfo = false) {
 
 exec function RT_ClearLog() {
 	local int i;
-	for(i = 0; i<50; i++) {
+	for(i = 0; i<100; i++) {
 		class'RTHelpers'.static.RTLog(" ", false, true);
+	}
+}
+
+exec function RT_GetTeamStatusOfClosestUnitToCursor() {
+	local XComGameState_Unit UnitState;
+	local ETeam TeamFlag;
+	local XComTacticalCheatManager CheatsManager;
+	local XComGameState_Player PlayerState;
+
+	CheatsManager = `CHEATMGR;
+
+	UnitState = CheatsManager.GetClosestUnitToCursor();
+	PlayerState = XComGameState_Player(`XCOMHISTORY.GetGameStateForObjectID(UnitState.GetAssociatedPlayerID()));
+	TeamFlag = PlayerState.TeamFlag;
+	if( UnitState.IsMindControlled() ) {
+		class'RTHelpers'.static.RTLog("Unit is mind controlled!",,true);
+		TeamFlag = UnitState.GetPreviousTeam();
+	}
+
+	class'RTHelpers'.static.RTLog(UnitState.GetFullName(),,true);
+	class'RTHelpers'.static.RTLog("TeamFlag: " $ TeamFlag,,true);
+}
+
+// Based on code from "Configurable Mission Timers by wghost"
+exec function RT_DebugKismetVariables() {
+	local XComGameState_Unit UnitState;
+	local ETeam TeamFlag;
+	local XComTacticalCheatManager CheatsManager;
+	local XComGameState_Player PlayerState;
+	local WorldInfo WorldInfo;
+	local Sequence MainSequence;
+	local array<SequenceObject> SeqObjs, LinkedObjs;
+	local int i, j;
+	local SeqVar_Int TimerVariable;
+	local SeqVar_Bool TimerEngagedVariable;
+	local GeneratedMissionData GeneratedMission;
+	local XComGameState_BattleData BattleData;
+	local string objectiveName;
+	local name EmptyName;
+	local array<StateObjectReference> GameStates;
+
+	CheatsManager = `CHEATMGR;
+
+	WorldInfo = `XWORLDINFO;
+	WorldInfo.MyKismetVariableMgr.RebuildVariableMap();
+	MainSequence = WorldInfo.GetGameSequence();
+	BattleData = XComGameState_BattleData(`XCOMHISTORY.GetSingleGameStateObjectForClass(class'XComGameState_BattleData'));
+	GeneratedMission = class'UIUtilities_Strategy'.static.GetXComHQ().GetGeneratedMissionData(BattleData.m_iMissionID);
+
+	if(GeneratedMission.Mission.MapNames.Length == 0)
+	{
+		class'RTHelpers'.static.RTLog("No objective map defined, skipping",,true);
+		return;
+	}
+
+	for(i = 0; i < GeneratedMission.Mission.MapNames.Length; i++)
+	{
+		if(InStr(GeneratedMission.Mission.MapNames[i], "Obj_") != -1)
+		{
+			objectiveName = GeneratedMission.Mission.MapNames[i];
+			break;
+		}
+	}
+
+	class'RTHelpers'.static.RTLog("objectiveName = " $ objectiveName);
+
+	if(objectiveName == "")
+	{
+		class'RTHelpers'.static.RTLog("No objective defined for this map, skipping",,true);
+		return;
+	}
+
+	if (mainSequence != None)
+	{
+		mainSequence.FindSeqObjectsByClass( class'SequenceVariable', true, SeqObjs);
+		if(SeqObjs.Length != 0)
+		{
+			class'RTHelpers'.static.RTLog("Kismet variables found",,true);
+			for(i = 0; i < SeqObjs.Length; i++)
+			{
+				if(SequenceVariable(SeqObjs[i]).VarName != EmptyName) {
+					if(SeqVar_GameStateObject(SeqObjs[i]) != none) {
+						class'RTHelpers'.static.RTLog("Found " $ SequenceVariable(SeqObjs[i]).VarName $ " , ClassType: " $ SeqObjs[i].class $ " GameStateObj: " $ SeqVar_GameStateObject(SeqObjs[i]).GetObject().ObjectID ,, true);
+					} else if(SeqVar_GameStateList(SeqObjs[i]) != none) {
+						class'RTHelpers'.static.RTLog("Found " $ SequenceVariable(SeqObjs[i]).VarName $ " , ClassType: " $ SeqObjs[i].class,, true);
+						GameStates = SeqVar_GameStateList(SeqObjs[i]).GameStates;
+						for(j = 0; j < GameStates.Length; j++) {
+							class'RTHelpers'.static.RTLog("" $ GameStates[j].ObjectID,,true);
+						}
+					} else if(SeqVar_Bool(SeqObjs[i]) != none) {
+						class'RTHelpers'.static.RTLog("Found " $ SequenceVariable(SeqObjs[i]).VarName $ " , ClassType: " $ SeqObjs[i].class $ " Bool: " $ SeqVar_Bool(SeqObjs[i]).bValue,, true);
+					} else if(SeqVar_Int(SeqObjs[i]) != none) {
+						class'RTHelpers'.static.RTLog("Found " $ SequenceVariable(SeqObjs[i]).VarName $ " , ClassType: " $ SeqObjs[i].class $ " Int: " $ SeqVar_Int(SeqObjs[i]).IntValue,, true);
+					} else {
+						class'RTHelpers'.static.RTLog("Found " $ SequenceVariable(SeqObjs[i]).VarName $ " , ClassType: " $ SeqObjs[i].class,, true);
+						//class'RTHelpers'.static.RTLog("" $ SeqObjs[i].ObjName,, true);
+					}
+				}
+			}
+		}
 	}
 }
