@@ -905,7 +905,7 @@ static function X2AbilityTemplate RTReprobateWaltzIcon()
 	local RTEffect_ReprobateWaltz	Effect;
 
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'RTReprobateWaltzIcon');
-	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_reaper";	   // TODO: THIS
+	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_reaper";	 // TODO: THIS
 	Template.AbilitySourceName = 'eAbilitySource_Psionic';
 	Template.eAbilityIconBehaviorHUD = EAbilityIconBehavior_NeverShow;
 	Template.Hostility = eHostility_Neutral;
@@ -1585,7 +1585,7 @@ static function X2AbilityTemplate RTGhostInTheShell()
 	local X2Effect_StayConcealed			PhantomEffect;
 
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'RTGhostInTheShell');
-	Template.IconImage = "img:///RisingTidesContentPackage.PerkIcons.rt_ghostintheshell";	   // TODO: THIS
+	Template.IconImage = "img:///RisingTidesContentPackage.PerkIcons.rt_ghostintheshell";	 // TODO: THIS
 	Template.AbilitySourceName = 'eAbilitySource_Psionic';
 	Template.eAbilityIconBehaviorHUD = EAbilityIconBehavior_NeverShow;
 	Template.Hostility = eHostility_Neutral;
@@ -1621,7 +1621,7 @@ static function X2AbilityTemplate RTGhostInTheShellEffect()
 	local X2Effect_RangerStealth ConcealEffect;
 
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'RTGhostInTheShellEffect');
-		Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_swordSlash";	   // TODO: THIS
+		Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_swordSlash";	 // TODO: THIS
 		Template.AbilitySourceName = 'eAbilitySource_Psionic';
 		Template.eAbilityIconBehaviorHUD = EAbilityIconBehavior_NeverShow;
 		Template.Hostility = eHostility_Neutral;
@@ -1659,7 +1659,7 @@ static function X2AbilityTemplate RTQueenOfBlades()
 	local X2Effect_Persistent	Effect;
 
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'RTQueenOfBlades');
-		Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_swordSlash";	   // TODO: THIS
+		Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_swordSlash";	 // TODO: THIS
 		Template.AbilitySourceName = 'eAbilitySource_Psionic';
 		Template.eAbilityIconBehaviorHUD = EAbilityIconBehavior_NeverShow;
 		Template.Hostility = eHostility_Neutral;
@@ -2103,9 +2103,9 @@ simulated function Teleport_BuildVisualization(XComGameState VisualizeGameState)
 		if( TargetStateObject != none )
 		{
 			History.GetCurrentAndPreviousGameStatesForObjectID(AbilityContext.PrimaryTarget.ObjectID,
-															   BuildData.StateObject_OldState, BuildData.StateObject_NewState,
-															   eReturnType_Reference,
-															   VisualizeGameState.HistoryIndex);
+															 BuildData.StateObject_OldState, BuildData.StateObject_NewState,
+															 eReturnType_Reference,
+															 VisualizeGameState.HistoryIndex);
 			`assert(BuildData.StateObject_NewState == TargetStateObject);
 		}
 		else
@@ -2494,7 +2494,7 @@ static function X2DataTemplate RTDashingStrike()
 	// Template.bUseSourceLocationZToAim = true;
 
 	AnimSets = new class'X2Effect_AdditionalAnimSets';
-	AnimSets.AddAnimSetWithPath("Advent_ANIM.Anims.AS_Advent");	   // temp
+	AnimSets.AddAnimSetWithPath("Advent_ANIM.Anims.AS_Advent");	 // temp
 	AnimSets.BuildPersistentEffect(1, false, false, false);
 	AnimSets.EffectName = 'RTAdventAnimSet';
 	// Template.AddShooterEffect(AnimSets);

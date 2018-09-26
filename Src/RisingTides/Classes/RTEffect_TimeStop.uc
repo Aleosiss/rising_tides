@@ -346,11 +346,11 @@ simulated function ModifyTracksVisualization(XComGameState VisualizeGameState, o
 		class'RTAction_Greyscaled'.static.AddToVisualizationTree(ModifyActionMetadata, VisualizeGameState.GetContext(), false, ModifyActionMetadata.LastActionAdded);
 		class'X2StatusEffects'.static.AddEffectSoundAndFlyOverToTrack(ModifyActionMetadata, VisualizeGameState.GetContext(), GetFlyoverTickText(UnitState), '', eColor_Bad, default.StatusIcon);
 		class'X2StatusEffects'.static.AddEffectMessageToTrack(ModifyActionMetadata,
-															  default.TimeStopEffectAddedString,
-															  VisualizeGameState.GetContext(),
-															  class'UIEventNoticesTactical'.default.FrozenTitle,
-															  default.StatusIcon,
-															  eUIState_Bad);
+															default.TimeStopEffectAddedString,
+															VisualizeGameState.GetContext(),
+															class'UIEventNoticesTactical'.default.FrozenTitle,
+															default.StatusIcon,
+															eUIState_Bad);
 		class'X2StatusEffects'.static.UpdateUnitFlag(ModifyActionMetadata, VisualizeGameState.GetContext());
 	}
 }
@@ -368,11 +368,11 @@ static function TimeStopVisualizationTicked(XComGameState VisualizeGameState, ou
 			//class'X2StatusEffects'.static.AddEffectCameraPanToAffectedUnitToTrack(BuildTrack, VisualizeGameState.GetContext());
 			//class'X2StatusEffects'.static.AddEffectSoundAndFlyOverToTrack(BuildTrack, VisualizeGameState.GetContext(), GetFlyoverTickText(UnitState), '', eColor_Bad, default.StatusIcon);
 			class'X2StatusEffects'.static.AddEffectMessageToTrack(ActionMetadata,
-															  default.TimeStopEffectPersistsString,
-															  VisualizeGameState.GetContext(),
-															  class'UIEventNoticesTactical'.default.FrozenTitle,
-															  default.StatusIcon,
-															  eUIState_Warning);
+															default.TimeStopEffectPersistsString,
+															VisualizeGameState.GetContext(),
+															class'UIEventNoticesTactical'.default.FrozenTitle,
+															default.StatusIcon,
+															eUIState_Warning);
 
 		}
 		class'X2StatusEffects'.static.UpdateUnitFlag(ActionMetadata, VisualizeGameState.GetContext());
@@ -416,11 +416,11 @@ simulated function AddX2ActionsForVisualization_Removed(XComGameState VisualizeG
 			class'X2StatusEffects'.static.AddEffectSoundAndFlyOverToTrack(ActionMetadata, VisualizeGameState.GetContext(), FlyoverText, '', eColor_Good, default.StatusIcon);
 			//class'X2StatusEffects'.static.AddEffectMessageToTrack(BuildTrack, default.TimeStopEffectRemovedString, VisualizeGameState.GetContext());
 			class'X2StatusEffects'.static.AddEffectMessageToTrack(ActionMetadata,
-																  FlyoverText,
-																  VisualizeGameState.GetContext(),
-																  class'UIEventNoticesTactical'.default.FrozenTitle,
-																  default.StatusIcon,
-																  eUIState_Good);
+																FlyoverText,
+																VisualizeGameState.GetContext(),
+																class'UIEventNoticesTactical'.default.FrozenTitle,
+																default.StatusIcon,
+																eUIState_Good);
 
 		}
 		class'X2StatusEffects'.static.UpdateUnitFlag(ActionMetadata, VisualizeGameState.GetContext());

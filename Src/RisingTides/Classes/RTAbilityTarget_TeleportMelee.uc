@@ -34,11 +34,11 @@ simulated function bool ValidatePrimaryTargetOption(const XComGameState_Ability 
 // it will select the closest valid attack tile to the ideal (and will simply return the ideal if it is valid). If no array us provided for
 // SortedPossibleTiles, will simply return true or false based on whether or not a tile is available
 simulated static function bool SelectAttackTile(XComGameState_Unit UnitState, 
-														   XComGameState_BaseObject TargetState, 
-														   X2AbilityTemplate MeleeAbilityTemplate,
-														   optional out array<TTile> SortedPossibleTiles, // index 0 is the best option.
-														   optional out TTile IdealTile, // If this tile is available, will just return it
-														   optional bool Unsorted = false) { // if unsorted is true, just returns the list of possible tiles
+														 XComGameState_BaseObject TargetState, 
+														 X2AbilityTemplate MeleeAbilityTemplate,
+														 optional out array<TTile> SortedPossibleTiles, // index 0 is the best option.
+														 optional out TTile IdealTile, // If this tile is available, will just return it
+														 optional bool Unsorted = false) { // if unsorted is true, just returns the list of possible tiles
 	local array<TTile> Tiles;
 	local TTile Tile, IteratorTile;
 

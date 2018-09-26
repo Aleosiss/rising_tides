@@ -66,7 +66,7 @@ var int BonusDamage;
 		//} else {
 			//ReturnValue = IteratorRecord.NumCrits;
 		//}
-	      	//break;
+	    	//break;
       //}
 //
       //return LookupBonusTier(ReturnValue);
