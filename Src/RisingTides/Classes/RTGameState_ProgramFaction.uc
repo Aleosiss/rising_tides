@@ -1003,9 +1003,10 @@ function MeetXCom(XComGameState NewGameState)
 		}
 	}
 
-
 	// Need one for One Small Favor
-	AddCardSlot();
+	AddOneSmallFavorCard(); // this also adds a card slot
+
+	// Normal cards on meet
 	for(idx = 0; idx < default.NumCardsOnMeet; idx++)
 	{
 		GenerateNewPlayableCard(NewGameState);
@@ -1019,6 +1020,38 @@ function MeetXCom(XComGameState NewGameState)
 	if (!ResHQ.IsRookieCovertActionAvailable(NewGameState))
 	{
 		ResHQ.CreateRookieCovertAction(NewGameState);
+	}
+}
+
+function AddOneSmallFavorCard(XComGameState NewGameState) {
+	local XComGameStateHistory History;
+	local XComGameState_StrategyCard CardState;
+	local StateObjectReference	EmptyCardRef;
+
+	foreach History.IterateByClassType(class'XComGameState_StrategyCard', CardState)
+	{
+		if(CardState.GetMyTemplateName() != 'ResCard_RTOneSmallFavor') {
+			continue;
+		}
+		
+		if(!IsCardAvailable(CardState, 5)) { // card strength is greater than possible, can never draw by accident
+			return;
+		}
+
+		if(GetNumCardSlots() < 1) {
+			return;
+		}
+
+		if(CardSlots[0] != EmptyCardRef) {
+			return;
+		}
+		
+		CardState = XComGameState_StrategyCard(NewGameState.ModifyStateObject(class'XComGameState_StrategyCard', CardState.ObjectID));
+		CardState.bDrawn = true;
+		CardState.bNewCard = true;
+
+		NewPlayableCards.AddItem(CardState.GetReference());
+		PlaceCardInSlot(CardState.GetReference(), 0);
 	}
 }
 
