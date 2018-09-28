@@ -1052,7 +1052,7 @@ function AddOneSmallFavorCard(XComGameState NewGameState) {
 
 		NewPlayableCards.AddItem(CardState.GetReference());
 		PlaceCardInSlot(CardState.GetReference(), 0);
-	}
+		CardState.ActivateCard(NewGameState);
 }
 
 function PreMissionUpdate(XComGameState NewGameState, XComGameState_MissionSite MissionSiteState) {
