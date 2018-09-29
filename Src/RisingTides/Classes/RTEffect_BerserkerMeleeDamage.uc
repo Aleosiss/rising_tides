@@ -39,7 +39,7 @@ simulated function WeaponDamageValue CreatePsionicBladeDamageEffect(WeaponDamage
 	local int iBonusPsionicDamage;
 
 	iBonusPsionicDamage = 10 - (XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(TargetRef.ObjectID)).GetBaseStat(eStat_Will) / 10); // ...magical
-																	   // TODO: Unmagical
+																	 // TODO: Unmagical
 
 	iBonusPsionicDamage = max(0, iBonusPsionicDamage);
 

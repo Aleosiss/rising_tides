@@ -132,7 +132,7 @@ static function AddFactionToGeneratedTemplates() {
 			if(ActionTemplate.DataName == 'CovertAction_ResistanceCard')
 				ActionTemplate.Narratives.AddItem('CovertActionNarrative_ResistanceCard_Program');
 
-			if(ActionTemplate.DataName == 'CovertAction_RevealChosenMovement')
+			if(ActionTemplate.DataName == 'CovertAction_RevealChosenMovements')
 				ActionTemplate.Narratives.AddItem('CovertActionNarrative_RevealChosenMovements_Program');
 
 			if(ActionTemplate.DataName == 'CovertAction_RevealChosenStrengths')

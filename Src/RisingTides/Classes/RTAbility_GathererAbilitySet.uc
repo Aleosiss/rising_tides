@@ -167,9 +167,9 @@ static function X2AbilityTemplate CreateOverTheShoulderAbility(X2AbilityTemplate
 	local X2AbilityCooldown						Cooldown;
 	local X2AbilityMultiTarget_Radius			Radius;
 	local X2Condition_UnitProperty				AllyCondition, LivingNonAllyUnitOnlyProperty;
-	local array<name>                       SkipExclusions;
+	local array<name>							SkipExclusions;
 
-	local RTEffect_OverTheShoulder				OTSEffect;      // I'm unsure of how this works... but it appears that
+	local RTEffect_OverTheShoulder				OTSEffect;		// I'm unsure of how this works... but it appears that
 																// this will control the application and removal of aura effects within its range
 
 	// Over The Shoulder
@@ -279,9 +279,9 @@ static function X2AbilityTemplate CreateOverTheShoulderAbility(X2AbilityTemplate
 	Template.AddMultiTargetEffect(KIPEffect);
 
 
-	// end enemy aura effects      ----------------------------------------
+	// end enemy aura effects	----------------------------------------
 
-	// begin ally aura effects	  -----------------------------------------
+	// begin ally aura effects	-----------------------------------------
 
 	// general tag effect to mark all units with OTS
 	AllyEffect = new class'X2Effect_Persistent';
@@ -299,10 +299,10 @@ static function X2AbilityTemplate CreateOverTheShoulderAbility(X2AbilityTemplate
 
 
 
-	// end ally aura effects	  ------------------------------------------
+	// end ally aura effects	------------------------------------------
 
 
-	// aura controller effect         ------------------------------------------
+	// aura controller effect	------------------------------------------
 	OTSEffect = new class'RTEffect_OverTheShoulder';
 	OTSEffect.BuildPersistentEffect(AuraEffectDuration,,,, eGameRule_PlayerTurnBegin);
 	OTSEffect.SetDisplayInfo(ePerkBuff_Bonus, default.OTS_TITLE, default.OTS_DESC_SELF, Template.IconImage, true,,Template.AbilitySourceName);
@@ -319,7 +319,7 @@ static function X2AbilityTemplate CreateOverTheShoulderAbility(X2AbilityTemplate
 	TagEffect.UnitName = default.OverTheShoulderTagName;
 	TagEffect.NewValueToSet = 1;
 	TagEffect.CleanupType = eCleanup_BeginTurn;
-	TagEffect.SetupEffectOnShotContextResult(true, true);      //  mark them regardless of whether the shot hit or missed
+	TagEffect.SetupEffectOnShotContextResult(true, true);		// mark them regardless of whether the shot hit or missed
 	Template.AddMultiTargetEffect(TagEffect);
 
 	Template.AbilityToHitCalc = default.DeadEye;
@@ -343,7 +343,7 @@ static function X2AbilityTemplate CreateOverTheShoulderAbility(X2AbilityTemplate
 }
 
 static function X2AbilityTemplate OverTheShoulderPassives() {
-	local X2AbilityTemplate                     Template;
+	local X2AbilityTemplate					Template;
 
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'OverTheShoulderPassives')
 
@@ -491,55 +491,55 @@ static function X2AbilityTemplate RTExtinctionEventPartOne() {
 	Template.AdditionalAbilities.AddItem('RTExtinctionEventPartThree');
 
 	return Template;
-  }
+}
 
 static function X2AbilityTemplate RTExtinctionEventPartTwo() {
-	  local X2AbilityTemplate Template;
-	  local RTEffect_Stealth StealthEffect;
-	  local X2Effect_DelayedAbilityActivation ActivationEffect;
-	  local X2AbilityTrigger_EventListener Trigger;
-	  local X2Effect_Persistent			VFXEffect;
+	local X2AbilityTemplate Template;
+	local RTEffect_Stealth StealthEffect;
+	local X2Effect_DelayedAbilityActivation ActivationEffect;
+	local X2AbilityTrigger_EventListener Trigger;
+	local X2Effect_Persistent			VFXEffect;
 
-	  `CREATE_X2ABILITY_TEMPLATE(Template, 'RTExtinctionEventPartTwo');
-	  Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_NeverShow;
-	  Template.Hostility = eHostility_Neutral;
-	  Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_swordSlash";
-	  Template.AbilitySourceName = 'eAbilitySource_Psionic';
+	`CREATE_X2ABILITY_TEMPLATE(Template, 'RTExtinctionEventPartTwo');
+	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_NeverShow;
+	Template.Hostility = eHostility_Neutral;
+	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_swordSlash";
+	Template.AbilitySourceName = 'eAbilitySource_Psionic';
 
-	  Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
+	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
 		Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
 		Template.bSkipFireAction = true;
 		Template.bCrossClassEligible = false;
 
-	  Trigger = new class'X2AbilityTrigger_EventListener';
-	  Trigger.ListenerData.EventID = 'RTExtinctionEventPartTwo';
-	  Trigger.ListenerData.EventFn = class'XComGameState_Ability'.static.AbilityTriggerEventListener_Self;
-	  Trigger.ListenerData.Filter = eFilter_Unit;
-	  Trigger.ListenerData.Deferral = ELD_OnStateSubmitted;
-	  Trigger.ListenerData.Priority = 50;
-	  Template.AbilityTriggers.AddItem(Trigger);
+	Trigger = new class'X2AbilityTrigger_EventListener';
+	Trigger.ListenerData.EventID = 'RTExtinctionEventPartTwo';
+	Trigger.ListenerData.EventFn = class'XComGameState_Ability'.static.AbilityTriggerEventListener_Self;
+	Trigger.ListenerData.Filter = eFilter_Unit;
+	Trigger.ListenerData.Deferral = ELD_OnStateSubmitted;
+	Trigger.ListenerData.Priority = 50;
+	Template.AbilityTriggers.AddItem(Trigger);
 
-	  Template.AbilityTargetStyle = default.SelfTarget;
-	  Template.AbilityToHitCalc = default.Deadeye;
+	Template.AbilityTargetStyle = default.SelfTarget;
+	Template.AbilityToHitCalc = default.Deadeye;
 
-	  StealthEffect = class'RTEffectBuilder'.static.RTCreateStealthEffect(1, false, 1.0f, eGameRule_PlayerTurnBegin, Template.AbilitySourceName);
-	  Template.AddTargetEffect(StealthEffect);
+	StealthEffect = class'RTEffectBuilder'.static.RTCreateStealthEffect(1, false, 1.0f, eGameRule_PlayerTurnBegin, Template.AbilitySourceName);
+	Template.AddTargetEffect(StealthEffect);
 
-	  VFXEffect = new class'X2Effect_Persistent';
-	  VFXEffect.BuildPersistentEffect(1, false, false, , eGameRule_PlayerTurnBegin);
-	  VFXEffect.VFXTemplateName = default.ExtinctionEventChargingParticleString;
-	  VFXEffect.EffectAddedFn = class'RTHelpers'.static.PanicLoopBeginFn;
-	  VFXEffect.EffectRemovedFn = class'RTHelpers'.static.PanicLoopEndFn;
-	  Template.AddTargetEffect(VFXEffect);
+	VFXEffect = new class'X2Effect_Persistent';
+	VFXEffect.BuildPersistentEffect(1, false, false, , eGameRule_PlayerTurnBegin);
+	VFXEffect.VFXTemplateName = default.ExtinctionEventChargingParticleString;
+	VFXEffect.EffectAddedFn = class'RTHelpers'.static.PanicLoopBeginFn;
+	VFXEffect.EffectRemovedFn = class'RTHelpers'.static.PanicLoopEndFn;
+	Template.AddTargetEffect(VFXEffect);
 
-	  ActivationEffect = new class'X2Effect_DelayedAbilityActivation';
-	  ActivationEffect.BuildPersistentEffect(1, false, false, , eGameRule_PlayerTurnBegin);
-	  ActivationEffect.TriggerEventName = default.ExtinctionEventStageThreeEventName;
-	  Template.AddTargetEffect(ActivationEffect);
+	ActivationEffect = new class'X2Effect_DelayedAbilityActivation';
+	ActivationEffect.BuildPersistentEffect(1, false, false, , eGameRule_PlayerTurnBegin);
+	ActivationEffect.TriggerEventName = default.ExtinctionEventStageThreeEventName;
+	Template.AddTargetEffect(ActivationEffect);
 
-	  Template.AbilityShooterConditions.AddItem(default.LivingShooterProperty);
+	Template.AbilityShooterConditions.AddItem(default.LivingShooterProperty);
 
-	  return Template;
+	return Template;
   }
 
 static function X2AbilityTemplate RTExtinctionEventPartThree() {
@@ -1986,9 +1986,9 @@ simulated function DimensionalRigt1_BuildAffectedVisualization(name EffectName, 
 
 
 		`XCOMHISTORY.GetCurrentAndPreviousGameStatesForObjectID(AvatarUnit.FindAbility('RTPsionicStormSustained').ObjectID,
-													   Placeholder_old, Placeholder_new,
-													   eReturnType_Reference,
-													   VisualizeGameState.HistoryIndex);
+													 Placeholder_old, Placeholder_new,
+													 eReturnType_Reference,
+													 VisualizeGameState.HistoryIndex);
 
 		SustainedAbility = XComGameState_Ability(Placeholder_old);
 
@@ -2219,17 +2219,17 @@ simulated function DimensionalRiftStage2_BuildVisualization(XComGameState Visual
 	//Configure the visualization track for the source
 	//****************************************************************************************
 	AvatarBuildData = InitData;
-	History.GetCurrentAndPreviousGameStatesForObjectID(InteractingUnitRef.ObjectID,
-													   AvatarBuildData.StateObject_OldState, AvatarBuildData.StateObject_NewState,
-													   eReturnType_Reference,
-													   VisualizeGameState.HistoryIndex);
+	History.GetCurrentAndPreviousGameStatesForObjectID(	InteractingUnitRef.ObjectID,
+														AvatarBuildData.StateObject_OldState, AvatarBuildData.StateObject_NewState,
+														eReturnType_Reference,
+														VisualizeGameState.HistoryIndex);
 	AvatarBuildData.VisualizeActor = History.GetVisualizer(InteractingUnitRef.ObjectID);
 
 	AvatarUnit = XComGameState_Unit(AvatarBuildData.StateObject_OldState);
-	History.GetCurrentAndPreviousGameStatesForObjectID(AvatarUnit.FindAbility('RTPsionicStormSustained').ObjectID,
-													   Placeholder_old, Placeholder_new,
-													   eReturnType_Reference,
-													   VisualizeGameState.HistoryIndex);
+	History.GetCurrentAndPreviousGameStatesForObjectID(	AvatarUnit.FindAbility('RTPsionicStormSustained').ObjectID,
+														Placeholder_old, Placeholder_new,
+														eReturnType_Reference,
+														VisualizeGameState.HistoryIndex);
 
 	SustainedAbility = XComGameState_Ability(Placeholder_old);
 	if(SustainedAbility.ValidActivationTiles.Length < 1)

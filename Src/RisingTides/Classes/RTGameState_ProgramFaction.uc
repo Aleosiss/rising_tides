@@ -42,8 +42,9 @@ var() array<RTDeathRecord> DeathRecordData;					// Program Datavault contianing 
 /* BEGIN OPERATIVE RECORD */
 
 // SPECTRE
-var localized string SquadOneName;
+var localized string SquadOneName;					// SPECTRE
 var localized string SquadOneBackground;
+var localized string WhisperWepName;				// 'Heartspan'
 var config array<name> SquadOneMembers;
 var config name SquadOneSitRepName;
 var config array<name> BerserkerWeaponUpgrades;
@@ -53,10 +54,10 @@ var config array<name> GathererWeaponUpgrades;
 
 var() array<StateObjectReference>								Master; 			// master list of operatives
 var() array<StateObjectReference> 								Active;				// operatives active
-var() RTGameState_PersistentGhostSquad					Deployed; 			// operatives that will be on the next mission
+var() RTGameState_PersistentGhostSquad							Deployed; 			// operatives that will be on the next mission
 var() array<StateObjectReference>								Captured;			// operatives not available
 var() array<StateObjectReference>								Squads;				// list of ghost teams (only one for now)
-var() int 																		iOperativeLevel;	// all operatives get level ups after a mission, even if they weren't on it. lorewise, they're constantly running missions; the player only sees a fraction of them
+var() int 														iOperativeLevel;	// all operatives get level ups after a mission, even if they weren't on it. lorewise, they're constantly running missions; the player only sees a fraction of them
 var bool														bSetupComplete;		// if we should rebuild the operative array from config
 
 /* END OPERATIVE RECORD   */
@@ -65,16 +66,18 @@ var bool														bSetupComplete;		// if we should rebuild the operative arr
 // FACTION VARIABLES
 var bool																bShouldPerformPostMissionCleanup;	// should cleanup the program's roster after a mission-- set during OSF and JPT missions
 var bool																bDirectNeuralManipulation;
-var config array<name>											InvalidMissionSources;				// list of mission types ineligible for Program support, usually story missions
-var config array<name>											UnavailableCovertActions;			// list of covert actions that the program cannot carry out
+var bool																bResistanceSabotageActivated;
+var config array<name>													InvalidMissionSources;				// list of mission types ineligible for Program support, usually story missions
+var config array<name>													UnavailableCovertActions;			// list of covert actions that the program cannot carry out
+var config array<name>													ExcludedGoldenPathCovertActions;				// list of golden path covert actions the program cannot carry out (yet)
 var config int															iNumberOfFavorsRequiredToIncreaseInfluence;
-var array<X2DataTemplate>									OperativeTemplates;
+var array<X2DataTemplate>												OperativeTemplates;
 var bool																bTemplarsDestroyed;
 var int																	iTemplarQuestlineStage;
 
 // ONE SMALL FAVOR HANDLING VARIABLES
 var private int															iPreviousMaxSoldiersForMission;		// cache of the number of soldiers on a mission before OSF modfied it
-var private StateObjectReference							SelectedMissionRef;			// cache of the mission one small favor is going to go against
+var private StateObjectReference										SelectedMissionRef;					// cache of the mission one small favor is going to go against
 var bool																bShouldResetOSFMonthly;
 var bool																bOneSmallFavorAvailable;			// can send squad on a mission, replacing XCOM
 var bool																bOneSmallFavorActivated;			// actively sending a squad on the next mission
@@ -145,9 +148,9 @@ function RTGameState_Unit CreateRTOperative(name GhostTemplateName, XComGameStat
 	WeaponState = XComGameState_Item(StartState.ModifyStateObject(class'XComGameState_Item', WeaponState.ObjectID));
 	ApplyWeaponUpgrades(GhostTemplateName, WeaponState);
 
-	class'RTHelpers'.static.RTLog( "Creating Program Operative " $ UnitState.GetName(eNameType_Nick) $ 
-							", with ObjectID " $ UnitState.GetReference().ObjectID $
-							", and CharacterTemplateName " $ UnitState.GetMyTemplateName()
+	class'RTHelpers'.static.RTLog(	"Creating Program Operative " $ UnitState.GetName(eNameType_Nick) $ 
+									", with ObjectID " $ UnitState.GetReference().ObjectID $
+									", and CharacterTemplateName " $ UnitState.GetMyTemplateName()
 						);
 
 	return UnitState;
@@ -180,7 +183,7 @@ function ApplyWeaponUpgrades(name GhostTemplateName, XComGameState_Item NewWeapo
 					NewWeaponState.ApplyWeaponUpgradeTemplate(UpgradeTemplate, idx);
 				}
 			}
-			NewWeaponState.Nickname = "Heartspan";
+			NewWeaponState.Nickname = default.WhisperWepName;
 			break;
 		case 'RTGhostGatherer':
 			for(idx = 0; idx < default.GathererWeaponUpgrades.Length; idx++) {
@@ -601,7 +604,6 @@ protected function AddDNMExperience(XComGameState NewGameState) {
 				// this soldier has no bond
 				continue;
 			}
-			
 
 			if(BondMateRef.ObjectID == BondMateState.ObjectID) {
 				// don't want to double dip on the sweet gainz bro
@@ -615,10 +617,8 @@ protected function AddDNMExperience(XComGameState NewGameState) {
 				// don't need to keep iterating since bonds are 1-to-1
 				break;
 			}
-
 		}
 	}
-
 }
 
 
@@ -887,8 +887,8 @@ function CreateGoldenPathActions(XComGameState NewGameState)
 		{
 			ActionTemplate = X2CovertActionTemplate(DataTemplate);
 
-			if(ActionTemplate.DataName == 'CovertAction_FindFaction' || ActionTemplate.DataName == 'CovertAction_FindFarthestFaction')
-				continue; //actively skip this one
+			if(default.ExcludedGoldenPathCovertActions.Find(ActionTemplate.DataName) != INDEX_NONE)
+				continue;
 
 			if (ActionTemplate != none && ActionTemplate.bGoldenPath) //we do this so we follow the requirements of Spectres' med to high requirement
 			{
@@ -950,7 +950,7 @@ function GenerateNewPlayableCard(XComGameState NewGameState)
 		}
 
 		if(NewCardState.GetMyTemplateName() == IteratorCardState.GetMyTemplateName()) {
-			class'RTHelpers'.static.RTLog("Created a duplicate card, returning none!");
+			//class'RTHelpers'.static.RTLog("Created a duplicate card, returning none!");
 			return;
 		}
 	}
@@ -962,7 +962,7 @@ function GenerateNewPlayableCard(XComGameState NewGameState)
 		}
 
 		if(NewCardState.GetMyTemplateName() == IteratorCardState.GetMyTemplateName()) {
-			class'RTHelpers'.static.RTLog("Created a duplicate card, returning none!");
+			//class'RTHelpers'.static.RTLog("Created a duplicate card, returning none!");
 			return;
 		}
 	}
@@ -1003,9 +1003,10 @@ function MeetXCom(XComGameState NewGameState)
 		}
 	}
 
-
 	// Need one for One Small Favor
-	AddCardSlot();
+	AddOneSmallFavorCard(); // this also adds a card slot
+
+	// Normal cards on meet
 	for(idx = 0; idx < default.NumCardsOnMeet; idx++)
 	{
 		GenerateNewPlayableCard(NewGameState);
@@ -1020,6 +1021,38 @@ function MeetXCom(XComGameState NewGameState)
 	{
 		ResHQ.CreateRookieCovertAction(NewGameState);
 	}
+}
+
+function AddOneSmallFavorCard(XComGameState NewGameState) {
+	local XComGameStateHistory History;
+	local XComGameState_StrategyCard CardState;
+	local StateObjectReference	EmptyCardRef;
+
+	foreach History.IterateByClassType(class'XComGameState_StrategyCard', CardState)
+	{
+		if(CardState.GetMyTemplateName() != 'ResCard_RTOneSmallFavor') {
+			continue;
+		}
+		
+		if(!IsCardAvailable(CardState, 5)) { // card strength is greater than possible, can never draw by accident
+			return;
+		}
+
+		if(GetNumCardSlots() < 1) {
+			return;
+		}
+
+		if(CardSlots[0] != EmptyCardRef) {
+			return;
+		}
+		
+		CardState = XComGameState_StrategyCard(NewGameState.ModifyStateObject(class'XComGameState_StrategyCard', CardState.ObjectID));
+		CardState.bDrawn = true;
+		CardState.bNewCard = true;
+
+		NewPlayableCards.AddItem(CardState.GetReference());
+		PlaceCardInSlot(CardState.GetReference(), 0);
+		CardState.ActivateCard(NewGameState);
 }
 
 function PreMissionUpdate(XComGameState NewGameState, XComGameState_MissionSite MissionSiteState) {
@@ -1075,33 +1108,31 @@ function TryIncreaseInfluence() {
 // can pull an XComGameState_ScanningSite from XComHQ.CurrentLocation attached to the NewGameState
 // check to see if the resistance is building an outpost
 // set ScanHoursRemaining, and TotalScanHours to 1
+
+// List for Override Event, recieves a LWTuple
+// Event Data is the Tuple, the Event Source is the RegionState
+// Tuple should have one bool, set it to true
 static function EventListenerReturn FortyYearsOfWarEventListener(Object EventData, Object EventSource, XComGameState GameState, Name EventID, Object CallbackData) {
 	local XComGameState NewGameState;
 	local XComGameState_WorldRegion RegionState;
 	local XComGameState_HeadquartersXCom XComHQ;
+	local XComLWTuple Tuple;
 
 	class'RTHelpers'.static.RTLog("Forty Years of War Triggered!");
-	foreach GameState.IterateByClassType(class'XComGameState_HeadquartersXCom', XComHQ) {
-		if(XComHQ != none) {
-			break;
-		}
-	}
-
-	RegionState = XComGameState_WorldRegion(`XCOMHISTORY.GetGameStateForObjectID(XComHQ.CurrentLocation.ObjectID));
-	if(RegionState == none) {
-		class'RTHelpers'.static.RTLog("FortyYearsOfWarEventListener did not recieve a region!", true);
+	Tuple = XComLWTuple(EventData);
+	if(Tuple == none) {
+		class'RTHelpers'.static.RTLog("FYOW did not recieve a LWTuple, ending...", true);
+		class'RTHelpers'.static.RTLog("" $ EventData.class);
 		return ELR_NoInterrupt;
 	}
 
-	if(!RegionState.bCanScanForOutpost) {
-		class'RTHelpers'.static.RTLog("Can't modify outpost build time, since we aren't scanning for one!");
+	if(Tuple.Id != 'RegionOutpostBuildStart') {
+		class'RTHelpers'.static.RTLog("FYOW did not receive the correct Tuple, ending...", true);
 		return ELR_NoInterrupt;
 	}
 
-	NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("FortyYearsOfWar modifying outpost build time!");
-	RegionState = XComGameState_WorldRegion(NewGameState.ModifyStateObject(class'XComGameState_WorldRegion', RegionState.ObjectID));
-	RegionState.ModifyRemainingScanTime(0.0001);
-	`GAMERULES.SubmitGameState(NewGameState);
+	Tuple.Data[0].b = true;
+
 	class'RTHelpers'.static.RTLog("Forty Years of War successfully executed!");
 	return ELR_NoInterrupt;
 }
@@ -1127,7 +1158,7 @@ static function InitFaction(optional XComGameState StartState) {
 		NewGameState = StartState;
 	}
 
-	if(ResHQ.GetFactionByTemplateName('Faction_Program') == none) {  //no faction, add it ourselves 
+	if(ResHQ.GetFactionByTemplateName('Faction_Program') == none) { // no faction, add it ourselves 
 		ResHQ = XComGameState_HeadquartersResistance(NewGameState.ModifyStateObject(class'XComGameState_HeadquartersResistance', ResHQ.ObjectID)); 
 		DataTemplate = StratMgr.FindStrategyElementTemplate('Faction_Program');
 		if(DataTemplate != none)
