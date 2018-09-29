@@ -842,7 +842,7 @@ DescriptionEntry="Dr. Elizabeth Hadley, born on October 3rd, 1968, is a certifie
 
 [FactionProgram X2EncyclopediaTemplate]
 ListTitle="The Program"
-DescriptionTitle="Faction"
+DescriptionTitle="The Program"
 DescriptionEntry="The Program, seemingly led by the illusive Dr. Hadley, are an offshoot of XCOM, branching off in the 1970's. In the original invasion, they sent a single operative and Dr. Hadley to assist, which proved instrumental to the war effort, but when the base was lost, those personnel went MIA. In the time since, little has escaped; even now, the Program goes unnamed, and details related to the organization remain frighteningly obscure. What is evident is that their primary focus is ensuring that when ADVENT falls, they- at the expense of any other, even XCOM- stand on top of the pile of rubble. In other words, be careful when dealing with them. Their technology is advanced, and their operatives elite, but they are not on your side, Commander, and your goals may not always align."
 
 [FactionProgramOperatives X2EncyclopediaTemplate]
@@ -1003,6 +1003,17 @@ ScanTooltip="Scanning at this site speeds up the rate at which we can train our 
 [RTOneSmallFavor_SPECTRE X2SitRepTemplate]
 FriendlyName="One Small Favor"
 Description="The Program has lent one of their squads to handle this operation."
+
+[RTSoldierStaffSlot X2StaffSlotTemplate]
+EmptyText="NON-TEMPLAR SOLDIER"
+BonusText="ON COVERT ACTION"
+
+[RTCovertActionRisk_TemplarAmbush X2CovertActionRiskTemplate]
+RiskName="Templar Ambush"
+
+[RTCovertActionRisk_TemplarDiscovery X2CovertActionRiskTemplate]
+RiskName="Templar Discovery"
+
 
 ;///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ;//---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------

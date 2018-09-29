@@ -80,7 +80,7 @@ static function X2DataTemplate CreateProgramIncreaseInfluenceTemplate()
 static function X2DataTemplate CreateProgramHuntTemplarsP1Reward() {
 	local X2RewardTemplate Template;
 
-	`CREATE_X2Reward_TEMPLATE(Template, '');
+	`CREATE_X2Reward_TEMPLATE(Template, 'RTReward_ProgramHuntTemplarsP1');
 	
 	Template.IsRewardAvailableFn = none; // allows logical augmentation of reward availability. For example, rescue rewards are only available if there are captured soldiers
 	Template.IsRewardNeededFn = none; // allows logical augmentation of reward availability. Used to indicate if the player desperately needs this resource
@@ -103,7 +103,7 @@ static function X2DataTemplate CreateProgramHuntTemplarsP1Reward() {
 static function X2DataTemplate CreateProgramHuntTemplarsP2Reward() {
 	local X2RewardTemplate Template;
 
-	`CREATE_X2Reward_TEMPLATE(Template, '');
+	`CREATE_X2Reward_TEMPLATE(Template, 'RTReward_ProgramHuntTemplarsP2');
 	
 	Template.IsRewardAvailableFn = none; // allows logical augmentation of reward availability. For example, rescue rewards are only available if there are captured soldiers
 	Template.IsRewardNeededFn = none; // allows logical augmentation of reward availability. Used to indicate if the player desperately needs this resource
@@ -126,7 +126,7 @@ static function X2DataTemplate CreateProgramHuntTemplarsP2Reward() {
 static function X2DataTemplate CreateProgramHuntTemplarsP3Reward() {
 	local X2RewardTemplate Template;
 
-	`CREATE_X2Reward_TEMPLATE(Template, '');
+	`CREATE_X2Reward_TEMPLATE(Template, 'RTReward_ProgramHuntTemplarsP3');
 	
 	Template.IsRewardAvailableFn = none; // allows logical augmentation of reward availability. For example, rescue rewards are only available if there are captured soldiers
 	Template.IsRewardNeededFn = none; // allows logical augmentation of reward availability. Used to indicate if the player desperately needs this resource

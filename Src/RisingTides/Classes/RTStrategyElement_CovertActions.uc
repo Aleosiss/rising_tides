@@ -166,7 +166,7 @@ static function X2DataTemplate CreateHuntTemplarsP1Template() {
 	local X2CovertActionTemplate Template;
 	`CREATE_X2TEMPLATE(class'X2CovertActionTemplate', Template, 'CovertAction_CreateHuntTemplarsP1Template');
 
-	Template.ChooseLocationFn = ChooseFactionRegion;
+	Template.ChooseLocationFn = ChooseTemplarRegion;
 	Template.OverworldMeshPath = "UI_3D.Overwold_Final.CovertAction";
 	Template.bGoldenPath = false;
 
@@ -174,10 +174,14 @@ static function X2DataTemplate CreateHuntTemplarsP1Template() {
 
 	Template.Narratives.AddItem('CovertActionNarrative_HuntTemplarsP1_Program');
 
-	Template.Slots.AddItem();
-	Template.Slots.AddItem();
+	// intel, 1 squaddie soldier, 1 scientist, 1 optional engineer
+	Template.Slots.AddItem(_CreateDefaultSoldierSlot(class'RTStrategyElement_ProgramStaffSlots'.default.StaffSlotTemplateName, 1));
+	Template.Slots.AddItem(_CreateDefaultStaffSlot('CovertActionScientistStaffSlot'));
+	Template.Slots.AddItem(_CreateDefaultStaffSlot('CovertActionEngineerStaffSlot'));
+	Template.OptionalCosts.AddItem(_CreateOptionalCostSlot('Intel', 25));
 
-	Template.Risks.AddItem('');
+	Template.Risks.AddItem('Templar_Ambush');
+
 	Template.Rewards.AddItem('RTReward_ProgramHuntTemplarsP1');
 
 	return Template;
@@ -190,7 +194,7 @@ static function X2DataTemplate CreateHuntTemplarsP2Template() {
 	local X2CovertActionTemplate Template;
 	`CREATE_X2TEMPLATE(class'X2CovertActionTemplate', Template, 'CovertAction_CreateHuntTemplarsP2Template');
 
-	Template.ChooseLocationFn = ChooseFactionRegion;
+	Template.ChooseLocationFn = ChooseTemplarRegion;
 	Template.OverworldMeshPath = "UI_3D.Overwold_Final.CovertAction";
 	Template.bGoldenPath = false;
 
@@ -198,10 +202,14 @@ static function X2DataTemplate CreateHuntTemplarsP2Template() {
 
 	Template.Narratives.AddItem('CovertActionNarrative_HuntTemplarsP2_Program');
 
-	Template.Slots.AddItem();
-	Template.Slots.AddItem();
+	// intel, 2 sergeant soldiers, 1 optional engineer
+	Template.Slots.AddItem(_CreateDefaultSoldierSlot(class'RTStrategyElement_ProgramStaffSlots'.default.StaffSlotTemplateName, 3));
+	Template.Slots.AddItem(_CreateDefaultSoldierSlot(class'RTStrategyElement_ProgramStaffSlots'.default.StaffSlotTemplateName, 3));
+	Template.Slots.AddItem(_CreateDefaultStaffSlot('CovertActionEngineerStaffSlot'));
+	Template.OptionalCosts.AddItem(_CreateOptionalCostSlot('Intel', 50));
 
-	Template.Risks.AddItem('');
+	Template.Risks.AddItem('Templar_Ambush');
+
 	Template.Rewards.AddItem('RTReward_ProgramHuntTemplarsP2');
 
 	return Template;
@@ -214,7 +222,7 @@ static function X2DataTemplate CreateHuntTemplarsP3Template() {
 	local X2CovertActionTemplate Template;
 	`CREATE_X2TEMPLATE(class'X2CovertActionTemplate', Template, 'CovertAction_CreateHuntTemplarsP3Template');
 
-	Template.ChooseLocationFn = ChooseFactionRegion;
+	Template.ChooseLocationFn = ChooseTemplarRegion;
 	Template.OverworldMeshPath = "UI_3D.Overwold_Final.CovertAction";
 	Template.bGoldenPath = false;
 
@@ -222,10 +230,14 @@ static function X2DataTemplate CreateHuntTemplarsP3Template() {
 
 	Template.Narratives.AddItem('CovertActionNarrative_HuntTemplarsP3_Program');
 
-	Template.Slots.AddItem();
-	Template.Slots.AddItem();
+	// 3 captain soldiers, 1 optional intel 
+	Template.Slots.AddItem(_CreateDefaultSoldierSlot(class'RTStrategyElement_ProgramStaffSlots'.default.StaffSlotTemplateName, 5));
+	Template.Slots.AddItem(_CreateDefaultSoldierSlot(class'RTStrategyElement_ProgramStaffSlots'.default.StaffSlotTemplateName, 5));
+	Template.Slots.AddItem(_CreateDefaultSoldierSlot(class'RTStrategyElement_ProgramStaffSlots'.default.StaffSlotTemplateName, 5));
+	Template.OptionalCosts.AddItem(_CreateOptionalCostSlot('Intel', 75));
 
-	Template.Risks.AddItem('');
+	Template.Risks.AddItem('Templar_Discovery');
+
 	Template.Rewards.AddItem('RTReward_ProgramHuntTemplarsP3');
 
 	return Template;
@@ -292,4 +304,15 @@ private static function StrategyCostReward _CreateOptionalCostSlot(name Resource
 	ActionCost.Reward = 'Reward_DecreaseRisk';
 	
 	return ActionCost;
+}
+
+static function ChooseTemplarRegion(XComGameState NewGameState, XComGameState_CovertAction ActionState, out array<StateObjectReference> ExcludeLocations) {
+	local XComGameState_ResistanceFaction TempalrFaction;
+
+	foreach `XCOMHISTORY.IterateByClassType(class'XComGameState_ResistanceFaction', TemplarFaction) {
+		if(TemplarFaction.GetMyTemplateName() == 'Faction_Templars') {
+			ActionState.LocationEntity = TemplarFaction.HomeRegion;
+			return;
+		}
+	}
 }
