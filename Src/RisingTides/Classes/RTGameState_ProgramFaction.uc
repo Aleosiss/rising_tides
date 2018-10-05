@@ -72,8 +72,11 @@ var config array<name>													UnavailableCovertActions;			// list of covert
 var config array<name>													ExcludedGoldenPathCovertActions;				// list of golden path covert actions the program cannot carry out (yet)
 var config int															iNumberOfFavorsRequiredToIncreaseInfluence;
 var array<X2DataTemplate>												OperativeTemplates;
+
+// TEMPLAR QUESTLINE VARIABLES
 var bool																bTemplarsDestroyed;
 var int																	iTemplarQuestlineStage;
+var array<StateObjectReference>											TemplarQuestActions;
 
 // ONE SMALL FAVOR HANDLING VARIABLES
 var private int															iPreviousMaxSoldiersForMission;		// cache of the number of soldiers on a mission before OSF modfied it
@@ -898,9 +901,46 @@ function CreateGoldenPathActions(XComGameState NewGameState)
 	}
 }
 
+// the 'golden path' for the Program
+function HandleTemplarQuestActions(XComGameState NewGameState) {
+	local X2StrategyElementTemplateManager StratMgr;
+	local array<X2StrategyElementTemplate> AllActionTemplates;
+	local X2StrategyElementTemplate DataTemplate;
+	local X2CovertActionTemplate ActionTemplate;
+	local array<name>	TemplarQuestCovertActionTemplateNames;
+
+	if(TemplarQuestActions.Length != 0) {
+		class'RTHelpers'.static.RTLog("Not creating more Templar Quest Covert Actions...");
+		return;
+	}
+
+	// oof
+	TemplarQuestCovertActionTemplateNames.AddItem('CovertAction_HuntTemplarsP1Template');
+	TemplarQuestCovertActionTemplateNames.AddItem('CovertAction_HuntTemplarsP2Template');
+	TemplarQuestCovertActionTemplateNames.AddItem('CovertAction_HuntTemplarsP3Template');
+
+	StratMgr = class'X2StrategyElementTemplateManager'.static.GetStrategyElementTemplateManager();
+	AllActionTemplates = StratMgr.GetAllTemplatesOfClass(class'X2CovertActionTemplate');
+
+	foreach AllActionTemplates(DataTemplate)
+	{
+		ActionTemplate = X2CovertActionTemplate(DataTemplate);
+		if (ActionTemplate != none && 
+			TemplarQuestCovertActionTemplateNames.Find(ActionTemplate.DataName) != INDEX_NONE)
+		{
+			TemplarQuestActions.AddItem(CreateCovertAction(NewGameState, ActionTemplate, 1));
+			GoldenPathActions.AddItem(CreateCovertAction(NewGameState, ActionTemplate, 1)); // these are 'golden path...'
+		}
+	}
+
+	
+
+}
+
 function OnEndOfMonth(XComGameState NewGameState, out array<Name> ActionExclusionList)
 {
 	super.OnEndOfMonth(NewGamestate, ActionExclusionList);
+	HandleTemplarQuestActions(NewGameState);
 
 	if(bShouldResetOSFMonthly) {
 		MakeOneSmallFavorAvailable();
@@ -988,6 +1028,7 @@ function MeetXCom(XComGameState NewGameState)
 	CleanUpFactionCovertActions(NewGameState);
 	CreateGoldenPathActions(NewGameState);
 	GenerateCovertActions(NewGameState, ExclusionList);
+	HandleTemplarQuestActions(NewGameState);
 	
 	CreateRTOperatives(NewGameState);
 	CreateRTSquads(NewGameState);
@@ -1004,7 +1045,7 @@ function MeetXCom(XComGameState NewGameState)
 	}
 
 	// Need one for One Small Favor
-	AddOneSmallFavorCard(); // this also adds a card slot
+	AddOneSmallFavorCard(NewGameState); // this also adds a card slot
 
 	// Normal cards on meet
 	for(idx = 0; idx < default.NumCardsOnMeet; idx++)
@@ -1053,6 +1094,7 @@ function AddOneSmallFavorCard(XComGameState NewGameState) {
 		NewPlayableCards.AddItem(CardState.GetReference());
 		PlaceCardInSlot(CardState.GetReference(), 0);
 		CardState.ActivateCard(NewGameState);
+	}
 }
 
 function PreMissionUpdate(XComGameState NewGameState, XComGameState_MissionSite MissionSiteState) {
@@ -1194,6 +1236,7 @@ static function InitFaction(optional XComGameState StartState) {
 		FactionState.FactionHQ = HavenState.GetReference();
 		FactionState.SetUpProgramFaction(NewGameState);
 		FactionState.CreateGoldenPathActions(NewGameState);
+		FactionState.HandleTemplarQuestActions(NewGameState);
 	}
 
 	if(NewGameState.GetNumGameStateObjects() > 0) {

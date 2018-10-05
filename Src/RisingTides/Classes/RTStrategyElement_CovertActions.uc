@@ -10,6 +10,9 @@ static function array<X2DataTemplate> CreateTemplates()
 	CovertActions.AddItem(CreateFindProgramFarAwayFactionTemplate());
 
 	// TODO: Hunt Templars
+	CovertActions.AddItem(CreateHuntTemplarsP1Template());
+	CovertActions.AddItem(CreateHuntTemplarsP2Template());
+	CovertActions.AddItem(CreateHuntTemplarsP3Template());
 
 	return CovertActions;
 }
@@ -164,13 +167,12 @@ private static function AddFactionToCovertActionNarratives(array<X2DataTemplate>
 //-------------------------------------------------     --------------------------------------
 static function X2DataTemplate CreateHuntTemplarsP1Template() {
 	local X2CovertActionTemplate Template;
-	`CREATE_X2TEMPLATE(class'X2CovertActionTemplate', Template, 'CovertAction_CreateHuntTemplarsP1Template');
+	`CREATE_X2TEMPLATE(class'X2CovertActionTemplate', Template, 'CovertAction_HuntTemplarsP1Template');
 
 	Template.ChooseLocationFn = ChooseTemplarRegion;
 	Template.OverworldMeshPath = "UI_3D.Overwold_Final.CovertAction";
 	Template.bGoldenPath = false;
-
-	Template.bDisplayRequiresAvailable = true;
+	Template.bUnique = true;
 
 	Template.Narratives.AddItem('CovertActionNarrative_HuntTemplarsP1_Program');
 
@@ -192,13 +194,12 @@ static function X2DataTemplate CreateHuntTemplarsP1Template() {
 //-------------------------------------------------     --------------------------------------
 static function X2DataTemplate CreateHuntTemplarsP2Template() {
 	local X2CovertActionTemplate Template;
-	`CREATE_X2TEMPLATE(class'X2CovertActionTemplate', Template, 'CovertAction_CreateHuntTemplarsP2Template');
+	`CREATE_X2TEMPLATE(class'X2CovertActionTemplate', Template, 'CovertAction_HuntTemplarsP2Template');
 
 	Template.ChooseLocationFn = ChooseTemplarRegion;
 	Template.OverworldMeshPath = "UI_3D.Overwold_Final.CovertAction";
 	Template.bGoldenPath = false;
-
-	Template.bDisplayRequiresAvailable = true;
+	Template.bUnique = true;
 
 	Template.Narratives.AddItem('CovertActionNarrative_HuntTemplarsP2_Program');
 
@@ -220,13 +221,12 @@ static function X2DataTemplate CreateHuntTemplarsP2Template() {
 //-------------------------------------------------     --------------------------------------
 static function X2DataTemplate CreateHuntTemplarsP3Template() {
 	local X2CovertActionTemplate Template;
-	`CREATE_X2TEMPLATE(class'X2CovertActionTemplate', Template, 'CovertAction_CreateHuntTemplarsP3Template');
+	`CREATE_X2TEMPLATE(class'X2CovertActionTemplate', Template, 'CovertAction_HuntTemplarsP3Template');
 
 	Template.ChooseLocationFn = ChooseTemplarRegion;
 	Template.OverworldMeshPath = "UI_3D.Overwold_Final.CovertAction";
 	Template.bGoldenPath = false;
-
-	Template.bDisplayRequiresAvailable = true;
+	Template.bUnique = true;
 
 	Template.Narratives.AddItem('CovertActionNarrative_HuntTemplarsP3_Program');
 
@@ -307,7 +307,7 @@ private static function StrategyCostReward _CreateOptionalCostSlot(name Resource
 }
 
 static function ChooseTemplarRegion(XComGameState NewGameState, XComGameState_CovertAction ActionState, out array<StateObjectReference> ExcludeLocations) {
-	local XComGameState_ResistanceFaction TempalrFaction;
+	local XComGameState_ResistanceFaction TemplarFaction;
 
 	foreach `XCOMHISTORY.IterateByClassType(class'XComGameState_ResistanceFaction', TemplarFaction) {
 		if(TemplarFaction.GetMyTemplateName() == 'Faction_Templars') {

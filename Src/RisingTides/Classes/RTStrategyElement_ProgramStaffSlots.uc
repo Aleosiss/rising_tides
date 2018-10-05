@@ -15,7 +15,7 @@ static function array<X2DataTemplate> CreateTemplates()
 static function X2DataTemplate CreateCovertActionSoldierStaffSlot_NotTemplar() {
 	local X2StaffSlotTemplate Template;
 
-	Template = CreateCovertActionSoldierStaffSlotTemplate(StaffSlotTemplateName);
+	Template = CreateCovertActionSoldierStaffSlotTemplate(default.StaffSlotTemplateName);
 	Template.IsUnitValidForSlotFn = IsUnitNotTemplar;
 
 	return Template;
@@ -26,7 +26,7 @@ static function bool IsUnitNotTemplar(XComGameState_StaffSlot SlotState, StaffUn
 	
 	UnitState = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(UnitInfo.UnitRef.ObjectID));
 
-	if (UnitState.GetSoldierClassTemplateName == 'Templar') {
+	if (UnitState.GetSoldierClassTemplateName() == 'Templar') {
 		return false;
 	}
 
@@ -35,5 +35,5 @@ static function bool IsUnitNotTemplar(XComGameState_StaffSlot SlotState, StaffUn
 
 defaultproperties
 {
-    StaffSlotTemplateName = 'RTSoldierStaffSlot'
+	StaffSlotTemplateName = 'RTSoldierStaffSlot'
 }

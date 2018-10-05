@@ -184,9 +184,10 @@ static function RTGameState_ProgramFaction GetNewProgramState(XComGameState NewG
 
 
 static function RTLog(string message, optional bool bShouldRedScreenToo = false, optional bool bShouldOutputToConsoleToo = false) {
-	if(!class'X2DownloadableContentInfo_RisingTides'.static.DebuggingEnabled())
-		return;
-	`LOG("RisingTides: " $ message);
+	local bool b;
+
+	b = !DebuggingEnabled();
+	`LOG(message, b, 'Rising Tides');
 	if(bShouldRedScreenToo) {
 		`RedScreen("RisingTides: " $ message);
 	}

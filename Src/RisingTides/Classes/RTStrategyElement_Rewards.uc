@@ -10,6 +10,9 @@ static function array<X2DataTemplate> CreateTemplates()
 	Rewards.AddItem(CreateFindFarthestProgramFactionRewardTemplate());
 
 	// Hunt Templars
+	Rewards.AddItem(CreateProgramHuntTemplarsP1Reward());
+	Rewards.AddItem(CreateProgramHuntTemplarsP2Reward());
+	Rewards.AddItem(CreateProgramHuntTemplarsP3Reward());
 
 	// Misc Rewards
 	Rewards.AddItem(CreateProgramAddCardSlotTemplate());
@@ -82,7 +85,7 @@ static function X2DataTemplate CreateProgramHuntTemplarsP1Reward() {
 
 	`CREATE_X2Reward_TEMPLATE(Template, 'RTReward_ProgramHuntTemplarsP1');
 	
-	Template.IsRewardAvailableFn = none; // allows logical augmentation of reward availability. For example, rescue rewards are only available if there are captured soldiers
+	Template.IsRewardAvailableFn = IsHuntTemplarsP1Available; // allows logical augmentation of reward availability. For example, rescue rewards are only available if there are captured soldiers
 	Template.IsRewardNeededFn = none; // allows logical augmentation of reward availability. Used to indicate if the player desperately needs this resource
 	Template.GenerateRewardFn = none;
 	Template.SetRewardFn = none;
@@ -105,7 +108,7 @@ static function X2DataTemplate CreateProgramHuntTemplarsP2Reward() {
 
 	`CREATE_X2Reward_TEMPLATE(Template, 'RTReward_ProgramHuntTemplarsP2');
 	
-	Template.IsRewardAvailableFn = none; // allows logical augmentation of reward availability. For example, rescue rewards are only available if there are captured soldiers
+	Template.IsRewardAvailableFn = IsHuntTemplarsP2Available; // allows logical augmentation of reward availability. For example, rescue rewards are only available if there are captured soldiers
 	Template.IsRewardNeededFn = none; // allows logical augmentation of reward availability. Used to indicate if the player desperately needs this resource
 	Template.GenerateRewardFn = none;
 	Template.SetRewardFn = none;
@@ -128,7 +131,7 @@ static function X2DataTemplate CreateProgramHuntTemplarsP3Reward() {
 
 	`CREATE_X2Reward_TEMPLATE(Template, 'RTReward_ProgramHuntTemplarsP3');
 	
-	Template.IsRewardAvailableFn = none; // allows logical augmentation of reward availability. For example, rescue rewards are only available if there are captured soldiers
+	Template.IsRewardAvailableFn = IsHuntTemplarsP3Available; // allows logical augmentation of reward availability. For example, rescue rewards are only available if there are captured soldiers
 	Template.IsRewardNeededFn = none; // allows logical augmentation of reward availability. Used to indicate if the player desperately needs this resource
 	Template.GenerateRewardFn = none;
 	Template.SetRewardFn = none;
@@ -212,6 +215,82 @@ static function bool IsProgramFactionRewardAvailable(optional XComGameState NewG
 	}
 
 	return true;
+}
+
+static function bool IsHuntTemplarsP1Available(optional XComGameState NewGameState, optional StateObjectReference AuxRef) {
+	local RTGameState_ProgramFaction ProgramState;
+	local XComGameState_ResistanceFaction FactionState;
+	local XComGameStateHistory History;
+
+	FactionState = GetFactionState(NewGameState, AuxRef);
+	if (FactionState != none) {
+		if ( FactionState.GetMyTemplateName() != 'Faction_Program') {
+			return false;
+		}
+	}
+
+	ProgramState = RTGameState_ProgramFaction(FactionState);
+	if(ProgramState == none) {
+		class'RTHelpers'.static.RTLog("wut", true);
+	}
+
+	foreach `XCOMHISTORY.IterateByClassType(class'XComGameState_ResistanceFaction', FactionState) {
+		if(FactionState.GetMyTemplateName() == 'Faction_Templars') {
+			if(FactionState.bMetXCom) {
+				return true;
+			}
+		}
+	}
+
+	return false;
+}
+
+static function bool IsHuntTemplarsP2Available(optional XComGameState NewGameState, optional StateObjectReference AuxRef) {
+	local RTGameState_ProgramFaction ProgramState;
+	local XComGameState_ResistanceFaction FactionState;
+	local XComGameStateHistory History;
+
+	FactionState = GetFactionState(NewGameState, AuxRef);
+	if (FactionState != none) {
+		if ( FactionState.GetMyTemplateName() != 'Faction_Program') {
+			return false;
+		}
+	}
+
+	ProgramState = RTGameState_ProgramFaction(FactionState);
+	if(ProgramState == none) {
+		class'RTHelpers'.static.RTLog("wut", true);
+	}
+
+	if(ProgramState.iTemplarQuestlineStage == 1) {
+		return true;
+	}
+
+	return false;
+}
+
+static function bool IsHuntTemplarsP3Available(optional XComGameState NewGameState, optional StateObjectReference AuxRef) {
+	local RTGameState_ProgramFaction ProgramState;
+	local XComGameState_ResistanceFaction FactionState;
+	local XComGameStateHistory History;
+
+	FactionState = GetFactionState(NewGameState, AuxRef);
+	if (FactionState != none) {
+		if ( FactionState.GetMyTemplateName() != 'Faction_Program') {
+			return false;
+		}
+	}
+
+	ProgramState = RTGameState_ProgramFaction(FactionState);
+	if(ProgramState == none) {
+		class'RTHelpers'.static.RTLog("wut", true);
+	}
+
+	if(ProgramState.iTemplarQuestlineStage == 2) {
+		return true;
+	}
+
+	return false;
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
