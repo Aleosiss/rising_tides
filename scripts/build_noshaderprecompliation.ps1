@@ -243,6 +243,11 @@ Write-Host "Copying the mod's scripts to Src..."
 Copy-Item "$stagingPath/Src/*" "$sdkPath/Development/Src/" -Force -Recurse -WarningAction SilentlyContinue
 Write-Host "Copied."
 
+# append extra_globals.uci to globals.uci
+if (Test-Path "$sdkPath/Development/Src/extra_globals.uci") {
+    Get-Content "$sdkPath/Development/Src/extra_globals.uci" | Add-Content "$sdkPath/Development/Src/Core/Globals.uci"
+}
+
 if ($forceFullBuild) {
     # if a full build was requested, clean all compiled scripts too
     Write-Host "Full build requested. Cleaning all compiled scripts from $sdkPath/XComGame/Script..."

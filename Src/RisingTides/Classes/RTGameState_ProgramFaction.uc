@@ -1080,7 +1080,7 @@ function AddOneSmallFavorCard(XComGameState NewGameState) {
 		}
 
 		if(GetNumCardSlots() < 1) {
-			return;
+			CardSlots.AddItem(EmptyCardRef);
 		}
 
 		if(CardSlots[0] != EmptyCardRef) {
