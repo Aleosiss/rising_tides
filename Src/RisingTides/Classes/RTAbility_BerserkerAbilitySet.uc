@@ -1582,7 +1582,7 @@ static function X2AbilityTemplate RTGhostInTheShell()
 {
 	local X2AbilityTemplate					Template;
 	local RTEffect_GhostInTheShell			Effect;
-	local X2Effect_StayConcealed			PhantomEffect;
+	//local X2Effect_StayConcealed			PhantomEffect;
 
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'RTGhostInTheShell');
 	Template.IconImage = "img:///RisingTidesContentPackage.PerkIcons.rt_ghostintheshell";	 // TODO: THIS

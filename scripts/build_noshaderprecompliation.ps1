@@ -170,25 +170,25 @@ $canSkipShaderPrecompliation = $false
 
 # Need to store the ModShaderCache before we compare the Content directories, it will interfere with the check.
 # Also, if there are no changes and we skip precompliation, we will need a backup of the ModShaderCache since it won't be regenerated after the stagingPath is cleaned.
-if(Test-Path $tempCachePath) {
-    # if we found a shadercache in here, that means that we found it last time and cached it, but the build failed and /tmp wasn't cleaned up... we can skip precompliation.
-    $canSkipShaderPrecompliation = $true
-    Write-Host "Found previously-stashed ModShaderCache. Shader precompliation can be skipped."
-} elseif(Test-Path $shaderCachePath) {
-    Write-Host "Found ModShaderCache, stashing it..."
-    
-    if(-not (Test-Path -Path $modSrcRoot/tmp)) {
-        New-Item $modSrcRoot/tmp -type Directory
-    } 
-    
-    Copy-Item -Path $shaderCachePath -Destination $tempCachePath
-    Remove-Item -Path $shaderCachePath
-    $canSkipShaderPrecompliation = $true
-    
-    Write-Host "Stashed."
-} else {
-    Write-Host "Unable to find a ModShaderCache. Shader precompliation is required."
-}
+#if(Test-Path $tempCachePath) {
+#    # if we found a shadercache in here, that means that we found it last time and cached it, but the build failed and /tmp wasn't cleaned up... we can skip precompliation.
+#    $canSkipShaderPrecompliation = $true
+#    Write-Host "Found previously-stashed ModShaderCache. Shader precompliation can be skipped."
+#} elseif(Test-Path $shaderCachePath) {
+#    Write-Host "Found ModShaderCache, stashing it..."
+#    
+#    if(-not (Test-Path -Path $modSrcRoot/tmp)) {
+#        New-Item $modSrcRoot/tmp -type Directory
+#    } 
+#    
+#    Copy-Item -Path $shaderCachePath -Destination $tempCachePath
+#    Remove-Item -Path $shaderCachePath
+#    $canSkipShaderPrecompliation = $true
+#    
+#    Write-Host "Stashed."
+#} else {
+#    Write-Host "Unable to find a ModShaderCache. Shader precompliation is required."
+#}
 
 # check to see if the files changed
 if($canSkipShaderPrecompliation) {
@@ -208,7 +208,7 @@ if($canSkipShaderPrecompliation) {
 # clean
 Write-Host "Cleaning mod project at $stagingPath...";
 if (Test-Path $stagingPath) {
-    Remove-Item $stagingPath -Recurse -WarningAction SilentlyContinue;
+    Remove-Item $stagingPath -Recurse -Force -WarningAction SilentlyContinue;
 }
 Write-Host "Cleaned."
 
@@ -244,8 +244,12 @@ Copy-Item "$stagingPath/Src/*" "$sdkPath/Development/Src/" -Force -Recurse -Warn
 Write-Host "Copied."
 
 # append extra_globals.uci to globals.uci
-if (Test-Path "$sdkPath/Development/Src/extra_globals.uci") {
-    Get-Content "$sdkPath/Development/Src/extra_globals.uci" | Add-Content "$sdkPath/Development/Src/Core/Globals.uci"
+if (Test-Path "$sdkPath/Development/Src/$modNameCanonical/Classes/extra_globals.uci") {
+    Write-Host "Appending macros..."
+    Get-Content "$sdkPath/Development/Src/$modNameCanonical/Classes/extra_globals.uci" | Add-Content "$sdkPath/Development/Src/Core/Globals.uci"
+    Write-Host "Appended."
+} else {
+    Write-Host "Couldn't find an extra_globals.uci to append extra macros..."
 }
 
 if ($forceFullBuild) {

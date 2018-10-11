@@ -42,6 +42,8 @@ static event OnPostTemplatesCreated()
 		class'RTHelpers'.static.RTLog("This is not a final release!");
 	`endif
 
+	`RTLOG("Script package loaded.");
+
 	MakePsiAbilitiesInterruptable();
 	AddProgramFactionCovertActions();
 	AddProgramAttachmentTemplates();
@@ -75,7 +77,7 @@ static event OnExitPostMissionSequence()
 	local RTGameState_ProgramFaction ProgramState, Program;
 	local XComGameState_BattleData BattleData;
 
-	Program = class'RTHelpers'.static.GetProgramState(NewGameState);
+	Program = class'RTHelpers'.static.GetProgramState();
 	if(Program.bShouldPerformPostMissionCleanup) {
 		NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("Cleanup Program Operatives from XCOMHQ!");
 		ProgramState = class'RTHelpers'.static.GetNewProgramState(NewGameState);
@@ -182,7 +184,7 @@ static function bool DebuggingEnabled() {
 exec function RT_PrintResistanceFactionNames() {
 	local XComGameStateHistory 					History;
 	local XComGameState_ResistanceFaction 		Faction;
-	local object 								obj;
+	//local object 								obj;
 
 	History = `XCOMHISTORY;
 
@@ -484,7 +486,7 @@ exec function ReportTestPanelLocation(optional name PanelName = 'TestDebugPanel'
 	local UIPanel TestPanel;
 	local string MissionType, LogOutput;
 	local float PosX, PosY;
-	local StateObjectReference MissionRef;
+	//local StateObjectReference MissionRef;
 
 	Screen = `SCREENSTACK.GetCurrentScreen();
 
@@ -535,7 +537,7 @@ static function ForceVisibilityUpdatesAll_BuildVisualization(XComGameState Visua
 	local XComGameState_Unit UnitState;
 	local VisualizationActionMetadata BuildTrack;
 	local X2Action_UpdateFOW FOWAction;
-	local RTAction_ForceVisibility RTForceVisibilityAction_Reset;
+	//local RTAction_ForceVisibility RTForceVisibilityAction_Reset;
 
 	foreach VisualizeGameState.IterateByClassType(class'XComGameState_Unit', UnitState)
 	{
@@ -594,7 +596,7 @@ exec function RT_GetVisibilityStatusOfClosestUnitToCursor() {
 
 exec function RT_ListAllSquadViewers(optional bool bDetailedInfo = false) {
 	local XComGameState_SquadViewer XComSquadViewerState;
-	local RTGameState_SquadViewer RTSquadViewerState;
+	//local RTGameState_SquadViewer RTSquadViewerState;
 	local XComGameStateHistory History;
 
 	History = `XCOMHISTORY;
@@ -633,23 +635,23 @@ exec function RT_GetTeamStatusOfClosestUnitToCursor() {
 
 // Based on code from "Configurable Mission Timers by wghost"
 exec function RT_DebugKismetVariables() {
-	local XComGameState_Unit UnitState;
-	local ETeam TeamFlag;
-	local XComTacticalCheatManager CheatsManager;
-	local XComGameState_Player PlayerState;
+	//local XComGameState_Unit UnitState;
+	//local ETeam TeamFlag;
+	//local XComTacticalCheatManager CheatsManager;
+	//local XComGameState_Player PlayerState;
 	local WorldInfo WorldInfo;
 	local Sequence MainSequence;
-	local array<SequenceObject> SeqObjs, LinkedObjs;
+	local array<SequenceObject> SeqObjs;
 	local int i, j;
-	local SeqVar_Int TimerVariable;
-	local SeqVar_Bool TimerEngagedVariable;
+	//local SeqVar_Int TimerVariable;
+	//local SeqVar_Bool TimerEngagedVariable;
 	local GeneratedMissionData GeneratedMission;
 	local XComGameState_BattleData BattleData;
 	local string objectiveName;
 	local name EmptyName;
 	local array<StateObjectReference> GameStates;
 
-	CheatsManager = `CHEATMGR;
+	//CheatsManager = `CHEATMGR;
 
 	WorldInfo = `XWORLDINFO;
 	WorldInfo.MyKismetVariableMgr.RebuildVariableMap();

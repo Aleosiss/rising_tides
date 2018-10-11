@@ -15,7 +15,7 @@ var float fStealthModifier;
 simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffectParameters, XComGameState_BaseObject kNewTargetState, XComGameState NewGameState, XComGameState_Effect NewEffectState)
 {
 	local XComGameState_Unit UnitState;
-	local bool bWasPreviouslyConcealed;
+	//local bool bWasPreviouslyConcealed;
 	local float fCurrentModifier, fFinalModifier;
 	local RTGameState_Effect StealthEffectState;
 
@@ -46,8 +46,8 @@ simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffe
 simulated function OnEffectRemoved(const out EffectAppliedData ApplyEffectParameters, XComGameState NewGameState, bool bCleansed, XComGameState_Effect RemovedEffectState)
 {
 	local XComGameState_Unit OldUnitState, NewUnitState;
-	local bool bWasPreviouslyConcealed;
-	local UnitValue PreviousValue;
+	//local bool bWasPreviouslyConcealed;
+	//local UnitValue PreviousValue;
 	local RTGameState_Effect StealthEffectState;
 
 	super.OnEffectRemoved(ApplyEffectParameters, NewGameState, bCleansed, RemovedEffectState);

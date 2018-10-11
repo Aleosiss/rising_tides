@@ -186,7 +186,7 @@ static function RTGameState_ProgramFaction GetNewProgramState(XComGameState NewG
 static function RTLog(string message, optional bool bShouldRedScreenToo = false, optional bool bShouldOutputToConsoleToo = false) {
 	local bool b;
 
-	b = !DebuggingEnabled();
+	b = DebuggingEnabled();
 	`LOG(message, b, 'Rising Tides');
 	if(bShouldRedScreenToo) {
 		`RedScreen("RisingTides: " $ message);
@@ -229,7 +229,7 @@ static function PrintGoldenPathActionsForFaction(XComGameState_ResistanceFaction
 }
 
 static function PrintMiscInfoForFaction(XComGameState_ResistanceFaction Faction) {
-	local XComGameState_HeadquartersXCom XComHQ;
+	//local XComGameState_HeadquartersXCom XComHQ;
 
 }
 
