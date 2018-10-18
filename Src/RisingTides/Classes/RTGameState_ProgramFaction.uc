@@ -942,6 +942,7 @@ function HandleTemplarQuestActions(XComGameState NewGameState) {
 
 	switch(iTemplarQuestlineStage) {
 		case 0:
+			if(!IsTemplarFactionMet()) { return; } // don't print the action if we haven't met the templars yet
 			QuestTemplateName = 'CovertAction_HuntTemplarsP1Template';
 			break;
 		case 1:
@@ -962,7 +963,20 @@ function HandleTemplarQuestActions(XComGameState NewGameState) {
 			CovertActions.AddItem(QuestRef);
 		}
 	}
+}
 
+private function bool IsTemplarFactionMet() {
+	local XComGameState_ResistanceFaction FactionState;
+
+	foreach `XCOMHISTORY.IterateByClassType(class'XComGameState_ResistanceFaction', FactionState) {
+		if(FactionState.GetMyTemplateName() == 'Faction_Templars') {
+			if(FactionState.bMetXCom) {
+				return true;
+			} else return false;
+		}
+	}
+
+	return false;
 }
 
 function OnEndOfMonth(XComGameState NewGameState, out array<Name> ActionExclusionList)
