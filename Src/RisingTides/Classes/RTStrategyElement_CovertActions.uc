@@ -10,6 +10,9 @@ static function array<X2DataTemplate> CreateTemplates()
 	CovertActions.AddItem(CreateFindProgramFarAwayFactionTemplate());
 
 	// TODO: Hunt Templars
+	CovertActions.AddItem(CreateHuntTemplarsP1Template());
+	CovertActions.AddItem(CreateHuntTemplarsP2Template());
+	CovertActions.AddItem(CreateHuntTemplarsP3Template());
 
 	return CovertActions;
 }
@@ -65,38 +68,13 @@ static function X2DataTemplate CreateFindProgramFarAwayFactionTemplate() {
 	return Template;
 }
 
-private static function CovertActionSlot _CreateDefaultSoldierSlot(name SlotName, optional int iMinRank, optional bool bRandomClass, optional bool bFactionClass) {
-	local CovertActionSlot SoldierSlot;
-
-	SoldierSlot.StaffSlot = SlotName;
-	SoldierSlot.Rewards.AddItem('Reward_StatBoostHP');
-	SoldierSlot.Rewards.AddItem('Reward_StatBoostAim');
-	SoldierSlot.Rewards.AddItem('Reward_StatBoostMobility');
-	SoldierSlot.Rewards.AddItem('Reward_StatBoostDodge');
-	SoldierSlot.Rewards.AddItem('Reward_StatBoostWill');
-	SoldierSlot.Rewards.AddItem('Reward_StatBoostHacking');
-	SoldierSlot.Rewards.AddItem('Reward_RankUp');
-	SoldierSlot.iMinRank = iMinRank;
-	SoldierSlot.bChanceFame = false;
-	SoldierSlot.bRandomClass = bRandomClass;
-	SoldierSlot.bFactionClass = bFactionClass;
-
-	if (SlotName == 'CovertActionRookieStaffSlot')
-	{
-		SoldierSlot.bChanceFame = false;
-	}
-
-	return SoldierSlot;
-}
-
-
 static function AddFactionToGeneratedTemplates() {
-	local array<name> CovertActionNames;
+	//local array<name> CovertActionNames;
 	local X2StrategyElementTemplateManager Manager;
-	local array<X2CovertActionTemplate> CovertActionTemplates;
-	local array<X2DataTemplate>			DataTemplates;
-	local X2DataTemplate				IteratorTemplate;
-	local X2CovertActionTemplate		TestTemplate;
+	//local array<X2CovertActionTemplate> CovertActionTemplates;
+	//local array<X2DataTemplate>			DataTemplates;
+	//local X2DataTemplate				IteratorTemplate;
+	//local X2CovertActionTemplate		TestTemplate;
 	local array<X2StrategyElementTemplate> AllActionTemplates;
 	local X2StrategyElementTemplate DataTemplate;
 	local X2CovertActionTemplate ActionTemplate;
@@ -181,5 +159,160 @@ private static function AddFactionToCovertActionNarratives(array<X2DataTemplate>
 			}
 		}
 		DataTemplates.Length = 0;
+	}
+}
+
+//---------------------------------------------------------------------------------------
+// TEMPLAR QUEST CHAIN P1
+//-------------------------------------------------     --------------------------------------
+static function X2DataTemplate CreateHuntTemplarsP1Template() {
+	local X2CovertActionTemplate Template;
+	`CREATE_X2TEMPLATE(class'X2CovertActionTemplate', Template, 'CovertAction_HuntTemplarsP1Template');
+
+	Template.ChooseLocationFn = ChooseTemplarRegion;
+	Template.OverworldMeshPath = "UI_3D.Overwold_Final.CovertAction";
+	Template.bGoldenPath = false;
+	Template.bUnique = true;
+
+	Template.Narratives.AddItem('CovertActionNarrative_HuntTemplarsP1_Program');
+
+	// intel, 1 squaddie soldier, 1 scientist, 1 optional engineer
+	Template.Slots.AddItem(_CreateDefaultSoldierSlot(class'RTStrategyElement_ProgramStaffSlots'.default.StaffSlotTemplateName, 1));
+	Template.Slots.AddItem(_CreateDefaultStaffSlot('CovertActionScientistStaffSlot'));
+	Template.Slots.AddItem(_CreateDefaultStaffSlot('CovertActionEngineerStaffSlot'));
+	Template.OptionalCosts.AddItem(_CreateOptionalCostSlot('Intel', 25));
+
+	Template.Risks.AddItem('Templar_Ambush');
+
+	Template.Rewards.AddItem('RTReward_ProgramHuntTemplarsP1');
+
+	return Template;
+}
+
+//---------------------------------------------------------------------------------------
+// TEMPLAR QUEST CHAIN P2
+//-------------------------------------------------     --------------------------------------
+static function X2DataTemplate CreateHuntTemplarsP2Template() {
+	local X2CovertActionTemplate Template;
+	`CREATE_X2TEMPLATE(class'X2CovertActionTemplate', Template, 'CovertAction_HuntTemplarsP2Template');
+
+	Template.ChooseLocationFn = ChooseTemplarRegion;
+	Template.OverworldMeshPath = "UI_3D.Overwold_Final.CovertAction";
+	Template.bGoldenPath = false;
+	Template.bUnique = true;
+
+	Template.Narratives.AddItem('CovertActionNarrative_HuntTemplarsP2_Program');
+
+	// intel, 2 sergeant soldiers, 1 optional engineer
+	Template.Slots.AddItem(_CreateDefaultSoldierSlot(class'RTStrategyElement_ProgramStaffSlots'.default.StaffSlotTemplateName, 3));
+	Template.Slots.AddItem(_CreateDefaultSoldierSlot(class'RTStrategyElement_ProgramStaffSlots'.default.StaffSlotTemplateName, 3));
+	Template.Slots.AddItem(_CreateDefaultStaffSlot('CovertActionEngineerStaffSlot'));
+	Template.OptionalCosts.AddItem(_CreateOptionalCostSlot('Intel', 50));
+
+	Template.Risks.AddItem('Templar_Ambush');
+
+	Template.Rewards.AddItem('RTReward_ProgramHuntTemplarsP2');
+
+	return Template;
+}
+
+//---------------------------------------------------------------------------------------
+// TEMPLAR QUEST CHAIN P3
+//-------------------------------------------------     --------------------------------------
+static function X2DataTemplate CreateHuntTemplarsP3Template() {
+	local X2CovertActionTemplate Template;
+	`CREATE_X2TEMPLATE(class'X2CovertActionTemplate', Template, 'CovertAction_HuntTemplarsP3Template');
+
+	Template.ChooseLocationFn = ChooseTemplarRegion;
+	Template.OverworldMeshPath = "UI_3D.Overwold_Final.CovertAction";
+	Template.bGoldenPath = false;
+	Template.bUnique = true;
+
+	Template.Narratives.AddItem('CovertActionNarrative_HuntTemplarsP3_Program');
+
+	// 3 captain soldiers, 1 optional intel 
+	Template.Slots.AddItem(_CreateDefaultSoldierSlot(class'RTStrategyElement_ProgramStaffSlots'.default.StaffSlotTemplateName, 5));
+	Template.Slots.AddItem(_CreateDefaultSoldierSlot(class'RTStrategyElement_ProgramStaffSlots'.default.StaffSlotTemplateName, 5));
+	Template.Slots.AddItem(_CreateDefaultSoldierSlot(class'RTStrategyElement_ProgramStaffSlots'.default.StaffSlotTemplateName, 5));
+	Template.OptionalCosts.AddItem(_CreateOptionalCostSlot('Intel', 75));
+
+	Template.Risks.AddItem('Templar_Discovery');
+
+	Template.Rewards.AddItem('RTReward_ProgramHuntTemplarsP3');
+
+	return Template;
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//---Slot Constructors--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+private static function CovertActionSlot _CreateDefaultSoldierSlot(name SlotName, optional int iMinRank, optional bool bRandomClass, optional bool bFactionClass) {
+	local CovertActionSlot SoldierSlot;
+
+	SoldierSlot.StaffSlot = SlotName;
+	SoldierSlot.Rewards.AddItem('Reward_StatBoostHP');
+	SoldierSlot.Rewards.AddItem('Reward_StatBoostAim');
+	SoldierSlot.Rewards.AddItem('Reward_StatBoostMobility');
+	SoldierSlot.Rewards.AddItem('Reward_StatBoostDodge');
+	SoldierSlot.Rewards.AddItem('Reward_StatBoostWill');
+	SoldierSlot.Rewards.AddItem('Reward_StatBoostHacking');
+	SoldierSlot.Rewards.AddItem('Reward_RankUp');
+	SoldierSlot.iMinRank = iMinRank;
+	SoldierSlot.bChanceFame = false;
+	SoldierSlot.bRandomClass = bRandomClass;
+	SoldierSlot.bFactionClass = bFactionClass;
+
+	if (SlotName == 'CovertActionRookieStaffSlot')
+	{
+		SoldierSlot.bChanceFame = false;
+	}
+
+	return SoldierSlot;
+}
+
+private static function CovertActionSlot _CreateDefaultStaffSlot(name SlotName) {
+	local CovertActionSlot StaffSlot;
+	
+	// Same as Soldier Slot, but no rewards
+	StaffSlot.StaffSlot = SlotName;
+	StaffSlot.bReduceRisk = false;
+	
+	return StaffSlot;
+}
+
+private static function CovertActionSlot _CreateDefaultOptionalSlot(name SlotName, optional int iMinRank, optional bool bFactionClass) {
+	local CovertActionSlot OptionalSlot;
+
+	OptionalSlot.StaffSlot = SlotName;
+	OptionalSlot.bChanceFame = false;
+	OptionalSlot.bReduceRisk = true;
+	OptionalSlot.iMinRank = iMinRank;
+	OptionalSlot.bFactionClass = bFactionClass;
+
+	return OptionalSlot;
+}
+
+private static function StrategyCostReward _CreateOptionalCostSlot(name ResourceName, int Quantity) {
+	local StrategyCostReward ActionCost;
+	local ArtifactCost Resources;
+
+	Resources.ItemTemplateName = ResourceName;
+	Resources.Quantity = Quantity;
+	ActionCost.Cost.ResourceCosts.AddItem(Resources);
+	ActionCost.Reward = 'Reward_DecreaseRisk';
+	
+	return ActionCost;
+}
+
+static function ChooseTemplarRegion(XComGameState NewGameState, XComGameState_CovertAction ActionState, out array<StateObjectReference> ExcludeLocations) {
+	local XComGameState_ResistanceFaction TemplarFaction;
+
+	foreach `XCOMHISTORY.IterateByClassType(class'XComGameState_ResistanceFaction', TemplarFaction) {
+		if(TemplarFaction.GetMyTemplateName() == 'Faction_Templars') {
+			ActionState.LocationEntity = TemplarFaction.HomeRegion;
+			return;
+		}
 	}
 }

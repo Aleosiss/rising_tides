@@ -182,7 +182,7 @@ static function X2AbilityTemplate ScopedAndDropped()
 	local X2AbilityCost_ActionPoints		ActionPointCost;
 	local X2AbilityCost_Ammo				AmmoCost;
 	local X2AbilityToHitCalc_StandardAim    ToHitCalc;
-	local X2Condition_Visibility            TargetVisibilityCondition;
+	//local X2Condition_Visibility            TargetVisibilityCondition;
 	local RTCondition_VisibleToPlayer	VisibleToPlayerCondition;
 	local array<name>                       SkipExclusions;
 	local X2Effect_Knockback				KnockbackEffect;

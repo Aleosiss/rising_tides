@@ -10,6 +10,9 @@ static function array<X2DataTemplate> CreateTemplates()
 	Rewards.AddItem(CreateFindFarthestProgramFactionRewardTemplate());
 
 	// Hunt Templars
+	Rewards.AddItem(CreateProgramHuntTemplarsP1Reward());
+	Rewards.AddItem(CreateProgramHuntTemplarsP2Reward());
+	Rewards.AddItem(CreateProgramHuntTemplarsP3Reward());
 
 	// Misc Rewards
 	Rewards.AddItem(CreateProgramAddCardSlotTemplate());
@@ -77,6 +80,75 @@ static function X2DataTemplate CreateProgramIncreaseInfluenceTemplate()
 	return Template;
 }
 
+static function X2DataTemplate CreateProgramHuntTemplarsP1Reward() {
+	local X2RewardTemplate Template;
+
+	`CREATE_X2Reward_TEMPLATE(Template, 'RTReward_ProgramHuntTemplarsP1');
+	
+	Template.IsRewardAvailableFn = IsHuntTemplarsP1Available; // allows logical augmentation of reward availability. For example, rescue rewards are only available if there are captured soldiers
+	Template.IsRewardNeededFn = none; // allows logical augmentation of reward availability. Used to indicate if the player desperately needs this resource
+	Template.GenerateRewardFn = none;
+	Template.SetRewardFn = none;
+	Template.GiveRewardFn = none;
+	Template.GetRewardStringFn = none;
+	Template.GetRewardPreviewStringFn = none;
+	Template.GetRewardDetailsStringFn = none;
+	Template.GetRewardImageFn = none;
+	Template.SetRewardByTemplateFn = none;
+	Template.GetBlackMarketStringFn = none;
+	Template.GetRewardIconFn = none;
+	Template.CleanUpRewardFn = none;
+	Template.RewardPopupFn = none;
+
+	return Template;
+}
+
+static function X2DataTemplate CreateProgramHuntTemplarsP2Reward() {
+	local X2RewardTemplate Template;
+
+	`CREATE_X2Reward_TEMPLATE(Template, 'RTReward_ProgramHuntTemplarsP2');
+	
+	Template.IsRewardAvailableFn = IsHuntTemplarsP2Available; // allows logical augmentation of reward availability. For example, rescue rewards are only available if there are captured soldiers
+	Template.IsRewardNeededFn = none; // allows logical augmentation of reward availability. Used to indicate if the player desperately needs this resource
+	Template.GenerateRewardFn = none;
+	Template.SetRewardFn = none;
+	Template.GiveRewardFn = none;
+	Template.GetRewardStringFn = none;
+	Template.GetRewardPreviewStringFn = none;
+	Template.GetRewardDetailsStringFn = none;
+	Template.GetRewardImageFn = none;
+	Template.SetRewardByTemplateFn = none;
+	Template.GetBlackMarketStringFn = none;
+	Template.GetRewardIconFn = none;
+	Template.CleanUpRewardFn = none;
+	Template.RewardPopupFn = none;
+
+	return Template;
+}
+
+static function X2DataTemplate CreateProgramHuntTemplarsP3Reward() {
+	local X2RewardTemplate Template;
+
+	`CREATE_X2Reward_TEMPLATE(Template, 'RTReward_ProgramHuntTemplarsP3');
+	
+	Template.IsRewardAvailableFn = IsHuntTemplarsP3Available; // allows logical augmentation of reward availability. For example, rescue rewards are only available if there are captured soldiers
+	Template.IsRewardNeededFn = none; // allows logical augmentation of reward availability. Used to indicate if the player desperately needs this resource
+	Template.GenerateRewardFn = none;
+	Template.SetRewardFn = none;
+	Template.GiveRewardFn = none;
+	Template.GetRewardStringFn = none;
+	Template.GetRewardPreviewStringFn = none;
+	Template.GetRewardDetailsStringFn = none;
+	Template.GetRewardImageFn = none;
+	Template.SetRewardByTemplateFn = none;
+	Template.GetBlackMarketStringFn = none;
+	Template.GetRewardIconFn = none;
+	Template.CleanUpRewardFn = none;
+	Template.RewardPopupFn = none;
+
+	return Template;
+}
+
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 //---Is Available Delegates--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -84,10 +156,10 @@ static function X2DataTemplate CreateProgramIncreaseInfluenceTemplate()
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // copied from RealityMachina
 static function bool IsProgramFactionReward_AddCardSlot_Available(optional XComGameState NewGameState, optional StateObjectReference AuxRef) {
-	local XComGameStateHistory History;
+	//local XComGameStateHistory History;
 	local XComGameState_ResistanceFaction FactionState;
 
-	History = `XCOMHISTORY;
+	//History = `XCOMHISTORY;
 	FactionState = GetFactionState(NewGameState, AuxRef);
 	if (FactionState != none) {
 		if ( FactionState.GetMyTemplateName() != 'Faction_Program') {
@@ -107,10 +179,10 @@ static function bool IsProgramFactionReward_IncreaseInfluence_Available(optional
 }
 
 static function bool IsFindProgramFactionRewardAvailable(optional XComGameState NewGameState, optional StateObjectReference AuxRef) {
-	local XComGameStateHistory History;
+	//local XComGameStateHistory History;
 	local XComGameState_ResistanceFaction FactionState;
 
-	History = `XCOMHISTORY;
+	//History = `XCOMHISTORY;
 	FactionState = GetFactionState(NewGameState, AuxRef);
 
 	if(FactionState.GetMyTemplateName() == class'RTHelpers'.default.ProgramFactionName)
@@ -119,10 +191,10 @@ static function bool IsFindProgramFactionRewardAvailable(optional XComGameState 
 }
 
 static function bool IsFindFarthestProgramFactionRewardAvailable(optional XComGameState NewGameState, optional StateObjectReference AuxRef) {
-	local XComGameStateHistory History;
+	//local XComGameStateHistory History;
 	local XComGameState_ResistanceFaction FactionState;
 
-	History = `XCOMHISTORY;
+	//History = `XCOMHISTORY;
 	FactionState = GetFactionState(NewGameState, AuxRef);
 
 	if(FactionState.GetMyTemplateName() == class'RTHelpers'.default.ProgramFactionName)
@@ -143,6 +215,93 @@ static function bool IsProgramFactionRewardAvailable(optional XComGameState NewG
 	}
 
 	return true;
+}
+
+static function bool IsHuntTemplarsP1Available(optional XComGameState NewGameState, optional StateObjectReference AuxRef) {
+	local RTGameState_ProgramFaction ProgramState;
+	local XComGameState_ResistanceFaction FactionState;
+	//local XComGameStateHistory History;
+
+	`RTLOG("Checking if the HuntTemplarsP1 is availble for " $ AuxRef.ObjectID);
+	FactionState = GetFactionState(NewGameState, AuxRef);
+	if (FactionState != none) {
+		if ( FactionState.GetMyTemplateName() != 'Faction_Program') {
+			`RTLOG("FactionState.GetMyTemplateName() == " $ FactionState.GetMyTemplateName() $ ", returning FALSE!");
+			return false;
+		}
+	}
+
+	ProgramState = RTGameState_ProgramFaction(FactionState);
+	if(ProgramState == none) {
+		class'RTHelpers'.static.RTLog("wut", true);
+	}
+
+	foreach `XCOMHISTORY.IterateByClassType(class'XComGameState_ResistanceFaction', FactionState) {
+		if(FactionState.GetMyTemplateName() == 'Faction_Templars') {
+			if(FactionState.bMetXCom) {
+				`RTLOG("The Templars have been met, returning TRUE!");
+				return true;
+			}
+		}
+	}
+	`RTLOG("The Templars haven't been met, returning FALSE!");
+	return false;
+}
+
+static function bool IsHuntTemplarsP2Available(optional XComGameState NewGameState, optional StateObjectReference AuxRef) {
+	local RTGameState_ProgramFaction ProgramState;
+	local XComGameState_ResistanceFaction FactionState;
+	//local XComGameStateHistory History;
+
+	`RTLOG("Checking if the HuntTemplarsP2 is availble for " $ AuxRef.ObjectID);
+	FactionState = GetFactionState(NewGameState, AuxRef);
+	if (FactionState != none) {
+		if ( FactionState.GetMyTemplateName() != 'Faction_Program') {
+			`RTLOG("FactionState.GetMyTemplateName() == " $ FactionState.GetMyTemplateName() $ ", returning FALSE!");
+			return false;
+		}
+	}
+
+	ProgramState = RTGameState_ProgramFaction(FactionState);
+	if(ProgramState == none) {
+		class'RTHelpers'.static.RTLog("wut", true);
+	}
+
+	if(ProgramState.iTemplarQuestlineStage == 1) {
+		`RTLOG("The questline stage has been met, returning TRUE!");
+		return true;
+	}
+
+	`RTLOG("The questline stage hasn't been met, returning FALSE!");
+	return false;
+}
+
+static function bool IsHuntTemplarsP3Available(optional XComGameState NewGameState, optional StateObjectReference AuxRef) {
+	local RTGameState_ProgramFaction ProgramState;
+	local XComGameState_ResistanceFaction FactionState;
+	//local XComGameStateHistory History;
+
+	`RTLOG("Checking if the HuntTemplarsP3 is availble for " $ AuxRef.ObjectID);
+	FactionState = GetFactionState(NewGameState, AuxRef);
+	if (FactionState != none) {
+		if ( FactionState.GetMyTemplateName() != 'Faction_Program') {
+			`RTLOG("FactionState.GetMyTemplateName() == " $ FactionState.GetMyTemplateName() $ ", returning FALSE!");
+			return false;
+		}
+	}
+
+	ProgramState = RTGameState_ProgramFaction(FactionState);
+	if(ProgramState == none) {
+		class'RTHelpers'.static.RTLog("wut", true);
+	}
+
+	if(ProgramState.iTemplarQuestlineStage == 2) {
+		`RTLOG("The questline stage has been met, returning TRUE!");
+		return true;
+	}
+
+	`RTLOG("The questline stage hasn't been met, returning FALSE!");
+	return false;
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -167,12 +326,11 @@ static function GenerateProgramFactionInfluenceReward(XComGameState_Reward Rewar
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 static function GiveProgramCardSlotReward(XComGameState NewGameState, XComGameState_Reward RewardState, optional StateObjectReference AuxRef, optional bool bOrder = false, optional int OrderHours = -1)
 {
-	local XComGameState_ResistanceFaction FactionState, RandomFactionState;
-	local array<XComGameState_ResistanceFaction> ArrayOfStates;
-	local XComGameStateHistory History;
+	local XComGameState_ResistanceFaction FactionState;
+	//local array<XComGameState_ResistanceFaction> ArrayOfStates;
+	//local XComGameStateHistory History;
 	local XComGameState_CovertAction ActionState;
 
-	History = `XCOMHISTORY;
 	ActionState = XComGameState_CovertAction(`XCOMHISTORY.GetGameStateForObjectID(AuxRef.ObjectID));
 
 	FactionState = XComGameState_ResistanceFaction(NewGameState.ModifyStateObject(class'XComGameState_ResistanceFaction', ActionState.Faction.ObjectID));

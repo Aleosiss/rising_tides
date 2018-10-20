@@ -26,3 +26,8 @@ Todo:
   ✔ Rework RTEffect_Stealth @done(18-04-30 18:32)
     ✔ Add RTGameState_Effect handling for it @done(18-04-30 18:32)
     ✔ Tracks Concealment / Superconcealment gained before Stealth was applied @done(18-04-30 18:32)
+  ☐ Add Hunt_Templar Risks
+  ☐ Add Hunt_Templars narratives
+  ☐ Add Hunt_Templars rewards
+  ☐ Add system to manage Hunt_Templars covert actions
+  ☐ Add Assault Templar Leadership mission

@@ -21,7 +21,7 @@ function int GetAttackingDamageModifier(XComGameState_Effect EffectState, XComGa
 
 	if (AbilityState.GetMyTemplateName() == 'RTKubikuri')
 	{
-	  if(AppliedData.AbilityResultContext.HitResult == eHit_Crit)
+		if(AppliedData.AbilityResultContext.HitResult == eHit_Crit)
 		{
 			SourceWeapon = AbilityState.GetSourceWeapon();
 			if(SourceWeapon != none) 
@@ -41,8 +41,8 @@ function int GetAttackingDamageModifier(XComGameState_Effect EffectState, XComGa
 						return int(2 * (TargetUnit.GetCurrentStat(eStat_HP)+TargetUnit.GetCurrentStat(eStat_ShieldHP)+TargetUnit.GetCurrentStat(eStat_ArmorMitigation)+CurrentDamage));
 					}
 				}
-            }
-        }
+			}
+		}
 		if(AppliedData.AbilityResultContext.HitResult == eHit_Success || AppliedData.AbilityResultContext.HitResult == eHit_Graze)
 		{
 			SourceWeapon = AbilityState.GetSourceWeapon();
@@ -56,7 +56,7 @@ function int GetAttackingDamageModifier(XComGameState_Effect EffectState, XComGa
 			}
 		}
 	}
-    return 0;
+	return 0;
 }
 
 function bool PostAbilityCostPaid(XComGameState_Effect EffectState, XComGameStateContext_Ability AbilityContext, XComGameState_Ability kAbility, XComGameState_Unit SourceUnit, XComGameState_Item AffectWeapon, XComGameState NewGameState, const array<name> PreCostActionPoints, const array<name> PreCostReservePoints)

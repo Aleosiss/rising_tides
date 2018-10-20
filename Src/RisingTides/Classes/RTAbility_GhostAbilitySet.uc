@@ -464,7 +464,7 @@ static function X2AbilityTemplate RTFeedback()
 	local X2AbilityTemplate					Template;
 	local X2AbilityTrigger_EventListener	Trigger;
 	local RTEffect_Panicked					PanicEffect;
-	local X2AbilityCost_ActionPoints		ActionPointCost;
+	//local X2AbilityCost_ActionPoints		ActionPointCost;
 
 
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'RTFeedback');

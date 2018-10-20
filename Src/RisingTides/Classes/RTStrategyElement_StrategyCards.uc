@@ -32,7 +32,7 @@ static function X2DataTemplate RTCreateOneSmallFavor()
 
 static function ActivateOneSmallFavor(XComGameState NewGameState, StateObjectReference InRef, optional bool bReactivate = false) {
 	local RTGameState_ProgramFaction Program;
-	local DynamicPropertySet PropertySet; //need to delay it when the player can see it
+	//local DynamicPropertySet PropertySet; //need to delay it when the player can see it
 
 	Program = class'RTHelpers'.static.GetNewProgramState(NewGameState);
 	Program.MakeOneSmallFavorAvailable();
@@ -60,12 +60,12 @@ static function X2DataTemplate RTCreateJustPassingThrough() {
 static function JustPassingThroughModifyTacStartState(XComGameState StartState) {
 	local RTGameState_ProgramFaction Program;
 	local XComGameState_HeadquartersXCom XComHQ;
-	local array<StateObjectReference> AvailableSoldiers;
+	//local array<StateObjectReference> AvailableSoldiers;
 	local StateObjectReference SoldierObjRef;
 	local XComGameState_MissionSite MissionState;
 	local XComGameState_Unit CopyUnitState, OriginalUnitState;
 	local name CharTemplateName;
-	local X2CharacterTemplate Template;
+	//local X2CharacterTemplate Template;
 	local XComGameState_Player PlayerState;
 
 	if (IsSplitMission( StartState ))
@@ -104,7 +104,7 @@ static function JustPassingThroughModifyTacStartState(XComGameState StartState) 
 	OriginalUnitState = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(SoldierObjRef.ObjectID));
 	CharTemplateName = OriginalUnitState.GetMyTemplateName();
 
-	Template = class'X2CharacterTemplateManager'.static.GetCharacterTemplateManager().FindCharacterTemplate( CharTemplateName );
+	//Template = class'X2CharacterTemplateManager'.static.GetCharacterTemplateManager().FindCharacterTemplate( CharTemplateName );
 
 	CopyUnitState = Program.CreateRTOperative(CharTemplateName, StartState);
 	CopyUnitState.bMissionProvided = true;

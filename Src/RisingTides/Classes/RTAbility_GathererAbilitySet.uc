@@ -2148,7 +2148,7 @@ static function X2AbilityTemplate RTEndPsistorms_Dead() {
 	local X2AbilityTemplate Template;
 	local X2AbilityTrigger_EventListener Trigger;
 	local X2Effect_RemoveEffects		RemoveEffect;
-	local X2Condition_UnitEffects		EffectCondition;
+	//local X2Condition_UnitEffects		EffectCondition;
 	local RTEffect_RemoveValidActivationTiles RemoveTargetedAreaEffect;
 	local RTEffect_ResetCharges					ResetChargesEffect;
 

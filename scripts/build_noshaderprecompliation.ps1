@@ -208,7 +208,7 @@ if($canSkipShaderPrecompliation) {
 # clean
 Write-Host "Cleaning mod project at $stagingPath...";
 if (Test-Path $stagingPath) {
-    Remove-Item $stagingPath -Recurse -WarningAction SilentlyContinue;
+    Remove-Item $stagingPath -Recurse -Force -WarningAction SilentlyContinue;
 }
 Write-Host "Cleaned."
 
@@ -242,6 +242,15 @@ Write-Host "Mirrored."
 Write-Host "Copying the mod's scripts to Src..."
 Copy-Item "$stagingPath/Src/*" "$sdkPath/Development/Src/" -Force -Recurse -WarningAction SilentlyContinue
 Write-Host "Copied."
+
+# append extra_globals.uci to globals.uci
+if (Test-Path "$sdkPath/Development/Src/$modNameCanonical/Classes/extra_globals.uci") {
+    Write-Host "Appending macros..."
+    Get-Content "$sdkPath/Development/Src/$modNameCanonical/Classes/extra_globals.uci" | Add-Content "$sdkPath/Development/Src/Core/Globals.uci"
+    Write-Host "Appended."
+} else {
+    Write-Host "Couldn't find an extra_globals.uci to append extra macros..."
+}
 
 if ($forceFullBuild) {
     # if a full build was requested, clean all compiled scripts too

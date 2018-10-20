@@ -65,7 +65,6 @@ var bool														bSetupComplete;		// if we should rebuild the operative arr
 
 // FACTION VARIABLES
 var bool																bShouldPerformPostMissionCleanup;	// should cleanup the program's roster after a mission-- set during OSF and JPT missions
-var bool																bTemplarsDestroyed;
 var bool																bDirectNeuralManipulation;
 var bool																bResistanceSabotageActivated;
 var config array<name>													InvalidMissionSources;				// list of mission types ineligible for Program support, usually story missions
@@ -73,6 +72,11 @@ var config array<name>													UnavailableCovertActions;			// list of covert
 var config array<name>													ExcludedGoldenPathCovertActions;				// list of golden path covert actions the program cannot carry out (yet)
 var config int															iNumberOfFavorsRequiredToIncreaseInfluence;
 var array<X2DataTemplate>												OperativeTemplates;
+
+// TEMPLAR QUESTLINE VARIABLES
+var bool																bTemplarsDestroyed;
+var int																	iTemplarQuestlineStage;
+var array<StateObjectReference>											TemplarQuestActions;
 
 // ONE SMALL FAVOR HANDLING VARIABLES
 var private int															iPreviousMaxSoldiersForMission;		// cache of the number of soldiers on a mission before OSF modfied it
@@ -126,9 +130,9 @@ function RTGameState_Unit CreateRTOperative(name GhostTemplateName, XComGameStat
 	local RTGameState_Unit UnitState;
 	local X2CharacterTemplate TempTemplate;
 	local RTCharacterTemplate CharTemplate;
-	local X2DataTemplate IteratorTemplate;
+	//local X2DataTemplate IteratorTemplate;
 	local XComGameState_Item WeaponState;
-	local name WeaponUpgradeName;
+	//local name WeaponUpgradeName;
 	local X2CharacterTemplateManager CharMgr;
 
 	CharMgr = class'X2CharacterTemplateManager'.static.GetCharacterTemplateManager();
@@ -158,11 +162,11 @@ function RTGameState_Unit CreateRTOperative(name GhostTemplateName, XComGameStat
 function ApplyWeaponUpgrades(name GhostTemplateName, XComGameState_Item NewWeaponState) {
 	local X2WeaponUpgradeTemplate UpgradeTemplate;
 	local X2ItemTemplateManager ItemTemplateMgr;
-	local name WeaponUpgradeName;
+	//local name WeaponUpgradeName;
 	local int idx;
 
-	local name DebugIteratorName;
-	local array<name> DebuggingNames;
+	//local name DebugIteratorName;
+	//local array<name> DebuggingNames;
 
 	ItemTemplateMgr = class'X2ItemTemplateManager'.static.GetItemTemplateManager();
 	NewWeaponState.WipeUpgradeTemplates();
@@ -403,7 +407,7 @@ function EventListenerReturn OnUnitAttacked(Object EventData, Object EventSource
 function OnEndTacticalPlay(XComGameState NewGameState)
 {
 	local XComGameStateHistory History;
-	local XComGameState_Unit UnitState;
+	//local XComGameState_Unit UnitState;
 	local XComGameState_HeadquartersXCom XComHQ;
 	local XComGameState_MissionSite MissionState;
 
@@ -437,6 +441,14 @@ protected static function bool IsOSFMission(XComGameState_MissionSite MissionSta
 }
 
 function MakeOneSmallFavorAvailable() {
+	if(Deployed == none) {
+		RotateRandomSquadToDeploy();
+	}
+
+	bOneSmallFavorAvailable = true;
+}
+
+function HandleOSFTutorial() {
 	local DynamicPropertySet PropertySet;
 	// add some checks here...
 	if(!bOSF_FirstTimeDisplayed) {
@@ -444,12 +456,6 @@ function MakeOneSmallFavorAvailable() {
 		class'X2StrategyGameRulesetDataStructures'.static.BuildDynamicPropertySet(PropertySet, 'UIAlert_OSFFirstTime', 'UITutorialBox', none, false, false, true, false);
 		class'XComPresentationLayerBase'.static.QueueDynamicPopup(PropertySet);
 	}
-
-	if(Deployed == none) {
-		RotateRandomSquadToDeploy();
-	}
-
-	bOneSmallFavorAvailable = true;
 }
 
 //---------------------------------------------------------------------------------------
@@ -459,7 +465,7 @@ function MakeOneSmallFavorAvailable() {
 // will scoop up their gear
 protected function BlastOperativeLoadouts(XComGameState NewGameState) {
 	local XComGameState_Unit UnitState;
-	local XComGameStateHistory History;
+	//local XComGameStateHistory History;
 	local XComGameState_Item ItemState;
 
 	foreach NewGameState.IterateByClassType(class'XComGameState_Unit', UnitState) {
@@ -629,7 +635,7 @@ simulated function RetrieveRescuedProgramOperatives(XComGameState NewGameState) 
 	local RTGameState_PersistentGhostSquad pgs;
 	local StateObjectReference SquadIteratorObjRef, UnitIteratorObjRef;
 	local XComGameStateHistory History;
-	local XComGameState_Unit UnitState, NewUnitState;
+	local XComGameState_Unit UnitState;
 	local XComGameState_HeadquartersXCom XComHQ;
 
 	History = `XCOMHISTORY;
@@ -664,21 +670,20 @@ simulated function RetrieveRescuedProgramOperatives(XComGameState NewGameState) 
 // Reset Consumables
 simulated function ReloadOperativeArmaments(XComGameState NewGameState) {
 	local XComGameStateHistory History;
-	local StateObjectReference SquadIteratorObjRef, UnitIteratorObjRef;
+	local StateObjectReference UnitIteratorObjRef;
 	local XComGameState_Unit UnitState, NewUnitState;
-	local XComGameState_Item ItemState, RemoveItemState;
-	local X2ItemTemplateManager	ItemTemplateManager;
-	local InventoryLoadout Loadout, EmptyLoadout;
-	local InventoryLoadoutItem LoadoutItem;
-	local X2EquipmentTemplate EquipmentTemplate;
-	local int idx;
+	//local XComGameState_Item ItemState, RemoveItemState;
+	//local X2ItemTemplateManager	ItemTemplateManager;
+	//local InventoryLoadout Loadout, EmptyLoadout;
+	//local InventoryLoadoutItem LoadoutItem;
+	//local X2EquipmentTemplate EquipmentTemplate;
+	//local int idx;
 	local XComGameState_Item WeaponState;
 	
 
 	History = `XCOMHISTORY;
-	ItemTemplateManager = class'X2ItemTemplateManager'.static.GetItemTemplateManager();
+	//ItemTemplateManager = class'X2ItemTemplateManager'.static.GetItemTemplateManager();
 	foreach Active(UnitIteratorObjRef) {
-		Loadout = EmptyLoadout;
 		UnitState = XComGameState_Unit(History.GetGameStateForObjectID(UnitIteratorObjRef.ObjectID));
 		class'RTHelpers'.static.RTLog("Reloading Arsenal for " $ UnitState.GetName(eNameType_Nick) $ ".");
 
@@ -744,7 +749,7 @@ private function AddRisingTidesTacticalTags(XComGameState_HeadquartersXCom XComH
 }
 
 simulated function bool CashOneSmallFavor(XComGameState NewGameState, XComGameState_MissionSite MissionSite) {
-	local StateObjectReference GhostRef, EmptyRef;
+	local StateObjectReference GhostRef;
 	local name GhostTemplateName;
 	
 	if(Deployed == none) {
@@ -897,9 +902,88 @@ function CreateGoldenPathActions(XComGameState NewGameState)
 	}
 }
 
+// the 'golden path' for the Program
+function InitTemplarQuestActions(XComGameState NewGameState) {
+	local X2StrategyElementTemplateManager StratMgr;
+	local array<X2StrategyElementTemplate> AllActionTemplates;
+	local X2StrategyElementTemplate DataTemplate;
+	local X2CovertActionTemplate ActionTemplate;
+	local array<name>	TemplarQuestCovertActionTemplateNames;
+
+	if(TemplarQuestActions.Length != 0) {
+		class'RTHelpers'.static.RTLog("Not creating more Templar Quest Covert Actions...");
+		return;
+	}
+
+	// oof
+	TemplarQuestCovertActionTemplateNames.AddItem('CovertAction_HuntTemplarsP1Template');
+	TemplarQuestCovertActionTemplateNames.AddItem('CovertAction_HuntTemplarsP2Template');
+	TemplarQuestCovertActionTemplateNames.AddItem('CovertAction_HuntTemplarsP3Template');
+
+	StratMgr = class'X2StrategyElementTemplateManager'.static.GetStrategyElementTemplateManager();
+	AllActionTemplates = StratMgr.GetAllTemplatesOfClass(class'X2CovertActionTemplate');
+
+	foreach AllActionTemplates(DataTemplate)
+	{
+		ActionTemplate = X2CovertActionTemplate(DataTemplate);
+		if (ActionTemplate != none && 
+			TemplarQuestCovertActionTemplateNames.Find(ActionTemplate.DataName) != INDEX_NONE)
+		{
+			TemplarQuestActions.AddItem(CreateCovertAction(NewGameState, ActionTemplate, 0));
+		}
+	}
+}
+
+function HandleTemplarQuestActions(XComGameState NewGameState) {
+	local XComGameState_CovertAction ActionState;
+	local StateObjectReference QuestRef;
+	local name QuestTemplateName;
+	local XComGameStateHistory History;
+
+	switch(iTemplarQuestlineStage) {
+		case 0:
+			if(!IsTemplarFactionMet()) { return; } // don't print the action if we haven't met the templars yet
+			QuestTemplateName = 'CovertAction_HuntTemplarsP1Template';
+			break;
+		case 1:
+			QuestTemplateName = 'CovertAction_HuntTemplarsP2Template';
+			break;
+		case 2:
+			QuestTemplateName = 'CovertAction_HuntTemplarsP3Template';
+			break;
+		default:
+			`RTLOG("iTemplarQuestStage is out-of-bounds! Ending early...");
+			return;
+	}
+
+	History = `XCOMHISTORY;
+	foreach TemplarQuestActions(QuestRef) {
+		ActionState = XComGameState_CovertAction(History.GetGameStateForObjectID(QuestRef.ObjectID));
+		if(ActionState.GetMyTemplateName() == QuestTemplateName) {
+			CovertActions.AddItem(QuestRef);
+		}
+	}
+}
+
+private function bool IsTemplarFactionMet() {
+	local XComGameState_ResistanceFaction FactionState;
+
+	foreach `XCOMHISTORY.IterateByClassType(class'XComGameState_ResistanceFaction', FactionState) {
+		if(FactionState.GetMyTemplateName() == 'Faction_Templars') {
+			if(FactionState.bMetXCom) {
+				return true;
+			} else return false;
+		}
+	}
+
+	return false;
+}
+
 function OnEndOfMonth(XComGameState NewGameState, out array<Name> ActionExclusionList)
 {
 	super.OnEndOfMonth(NewGamestate, ActionExclusionList);
+	InitTemplarQuestActions(NewGameState);
+	HandleTemplarQuestActions(NewGameState);
 
 	if(bShouldResetOSFMonthly) {
 		MakeOneSmallFavorAvailable();
@@ -984,9 +1068,13 @@ function MeetXCom(XComGameState NewGameState)
 	bNewFragmentActionAvailable = true;
 	MetXComDate = GetCurrentTime();
 
+	HandleOSFTutorial();
+
 	CleanUpFactionCovertActions(NewGameState);
 	CreateGoldenPathActions(NewGameState);
 	GenerateCovertActions(NewGameState, ExclusionList);
+	InitTemplarQuestActions(NewGameState);
+	HandleTemplarQuestActions(NewGameState);
 	
 	CreateRTOperatives(NewGameState);
 	CreateRTSquads(NewGameState);
@@ -1002,9 +1090,10 @@ function MeetXCom(XComGameState NewGameState)
 		}
 	}
 
-
 	// Need one for One Small Favor
-	AddCardSlot();
+	AddOneSmallFavorCard(NewGameState); // this also adds a card slot
+
+	// Normal cards on meet
 	for(idx = 0; idx < default.NumCardsOnMeet; idx++)
 	{
 		GenerateNewPlayableCard(NewGameState);
@@ -1018,6 +1107,42 @@ function MeetXCom(XComGameState NewGameState)
 	if (!ResHQ.IsRookieCovertActionAvailable(NewGameState))
 	{
 		ResHQ.CreateRookieCovertAction(NewGameState);
+	}
+}
+
+function AddOneSmallFavorCard(XComGameState NewGameState) {
+	local XComGameStateHistory History;
+	local XComGameState_StrategyCard CardState;
+	local StateObjectReference	EmptyCardRef;
+
+	History = `XCOMHISTORY;
+
+	foreach History.IterateByClassType(class'XComGameState_StrategyCard', CardState)
+	{
+		if(CardState.GetMyTemplateName() != 'ResCard_RTOneSmallFavor') {
+			continue;
+		}
+		
+		if(!IsCardAvailable(CardState, 5)) { // card strength is greater than possible, can never draw by accident
+			`RTLOG("OSF isn't available?", true, false);
+			return;
+		}
+
+		if(GetNumCardSlots() < 1) {
+			CardSlots.AddItem(EmptyCardRef);
+		}
+
+		if(CardSlots[0] != EmptyCardRef) {
+			return;
+		}
+		
+		CardState = XComGameState_StrategyCard(NewGameState.ModifyStateObject(class'XComGameState_StrategyCard', CardState.ObjectID));
+		CardState.bDrawn = true;
+		CardState.bNewCard = true;
+
+		NewPlayableCards.AddItem(CardState.GetReference());
+		PlaceCardInSlot(CardState.GetReference(), 0);
+		CardState.ActivateCard(NewGameState);
 	}
 }
 
@@ -1079,9 +1204,9 @@ function TryIncreaseInfluence() {
 // Event Data is the Tuple, the Event Source is the RegionState
 // Tuple should have one bool, set it to true
 static function EventListenerReturn FortyYearsOfWarEventListener(Object EventData, Object EventSource, XComGameState GameState, Name EventID, Object CallbackData) {
-	local XComGameState NewGameState;
-	local XComGameState_WorldRegion RegionState;
-	local XComGameState_HeadquartersXCom XComHQ;
+	//local XComGameState NewGameState;
+	//local XComGameState_WorldRegion RegionState;
+	//local XComGameState_HeadquartersXCom XComHQ;
 	local XComLWTuple Tuple;
 
 	class'RTHelpers'.static.RTLog("Forty Years of War Triggered!");
@@ -1120,7 +1245,7 @@ static function InitFaction(optional XComGameState StartState) {
 	StratMgr = class'X2StrategyElementTemplateManager'.static.GetStrategyElementTemplateManager();
 	if(StartState == none) {
 		NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("Adding the Program Faction Object...");
-	} else  {
+	} else {
 		NewGameState = StartState;
 	}
 
@@ -1160,6 +1285,7 @@ static function InitFaction(optional XComGameState StartState) {
 		FactionState.FactionHQ = HavenState.GetReference();
 		FactionState.SetUpProgramFaction(NewGameState);
 		FactionState.CreateGoldenPathActions(NewGameState);
+		FactionState.InitTemplarQuestActions(NewGameState);
 	}
 
 	if(NewGameState.GetNumGameStateObjects() > 0) {
