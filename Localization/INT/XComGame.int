@@ -192,8 +192,8 @@ LocPromotionPopupText="<Bullet/>Leave the meld, negating possible panic effects 
 
 [PsiOverload X2AbilityTemplate]
 LocFriendlyName="Mind Wrack"
-LocLongDescription="Overload an organic unit's brain with pure psionic energy, killing it immediately."
-LocHelpText="Overload an organic unit's brain with pure psionic energy, killing it immediately."
+LocLongDescription="Overload an organic unit's brain with pure psionic energy, killing it immediately. Suffer feedback, disabling all action for a significant duration."
+LocHelpText="Overload an organic unit's brain with pure psionic energy, killing it immediately. Suffer feedback."
 LocFlyOverText="Mind Wrack"
 LocPromotionPopupText="<Bullet> <Ability:SelfCooldown/> turn cooldown.<br/><Bullet/> Overload an organic unit's brain with pure psionic energy, killing it immediately. The feedback from the ability will cause a significant moment of panic.<br/>"
 
@@ -591,7 +591,7 @@ LocFriendlyName="Guardian Angel"
 LocLongDescription="Grant an effect to allied units affected by Over the Shoulder which cleanses mental debuffs, and slowly heals them."
 LocHelpText="Grant an effect to allied units affected by Over the Shoulder which cleanses mental debuffs, and slowly heals them."
 LocFlyOverText="Guardian Angel"
-LocPromotionPopupText="<Bullet/> Grant an effect to allied units affected by Over the Shoulder which cleanses mental debuffs, and slowly heals them.<br/><Bullet/> The healing effect can only happen once per turn.<br/>"
+LocPromotionPopupText="<Bullet/> Grant an effect to allied units affected by Over the Shoulder which cleanses mental debuffs, and slowly heals them.<br/><Bullet/> The healing effect can only happen once per turn.<br/><Bullet/> Note that this ability cannot affect Feedback gained from using Mind Wrack.<br/>"
 
 [RTForcedIntroversion X2AbilityTemplate]
 LocFriendlyName="Forced Introversion"
