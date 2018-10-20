@@ -982,8 +982,8 @@ private function bool IsTemplarFactionMet() {
 function OnEndOfMonth(XComGameState NewGameState, out array<Name> ActionExclusionList)
 {
 	super.OnEndOfMonth(NewGamestate, ActionExclusionList);
-	//InitTemplarQuestActions(NewGameState);
-	//HandleTemplarQuestActions(NewGameState);
+	InitTemplarQuestActions(NewGameState);
+	HandleTemplarQuestActions(NewGameState);
 
 	if(bShouldResetOSFMonthly) {
 		MakeOneSmallFavorAvailable();
@@ -1073,8 +1073,8 @@ function MeetXCom(XComGameState NewGameState)
 	CleanUpFactionCovertActions(NewGameState);
 	CreateGoldenPathActions(NewGameState);
 	GenerateCovertActions(NewGameState, ExclusionList);
-	//InitTemplarQuestActions(NewGameState);
-	//HandleTemplarQuestActions(NewGameState);
+	InitTemplarQuestActions(NewGameState);
+	HandleTemplarQuestActions(NewGameState);
 	
 	CreateRTOperatives(NewGameState);
 	CreateRTSquads(NewGameState);
@@ -1285,7 +1285,7 @@ static function InitFaction(optional XComGameState StartState) {
 		FactionState.FactionHQ = HavenState.GetReference();
 		FactionState.SetUpProgramFaction(NewGameState);
 		FactionState.CreateGoldenPathActions(NewGameState);
-		//FactionState.InitTemplarQuestActions(NewGameState);
+		FactionState.InitTemplarQuestActions(NewGameState);
 	}
 
 	if(NewGameState.GetNumGameStateObjects() > 0) {

@@ -10,9 +10,9 @@ static function array<X2DataTemplate> CreateTemplates()
 	CovertActions.AddItem(CreateFindProgramFarAwayFactionTemplate());
 
 	// TODO: Hunt Templars
-	//CovertActions.AddItem(CreateHuntTemplarsP1Template());
-	//CovertActions.AddItem(CreateHuntTemplarsP2Template());
-	//CovertActions.AddItem(CreateHuntTemplarsP3Template());
+	CovertActions.AddItem(CreateHuntTemplarsP1Template());
+	CovertActions.AddItem(CreateHuntTemplarsP2Template());
+	CovertActions.AddItem(CreateHuntTemplarsP3Template());
 
 	return CovertActions;
 }
