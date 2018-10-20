@@ -710,3 +710,41 @@ exec function RT_DebugKismetVariables() {
 		}
 	}
 }
+
+exec function RT_DebugClosestUnitToCursorAvailableAbilties() {
+	local XComGameState_Unit UnitState;
+	local StateObjectReference AbilityRef;
+	local XComGameState_Ability AbilityState;
+	local XComGameStateHistory History;
+	local AvailableAction Action;
+
+	UnitState = `CHEATMGR.GetClosestUnitToCursor();
+	if(UnitState == none) {
+		class'RTHelpers'.static.RTLog("Couldn't find unit to debug!", false, true);
+		return;
+	}
+
+	History = `XCOMHISTORY;
+	if(History == none) {
+		class'RTHelpers'.static.RTLog("NO HISTORY??????", false, true);
+		return;
+	}
+
+	class'RTHelpers'.static.RTLog("Gathering and displaying ability availability for " $ UnitState.GetFullName(), false, true);
+	foreach UnitState.Abilities(AbilityRef) {
+		AbilityState = XComGameState_Ability(History.GetGameStateForObjectID(AbilityRef.ObjectID));
+		if(AbilityState == none) {
+			continue;
+		}
+
+		AbilityState.UpdateAbilityAvailability(Action);
+		if(!Action.bInputTriggered) {
+			continue;
+		}
+		
+		if(Action.AvailableCode == 'AA_Success') {
+			class'RTHelpers'.static.RTLog("" $ AbilityState.GetMyTemplateName() $ " is available.", false, true);
+		} else { class'RTHelpers'.static.RTLog("" $ AbilityState.GetMyTemplateName() $ " is not available due to " $ Action.AvailableCode, false, true); }
+	}
+	class'RTHelpers'.static.RTLog("Finished gathering and displaying ability availablity for " $ UnitState.GetFullName(), false, true);
+}

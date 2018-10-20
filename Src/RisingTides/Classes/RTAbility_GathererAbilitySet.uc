@@ -710,8 +710,14 @@ static function X2AbilityTemplate RTTheSixPathsOfPainOverride() {
 
 	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_NeverShow;
 	Template.IconImage = "img:///RisingTidesContentPackage.PerkIcons.rt_thesixpathsofpain";
+
+	// free to cast
 	Template.AbilityCosts.Length = 0;
 	Template.AbilityCooldown = none;
+
+	// can't cast anyway
+	Template.AbilityTriggers.Length = 0;
+	Template.AbilityTriggers.AddItem(new class'X2AbilityTrigger_Placeholder');
 
 	Template.PostActivationEvents.AddItem(default.PostOverTheShoulderEventName);
 
