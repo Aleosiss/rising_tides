@@ -27,3 +27,7 @@ function bool IsFullStrength() {
 function name GetAssociatedSitRepTemplateName() {
 	return AssociatedSitRepTemplateName;
 }
+
+function string GetName() {
+	return SquadName;
+}

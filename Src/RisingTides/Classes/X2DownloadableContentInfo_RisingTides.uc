@@ -414,6 +414,52 @@ exec function RT_AddProgramOperativeToXCOMCrew() {
 		`LOG("Rising Tides: Did not find any active operatives!");
 }
 
+exec function RT_RegenerateProgramOperatives() {
+	local XComGameStateHistory History;
+	local XComGameState NewGameState;
+	local XComGameState_Unit UnitState;
+	local RTGameState_ProgramFaction ProgramState;
+	local StateObjectReference SquadRef;
+	local RTGameState_PersistentGhostSquad SquadState;
+
+	History = `XCOMHISTORY;
+	NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("Rising Tides: CHEAT: Regenerate Program Operatives, Part 1");
+	ProgramState = class'RTHelpers'.static.GetNewProgramState(NewGameState);
+	`RTLOG("CHEAT: Regenerate Program Operatives ####################", false, true);
+
+	`RTLOG("Wiping Squads...", false, true);
+	foreach ProgramState.Squads(SquadRef) {
+		SquadState = RTGameState_PersistentGhostSquad(History.GetGameStateForObjectID(SquadRef.ObjectID));
+		`RTLOG("Found a " $ SquadState.GetName() $ ", wiping them from existance!", false, true);
+		NewGameState.RemoveStateObject(SquadRef.ObjectID);
+	}
+
+	`RTLOG("Wiping Operatives...", false, true);
+	foreach ProgramState.Master(SquadRef) {
+		UnitState = XComGameState_Unit(History.GetGameStateForObjectID(SquadRef.ObjectID));
+		`RTLOG("Found a " $ UnitState.GetMyTemplateName() $ ", wiping them from existance!", false, true);
+		NewGameState.RemoveStateObject(SquadRef.ObjectID);
+	}
+
+	ProgramState.Squads.Length = 0;
+	ProgramState.Master.Length = 0;
+	ProgramState.Active.Length = 0;
+	ProgramState.Captured.Length = 0;
+	ProgramState.Deployed = none;
+
+	`XCOMGAME.GameRuleset.SubmitGameState(NewGameState);
+
+	`RTLOG("Recreating Operatives...", false, true);
+	NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("Rising Tides: CHEAT: Regenerate Program Operatives, Part 2");
+	ProgramState = class'RTHelpers'.static.GetNewProgramState(NewGameState);
+
+	ProgramState.CreateRTOperatives(NewGameState);
+	ProgramState.CreateRTSquads(NewGameState);
+
+	`XCOMGAME.GameRuleset.SubmitGameState(NewGameState);
+
+}
+
 exec function RT_PrintCrew()
 {
 	local XComGameState_HeadquartersXCom XComHQ;
@@ -749,4 +795,29 @@ exec function RT_DebugClosestUnitToCursorAvailableAbilties() {
 		} else { class'RTHelpers'.static.RTLog("" $ AbilityState.GetMyTemplateName() $ " is not available due to " $ Action.AvailableCode, false, true); }
 	}
 	class'RTHelpers'.static.RTLog("Finished gathering and displaying ability availablity for " $ UnitState.GetFullName(), false, true);
+}
+
+exec function RT_CheatLadderPoints(int Points) {
+	local XComGameState NewGameState;
+	local XComGameState_LadderProgress LadderData;
+	local XComGameState_ChallengeScore ChallengeScore;
+
+	// CMPT_KilledEnemy
+	NewGameState = class'XComGameStateContext_ChallengeScore'.static.CreateChangeState( );
+
+	ChallengeScore = XComGameState_ChallengeScore( NewGameState.CreateStateObject( class'XComGameState_ChallengeScore' ) );
+	ChallengeScore.ScoringType = CMPT_KilledEnemy;
+	ChallengeScore.AddedPoints = Points;
+
+	LadderData = XComGameState_LadderProgress( `XCOMHISTORY.GetSingleGameStateObjectForClass(class'XComGameState_LadderProgress', true));
+	LadderData = XComGameState_LadderProgress( NewGameState.ModifyStateObject( class'XComGameState_LadderProgress', LadderData.ObjectID ) );
+	LadderData.CumulativeScore += Points;
+
+	`XCOMGAME.GameRuleset.SubmitGameState( NewGameState );
+
+	return;
+}
+
+exec function RT_DebugOSFGhostActivation() {
+
 }

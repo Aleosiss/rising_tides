@@ -72,6 +72,8 @@ simulated function AddOneSmallFavorSelectionCheckBox(UIScreen Screen) {
 		return;
 	}
 
+	Program.HandleOSFTutorial();
+
 	// immediately execute the init code if we're somehow late to the initialization party
 	if(MissionScreen.ConfirmButton.bIsVisible) {
 		if(MissionScreen.ConfirmButton.bIsInited && MissionScreen.ConfirmButton.bIsVisible) {
