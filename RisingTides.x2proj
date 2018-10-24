@@ -19,6 +19,7 @@
     <Folder Include="Src\XComGame" />
     <Folder Include="Src\RisingTides\" />
     <Folder Include="Src\RisingTides\Classes\" />
+    <Folder Include="Localization\JPN" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Config\XComClassData.ini">

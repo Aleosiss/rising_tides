@@ -24,10 +24,10 @@ function StageDirectory ([string]$directoryName, [string]$srcDirectory, [string]
 
 function CheckErrorCode([string] $message) {
     if ($LASTEXITCODE -ne 0) {
-        $stopwatch.stop()
+        $stopwatch.stop();
         $ts = $stopwatch.Elapsed.TotalSeconds;
 
-        Write-Host "Build failed in $ts seconds."
+        Write-Host "Build failed in $ts seconds.";
         FailureMessage  $message;
         
     }
@@ -131,6 +131,81 @@ function Launch-Make([string] $makeCmd, [string] $makeFlags, [string] $sdkPath, 
     $global:LASTEXITCODE = $process.ExitCode
 }
 
+# This function verifies that all project files in the mod subdirectories actually exist in the .x2proj file
+# AUTHOR: X2WOTCCommunityHighlander
+function ValidateProjectFile([string] $modProjectRoot, [string] $modName)
+{
+    Write-Host "Checking for missing entries in .x2proj file..."
+    $projFilepath = "$modProjectRoot\$modName.x2proj"
+    if(Test-Path $projFilepath)
+    {
+        CheckX2ProjIncludes $modProjectRoot $modName $projFilepath
+        CleanX2ProjIncludes $modProjectRoot $modName $projFilepath
+    }
+    else
+    {
+        FailureMessage("The project file '$projFilepath' doesn't exist!")
+    }
+}
+
+function CheckX2ProjIncludes([string] $modProjectRoot, [string] $modName, [string] $projFilepath) {
+    $missingEntries = New-Object System.Collections.Generic.List[System.Object]
+    $patchedFiles = New-Object System.Collections.Generic.List[System.Object]
+    $patchedFolders = New-Object System.Collections.Generic.List[System.Object]
+    $projContent = Get-Content $projFilepath
+    $srcFolders = "Config", "Content", "Localization", "Src"
+    # Loop through all files in subdirectories and fail the build if any filenames are missing inside the project file
+    Get-ChildItem $modProjectRoot -Directory | Where-Object { $srcFolders -contains $_.Name } | Get-ChildItem -Recurse |
+    ForEach-Object {
+        If (!($projContent | Select-String -Pattern $_.Name)) {
+            $missingEntries.Add($_.Name)
+            
+            $relative = Resolve-Path -relative $_.FullName
+            $relative = $relative.Substring(2)
+
+            if((Get-Item $_.FullName) -is [System.IO.DirectoryInfo]) {
+                $patchedFolders.Add($relative)
+            } else {
+                $patchedFiles.Add($relative);
+            }
+            
+        }
+    }
+
+    if($missingEntries.Length -gt 0)
+    {
+        Write-Host ("Entries missing in the .x2proj file: $missingEntries")
+        [xml]$xmlProjContent = Get-Content $projFilepath
+
+        $patchedFiles | ForEach-Object {
+            $element = $xmlProjContent.CreateElement("Content")
+            $element.SetAttribute("Include", $_)
+            $xmlProjContent.Project.ItemGroup[1].AppendChild($element)
+        }
+
+        $patchedFolders | ForEach-Object {
+            $element = $xmlProjContent.CreateElement("Folder")
+            $element.SetAttribute("Include", $_)
+            $xmlProjContent.Project.ItemGroup[0].AppendChild($element)
+        }
+
+        # I couldn't prevent a xmlns namespace from being declared, so just hard removing it T_T
+        $xmlProjContent = [xml] $xmlProjContent.OuterXml.Replace(" xmlns=`"`"", "")
+        $xmlProjContent.save("$modProjectRoot\$modName.x2proj")
+
+        Write-Host "Patched $modName.x2proj includes successfully!"
+    } else {
+        Write-Host "No patching required."
+    }
+
+}
+
+function CleanX2ProjIncludes([string] $modProjectRoot, [string] $modName, [string] $projFilepath) {
+    # TODO
+}
+
+
+
 function HaveDirectoryContentsChanged ([string] $srcDirPath, [string] $destDirPath) {
     $srcDir = Get-ChildItem $srcDirPath
     $destDir = Get-ChildItem $destDirPath
@@ -158,6 +233,10 @@ $modNameCanonical = $mod
 # we're going to ask that people specify the folder that has their .XCOM_sln in it as the -srcDirectory argument, but a lot of the time all we care about is
 # the folder below that that contains Config, Localization, Src, etc...
 $modSrcRoot = "$srcDirectory/"
+
+# check that all files in the mod folder are present in the .x2proj file
+ValidateProjectFile $modSrcRoot $modNameCanonical
+
 # build the staging path
 $stagingPath = "{0}/XComGame/Mods/{1}/" -f $sdkPath, $modNameCanonical
 
