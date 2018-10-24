@@ -202,6 +202,26 @@ function CheckX2ProjIncludes([string] $modProjectRoot, [string] $modName, [strin
 
 function CleanX2ProjIncludes([string] $modProjectRoot, [string] $modName, [string] $projFilepath) {
     # TODO
+    [xml]$xmlProjContent = Get-Content $projFilepath
+    $presentFiles = New-Object System.Collections.Generic.List[System.Object]
+    $presentFolders = New-Object System.Collections.Generic.List[System.Object]
+    $srcFolders = "Config", "Content", "Localization", "Src"
+    Get-ChildItem $modProjectRoot -Directory | Where-Object { $srcFolders -contains $_.Name } | Get-ChildItem -Recurse |
+    ForEach-Object {
+        $relative = Resolve-Path -relative $_.FullName
+        $relative = $relative.Substring(2)
+
+        if((Get-Item $_.FullName) -is [System.IO.DirectoryInfo]) {
+            $presentFolders.Add($relative);
+        } else {
+            $presentFiles.Add($relative);
+        }
+    }
+
+    # check folder includes...
+
+
+    # check file includes...
 }
 
 
