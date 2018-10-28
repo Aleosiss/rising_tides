@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" DefaultTargets="Default" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Guid>48dba7e4-8cb6-4360-9d92-33907939babf</Guid>
@@ -13,8 +13,8 @@
     <Folder Include="Config\" />
     <Folder Include="Content\" />
     <Folder Include="Localization\" />
-    <Folder Include="Localization\INT" />
-    <Folder Include="Localization\ESN" />
+    <Folder Include="Localization\INT\" />
+    <Folder Include="Localization\ESN\" />
     <Folder Include="Src\" />
     <Folder Include="Src\XComGame\" />
     <Folder Include="Src\RisingTides\" />
@@ -589,9 +589,8 @@
     <Content Include="Src\RisingTides\Classes\XComGameState_Effect_ImmediateMultiTarget.uc">
       <SubType>Content</SubType>
     </Content>
-    <Content Include="StartDebugging.bat">
-      <SubType>Content</SubType>
-    </Content>
+    <Content Include="Localization\JPN\RisingTides.jpn" />
+    <Content Include="Localization\JPN\XComGame.jpn" />
   </ItemGroup>
   <Import Project="$(MSBuildLocalExtensionPath)\XCOM2.targets" />
 </Project>

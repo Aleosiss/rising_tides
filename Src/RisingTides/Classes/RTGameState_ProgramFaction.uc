@@ -97,7 +97,7 @@ var localized string OSFFirstTime_ImagePath;
 /* *********************************************************************** */
 
 // SetUpProgramFaction(XComGameState StartState)
- function SetUpProgramFaction(XComGameState StartState)
+function SetUpProgramFaction(XComGameState StartState)
 {
 	InitListeners();
 	class'RTGameState_StrategyCard'.static.SetUpStrategyCards(StartState);
