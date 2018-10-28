@@ -97,7 +97,7 @@ var localized string OSFFirstTime_ImagePath;
 /* *********************************************************************** */
 
 // SetUpProgramFaction(XComGameState StartState)
- function SetUpProgramFaction(XComGameState StartState)
+function SetUpProgramFaction(XComGameState StartState)
 {
 	InitListeners();
 	class'RTGameState_StrategyCard'.static.SetUpStrategyCards(StartState);
@@ -450,9 +450,17 @@ function MakeOneSmallFavorAvailable() {
 
 function HandleOSFTutorial() {
 	local DynamicPropertySet PropertySet;
-	// add some checks here...
+	local XComGameState NewGameState;
+	local RTGameState_ProgramFaction ProgramState;
+
 	if(!bOSF_FirstTimeDisplayed) {
-		bOSF_FirstTimeDisplayed = true;
+		// Update the bool, this requires a newgamestate
+		NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("RisingTides: setting One Small Favor tutorial flag...");
+		ProgramState = RTGameState_ProgramFaction(NewGameState.ModifyStateObject(class'RTGameState_ProgramFaction', self.ObjectID));
+		ProgramState.bOSF_FirstTimeDisplayed = true;
+		`XCOMGAME.GameRuleset.SubmitGameState(NewGameState);
+
+		// Display the tutorial popup, this also requires a newgamestate
 		class'X2StrategyGameRulesetDataStructures'.static.BuildDynamicPropertySet(PropertySet, 'UIAlert_OSFFirstTime', 'UITutorialBox', none, false, false, true, false);
 		class'XComPresentationLayerBase'.static.QueueDynamicPopup(PropertySet);
 	}
@@ -1067,8 +1075,6 @@ function MeetXCom(XComGameState NewGameState)
 	bMetXCom = true;
 	bNewFragmentActionAvailable = true;
 	MetXComDate = GetCurrentTime();
-
-	HandleOSFTutorial();
 
 	CleanUpFactionCovertActions(NewGameState);
 	CreateGoldenPathActions(NewGameState);

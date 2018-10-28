@@ -13,15 +13,22 @@
     <Folder Include="Config\" />
     <Folder Include="Content\" />
     <Folder Include="Localization\" />
-	<Folder Include="Localization\INT" />
-	<Folder Include="Localization\ESN" />
-	<Folder Include="Src\" />
-    <Folder Include="Src\XComGame" />
+    <Folder Include="Localization\INT\" />
+    <Folder Include="Localization\ESN\" />
+    <Folder Include="Src\" />
+    <Folder Include="Src\XComGame\" />
     <Folder Include="Src\RisingTides\" />
     <Folder Include="Src\RisingTides\Classes\" />
+    <Folder Include="Localization\JPN\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Config\XComClassData.ini">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Config\XComEncyclopedia.ini">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Config\XComGameData_CharacterStats.ini">
       <SubType>Content</SubType>
     </Content>
     <Content Include="Config\XComPromotionUIMod.ini">
@@ -43,6 +50,21 @@
       <SubType>Content</SubType>
     </Content>
     <Content Include="Content\FX_Avatar.upk">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Content\FX_Beam_HunterPistol_RT.upk">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Content\FX_Beam_Rifle_RT.upk">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Content\FX_Beam_Shotgun_RT.upk">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Content\FX_Beam_SniperRifle_RT.upk">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Content\FX_Beam_Sword_RT.upk">
       <SubType>Content</SubType>
     </Content>
     <Content Include="Content\FX_Explosion_EMP_Grenade.upk">
@@ -177,6 +199,12 @@
     <Content Include="Content\RT_Perk_Psi_TimeStandsStill.upk">
       <SubType>Content</SubType>
     </Content>
+    <Content Include="Localization\ESN\RisingTides.esn">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Localization\ESN\XComGame.esn">
+      <SubType>Content</SubType>
+    </Content>
     <Content Include="Localization\INT\RisingTides.int">
       <SubType>Content</SubType>
     </Content>
@@ -186,6 +214,9 @@
     <Content Include="Config\XComEngine.ini" />
     <Content Include="Config\XComGame.ini" />
     <Content Include="Localization\INT\XComGame.int" />
+    <Content Include="Src\RisingTides\Classes\extra_globals.uci">
+      <SubType>Content</SubType>
+    </Content>
     <Content Include="Src\RisingTides\Classes\RTAbilityCooldown.uc">
       <SubType>Content</SubType>
     </Content>
@@ -558,9 +589,8 @@
     <Content Include="Src\RisingTides\Classes\XComGameState_Effect_ImmediateMultiTarget.uc">
       <SubType>Content</SubType>
     </Content>
-    <Content Include="StartDebugging.bat">
-      <SubType>Content</SubType>
-    </Content>
+    <Content Include="Localization\JPN\RisingTides.jpn" />
+    <Content Include="Localization\JPN\XComGame.jpn" />
   </ItemGroup>
   <Import Project="$(MSBuildLocalExtensionPath)\XCOM2.targets" />
 </Project>

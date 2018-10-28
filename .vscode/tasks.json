@@ -9,7 +9,17 @@
                 "kind": "build",
                 "isDefault": true
             },
-            "problemMatcher": []
+            "problemMatcher": [{
+                "owner": "unrealscript",
+                "fileLocation": ["absolute"],
+                "pattern": {
+                    "regexp": "^(.*)\(([0-9]*)\) : (Warning|Error), ([^\n]*)$",
+                    "file": 1,
+                    "line": 2,
+                    "severity": 3,
+                    "message": 4
+                }
+            }]
         },
         {
             "label": "build_laptop",
