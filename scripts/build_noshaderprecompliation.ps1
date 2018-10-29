@@ -212,7 +212,6 @@ function CheckX2ProjIncludes([string] $modProjectRoot, [string] $modName, [strin
 }
 
 function CleanX2ProjIncludes([string] $modProjectRoot, [string] $modName, [string] $projFilepath) {
-    # TODO
     [xml]$xmlProjContent = Get-Content $projFilepath
     $presentFiles = New-Object System.Collections.Generic.List[System.Object]
     $includesToRemove = New-Object System.Collections.Generic.List[System.Object]

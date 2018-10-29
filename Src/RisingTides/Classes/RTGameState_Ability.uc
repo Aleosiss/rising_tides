@@ -224,7 +224,9 @@ function EventListenerReturn UnwillingConduitEvent(Object EventData, Object Even
 	NewGameState.AddStateObject(NewAbilityState);
 	NewGameState.AddStateObject(NewSourceUnitState);
 
-	XComGameStateContext_ChangeContainer(NewGameState.GetContext()).BuildVisualizationFn = ConduitVisualizationFn;
+	if(iConduits > 0) {
+		XComGameStateContext_ChangeContainer(NewGameState.GetContext()).BuildVisualizationFn = ConduitVisualizationFn;
+	}
 
 	`LOG("Rising Tides: Finishing Unwilling Conduit check!");
 

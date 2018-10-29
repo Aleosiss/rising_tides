@@ -173,6 +173,7 @@ static function X2DataTemplate CreateHuntTemplarsP1Template() {
 	Template.OverworldMeshPath = "UI_3D.Overwold_Final.CovertAction";
 	Template.bGoldenPath = false;
 	Template.bUnique = true;
+	Template.RequiredFactionInfluence = eFactionInfluence_Respected;
 
 	Template.Narratives.AddItem('CovertActionNarrative_HuntTemplarsP1_Program');
 
@@ -200,6 +201,7 @@ static function X2DataTemplate CreateHuntTemplarsP2Template() {
 	Template.OverworldMeshPath = "UI_3D.Overwold_Final.CovertAction";
 	Template.bGoldenPath = false;
 	Template.bUnique = true;
+	Template.RequiredFactionInfluence = eFactionInfluence_Influential;
 
 	Template.Narratives.AddItem('CovertActionNarrative_HuntTemplarsP2_Program');
 
@@ -227,6 +229,7 @@ static function X2DataTemplate CreateHuntTemplarsP3Template() {
 	Template.OverworldMeshPath = "UI_3D.Overwold_Final.CovertAction";
 	Template.bGoldenPath = false;
 	Template.bUnique = true;
+	Template.RequiredFactionInfluence = eFactionInfluence_MAX;
 
 	Template.Narratives.AddItem('CovertActionNarrative_HuntTemplarsP3_Program');
 

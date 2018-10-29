@@ -937,7 +937,7 @@ function InitTemplarQuestActions(XComGameState NewGameState) {
 		if (ActionTemplate != none && 
 			TemplarQuestCovertActionTemplateNames.Find(ActionTemplate.DataName) != INDEX_NONE)
 		{
-			TemplarQuestActions.AddItem(CreateCovertAction(NewGameState, ActionTemplate, 0));
+			TemplarQuestActions.AddItem(CreateCovertAction(NewGameState, ActionTemplate, ActionTemplate.RequiredFactionInfluence));
 		}
 	}
 }
@@ -971,6 +971,10 @@ function HandleTemplarQuestActions(XComGameState NewGameState) {
 			CovertActions.AddItem(QuestRef);
 		}
 	}
+}
+
+function IncrementTemplarQuestlineStage() {
+	iTemplarQuestlineStage++;
 }
 
 private function bool IsTemplarFactionMet() {

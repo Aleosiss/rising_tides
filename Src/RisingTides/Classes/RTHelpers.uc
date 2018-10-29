@@ -257,6 +257,26 @@ static function XComGameState_HeadquartersXCom GetXComHQState()
 	return NewXComHQ;
 }
 
+static function XComGameState_ResistanceFaction GetTemplarFactionState()
+{
+	local XComGameState_ResistanceFaction TemplarState;
+
+	foreach `XCOMHISTORY.IterateByClassType(class'XComGameState_ResistanceFaction', TemplarState)
+	{
+		if(TemplarState.GetMyTemplateName() == 'Faction_Templars')
+		{
+			break;
+		}
+	}
+
+	if(TemplarState == none) {
+		RTLog("Warning, could not find TemplarState, returning null!");
+		return none;
+	}
+
+	return TemplarState;
+}
+
 simulated static function bool IsInvalidMission(X2MissionSourceTemplate Template) {
 	return class'RTGameState_ProgramFaction'.default.InvalidMissionSources.Find(Template.DataName) != INDEX_NONE;
 }
