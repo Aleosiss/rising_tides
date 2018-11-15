@@ -1,0 +1,1 @@
+class RTEffect_Repositioning extends X2Effect_Persistent config(RisingTides);

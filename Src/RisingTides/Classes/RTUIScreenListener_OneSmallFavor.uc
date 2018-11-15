@@ -7,6 +7,7 @@ var StateObjectReference mr;
 var bool		bDebugging;
 
 var config array<name> FatLaunchButtonMissionTypes;
+var config float OSFCheckboxDistortOnClickDuration;
 
 delegate OldOnClickedDelegate(UIButton Button);
 
@@ -50,6 +51,7 @@ event OnRemoved(UIScreen Screen) {
 simulated function ManualGC() {
 	OldOnClickedDelegate = none;
 	ms = none;
+	HandleInput(false);
 	cb.Remove();
 	cb = none;
 }
@@ -137,13 +139,14 @@ function OnConfirmButtonInited(UIPanel Panel) {
 	GetPositionByMissionType(MissionScreen.GetMission().GetMissionSource().DataName, PosX, PosY);
 
 	cb = MissionScreen.Spawn(class'UICheckbox', MissionScreen.ButtonGroup);	
-	cb.InitCheckbox('OSFActivateCheckbox', , false, , bReadOnly)
+	cb.InitCheckbox('OSFActivateCheckbox', , false, OnCheckboxChange, bReadOnly)
 		.SetSize(Button.Height, Button.Height)
 		.OriginTopLeft()
 		.SetPosition(PosX, PosY)
 		.SetColor(class'UIUtilities_Colors'.static.ColorToFlashHex(Program.GetMyTemplate().FactionColor))
 		.SetTooltipText(strCheckboxDesc, , , 10, , , true, 0.0f);
 	class'RTHelpers'.static.RTLog("Created a checkbox at position " $ PosX $ " x and " $ PosY $ " y.");
+	HandleInput(true);
 
 	// Modify the OnLaunchButtonClicked Delegate
 	if(Button != none) {
@@ -158,6 +161,11 @@ function ModifiedLaunchButtonClicked(UIButton Button) {
 	mr = ms.GetMission().GetReference();
 	AddOneSmallFavorSitrep(XComGameState_MissionSite(`XCOMHISTORY.GetGameStateForObjectID(mr.ObjectID)));
 	OldOnClickedDelegate(Button);
+}
+
+simulated function OnCheckboxChange(UICheckbox checkboxControl)
+{
+	ms.Movie.Pres.StartDistortUI(default.OSFCheckboxDistortOnClickDuration);
 }
 
 simulated function bool AddOneSmallFavorSitrep(XComGameState_MissionSite MissionState) {
@@ -184,7 +192,7 @@ simulated function bool AddOneSmallFavorSitrep(XComGameState_MissionSite Mission
 		}
 
 		class'RTHelpers'.static.RTLog("Adding One Small Favor SITREP due to it being available and activated!");
-	} else { 
+	} else {
 		class'RTHelpers'.static.RTLog("Adding One Small Favor SITREP via debug override!"); 
 	}
 
@@ -309,6 +317,39 @@ simulated function GetPositionByMissionType(name MissionSource, out float PosX, 
 		PosX = -198;
 		PosY = 125;
 	}
+}
+
+function HandleInput(bool bIsSubscribing)
+{
+	local delegate<UIScreenStack.CHOnInputDelegate> inputDelegate;
+	inputDelegate = OnUnrealCommand;
+	if(bIsSubscribing)
+	{
+		`SCREENSTACK.SubscribeToOnInput(inputDelegate);
+	}
+	else
+	{
+		`SCREENSTACK.UnsubscribeFromOnInput(inputDelegate);
+	}
+}
+
+static protected function bool OnUnrealCommand(int cmd, int arg)
+{
+	if (cmd == class'UIUtilities_Input'.const.FXS_BUTTON_X && arg == class'UIUtilities_Input'.const.FXS_ACTION_RELEASE)
+	{
+		// Cannot open screen during flight
+		if (class'XComEngine'.static.GetHQPres().StrategyMap2D.m_eUIState != eSMS_Flight)
+		{
+			// flip the checkbox
+			if(cb != none)
+			{
+				cb.bChecked = !cb.bChecked;
+			}
+			
+		}
+		return true;
+	}
+	return false;
 }
 
 defaultproperties

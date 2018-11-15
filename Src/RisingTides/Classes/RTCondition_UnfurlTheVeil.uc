@@ -17,11 +17,22 @@ private function bool CheckTarget(XComGameState_BaseObject kTarget, optional XCo
 	local XComGamestateHistory History;
 	local XComGameState_Unit IteratorState;
 	local array<XComGameState_Unit> ActivatedUnits;
+	local XComGameState_Unit SourceUnitState;
+
+	if(kSource == none) {
+		return false;
+	}
+
+	SourceUnitState = XComGameState_Unit(kSource);
+	if(SourceUnitState == none) {
+		`RTLOG("What the fuck is going on here? (RTC_UnfurlTheVeil)", true, false);
+		return false;
+	}
 
 	History = `XCOMHISTORY;
 	// only available if all activated enemies are affected by OTS
 	foreach History.IterateByClassType(class'XComGameState_Unit', IteratorState) {
-		if(IteratorState.GetTeam() == XComGameState_Unit(kSource).GetTeam()) {
+		if(!IteratorState.IsEnemyUnit(SourceUnitState)) {
 			continue;
 		}
 

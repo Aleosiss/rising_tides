@@ -1,8 +1,17 @@
 class RTGameState_Effect extends XComGameState_Effect;
 
+// RTEffect_OverTheShoulder
 var array<StateObjectReference> EffectsAddedList;
 var array<StateObjectReference> EffectsRemovedList;
+
+// RTEffect_Repositioning
+var array<TTile> PreviousTilePositions;
+var bool bRepositioningActive;
+
+// RTEffect_LinkedIntelligence
 var bool bCanTrigger;
+
+// RTEffect_Stealth
 var bool bWasPreviouslyConcealed;
 
 var localized string LocPsionicallyInterruptedName;
@@ -1606,6 +1615,50 @@ function EventListenerReturn RTApplyTimeStop(Object EventData, Object EventSourc
 	}
 
 	return ELR_NoInterrupt;
+}
+
+function EventListenerReturn HandleRepositioning(Object EventData, Object EventSource, XComGameState NewGameState, Name EventID)
+{
+	local XComGameState_Unit UnitState;
+	local TTile CurrentTile, IteratorTile;
+	local XComGameStateHistory History;
+	local RTEffect_Repositioning EffectTemplate;
+	local bool bTooClose;
+
+	EffectTemplate = RTEffect_Repositioning(GetX2Effect());
+	if(EffectTemplate == none)
+	{
+		`RTLOG("HandleRepositioning triggered by an invalid X2Effect!", true, false);
+		return ELR_NoInterrupt;
+	}
+
+	UnitState = XComGameState_Unit(EventData);
+	if(UnitState == none || ApplyEffectParameters.SourceStateObjectRef.ObjectID != UnitState.ObjectID)
+	{
+		`RTLOG("HandleRepositioning triggered by an invalid unit!", true, false);
+		return ELR_NoInterrupt;
+	}
+	
+	CurrentTile = UnitState.TileLocation;
+	foreach PreviousTilePositions(IteratorTile)
+	{
+		if(class'X2Helpers'.static.DistanceBetweenTiles(CurrentTile, IteratorTile) > EffectTemplate.REPOSITIONING_TILES_MOVED_REQUIREMENT)
+		{
+			bTooClose = true;
+		}
+	}
+
+	if(!bTooClose) {
+		bRepositioningActive = true;
+	}
+	// remove the last tile
+	if(PreviousTilePositions.Length < EffectTemplate.REPOSITIONING_MAX_POSITIONS_SAVED)
+	{
+		PreviousTilePositions.Remove(0);
+	}
+
+	PreviousTilePositions.AddItem(CurrentTile);
+
 }
 
 defaultproperties

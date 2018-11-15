@@ -40,6 +40,7 @@ class RTAbility_MarksmanAbilitySet extends RTAbility_GhostAbilitySet
 	var config int SND_DEFENSE_BONUS;
 	var config float EMM_DAMAGE_PERCENT;
 	var config int SIS_CONCEALMENT_TURNS;
+	var config int REPOSITIONING_TILES_MOVED_REQUIREMENT;
 
 	var config int HARBINGER_SHIELD_AMOUNT, HARBINGER_COOLDOWN, HARBINGER_DAMAGE_BONUS, HARBINGER_WILL_BONUS, HARBINGER_AIM_BONUS, HARBINGER_ARMOR_BONUS;
 	var config WeaponDamageValue HARBINGER_DMG;
@@ -2703,6 +2704,38 @@ static function X2AbilityTemplate RTKubikuriDamage()
 	Template.AddTargetEffect(DamageEffect);
 	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
 	return Template;
+}
+
+//---------------------------------------------------------------------------------------
+//---Repositioning-----------------------------------------------------------------------
+//---------------------------------------------------------------------------------------
+static function X2AbilityTemplate RTRepositioning() {
+	local X2AbilityTemplate Template;
+	local RTEffec_Repositioning	RTEffect;
+
+	`CREATE_X2ABILITY_TEMPLATE(Template, 'RTRepositioning');
+
+	Template.IconImage = "img:///RisingTidesContentPackage.PerkIcons.UIPerk_repositioning";
+	Template.AbilitySourceName = 'eAbilitySource_Perk';
+	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_NeverShow;
+	Template.Hostility = eHostility_Neutral;
+	Template.bCrossClassEligible = false;
+
+	Template.AbilityTriggers.AddItem(default.UnitPostBeginPlayTrigger);
+	Template.AbilityToHitCalc = default.DeadEye;
+	Template.AbilityTargetStyle = default.SelfTarget;
+
+	RTEffect = new class 'RTEffec_Repositioning';
+	RTEffect.BuildPersistentEffect(1, true, false, false, eGameRule_PlayerTurnEnd);
+	RTEffect.TILES_MOVE_REQUIREMENT = default.REPOSITIONING_TILES_MOVED_REQUIREMENT;
+	RTEffect.SetDisplayInfo(ePerkBuff_Passive, Template.LocFriendlyName, Template.LocLongDescription, Template.IconImage, true,, Template.AbilitySourceName);
+	Template.AddTargetEffect(RTEffect);
+
+
+	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
+
+	return Template;
+
 }
 
 

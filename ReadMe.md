@@ -17,10 +17,7 @@ This would be a bare-bones content mod. I also have the following content in min
 
 ## Current To Test
 
-	- Direct Neural Manipulation
-
 ## Current Bugs (High Priority)
-
 
 ## Current Issues 
 
@@ -42,7 +39,7 @@ This would be a bare-bones content mod. I also have the following content in min
 		- Extinction Event needs to somehow stop revive units from reviving
 		- Come up with a better solution for Over The Shoulder vs. concealed units
 	- General:
-		- none
+		- Add Priorites for Abilities
 	- The Program (New Faction):
 		- get new icon and faceplate
 		- create customizations for all ghosts
@@ -68,3 +65,8 @@ This would be a bare-bones content mod. I also have the following content in min
 	- Networked OI does not work with CloseCombatSpecialistAttack or KillzoneShot. Unsure of exact cause, appears that CCS does not tick AbilityActivated
 	- Shadow Strike does not highlight the tiles it can activate to
 	- Have to travel to a region that is building an outpost to activate Forty Years of War
+
+
+
+
+
