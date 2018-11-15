@@ -818,6 +818,12 @@ exec function RT_CheatLadderPoints(int Points) {
 	return;
 }
 
-exec function RT_DebugOSFGhostActivation() {
+exec function TestScreen() {
+	local XComPresentationLayerBase pres;
+	local UISCreenStack	ScreenStack;
 
+	local RTUIScreen_AdvanceTemplarQuestlineStage Screen;
+
+	pres = `PRESBASE;
+	ScreenStack = `SCREENSTACK;
 }
