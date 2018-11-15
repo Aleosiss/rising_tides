@@ -1659,6 +1659,8 @@ function EventListenerReturn HandleRepositioning(Object EventData, Object EventS
 
 	PreviousTilePositions.AddItem(CurrentTile);
 
+	return ELR_NoInterrupt;
+
 }
 
 defaultproperties
