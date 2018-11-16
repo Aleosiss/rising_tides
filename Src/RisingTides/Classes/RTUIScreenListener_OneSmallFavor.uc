@@ -333,7 +333,7 @@ function HandleInput(bool bIsSubscribing)
 	}
 }
 
-static protected function bool OnUnrealCommand(int cmd, int arg)
+protected function bool OnUnrealCommand(int cmd, int arg)
 {
 	if (cmd == class'UIUtilities_Input'.const.FXS_BUTTON_X && arg == class'UIUtilities_Input'.const.FXS_ACTION_RELEASE)
 	{

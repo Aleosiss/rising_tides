@@ -2,7 +2,7 @@ class RTUIScreen_AdvanceTemplarQuestlineStage extends UIX2SimpleScreen config (P
 
 simulated function InitScreen(XComPlayerController InitController, UIMovie InitMovie, optional name InitName)
 {
-	super.Init(InitController, InitMovie, InitName);
+	super.InitScreen(InitController, InitMovie, InitName);
 
 	BuildScreen();
 }

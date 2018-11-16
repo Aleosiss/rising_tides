@@ -41,6 +41,7 @@ class RTAbility_MarksmanAbilitySet extends RTAbility_GhostAbilitySet
 	var config float EMM_DAMAGE_PERCENT;
 	var config int SIS_CONCEALMENT_TURNS;
 	var config int REPOSITIONING_TILES_MOVED_REQUIREMENT;
+	var config int REPOSITIONING_MAX_POSITIONS_SAVED;
 
 	var config int HARBINGER_SHIELD_AMOUNT, HARBINGER_COOLDOWN, HARBINGER_DAMAGE_BONUS, HARBINGER_WILL_BONUS, HARBINGER_AIM_BONUS, HARBINGER_ARMOR_BONUS;
 	var config WeaponDamageValue HARBINGER_DMG;
@@ -2728,7 +2729,8 @@ static function X2AbilityTemplate RTRepositioning() {
 
 	RTEffect = new class 'RTEffect_Repositioning';
 	RTEffect.BuildPersistentEffect(1, true, false, false, eGameRule_PlayerTurnEnd);
-	RTEffect.TILES_MOVE_REQUIREMENT = default.REPOSITIONING_TILES_MOVED_REQUIREMENT;
+	RTEffect.TilesMovedRequired = default.REPOSITIONING_TILES_MOVED_REQUIREMENT;
+	RTEffect.MaxPositionsSaved = default.REPOSITIONING_MAX_POSITIONS_SAVED;
 	RTEffect.SetDisplayInfo(ePerkBuff_Passive, Template.LocFriendlyName, Template.LocLongDescription, Template.IconImage, true,, Template.AbilitySourceName);
 	Template.AddTargetEffect(RTEffect);
 

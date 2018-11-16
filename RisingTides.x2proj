@@ -592,6 +592,7 @@
     <Content Include="Localization\JPN\RisingTides.jpn" />
     <Content Include="Localization\JPN\XComGame.jpn" />
     <Content Include="Src\RisingTides\Classes\RTUIScreen_AdvanceTemplarQuestlineStage.uc" />
+    <Content Include="Src\RisingTides\Classes\RTEffect_Repositioning.uc" />
   </ItemGroup>
   <Import Project="$(MSBuildLocalExtensionPath)\XCOM2.targets" />
 </Project>

@@ -1,4 +1,4 @@
-class RTGameState_Effect extends XComGameState_Effect;
+class RTGameState_Effect extends XComGameState_Effect dependson(RTHelpers);
 
 // RTEffect_OverTheShoulder
 var array<StateObjectReference> EffectsAddedList;
@@ -1622,7 +1622,7 @@ function EventListenerReturn RTApplyTimeStop(Object EventData, Object EventSourc
 // EventSource: SourceUnitState
 // Passed a NewGameState
 // when we move, we need to check if we're far enough away from before in order to trigger repositioning
-function EventListenerReturn HandleRepositioning(Object EventData, Object EventSource, XComGameState NewGameState, Name EventID)
+function EventListenerReturn HandleRepositioning(Object EventData, Object EventSource, XComGameState NewGameState, Name EventID, Object CallbackData)
 {
 	local XComGameState_Unit UnitState;
 	local TTile CurrentTile, IteratorTile;
@@ -1637,7 +1637,11 @@ function EventListenerReturn HandleRepositioning(Object EventData, Object EventS
 	AbilityState = XComGameState_Ability(EventData);
 
 	// if we fired a shot, we need to update repositioning
-	Categories = (eChecklist_StandardShots, eChecklist_SniperShots, eChecklist_OverwatchShots);
+	// ...for some reason, the normal syntax doesn't work here?
+	Categories.Add(eChecklist_StandardShots);
+	Categories.Add(eChecklist_SniperShots);
+	Categories.Add(eChecklist_OverwatchShots);
+
 	if(!class'RTHelpers'.static.MultiCatCheckAbilityActivated(AbilityState.GetMyTemplateName(), Categories))
 	{
 		return ELR_NoInterrupt;
@@ -1660,19 +1664,19 @@ function EventListenerReturn HandleRepositioning(Object EventData, Object EventS
 	CurrentTile = UnitState.TileLocation;
 	foreach PreviousTilePositions(IteratorTile)
 	{
-		if(class'X2Helpers'.static.DistanceBetweenTiles(CurrentTile, IteratorTile) < EffectTemplate.REPOSITIONING_TILES_MOVED_REQUIREMENT)
+		if(class'Helpers'.static.DistanceBetweenTiles(CurrentTile, IteratorTile) < EffectTemplate.TilesMovedRequired)
 		{
 			bTooClose = true;
 		}
 	}
 
-	RTEffectState = RTGameState_Effect(GameState.ModifyStateObject(Class, ObjectID));
+	RTEffectState = RTGameState_Effect(NewGameState.ModifyStateObject(Class, ObjectID));
 	RTEffectState.bRepositioningActive = !bTooClose;
 
 	// remove the last tile
-	if(PreviousTilePositions.Length < EffectTemplate.REPOSITIONING_MAX_POSITIONS_SAVED)
+	if(PreviousTilePositions.Length < EffectTemplate.MaxPositionsSaved)
 	{
-		RTEffectState.PreviousTilePositions.Remove(0);
+		RTEffectState.PreviousTilePositions.Remove(0, 1);
 	}
 	RTEffectState.PreviousTilePositions.AddItem(CurrentTile);
 
@@ -1682,7 +1686,7 @@ function EventListenerReturn HandleRepositioning(Object EventData, Object EventS
 // Event ID: RetainConcealmentOnActivation
 // Event Data: XComLWTuple containing 1 bool
 // Event Source ActivatedAbilityStateContext 
-function EventListenerReturn HandleRetainConcealmentRepositioning(Object EventData, Object EventSource, XComGameState GameState, name EventID)
+function EventListenerReturn HandleRetainConcealmentRepositioning(Object EventData, Object EventSource, XComGameState GameState, name EventID, Object CallbackData)
 {
 	local XComLWTuple Tuple;
 	local XComGameStateContext_Ability ActivatedAbilityStateContext;
