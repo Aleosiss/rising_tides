@@ -6,8 +6,8 @@ class RTEffect_Repositioning extends X2Effect_Persistent config(RisingTides);
  * 1. Update the list of firing positions whenever a shot is fired.
  * 2. Read the list of firing positions and override RetainConcealmentOnActivation when necessary.
 */
-
-
+var int TilesMovedRequired;
+var int MaxPositionsSaved;
 
 function RegisterForEvents(XComGameState_Effect EffectGameState)
 {
@@ -24,8 +24,8 @@ function RegisterForEvents(XComGameState_Effect EffectGameState)
 
 	EffectObj = EffectState;
 
-	EventMgr.RegisterForEvent(EffectObj, 'UnitMoveFinished', EffectState.HandleRepositioning, ELD_OnStateSubmitted);
-	EventMgr.RegisterForEvent(EffectObj, 'RetainConcealmentOnActivation', EffectState.HandleRetainConcealmentRepositioning, ELD_OnStateSubmitted);
+	EventMgr.RegisterForEvent(EffectObj, 'UnitMoveFinished', EffectState.HandleRepositioning, ELD_OnStateSubmitted, , FilterObj);
+	EventMgr.RegisterForEvent(EffectObj, 'RetainConcealmentOnActivation', EffectState.HandleRetainConcealmentRepositioning, ELD_OnStateSubmitted, , FilterObj);
 }
 
 
