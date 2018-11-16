@@ -1617,6 +1617,11 @@ function EventListenerReturn RTApplyTimeStop(Object EventData, Object EventSourc
 	return ELR_NoInterrupt;
 }
 
+// Event ID: AbilityActivated
+// EventData: AbilityState
+// EventSource: SourceUnitState
+// Passed a NewGameState
+// when we move, we need to check if we're far enough away from before in order to trigger repositioning
 function EventListenerReturn HandleRepositioning(Object EventData, Object EventSource, XComGameState NewGameState, Name EventID)
 {
 	local XComGameState_Unit UnitState;
@@ -1624,6 +1629,19 @@ function EventListenerReturn HandleRepositioning(Object EventData, Object EventS
 	local XComGameStateHistory History;
 	local RTEffect_Repositioning EffectTemplate;
 	local bool bTooClose;
+	local RTGameState_Effect RTEffectState;
+	local XComGameState_Ability AbilityState; // what just activated
+	local array<ERTChecklist> Categories;
+
+	
+	AbilityState = XComGameState_Ability(EventData);
+
+	// if we fired a shot, we need to update repositioning
+	Categories = (eChecklist_StandardShots, eChecklist_SniperShots, eChecklist_OverwatchShots);
+	if(!class'RTHelpers'.static.MultiCatCheckAbilityActivated(AbilityState.GetMyTemplateName(), Categories))
+	{
+		return ELR_NoInterrupt;
+	}
 
 	EffectTemplate = RTEffect_Repositioning(GetX2Effect());
 	if(EffectTemplate == none)
@@ -1632,8 +1650,8 @@ function EventListenerReturn HandleRepositioning(Object EventData, Object EventS
 		return ELR_NoInterrupt;
 	}
 
-	UnitState = XComGameState_Unit(EventData);
-	if(UnitState == none || ApplyEffectParameters.SourceStateObjectRef.ObjectID != UnitState.ObjectID)
+	UnitState = XComGameState_Unit(EventSource);
+	if(UnitState == none || ApplyEffectParameters.TargetStateObjectRef.ObjectID != UnitState.ObjectID)
 	{
 		`RTLOG("HandleRepositioning triggered by an invalid unit!", true, false);
 		return ELR_NoInterrupt;
@@ -1642,25 +1660,53 @@ function EventListenerReturn HandleRepositioning(Object EventData, Object EventS
 	CurrentTile = UnitState.TileLocation;
 	foreach PreviousTilePositions(IteratorTile)
 	{
-		if(class'X2Helpers'.static.DistanceBetweenTiles(CurrentTile, IteratorTile) > EffectTemplate.REPOSITIONING_TILES_MOVED_REQUIREMENT)
+		if(class'X2Helpers'.static.DistanceBetweenTiles(CurrentTile, IteratorTile) < EffectTemplate.REPOSITIONING_TILES_MOVED_REQUIREMENT)
 		{
 			bTooClose = true;
 		}
 	}
 
-	if(!bTooClose) {
-		bRepositioningActive = true;
-	}
+	RTEffectState = RTGameState_Effect(GameState.ModifyStateObject(Class, ObjectID));
+	RTEffectState.bRepositioningActive = !bTooClose;
+
 	// remove the last tile
 	if(PreviousTilePositions.Length < EffectTemplate.REPOSITIONING_MAX_POSITIONS_SAVED)
 	{
-		PreviousTilePositions.Remove(0);
+		RTEffectState.PreviousTilePositions.Remove(0);
 	}
-
-	PreviousTilePositions.AddItem(CurrentTile);
+	RTEffectState.PreviousTilePositions.AddItem(CurrentTile);
 
 	return ELR_NoInterrupt;
+}
 
+// Event ID: RetainConcealmentOnActivation
+// Event Data: XComLWTuple containing 1 bool
+// Event Source ActivatedAbilityStateContext 
+function EventListenerReturn HandleRetainConcealmentRepositioning(Object EventData, Object EventSource, XComGameState GameState, name EventID)
+{
+	local XComLWTuple Tuple;
+	local XComGameStateContext_Ability ActivatedAbilityStateContext;
+	local XComGameState_Unit UnitState;
+
+	Tuple = XComLWTuple(EventData);
+	ActivatedAbilityStateContext = XComGameStateContext_Ability(EventSource);
+
+	if(Tuple == none || ActivatedAbilityStateContext == none)
+	{
+		`RTLOG("One of the event objectives for RTE_Repositioning::HandleRetainConcealment was invalid!", true, false);
+		return ELR_NoInterrupt;
+	}
+
+	// if what activated this ability ISN'T what has this effect
+	if(ActivatedAbilityStateContext.InputContext.SourceObject.ObjectID != ApplyEffectParameters.TargetStateObjectRef.ObjectID)
+	{
+		`RTLOG("RTEffect_Repositioning attempted to trigger on a unit that doesn't have it.", true, false);
+		return ELR_NoInterrupt;
+	}
+
+	Tuple.Data[0].b = bRepositioningActive;
+
+	return ELR_NoInterrupt;
 }
 
 defaultproperties

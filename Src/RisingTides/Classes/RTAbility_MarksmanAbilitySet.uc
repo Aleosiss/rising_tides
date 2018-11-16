@@ -109,6 +109,7 @@ static function array<X2DataTemplate> CreateTemplates()
 	Templates.AddItem(RTOverflowBarrierEvent());
 	Templates.AddItem(RTKubikuri());
 	Templates.AddItem(RTKubikuriDamage());
+	Templates.AddItem(RTRepositioning());
 
 	return Templates;
 }
@@ -2711,7 +2712,7 @@ static function X2AbilityTemplate RTKubikuriDamage()
 //---------------------------------------------------------------------------------------
 static function X2AbilityTemplate RTRepositioning() {
 	local X2AbilityTemplate Template;
-	local RTEffec_Repositioning	RTEffect;
+	local RTEffect_Repositioning RTEffect;
 
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'RTRepositioning');
 
@@ -2725,17 +2726,15 @@ static function X2AbilityTemplate RTRepositioning() {
 	Template.AbilityToHitCalc = default.DeadEye;
 	Template.AbilityTargetStyle = default.SelfTarget;
 
-	RTEffect = new class 'RTEffec_Repositioning';
+	RTEffect = new class 'RTEffect_Repositioning';
 	RTEffect.BuildPersistentEffect(1, true, false, false, eGameRule_PlayerTurnEnd);
 	RTEffect.TILES_MOVE_REQUIREMENT = default.REPOSITIONING_TILES_MOVED_REQUIREMENT;
 	RTEffect.SetDisplayInfo(ePerkBuff_Passive, Template.LocFriendlyName, Template.LocLongDescription, Template.IconImage, true,, Template.AbilitySourceName);
 	Template.AddTargetEffect(RTEffect);
 
-
 	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
 
 	return Template;
-
 }
 
 

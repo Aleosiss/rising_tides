@@ -1,67 +1,36 @@
 class RTEffect_Repositioning extends X2Effect_Persistent config(RisingTides);
 
-var name DefaultEventName;
+/**
+ * Requires 2 seperate event listeners (by my calculations...)
+ * 
+ * 1. Update the list of firing positions whenever a shot is fired.
+ * 2. Read the list of firing positions and override RetainConcealmentOnActivation when necessary.
+*/
+
+
 
 function RegisterForEvents(XComGameState_Effect EffectGameState)
 {
 	local X2EventManager EventMgr;
-	local RTGameState_Effect EffectState;
-	local Object EffectObj;
+    local RTGameState_Effect EffectState;
+    local XComGameState_Unit UnitState;
+    local Object EffectObj;
+    local Object FilterObj;
 
 	EventMgr = `XEVENTMGR;
-	EffectState = RTGameState_Effect(EffectGameState);
+    EffectState = RTGameState_Effect(EffectGameState);
+    FilterObj = XComGameState_Unit(`XCOMHISTORY
+                    .GetGameStateForObjectID(EffectGameState.ApplyEffectParameters.TargetStateObjectRef.ObjectID));
 
 	EffectObj = EffectState;
 
-	EventMgr.RegisterForEvent(EffectObj, DefaultEventName, EffectState.HandleRepositioning, ELD_OnStateSubmitted);
-	EventMgr.RegisterForEvent(EffectObj, 'RetainConcealmentOnActivation', HandleRetainConcealment, ELD_OnStateSubmitted);
-}
-
-function EventListenerReturn HandleRetainConcealment(Object EventData, Object EventSource, XComGameState GameState, name EventID)
-{
-    local RTGameState_Effect RTEffectState;
-    local XComLWTuple Tuple;
-    local bool bShouldRetainConcealment;
-    local XComGameStateContext_Ability ActivatedAbilityStateContext;
-    local XComGameState_Unit UnitState;
-    local XComGameStateHistory History;
-
-    Tuple = XComLWTuple(EventData);
-    ActivatedAbilityStateContext = XComGameStateContext_Ability(EventSource);
-
-    if(Tuple == none || ActivatedAbilityStateContext == none)
-    {
-        `RTLOG("One of the event objectives for RTE_Repositioning::HandleRetainConcealment was invalid!", true, false);
-        return ELR_NoInterrupt;
-    }
-
-    UnitState = XComGameState_Unit(ActivatedAbilityStateContext.InputContext.SourceObject);
-    if(UnitState == none)
-    {
-        `RTLOG("what", true, false);
-        return ELR_NoInterrupt;
-    }
-
-    History = `XCOMHISTORY;
-    foreach UnitState.AffectedByEffects(EffectRef) {
-        RTEffectState = RTGameState_Effect(History.GetGameStateForObjectID(EffectRef.ObjectID);
-        if(RTEffectState == none)
-        {
-            continue;
-        }
-
-        if(RTEffectState.bRepositioningActive) {
-            Tuple.Data[0].b = true;
-            return ELR_NoInterrupt;
-        }
-    }
-
-    return ELR_NoInterrupt;
+	EventMgr.RegisterForEvent(EffectObj, 'UnitMoveFinished', EffectState.HandleRepositioning, ELD_OnStateSubmitted);
+	EventMgr.RegisterForEvent(EffectObj, 'RetainConcealmentOnActivation', EffectState.HandleRetainConcealmentRepositioning, ELD_OnStateSubmitted);
 }
 
 
 defaultproperties
 {
-    DefaultEventName = 'RepositioningEventName'
+    EffectName = 'RTRepositioning'
     GameStateEffectClass = class'RTGameState_Effect'
 }
