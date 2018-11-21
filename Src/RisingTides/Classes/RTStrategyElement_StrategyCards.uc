@@ -86,21 +86,21 @@ static function JustPassingThroughModifyTacStartState(XComGameState StartState) 
 	}
 	MissionState = XComGameState_MissionSite(`XCOMHISTORY.GetGameStateForObjectID(XComHQ.MissionRef.ObjectID));
 	if(class'RTHelpers'.static.IsInvalidMission(MissionState.GetMissionSource())) {
-		//class'RTHelpers'.static.RTLog("Invalid Mission Type for JPT!");
+		//`RTLOG("Invalid Mission Type for JPT!");
 		return;
 	}
 
 	if(XComHQ.TacticalGameplayTags.Find( 'NoVolunteerArmy' ) != INDEX_NONE) {
-		//class'RTHelpers'.static.RTLog("JPT: No Volunteer Army allowed!");
+		//`RTLOG("JPT: No Volunteer Army allowed!");
 		return;
 	}
 
 	if(XComHQ.TacticalGameplayTags.Find( 'RTOneSmallFavor' ) != INDEX_NONE) {
-		//class'RTHelpers'.static.RTLog("JPT: One Small Favor already active!");
+		//`RTLOG("JPT: One Small Favor already active!");
 		return;
 	}
 
-	//class'RTHelpers'.static.RTLog("All checks passed, adding a operative to the XCOM squad!");
+	//`RTLOG("All checks passed, adding a operative to the XCOM squad!");
 	OriginalUnitState = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(SoldierObjRef.ObjectID));
 	CharTemplateName = OriginalUnitState.GetMyTemplateName();
 
@@ -119,7 +119,7 @@ static function JustPassingThroughModifyTacStartState(XComGameState StartState) 
 		}
 	}
 	CopyUnitState.SetSoldierProgression(OriginalUnitState.m_SoldierProgressionAbilties);
-	//class'RTHelpers'.static.RTLog("Successfully built a copy of an operative!");
+	//`RTLOG("Successfully built a copy of an operative!");
 
 
 	XComHQ.Squad.AddItem(CopyUnitState.GetReference());
@@ -191,7 +191,7 @@ static function ActivateFortyYearsOfWar(XComGameState NewGameState, StateObjectR
 	Program = class'RTHelpers'.static.GetNewProgramState(NewGameState);
 	Obj = Program;
 
-	class'RTHelpers'.static.RTLog("Activating Forty Years of War!");
+	`RTLOG("Activating Forty Years of War!");
 	`XEVENTMGR.RegisterForEvent(Obj, 'RegionOutpostBuildStart', Program.FortyYearsOfWarEventListener, ELD_Immediate);
 
 	// Build outposts in any regions which are currently being scanned
@@ -213,7 +213,7 @@ static function DeactivateFortyYearsOfWar(XComGameState NewGameState, StateObjec
 
 	Program = class'RTHelpers'.static.GetNewProgramState(NewGameState);
 	Obj = Program;
-	class'RTHelpers'.static.RTLog("Deactivating Forty Years of War!");
+	`RTLOG("Deactivating Forty Years of War!");
 	`XEVENTMGR.UnRegisterFromEvent(Obj, 'AvengerLandedScanRegion');
 	`XEVENTMGR.UnRegisterFromEvent(Obj, 'RegionOutpostBuildStart');
 }
@@ -235,7 +235,7 @@ static function ActivateDirectNeuralManipulation(XComGameState NewGameState, Sta
 	local RTGameState_ProgramFaction Program;
 
 	Program = class'RTHelpers'.static.GetNewProgramState(NewGameState);
-	class'RTHelpers'.static.RTLog("Activating Direct Neural Manipulation!");
+	`RTLOG("Activating Direct Neural Manipulation!");
 	Program.bDirectNeuralManipulation = true;
 
 }
@@ -244,7 +244,7 @@ static function DeactivateDirectNeuralManipulation(XComGameState NewGameState, S
 	local RTGameState_ProgramFaction Program;
 
 	Program = class'RTHelpers'.static.GetNewProgramState(NewGameState);
-	class'RTHelpers'.static.RTLog("Deactivating Direct Neural Manipulation!");
+	`RTLOG("Deactivating Direct Neural Manipulation!");
 	Program.bDirectNeuralManipulation = false;
 
 }
@@ -267,11 +267,11 @@ static function ActivateResistanceSabotage(XComGameState NewGameState, StateObje
 	local XComGameState_ResistanceFaction IteratorFactionState, NewFactionState;
 	local RTGameState_ProgramFaction ProgramState;
 
-	//class'RTHelpers'.static.RTLog("Activating Resistance Sabotage!");
+	//`RTLOG("Activating Resistance Sabotage!");
 	History = `XCOMHISTORY;
 	ProgramState = class'RTHelpers'.static.GetNewProgramState(NewGameState);
 	if(ProgramState.bResistanceSabotageActivated) {
-		//class'RTHelpers'.static.RTLog("Oops, it's already activated. Aborting.");
+		//`RTLOG("Oops, it's already activated. Aborting.");
 		return;
 	} else {
 		ProgramState.bResistanceSabotageActivated = true;
@@ -294,11 +294,11 @@ static function DeactivateResistanceSabotage(XComGameState NewGameState, StateOb
 	local StateObjectReference CardRef, EmptyRef; 
 	local bool bFoundEmptySlot;
 
-	//class'RTHelpers'.static.RTLog("Deactivating Resistance Sabotage!");
+	//`RTLOG("Deactivating Resistance Sabotage!");
 	History = `XCOMHISTORY;
 	ProgramState = class'RTHelpers'.static.GetNewProgramState(NewGameState);
 	if(!ProgramState.bResistanceSabotageActivated) {
-		//class'RTHelpers'.static.RTLog("Wait, it's not activated. Aborting.");
+		//`RTLOG("Wait, it's not activated. Aborting.");
 		return;
 	} else {
 		ProgramState.bResistanceSabotageActivated = false;

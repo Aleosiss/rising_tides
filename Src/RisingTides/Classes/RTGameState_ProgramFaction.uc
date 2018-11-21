@@ -151,7 +151,7 @@ function RTGameState_Unit CreateRTOperative(name GhostTemplateName, XComGameStat
 	WeaponState = XComGameState_Item(StartState.ModifyStateObject(class'XComGameState_Item', WeaponState.ObjectID));
 	ApplyWeaponUpgrades(GhostTemplateName, WeaponState);
 
-	class'RTHelpers'.static.RTLog(	"Creating Program Operative " $ UnitState.GetName(eNameType_Nick) $ 
+	`RTLOG(	"Creating Program Operative " $ UnitState.GetName(eNameType_Nick) $ 
 									", with ObjectID " $ UnitState.GetReference().ObjectID $
 									", and CharacterTemplateName " $ UnitState.GetMyTemplateName()
 						);
@@ -511,7 +511,7 @@ protected function RecalculateActiveOperativesAndSquads(XComGameState NewGameSta
 			foreach pgs.InitOperatives(UnitIteratorObjRef) {
 				UnitState = XComGameState_Unit(History.GetGameStateForObjectID(UnitIteratorObjRef.ObjectID));
 				if(UnitState == none) {
-					class'RTHelpers'.static.RTLog("Couldn't find UnitState for ObjectID" $ UnitIteratorObjRef.ObjectID);
+					`RTLOG("Couldn't find UnitState for ObjectID" $ UnitIteratorObjRef.ObjectID);
 					continue;
 				}
 
@@ -605,7 +605,7 @@ protected function AddDNMExperience(XComGameState NewGameState) {
 	}
 
 	if(ActiveSquadUnitStates.Length == 0) {
-		class'RTHelpers'.static.RTLog("Didn't find any active XCOM units on the GameState!", true);
+		`RTLOG("Didn't find any active XCOM units on the GameState!", true);
 		return;
 	}
 
@@ -656,7 +656,7 @@ simulated function RetrieveRescuedProgramOperatives(XComGameState NewGameState) 
 			foreach pgs.InitOperatives(UnitIteratorObjRef) {
 				UnitState = XComGameState_Unit(History.GetGameStateForObjectID(UnitIteratorObjRef.ObjectID));
 				if(UnitState == none) {
-					class'RTHelpers'.static.RTLog("Couldn't find UnitState for ObjectID" $ UnitIteratorObjRef.ObjectID);
+					`RTLOG("Couldn't find UnitState for ObjectID" $ UnitIteratorObjRef.ObjectID);
 					continue;
 				}
 
@@ -693,7 +693,7 @@ simulated function ReloadOperativeArmaments(XComGameState NewGameState) {
 	//ItemTemplateManager = class'X2ItemTemplateManager'.static.GetItemTemplateManager();
 	foreach Active(UnitIteratorObjRef) {
 		UnitState = XComGameState_Unit(History.GetGameStateForObjectID(UnitIteratorObjRef.ObjectID));
-		class'RTHelpers'.static.RTLog("Reloading Arsenal for " $ UnitState.GetName(eNameType_Nick) $ ".");
+		`RTLOG("Reloading Arsenal for " $ UnitState.GetName(eNameType_Nick) $ ".");
 
 		NewUnitState = XComGameState_Unit(NewGameState.ModifyStateObject(class'XComGameState_Unit', UnitState.ObjectID));
 		NewUnitState.BlastLoadout(NewGameState);
@@ -765,14 +765,14 @@ simulated function bool CashOneSmallFavor(XComGameState NewGameState, XComGameSt
 	}
 
 	if(Deployed == none) {
-		class'RTHelpers'.static.RTLog("The Program has no squads?", true);
+		`RTLOG("The Program has no squads?", true);
 		return false; // we... have no squads?
 	}
 
 	MissionSite = XComGameState_MissionSite(NewGameState.ModifyStateObject(MissionSite.class, MissionSite.ObjectID));
 	foreach Deployed.Operatives(GhostRef) {
 		GhostTemplateName = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(GhostRef.ObjectID)).GetMyTemplateName();
-		class'RTHelpers'.static.RTLog("Adding a " $ GhostTemplateName $ " to the SpecialSoldiers for Mission " $ MissionSite.GeneratedMission.Mission.MissionName);
+		`RTLOG("Adding a " $ GhostTemplateName $ " to the SpecialSoldiers for Mission " $ MissionSite.GeneratedMission.Mission.MissionName);
 		MissionSite.GeneratedMission.Mission.SpecialSoldiers.AddItem(GhostTemplateName);
 	}
 	
@@ -788,19 +788,19 @@ simulated function bool UncashOneSmallFavor(XComGameState NewGameState, XComGame
 	local name GhostTemplateName;
 	
 	if(MissionSite.GetReference().ObjectID != SelectedMissionRef.ObjectID) {
-		class'RTHelpers'.static.RTLog("MissionSite ObjectID is not the same as the SelectedMissionRef! Removing OSF from the SelectedMissionRef instead of the given one!");
+		`RTLOG("MissionSite ObjectID is not the same as the SelectedMissionRef! Removing OSF from the SelectedMissionRef instead of the given one!");
 		MissionSite = XComGameState_MissionSite(`XCOMHISTORY.GetGameStateForObjectID(SelectedMissionRef.ObjectID));
 	}
 
 	if(Deployed == none) {
-		class'RTHelpers'.static.RTLog("The Program has no squads?", true);
+		`RTLOG("The Program has no squads?", true);
 		return false; // we... have no squads?
 	}
 
 	MissionSite = XComGameState_MissionSite(NewGameState.ModifyStateObject(MissionSite.class, MissionSite.ObjectID));
 	foreach Deployed.Operatives(GhostRef) {
 		GhostTemplateName = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(GhostRef.ObjectID)).GetMyTemplateName();
-		class'RTHelpers'.static.RTLog("Removing a " $ GhostTemplateName $ " from the SpecialSoldiers for Mission " $ MissionSite.GeneratedMission.Mission.MissionName);
+		`RTLOG("Removing a " $ GhostTemplateName $ " from the SpecialSoldiers for Mission " $ MissionSite.GeneratedMission.Mission.MissionName);
 		MissionSite.GeneratedMission.Mission.SpecialSoldiers.RemoveItem(GhostTemplateName);
 	}
 	
@@ -872,13 +872,13 @@ function PrintGoldenPathActionInformation() {
 
 	History = `XCOMHISTORY;
 
-	class'RTHelpers'.static.RTLog("Printing Golden Path covert actions for the Program...");
+	`RTLOG("Printing Golden Path covert actions for the Program...");
 	foreach GoldenPathActions(StateObjRef) {
 		CovertActionState = XComGameState_CovertAction(History.GetGameStateForObjectID(StateObjRef.ObjectID));
 		if(CovertActionState == none)
 			continue;
 		CovertActionTemplate = CovertActionState.GetMyTemplate();
-		class'RTHelpers'.static.RTLog("" $ CovertActionTemplate.DataName);
+		`RTLOG("" $ CovertActionTemplate.DataName);
 	}
 }
 
@@ -919,7 +919,7 @@ function InitTemplarQuestActions(XComGameState NewGameState) {
 	local array<name>	TemplarQuestCovertActionTemplateNames;
 
 	if(TemplarQuestActions.Length != 0) {
-		class'RTHelpers'.static.RTLog("Not creating more Templar Quest Covert Actions...");
+		`RTLOG("Not creating more Templar Quest Covert Actions...");
 		return;
 	}
 
@@ -1032,7 +1032,7 @@ function GenerateNewPlayableCard(XComGameState NewGameState)
 
 	NewCardState = GetRandomCardToMakePlayable(NewGameState);
 	if(NewCardState == none) {
-		//class'RTHelpers'.static.RTLog("Couldn't make a random card playable!");
+		//`RTLOG("Couldn't make a random card playable!");
 		return;
 	}
 
@@ -1045,7 +1045,7 @@ function GenerateNewPlayableCard(XComGameState NewGameState)
 		}
 
 		if(NewCardState.GetMyTemplateName() == IteratorCardState.GetMyTemplateName()) {
-			//class'RTHelpers'.static.RTLog("Created a duplicate card, returning none!");
+			//`RTLOG("Created a duplicate card, returning none!");
 			return;
 		}
 	}
@@ -1057,7 +1057,7 @@ function GenerateNewPlayableCard(XComGameState NewGameState)
 		}
 
 		if(NewCardState.GetMyTemplateName() == IteratorCardState.GetMyTemplateName()) {
-			//class'RTHelpers'.static.RTLog("Created a duplicate card, returning none!");
+			//`RTLOG("Created a duplicate card, returning none!");
 			return;
 		}
 	}
@@ -1219,22 +1219,22 @@ static function EventListenerReturn FortyYearsOfWarEventListener(Object EventDat
 	//local XComGameState_HeadquartersXCom XComHQ;
 	local XComLWTuple Tuple;
 
-	class'RTHelpers'.static.RTLog("Forty Years of War Triggered!");
+	`RTLOG("Forty Years of War Triggered!");
 	Tuple = XComLWTuple(EventData);
 	if(Tuple == none) {
-		class'RTHelpers'.static.RTLog("FYOW did not recieve a LWTuple, ending...", true);
-		class'RTHelpers'.static.RTLog("" $ EventData.class);
+		`RTLOG("FYOW did not recieve a LWTuple, ending...", true);
+		`RTLOG("" $ EventData.class);
 		return ELR_NoInterrupt;
 	}
 
 	if(Tuple.Id != 'RegionOutpostBuildStart') {
-		class'RTHelpers'.static.RTLog("FYOW did not receive the correct Tuple, ending...", true);
+		`RTLOG("FYOW did not receive the correct Tuple, ending...", true);
 		return ELR_NoInterrupt;
 	}
 
 	Tuple.Data[0].b = true;
 
-	class'RTHelpers'.static.RTLog("Forty Years of War successfully executed!");
+	`RTLOG("Forty Years of War successfully executed!");
 	return ELR_NoInterrupt;
 }
 
@@ -1280,7 +1280,7 @@ static function InitFaction(optional XComGameState StartState) {
 		}
 
 		if(AllHavens.Length == 0) {
-			class'RTHelpers'.static.RTLog("Couldn't find a Haven to attach the Faction to!");
+			`RTLOG("Couldn't find a Haven to attach the Faction to!");
 		}
 
 		HavenState = XComGameState_Haven(NewGameState.ModifyStateObject(class'XComGameState_Haven', AllHavens[`SYNC_RAND_STATIC(AllHavens.Length)].ObjectID));

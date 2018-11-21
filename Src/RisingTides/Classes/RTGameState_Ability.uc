@@ -418,8 +418,8 @@ function EventListenerReturn RTAbilityTriggerEventListener_ValidAbilityLocations
 // mostly used for debugging
 function EventListenerReturn RTAbilityTriggerEventListener_Self(Object EventData, Object EventSource, XComGameState GameState, Name EventID, Object CallbackData)
 {
-	class'RTHelpers'.static.RTLog("RTAbilityTriggerEventListener_Self");
-	class'RTHelpers'.static.RTLog(XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(OwnerStateObject.ObjectID)).GetFullName());
+	`RTLOG("RTAbilityTriggerEventListener_Self");
+	`RTLOG(XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(OwnerStateObject.ObjectID)).GetFullName());
 	//RTAbilityTriggerAgainstSingleTarget(OwnerStateObject, false);
 	ActivateAbility(OwnerStateObject);
 
@@ -434,7 +434,7 @@ protected function bool ActivateAbility(StateObjectReference TargetRef) {
 
 	AvailableCode = CanActivateAbilityForObserverEvent(XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(TargetRef.ObjectID)));
 	if(AvailableCode != 'AA_Success') {
-		class'RTHelpers'.static.RTLog("Couldn't Activate "@ self.GetMyTemplateName() @ " for observer event, Code = "$ AvailableCode);
+		`RTLOG("Couldn't Activate "@ self.GetMyTemplateName() @ " for observer event, Code = "$ AvailableCode);
 		return false;
 	} else {
 		NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("Activating Ability " $ GetMyTemplateName());
@@ -445,16 +445,16 @@ protected function bool ActivateAbility(StateObjectReference TargetRef) {
 	AbilityContext = class'XComGameStateContext_Ability'.static.BuildContextFromAbility(self, TargetRef.ObjectID);
 
 	if( AbilityContext.Validate() ) {
-		class'RTHelpers'.static.RTLog("The AbilityContext was validated, submitting it!");
+		`RTLOG("The AbilityContext was validated, submitting it!");
 		if(!`TACTICALRULES.SubmitGameStateContext(AbilityContext)) {
-			class'RTHelpers'.static.RTLog("The Context failed to be submitted!");
+			`RTLOG("The Context failed to be submitted!");
 			return false;
 		} else {
-			class'RTHelpers'.static.RTLog("The Context was submitted successfully!");
+			`RTLOG("The Context was submitted successfully!");
 			return true;
 		}
 	} else {
-		class'RTHelpers'.static.RTLog("Rising Tides: Couldn't validate AbilityContext, " @ self.GetMyTemplateName() @ " not activated.");
+		`RTLOG("Rising Tides: Couldn't validate AbilityContext, " @ self.GetMyTemplateName() @ " not activated.");
 		return false;
 	}
 }

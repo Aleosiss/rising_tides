@@ -233,7 +233,7 @@ static function bool IsHuntTemplarsP1Available(optional XComGameState NewGameSta
 
 	ProgramState = RTGameState_ProgramFaction(FactionState);
 	if(ProgramState == none) {
-		class'RTHelpers'.static.RTLog("wut", true);
+		`RTLOG("wut", true);
 	}
 
 	foreach `XCOMHISTORY.IterateByClassType(class'XComGameState_ResistanceFaction', FactionState) {
@@ -264,7 +264,7 @@ static function bool IsHuntTemplarsP2Available(optional XComGameState NewGameSta
 
 	ProgramState = RTGameState_ProgramFaction(FactionState);
 	if(ProgramState == none) {
-		class'RTHelpers'.static.RTLog("wut", true);
+		`RTLOG("wut", true);
 	}
 
 	if(ProgramState.iTemplarQuestlineStage == 1) {
@@ -292,7 +292,7 @@ static function bool IsHuntTemplarsP3Available(optional XComGameState NewGameSta
 
 	ProgramState = RTGameState_ProgramFaction(FactionState);
 	if(ProgramState == none) {
-		class'RTHelpers'.static.RTLog("wut", true);
+		`RTLOG("wut", true);
 	}
 
 	if(ProgramState.iTemplarQuestlineStage == 2) {

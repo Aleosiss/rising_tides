@@ -74,7 +74,7 @@ static function X2CharacterTemplate CreateWhisperTemplate()
 	CharTemplate.ForceAppearance.nmTorsoDeco = 'MPW_WotC_SLD_MamaMEA_Remnant_Hvy_Torso_M';
 	CharTemplate.ForceAppearance.bGhostPawn = False;
 
-	class'RTHelpers'.static.RTLog("Adding Whisper's character template!");
+	`RTLOG("Adding Whisper's character template!");
 	return CharTemplate;
 }
 
@@ -139,7 +139,7 @@ static function X2CharacterTemplate CreateQueenTemplate()
 	CharTemplate.ForceAppearance.nmTorsoDeco = 'LPW_WotC_SLD_MamaMEA_Remnant_Hvy_Torso_F';
 	CharTemplate.ForceAppearance.bGhostPawn = False;
 
-	class'RTHelpers'.static.RTLog("Adding Queen's character template!");
+	`RTLOG("Adding Queen's character template!");
 	return CharTemplate;
 }
 
@@ -204,7 +204,7 @@ static function X2CharacterTemplate CreateNovaTemplate()
 	CharTemplate.ForceAppearance.nmTorsoDeco = 'LPW_WotC_SLD_MamaMEA_Remnant_Hvy_Torso_F';
 	CharTemplate.ForceAppearance.bGhostPawn = False;
 
-	class'RTHelpers'.static.RTLog("Adding Nova's character template!");
+	`RTLOG("Adding Nova's character template!");
 	return CharTemplate;
 }
 

@@ -782,7 +782,7 @@ function EveryMomentMattersVisualizationFn(XComGameState VisualizeGameState) {
 			SoundAndFlyOver.SetSoundAndFlyOverParameters(None, AbilityTemplate.LocFriendlyName, '', eColor_Good, AbilityTemplate.IconImage);
 
 		} else {
-			class'RTHelpers'.static.RTLog("Rising Tides - Every Moment Matters: Couldn't find AbilityTemplate for visualization!");
+			`RTLOG("Rising Tides - Every Moment Matters: Couldn't find AbilityTemplate for visualization!");
 		}
 		break;
 	}
@@ -1763,7 +1763,7 @@ function RepositoningVisualizationFn(XComGameState VisualizeGameState) {
 		SoundAndFlyOver.SetSoundAndFlyOverParameters(None, AbilityTemplate.LocFlyOverText, '', eColor_Good, AbilityTemplate.IconImage);
 
 	} else {
-		class'RTHelpers'.static.RTLog("Rising Tides - Repositioning: Couldn't find AbilityTemplate for visualization!");
+		`RTLOG("Rising Tides - Repositioning: Couldn't find AbilityTemplate for visualization!");
 	}
 }
 
@@ -1852,7 +1852,7 @@ function RepositoningCheckVisualizationFn(XComGameState VisualizeGameState) {
 			SoundAndFlyOver.SetSoundAndFlyOverParameters(None, AbilityTemplate.LocMissMessage, '', eColor_Bad, AbilityTemplate.IconImage);
 		}
 	} else {
-		class'RTHelpers'.static.RTLog("Rising Tides - Repositioning: Couldn't find AbilityTemplate for visualization!");
+		`RTLOG("Rising Tides - Repositioning: Couldn't find AbilityTemplate for visualization!");
 	}
 }
 

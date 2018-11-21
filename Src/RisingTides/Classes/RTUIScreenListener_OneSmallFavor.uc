@@ -96,7 +96,7 @@ simulated function AddOneSmallFavorSelectionCheckBox(UIScreen Screen) {
 	}
 	
 	else {
-		class'RTHelpers'.static.RTLog("Could not find a confirm button for the mission!", true);
+		`RTLOG("Could not find a confirm button for the mission!", true);
 	}
 }
 
@@ -117,7 +117,7 @@ function OnConfirmButtonInited(UIPanel Panel) {
 	Program = RTGameState_ProgramFaction(`XCOMHISTORY.GetSingleGameStateObjectForClass(class'RTGameState_ProgramFaction'));
 	Button = UIButton(Panel);
 	if(Button == none) {
-		class'RTHelpers'.static.RTLog("This isn't a button!");
+		`RTLOG("This isn't a button!");
 	}
 
 	// the checkbox shouldn't be clickable if the favor isn't available
@@ -125,7 +125,7 @@ function OnConfirmButtonInited(UIPanel Panel) {
 	if(!bReadOnly) {
 		bReadOnly = class'RTHelpers'.static.IsInvalidMission(MissionScreen.GetMission().GetMissionSource());
 		if(bReadOnly) {
-			class'RTHelpers'.static.RTLog("This MissionSource is invalid!", true);
+			`RTLOG("This MissionSource is invalid!", true);
 		}
 	}
 
@@ -145,7 +145,7 @@ function OnConfirmButtonInited(UIPanel Panel) {
 		.SetPosition(PosX, PosY)
 		.SetColor(class'UIUtilities_Colors'.static.ColorToFlashHex(Program.GetMyTemplate().FactionColor))
 		.SetTooltipText(strCheckboxDesc, , , 10, , , true, 0.0f);
-	class'RTHelpers'.static.RTLog("Created a checkbox at position " $ PosX $ " x and " $ PosY $ " y.");
+	`RTLOG("Created a checkbox at position " $ PosX $ " x and " $ PosY $ " y.");
 	HandleInput(true);
 
 	// Modify the OnLaunchButtonClicked Delegate
@@ -153,7 +153,7 @@ function OnConfirmButtonInited(UIPanel Panel) {
 		OldOnClickedDelegate = Button.OnClickedDelegate;
 		Button.OnClickedDelegate = ModifiedLaunchButtonClicked;
 	} else {
-		class'RTHelpers'.static.RTLog("Panel was not a button?", true);
+		`RTLOG("Panel was not a button?", true);
 	}
 }
 
@@ -191,26 +191,26 @@ simulated function bool AddOneSmallFavorSitrep(XComGameState_MissionSite Mission
 			return false;
 		}
 
-		class'RTHelpers'.static.RTLog("Adding One Small Favor SITREP due to it being available and activated!");
+		`RTLOG("Adding One Small Favor SITREP due to it being available and activated!");
 	} else {
-		class'RTHelpers'.static.RTLog("Adding One Small Favor SITREP via debug override!"); 
+		`RTLOG("Adding One Small Favor SITREP via debug override!"); 
 	}
 
 
 	XComHQ = class'UIUtilities_Strategy'.static.GetXComHQ();
 
 	if(MissionState.GeneratedMission.SitReps.Find('RTOneSmallFavor') != INDEX_NONE) {
-		class'RTHelpers'.static.RTLog("This map already has the One Small Favor tag!", true);
+		`RTLOG("This map already has the One Small Favor tag!", true);
 		return false;
 	}
 	
 	if(class'RTHelpers'.static.IsInvalidMission(MissionState.GetMissionSource())) {
-		class'RTHelpers'.static.RTLog("This map is invalid!", true);
+		`RTLOG("This map is invalid!", true);
 		return false;
 	}
 
 	if(MissionState.TacticalGameplayTags.Find('RTOneSmallFavor') != INDEX_NONE) {
-		class'RTHelpers'.static.RTLog("This mission is already tagged for one small favor!");
+		`RTLOG("This mission is already tagged for one small favor!");
 		return false;
 	}
 
@@ -230,7 +230,7 @@ simulated function bool AddOneSmallFavorSitrep(XComGameState_MissionSite Mission
 		`XCOMGAME.GameRuleset.SubmitGameState(NewGameState);
 		//MissionScreen.UpdateData();
 	} else {
-		class'RTHelpers'.static.RTLog("Warning: One Small Favor activated but didn't add any objects to the GameState?!", true);
+		`RTLOG("Warning: One Small Favor activated but didn't add any objects to the GameState?!", true);
 		History.CleanupPendingGameState(NewGameState);
 	}
 

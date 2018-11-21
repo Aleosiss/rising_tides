@@ -39,7 +39,7 @@ static event InstallNewCampaign(XComGameState StartState) {
 static event OnPostTemplatesCreated()
 {
 	`if (`notdefined(FINAL_RELEASE)) 
-		class'RTHelpers'.static.RTLog("This is not a final release!");
+		`RTLOG("This is not a final release!");
 	`endif
 
 	`RTLOG("Script package loaded.");
@@ -145,7 +145,7 @@ simulated static function MakePsiAbilitiesInterruptable() {
 	local X2AbilityTemplateManager AbilityTemplateMgr;
 	local int i;
 
-	class'RTHelpers'.static.RTLog("Patching Psionic Abilities...");
+	`RTLOG("Patching Psionic Abilities...");
 	for(i = 0; i < class'RTHelpers'.default.PsionicAbilities.Length; ++i) {
 		PsionicTemplateNames.AddItem(class'RTHelpers'.default.PsionicAbilities[i]);
 	}
@@ -188,10 +188,10 @@ exec function RT_PrintResistanceFactionNames() {
 
 	History = `XCOMHISTORY;
 
-	class'RTHelpers'.static.RTLog("printing faction names...", false);
+	`RTLOG("printing faction names...", false);
 	foreach History.IterateByClassType(class'XComGameState_ResistanceFaction', Faction) {
 		if(Faction != none) {
-			class'RTHelpers'.static.RTLog("" $ Faction.GetMyTemplateName());
+			`RTLOG("" $ Faction.GetMyTemplateName());
 		}
 	}
 }
@@ -202,24 +202,24 @@ exec function RT_PrintProgramFactionInformation(optional bool bShouldPrintFullIn
 
 	History = `XCOMHISTORY;
 
-	class'RTHelpers'.static.RTLog("Gathering Debug Information for the Program...");
+	`RTLOG("Gathering Debug Information for the Program...");
 	Faction = class'RTHelpers'.static.GetProgramState();
 
 	if(bShouldPrintFullInfo) {
-		class'RTHelpers'.static.RTLog(Faction.ToString(bShouldPrintAllFields), , true);
+		`RTLOG(Faction.ToString(bShouldPrintAllFields), , true);
 		return;
 	}
 
-	class'RTHelpers'.static.RTLog("Printing Golden Path covert actions for the Program...");
+	`RTLOG("Printing Golden Path covert actions for the Program...");
 	class'RTHelpers'.static.PrintGoldenPathActionsForFaction(Faction);
 
-	class'RTHelpers'.static.RTLog("Printing Standard covert actions for the Program...");
+	`RTLOG("Printing Standard covert actions for the Program...");
 	class'RTHelpers'.static.PrintCovertActionsForFaction(Faction);
 
-	class'RTHelpers'.static.RTLog("Printing Rival Chosen for the Program...");
-	class'RTHelpers'.static.RTLog("" $ XComGameState_AdventChosen(History.GetGameStateForObjectID(Faction.RivalChosen.ObjectID)).GetChosenClassName());
+	`RTLOG("Printing Rival Chosen for the Program...");
+	`RTLOG("" $ XComGameState_AdventChosen(History.GetGameStateForObjectID(Faction.RivalChosen.ObjectID)).GetChosenClassName());
 
-	class'RTHelpers'.static.RTLog("Printing Misc Information for the Program...");
+	`RTLOG("Printing Misc Information for the Program...");
 	class'RTHelpers'.static.PrintMiscInfoForFaction(Faction);
 
 
@@ -239,7 +239,7 @@ exec function RT_TriggerEvent(name EventID) {
 }
 
 exec function RT_DebugModVersion() {
-	class'RTHelpers'.static.RTLog("Mod Version is: " $ default.MajorVer $ "." $ default.MinorVer $ "." $ default.PatchVer);
+	`RTLOG("Mod Version is: " $ default.MajorVer $ "." $ default.MinorVer $ "." $ default.PatchVer);
 }
 
 exec function RT_ToggleCustomDebugOutput() {
@@ -278,7 +278,7 @@ exec function RT_PrintAppearence(int ObjectID) {
 
 	UnitState = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(ObjectID));
 	if(UnitState == none) {
-		class'RTHelpers'.static.RTLog("UnitState was null for PrintAppearance!");
+		`RTLOG("UnitState was null for PrintAppearance!");
 		return;
 	}	
 
@@ -357,7 +357,7 @@ exec function RT_GenerateProgramCards() {
 
 	NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("CHEAT: Add Program Faction Cards!");
 	ProgramState = class'RTHelpers'.static.GetNewProgramState(NewGameState);
-	class'RTHelpers'.static.RTLog("Generating cards...", false, true);
+	`RTLOG("Generating cards...", false, true);
 	for(idx = 0; idx < 20; idx++)
 	{
 		ProgramState.GenerateNewPlayableCard(NewGameState);
@@ -375,10 +375,10 @@ exec function RT_DebugActiveOperatives() {
 	ProgramState = class'RTHelpers'.static.GetProgramState();
 	History = `XCOMHISTORY;
 	
-	class'RTHelpers'.static.RTLog("Printing Active Operatives...");
+	`RTLOG("Printing Active Operatives...");
 	foreach ProgramState.Active(IteratorRef) {
 		UnitState = XComGameState_Unit(History.GetGameStateForObjectID(IteratorRef.ObjectID));
-		class'RTHelpers'.static.RTLog( "Found Ghost Operative " $ UnitState.GetFullName() $ 
+		`RTLOG( "Found Ghost Operative " $ UnitState.GetFullName() $ 
 								", with ObjectID " $ UnitState.GetReference().ObjectID $
 								", and CharacterTemplateName " $ UnitState.GetMyTemplateName()
 							);
@@ -472,7 +472,7 @@ exec function RT_PrintCrew()
 	
 	XComHQ = XComGameState_HeadquartersXCom(History.GetSingleGameStateObjectForClass(class'XComGameState_HeadquartersXCom'));
 
-	class'RTHelpers'.static.RTLog("Logging XCOM Crew...");
+	`RTLOG("Logging XCOM Crew...");
 	CrewString = "\nXCom Crew";
 
 	for(idx = 0; idx < XComHQ.Crew.Length; idx++)
@@ -485,7 +485,7 @@ exec function RT_PrintCrew()
 		}
 	}
 
-	class'RTHelpers'.static.RTLog(CrewString);
+	`RTLOG(CrewString);
 }
 
 // Courtesy of bountygiver
@@ -543,11 +543,11 @@ exec function ReportTestPanelLocation(optional name PanelName = 'TestDebugPanel'
 	if(UIMission(Screen) != none) {
 		MissionType = string(UIMission(Screen).GetMission().GetMissionSource().DataName);
 		LogOutput = ("" $ PanelName $ " located at (" $ PosX $ ", " $ PosY $ ") for MissionType " $ MissionType);
-		class'RTHelpers'.static.RTLog(LogOutput);
+		`RTLOG(LogOutput);
 
 	} else {
 		LogOutput = ("" $ PanelName $ " located at (" $ PosX $ ", " $ PosY $ ")");
-		class'RTHelpers'.static.RTLog(LogOutput);
+		`RTLOG(LogOutput);
 
 	}
 }
@@ -556,7 +556,7 @@ exec function RT_DebugVisibilityAll() {
 	local XComGameState_Unit ItUnit;
 	foreach `XCOMHISTORY.IterateByClassType(class'XComGameState_Unit', ItUnit)
 	{
-		class'RTHelpers'.static.RTLog("" $ ItUnit.GetFullName());
+		`RTLOG("" $ ItUnit.GetFullName());
 		class'RTCondition_VisibleToPlayer'.static.IsTargetVisibleToLocalPlayer(ItUnit.GetReference(), , true);
 	}
 }
@@ -636,8 +636,8 @@ exec function RT_GetVisibilityStatusOfClosestUnitToCursor() {
 
 	UnitState = CheatsManager.GetClosestUnitToCursor();
 	ForceVisibleSetting = UnitState.ForceModelVisible();
-	class'RTHelpers'.static.RTLog(UnitState.GetFullName());
-	class'RTHelpers'.static.RTLog("" $ ForceVisibleSetting);
+	`RTLOG(UnitState.GetFullName());
+	`RTLOG("" $ ForceVisibleSetting);
 }
 
 exec function RT_ListAllSquadViewers(optional bool bDetailedInfo = false) {
@@ -648,14 +648,14 @@ exec function RT_ListAllSquadViewers(optional bool bDetailedInfo = false) {
 	History = `XCOMHISTORY;
 
 	foreach History.IterateByClassType(class'XComGameState_SquadViewer', XComSquadViewerState) {
-		class'RTHelpers'.static.RTLOG("" $ "Found a SquadViewer: " $ XComSquadViewerState.ToString(bDetailedInfo), , true);
+		`RTLOG("" $ "Found a SquadViewer: " $ XComSquadViewerState.ToString(bDetailedInfo), , true);
 	}
 }
 
 exec function RT_ClearLog() {
 	local int i;
 	for(i = 0; i<100; i++) {
-		class'RTHelpers'.static.RTLog(" ", false, true);
+		`RTLOG(" ", false, true);
 	}
 }
 
@@ -671,12 +671,12 @@ exec function RT_GetTeamStatusOfClosestUnitToCursor() {
 	PlayerState = XComGameState_Player(`XCOMHISTORY.GetGameStateForObjectID(UnitState.GetAssociatedPlayerID()));
 	TeamFlag = PlayerState.TeamFlag;
 	if( UnitState.IsMindControlled() ) {
-		class'RTHelpers'.static.RTLog("Unit is mind controlled!",,true);
+		`RTLOG("Unit is mind controlled!",,true);
 		TeamFlag = UnitState.GetPreviousTeam();
 	}
 
-	class'RTHelpers'.static.RTLog(UnitState.GetFullName(),,true);
-	class'RTHelpers'.static.RTLog("TeamFlag: " $ TeamFlag,,true);
+	`RTLOG(UnitState.GetFullName(),,true);
+	`RTLOG("TeamFlag: " $ TeamFlag,,true);
 }
 
 // Based on code from "Configurable Mission Timers by wghost"
@@ -707,7 +707,7 @@ exec function RT_DebugKismetVariables() {
 
 	if(GeneratedMission.Mission.MapNames.Length == 0)
 	{
-		class'RTHelpers'.static.RTLog("No objective map defined, skipping",,true);
+		`RTLOG("No objective map defined, skipping",,true);
 		return;
 	}
 
@@ -720,11 +720,11 @@ exec function RT_DebugKismetVariables() {
 		}
 	}
 
-	class'RTHelpers'.static.RTLog("objectiveName = " $ objectiveName);
+	`RTLOG("objectiveName = " $ objectiveName);
 
 	if(objectiveName == "")
 	{
-		class'RTHelpers'.static.RTLog("No objective defined for this map, skipping",,true);
+		`RTLOG("No objective defined for this map, skipping",,true);
 		return;
 	}
 
@@ -733,25 +733,25 @@ exec function RT_DebugKismetVariables() {
 		mainSequence.FindSeqObjectsByClass( class'SequenceVariable', true, SeqObjs);
 		if(SeqObjs.Length != 0)
 		{
-			class'RTHelpers'.static.RTLog("Kismet variables found",,true);
+			`RTLOG("Kismet variables found",,true);
 			for(i = 0; i < SeqObjs.Length; i++)
 			{
 				if(SequenceVariable(SeqObjs[i]).VarName != EmptyName) {
 					if(SeqVar_GameStateObject(SeqObjs[i]) != none) {
-						class'RTHelpers'.static.RTLog("Found " $ SequenceVariable(SeqObjs[i]).VarName $ " , ClassType: " $ SeqObjs[i].class $ " GameStateObj: " $ SeqVar_GameStateObject(SeqObjs[i]).GetObject().ObjectID ,, true);
+						`RTLOG("Found " $ SequenceVariable(SeqObjs[i]).VarName $ " , ClassType: " $ SeqObjs[i].class $ " GameStateObj: " $ SeqVar_GameStateObject(SeqObjs[i]).GetObject().ObjectID ,, true);
 					} else if(SeqVar_GameStateList(SeqObjs[i]) != none) {
-						class'RTHelpers'.static.RTLog("Found " $ SequenceVariable(SeqObjs[i]).VarName $ " , ClassType: " $ SeqObjs[i].class,, true);
+						`RTLOG("Found " $ SequenceVariable(SeqObjs[i]).VarName $ " , ClassType: " $ SeqObjs[i].class,, true);
 						GameStates = SeqVar_GameStateList(SeqObjs[i]).GameStates;
 						for(j = 0; j < GameStates.Length; j++) {
-							class'RTHelpers'.static.RTLog("" $ GameStates[j].ObjectID,,true);
+							`RTLOG("" $ GameStates[j].ObjectID,,true);
 						}
 					} else if(SeqVar_Bool(SeqObjs[i]) != none) {
-						class'RTHelpers'.static.RTLog("Found " $ SequenceVariable(SeqObjs[i]).VarName $ " , ClassType: " $ SeqObjs[i].class $ " Bool: " $ SeqVar_Bool(SeqObjs[i]).bValue,, true);
+						`RTLOG("Found " $ SequenceVariable(SeqObjs[i]).VarName $ " , ClassType: " $ SeqObjs[i].class $ " Bool: " $ SeqVar_Bool(SeqObjs[i]).bValue,, true);
 					} else if(SeqVar_Int(SeqObjs[i]) != none) {
-						class'RTHelpers'.static.RTLog("Found " $ SequenceVariable(SeqObjs[i]).VarName $ " , ClassType: " $ SeqObjs[i].class $ " Int: " $ SeqVar_Int(SeqObjs[i]).IntValue,, true);
+						`RTLOG("Found " $ SequenceVariable(SeqObjs[i]).VarName $ " , ClassType: " $ SeqObjs[i].class $ " Int: " $ SeqVar_Int(SeqObjs[i]).IntValue,, true);
 					} else {
-						class'RTHelpers'.static.RTLog("Found " $ SequenceVariable(SeqObjs[i]).VarName $ " , ClassType: " $ SeqObjs[i].class,, true);
-						//class'RTHelpers'.static.RTLog("" $ SeqObjs[i].ObjName,, true);
+						`RTLOG("Found " $ SequenceVariable(SeqObjs[i]).VarName $ " , ClassType: " $ SeqObjs[i].class,, true);
+						//`RTLOG("" $ SeqObjs[i].ObjName,, true);
 					}
 				}
 			}
@@ -768,17 +768,17 @@ exec function RT_DebugClosestUnitToCursorAvailableAbilties() {
 
 	UnitState = `CHEATMGR.GetClosestUnitToCursor();
 	if(UnitState == none) {
-		class'RTHelpers'.static.RTLog("Couldn't find unit to debug!", false, true);
+		`RTLOG("Couldn't find unit to debug!", false, true);
 		return;
 	}
 
 	History = `XCOMHISTORY;
 	if(History == none) {
-		class'RTHelpers'.static.RTLog("NO HISTORY??????", false, true);
+		`RTLOG("NO HISTORY??????", false, true);
 		return;
 	}
 
-	class'RTHelpers'.static.RTLog("Gathering and displaying ability availability for " $ UnitState.GetFullName(), false, true);
+	`RTLOG("Gathering and displaying ability availability for " $ UnitState.GetFullName(), false, true);
 	foreach UnitState.Abilities(AbilityRef) {
 		AbilityState = XComGameState_Ability(History.GetGameStateForObjectID(AbilityRef.ObjectID));
 		if(AbilityState == none) {
@@ -791,10 +791,10 @@ exec function RT_DebugClosestUnitToCursorAvailableAbilties() {
 		}
 		
 		if(Action.AvailableCode == 'AA_Success') {
-			class'RTHelpers'.static.RTLog("" $ AbilityState.GetMyTemplateName() $ " is available.", false, true);
-		} else { class'RTHelpers'.static.RTLog("" $ AbilityState.GetMyTemplateName() $ " is not available due to " $ Action.AvailableCode, false, true); }
+			`RTLOG("" $ AbilityState.GetMyTemplateName() $ " is available.", false, true);
+		} else { `RTLOG("" $ AbilityState.GetMyTemplateName() $ " is not available due to " $ Action.AvailableCode, false, true); }
 	}
-	class'RTHelpers'.static.RTLog("Finished gathering and displaying ability availablity for " $ UnitState.GetFullName(), false, true);
+	`RTLOG("Finished gathering and displaying ability availablity for " $ UnitState.GetFullName(), false, true);
 }
 
 exec function RT_CheatLadderPoints(int Points) {
