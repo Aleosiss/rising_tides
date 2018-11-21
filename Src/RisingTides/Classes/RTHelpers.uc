@@ -48,11 +48,10 @@ static function ListDefaultAbilityLists() {
 }
 
 
-static function bool CheckAbilityActivated(name AbilityTemplateName, ERTChecklist Checklist) {
-	local bool b, d;
+static function bool CheckAbilityActivated(name AbilityTemplateName, ERTChecklist Checklist, optional bool bDebug = false) {
+	local bool b;
 	local string n;
 	b = true;
-	d = false; // debug flag
 
 	//ListDefaultAbilityLists();
 
@@ -91,20 +90,20 @@ static function bool CheckAbilityActivated(name AbilityTemplateName, ERTChecklis
 					b = false;
 	}
 
-	if(!b && d) {
-		`LOG("Rising Tides: " @ AbilityTemplateName @ " was not found in " @ n);
+	if(!b && bDebug) {
+		`RTLOG(AbilityTemplateName $ " was not found in " $ n);
 	}
 
 	return b;
 }
 
-static function bool MultiCatCheckAbilityActivated (name AbilityTemplateName, array<ERTChecklist> Checklists) {
+static function bool MultiCatCheckAbilityActivated(name AbilityTemplateName, array<ERTChecklist> Checklists, optional bool bDebug = false) {
 	local ERTChecklist Iterator;
 	local bool b;
 
 	b = false;
 	foreach Checklists(Iterator) {
-		b = CheckAbilityActivated(AbilityTemplateName, Iterator);
+		b = CheckAbilityActivated(AbilityTemplateName, Iterator, bDebug);
 		if(b) {
 			break;
 		}

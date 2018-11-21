@@ -30,6 +30,15 @@ LocHelpText="Killing a flanked or uncovered target with a sniper rifle does not 
 LocFlyOverText="Scoped And Dropped"
 LocPromotionPopupText="<Bullet/> This unit does not suffer from squadsight penalties.<br/><Bullet/> Additional shots taken via this ability will suffer reduced chance to critically hit.<br/>"
 
+[RTRepositioning X2AbilityTemplate]
+LocFriendlyName="Repositioning"
+LocLongDescription="If your last X firing positions are X tiles away, your next shot retains concealment."
+LocHelpText="If your last X firing positions are X tiles away, your next shot retains concealment."
+LocFlyOverText="Repositioning - Concealment retained!"
+LocPromotionPopupText="<Bullet/> <br/><Bullet/> <br/><Bullet/> <br/><Bullet/> <br/>"
+LocHitMessage="Repositioning - Activated"
+LocMissMessage="Repositioning - Deactivated"
+
 [RTOverflowBarrier X2AbilityTemplate]
 LocFriendlyName="Overflow Barrier"
 LocLongDescription="When this unit deals overkill damage, it converts that damage into shielding for itself and its melded allies."
@@ -557,6 +566,13 @@ LocLongDescription="Peer over the shoulder of enemy units, seeing what they see.
 LocHelpText="Peer over the shoulder of enemy units, seeing what they see. "
 LocFlyOverText="Over The Shoulder"
 LocPromotionPopupText="<Bullet/> Peer over the shoulder of enemy units, seeing what they see.<br/>"
+
+[RTUnfurlTheVeil X2AbilityTemplate]
+LocFriendlyName="Unfurl The Veil"
+LocLongDescription="If all active enemy units are affected by Over the Shoulder, gain concealment."
+LocHelpText="If all active enemy units are affected by Over the Shoulder, gain concealment."
+LocFlyOverText="Unfurl The Veil"
+LocPromotionPopupText="<Bullet/> If all active enemy units are affected by Over the Shoulder, gain concealment.<br/>"
 
 [RTTheSixPathsOfPain X2AbilityTemplate]
 LocFriendlyName="The Six Paths of Pain"

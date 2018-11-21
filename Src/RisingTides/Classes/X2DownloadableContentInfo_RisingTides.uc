@@ -827,3 +827,7 @@ exec function TestScreen() {
 	pres = `PRESBASE;
 	ScreenStack = `SCREENSTACK;
 }
+
+exec function RT_ListAbilityLists() {
+	class'RTHelpers'.static.ListDefaultAbilityLists();
+}

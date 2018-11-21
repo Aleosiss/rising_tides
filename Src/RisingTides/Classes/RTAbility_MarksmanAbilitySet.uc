@@ -2717,7 +2717,7 @@ static function X2AbilityTemplate RTRepositioning() {
 
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'RTRepositioning');
 
-	Template.IconImage = "img:///RisingTidesContentPackage.PerkIcons.UIPerk_repositioning";
+	Template.IconImage = "img:///RisingTidesContentPackage.PerkIcons.LW_AbilityKubikuri";
 	Template.AbilitySourceName = 'eAbilitySource_Perk';
 	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_NeverShow;
 	Template.Hostility = eHostility_Neutral;

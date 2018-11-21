@@ -126,7 +126,7 @@ simulated function OnEffectRemoved(const out EffectAppliedData ApplyEffectParame
 		`Redscreen("RTEffect_MobileSquadViewer::OnEffectRemoved: Could not find associated viewer object to remove!");
 		return;
 	} else {
-		class'RTHelpers'.static.RTLog("Removing ObjectID: " $ Viewer.GetReference().ObjectID);
+		class'RTHelpers'.static.RTLog("Removing RTGameState_SquadViewer ObjectID: " $ Viewer.GetReference().ObjectID);
 		NewGameState.RemoveStateObject(RemovedEffectState.CreatedObjectReference.ObjectID);
 	}
 

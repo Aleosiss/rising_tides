@@ -2744,16 +2744,16 @@ static simulated function PsionicLash_BuildVisualization(XComGameState Visualize
 
 static function X2AbilityTemplate RTUnfurlTheVeil() {
 	local X2AbilityTemplate						Template;
-	local X2Effect_RangerStealth			StealthEffect;
-	local RTCondition_UnfurlTheVeil			VeilCondition;
-	local X2AbilityCost_ActionPoints		Cost;
+	local X2Effect_RangerStealth				StealthEffect;
+	local RTCondition_UnfurlTheVeil				VeilCondition;
+	local X2AbilityCost_ActionPoints			Cost;
 	local X2AbilityCooldown						Cooldown;
 
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'RTUnfurlTheVeil');
 	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_swordSlash";
 
 	Template.AbilitySourceName = 'eAbilitySource_Psionic';
-	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_ShowIfAvailable;
+	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_AlwaysShow;
 	Template.Hostility = eHostility_Defensive;
 
 	Template.AbilityToHitCalc = default.DeadEye;
@@ -2780,8 +2780,8 @@ static function X2AbilityTemplate RTUnfurlTheVeil() {
 	StealthEffect.BuildPersistentEffect(1, true, true, false, eGameRule_PlayerTurnEnd);
 	StealthEffect.SetDisplayInfo(ePerkBuff_Bonus, Template.LocFriendlyName, Template.GetMyHelpText(), Template.IconImage, true);
 	StealthEffect.bRemoveWhenTargetConcealmentBroken = true;
-	Template.AddTargetEffect(StealthEffect);
 
+	Template.AddTargetEffect(StealthEffect);
 	Template.AddTargetEffect(class'X2Effect_Spotted'.static.CreateUnspottedEffect());
 
 	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
@@ -2805,7 +2805,6 @@ defaultproperties
 	GuiltyConscienceEffectName = "GuiltyConscienceEffect"
 	PostOverTheShoulderEventName = "TriangulationEvent"
 	KnowledgeIsPowerEffectName = "KnowledgeIsPowerEffectName"
-
 	PsionicStormSustainedActivationEffectName = "PsionicStormSustainedDamageEffectName"
 	PsionicStormSustainedDamageEvent = "PsionicStormSustainedDamageEventName"
 	PsistormMarkedEffectName = "PsionicStormDamageMarkName"
