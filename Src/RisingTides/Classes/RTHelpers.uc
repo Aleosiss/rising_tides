@@ -23,27 +23,27 @@ static function ListDefaultAbilityLists() {
 	local name n;
 
 	foreach default.StandardShots(n) {
-		`LOG("Rising Tides: Standard Shots: " @ n);
+		`RTLOG("Standard Shots: " @ n);
 	}
 
 	foreach default.MeleeAbilities(n) {
-		`LOG("Rising Tides: Melee Abilities: " @ n);
+		`RTLOG("Melee Abilities: " @ n);
 	}
 
 	foreach default.SniperShots(n) {
-		`LOG("Rising Tides: Sniper Shots: " @ n);
+		`RTLOG("Sniper Shots: " @ n);
 	}
 
 	foreach default.OverwatchShots(n) {
-		`LOG("Rising Tides: Overwatch Shots: " @ n);
+		`RTLOG("Overwatch Shots: " @ n);
 	}
 
 	foreach default.PsionicAbilities(n) {
-		`LOG("Rising Tides: Psionic Abilities: " @ n);
+		`RTLOG("Psionic Abilities: " @ n);
 	}
 
 	foreach default.FreeActions(n) {
-		`LOG("Rising Tides: Free Actions: " @ n);
+		`RTLOG("Free Actions: " @ n);
 	}
 }
 

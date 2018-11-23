@@ -594,6 +594,7 @@
     <Content Include="Src\RisingTides\Classes\RTUIScreen_AdvanceTemplarQuestlineStage.uc" />
     <Content Include="Src\RisingTides\Classes\RTEffect_Repositioning.uc" />
     <Content Include="Content\RT_Perk_Psi_UnfurlTheVeil.upk" />
+    <Content Include="Src\RisingTides\Classes\RTCommandManager.uc" />
   </ItemGroup>
   <Import Project="$(MSBuildLocalExtensionPath)\XCOM2.targets" />
 </Project>

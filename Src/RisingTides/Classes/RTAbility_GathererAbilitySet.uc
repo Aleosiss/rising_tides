@@ -1046,7 +1046,7 @@ function RudimentaryCreaturesAffectTargetVisualization(XComGameState VisualizeGa
 
 	AbilityState = XComGameState_Ability(`XCOMHISTORY.GetGameStateForObjectID(ObjectID));
 	if(AbilityState == none) {
-		`LOG("Rising Tides: RudimentaryCreaturesAffectTargetVisualization failed to find an abilitystate for object ID " $ ObjectID);
+		`RTLOG("RudimentaryCreaturesAffectTargetVisualization failed to find an abilitystate for object ID " $ ObjectID);
 		return;
 	}
 
