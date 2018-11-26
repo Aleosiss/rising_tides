@@ -656,3 +656,10 @@ exec function TestScreen() {
 exec function RT_ListAbilityLists() {
 	class'RTHelpers'.static.ListDefaultAbilityLists();
 }
+
+exec function RT_CheatProgramInfluence() {
+    local RTGameState_ProgramFaction ProgramState;
+
+    ProgramState = class'RTHelpers'.static.GetProgramState();
+    ProgramState.TryIncreaseInfluence();
+}

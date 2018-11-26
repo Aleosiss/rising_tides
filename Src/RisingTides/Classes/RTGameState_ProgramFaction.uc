@@ -1181,8 +1181,10 @@ function TryIncreaseInfluence() {
 	local XComGameState_Reward RewardState;
 	local XComGameState NewGameState;
 	local RTGameState_ProgramFaction Program;
+	local int iGuarenteedCorrectValue; // too lazy to see what the correct value should be XDDD
 
 	iNumberOfFavorsCalledIn++;
+	iGuarenteedCorrectValue = iNumberOfFavorsCalledIn;
 
 	if(iNumberOfFavorsCalledIn >= default.iNumberOfFavorsRequiredToIncreaseInfluence) {
 		// Award influence increase
@@ -1202,6 +1204,11 @@ function TryIncreaseInfluence() {
 
 		// This method creates and submits another new game state
 		RewardState.DisplayRewardPopup();
+	} else {
+		NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("RisingTides: Increasing Influence");
+		Program = RTGameState_ProgramFaction(NewGameState.ModifyStateObject(class'RTGameState_ProgramFaction', self.ObjectID));
+		Program.iNumberOfFavorsCalledIn = iGuarenteedCorrectValue;
+		`XCOMGAME.GameRuleset.SubmitGameState(NewGameState);
 	}
 }
 

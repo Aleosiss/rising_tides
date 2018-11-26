@@ -2750,7 +2750,7 @@ static function X2AbilityTemplate RTUnfurlTheVeil() {
 	local X2AbilityCooldown						Cooldown;
 
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'RTUnfurlTheVeil');
-	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_swordSlash";
+	Template.IconImage = "img:///RisingTidesContentPackage.PerkIcons.rt_unfurltheveil";
 
 	Template.AbilitySourceName = 'eAbilitySource_Psionic';
 	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_AlwaysShow;
