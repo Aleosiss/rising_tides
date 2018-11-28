@@ -7,9 +7,6 @@ RTNotFriendlyName="Pressure"
 [RTEffect_PrecisionShotDamage]
 RTFriendlyName="Precision Shot"
 
-[RTEffect_Aggression]
-RTFriendlyName="Aggression"
-
 [RTEffect_SnapshotEffect]
 RTFriendlyName="Snapshot"
 

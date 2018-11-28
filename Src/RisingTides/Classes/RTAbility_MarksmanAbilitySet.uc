@@ -42,6 +42,8 @@ class RTAbility_MarksmanAbilitySet extends RTAbility_GhostAbilitySet
 	var config int SIS_CONCEALMENT_TURNS;
 	var config int REPOSITIONING_TILES_MOVED_REQUIREMENT;
 	var config int REPOSITIONING_MAX_POSITIONS_SAVED;
+	var config int AGGRESSION_CRIT_PER_UNIT;
+	var config int AGGRESSION_UNITS_FOR_MAX_BONUS;
 
 	var config int HARBINGER_SHIELD_AMOUNT, HARBINGER_COOLDOWN, HARBINGER_DAMAGE_BONUS, HARBINGER_WILL_BONUS, HARBINGER_AIM_BONUS, HARBINGER_ARMOR_BONUS;
 	var config WeaponDamageValue HARBINGER_DMG;
@@ -582,6 +584,8 @@ static function X2AbilityTemplate RTAggression()
 	Template.AbilityTriggers.AddItem(default.UnitPostBeginPlayTrigger);
 
 	AgroEffect = new class'RTEffect_Aggression';
+	AgroEffect.iCritBonusPerUnit = default.AGGRESSION_CRIT_PER_UNIT;
+	AgroEffect.iUnitsForMaxBonus = default.AGGRESSION_UNITS_FOR_MAX_BONUS;
 	AgroEffect.BuildPersistentEffect(1, true, true, true);
 	AgroEffect.SetDisplayInfo(ePerkBuff_Passive, Template.LocFriendlyName, Template.LocLongDescription, Template.IconImage, true,,Template.AbilitySourceName);
 	Template.AddTargetEffect(AgroEffect);
