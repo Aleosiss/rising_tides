@@ -1098,14 +1098,10 @@ defaultproperties
 	End Object
 	StandardSizeProperty = DefaultStandardSizeProperty
 
-
-
-
 	RTFeedbackEffectName = "RTFeedback"
 	RTFeedbackWillDebuffName = "RTFeedbackWillDebuff"
 	UnitUsedPsionicAbilityEvent = "UnitUsedPsionicAbility"
 	ForcePsionicAbilityEvent = "ForcePsionicAbilityEvent"
-
 
 	RTMindControlEffectName = "MindControl"
 	RTGhostTagEffectName = "RTGhostOperative"
@@ -1113,6 +1109,13 @@ defaultproperties
 	RTMindControlTemplateName = "RTMindControl"
 	RTTechnopathyTemplateName = "RTTechnopathy"
 	DefaultPsionicAnimDelay = 4.0
+}
 
+static function bool AbilityTagExpandHandler(string InString, out string OutString)
+{
+	local name Tag;
 
+	Tag = name(InString);
+
+	return false;
 }

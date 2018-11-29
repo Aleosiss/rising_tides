@@ -32,8 +32,8 @@ LocPromotionPopupText="<Bullet/> This unit does not suffer from squadsight penal
 
 [RTRepositioning X2AbilityTemplate]
 LocFriendlyName="Repositioning"
-LocLongDescription="If your last X firing positions are X tiles away, your next shot retains concealment."
-LocHelpText="If your last X firing positions are X tiles away, your next shot retains concealment."
+LocLongDescription="If your last <Ability:RTREPOSITIONING_MAX_POSITIONS_SAVED> firing positions are <Ability:RTREPOSITIONING_TILE_DISTANCE> tiles away, your next shot retains concealment."
+LocHelpText="If your last <Ability:RTREPOSITIONING_MAX_POSITIONS_SAVED> shots taken were <Ability:RTREPOSITIONING_TILE_DISTANCE> tiles away, your next shot retains concealment."
 LocFlyOverText="Repositioning - Concealment retained!"
 LocPromotionPopupText="<Bullet/> <br/><Bullet/> <br/><Bullet/> <br/><Bullet/> <br/>"
 LocHitMessage="Repositioning - Activated"
@@ -44,7 +44,7 @@ LocFriendlyName="Overflow Barrier"
 LocLongDescription="When this unit deals overkill damage, it converts that damage into shielding for itself and its melded allies."
 LocHelpText="When this unit deals overkill damage, it converts that damage into shielding for itself and its melded allies."
 LocFlyOverText="Overflow Barrier"
-LocPromotionPopupText="<Bullet/> Try to use in combination with powerful damage abilities such as Precision Shot or Time Stands Still.<br/><Bullet/> Minimum of 1 Shield HP if overkill damage is dealt.<br/><Bullet/> The unit with Overflow Barrier must be melded to generate any shielding.<br/><Bullet/> Shields persist even if the meld is lost.<br/>"
+LocPromotionPopupText="<Bullet/> Minimum of 1 Shield HP if overkill damage is dealt.<br/><Bullet/> Try to use in combination with powerful damage abilities such as Precision Shot or Time Stands Still.<br/><Bullet/> Minimum of 1 Shield HP if overkill damage is dealt.<br/><Bullet/> The unit with Overflow Barrier must be melded to generate any shielding.<br/><Bullet/> Shields persist even if the meld is lost.<br/>"
 
 [RTOverflowBarrierEvent X2AbilityTemplate]
 LocFriendlyName="Overflow Barrier"
@@ -55,17 +55,17 @@ LocPromotionPopupText="<Bullet/> Minimum of 1 Shield HP if overkill damage is de
 
 [RTPrecisionShot X2AbilityTemplate]
 LocFriendlyName="Precision Shot"
-LocLongDescription="A carefully aimed shot, suffering decreased chance to hit, but increased critical chance and critical damage."
+LocLongDescription="A carefully aimed shot, suffering <Ability:RTPRECISION_SHOT_AIM_PENALITY> chance to hit, but <Ability:RTPRECISION_SHOT_CRIT_CHANCE>% increased critical chance and <Ability:RTPRECISION_SHOT_CRIT_DAMAGE>% critical damage."
 LocHelpText="Shoot with decreased chance to hit, but increased critical chance and critical damage."
 LocFlyOverText="Precision Shot"
-LocPromotionPopupText="<Bullet> <Ability:SelfCooldown/> turn cooldown.<br/><Bullet/> Shoot a precision shot, suffering from decreased chance to hit, but increased critical chance and critical damage.<br/>"
+LocPromotionPopupText="<Bullet> <Ability:SelfCooldown/> turn cooldown.<br/>"
 
 [RTAggression X2AbilityTemplate]
 LocFriendlyName="Aggression"
-LocLongDescription="Gain 10% critical chance per visible enemy unit, up to 30%. (Squadsight included)"
-LocHelpText="Gain 10% critical chance per enemy spotted."
+LocLongDescription="Gain <Ability:AGGRESSION_CRIT_PER_UNIT>% critical chance per visible enemy unit, up to <Ability:AGGRESSION_MAX_CRIT>%. (Squadsight included)"
+LocHelpText="Gain <Ability:AGGRESSION_CRIT_PER_UNIT>% critical chance per enemy spotted."
 LocFlyOverText="Aggression"
-LocPromotionPopupText="<Bullet/> Gain 10% critical chance per visible enemy unit, up to 30%. (Squadsight included).<br/>"
+LocPromotionPopupText=""
 
 [KnockThemDown X2AbilityTemplate]
 LocFriendlyName="Knock Them Down"
@@ -572,7 +572,7 @@ LocFriendlyName="Unfurl The Veil"
 LocLongDescription="If all active enemy units are affected by Over the Shoulder, gain concealment."
 LocHelpText="If all active enemy units are affected by Over the Shoulder, gain concealment."
 LocFlyOverText="Unfurl The Veil"
-LocPromotionPopupText="<Bullet/> If all active enemy units are affected by Over the Shoulder, gain concealment.<br/>"
+LocPromotionPopupText="<Bullet> <Ability:SelfCooldown/> turn cooldown.<br/>"
 
 [RTTheSixPathsOfPain X2AbilityTemplate]
 LocFriendlyName="The Six Paths of Pain"

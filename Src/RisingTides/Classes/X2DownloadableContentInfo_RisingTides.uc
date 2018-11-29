@@ -174,3 +174,24 @@ simulated static function MakePsiAbilitiesInterruptable() {
 static function bool DebuggingEnabled() {
 	return default.bDebuggingEnabled;
 }
+
+static function bool AbilityTagExpandHandler(string InString, out string OutString)
+{
+	local array<Object>				AbilitySetArray;
+	local Object					AbilitySetObject;
+	local RTAbility_GhostAbilitySet	AbilitySet;
+
+
+	AbilitySetArray = class'XComEngine'.static.GetClassDefaultObjects(class'RTAbility_GhostAbilitySet');
+	foreach AbilitySetArray(AbilitySetObject)
+	{
+		AbilitySet = RTAbility_GhostAbilitySet(AbilitySetObject);
+		if(AbilitySet.static.AbilityTagExpandHandler(InString, OutString)) {
+			return true;
+		} else {
+			continue;
+		}
+	}
+
+	return false;
+}

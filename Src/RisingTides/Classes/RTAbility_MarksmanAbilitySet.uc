@@ -2743,10 +2743,39 @@ static function X2AbilityTemplate RTRepositioning() {
 	return Template;
 }
 
-
-
 defaultproperties
 {
 	KillZoneReserveType = "KillZone"
 	TimeStopEffectName = "TimeStopEffect"
+}
+
+static function bool AbilityTagExpandHandler(string InString, out string OutString)
+{
+	local name Tag;
+
+	Tag = name(InString);
+
+	switch(Tag)
+	{
+	case 'RTREPOSITIONING_MAX_POSITIONS_SAVED':
+		OutString = string(default.REPOSITIONING_MAX_POSITIONS_SAVED);
+		return true;
+	case 'RTREPOSITIONING_TILE_DISTANCE':
+		OutString = string(default.REPOSITIONING_TILES_MOVED_REQUIREMENT);
+		return true;
+	case 'RTPRECISION_SHOT_CRIT_CHANCE'
+		OutString = string();
+		return true;
+	case 'RTPRECISION_SHOT_CRIT_DAMAGE'
+		OutString = string();
+		return true;
+	case 'AGGRESSION_CRIT_PER_UNIT'
+		OutString = string();
+		return true;
+	case 'AGGRESSION_MAX_CRIT'
+		OutString = string();
+		return true;
+	}
+
+	return false;
 }
