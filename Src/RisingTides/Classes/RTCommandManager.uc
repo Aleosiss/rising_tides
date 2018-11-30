@@ -670,3 +670,13 @@ exec function RT_CheatProgramInfluence() {
     ProgramState = class'RTHelpers'.static.GetProgramState();
     ProgramState.TryIncreaseInfluence();
 }
+
+exec function RT_CheatEliminateTemplarFaction() {
+	local XComGameState NewGameState;
+
+	NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("CHEAT - ELIMINATE TEMPLAR FACTION");
+	class'RTStrategyElement_Rewards'.static.EliminateTemplars(NewGameState, none);
+
+	`XCOMGAME.GameRuleset.SubmitGameState(NewGameState);
+}
+

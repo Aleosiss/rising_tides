@@ -2763,17 +2763,20 @@ static function bool AbilityTagExpandHandler(string InString, out string OutStri
 	case 'RTREPOSITIONING_TILE_DISTANCE':
 		OutString = string(default.REPOSITIONING_TILES_MOVED_REQUIREMENT);
 		return true;
-	case 'RTPRECISION_SHOT_CRIT_CHANCE'
-		OutString = string();
+	case 'RTPRECISION_SHOT_CRIT_CHANCE':
+		OutString = string(default.HEADSHOT_CRIT_BONUS);
 		return true;
-	case 'RTPRECISION_SHOT_CRIT_DAMAGE'
-		OutString = string();
+	case 'RTPRECISION_SHOT_CRIT_DAMAGE':
+		OutString = string(default.HEADSHOT_CRITDMG_BONUS);
 		return true;
-	case 'AGGRESSION_CRIT_PER_UNIT'
-		OutString = string();
+	case 'RTPRECISION_SHOT_AIM_PENALITY':
+		OutString = string(default.HEADSHOT_AIM_MULTIPLIER);
 		return true;
-	case 'AGGRESSION_MAX_CRIT'
-		OutString = string();
+	case 'AGGRESSION_CRIT_PER_UNIT':
+		OutString = string(default.AGGRESSION_CRIT_PER_UNIT);
+		return true;
+	case 'AGGRESSION_MAX_CRIT':
+		OutString = string(default.AGGRESSION_UNITS_FOR_MAX_BONUS * default.AGGRESSION_CRIT_PER_UNIT);
 		return true;
 	}
 

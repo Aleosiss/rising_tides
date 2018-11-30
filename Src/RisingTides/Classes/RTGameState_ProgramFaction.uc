@@ -955,12 +955,15 @@ function HandleTemplarQuestActions(XComGameState NewGameState) {
 		case 0:
 			if(!IsTemplarFactionMet()) { return; } // don't print the action if we haven't met the templars yet
 			QuestTemplateName = 'CovertAction_HuntTemplarsP1Template';
+			`RTLOG("Adding CovertAction_HuntTemplarsP1Template");
 			break;
 		case 1:
 			QuestTemplateName = 'CovertAction_HuntTemplarsP2Template';
+			`RTLOG("Adding CovertAction_HuntTemplarsP2Template");
 			break;
 		case 2:
 			QuestTemplateName = 'CovertAction_HuntTemplarsP3Template';
+			`RTLOG("Adding CovertAction_HuntTemplarsP3Template");
 			break;
 		default:
 			`RTLOG("iTemplarQuestStage is out-of-bounds! Ending early...");
@@ -1215,6 +1218,15 @@ function TryIncreaseInfluence() {
 	}
 }
 
+function ForceIncreaseInfluence() {
+	local int iInfluence;
+
+	iInfluence = Influence;
+	iInfluence++;
+
+	Influence = EFactionInfluence(iInfluence);
+}
+
 // Listen for AvengerLandedScanRegion, recieves a NewGameState
 // can pull an XComGameState_ScanningSite from XComHQ.CurrentLocation attached to the NewGameState
 // check to see if the resistance is building an outpost
@@ -1280,7 +1292,6 @@ static function InitFaction(optional XComGameState StartState) {
 
 			FactionState.FactionName = FactionTemplate.GenerateFactionName();
 			FactionState.FactionIconData = FactionTemplate.GenerateFactionIcon();
-
 		}
 
 		foreach History.IterateByClassType(class'XComGameState_Haven', HavenState)

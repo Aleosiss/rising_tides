@@ -29,7 +29,7 @@ function GetToHitModifiers(XComGameState_Effect EffectState, XComGameState_Unit 
 	if (SourceWeapon != none)
 	{
 		ModInfo.ModType = eHit_Crit;
-		ModInfo.Reason = LocFriendlyName;
+		ModInfo.Reason = AbilityState.GetMyTemplate().LocFriendlyName;
 
 		crit_bonus = iCritBonusPerUnit * numUnits;
 		max_bonus = iCritBonusPerUnit * iUnitsForMaxBonus;
