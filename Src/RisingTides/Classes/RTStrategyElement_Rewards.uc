@@ -358,6 +358,11 @@ static function GiveProgramFactionInfluenceReward(XComGameState NewGameState, XC
 	
 	FactionState = XComGameState_ResistanceFaction(NewGameState.ModifyStateObject(class'XComGameState_ResistanceFaction', RewardState.RewardObjectReference.ObjectID));
 	FactionState.IncreaseInfluenceLevel(NewGameState);
+	if(FactionState.GetInfluence() < eFactionInfluence_Influential) {
+		if(RTGameState_ProgramFaction(FactionState) != none) {
+			RTGameState_ProgramFaction(FactionState).ForceIncreaseInfluence();
+		}
+	}
 }
 
 static function GiveHuntTemplarsP3Reward(XComGameState NewGameState, XComGameState_Reward RewardState, optional StateObjectReference AuxRef, optional bool bOrder = false, optional int OrderHours = -1)
@@ -376,10 +381,12 @@ static function EliminateTemplars(XComGameState NewGameState, XComGameState_Rewa
 	local XComGameState_HeadquartersXCom XComHQ;
 	local XComGameStateHistory History;
 	local XComGameState_HeadquartersResistance ResistHQ;
+	local XComGameState_Haven FactionHavenState;
 	local StateObjectReference IteratorRef;
 	local StateObjectReference EmptyRef;
 	local XComGameState_Unit UnitState;
 	local XComGameState_StrategyCard CardState;
+	local XComGameState_WorldRegion RegionState;
 	local int i;
 
 	History = `XCOMHISTORY;
@@ -388,12 +395,12 @@ static function EliminateTemplars(XComGameState NewGameState, XComGameState_Rewa
 	ResistHQ = XComGameState_HeadquartersResistance(History.GetSingleGameStateObjectForClass(class'XComGameState_HeadquartersResistance'));
 
 	/** What, exactly, goes into removing a faction?
-
 		-> Remove TemplarState.GetReference() from XCGS_HeadquartersResistance.Factions
 		-> Call DeactivateCard on all activated Templar cards
 		-> Check Covert Actions, if there are any from the Templars they need to be canceled
 		-> Need to clean up Templar soldiers? It would be more realistic for them to stick around then leave randomly, perhaps even sabotage the avenger
 			but fuck that
+		-> Clean up the Resistance Haven
 		-> Find soldiers in the XCOM barracks that are Templars, and remove them
 		-> Generate a popup displaying all of what has transpired
 		-> Transfer Chosen missions to Program(?)
@@ -403,6 +410,7 @@ static function EliminateTemplars(XComGameState NewGameState, XComGameState_Rewa
 
 	TemplarState = XComGameState_ResistanceFaction(NewGameState.ModifyStateObject(class'XComGameState_ResistanceFaction', TemplarState.GetReference().ObjectID));
 	TemplarState.CleanUpFactionCovertActions(NewGameState);
+	TemplarState.CovertActions.Length = 0;
 	foreach TemplarState.CardSlots(IteratorRef) 
 	{
 		CardState = XComGameState_StrategyCard(History.GetGameStateForObjectID(IteratorRef.ObjectID));
@@ -413,10 +421,11 @@ static function EliminateTemplars(XComGameState NewGameState, XComGameState_Rewa
 
 		i++;
 	}
-	TemplarState.CardSlots.Length = 0;
-	for(i = i; i > 0; i--) {
-		TemplarState.CardSlots.AddItem(EmptyRef);
-	}
+
+	FactionHavenState = XComGameState_Haven(`XCOMHISTORY.GetGameStateForObjectID(TemplarState.FactionHQ.ObjectID));
+	NewGameState.RemoveStateObject(FactionHavenState.ObjectID);
+
+	NewGameState.RemoveStateObject(TemplarState.ObjectID);
 
 	XComHQ = XComGameState_HeadquartersXCom(NewGameState.ModifyStateObject(class'XComGameState_HeadquartersXCom', XComHQ.GetReference().ObjectID));
 	foreach XComHQ.Crew(IteratorRef)
