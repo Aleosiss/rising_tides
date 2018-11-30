@@ -283,6 +283,13 @@ exec function RT_RegenerateProgramOperatives() {
 
 	`XCOMGAME.GameRuleset.SubmitGameState(NewGameState);
 
+	NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("Rising Tides: CHEAT: Regenerate Program Operatives, Part 3");
+	ProgramState = class'RTHelpers'.static.GetNewProgramState(NewGameState);
+
+	for(i = 0; i < ProgramState.iOperativeLevel; i++) {
+		ProgramState.PromoteAllOperatives(NewGameState);
+	}
+
 }
 
 exec function RT_PrintCrew()
@@ -666,9 +673,12 @@ exec function RT_CheatProgramInfluence() {
 
 exec function RT_CheatEliminateTemplarFaction() {
 	local XComGameState NewGameState;
+	local XComGameState_ResistanceFaction TemplarState;
 
 	NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("CHEAT - ELIMINATE TEMPLAR FACTION");
-	class'RTStrategyElement_Rewards'.static.EliminateTemplars(NewGameState, none);
+	TemplarState = class'RTHelpers'.static.GetTemplarFactionState();
+
+	class'RTStrategyElement_Rewards'.static.EliminateTemplars(NewGameState, TemplarState);
 
 	`XCOMGAME.GameRuleset.SubmitGameState(NewGameState);
 }

@@ -367,8 +367,12 @@ static function GiveProgramFactionInfluenceReward(XComGameState NewGameState, XC
 
 static function GiveHuntTemplarsP3Reward(XComGameState NewGameState, XComGameState_Reward RewardState, optional StateObjectReference AuxRef, optional bool bOrder = false, optional int OrderHours = -1)
 {
+	local XComGameState_ResistanceFaction TemplarState;
+
+	TemplarState = class'RTHelpers'.static.GetTemplarFactionState();
+
 	GiveProgramAdvanceQuestlineReward(NewGameState, RewardState, AuxRef, bOrder, OrderHours);
-	EliminateTemplars(NewGameState, RewardState, AuxRef, bOrder, OrderHours);
+	EliminateFaction(NewGameState, TemplarState);
 	GiveTemplarQuestlineCompleteReward(NewGameState, RewardState, AuxRef, bOrder, OrderHours);
 }
 
@@ -376,8 +380,7 @@ static function GiveTemplarQuestlineCompleteReward(XComGameState NewGameState, X
 	
 }
 
-static function EliminateTemplars(XComGameState NewGameState, XComGameState_Reward RewardState, optional StateObjectReference AuxRef, optional bool bOrder = false, optional int OrderHours = -1) {
-	local XComGameState_ResistanceFaction TemplarState;
+static function EliminateFaction(XComGameState NewGameState, XComGameState_ResistanceFaction FactionState, optional bool bShouldFactionSoldiersDesert = true) {
 	local XComGameState_HeadquartersXCom XComHQ;
 	local XComGameStateHistory History;
 	local XComGameState_HeadquartersResistance ResistHQ;
@@ -391,11 +394,11 @@ static function EliminateTemplars(XComGameState NewGameState, XComGameState_Rewa
 
 	History = `XCOMHISTORY;
 	XComHQ = class'RTHelpers'.static.GetXComHQState();
-	TemplarState = class'RTHelpers'.static.GetTemplarFactionState();
 	ResistHQ = XComGameState_HeadquartersResistance(History.GetSingleGameStateObjectForClass(class'XComGameState_HeadquartersResistance'));
-
+	FactionState = XComGameState_ResistanceFaction(NewGameState.ModifyStateObject(class'XComGameState_ResistanceFaction', FactionState.GetReference().ObjectID));
+	
 	/** What, exactly, goes into removing a faction?
-		-> Remove TemplarState.GetReference() from XCGS_HeadquartersResistance.Factions
+		-> Remove FactionState.GetReference() from XCGS_HeadquartersResistance.Factions
 		-> Call DeactivateCard on all activated Templar cards
 		-> Check Covert Actions, if there are any from the Templars they need to be canceled
 		-> Need to clean up Templar soldiers? It would be more realistic for them to stick around then leave randomly, perhaps even sabotage the avenger
@@ -405,37 +408,45 @@ static function EliminateTemplars(XComGameState NewGameState, XComGameState_Rewa
 		-> Generate a popup displaying all of what has transpired
 		-> Transfer Chosen missions to Program(?)
 	*/
-	ResistHQ = XComGameState_HeadquartersResistance(NewGameState.ModifyStateObject(class'XComGameState_HeadquartersResistance', ResistHQ.GetReference().ObjectID));
-	ResistHQ.Factions.RemoveItem(TemplarState.GetReference());
 
-	TemplarState = XComGameState_ResistanceFaction(NewGameState.ModifyStateObject(class'XComGameState_ResistanceFaction', TemplarState.GetReference().ObjectID));
-	TemplarState.CleanUpFactionCovertActions(NewGameState);
-	TemplarState.CovertActions.Length = 0;
-	foreach TemplarState.CardSlots(IteratorRef) 
+	// remove from resistance hq
+	ResistHQ = XComGameState_HeadquartersResistance(NewGameState.ModifyStateObject(class'XComGameState_HeadquartersResistance', ResistHQ.GetReference().ObjectID));
+	ResistHQ.Factions.RemoveItem(FactionState.GetReference());
+
+	// remove covert actions
+	FactionState.CleanUpFactionCovertActions(NewGameState);
+	FactionState.CovertActions.Length = 0;
+
+	// remove resistance orders
+	foreach FactionState.CardSlots(IteratorRef) 
 	{
 		CardState = XComGameState_StrategyCard(History.GetGameStateForObjectID(IteratorRef.ObjectID));
 		if(CardState != none) {
 			CardState.DeactivateCard(NewGameState);
-			TemplarState.PlayableCards.AddItem(IteratorRef);
+			FactionState.PlayableCards.AddItem(IteratorRef);
 		}
-
 		i++;
 	}
 
-	FactionHavenState = XComGameState_Haven(`XCOMHISTORY.GetGameStateForObjectID(TemplarState.FactionHQ.ObjectID));
+	// remove haven
+	FactionHavenState = XComGameState_Haven(`XCOMHISTORY.GetGameStateForObjectID(FactionState.FactionHQ.ObjectID));
 	NewGameState.RemoveStateObject(FactionHavenState.ObjectID);
 
-	NewGameState.RemoveStateObject(TemplarState.ObjectID);
-
-	XComHQ = XComGameState_HeadquartersXCom(NewGameState.ModifyStateObject(class'XComGameState_HeadquartersXCom', XComHQ.GetReference().ObjectID));
-	foreach XComHQ.Crew(IteratorRef)
-	{
-		UnitState = XComGameState_Unit(History.GetGameStateForObjectID(IteratorRef.ObjectID));
-		if(UnitState != none && UnitState.GetMyTemplateName() == 'TemplarSoldier')
+	// remove faction solders
+	if(bShouldFactionSoldiersDesert) {
+		XComHQ = XComGameState_HeadquartersXCom(NewGameState.ModifyStateObject(class'XComGameState_HeadquartersXCom', XComHQ.GetReference().ObjectID));
+		foreach XComHQ.Crew(IteratorRef)
 		{
-			FireUnit(NewGameState, IteratorRef);
+			UnitState = XComGameState_Unit(History.GetGameStateForObjectID(IteratorRef.ObjectID));
+			if(UnitState != none && UnitState.GetMyTemplateName() == FactionState.ChampionCharacterClass)
+			{
+				FireUnit(NewGameState, IteratorRef);
+			}
 		}
 	}
+
+	// rip
+	NewGameState.RemoveStateObject(FactionState.ObjectID);
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
