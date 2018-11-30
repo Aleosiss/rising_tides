@@ -283,6 +283,13 @@ exec function RT_RegenerateProgramOperatives() {
 
 	`XCOMGAME.GameRuleset.SubmitGameState(NewGameState);
 
+	NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("Rising Tides: CHEAT: Regenerate Program Operatives, Part 3");
+	ProgramState = class'RTHelpers'.static.GetNewProgramState(NewGameState);
+
+	for(i = 0; i < ProgramState.iOperativeLevel; i++) {
+		ProgramState.PromoteAllOperatives(NewGameState);
+	}
+
 }
 
 exec function RT_PrintCrew()
