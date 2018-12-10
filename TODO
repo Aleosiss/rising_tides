@@ -11,9 +11,9 @@ Todo:
     ✔ Add influence reward template @done(18-04-24 23:18)
     ✔ Add Faction influence popup after grant @done(18-04-24 23:18)
   ☐ Add Program Equipment
-    ☐ Add Program DMR
-    ☐ Add Program Shotgun
-    ☐ Add Program Carbine
+    ✔ Add Program DMR @done(18-12-09 16:55)
+    ✔ Add Program Shotgun @done(18-12-09 16:55)
+    ✔ Add Program Carbine @done(18-12-09 16:55)
     ✔ Add Program Pistol @done(18-04-24 23:18)
     ☐ Add Program Armor
   ☐ Add supporting UI to new stuff
@@ -27,7 +27,8 @@ Todo:
     ✔ Add RTGameState_Effect handling for it @done(18-04-30 18:32)
     ✔ Tracks Concealment / Superconcealment gained before Stealth was applied @done(18-04-30 18:32)
   ☐ Add Hunt_Templar Risks
+    ☐ Add Templar Ambush
   ☐ Add Hunt_Templars narratives
   ☐ Add Hunt_Templars rewards
-  ☐ Add system to manage Hunt_Templars covert actions
+  ✔ Add system to manage Hunt_Templars covert actions @done(18-12-09 16:55)
   ☐ Add Assault Templar Leadership mission

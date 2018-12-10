@@ -1005,7 +1005,36 @@ ActionObjective="Hunt the Templars"
 [CovertActionNarrative_HuntTemplarsP3_Program X2CovertActionNarrativeTemplate]
 ActionName="Lure Them Out"
 ActionPreNarrative="Lanner, or Geist, as he is now known, is extremely paranoid, and revealing a vulnerablity remains a challenge. Instead of attacking the compound directly, MILADVISE is giving 98.2 percent odds that leaking the location of the First Contact site will prompt Geist to investigate personally. In order to make it convincing, I'll need some of your soldiers to join mine for one final operation. - Dr. Hadley"
-ActionPostNarrative="The trap is set. The bait is primed. All that remains is spring it. I will send my best, and if you do the same, victory is assured. - Dr. Hadley"
+ActionPostNarrative="The trap is primed. The bait is set. All that remains is spring it. I will send my best, and if you do the same, victory is assured. - Dr. Hadley"
+;///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+;//---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+;//---Missions-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+;//---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+;///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+[RT_TemplarAmbush X2MissionTemplate]
+DisplayName="Templar Ambush"
+Briefing="Eliminate Templar Investigation Squad"
+PostMissionType="Kill all hostiles"
+BriefingImage="img:///UILibrary_StrategyImages.X2StrategyMap.Alert_Advent_Facility"
+ObjectiveTextPools[0]="Neutralize all enemy targets"
+
+[RT_TemplarAmbush X2MissionNarrativeTemplate]
+ObjectiveTextPools[0]="Neutralize all Templars in the AO"
+ObjectiveTextPools[1]="Kill Templar Coven Leader"
+ObjectiveTextPools[2]="Secure Area of Operations"
+
+[RT_TemplarCovenAssault X2MissionTemplate]
+DisplayName="Templar Coven Assault"
+Briefing="Eliminate Geist. Leave No Survivors"
+PostMissionType="Kill all hostiles"
+BriefingImage="img:///UILibrary_StrategyImages.X2StrategyMap.Alert_Advent_Facility"
+ObjectiveTextPools[0]="Neutralize Templar Leadership"
+
+[RT_TemplarCovenAssault X2MissionNarrativeTemplate]
+ObjectiveTextPools[0]="Neutralize all Templars in the AO"
+ObjectiveTextPools[1]="Kill Geist"
+ObjectiveTextPools[2]="Secure Area of Operations"
+
 ;///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ;//---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 ;//---Misc-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------

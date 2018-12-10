@@ -1,0 +1,1 @@
+class RTGameState_MissionSiteTemplarAmbush extends XComGameState_MissionSite;
