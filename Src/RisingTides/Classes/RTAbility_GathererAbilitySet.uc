@@ -507,9 +507,9 @@ static function X2AbilityTemplate RTExtinctionEventPartTwo() {
 	Template.AbilitySourceName = 'eAbilitySource_Psionic';
 
 	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
-		Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
-		Template.bSkipFireAction = true;
-		Template.bCrossClassEligible = false;
+	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
+	Template.bSkipFireAction = true;
+	Template.bCrossClassEligible = false;
 
 	Trigger = new class'X2AbilityTrigger_EventListener';
 	Trigger.ListenerData.EventID = 'RTExtinctionEventPartTwo';
@@ -528,8 +528,8 @@ static function X2AbilityTemplate RTExtinctionEventPartTwo() {
 	VFXEffect = new class'X2Effect_Persistent';
 	VFXEffect.BuildPersistentEffect(1, false, false, , eGameRule_PlayerTurnBegin);
 	VFXEffect.VFXTemplateName = default.ExtinctionEventChargingParticleString;
-	VFXEffect.EffectAddedFn = class'RTHelpers'.static.PanicLoopBeginFn;
-	VFXEffect.EffectRemovedFn = class'RTHelpers'.static.PanicLoopEndFn;
+	VFXEffect.EffectAddedFn = PanicLoopBeginFn;
+	VFXEffect.EffectRemovedFn = PanicLoopEndFn;
 	Template.AddTargetEffect(VFXEffect);
 
 	ActivationEffect = new class'X2Effect_DelayedAbilityActivation';
@@ -540,7 +540,27 @@ static function X2AbilityTemplate RTExtinctionEventPartTwo() {
 	Template.AbilityShooterConditions.AddItem(default.LivingShooterProperty);
 
 	return Template;
-  }
+}
+
+static function PanicLoopBeginFn( X2Effect_Persistent PersistentEffect, const out EffectAppliedData ApplyEffectParameters, XComGameState_BaseObject kNewTargetState, XComGameState NewGameState )
+{
+	local XComGameState_Unit UnitState;
+
+	UnitState = XComGameState_Unit( NewGameState.CreateStateObject( class'XComGameState_Unit', ApplyEffectParameters.TargetStateObjectRef.ObjectID ) );
+	UnitState.bPanicked = true;
+
+	NewGameState.AddStateObject( UnitState );
+}
+
+static function PanicLoopEndFn( X2Effect_Persistent PersistentEffect, const out EffectAppliedData ApplyEffectParameters, XComGameState NewGameState, bool bCleansed )
+{
+	local XComGameState_Unit UnitState;
+
+	UnitState = XComGameState_Unit( NewGameState.CreateStateObject( class'XComGameState_Unit', ApplyEffectParameters.TargetStateObjectRef.ObjectID ) );
+	UnitState.bPanicked = false;
+
+	NewGameState.AddStateObject( UnitState );
+}
 
 static function X2AbilityTemplate RTExtinctionEventPartThree() {
 	local X2AbilityTemplate Template;

@@ -21,7 +21,7 @@ Okay, let's get started. This episode 0 is technically about setting up your mod
 
 First, you're going to need to install the XCOM2 SDK. This isn't as simple as clicking install; there's several steps here. After the install completes, you have a decision to make: what kind of mod do you want to make?
 
-Is it a simple edit to a script, or configuration? Something that doesn't require graphics? If that is the case, you are fine. But if not, you want to get the full_content release. Simply right-click on the SDK in the Steam tools section, navigate to betas, and select full_content from the dropdown. This will prompt Steam to additionally download approximately 90gb of content to the XCOM2 Editor.
+Is it a simple edit to a script, or configuration? Something that doesn't require graphics? If that is the case, you are fine. But if not, you want to get the full_content release. Simply right-click on the SDK in the Steam tools section, navigate to betas, and select full_content from the dropdown. This will prompt Steam to additionally download approximately 90GB of content to the XCOM2 Editor.
 
 Next step. We need to additionally install modbuddy itself and binaries related to UE3. Navigate back to the Steam tools section and open up the SDK properties once again. This time, we need to open up the Local Files tab, then click on 'Browse Local Files' to open up an Explorer window.
 
@@ -49,6 +49,8 @@ Open up VSCode.
 
 We are now about to taste the magic. Open up another web browser tab and navigate to nodejs.org.
 
+<OOF when the download button is pressed> Yeah, I know, I know...
+
 Download and install node.js and npm, which are requirements for the XCOM2 project generator. I would note, again, the path given by the installer. This is less useful than the other paths we're noted, but in case you don't have access to the node binaries, you will have to add this path to the... PATH. Yeah.
 
 Now go back to VSCode and create your project folder. Great. VSCode has almost too many great shortcuts for you to use-- Hit control-shift-p to open up the command pane, then look for 'toggle integrated terminal' to open up a powershell window.
@@ -63,9 +65,9 @@ In your VSCode window, type `yo x2mod`. This will begin the process of generatin
 
 Once the process is complete, you have a mod. Gaze at it. Open it up, look at the tree. Navigate to the src/modname/classes folder and take a look at the files instead. First, we have the X2DLCInfo. This is often the entry point for your mod. Of course, if you're just doing some simple config changes, feel free to delete some of these files.
 
-Next is something you probably didn't expect, if you've made a mod in the past. The `extra_globals.uci`. If we open it up, we see a lot of commented code. This is where you can define your own macros, which are basically code snippets. Pretty nifty, especially when dealing with static method calls.
+Next is something you probably didn't expect, if you've made a mod in the past. The `extra_globals.uci`. If we open it up, we see a lot of commented code. This is where you can define your own macros, which are basically code snippets. Pretty nifty, especially when dealing with static method calls. For example, the macro `XCOMHISTORY is a static call to retrieve the history. Usually mods don't need macros, but it can be useful for say, your own logging method.
 
-Next, go up a bit and take a look at the Config folder. This is the important one. These three `.ini`s tell XCOM2 what to actually load, so don't touch these. Finally, you can check out the Localization folder, which has the localization files for the International, or English, version of your mod.
+Next, go up a bit and take a look at the Config folder. This is the important one. These three `.ini`s tell XCOM2 what to actually load, so don't touch these if you plan on making a mod that has content scripts. Finally, you can check out the Localization folder, which has the localization files for the International, or English, version of your mod.
 
 ## 6. Building mods
 
@@ -80,8 +82,6 @@ Check out the `build.ps1`. This is where the magic happens. This script takes ca
 Open up the Command Palette again, and this time select a generic 'Run Task'. Go to Open AMU and hit it. Go through each stage, which is pretty self-explanatory. Note the while the Description is populated from the Readme initially, further updates will pull it from the mod's steam workshop entry. And, we're done.
 
 ## 8. Outro
-
-
 
 ## The Video
 
