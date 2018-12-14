@@ -1,13 +1,17 @@
 2.1.0
 - Add new covert action line to the Program to eliminate the Templars!
+    - 3 New Covert Actions
+        - New mission (Templar Ambush Retaliation)
+            - A local Templar cult has stumbled upon your plans
+            - You can escape, but if word gets back to Geist, your efforts will have been for nothing!
     - New mission (Assault Templar Coven)
         - Attack the heart of Templar activities and kill Geist once and for all
         - The Program will grant excellent rewards for completing this action, but be warned: your Templar soldiers WILL NOT BE HAPPY with your decision... (they will desert)
-    - New perks. If you want them in an ongoing campaign, regenerate your Program operatives with the command 'RT_RegenerateProgramOperatives'.
-        - Repositioning: Replaces Damn Good Ground on the Infiltrator's perk tree.
-            - If your last (3) shots were taken from (9) tiles away, retain concealment on your next shot.
-        - Unfurl The Veil: Replaces Meld Induction on the Gatherer's perk tree.
-            - If all active enemies are affected by Over the Shoulder, gain concealment. (6) turn cooldown.
+- New perks. If you want them in an ongoing campaign, regenerate your Program operatives with the command 'RT_RegenerateProgramOperatives'.
+    - Repositioning: Replaces Damn Good Ground on the Infiltrator's perk tree.
+        - If your last (3) shots were taken from (9) tiles away, retain concealment on your next shot.
+    - Unfurl The Veil: Replaces Meld Induction on the Gatherer's perk tree.
+        - If all active enemies are affected by Over the Shoulder, gain concealment. (6) turn cooldown.
     
 2.0.7
 - Fixed issues where clicking the Button did not actually activate One Small Favor.

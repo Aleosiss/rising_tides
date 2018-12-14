@@ -51,7 +51,7 @@ Open up VSCode.
 
 We are now about to taste the magic. Open up another web browser tab and navigate to nodejs.org.
 
-<OOF> Yeah, I know.
+<OOF when the download button is pressed> Yeah, I know, I know...
 
 Download and install node.js and npm, which are requirements for the XCOM2 project generator. I would note, again, the path given by the installer. This is less useful than the other paths we're noted, but in case you don't have access to the node binaries, you will have to add this path to the... PATH. Yeah.
 
@@ -84,8 +84,6 @@ Check out the `build.ps1`. This is where the magic happens. This script takes ca
 Open up the Command Palette again, and this time select a generic 'Run Task'. Go to Open AMU and hit it. Go through each stage, which is pretty self-explanatory. Note the while the Description is populated from the Readme initially, further updates will pull it from the mod's steam workshop entry. And, we're done.
 
 ## 8. Outro
-
-
 
 ## The Video
 

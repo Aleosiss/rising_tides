@@ -511,7 +511,7 @@ exec function RT_GetTeamStatusOfClosestUnitToCursor() {
 	`RTLOG("TeamFlag: " $ TeamFlag,,true);
 }
 
-// Based on code from "Configurable Mission Timers by wghost"
+// Based on code from "Configurable Mission Timers" by wghost
 exec function RT_DebugKismetVariables() {
 	//local XComGameState_Unit UnitState;
 	//local ETeam TeamFlag;

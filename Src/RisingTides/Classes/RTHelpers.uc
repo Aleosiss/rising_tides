@@ -129,28 +129,6 @@ static function GetAdjacentTiles(TTile TargetTile, out array<TTile> AdjacentTile
 	}
 }
 
-static function PanicLoopBeginFn( X2Effect_Persistent PersistentEffect, const out EffectAppliedData ApplyEffectParameters, XComGameState_BaseObject kNewTargetState, XComGameState NewGameState )
-{
-	local XComGameState_Unit UnitState;
-
-	// change the height
-	UnitState = XComGameState_Unit( NewGameState.CreateStateObject( class'XComGameState_Unit', ApplyEffectParameters.TargetStateObjectRef.ObjectID ) );
-	UnitState.bPanicked = true;
-
-	NewGameState.AddStateObject( UnitState );
-}
-
-static function PanicLoopEndFn( X2Effect_Persistent PersistentEffect, const out EffectAppliedData ApplyEffectParameters, XComGameState NewGameState, bool bCleansed )
-{
-	local XComGameState_Unit UnitState;
-
-	// change the height
-	UnitState = XComGameState_Unit( NewGameState.CreateStateObject( class'XComGameState_Unit', ApplyEffectParameters.TargetStateObjectRef.ObjectID ) );
-	UnitState.bPanicked = false;
-
-	NewGameState.AddStateObject( UnitState );
-}
-
 static function RTGameState_ProgramFaction GetProgramState(optional XComGameState NewGameState) {
 	local RTGameState_ProgramFaction Program;
 
@@ -170,6 +148,10 @@ static function RTGameState_ProgramFaction GetProgramState(optional XComGameStat
 		Program = RTGameState_ProgramFaction(`XCOMHISTORY.GetSingleGameStateObjectForClass(class'RTGameState_ProgramFaction'));
 	}
 
+	if(Program == none) {
+		`RTLOG("ERROR, Could not find a ProgramStateObject, returning NONE!", true, false);
+	}
+	
 	return Program;
 }
 
@@ -177,6 +159,10 @@ static function RTGameState_ProgramFaction GetNewProgramState(XComGameState NewG
 	local RTGameState_ProgramFaction Program;
 
 	Program = GetProgramState(NewGameState);
+	if(Program == none) {
+		return none;
+	}
+
 	Program = RTGameState_ProgramFaction(NewGameState.ModifyStateObject(class'RTGameState_ProgramFaction', Program.ObjectID));
 	return Program;
 }
@@ -187,10 +173,10 @@ static function RTLog(string message, optional bool bShouldRedScreenToo = false,
 
 	b = DebuggingEnabled();
 	`LOG(message, b, 'Rising Tides');
-	if(bShouldRedScreenToo) {
+	if(bShouldRedScreenToo && b) {
 		`RedScreen("RisingTides: " $ message);
 	}
-	if(bShouldOutputToConsoleToo) {
+	if(bShouldOutputToConsoleToo && b) {
 		class'Helpers'.static.OutputMsg(message);
 	}
 }
