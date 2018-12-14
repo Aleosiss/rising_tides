@@ -576,7 +576,7 @@ protected function RecalculateActiveOperativesAndSquads(XComGameState NewGameSta
 //---------------------------------------------------------------------------------------
 //---Promote All Operatives--------------------------------------------------------------
 //---------------------------------------------------------------------------------------
-protected function PromoteAllOperatives(XComGameState NewGameState) {
+function PromoteAllOperatives(XComGameState NewGameState) {
 	local XComGameState_Unit UnitState;
 	local StateObjectReference UnitIteratorObjRef;
 	local XComGameStateHistory History;

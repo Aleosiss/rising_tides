@@ -16,7 +16,7 @@ static function array<X2DataTemplate> CreateTemplates()
 	return MissionSources;
 }
 
-static function X2DataTemplate CreateChosenAmbushTemplate()
+static function X2DataTemplate CreateTemplarAmbushTemplate()
 {
 	local X2MissionSourceTemplate Template;
 

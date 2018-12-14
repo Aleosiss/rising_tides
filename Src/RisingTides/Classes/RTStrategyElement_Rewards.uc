@@ -438,7 +438,7 @@ static function EliminateFaction(XComGameState NewGameState, XComGameState_Resis
 		foreach XComHQ.Crew(IteratorRef)
 		{
 			UnitState = XComGameState_Unit(History.GetGameStateForObjectID(IteratorRef.ObjectID));
-			if(UnitState != none && UnitState.GetMyTemplateName() == FactionState.ChampionCharacterClass)
+			if(UnitState != none && UnitState.GetMyTemplateName() == FactionState.GetChampionCharacterName())
 			{
 				FireUnit(NewGameState, IteratorRef);
 			}

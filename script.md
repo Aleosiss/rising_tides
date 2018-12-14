@@ -14,7 +14,7 @@ Hello, I'm Aleosiss, author of the Rising Tides mod, and this is a tutorial, may
 
 You might ask yourself, wait, you idiot, isn't this like 3 years late? Well, no. As the community has cycled, more innovations have advanced what we're capable of and how we develop, so now is as good a time as any. In particular, the Community Highlander is pretty mature at this point, and there is a decent turn-around-time on pull requests and releases, which means that any kind of mod requiring overrides of base-game code are much easier to make these days. As stands, the tooling improvements that have allowed that to happen also benefit the rest of us. 
 
-This video will focus on an approach that minimizes our exposure to ModBuddy; there are already plenty of content related to getting started with Modbuddy.
+This video will focus on an approach that minimizes our exposure to ModBuddy; there is already plenty of content related to getting started with Modbuddy.
 
 
 ## 1. Installing Modbuddy

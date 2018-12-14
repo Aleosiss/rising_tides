@@ -313,25 +313,25 @@ $canSkipShaderPrecompliation = $false
 
 # Need to store the ModShaderCache before we compare the Content directories, it will interfere with the check.
 # Also, if there are no changes and we skip precompliation, we will need a backup of the ModShaderCache since it won't be regenerated after the stagingPath is cleaned.
-#if(Test-Path $tempCachePath) {
-#    # if we found a shadercache in here, that means that we found it last time and cached it, but the build failed and /tmp wasn't cleaned up... we can skip precompliation.
-#    $canSkipShaderPrecompliation = $true
-#    Write-Host "Found previously-stashed ModShaderCache. Shader precompliation can be skipped."
-#} elseif(Test-Path $shaderCachePath) {
-#    Write-Host "Found ModShaderCache, stashing it..."
-#    
-#    if(-not (Test-Path -Path $modSrcRoot/tmp)) {
-#        New-Item $modSrcRoot/tmp -type Directory
-#    } 
-#    
-#    Copy-Item -Path $shaderCachePath -Destination $tempCachePath
-#    Remove-Item -Path $shaderCachePath
-#    $canSkipShaderPrecompliation = $true
-#    
-#    Write-Host "Stashed."
-#} else {
-#    Write-Host "Unable to find a ModShaderCache. Shader precompliation is required."
-#}
+if(Test-Path $tempCachePath) {
+    # if we found a shadercache in here, that means that we found it last time and cached it, but the build failed and /tmp wasn't cleaned up... we can skip precompliation.
+    $canSkipShaderPrecompliation = $true
+    Write-Host "Found previously-stashed ModShaderCache. Shader precompliation can be skipped."
+} elseif(Test-Path $shaderCachePath) {
+    Write-Host "Found ModShaderCache, stashing it..."
+    
+    if(-not (Test-Path -Path $modSrcRoot/tmp)) {
+        New-Item $modSrcRoot/tmp -type Directory
+    } 
+    
+    Copy-Item -Path $shaderCachePath -Destination $tempCachePath
+    Remove-Item -Path $shaderCachePath
+    $canSkipShaderPrecompliation = $true
+    
+    Write-Host "Stashed."
+} else {
+    Write-Host "Unable to find a ModShaderCache. Shader precompliation is required."
+}
 
 # check to see if the files changed
 if($canSkipShaderPrecompliation) {

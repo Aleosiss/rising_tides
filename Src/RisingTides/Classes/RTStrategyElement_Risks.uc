@@ -23,7 +23,7 @@ static function X2DataTemplate CreateTemplarAmbushRiskTemplate()
 static function CreateTemplarAmbush(XComGameState NewGameState, XComGameState_CovertAction ActionState, optional StateObjectReference TargetRef)
 {
 	local XComGameState_HeadquartersResistance ResHQ;
-	local XComGameState_MissionSiteChosenAmbush MissionState;
+	local RTGameState_MissionSiteTemplarAmbush MissionState;
 	local XComGameState_WorldRegion RegionState;
 	local XComGameState_Reward RewardState;
 	local X2StrategyElementTemplateManager StratMgr;

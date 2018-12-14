@@ -246,6 +246,7 @@ exec function RT_RegenerateProgramOperatives() {
 	local RTGameState_ProgramFaction ProgramState;
 	local StateObjectReference SquadRef;
 	local RTGameState_PersistentGhostSquad SquadState;
+	local int i;
 
 	History = `XCOMHISTORY;
 	NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("Rising Tides: CHEAT: Regenerate Program Operatives, Part 1");
@@ -678,7 +679,7 @@ exec function RT_CheatEliminateTemplarFaction() {
 	NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("CHEAT - ELIMINATE TEMPLAR FACTION");
 	TemplarState = class'RTHelpers'.static.GetTemplarFactionState();
 
-	class'RTStrategyElement_Rewards'.static.EliminateTemplars(NewGameState, TemplarState);
+	class'RTStrategyElement_Rewards'.static.EliminateFaction(NewGameState, TemplarState);
 
 	`XCOMGAME.GameRuleset.SubmitGameState(NewGameState);
 }
