@@ -602,6 +602,7 @@
     <Content Include="Src\RisingTides\Classes\RTMissionSet.uc" />
     <Content Include="Src\RisingTides\Classes\RTStrategyElement_MissionSources.uc" />
     <Content Include="Src\RisingTides\Classes\RTStrategyElement_Risks.uc" />
+    <Content Include="Src\RisingTides\Classes\RTUIMission_TemplarAmbush.uc" />
   </ItemGroup>
   <Import Project="$(MSBuildLocalExtensionPath)\XCOM2.targets" />
 </Project>

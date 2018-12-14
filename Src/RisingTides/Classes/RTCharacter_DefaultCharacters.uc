@@ -7,7 +7,10 @@ static function array<X2DataTemplate> CreateTemplates()
 	// SPECTRE
     Templates.AddItem(CreateWhisperTemplate());
     Templates.AddItem(CreateQueenTemplate());
-    Templates.AddItem(CreateNovaTemplate());
+	Templates.AddItem(CreateNovaTemplate());
+	
+	// HIGHLANDER
+	Templates.AddItem(CreateKagaTemplate());
 
 	return Templates;
 }
@@ -205,6 +208,78 @@ static function X2CharacterTemplate CreateNovaTemplate()
 	CharTemplate.ForceAppearance.bGhostPawn = False;
 
 	`RTLOG("Adding Nova's character template!");
+	return CharTemplate;
+}
+
+static function X2CharacterTemplate CreateKagaTemplate()
+{
+	local RTCharacterTemplate CharTemplate;
+
+	CharTemplate = CreateProgramSoldierTemplate('RTGhostOperator');
+	
+	CharTemplate.DefaultSoldierClass = 'RT_Gatherer';
+	CharTemplate.DefaultLoadout = 'RT_Gatherer';
+    CharTemplate.bIsPsionic = true;
+    
+	CharTemplate.bForceAppearance = true;
+	CharTemplate.bAppearanceDefinesPawn = true;
+
+	CharTemplate.ForceAppearance.nmHead = 'CaucFem_D';
+	CharTemplate.ForceAppearance.iGender = 2;
+	CharTemplate.ForceAppearance.iRace = 0;
+	CharTemplate.ForceAppearance.nmHaircut = 'FemHair_F';
+	CharTemplate.ForceAppearance.iHairColor = 17;
+	CharTemplate.ForceAppearance.iFacialHair = 0;
+	CharTemplate.ForceAppearance.nmBeard = 'MaleBeard_Blank';
+	CharTemplate.ForceAppearance.iSkinColor = 0;
+	CharTemplate.ForceAppearance.iEyeColor = 6;
+	CharTemplate.ForceAppearance.nmFlag = 'Country_USA';;
+	CharTemplate.ForceAppearance.iVoice = 0;
+	CharTemplate.ForceAppearance.iAttitude = 6;
+	CharTemplate.ForceAppearance.iArmorDeco = 0;
+	CharTemplate.ForceAppearance.iArmorTint = 92;
+	CharTemplate.ForceAppearance.iArmorTintSecondary = 91;
+	CharTemplate.ForceAppearance.iWeaponTint = 7;
+	CharTemplate.ForceAppearance.iTattooTint = 10;
+	CharTemplate.ForceAppearance.nmWeaponPattern = 'Hex';
+	CharTemplate.ForceAppearance.nmPawn = 'XCom_Soldier_F';
+	CharTemplate.ForceAppearance.nmTorso = 'LPW_WotC_SLD_MamaMEA_Pathfinder_Und_Secondary_Torso_F';
+	CharTemplate.ForceAppearance.nmArms = 'PwrLgt_Std_A_F';
+	CharTemplate.ForceAppearance.nmLegs = 'LPW_WotC_SLD_MamaMEA_Pathfinder_Und_Legs_F';
+	CharTemplate.ForceAppearance.nmHelmet = 'ALL_WotC_MamaMEA_Remnant_Heavy_Helmet_F';
+	CharTemplate.ForceAppearance.nmEye = 'DefaultEyes_3';
+	CharTemplate.ForceAppearance.nmTeeth = 'DefaultTeeth';
+	CharTemplate.ForceAppearance.nmFacePropLower = 'Prop_FaceLower_Blank';
+	CharTemplate.ForceAppearance.nmFacePropUpper = 'Prop_FaceUpper_Blank';
+	CharTemplate.ForceAppearance.nmPatterns = 'Pat_Nothing';
+	CharTemplate.ForceAppearance.nmVoice = 'FemaleVoice2_English_US';
+	//CharTemplate.ForceAppearance.nmLanguage = None;
+	CharTemplate.ForceAppearance.nmTattoo_LeftArm = 'Tattoo_Arms_BLANK';
+	CharTemplate.ForceAppearance.nmTattoo_RightArm = 'Tattoo_Arms_BLANK';
+	CharTemplate.ForceAppearance.nmScars = 'Scars_BLANK';
+	CharTemplate.ForceAppearance.nmTorso_Underlay = 'CnvUnderlay_Std_A_F';
+	CharTemplate.ForceAppearance.nmArms_Underlay = 'CnvMed_Underlay_A_F';
+	CharTemplate.ForceAppearance.nmLegs_Underlay = 'CnvUnderlay_Std_A_F';
+	//CharTemplate.ForceAppearance.nmFacePaint = None;
+	CharTemplate.ForceAppearance.nmLeftArm = 'LPW_WotC_SLD_MamaMEA_Pathfinder_Und_Secondary_Arm_Left_F';
+	CharTemplate.ForceAppearance.nmRightArm = 'LPW_WotC_SLD_MamaMEA_Pathfinder_Und_Secondary_Arm_Right_F';
+	CharTemplate.ForceAppearance.nmLeftArmDeco = 'LPW_WotC_SLD_MamaMEA_Remnant_Hvy_Arm_Left_F';
+	CharTemplate.ForceAppearance.nmRightArmDeco = 'LPW_WotC_SLD_MamaMEA_Remnant_Hvy_Arm_Right_F';
+	//CharTemplate.ForceAppearance.nmLeftForearm = None;
+	//CharTemplate.ForceAppearance.nmRightForearm = None;
+	//CharTemplate.ForceAppearance.nmThighs = None;
+	CharTemplate.ForceAppearance.nmShins = 'LPW_WotC_SLD_MamaMEA_Remnant_Hvy_Legs_F';
+	CharTemplate.ForceAppearance.nmTorsoDeco = 'LPW_WotC_SLD_MamaMEA_Remnant_Hvy_Torso_F';
+	CharTemplate.ForceAppearance.bGhostPawn = False;
+
+
+	// Since Kaga can't get level ups, give her some abilities now
+	CharTemplate.Abilities.AddItem('RTCrushingGrasp');
+	CharTemplate.Abilities.AddItem('RTPsionicLash');
+	CharTemplate.Abilities.AddItem('RTUnfurlTheVeil');
+	CharTemplate.Abilities.AddItem('Fade');
+
+	`RTLOG("Adding Kaga's character template!");
 	return CharTemplate;
 }
 

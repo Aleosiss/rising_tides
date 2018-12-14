@@ -1035,6 +1035,14 @@ ObjectiveTextPools[0]="Neutralize all Templars in the AO"
 ObjectiveTextPools[1]="Kill Geist"
 ObjectiveTextPools[2]="Secure Area of Operations"
 
+[RTUIMission_TemplarAmbush]
+m_strTitle=COUNTERINTELLIGENCE
+m_strBody=Our soldiers have been discovered during the undertaking of a Covert Action!  Prevent hostile forces from reporting back to leadership!
+m_strConfirmMission=BEGIN COUNTERINTELLIGENCE OPERATION
+m_strConfirmLabel=BEGIN
+m_strObjective=OBJECTIVE
+m_strObjectiveDesc=Eliminate Templar forces.
+
 ;///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ;//---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 ;//---Misc-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------

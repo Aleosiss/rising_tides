@@ -51,6 +51,11 @@ var config array<name> BerserkerWeaponUpgrades;
 var config array<name> MarksmanWeaponUpgrades;
 var config array<name> GathererWeaponUpgrades;
 
+// HIGHLANDER
+var localized string SquadTwoName;					// HIGHLANDER
+var localized string SquadTwoBackground;
+var config array<name> SquadTwoMembers;
+
 
 var() array<StateObjectReference>								Master; 			// master list of operatives
 var() array<StateObjectReference> 								Active;				// operatives active
@@ -115,6 +120,7 @@ function CreateRTOperatives(XComGameState StartState) {
 	AddRTOperativeToProgram('RTGhostBerserker', StartState);
 	AddRTOperativeToProgram('RTGhostMarksman', StartState);
 	AddRTOperativeToProgram('RTGhostGatherer', StartState);
+	AddRTOperativeToProgram('RTGhostOperator', StartState);
 }
 
 // Seperated this out of CreateRTOperative in order to allow the creation of duplicate operatives in Just Passing Through
@@ -196,6 +202,15 @@ function ApplyWeaponUpgrades(name GhostTemplateName, XComGameState_Item NewWeapo
 				}
 			}
 			break;
+		case 'RTGhostOperator': // operator uses gatherer equipment, although it might be more accurate in reverse...
+			for(idx = 0; idx < default.GathererWeaponUpgrades.Length; idx++) {
+				UpgradeTemplate = X2WeaponUpgradeTemplate(ItemTemplateMgr.FindItemTemplate(default.GathererWeaponUpgrades[idx]));
+				if (UpgradeTemplate != none) {
+					NewWeaponState.ApplyWeaponUpgradeTemplate(UpgradeTemplate, idx);
+				}
+			}
+			break;
+
 	}
 }
 //---------------------------------------------------------------------------------------
@@ -203,7 +218,7 @@ function ApplyWeaponUpgrades(name GhostTemplateName, XComGameState_Item NewWeapo
 //---------------------------------------------------------------------------------------
 function CreateRTSquads(XComGameState StartState) {
 
-	local RTGameState_PersistentGhostSquad one;
+	local RTGameState_PersistentGhostSquad one, two;
 	local StateObjectReference OperativeRef;
 	local XComGameStateHistory History;
 	local XComGameState_Unit UnitState;
@@ -211,8 +226,12 @@ function CreateRTSquads(XComGameState StartState) {
 	History = `XCOMHISTORY;
 
 	one = RTGameState_PersistentGhostSquad(StartState.CreateNewStateObject(class'RTGameState_PersistentGhostSquad'));
-	one.CreateSquad(1, default.SquadOneName, default.SquadOneBackground, default.SquadOneSitRepName);
+	one.CreateSquad(1, default.SquadOneName, default.SquadOneBackground, default.SquadOneSitRepName, true);
 	Squads.AddItem(one.GetReference());
+
+	two = RTGameState_PersistentGhostSquad(StartState.CreateNewStateObject(class'RTGameState_PersistentGhostSquad'));
+	two.CreateSquad(2, default.SquadTwoName, default.SquadTwoBackground, '', false);
+	Squads.AddItem(two.GetReference());
 
 	foreach Master(OperativeRef) {
 		// team 1 "SPECTRE"
@@ -221,9 +240,15 @@ function CreateRTSquads(XComGameState StartState) {
 			one.Operatives.AddItem(OperativeRef);
 			one.initOperatives.AddItem(OperativeRef);
 		}
+
+		if(SquadTwoMembers.Find(UnitState.GetMyTemplateName()) != INDEX_NONE) {
+			two.Operatives.AddItem(OperativeRef);
+			two.initOperatives.AddItem(OperativeRef);
+		}
 	}
 
 	Deployed = one;
+	one.bIsDeployed = true;
 }
 
 // UpdateNumDeaths(name CharacterTemplateName, StateObjectReference UnitRef)
@@ -814,9 +839,43 @@ simulated function bool UncashOneSmallFavor(XComGameState NewGameState, XComGame
 }
 	
 protected function RotateRandomSquadToDeploy() {
+	local bool bFoundSquad;
+	local int i;
 	if(Squads.Length == 0)
 		return;
-	Deployed = RTGameState_PersistentGhostSquad(`XCOMHISTORY.GetGameStateForObjectID(Squads[`SYNC_RAND(Squads.Length)].ObjectID));
+	
+	if(Deployed != none) {
+		Deployed.bIsDeployed = false;
+		Deployed = none;
+	}
+	
+	while(!bFoundSquad) {
+		Deployed = RTGameState_PersistentGhostSquad(`XCOMHISTORY.GetGameStateForObjectID(Squads[`SYNC_RAND(Squads.Length)].ObjectID));
+		bFoundSquad = Deployed.CanBeDeployed();
+		i++;
+		if(i > 20) {
+			`RTLOG("Can't find a deployable squad?!", true, false);
+			return;
+		}
+	}
+
+	Deployed.bIsDeployed = true;
+	return;
+}
+
+function XComGameState_Unit GetOperative(string Nickname) {
+	local XComGameState_Unit UnitState;
+	local StateObjectReference IteratorRef;
+	local XComGameStateHistory History;
+
+	History = `XCOMHISTORY;
+
+	foreach Active(IteratorRef) {
+		UnitState = XComGameState_Unit(History.GetGameStateForObjectID(IteratorRef.ObjectID));
+		if(UnitState.GetName(eNameType_FullNick) == Nickname) {
+			return UnitState;
+		}
+	}
 }
 
 //#############################################################################################
@@ -1164,6 +1223,10 @@ function AddOneSmallFavorCard(XComGameState NewGameState) {
 
 function PreMissionUpdate(XComGameState NewGameState, XComGameState_MissionSite MissionSiteState) {
 	if(bOneSmallFavorActivated) {
+		bShouldPerformPostMissionCleanup = true;
+	}
+
+	if(MissionSiteState.Source == 'MissionSource_TemplarAmbush') {
 		bShouldPerformPostMissionCleanup = true;
 	}
 }

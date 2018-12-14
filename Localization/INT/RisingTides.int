@@ -143,6 +143,10 @@ OSFFirstTime_Text = "The Program fields small squads of elite operatives. As a r
 OSFFirstTime_ImagePath = "img:///RisingTidesContentPackage.UIImages.osf_tutorial"
 WhisperWepName = 'Heartspan' # ...by sacrificing the rook, I can attack the king...
 
+SquadTwoName="HIGHLANDER"
+SquadTwoBackground="HIGHLANDER works the people."
+
+
 [Faction_Program RTProgramFactionTemplate]
 FactionTitle="The Program"
 FactionHQDisplayName="PROGRAM"
@@ -195,6 +199,14 @@ strCharacterBackgroundMale[1]="\<not writen\>"
 strForcedFirstName="[REDACTED]"
 strForcedLastName="[REDACTED]"
 strForcedNickName="Nova"
+
+[RTGhostOperator RTCharacterTemplate]
+strCharacterName="Program Operative"
+strCharacterBackgroundMale[0]="[REDACTED] \nC.O. Bradford Note: Don't pry."
+strCharacterBackgroundMale[1]="\<not writen\>"
+strForcedFirstName="[REDACTED]"
+strForcedLastName="[REDACTED]"
+strForcedNickName="Kaga"
 
 #[ResCard_RT RTProgramStrategyCardTemplate]
 #DisplayName=""

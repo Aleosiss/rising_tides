@@ -222,7 +222,11 @@ exec function RT_AddProgramOperativeToXCOMCrew() {
 	bFoundAtLeastOne = false;
 	foreach History.IterateByClassType(class'XComGameState_Unit', UnitState)
 	{
-		if(UnitState.GetMyTemplateName() == 'RTGhostMarksman' || UnitState.GetMyTemplateName() == 'RTGhostBerserker' || UnitState.GetMyTemplateName() == 'RTGhostGatherer')
+		if(	UnitState.GetMyTemplateName() == 'RTGhostMarksman' || 
+			UnitState.GetMyTemplateName() == 'RTGhostBerserker' || 
+			UnitState.GetMyTemplateName() == 'RTGhostGatherer' ||
+			UnitState.GetMyTemplateName() == 'RTGhostOperator'
+			)
 		{
 			`RTLOG("Found a " $ UnitState.GetMyTemplateName() $ ", adding them to XCOM!");
 			NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("Rising Tides: CHEAT: AddSPECTREToCrew");
