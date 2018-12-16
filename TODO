@@ -29,10 +29,16 @@ Todo:
   ☐ Add Hunt_Templar Risks
     ☐ Add Templar Ambush
     ✔ Add RTGameState_MissionStateTemplarAmbush @done(18-12-16 02:10)
-    ☐ Add Templar Ambush Mission *.inis (Schedules, Mission)
+    ☐ Add Templar Ambush Mission *.inis (Schedules, Mission, Encounters)
+    ☐ Add Templar Ambush Obj.umap
     ✔ Add Templar Ambush UIAlert @done(18-12-16 02:10)
     ✔ Add Templar Ambush UIMission @done(18-12-16 02:10)
   ☐ Add Hunt_Templars narratives
   ☐ Add Hunt_Templars rewards
   ✔ Add system to manage Hunt_Templars covert actions @done(18-12-09 16:55)
   ☐ Add Assault Templar Leadership mission
+  ☐ Add Enemy Templar Faction
+    ☐ Templar Abiity Set
+    ☐ Templar Character Generator
+    ☐ Templar AI.ini
+    ☐ TEmplar Encounter configuration
