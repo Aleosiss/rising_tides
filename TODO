@@ -28,9 +28,10 @@ Todo:
     ✔ Tracks Concealment / Superconcealment gained before Stealth was applied @done(18-04-30 18:32)
   ☐ Add Hunt_Templar Risks
     ☐ Add Templar Ambush
-    ☐ Add RTGameState_MissionStateTemplarAmbush
+    ✔ Add RTGameState_MissionStateTemplarAmbush @done(18-12-16 02:10)
     ☐ Add Templar Ambush Mission *.inis (Schedules, Mission)
-    ☐ Add Templar Ambush UIMission
+    ✔ Add Templar Ambush UIAlert @done(18-12-16 02:10)
+    ✔ Add Templar Ambush UIMission @done(18-12-16 02:10)
   ☐ Add Hunt_Templars narratives
   ☐ Add Hunt_Templars rewards
   ✔ Add system to manage Hunt_Templars covert actions @done(18-12-09 16:55)
