@@ -14,6 +14,8 @@ static function array<X2DataTemplate> CreateTemplates()
 	Rewards.AddItem(CreateProgramHuntTemplarsP2Reward());
 	Rewards.AddItem(CreateProgramHuntTemplarsP3Reward());
 
+	Rewards.AddItem(CreateProgramHuntTemplarsAmbushReward());
+
 	// Misc Rewards
 	Rewards.AddItem(CreateProgramAddCardSlotTemplate());
 	Rewards.AddItem(CreateProgramIncreaseInfluenceTemplate());
@@ -136,6 +138,29 @@ static function X2DataTemplate CreateProgramHuntTemplarsP3Reward() {
 	Template.GenerateRewardFn = none;
 	Template.SetRewardFn = none;
 	Template.GiveRewardFn = GiveHuntTemplarsP3Reward; // TODO
+	Template.GetRewardStringFn = none; // TODO
+	Template.GetRewardPreviewStringFn = none; // TODO
+	Template.GetRewardDetailsStringFn = none; // TODO
+	Template.GetRewardImageFn = none; // TODO
+	Template.SetRewardByTemplateFn = none;
+	Template.GetBlackMarketStringFn = none;
+	Template.GetRewardIconFn = none;
+	Template.CleanUpRewardFn = none;
+	Template.RewardPopupFn = none; // TODO
+
+	return Template;
+}
+
+static function X2DataTemplate CreateProgramHuntTemplarsAmbushReward() {
+	local X2RewardTemplate Template;
+
+	`CREATE_X2Reward_TEMPLATE(Template, 'RTReward_TemplarAmbush');
+	
+	Template.IsRewardAvailableFn = none;
+	Template.IsRewardNeededFn = none; 
+	Template.GenerateRewardFn = none;
+	Template.SetRewardFn = none;
+	Template.GiveRewardFn = GiveHuntTemplarAmbushReward; // TODO
 	Template.GetRewardStringFn = none; // TODO
 	Template.GetRewardPreviewStringFn = none; // TODO
 	Template.GetRewardDetailsStringFn = none; // TODO
@@ -380,6 +405,26 @@ static function GiveTemplarQuestlineCompleteReward(XComGameState NewGameState, X
 	
 }
 
+static function GiveHuntTemplarAmbushReward(XComGameState NewGameState, XComGameState_Reward RewardState, optional StateObjectReference AuxRef, optional bool bOrder = false, optional int OrderHours = -1)
+{
+	local RTGameState_ProgramFaction ProgramFaction;
+
+	ProgramFaction = class'RTHelpers'.static.GetNewProgramState(NewGameState);
+	switch(ProgramFaction.iTemplarQuestlineStage) {
+		case 0:
+			GiveProgramAdvanceQuestlineReward(NewGameState, RewardState, AuxRef, bOrder, OrderHours);
+			break;
+		case 1:
+			GiveProgramAdvanceQuestlineReward(NewGameState, RewardState, AuxRef, bOrder, OrderHours);
+			break;
+		case 2:
+			GiveHuntTemplarsP3Reward(NewGameState, RewardState, AuxRef, bOrder, OrderHours);
+			break;
+		default:
+			`RTLOG("Something broke, GiveHuntTemplarAmbushReward is out of bounds!", true, false);
+			break;
+	}
+}
 static function EliminateFaction(XComGameState NewGameState, XComGameState_ResistanceFaction FactionState, optional bool bShouldFactionSoldiersDesert = true) {
 	local XComGameState_HeadquartersXCom XComHQ;
 	local XComGameStateHistory History;

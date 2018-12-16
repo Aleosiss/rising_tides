@@ -95,6 +95,70 @@ static function int GetMissionDifficultyFromQuestlineStage(XComGameState_Mission
 
 static function TemplarAmbushPopup(optional XComGameState_MissionSite MissionState)
 {
-	`HQPRES.UIChosenAmbushMission(MissionState); // TODO
+	UITemplarAmbushMission(MissionState); // TODO
+}
+
+
+static function UITemplarAmbushMission(XComGameState_MissionSite MissionState, optional bool bInstant = false)
+{
+	local XComGameState_ResistanceFaction FactionState;
+	local DynamicPropertySet PropertySet;
+	local name AmbushEvent;
+
+	FactionState = MissionState.GetResistanceFaction();
+	AmbushEvent = 'CovertActionAmbush_Central';
+
+	class'X2StrategyGameRulesetDataStructures'.static.BuildDynamicPropertySet(PropertySet, 'RTUIAlert', 'RTAlert_TemplarAmbush', TemplarAmbushAlertCB, true, true, true, false);
+	class'X2StrategyGameRulesetDataStructures'.static.AddDynamicNameProperty(PropertySet, 'EventToTrigger', AmbushEvent);
+	class'X2StrategyGameRulesetDataStructures'.static.AddDynamicStringProperty(PropertySet, 'SoundToPlay', "ChosenPopupOpen");
+	class'X2StrategyGameRulesetDataStructures'.static.AddDynamicIntProperty(PropertySet, 'MissionRef', MissionState.ObjectID);
+	class'X2StrategyGameRulesetDataStructures'.static.AddDynamicIntProperty(PropertySet, 'FactionRef', FactionState.ObjectID);
+	class'X2StrategyGameRulesetDataStructures'.static.AddDynamicBoolProperty(PropertySet, 'bInstantInterp', bInstant);
+	`HQPRES.QueueDynamicPopup(PropertySet);
+}
+
+static function Test(optional XComGameState_MissionSite MissionState)
+{
+	UITest(MissionState);
+}
+
+
+static function UITest(XComGameState_MissionSite MissionState, optional bool bInstant = false)
+{
+	local XComGameState_ResistanceFaction FactionState;
+	local DynamicPropertySet PropertySet;
+	local name AmbushEvent;
+
+	FactionState = MissionState.GetResistanceFaction();
+	AmbushEvent = 'CovertActionAmbush_Central';
+
+	class'X2StrategyGameRulesetDataStructures'.static.BuildDynamicPropertySet(PropertySet, 'RTUIAlert', 'RTAlert_Test', TemplarAmbushAlertCB, true, true, true, false);
+	class'X2StrategyGameRulesetDataStructures'.static.AddDynamicNameProperty(PropertySet, 'EventToTrigger', AmbushEvent);
+	class'X2StrategyGameRulesetDataStructures'.static.AddDynamicStringProperty(PropertySet, 'SoundToPlay', "ChosenPopupOpen");
+	class'X2StrategyGameRulesetDataStructures'.static.AddDynamicIntProperty(PropertySet, 'MissionRef', MissionState.ObjectID);
+	class'X2StrategyGameRulesetDataStructures'.static.AddDynamicIntProperty(PropertySet, 'FactionRef', FactionState.ObjectID);
+	class'X2StrategyGameRulesetDataStructures'.static.AddDynamicBoolProperty(PropertySet, 'bInstantInterp', bInstant);
+	`HQPRES.QueueDynamicPopup(PropertySet);
+}
+
+simulated function TemplarAmbushAlertCB(Name eAction, out DynamicPropertySet AlertData, optional bool bInstant = false)
+{
+	local RTUIMission_TemplarAmbush kScreen;
+	local XComHQPresentationLayer HQPres;
+
+	if (eAction == 'eUIAction_Accept')
+	{
+		HQPres = `HQPRES;
+		if (!`ScreenStack.GetCurrentScreen().IsA('RTUIMission_TemplarAmbush'))
+		{
+			
+			kScreen = HQPres.Spawn(class'RTUIMission_TemplarAmbush', HQPres);
+			kScreen.MissionRef.ObjectID = class'X2StrategyGameRulesetDataStructures'.static.GetDynamicIntProperty(AlertData, 'MissionRef');
+			`ScreenStack.Push(kScreen);
+		}
+
+		if (`GAME.GetGeoscape().IsScanning())
+			HQPres.StrategyMap2D.ToggleScan();
+	}
 }
 

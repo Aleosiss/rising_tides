@@ -5,6 +5,10 @@ var public localized String m_strBody;
 var public localized String m_strConfirmMission;
 var public localized String m_strObjective;
 var public localized String m_strObjectiveDesc;
+var public localized String m_strChosenTypeData;
+var public localized String m_strChosenNameData;
+var public localized String m_strChosenNickData;
+
 
 //----------------------------------------------------------------------------
 // MEMBERS
@@ -139,9 +143,9 @@ simulated function BuildMissionPanel()
 
 	LibraryPanel.MC.BeginFunctionOp("UpdateChosenInfoBlade");
 	LibraryPanel.MC.QueueString(m_strTitle); // Title
-	LibraryPanel.MC.QueueString("TEST DATA CHOSEN TYPE"); // Chosen Type
-	LibraryPanel.MC.QueueString("TEST DATA CHOSEN NAME"); // Chosen Name
-	LibraryPanel.MC.QueueString("TEST DATA CHOSEN NICK"); // Chosen Nickname
+	LibraryPanel.MC.QueueString(m_strChosenTypeData); // Chosen Type
+	LibraryPanel.MC.QueueString(m_strChosenNameData); // Chosen Name
+	LibraryPanel.MC.QueueString(m_strChosenNickData); // Chosen Nickname
 	LibraryPanel.MC.QueueString(GetMissionImage()); // Image
 	LibraryPanel.MC.QueueString(GetOpName()); // Mission Value
 	LibraryPanel.MC.QueueString(m_strObjective); // Objective Label
@@ -167,8 +171,10 @@ simulated function BuildOptionsPanel()
 	
 	Button2.Hide();
 
+	// This lets us back out anyway if we're not in a FINAL_RELEASE
 	`if(`notdefined(FINAL_RELEASE))
 	Button2.OnClickedDelegate = OnSimCombat;
+	Button2.SetText("DEV HACK: CANCEL UNCANCELABLE MISSION");
 	Button2.Show();
 	`endif
 

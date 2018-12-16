@@ -688,3 +688,44 @@ exec function RT_CheatEliminateTemplarFaction() {
 	`XCOMGAME.GameRuleset.SubmitGameState(NewGameState);
 }
 
+exec function GenerateTemplarAmbush() {
+	local XComGameState NewGameState;
+	local XComGameState_MissionSite MissionState;
+
+	NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("CHEAT - ELIMINATE TEMPLAR FACTION");
+	MissionState = CreateFakeTemplarAmbush(NewGameState);
+	`XCOMGAME.GameRuleset.SubmitGameState(NewGameState);
+	class'RTStrategyElement_MissionSources'.static.TemplarAmbushPopup(MissionState);
+	//class'RTStrategyElement_MissionSources'.static.Test(MissionState);
+}
+
+function XComGameState_MissionSite CreateFakeTemplarAmbush(XComGameState NewGameState) {
+	local XComGameState_HeadquartersResistance ResHQ;
+	local RTGameState_MissionSiteTemplarAmbush MissionState;
+	local XComGameState_WorldRegion RegionState;
+	local XComGameState_Reward RewardState;
+	local X2StrategyElementTemplateManager StratMgr;
+	local X2RewardTemplate RewardTemplate;
+	local X2MissionSourceTemplate MissionSource;
+	local array<XComGameState_Reward> MissionRewards;
+	local StateObjectReference EmptyRef;
+
+	StratMgr = class'X2StrategyElementTemplateManager'.static.GetStrategyElementTemplateManager();
+	RegionState = `XCOMHQ.GetContinent().GetRandomRegionInContinent();
+
+	MissionRewards.Length = 0;
+	RewardTemplate = X2RewardTemplate(StratMgr.FindStrategyElementTemplate('Reward_None')); // rewards are given by the X2MissionSourceTemplate
+	RewardState = RewardTemplate.CreateInstanceFromTemplate(NewGameState);
+	MissionRewards.AddItem(RewardState);
+
+	MissionSource = X2MissionSourceTemplate(StratMgr.FindStrategyElementTemplate('RTMissionSource_TemplarAmbush'));
+	MissionState = RTGameState_MissionSiteTemplarAmbush(NewGameState.CreateNewStateObject(class'RTGameState_MissionSiteTemplarAmbush'));
+	MissionState.CovertActionRef = EmptyRef;
+	
+	MissionState.BuildMission(MissionSource, RegionState.GetRandom2DLocationInRegion(), RegionState.GetReference(), MissionRewards, true);
+	MissionState.ResistanceFaction = class'RTHelpers'.static.GetProgramState().GetReference();
+
+	return MissionState;
+}
+
+

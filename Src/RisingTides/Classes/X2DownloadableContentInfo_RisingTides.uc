@@ -110,7 +110,23 @@ static function bool DisplayQueuedDynamicPopup(DynamicPropertySet PropertySet)
 		return true;
 	}
 
+	if(PropertySet.PrimaryRoutingKey == 'RTUIAlert') {
+		CallAlert(PropertySet);
+		return true;
+	}
+
 	return false;
+}
+
+static function CallAlert(const out DynamicPropertySet PropertySet)
+{
+	local RTUIAlert Alert;
+
+	Alert = `HQPRES.Spawn(class'RTUIAlert', `HQPRES);
+	Alert.DisplayPropertySet = PropertySet;
+	Alert.eAlertName = PropertySet.SecondaryRoutingKey;
+
+	`SCREENSTACK.Push(Alert);
 }
 
 static function CallUIFactionPopup(const out DynamicPropertySet PropertySet)

@@ -1,22 +1,39 @@
 // This is an Unreal Script
 class RTUIScreenListener_OneSmallFavor extends UIScreenListener config(ProgramFaction);
 
-var UICheckbox 	cb;
-var UIMission	ms;
-var StateObjectReference mr;
-var bool		bDebugging;
+var UICheckbox						cb;
+var UIMission						ms;
+var StateObjectReference			mr;
+var bool							bDebugging;
+var bool							bHasSeenTutorial;
 
-var config array<name> FatLaunchButtonMissionTypes;
-var config float OSFCheckboxDistortOnClickDuration;
+var config array<name> 				FatLaunchButtonMissionTypes;
+var config float 					OSFCheckboxDistortOnClickDuration;
 
 delegate OldOnClickedDelegate(UIButton Button);
 
 event OnInit(UIScreen Screen)
 {
+	local RTGameState_ProgramFaction Program;
+	
+	if(UIStrategyMap(Screen) != none && !bHasSeenTutorial) {
+		Program = RTGameState_ProgramFaction(`XCOMHISTORY.GetSingleGameStateObjectForClass(class'RTGameState_ProgramFaction'));
+		if(Program == none) {
+			return;
+		}
+	
+		if(!Program.bMetXCom) {
+			return;
+		}
+	
+		Program.HandleOSFTutorial();
+		bHasSeenTutorial = Program.bOSF_FirstTimeDisplayed;
+	}
+
 	if(UIMission(Screen) == none) {
 		return;
 	}
-	
+
 	bDebugging = false;
 
 	ms = UIMission(Screen);
@@ -74,8 +91,6 @@ simulated function AddOneSmallFavorSelectionCheckBox(UIScreen Screen) {
 		return;
 	}
 
-	Program.HandleOSFTutorial();
-
 	// immediately execute the init code if we're somehow late to the initialization party
 	if(MissionScreen.ConfirmButton.bIsVisible) {
 		if(MissionScreen.ConfirmButton.bIsInited && MissionScreen.ConfirmButton.bIsVisible) {
@@ -125,7 +140,8 @@ function OnConfirmButtonInited(UIPanel Panel) {
 	if(!bReadOnly) {
 		bReadOnly = class'RTHelpers'.static.IsInvalidMission(MissionScreen.GetMission().GetMissionSource());
 		if(bReadOnly) {
-			`RTLOG("This MissionSource is invalid!", true);
+			`RTLOG("This MissionSource is invalid!", false, false);
+			return; // don't even make the checkbox in this case...
 		}
 	}
 

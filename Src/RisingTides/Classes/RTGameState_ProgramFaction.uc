@@ -1335,6 +1335,10 @@ static function InitFaction(optional XComGameState StartState) {
 	local XComGameState_Haven HavenState;
 	local XComGameState_HeadquartersResistance ResHQ;
 
+	if(`XCOMGAME.GameRuleset == none) {
+		return;
+	}
+
 	History = class'XComGameStateHistory'.static.GetGameStateHistory();
 	ResHQ = XComGameState_HeadquartersResistance(History.GetSingleGameStateObjectForClass(class'XComGameState_HeadquartersResistance'));
 	StratMgr = class'X2StrategyElementTemplateManager'.static.GetStrategyElementTemplateManager();

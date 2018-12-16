@@ -146,6 +146,23 @@ WhisperWepName = 'Heartspan' # ...by sacrificing the rook, I can attack the king
 SquadTwoName="HIGHLANDER"
 SquadTwoBackground="HIGHLANDER works the people."
 
+[RTUIAlert]
+strTemplarAmbushDescription="While working with the Program during the recent Covert Action, the local Templar forces in the area of operations caught wind of our plans. We must move quickly and eliminate the cell before it can report back to Geist. If we fail here, the Templars will almost certainly pull out of the alliance and go into hiding."
+strTemplarAmbushStr1="Handler: 6"
+strTemplarAmbushStr2="Field Team: HIGHLANDER"
+strTemplarAmbushStr3="Operator: 'Kaga'"
+strTemplarAmbushHeader="TEMPLAR DISCOVERY"
+strTemplarAmbushBegin="Begin Operation"
+
+[RTUIMission_TemplarAmbush]
+m_strTitle="COUNTERINTELLIGENCE"
+m_strBody="Prevent the local Templar coven from reporting back to leadership, and Geist."
+m_strConfirmMission="LAUNCH MISSION"
+m_strObjective="OBJECTIVE:"
+m_strObjectiveDesc="Eliminate all hostile forces."
+m_strChosenTypeData="Handler: 9"
+m_strChosenNameData="Field Team: HIGHLANDER"
+m_strChosenNickData="Operator: 'Kaga'"
 
 [Faction_Program RTProgramFactionTemplate]
 FactionTitle="The Program"

@@ -40,7 +40,7 @@ static function CreateTemplarAmbush(XComGameState NewGameState, XComGameState_Co
 		RegionState = ActionState.GetWorldRegion();
 
 		MissionRewards.Length = 0;
-		RewardTemplate = X2RewardTemplate(StratMgr.FindStrategyElementTemplate('RTReward_TemplarAmbush'));
+		RewardTemplate = X2RewardTemplate(StratMgr.FindStrategyElementTemplate('Reward_None')); // rewards are given by the X2MissionSourceTemplate
 		RewardState = RewardTemplate.CreateInstanceFromTemplate(NewGameState);
 		MissionRewards.AddItem(RewardState);
 
@@ -49,7 +49,6 @@ static function CreateTemplarAmbush(XComGameState NewGameState, XComGameState_Co
 		MissionState = RTGameState_MissionSiteTemplarAmbush(NewGameState.CreateNewStateObject(class'RTGameState_MissionSiteTemplarAmbush'));
 		MissionState.CovertActionRef = ActionState.GetReference();
 		MissionState.BuildMission(MissionSource, RegionState.GetRandom2DLocationInRegion(), RegionState.GetReference(), MissionRewards, true);
-
 		MissionState.ResistanceFaction = ActionState.Faction;
 	}
 }
