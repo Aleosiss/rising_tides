@@ -13,15 +13,15 @@ var int MaxPositionsSaved;
 function RegisterForEvents(XComGameState_Effect EffectGameState)
 {
 	local X2EventManager EventMgr;
-    local RTGameState_Effect EffectState;
-    local XComGameState_Unit UnitState;
-    local Object EffectObj;
-    local Object FilterObj;
+	local RTGameState_Effect EffectState;
+//	local XComGameState_Unit UnitState;
+	local Object EffectObj;
+	local Object FilterObj;
 
 	EventMgr = `XEVENTMGR;
-    EffectState = RTGameState_Effect(EffectGameState);
-    FilterObj = XComGameState_Unit(`XCOMHISTORY
-                    .GetGameStateForObjectID(EffectGameState.ApplyEffectParameters.TargetStateObjectRef.ObjectID));
+	EffectState = RTGameState_Effect(EffectGameState);
+	FilterObj = XComGameState_Unit(`XCOMHISTORY
+					.GetGameStateForObjectID(EffectGameState.ApplyEffectParameters.TargetStateObjectRef.ObjectID));
 
 	EffectObj = EffectState;
 
@@ -33,6 +33,6 @@ function RegisterForEvents(XComGameState_Effect EffectGameState)
 
 defaultproperties
 {
-    EffectName = "RTRepositioning"
-    GameStateEffectClass = class'RTGameState_Effect'
+	EffectName = "RTRepositioning"
+	GameStateEffectClass = class'RTGameState_Effect'
 }

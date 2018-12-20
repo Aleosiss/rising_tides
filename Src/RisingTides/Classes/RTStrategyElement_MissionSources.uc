@@ -83,7 +83,6 @@ static function TemplarAmbushOnFailure(XComGameState NewGameState, XComGameState
 static function int GetMissionDifficultyFromQuestlineStage(XComGameState_MissionSite MissionState)
 {
 	local int Difficulty;
-	local RTGameState_ProgramFaction ProgramState;
 
 	Difficulty = 1 + class'RTHelpers'.static.GetProgramState().iTemplarQuestlineStage;
 

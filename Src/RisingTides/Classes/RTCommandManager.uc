@@ -68,15 +68,15 @@ exec function RT_DebugModVersion() {
 }
 
 exec function RT_ToggleCustomDebugOutput() {
-    class'UIDebugStateMachines'.static.GetThisScreen().ToggleVisible();
+	class'UIDebugStateMachines'.static.GetThisScreen().ToggleVisible();
 }
 
 exec function RT_PrintPerkContentsForXCom() {
-    class'UIDebugStateMachines'.static.PrintOutPerkContentsForXComUnits();
+	class'UIDebugStateMachines'.static.PrintOutPerkContentsForXComUnits();
 }
 
 exec function RT_PrintLoadedPerkContents() {
-    class'UIDebugStateMachines'.static.PrintOutLoadedPerkContents();
+	class'UIDebugStateMachines'.static.PrintOutLoadedPerkContents();
 }
 
 exec function RT_TryForceAppendAbilityPerks(name AbilityName) {
@@ -658,7 +658,6 @@ exec function RT_CheatLadderPoints(int Points) {
 exec function TestScreen() {
 	local XComPresentationLayerBase pres;
 	local UISCreenStack	ScreenStack;
-
 	local RTUIScreen_AdvanceTemplarQuestlineStage Screen;
 
 	pres = `PRESBASE;
@@ -670,10 +669,10 @@ exec function RT_ListAbilityLists() {
 }
 
 exec function RT_CheatProgramInfluence() {
-    local RTGameState_ProgramFaction ProgramState;
+	local RTGameState_ProgramFaction ProgramState;
 
-    ProgramState = class'RTHelpers'.static.GetProgramState();
-    ProgramState.TryIncreaseInfluence();
+	ProgramState = class'RTHelpers'.static.GetProgramState();
+	ProgramState.TryIncreaseInfluence();
 }
 
 exec function RT_CheatEliminateTemplarFaction() {

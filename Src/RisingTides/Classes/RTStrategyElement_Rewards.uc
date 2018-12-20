@@ -431,11 +431,11 @@ static function EliminateFaction(XComGameState NewGameState, XComGameState_Resis
 	local XComGameState_HeadquartersResistance ResistHQ;
 	local XComGameState_Haven FactionHavenState;
 	local StateObjectReference IteratorRef;
-	local StateObjectReference EmptyRef;
+//	local StateObjectReference EmptyRef;
 	local XComGameState_Unit UnitState;
 	local XComGameState_StrategyCard CardState;
-	local XComGameState_WorldRegion RegionState;
-	local int i;
+//	local XComGameState_WorldRegion RegionState;
+//	local int i;
 
 	History = `XCOMHISTORY;
 	XComHQ = class'RTHelpers'.static.GetXComHQState();
@@ -470,7 +470,7 @@ static function EliminateFaction(XComGameState NewGameState, XComGameState_Resis
 			CardState.DeactivateCard(NewGameState);
 			FactionState.PlayableCards.AddItem(IteratorRef);
 		}
-		i++;
+//		i++;
 	}
 
 	// remove haven

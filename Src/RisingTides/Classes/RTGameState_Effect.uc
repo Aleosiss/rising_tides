@@ -1626,7 +1626,7 @@ function EventListenerReturn HandleRepositioning(Object EventData, Object EventS
 {
 	local XComGameState_Unit UnitState;
 	local TTile CurrentTile;
-	local XComGameStateHistory History;
+//	local XComGameStateHistory History;
 	local RTEffect_Repositioning EffectTemplate;
 	local RTGameState_Effect RTEffectState;
 	local XComGameState_Ability AbilityState; // what just activated
@@ -1689,14 +1689,14 @@ function EventListenerReturn HandleRepositioning(Object EventData, Object EventS
 // When we're about to break concealment, check to see if we can trigger Repositioning
 function EventListenerReturn HandleRetainConcealmentRepositioning(Object EventData, Object EventSource, XComGameState GameState, name EventID, Object CallbackData)
 {
-	local XComLWTuple Tuple;
 	local XComGameStateContext_Ability ActivatedAbilityStateContext;
-	local XComGameState_Unit UnitState;
-	local bool bTooClose;
-	local XComGameState NewGameState;
-	local TTile CurrentTile, IteratorTile;
-	local RTEffect_Repositioning EffectTemplate;
+//	local XComGameState_Unit UnitState;
+//	local bool bTooClose;
+//	local TTile CurrentTile, IteratorTile;
+//	local RTEffect_Repositioning EffectTemplate;
 	local RTGameState_Effect EffectState;
+	local XComGameState NewGameState;
+	local XComLWTuple Tuple;
 
 	if(ActivatedAbilityStateContext.InputContext.SourceObject.ObjectID != ApplyEffectParameters.TargetStateObjectRef.ObjectID)
 	{
@@ -1733,7 +1733,7 @@ function EventListenerReturn HandleRetainConcealmentRepositioning(Object EventDa
 		NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState(string(GetFuncName()));
 		XComGameStateContext_ChangeContainer(NewGameState.GetContext()).BuildVisualizationFn = RepositoningVisualizationFn;
 		EffectState = RTGameState_Effect(NewGameState.ModifyStateObject(Class, ObjectID));
-		bRepositioningActive = false;
+		EffectState.bRepositioningActive = false;
 		`TACTICALRULES.SubmitGameState(NewGameState);
 		Tuple.Data[0].b = true;
 	}
@@ -1769,7 +1769,7 @@ function RepositoningVisualizationFn(XComGameState VisualizeGameState) {
 
 function EventListenerReturn HandleRepositioningAvaliable(Object EventData, Object EventSource, XComGameState GameState, name EventID, Object CallbackData)
 {
-	local XComGameStateContext_Ability ActivatedAbilityStateContext;
+//	local XComGameStateContext_Ability ActivatedAbilityStateContext;
 	local XComGameState_Unit UnitState;
 	local bool bTooClose;
 	local XComGameState NewGameState;
