@@ -343,6 +343,7 @@ if($canSkipShaderPrecompliation) {
 } else {
     Write-Host "Can't skip shader precompliation."
     if(Test-Path $tempCachePath) {
+        Write-Host "Deleting stashed ModShaderCache."
         Remove-Item -Path $tempCachePath
         Remove-Item -path $modSrcRoot/tmp
     }
