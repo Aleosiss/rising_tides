@@ -212,14 +212,14 @@ strForcedNickName="Whisper"
 [RTGhostGatherer RTCharacterTemplate]
 strCharacterName="Program Operative"
 strCharacterBackgroundMale[0]="[REDACTED] \nC.O. Bradford Note: This one seems... too familiar. Don't pry. I'll look into it."
-strCharacterBackgroundMale[1]="Although her real name is a true unknown, 'Nova' is a familiar name and a familiar voice on the comms. Under the guise of a hotshot rookie SAS recruit, she joined the XCOM project in 2015, along with a Dr. Elizabeth Hadley, with dual intent. First, to lend aid as a psionic supercommando, and second, to prevent the spread of the knowledge of psionics. Under Dr. Hadley's order, she quickly rose through the ranks of XCOM with her impeccable aim and uncanny ability to read the battlefield-- but when XCOM fell, she made her way, first to the Psi-lab, and then to barracks, with deadly purpose. The only survivor was Staff Sergeant Matthew Lanner, who, mind left in badly fragmented pieces from Nova’s overwhelming psionic assault, crawled from the ruins of the XCOM base with a singular word remaining—Geist."
+strCharacterBackgroundMale[1]="Although her real name is a true unknown, 'Nova' is a familiar name and a familiar voice on the comms. Under the guise of a hotshot rookie SAS recruit, she joined the XCOM project in 2015, along with a Dr. Elizabeth Hadley, with dual intent. First, to lend aid as a psionic supercommando, and second, to prevent the spread of the knowledge of psionics. Under Dr. Hadley's order, she quickly rose through the ranks of XCOM with her impeccable aim and uncanny ability to read the battlefield-- but as XCOM fell, she made her way, first to the Psi-lab, and then to barracks, with deadly purpose. The only survivor was Staff Sergeant Matthew Lanner, who, mind left in badly fragmented pieces from Nova’s overwhelming psionic assault, crawled from the ruins of the XCOM base with a singular word remaining—Geist."
 strForcedFirstName="[REDACTED]"
 strForcedLastName="[REDACTED]"
 strForcedNickName="Nova"
 ; Although her real name is a true unknown, 'Nova' is a familiar name and a familiar voice on the comms. Under the guise of a hotshot rookie SAS recruit, she
 ; joined the XCOM project in 2015, along with a Dr. Elizabeth Hadley, with dual intent. First, to lend aid as a psionic supercommando, and second, to prevent
 ; the spread of the knowledge of psionics. Under Dr. Hadley's order, she quickly rose through the ranks of XCOM with her impeccable aim and uncanny ability to
-; read the battlefield—but when XCOM fell, she made her way, first to the Psi-lab, and then to barracks, with deadly purpose. The only survivor was Staff
+; read the battlefield—but as XCOM fell, she made her way, first to the Psi-lab, and then to barracks, with deadly purpose. The only survivor was Staff
 ; Sergeant Matthew Lanner, who, mind left in badly fragmented pieces from Nova’s overwhelming psionic assault, crawled from the ruins of the XCOM base with a
 ; singular word remaining—Geist.
 
