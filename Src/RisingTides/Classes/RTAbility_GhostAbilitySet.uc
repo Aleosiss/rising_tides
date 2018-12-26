@@ -1113,9 +1113,9 @@ defaultproperties
 
 static function bool AbilityTagExpandHandler(string InString, out string OutString)
 {
-	local name Tag;
+//	local name Tag;
 
-	Tag = name(InString);
+//	Tag = name(InString);
 
 	return false;
 }

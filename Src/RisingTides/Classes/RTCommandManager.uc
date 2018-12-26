@@ -176,9 +176,11 @@ exec function RT_GenerateProgramCards() {
 
 	NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("CHEAT: Add Program Faction Cards!");
 	ProgramState = class'RTHelpers'.static.GetNewProgramState(NewGameState);
-	ProgramState.Influence = eFactionInfluence_Influential;
+	ProgramState.IncreaseInfluenceLevel(NewGameState);
+	ProgramState.IncreaseInfluenceLevel(NewGameState);
+	ProgramState.IncreaseInfluenceLevel(NewGameState);
+	ProgramState.IncreaseInfluenceLevel(NewGameState);
 	`GAMERULES.SubmitGameState(NewGameState);
-
 
 	NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("CHEAT: Add Program Faction Cards!");
 	ProgramState = class'RTHelpers'.static.GetNewProgramState(NewGameState);
@@ -656,12 +658,12 @@ exec function RT_CheatLadderPoints(int Points) {
 }
 
 exec function TestScreen() {
-	local XComPresentationLayerBase pres;
+	/*local XComPresentationLayerBase pres;
 	local UISCreenStack	ScreenStack;
 	local RTUIScreen_AdvanceTemplarQuestlineStage Screen;
 
 	pres = `PRESBASE;
-	ScreenStack = `SCREENSTACK;
+	ScreenStack = `SCREENSTACK;*/
 }
 
 exec function RT_ListAbilityLists() {
@@ -699,7 +701,6 @@ exec function GenerateTemplarAmbush() {
 }
 
 function XComGameState_MissionSite CreateFakeTemplarAmbush(XComGameState NewGameState) {
-	local XComGameState_HeadquartersResistance ResHQ;
 	local RTGameState_MissionSiteTemplarAmbush MissionState;
 	local XComGameState_WorldRegion RegionState;
 	local XComGameState_Reward RewardState;

@@ -605,6 +605,13 @@
     <Content Include="Src\RisingTides\Classes\RTUIMission_TemplarAmbush.uc" />
     <Content Include="Config\XComMissionSources.ini" />
     <Content Include="Src\RisingTides\Classes\RTUIAlert.uc" />
+    <Content Include="Config\XComEncounterLists.ini" />
+    <Content Include="Config\XComEncounters.ini" />
+    <Content Include="Src\RisingTides\Classes\RTCharacter_DefaultTemplars.uc" />
+    <Content Include="Src\RisingTides\Classes\RTCharacterGenerator_Templar.uc" />
+    <Content Include="Config\XComContent.ini" />
+    <Content Include="Content\GameUnit_GenericHumanHostile.upk" />
+    <Content Include="Config\XComGameCore.ini" />
   </ItemGroup>
   <Import Project="$(MSBuildLocalExtensionPath)\XCOM2.targets" />
 </Project>

@@ -370,7 +370,7 @@ static function X2AbilityTemplate RTBurst() {
 	// local X2Effect_Persistent						Effect;
 
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'RTBurst');
-	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_swordSlash"; //TODO: Change this
+	Template.IconImage = "img:///RisingTidesContentPackage.PerkIcons.rt_burst";
 	Template.AbilitySourceName = 'eAbilitySource_Psionic';
 	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_AlwaysShow;
 	Template.AbilityConfirmSound = "TacticalUI_ActivateAbility";
@@ -637,7 +637,7 @@ static function X2AbilityTemplate RTBlur() {
 	local X2Effect_PersistentStatChange BlurEffect;
 
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'RTBlur');
-	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_snapshot";
+	Template.IconImage = "img:///RisingTidesContentPackage.PerkIcons.rt_blur";
 
 	Template.AbilitySourceName = 'eAbilitySource_Psionic';
 	Template.eAbilityIconBehaviorHUD = EAbilityIconBehavior_NeverShow;

@@ -2,11 +2,11 @@ class RTCharacter_DefaultCharacters extends X2Character_DefaultCharacters config
 
 static function array<X2DataTemplate> CreateTemplates()
 {
-    local array<X2DataTemplate> Templates;
+	local array<X2DataTemplate> Templates;
 	
 	// SPECTRE
-    Templates.AddItem(CreateWhisperTemplate());
-    Templates.AddItem(CreateQueenTemplate());
+	Templates.AddItem(CreateWhisperTemplate());
+	Templates.AddItem(CreateQueenTemplate());
 	Templates.AddItem(CreateNovaTemplate());
 	
 	// HIGHLANDER
@@ -89,8 +89,8 @@ static function X2CharacterTemplate CreateQueenTemplate()
 	
 	CharTemplate.DefaultSoldierClass = 'RT_Berserker';
 	CharTemplate.DefaultLoadout = 'RT_Berserker';
-    CharTemplate.bIsPsionic = true;
-    
+	CharTemplate.bIsPsionic = true;
+	
 	CharTemplate.bForceAppearance = true;
 	CharTemplate.bAppearanceDefinesPawn = true;
 
@@ -154,8 +154,8 @@ static function X2CharacterTemplate CreateNovaTemplate()
 	
 	CharTemplate.DefaultSoldierClass = 'RT_Gatherer';
 	CharTemplate.DefaultLoadout = 'RT_Gatherer';
-    CharTemplate.bIsPsionic = true;
-    
+	CharTemplate.bIsPsionic = true;
+	
 	CharTemplate.bForceAppearance = true;
 	CharTemplate.bAppearanceDefinesPawn = true;
 
@@ -219,11 +219,12 @@ static function X2CharacterTemplate CreateKagaTemplate()
 	
 	CharTemplate.DefaultSoldierClass = 'RT_Gatherer';
 	CharTemplate.DefaultLoadout = 'RT_Gatherer';
-    CharTemplate.bIsPsionic = true;
-    
+	CharTemplate.bIsPsionic = true;
+	
 	CharTemplate.bForceAppearance = true;
 	CharTemplate.bAppearanceDefinesPawn = true;
 
+	// She looks the same as Nova, too lazy to make her Asian... fuck
 	CharTemplate.ForceAppearance.nmHead = 'CaucFem_D';
 	CharTemplate.ForceAppearance.iGender = 2;
 	CharTemplate.ForceAppearance.iRace = 0;
