@@ -821,3 +821,39 @@ exec function RT_CheatLadderPoints(int Points) {
 exec function RT_DebugOSFGhostActivation() {
 
 }
+
+exec function RT_RecreateOneSmallFavor() {
+	local XComGameStateHistory History;
+	local XComGameState NewGameState;
+	local RTGameState_ProgramFaction ProgramState;
+	local XComGameState_StrategyCard CardState;
+	local StateObjectReference IteratorRef;
+	local X2StrategyElementTemplateManager StratMgr;
+	local array<X2StrategyElementTemplate> AllCardTemplates;
+	local RTProgramStrategyCardTemplate CardTemplate;
+	local int idx;
+
+	History = `XCOMHISTORY;
+	NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("Rising Tides: CHEAT: Regenerate One Small Favor");
+	ProgramState = class'RTHelpers'.static.GetNewProgramState(NewGameState);
+
+	// try to find One Small Favor
+	foreach ProgramState.PlayableCards(IteratorRef) {
+		CardState = XComGameState_StrategyCard(History.GetGameStateForObjectID(IteratorRef.ObjectID));
+		if(CardState.GetMyTemplateName() == 'ResCard_RTOneSmallFavor') {
+			return;
+		}
+	}
+
+	// didn't find it, bugged campaign
+	foreach History.IterateByClassType(class'XComGameState_StrategyCard', CardState)
+	{
+		if(CardState.GetMyTemplateName() == 'ResCard_RTOneSmallFavor') {
+			ProgramState.PlayableCards.AddItem(CardState.GetReference());
+			`XCOMGAME.GameRuleset.SubmitGameState(NewGameState);
+			return;
+		}
+	}
+
+	`XCOMGAME.GameRuleset.SubmitGameState(NewGameState);
+}
