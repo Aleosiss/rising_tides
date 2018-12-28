@@ -1089,47 +1089,6 @@ event OnCreation(optional X2DataTemplate Template)
 
 }
 
-function GenerateNewPlayableCard(XComGameState NewGameState)
-{
-	local XComGameState_StrategyCard NewCardState, IteratorCardState;
-	local StateObjectReference IteratorRef;
-	local XComGameStateHistory History;
-
-	NewCardState = GetRandomCardToMakePlayable(NewGameState);
-	if(NewCardState == none) {
-		//`RTLOG("Couldn't make a random card playable!");
-		return;
-	}
-
-	// No duplicates please
-	History = `XCOMHISTORY;
-	foreach PlayableCards(IteratorRef) {
-		IteratorCardState = XComGameState_StrategyCard(History.GetGameStateForObjectID(IteratorRef.ObjectID));
-		if(IteratorCardState == none) {
-			continue;
-		}
-
-		if(NewCardState.GetMyTemplateName() == IteratorCardState.GetMyTemplateName()) {
-			//`RTLOG("Created a duplicate card, returning none!");
-			return;
-		}
-	}
-
-	foreach NewPlayableCards(IteratorRef) {
-		IteratorCardState = XComGameState_StrategyCard(History.GetGameStateForObjectID(IteratorRef.ObjectID));
-		if(IteratorCardState == none) {
-			continue;
-		}
-
-		if(NewCardState.GetMyTemplateName() == IteratorCardState.GetMyTemplateName()) {
-			//`RTLOG("Created a duplicate card, returning none!");
-			return;
-		}
-	}
-
-	AddPlayableCard(NewGameState, NewCardState.GetReference());
-}
-
 function MeetXCom(XComGameState NewGameState)
 {
 	local XComGameState_HeadquartersResistance ResHQ;
@@ -1216,6 +1175,7 @@ function AddOneSmallFavorCard(XComGameState NewGameState) {
 		CardState.bNewCard = true;
 
 		NewPlayableCards.AddItem(CardState.GetReference());
+		PlayableCards.AddItem(CardState.GetReference());
 		PlaceCardInSlot(CardState.GetReference(), 0);
 		CardState.ActivateCard(NewGameState);
 	}
