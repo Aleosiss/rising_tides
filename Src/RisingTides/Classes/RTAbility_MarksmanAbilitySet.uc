@@ -567,7 +567,7 @@ static function X2AbilityTemplate RTAggression()
 
 	//Icon Properties
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'RTAggression');
-	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_aggression";
+	Template.IconImage = "img:///RisingTidesContentPackage.PerkIcons.rt_aggression";
 
 	Template.AbilitySourceName = 'eAbilitySource_Psionic';
 	Template.eAbilityIconBehaviorHUD = EAbilityIconBehavior_NeverShow;
@@ -778,7 +778,7 @@ static function X2AbilityTemplate SixOClock()
 	local RTEffect_SixOClock            PersistentEffect;
 
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'SixOClock');
-	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_tacticalsense";
+	Template.IconImage = "img:///RisingTidesContentPackage.PerkIcons.rt_sixoclock";
 
 	Template.AbilitySourceName = 'eAbilitySource_Psionic';
 	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_NeverShow;
@@ -1987,7 +1987,7 @@ static function X2AbilityTemplate EyeInTheSky()
 
 	//Icon Properties
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'EyeInTheSky');
-	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_overwatch";
+	Template.IconImage = "img:///RisingTidesContentPackage.PerkIcons.rt_eyeinthesky";
 
 	Template.AbilitySourceName = 'eAbilitySource_Perk';
 	Template.eAbilityIconBehaviorHUD = EAbilityIconBehavior_NeverShow;
@@ -2121,8 +2121,8 @@ static function X2AbilityTemplate Harbinger()
 	local X2Condition_UnitProperty	TargetCondition;
 
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'Harbinger');
-	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_adventpsiwitch_mindcontrol";
-
+	Template.IconImage = "img:///RisingTidesContentPackage.PerkIcons.rt_assumingdirectcontrol";
+	
 	Template.AbilitySourceName = 'eAbilitySource_Psionic';
 	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_ShowIfAvailable;
 	Template.ConcealmentRule = eConceal_Always;
@@ -2208,7 +2208,7 @@ simulated function OnHarbingerShieldRemoved_BuildVisualization(XComGameState Vis
 	if (XGUnit(ActionMetadata.VisualizeActor).IsAlive())
 	{
 		SoundAndFlyOver = X2Action_PlaySoundAndFlyOver(class'X2Action_PlaySoundAndFlyOver'.static.AddToVisualizationTree(ActionMetadata, VisualizeGameState.GetContext(), false, ActionMetadata.LastActionAdded));
-		SoundAndFlyOver.SetSoundAndFlyOverParameters(None, "Shield Broken", '', eColor_Bad, , 0.75, true);
+		SoundAndFlyOver.SetSoundAndFlyOverParameters(None, class'RTAbility_GathererAbilitySet'.default.HarbingerShieldLostStr, '', eColor_Bad, , 0.75, true);
 	}
 }
 

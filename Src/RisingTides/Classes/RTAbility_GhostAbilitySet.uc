@@ -121,7 +121,7 @@ static function X2AbilityTemplate GhostPsiSuite()
 	local X2Effect_StayConcealed				PhantomEffect;
 
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'GhostPsiSuite');
-	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_adventpsiwitch_mindcontrol"; //TODO: Change this
+	Template.IconImage = "img:///RisingTidesContentPackage.PerkIcons.rt_program_shield";
 
 	Template.AbilitySourceName = 'eAbilitySource_Psionic';
 	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_NeverShow;
@@ -520,7 +520,7 @@ static function X2AbilityTemplate Fade()
 	local X2Effect_Persistent		CooldownTrackerEffect;
 
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'Fade');
-	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_phantom";
+	Template.IconImage = "img:///RisingTidesContentPackage.PerkIcons.rt_fade";
 
 	Template.AbilitySourceName = 'eAbilitySource_Psionic';
 	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_NeverShow;
@@ -575,7 +575,7 @@ static function X2AbilityTemplate Teek() {
 	local X2Effect_PersistentStatChange BlurEffect;
 
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'Teek');
-	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_voidrift";
+	Template.IconImage = "img:///RisingTidesContentPackage.PerkIcons.rt_teek";
 
 	Template.AbilitySourceName = 'eAbilitySource_Psionic';
 	Template.eAbilityIconBehaviorHUD = EAbilityIconBehavior_NeverShow;
@@ -1098,14 +1098,10 @@ defaultproperties
 	End Object
 	StandardSizeProperty = DefaultStandardSizeProperty
 
-
-
-
 	RTFeedbackEffectName = "RTFeedback"
 	RTFeedbackWillDebuffName = "RTFeedbackWillDebuff"
 	UnitUsedPsionicAbilityEvent = "UnitUsedPsionicAbility"
 	ForcePsionicAbilityEvent = "ForcePsionicAbilityEvent"
-
 
 	RTMindControlEffectName = "MindControl"
 	RTGhostTagEffectName = "RTGhostOperative"
@@ -1113,6 +1109,13 @@ defaultproperties
 	RTMindControlTemplateName = "RTMindControl"
 	RTTechnopathyTemplateName = "RTTechnopathy"
 	DefaultPsionicAnimDelay = 4.0
+}
 
+static function bool AbilityTagExpandHandler(string InString, out string OutString)
+{
+//	local name Tag;
 
+//	Tag = name(InString);
+
+	return false;
 }

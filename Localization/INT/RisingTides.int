@@ -122,6 +122,7 @@ GuardianAngelHealText="Guardian Angel"
 KIPFriendlyName="Knowledge Is Power"
 KIPFriendlyDesc="I'm onto you..."
 LocPsionicallyInterruptedName="Interrupted!"
+HarbingerShieldLostStr="Shield Lost!"
 
 [RTAbility_MarksmanAbilitySet]
 TimeStopEffectTitle="Greyscaled"
