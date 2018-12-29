@@ -121,7 +121,7 @@ static function X2AbilityTemplate GhostPsiSuite()
 	local X2Effect_StayConcealed				PhantomEffect;
 
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'GhostPsiSuite');
-	Template.IconImage = "img:///RisingTidesContentPackage.PerkIcons.rt_program_shield"; //TODO: Change this
+	Template.IconImage = "img:///RisingTidesContentPackage.PerkIcons.rt_program_shield";
 
 	Template.AbilitySourceName = 'eAbilitySource_Psionic';
 	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_NeverShow;
@@ -520,7 +520,7 @@ static function X2AbilityTemplate Fade()
 	local X2Effect_Persistent		CooldownTrackerEffect;
 
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'Fade');
-	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_phantom";
+	Template.IconImage = "img:///RisingTidesContentPackage.PerkIcons.rt_fade";
 
 	Template.AbilitySourceName = 'eAbilitySource_Psionic';
 	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_NeverShow;
