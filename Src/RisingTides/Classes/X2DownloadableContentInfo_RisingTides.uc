@@ -14,6 +14,7 @@ var config bool bDebuggingEnabled;
 var config int MajorVer;
 var config int MinorVer;
 var config int PatchVer;
+var config bool bShouldRemoveHelmets;
 
 /// <summary>
 /// This method is run if the player loads a saved game that was created prior to this DLC / Mod being installed, and allows the

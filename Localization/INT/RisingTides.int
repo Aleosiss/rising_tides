@@ -68,15 +68,15 @@ LocPromotionPopupText="<Bullet/> Over the Shoulder grants vision of enemy units,
 
 [RTUnwillingConduits RTAbilityTemplate]
 LocFriendlyName="Unwilling Conduits"
-LocLongDescription="Whenever this unit casts a psionic ability, it drains energy from units affected by Over the Shoulder to fuel the action,  reducing the cooldown for each unit affected."
+LocLongDescription="Whenever this unit casts a psionic ability, it drains energy from units affected by Over the Shoulder to fuel the action, reducing the cooldown for each unit affected."
 LocHelpText="Whenever this unit casts a psionic ability, it drains energy from units affected by Over the Shoulder to fuel the action, reducing the cooldown for each unit affected."
 LocFlyOverText="Unwilling Conduits"
 LocPromotionPopupText="<Bullet/> Deals a small amount of damage to enemy and ally alike.<br/><Bullet/> Cooldown will be reduced to a minimum of 1; usable next turn.<br/>"
 
 [RTEchoedAgony RTAbilityTemplate]
 LocFriendlyName="Echoed Agony"
-LocLongDescription="This unit will echo panic attempts that affect to nearby enemies affected by Over the Shoulder."
-LocHelpText="This unit will echo panic attempts that affect to nearby enemies affected by Over the Shoulder."
+LocLongDescription="This unit will echo panic attempts that affect it to nearby enemies affected by Over the Shoulder."
+LocHelpText="This unit will echo panic attempts that affect it to nearby enemies affected by Over the Shoulder."
 LocFlyOverText="Echoed Agony"
 LocPromotionPopupText="<Bullet/> Only affects enemy units.<br/><Bullet/> Feedback counts as a panic source and is much stronger than other sources of panic.<br/>"
 

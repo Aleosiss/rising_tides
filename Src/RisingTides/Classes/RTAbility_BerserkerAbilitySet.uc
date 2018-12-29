@@ -673,7 +673,7 @@ static function X2AbilityTemplate RTPurge() {
 	local X2Effect_Persistent 								VFXEffect;
 
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'RTPurge');
-	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_snapshot";
+	Template.IconImage = "img:///RisingTidesContentPackage.PerkIcons.rt_purge";
 
 	Template.AbilitySourceName = 'eAbilitySource_Psionic';
 	Template.eAbilityIconBehaviorHUD = EAbilityIconBehavior_AlwaysShow;
@@ -732,7 +732,7 @@ static function X2AbilityTemplate RTMentor() {
 	local X2Effect_RemoveEffects			RemoveEffect;
 
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'RTMentor');
-	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_swordSlash"; //TODO: Change this
+	Template.IconImage = "img:///RisingTidesContentPackage.PerkIcons.rt_mentor"; //TODO: Change this
 	Template.AbilitySourceName = 'eAbilitySource_Psionic';
 	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_AlwaysShow;
 	Template.AbilityConfirmSound = "TacticalUI_ActivateAbility";
@@ -887,7 +887,7 @@ static function X2AbilityTemplate RTReprobateWaltz()
 	Template.ShotHUDPriority = class'UIUtilities_Tactical'.const.CLASS_COLONEL_PRIORITY;
 	Template.AbilitySourceName = 'eAbilitySource_Psionic';
 	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_NeverShow;
-	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_reaper";
+	Template.IconImage = "img:///RisingTidesContentPackage.PerkIcons.rt_reprobatewaltz";
 
 	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
 	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
@@ -905,7 +905,7 @@ static function X2AbilityTemplate RTReprobateWaltzIcon()
 	local RTEffect_ReprobateWaltz	Effect;
 
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'RTReprobateWaltzIcon');
-	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_reaper";	 // TODO: THIS
+	Template.IconImage = "img:///RisingTidesContentPackage.PerkIcons.rt_reprobatewaltz";	 // TODO: THIS
 	Template.AbilitySourceName = 'eAbilitySource_Psionic';
 	Template.eAbilityIconBehaviorHUD = EAbilityIconBehavior_NeverShow;
 	Template.Hostility = eHostility_Neutral;
@@ -938,7 +938,7 @@ static function X2AbilityTemplate RTPyroclasticFlow()
 	local X2Effect_Persistent					SOVEffect;
 
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'RTPyroclasticFlow');
-	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_swordSlash";
+	Template.IconImage = "img:///RisingTidesContentPackage.PerkIcons.rt_pyroclasticflow";
 
 	Template.AbilitySourceName = 'eAbilitySource_Perk';
 	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_NeverShow;
@@ -1206,7 +1206,7 @@ static function X2AbilityTemplate RTContainedFury() {
 		local X2Effect_Persistent	Effect;
 
 		`CREATE_X2ABILITY_TEMPLATE(Template, 'RTContainedFury');
-		Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_swordSlash";
+		Template.IconImage = "img:///RisingTidesContentPackage.PerkIcons.rt_containedfury";
 		Template.AbilitySourceName = 'eAbilitySource_Psionic';
 		Template.eAbilityIconBehaviorHUD = EAbilityIconBehavior_NeverShow;
 		Template.Hostility = eHostility_Neutral;
@@ -1293,7 +1293,7 @@ static function X2AbilityTemplate RTUnstableConduit()
 	local X2AbilityTrigger_EventListener	Trigger;
 
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'RTUnstableConduit');
-	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_adventpsiwitch_mindcontrol";
+	Template.IconImage = "img:///RisingTidesContentPackage.PerkIcons.rt_unstableconduit";
 
 	Template.AbilitySourceName = 'eAbilitySource_Psionic';
 	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_NeverShow;
@@ -1336,7 +1336,7 @@ static function X2AbilityTemplate RTUnstableConduitIcon() {
 		local X2Effect_Persistent	Effect;
 
 		`CREATE_X2ABILITY_TEMPLATE(Template, 'RTUnstableConduitIcon');
-		Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_swordSlash";
+		Template.IconImage = "img:///RisingTidesContentPackage.PerkIcons.rt_unstableconduit";
 		Template.AbilitySourceName = 'eAbilitySource_Psionic';
 		Template.eAbilityIconBehaviorHUD = EAbilityIconBehavior_NeverShow;
 		Template.Hostility = eHostility_Neutral;
@@ -1373,7 +1373,7 @@ static function X2AbilityTemplate RTUnstableConduitBurst() {
 	local X2Effect_Persistent							Effect;
 
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'RTUnstableConduitBurst');
-	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_swordSlash"; //TODO: Change this
+	Template.IconImage = "img:///RisingTidesContentPackage.PerkIcons.rt_burst"; //TODO: Change this
 	Template.AbilitySourceName = 'eAbilitySource_Psionic';
 	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_NeverShow;
 	Template.AbilityConfirmSound = "TacticalUI_ActivateAbility";
@@ -1455,7 +1455,7 @@ static function X2AbilityTemplate RTPersistingImages()
 	local RTEffect_GenerateAfterimage AfterEffect;
 
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'RTPersistingImages');
-	Template.IconImage = "img:///RisingTidesContentPackage.PerkIcons.UIPerk_stealth_circle_pi";
+	Template.IconImage = "img:///RisingTidesContentPackage.PerkIcons.rt_persistingimages";
 	Template.AbilitySourceName = 'eAbilitySource_Psionic';
 	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_NeverShow;
 	Template.Hostility = eHostility_Neutral;
@@ -1659,7 +1659,7 @@ static function X2AbilityTemplate RTQueenOfBlades()
 	local X2Effect_Persistent	Effect;
 
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'RTQueenOfBlades');
-		Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_swordSlash";	 // TODO: THIS
+		Template.IconImage = "img:///RisingTidesContentPackage.PerkIcons.rt_queenofblades";	 // TODO: THIS
 		Template.AbilitySourceName = 'eAbilitySource_Psionic';
 		Template.eAbilityIconBehaviorHUD = EAbilityIconBehavior_NeverShow;
 		Template.Hostility = eHostility_Neutral;
@@ -1706,7 +1706,7 @@ static function X2DataTemplate RTShadowStrike()
 
 	Template.AbilitySourceName = 'eAbilitySource_Psionic';
 	Template.eAbilityIconBehaviorHUD = EAbilityIconBehavior_AlwaysShow;
-	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_codex_teleport";
+	Template.IconImage = "img:///RisingTidesContentPackage.PerkIcons.rt_shadowstrike";
 
 	ActionPointCost = new class'X2AbilityCost_ActionPoints';
 	ActionPointCost.iNumPoints = 1;

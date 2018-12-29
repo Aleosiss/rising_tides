@@ -800,6 +800,7 @@ simulated function bool CashOneSmallFavor(XComGameState NewGameState, XComGameSt
 	MissionSite = XComGameState_MissionSite(NewGameState.ModifyStateObject(MissionSite.class, MissionSite.ObjectID));
 	foreach Deployed.Operatives(GhostRef) {
 		GhostTemplateName = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(GhostRef.ObjectID)).GetMyTemplateName();
+		HandleOperativeHelmets(NewGameState);
 		`RTLOG("Adding a " $ GhostTemplateName $ " to the SpecialSoldiers for Mission " $ MissionSite.GeneratedMission.Mission.MissionName);
 		MissionSite.GeneratedMission.Mission.SpecialSoldiers.AddItem(GhostTemplateName);
 	}
@@ -861,6 +862,28 @@ protected function RotateRandomSquadToDeploy() {
 
 	Deployed.bIsDeployed = true;
 	return;
+}
+
+function HandleOperativeHelmets(XComGameState NewGameState) {
+	local XComGameState_Unit OperativeState;
+	local StateObjectReference IteratorRef;
+	local XComGameStateHistory History;
+
+	History = `XCOMHISTORY;
+
+	foreach Master(IteratorRef) {
+		OperativeState = XComGameState_Unit(History.GetGameStateForObjectID(IteratorRef.ObjectID));
+		OperativeState = XComGameState_Unit(NewGameState.ModifyStateObject(class'XComGameState_Unit', OperativeState.ObjectID));
+		if(class'X2DownloadableContentInfo_RisingTides'.default.bShouldRemoveHelmets) {
+			OperativeState.kAppearance.nmHelmet = '';
+		} else {
+			if(OperativeState.kAppearance.iGender == eGender_Female) {
+				OperativeState.kAppearance.nmHelmet = 'ALL_WotC_MamaMEA_Remnant_Heavy_Helmet_F';
+			} else {
+				OperativeState.kAppearance.nmHelmet = 'ALL_WotC_MamaMEA_Remnant_Heavy_Helmet_M';
+			}
+		}
+	}
 }
 
 function XComGameState_Unit GetOperative(string Nickname) {
