@@ -371,6 +371,7 @@ static function X2AbilityTemplate RTTriangulation() {
 
 	`CREATE_X2TEMPLATE(class'RTAbilityTemplate', Template, 'RTTriangulation');
 	Template = CreateOverTheShoulderAbility(Template);
+	Template.IconImage = "img:///RisingTidesContentPackage.PerkIcons.rt_triangulation";
 	Template.AbilitySourceName = 'eAbilitySource_Psionic';
 	Template.AbilityTriggers.Length = 0;
 	Template.AbilityCosts.Length = 0;
@@ -1375,7 +1376,7 @@ static function RTEffect_GuiltyConscience CreateGuiltyConscienceEffect(int Trigg
 	Effect.iTriggerThreshold = TriggerThreshold;
 	Effect.BuildPersistentEffect(2, false, true, false, eGameRule_PlayerTurnBegin); // 2 turn duration means it won't get removed by OTS
 	Effect.DuplicateResponse = eDupe_Refresh;
-	Effect.IconImage = "img:///RisingTidesContentPackage.PerkIcons.UIPerk_panic_overwatch_gc";
+	Effect.IconImage = "img:///RisingTidesContentPackage.PerkIcons.rt_guiltyconscience";
 	Effect.EffectName = default.GuiltyConscienceEffectName;
 	Effect.GuiltyConscienceEventName = default.GuiltyConscienceEventName;
 	Effect.TargetConditions.AddItem(default.PsionicTargetingProperty);
