@@ -1395,7 +1395,7 @@ static function X2AbilityTemplate RTGuiltyConscienceEvent() {
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'RTGuiltyConscienceEvent');
 
 	Template.bDontDisplayInAbilitySummary = true;
-	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_swordSlash";
+	Template.IconImage = "img:///RisingTidesContentPackage.PerkIcons.rt_guiltyconscience";
 	Template.AbilitySourceName = 'eAbilitySource_Psionic';
 	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_NeverShow;
 
