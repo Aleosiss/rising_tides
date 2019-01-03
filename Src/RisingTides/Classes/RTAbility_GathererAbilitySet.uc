@@ -70,6 +70,7 @@ class RTAbility_GathererAbilitySet extends RTAbility_GhostAbilitySet config(Risi
 	var localized string KIPFriendlyDesc;
 	var localized string LocPsionicallyInterruptedName;
 	var localized string HarbingerShieldLostStr;
+	var localized string GuardianAngelEffectDesc;
 
 	var config string KIPIconPath;
 
@@ -98,7 +99,7 @@ static function array<X2DataTemplate> CreateTemplates()
 	Templates.AddItem(RTExtinctionEventPartTwo());
 	Templates.AddItem(RTExtinctionEventPartThree());
 	Templates.AddItem(RTUnwillingConduits());
-	Templates.AddItem(PurePassive('RTUnwillingConduitsIcon', "img:///UILibrary_PerkIcons.UIPerk_swordSlash", false, 'eAbilitySource_Psionic'));
+	Templates.AddItem(PurePassive('RTUnwillingConduitsIcon', "img:///RisingTidesContentPackage.PerkIcons.rt_unwillingconduits", false, 'eAbilitySource_Psionic'));
 	Templates.AddItem(RTDomination());
 	Templates.AddItem(RTTechnopathy());
 	Templates.AddItem(RTConstructTechnopathyHack('RTTechnopathy_Hack'));
@@ -109,7 +110,7 @@ static function array<X2DataTemplate> CreateTemplates()
 	Templates.AddItem(RTCancelTechnopathyHack());
 	Templates.AddItem(RTSibyl());
 	Templates.AddItem(RTEchoedAgony());
-	Templates.AddItem(PurePassive('RTEchoedAgonyIcon', "img:///UILibrary_PerkIcons.UIPerk_swordSlash", false, 'eAbilitySource_Psionic'));
+	Templates.AddItem(PurePassive('RTEchoedAgonyIcon', "img:///RisingTidesContentPackage.PerkIcons.rt_echoedagony", false, 'eAbilitySource_Psionic'));
 	Templates.AddItem(RTCreateEchoedAgonyEffectAbility());
 	Templates.AddItem(RTGuiltyConscience());
 	Templates.AddItem(RTGuiltyConscienceEvent());
@@ -935,7 +936,7 @@ static function X2Effect_DamageImmunity CreateGuardianAngelImmunitiesEffect() {
 
 		Effect = new class'X2Effect_DamageImmunity';
 		Effect.BuildPersistentEffect(1, false, true, false, eGameRule_PlayerTurnEnd);
-		Effect.SetDisplayInfo(ePerkBuff_Bonus, "Guardian Angel", "Get up.", "img:///UILibrary_PerkIcons.UIPerk_swordSlash", true,, 'eAbilitySource_Psionic');
+		Effect.SetDisplayInfo(ePerkBuff_Bonus, default.GuardianAngelHealText, default.GuardianAngelEffectDesc, "img:///RisingTidesContentPackage.PerkIcons.UIPerk_revive_overwatch_ga", true,, 'eAbilitySource_Psionic');
 		// Guardian Angel will not stop hard CC, but cleanse it next turn.
 		Effect.ImmuneTypes.AddItem(class'X2AbilityTemplateManager'.default.DisorientedName);
 		Effect.ImmuneTypes.AddItem(class'X2AbilityTemplateManager'.default.ConfusedName);
@@ -995,7 +996,7 @@ static function X2AbilityTemplate RTRudimentaryCreaturesEvent() {
 
 	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_NeverShow;
 	Template.Hostility = eHostility_Neutral;
-	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_swordSlash";
+	Template.IconImage = "img:///RisingTidesContentPackage.PerkIcons.UIPerk_overwatch_defense2_rc";
 	Template.AbilitySourceName = 'eAbilitySource_Psionic';
 
 	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;

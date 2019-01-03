@@ -211,7 +211,7 @@ static function X2AbilityTemplate BumpInTheNightStealthListener()
 	local X2AbilityTrigger_EventListener	Trigger;
 
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'BumpInTheNightStealthListener');
-	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_swordSlash";
+	Template.IconImage = "img:///RisingTidesContentPackage.PerkIcons.UIPerk_knife_adrenaline_bloodlust";
 	Template.AbilitySourceName = 'eAbilitySource_Psionic';
 	Template.eAbilityIconBehaviorHUD = EAbilityIconBehavior_NeverShow;
 	Template.Hostility = eHostility_Neutral;
