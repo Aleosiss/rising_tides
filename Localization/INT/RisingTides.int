@@ -116,6 +116,7 @@ BloodlustEffectTitle="Bloodlust"
 
 [RTAbility_GathererAbilitySet]
 GuardianAngelHealText="Guardian Angel"
+GuardianAngelEffectDesc="Get up."
 KIPFriendlyName="Knowledge Is Power"
 KIPFriendlyDesc="I'm onto you..."
 LocPsionicallyInterruptedName="Interrupted!"
