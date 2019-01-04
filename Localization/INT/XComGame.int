@@ -813,6 +813,20 @@ AbilityAvailabilityStrings[95]="There are too many stacks for the ability to fun
 AbilityAvailabilityStrings[96]="The effect was not found."
 
 ;----------------------------------------------------------------------------------------------------------------------------
+[RTUnwaveringResolve X2AbilityTemplate]
+LocFriendlyName="Unwavering Resolve"
+LocLongDescription="When this unit's focus reaches 0, gain another point of focus."
+LocHelpText="When this unit's focus reaches 0, gain another point of focus."
+LocFlyOverText="Unwavering Resolve"
+LocPromotionPopupText=""
+
+[RTUnwaveringResolveIcon X2AbilityTemplate]
+LocFriendlyName="Unwavering Resolve"
+LocLongDescription="When this unit's focus reaches 0, gain another point of focus."
+LocHelpText="When this unit's focus reaches 0, gain another point of focus."
+LocFlyOverText="Unwavering Resolve"
+LocPromotionPopupText=""
+;----------------------------------------------------------------------------------------------------------------------------
 [RTProfessionalsHaveStandards X2AbilityTemplate]
 LocFriendlyName="Old World Training"
 LocLongDescription="Old World training techniques improve the soldier's ability to remain concealed at a distance."
@@ -1130,4 +1144,22 @@ strCharacterName="Templar Bishop"
 
 [RTTemplarWarrior_M3 X2CharacterTemplate]
 strCharacterName="Templar Prior"
+
+[RTTemplarScholar_M1 X2CharacterTemplate]
+strCharacterName="Templar Disciple"
+
+[RTTemplarScholar_M2 X2CharacterTemplate]
+strCharacterName="Templar Acolyte"
+
+[RTTemplarScholar_M3 X2CharacterTemplate]
+strCharacterName="Templar Advisor"
+
+[RTTemplarPeon_M1 X2CharacterTemplate]
+strCharacterName="Templar Intiate"
+
+[RTTemplarPeon_M2 X2CharacterTemplate]
+strCharacterName="Templar Follower"
+
+[RTTemplarPeon_M3 X2CharacterTemplate]
+strCharacterName="Templar Idealist"
 

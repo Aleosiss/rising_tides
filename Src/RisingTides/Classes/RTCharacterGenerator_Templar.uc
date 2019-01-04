@@ -17,6 +17,8 @@ var config array<Name> FemaleTemplarRightArms;
 var config array<Name> FemaleTemplarThighs;
 var config array<Name> FemaleTemplarTorsoDecos;
 var config array<Name> FemaleTemplarTorsos;
+var config array<Name> FemaleTemplarLeftArmDecos;
+var config array<Name> FemaleTemplarRightArmDecos;
 
 var config array<Name> MaleTemplarHelmets;
 var config array<Name> MaleTemplarLeftArms;
@@ -25,37 +27,42 @@ var config array<Name> MaleTemplarRightArms;
 var config array<Name> MaleTemplarThighs;
 var config array<Name> MaleTemplarTorsoDecos;
 var config array<Name> MaleTemplarTorsos;
+var config array<Name> MaleTemplarLeftArmDecos;
+var config array<Name> MaleTemplarRightArmDecos;
 
 var config array<Name> FemaleScholarHelmets;
+var config array<Name> FemaleScholarTorsoDecos;
 
 var config array<Name> MaleScholarHelmets;
+var config array<Name> MaleScholarTorsoDecos;
 
 function TSoldier CreateTSoldier( optional name CharacterTemplateName, optional EGender eForceGender, optional name nmCountry = '', optional int iRace = -1, optional name ArmorName ) {
 	switch(CharacterTemplateName) {
 		case 'RTTemplarWarrior_M1':
 		case 'RTTemplarWarrior_M2':
 		case 'RTTemplarWarrior_M3':
-			return CreateTemplarWarrior(CharacterTemplateName, eForceGender, nmCountry, iRace, ArmorName, false);
+			return CreateTemplar(CharacterTemplateName, eForceGender, nmCountry, iRace, ArmorName, false);
 		case 'RTTemplarPeon_M1':
 		case 'RTTemplarPeon_M2':
 		case 'RTTemplarPeon_M3':
 			return CreateTemplarPeon(CharacterTemplateName, eForceGender, nmCountry, iRace, ArmorName);
 		case 'RTTemplarScholar_M1':
-		case 'RTTemplarScholar_M1':
-		case 'RTTemplarScholar_M1':
-			return CreateTemplarWarrior(CharacterTemplateName, eForceGender, nmCountry, iRace, ArmorName, true);
+		case 'RTTemplarScholar_M2':
+		case 'RTTemplarScholar_M3':
+			return CreateTemplar(CharacterTemplateName, eForceGender, nmCountry, iRace, ArmorName, true);
 		default:
 			`RTLOG("RTCharacterGenerator_Templar Got an invalid CharacterTemplateName, returning a TemplarWarrior!", true, false);
-			return CreateTemplarWarrior(CharacterTemplateName, eForceGender, nmCountry, iRace, ArmorName);
+			return CreateTemplar(CharacterTemplateName, eForceGender, nmCountry, iRace, ArmorName);
 	}
 }
 
-function TSoldier CreateTemplarWarrior( optional name CharacterTemplateName, optional EGender eForceGender, optional name nmCountry = '', optional int iRace = -1, optional name ArmorName, optional bool bIsScholar )
+function TSoldier CreateTemplar( optional name CharacterTemplateName, optional EGender eForceGender, optional name nmCountry = '', optional int iRace = -1, optional name ArmorName, optional bool bIsScholar )
 {
 	local XComLinearColorPalette HairPalette;
 	local X2SimpleBodyPartFilter BodyPartFilter;
 	local X2CharacterTemplate CharacterTemplate;
 	local TAppearance DefaultAppearance;
+	local int iArmDecoSync;
 
 	kSoldier.kAppearance = DefaultAppearance;	
 	CharacterTemplate = SetCharacterTemplate(CharacterTemplateName, ArmorName);
@@ -81,8 +88,14 @@ function TSoldier CreateTemplarWarrior( optional name CharacterTemplateName, opt
 		kSoldier.kAppearance.nmTorsoDeco = default.FemaleTemplarTorsoDecos[`SYNC_RAND(FemaleTemplarTorsoDecos.Length)];
 		kSoldier.kAppearance.nmThighs = default.FemaleTemplarThighs[`SYNC_RAND(FemaleTemplarThighs.Length)];
 
+		iArmDecoSync = `SYNC_RAND(FemaleTemplarLeftArmDecos.Length);
+		kSoldier.kAppearance.nmLeftArmDeco = default.FemaleTemplarLeftArmDecos[iArmDecoSync];
+		kSoldier.kAppearance.nmLeftArmDeco = default.FemaleTemplarRightArmDecos[iArmDecoSync];
+
 		if(bIsScholar) {
 			kSoldier.kAppearance.nmHelmet = default.FemaleScholarHelmets[`SYNC_RAND(FemaleScholarHelmets.Length)];
+			kSoldier.kAppearance.nmHelmet = default.FemaleScholarTorsoDecos[`SYNC_RAND(FemaleScholarTorsoDecos.Length)];
+			
 		}
 	} else {
 		kSoldier.kAppearance.nmHelmet = default.MaleTemplarHelmets[`SYNC_RAND(MaleTemplarHelmets.Length)];
@@ -93,8 +106,13 @@ function TSoldier CreateTemplarWarrior( optional name CharacterTemplateName, opt
 		kSoldier.kAppearance.nmTorsoDeco = default.MaleTemplarTorsoDecos[`SYNC_RAND(MaleTemplarTorsoDecos.Length)];
 		kSoldier.kAppearance.nmThighs = default.MaleTemplarThighs[`SYNC_RAND(MaleTemplarThighs.Length)];
 
+		iArmDecoSync = `SYNC_RAND(FemaleTemplarLeftArmDecos.Length);
+		kSoldier.kAppearance.nmLeftArmDeco = default.MaleTemplarLeftArmDecos[iArmDecoSync];
+		kSoldier.kAppearance.nmLeftArmDeco = default.MaleTemplarRightArmDecos[iArmDecoSync];
+
 		if(bIsScholar) {
 			kSoldier.kAppearance.nmHelmet = default.MaleScholarHelmets[`SYNC_RAND(MaleScholarHelmets.Length)];
+			kSoldier.kAppearance.nmHelmet = default.MaleScholarTorsoDecos[`SYNC_RAND(MaleScholarTorsoDecos.Length)];
 		}
 	}
 

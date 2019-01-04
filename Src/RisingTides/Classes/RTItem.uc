@@ -530,7 +530,8 @@ static function X2DataTemplate CreateRTTemplarGauntlet_Left(name TemplateName)
 
 	TemplateName = name(TemplateName $ '_Left');
 	`CREATE_X2TEMPLATE(class'X2WeaponTemplate', Template, TemplateName);
-
+	Template.ItemCat = 'weapon';
+	Template.WeaponCat = 'gauntlet';
 	Template.InventorySlot = eInvSlot_TertiaryWeapon;
 	Template.bUseArmorAppearance = true;
 	Template.iRadius = 1;

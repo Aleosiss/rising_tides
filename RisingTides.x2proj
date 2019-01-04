@@ -612,6 +612,7 @@
     <Content Include="Config\XComContent.ini" />
     <Content Include="Content\GameUnit_GenericHumanHostile.upk" />
     <Content Include="Config\XComGameCore.ini" />
+    <Content Include="Src\RisingTides\Classes\RTAbility_TemplarAbilitySet.uc" />
   </ItemGroup>
   <Import Project="$(MSBuildLocalExtensionPath)\XCOM2.targets" />
 </Project>

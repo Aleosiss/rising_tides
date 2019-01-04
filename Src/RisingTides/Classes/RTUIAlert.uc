@@ -70,14 +70,14 @@ simulated function BuildTemplarAmbushAlert()
 	}
 	
 	BuildChosenSplashAlert(
-		strTemplarAmbushHeader,																									// header
+		strTemplarAmbushHeader,																								// header
 		strTemplarAmbushStr1,																								// chosen type line
 		strTemplarAmbushStr2,																								// chosen name line
 		strTemplarAmbushStr3,																								// chosen nick line
-		class'UIUtilities_Text'.static.GetColoredText(strTemplarAmbushDescription, eUIState_Header),							// body of the message
-		m_strChosenAmbushImage,																						// the picture
+		class'UIUtilities_Text'.static.GetColoredText(strTemplarAmbushDescription, eUIState_Header),						// body of the message
+		m_strChosenAmbushImage,																								// the picture
 		strTemplarAmbushBegin,																								// confirm string
-		"");																										// cancel string
+		"");																												// cancel string
 
 	BuildChosenIcon(FactionState.GetFactionIcon());
 }
