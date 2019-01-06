@@ -66,7 +66,7 @@ simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffe
 simulated function bool OnEffectTicked(const out EffectAppliedData ApplyEffectParameters, XComGameState_Effect kNewEffectState, XComGameState NewGameState, bool FirstApplication, XComGameState_Player Player) {
 	local XComGameState_Unit TargetUnitState;
 	local XComGameStateHistory History;
-	local RTGameState_SquadViewer ViewerState, OldViewerState;
+	local RTGameState_SquadViewer ViewerState/*, OldViewerState*/;
 	local float fViewRadius;
 	local TTile ViewerTile;
 
@@ -193,7 +193,7 @@ simulated function AddX2ActionsForVisualization_Tick(XComGameState VisualizeGame
 simulated function AddX2ActionsForVisualization_Removed(XComGameState VisualizeGameState, out VisualizationActionMetadata ActionMetadata, const name EffectApplyResult, XComGameState_Effect RemovedEffect) {
 	local RTGameState_SquadViewer SquadViewer;
 	local X2Action_AbilityPerkDurationEnd PerkEnded;
-	local X2Action_ForceUnitVisiblity ForceVisiblityAction_Hide, ForceVisiblityAction_Reset;
+	//local X2Action_ForceUnitVisiblity ForceVisiblityAction_Hide, ForceVisiblityAction_Reset;
 	local RTAction_ForceVisibility RTForceVisibilityAction_Reset;
 	local XComGameState_Unit EffectedUnitState;
 

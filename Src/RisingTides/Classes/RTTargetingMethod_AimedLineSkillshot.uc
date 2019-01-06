@@ -22,7 +22,6 @@ function Init(AvailableAction InAction, int NewTargetIndex)
 	local X2AbilityTemplate AbilityTemplate;
 	local float TileLength;
 
-
 	super.Init(InAction, NewTargetIndex);
 
 	// Make sure we have targets of some kind.
@@ -31,7 +30,7 @@ function Init(AvailableAction InAction, int NewTargetIndex)
 	// select the target before setting up the midpoint cam so we know where we are midpointing to
 	DirectSetTarget(NewTargetIndex);
 
-        AbilityTemplate = Ability.GetMyTemplate( );
+	AbilityTemplate = Ability.GetMyTemplate( );
 	WorldData = `XWORLD;
 	FiringTile = UnitState.TileLocation;
 	FiringLocation = WorldData.GetPositionFromTileCoordinates(UnitState.TileLocation);
@@ -154,7 +153,7 @@ function Canceled()
 	FiringUnit.IdleStateMachine.bTargeting = false;
 	NotifyTargetTargeted(false);
 
-        AOEMeshActor.Destroy();
+	AOEMeshActor.Destroy();
 	ClearTargetedActors();
 	LineActor.Destroy();
 
@@ -228,7 +227,6 @@ function DirectSetTarget(int TargetIndex)
 	TacticalHud = Pres.GetTacticalHUD();
 	TacticalHud.TargetEnemy(GetTargetedObjectID());
 
-
 	FiringUnit.IdleStateMachine.bTargeting = true;
 	FiringUnit.IdleStateMachine.CheckForStanceUpdate();
 
@@ -250,7 +248,7 @@ function DirectSetTarget(int TargetIndex)
 	bFriendlyFireAgainstObjects = false;
 	bFriendlyFireAgainstUnits = false;
 
-    NewTargetLocation = WorldData.GetPositionFromTileCoordinates(XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(GetTargetedObjectID())).TileLocation);
+	NewTargetLocation = WorldData.GetPositionFromTileCoordinates(XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(GetTargetedObjectID())).TileLocation);
 	//NewTargetLocation = WorldData.GetPositionFromTileCoordinates(TargetTile);
 	NewTargetLocation.Z = WorldData.GetFloorZForPosition(NewTargetLocation, true) + class'XComWorldData'.const.WORLD_HalfFloorHeight;
 
@@ -276,7 +274,7 @@ function DirectSetTarget(int TargetIndex)
 	MarkTargetedActors(CurrentlyMarkedTargets, (!AbilityIsOffensive) ? FiringUnit.GetTeam() : eTeam_None);
 	DrawAOETiles(Tiles);
 	AOEMeshActor.SetHidden(false);
-        if (LineActor != none)
+		if (LineActor != none)
 	{
 		ShooterToTarget = NewTargetLocation - FiringLocation;
 		LineRotator = rotator( ShooterToTarget );

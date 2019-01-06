@@ -92,7 +92,7 @@ static function array<X2DataTemplate> CreateTemplates()
 	Templates.AddItem(TwitchReaction());
 	Templates.AddItem(TwitchReactionShot());
 	Templates.AddItem(LinkedIntelligence());
-	Templates.AddItem(PsionicSurge());								     	// animation
+	Templates.AddItem(PsionicSurge());								   	// animation
 	Templates.AddItem(EyeInTheSky());
 	Templates.AddItem(HeatChannel());										// animation
 	Templates.AddItem(HeatChannelIcon());
@@ -182,7 +182,7 @@ static function X2AbilityTemplate ScopedAndDropped()
 	local X2AbilityCost_ActionPoints		ActionPointCost;
 	local X2AbilityCost_Ammo				AmmoCost;
 	local X2AbilityToHitCalc_StandardAim    ToHitCalc;
-	local X2Condition_Visibility            TargetVisibilityCondition;
+	//local X2Condition_Visibility            TargetVisibilityCondition;
 	local RTCondition_VisibleToPlayer	VisibleToPlayerCondition;
 	local array<name>                       SkipExclusions;
 	local X2Effect_Knockback				KnockbackEffect;
@@ -374,7 +374,7 @@ static function X2AbilityTemplate RTOverwatchShot()
 	local X2AbilityToHitCalc_StandardAim    StandardAim;
 	local X2Condition_UnitProperty          ShooterCondition;
 	local X2AbilityTarget_Single            SingleTarget;
-	local X2AbilityTrigger_Event	        Trigger;
+	local X2AbilityTrigger_Event	      Trigger;
 	local array<name>                       SkipExclusions;
 	local X2Condition_Visibility            TargetVisibilityCondition;
 	local RTCondition_VisibleToPlayer VisibleToPlayerCondition;
@@ -567,7 +567,7 @@ static function X2AbilityTemplate RTAggression()
 
 	//Icon Properties
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'RTAggression');
-	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_aggression";
+	Template.IconImage = "img:///RisingTidesContentPackage.PerkIcons.rt_aggression";
 
 	Template.AbilitySourceName = 'eAbilitySource_Psionic';
 	Template.eAbilityIconBehaviorHUD = EAbilityIconBehavior_NeverShow;
@@ -778,7 +778,7 @@ static function X2AbilityTemplate SixOClock()
 	local RTEffect_SixOClock            PersistentEffect;
 
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'SixOClock');
-	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_tacticalsense";
+	Template.IconImage = "img:///RisingTidesContentPackage.PerkIcons.rt_sixoclock";
 
 	Template.AbilitySourceName = 'eAbilitySource_Psionic';
 	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_NeverShow;
@@ -1056,7 +1056,7 @@ static function X2AbilityTemplate SovereignEffect()
 {
 	local X2AbilityTemplate						Template;
 	local X2Condition_UnitProperty				MultiUnitPropertyCondition;
-	local X2Effect_Panicked				        PanicEffect;
+	local X2Effect_Panicked				      PanicEffect;
 	local X2AbilityCooldown						Cooldown;
 	 local X2AbilityTrigger_EventListener		EventListener;
 	local X2AbilityMultiTarget_Radius			MultiTarget;
@@ -1987,7 +1987,7 @@ static function X2AbilityTemplate EyeInTheSky()
 
 	//Icon Properties
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'EyeInTheSky');
-	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_overwatch";
+	Template.IconImage = "img:///RisingTidesContentPackage.PerkIcons.rt_eyeinthesky";
 
 	Template.AbilitySourceName = 'eAbilitySource_Perk';
 	Template.eAbilityIconBehaviorHUD = EAbilityIconBehavior_NeverShow;
@@ -2121,8 +2121,8 @@ static function X2AbilityTemplate Harbinger()
 	local X2Condition_UnitProperty	TargetCondition;
 
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'Harbinger');
-	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_adventpsiwitch_mindcontrol";
-
+	Template.IconImage = "img:///RisingTidesContentPackage.PerkIcons.rt_assumingdirectcontrol";
+	
 	Template.AbilitySourceName = 'eAbilitySource_Psionic';
 	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_ShowIfAvailable;
 	Template.ConcealmentRule = eConceal_Always;
@@ -2208,7 +2208,7 @@ simulated function OnHarbingerShieldRemoved_BuildVisualization(XComGameState Vis
 	if (XGUnit(ActionMetadata.VisualizeActor).IsAlive())
 	{
 		SoundAndFlyOver = X2Action_PlaySoundAndFlyOver(class'X2Action_PlaySoundAndFlyOver'.static.AddToVisualizationTree(ActionMetadata, VisualizeGameState.GetContext(), false, ActionMetadata.LastActionAdded));
-		SoundAndFlyOver.SetSoundAndFlyOverParameters(None, "Shield Broken", '', eColor_Bad, , 0.75, true);
+		SoundAndFlyOver.SetSoundAndFlyOverParameters(None, class'RTAbility_GathererAbilitySet'.default.HarbingerShieldLostStr, '', eColor_Bad, , 0.75, true);
 	}
 }
 
@@ -2526,7 +2526,7 @@ static function X2AbilityTemplate RTOverflowBarrier()
 	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
 	//Template.BuildVisualizationFn = Shielded_BuildVisualization;
 	Template.bSkipFireAction = true;
-	   Template.bShowActivation = true;
+	 Template.bShowActivation = true;
 
 	Template.BuildVisualizationFn = OverflowShielded_BuildVisualization;
 	Template.CinescriptCameraType = "AdvShieldBearer_EnergyShieldArmor";

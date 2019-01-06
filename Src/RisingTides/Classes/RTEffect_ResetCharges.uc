@@ -1,7 +1,7 @@
 class RTEffect_ResetCharges extends X2Effect;
 
 var name AbilityToReset;
-var int BaseCharges;		    
+var int BaseCharges;		  
 
 simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffectParameters, XComGameState_BaseObject kNewTargetState, XComGameState NewGameState, XComGameState_Effect NewEffectState)
 {

@@ -67,251 +67,246 @@ protected function InitializeAbilityForActivation(out XComGameState_Ability Abil
 
 // EffectAddedBuildVisualizationFn
 function EffectAddedBuildVisualizationFn (XComGameState VisualizeGameState) {
-  local VisualizationActionMetadata SourceMetadata;
-  local VisualizationActionMetadata TargetMetadata;
-  local XComGameStateHistory History;
-  local X2VisualizerInterface VisualizerInterface;
-  local XComGameState_Effect EffectState;
-  local XComGameState_BaseObject EffectTarget;
-  local XComGameState_BaseObject EffectSource;
-  local X2Effect_Persistent EffectTemplate;
-  local int i;
+	local VisualizationActionMetadata SourceMetadata;
+	local VisualizationActionMetadata TargetMetadata;
+	local XComGameStateHistory History;
+	local X2VisualizerInterface VisualizerInterface;
+	local XComGameState_Effect EffectState;
+	local XComGameState_BaseObject EffectTarget;
+	local XComGameState_BaseObject EffectSource;
+	local X2Effect_Persistent EffectTemplate;
+	local int i;
 
-  local XComGameState AssociatedState;
-  local array<StateObjectReference> AddedEffects;
+	local XComGameState AssociatedState;
+	local array<StateObjectReference> AddedEffects;
 
 
-  History = `XCOMHISTORY;
+	History = `XCOMHISTORY;
 
-  AddedEffects = EffectsAddedList;
-  AssociatedState = VisualizeGameState;
+	AddedEffects = EffectsAddedList;
+	AssociatedState = VisualizeGameState;
 
-  for (i = 0; i < AddedEffects.Length; ++i)
-  {
-	EffectState = XComGameState_Effect(History.GetGameStateForObjectID(AddedEffects[i].ObjectID));
-	if (EffectState != none)
+	for (i = 0; i < AddedEffects.Length; ++i)
 	{
-	  EffectSource = History.GetGameStateForObjectID(EffectState.ApplyEffectParameters.SourceStateObjectRef.ObjectID);
-	  EffectTarget = History.GetGameStateForObjectID(EffectState.ApplyEffectParameters.TargetStateObjectRef.ObjectID);
-
-	  if (EffectTarget != none)
-	  {
-		TargetMetadata.VisualizeActor  = History.GetVisualizer(EffectTarget.ObjectID);
-		VisualizerInterface = X2VisualizerInterface(TargetMetadata.VisualizeActor );
-		if (TargetMetadata.VisualizeActor  != none)
+		EffectState = XComGameState_Effect(History.GetGameStateForObjectID(AddedEffects[i].ObjectID));
+		if (EffectState != none)
 		{
-		  History.GetCurrentAndPreviousGameStatesForObjectID(EffectTarget.ObjectID, TargetMetadata.StateObject_OldState, TargetMetadata.StateObject_NewState, eReturnType_Reference, AssociatedState.HistoryIndex);
-		  if (TargetMetadata.StateObject_NewState == none)
-		  TargetMetadata.StateObject_NewState = TargetMetadata.StateObject_OldState;
+			EffectSource = History.GetGameStateForObjectID(EffectState.ApplyEffectParameters.SourceStateObjectRef.ObjectID);
+			EffectTarget = History.GetGameStateForObjectID(EffectState.ApplyEffectParameters.TargetStateObjectRef.ObjectID);
 
-		  if (VisualizerInterface != none)
-		  VisualizerInterface.BuildAbilityEffectsVisualization(AssociatedState, TargetMetadata);
+			if (EffectTarget != none)
+			{
+				TargetMetadata.VisualizeActor = History.GetVisualizer(EffectTarget.ObjectID);
+				VisualizerInterface = X2VisualizerInterface(TargetMetadata.VisualizeActor );
+				if (TargetMetadata.VisualizeActor != none)
+				{
+					History.GetCurrentAndPreviousGameStatesForObjectID(EffectTarget.ObjectID, TargetMetadata.StateObject_OldState, TargetMetadata.StateObject_NewState, eReturnType_Reference, AssociatedState.HistoryIndex);
+					if (TargetMetadata.StateObject_NewState == none)
+					TargetMetadata.StateObject_NewState = TargetMetadata.StateObject_OldState;
 
-		  EffectTemplate = EffectState.GetX2Effect();
-		  EffectTemplate.AddX2ActionsForVisualization(AssociatedState, TargetMetadata, 'AA_Success');
+					if (VisualizerInterface != none)
+					VisualizerInterface.BuildAbilityEffectsVisualization(AssociatedState, TargetMetadata);
 
+					EffectTemplate = EffectState.GetX2Effect();
+					EffectTemplate.AddX2ActionsForVisualization(AssociatedState, TargetMetadata, 'AA_Success');
+				}
+
+				if (EffectTarget.ObjectID == EffectSource.ObjectID)
+				{
+					SourceMetadata = TargetMetadata;
+				}
+
+				SourceMetadata.VisualizeActor = History.GetVisualizer(EffectSource.ObjectID);
+				if (SourceMetadata.VisualizeActor != none)
+				{
+					History.GetCurrentAndPreviousGameStatesForObjectID(EffectSource.ObjectID, SourceMetadata.StateObject_OldState, SourceMetadata.StateObject_NewState, eReturnType_Reference, AssociatedState.HistoryIndex);
+					if (SourceMetadata.StateObject_NewState == none)
+						SourceMetadata.StateObject_NewState = SourceMetadata.StateObject_OldState;
+
+					EffectTemplate.AddX2ActionsForVisualizationSource(AssociatedState, SourceMetadata, 'AA_Success');
+				}
+			}
 		}
-
-		if (EffectTarget.ObjectID == EffectSource.ObjectID)
-		{
-		  SourceMetadata = TargetMetadata;
-		}
-
-		SourceMetadata.VisualizeActor  = History.GetVisualizer(EffectSource.ObjectID);
-		if (SourceMetadata.VisualizeActor  != none)
-		{
-		  History.GetCurrentAndPreviousGameStatesForObjectID(EffectSource.ObjectID, SourceMetadata.StateObject_OldState, SourceMetadata.StateObject_NewState, eReturnType_Reference, AssociatedState.HistoryIndex);
-		  if (SourceMetadata.StateObject_NewState == none)
-		  SourceMetadata.StateObject_NewState = SourceMetadata.StateObject_OldState;
-
-		  EffectTemplate.AddX2ActionsForVisualizationSource(AssociatedState, SourceMetadata, 'AA_Success');
-
-		}
-
-	  }
 	}
-  }
 }
 
 // EffectRemovedBuildVisualizationFn
 function EffectRemovedBuildVisualizationFn(XComGameState VisualizeGameState) {
-  local VisualizationActionMetadata SourceMetadata;
-  local VisualizationActionMetadata TargetMetadata;
+	local VisualizationActionMetadata SourceMetadata;
+	local VisualizationActionMetadata TargetMetadata;
 
-  local XComGameStateHistory History;
-  local X2VisualizerInterface VisualizerInterface;
-  local XComGameState_Effect EffectState;
-  local XComGameState_BaseObject EffectTarget;
-  local XComGameState_BaseObject EffectSource;
-  local X2Effect_Persistent EffectTemplate;
-  local int i;
+	local XComGameStateHistory History;
+	local X2VisualizerInterface VisualizerInterface;
+	local XComGameState_Effect EffectState;
+	local XComGameState_BaseObject EffectTarget;
+	local XComGameState_BaseObject EffectSource;
+	local X2Effect_Persistent EffectTemplate;
+	local int i;
 
-  local XComGameState AssociatedState;
-  local array<StateObjectReference> RemovedEffects;
+	local XComGameState AssociatedState;
+	local array<StateObjectReference> RemovedEffects;
 
-  History = `XCOMHISTORY;
+	History = `XCOMHISTORY;
 
-  RemovedEffects = EffectsRemovedList;
-  AssociatedState = VisualizeGameState;
+	RemovedEffects = EffectsRemovedList;
+	AssociatedState = VisualizeGameState;
 
-  for (i = 0; i < RemovedEffects.Length; ++i)
-  {
-	EffectState = XComGameState_Effect(History.GetGameStateForObjectID(RemovedEffects[i].ObjectID));
-	if (EffectState != none)
+	for (i = 0; i < RemovedEffects.Length; ++i)
 	{
-	  EffectSource = History.GetGameStateForObjectID(EffectState.ApplyEffectParameters.SourceStateObjectRef.ObjectID);
-	  EffectTarget = History.GetGameStateForObjectID(EffectState.ApplyEffectParameters.TargetStateObjectRef.ObjectID);
-
-	  if (EffectTarget != none)
-	  {
-		TargetMetadata.VisualizeActor  = History.GetVisualizer(EffectTarget.ObjectID);
-		VisualizerInterface = X2VisualizerInterface(TargetMetadata.VisualizeActor);
-		if (TargetMetadata.VisualizeActor  != none)
+		EffectState = XComGameState_Effect(History.GetGameStateForObjectID(RemovedEffects[i].ObjectID));
+		if (EffectState != none)
 		{
-		  History.GetCurrentAndPreviousGameStatesForObjectID(EffectTarget.ObjectID, TargetMetadata.StateObject_OldState, TargetMetadata.StateObject_NewState, eReturnType_Reference, AssociatedState.HistoryIndex);
-		  if (TargetMetadata.StateObject_NewState == none)
-		  TargetMetadata.StateObject_NewState = TargetMetadata.StateObject_OldState;
+			EffectSource = History.GetGameStateForObjectID(EffectState.ApplyEffectParameters.SourceStateObjectRef.ObjectID);
+			EffectTarget = History.GetGameStateForObjectID(EffectState.ApplyEffectParameters.TargetStateObjectRef.ObjectID);
 
-		  if (VisualizerInterface != none)
-		  VisualizerInterface.BuildAbilityEffectsVisualization(AssociatedState, TargetMetadata);
+			if (EffectTarget != none)
+			{
+				TargetMetadata.VisualizeActor = History.GetVisualizer(EffectTarget.ObjectID);
+				VisualizerInterface = X2VisualizerInterface(TargetMetadata.VisualizeActor);
+				if (TargetMetadata.VisualizeActor != none)
+				{
+					History.GetCurrentAndPreviousGameStatesForObjectID(EffectTarget.ObjectID, TargetMetadata.StateObject_OldState, TargetMetadata.StateObject_NewState, eReturnType_Reference, AssociatedState.HistoryIndex);
+					if (TargetMetadata.StateObject_NewState == none)
+						TargetMetadata.StateObject_NewState = TargetMetadata.StateObject_OldState;
 
-		  EffectTemplate = EffectState.GetX2Effect();
-		  EffectTemplate.AddX2ActionsForVisualization_Removed(AssociatedState, TargetMetadata, 'AA_Success', EffectState);
+					if (VisualizerInterface != none)
+						VisualizerInterface.BuildAbilityEffectsVisualization(AssociatedState, TargetMetadata);
 
+					EffectTemplate = EffectState.GetX2Effect();
+					EffectTemplate.AddX2ActionsForVisualization_Removed(AssociatedState, TargetMetadata, 'AA_Success', EffectState);
+
+				}
+
+				if (EffectTarget.ObjectID == EffectSource.ObjectID)
+				{
+					SourceMetadata = TargetMetadata;
+				}
+
+				SourceMetadata.VisualizeActor = History.GetVisualizer(EffectSource.ObjectID);
+				if (SourceMetadata.VisualizeActor != none)
+				{
+					History.GetCurrentAndPreviousGameStatesForObjectID(EffectSource.ObjectID, SourceMetadata.StateObject_OldState, SourceMetadata.StateObject_NewState, eReturnType_Reference, AssociatedState.HistoryIndex);
+					if (SourceMetadata.StateObject_NewState == none)
+						SourceMetadata.StateObject_NewState = SourceMetadata.StateObject_OldState;
+
+					EffectTemplate.AddX2ActionsForVisualization_RemovedSource(AssociatedState, SourceMetadata, 'AA_Success', EffectState);
+				}
+			}
 		}
-
-		if (EffectTarget.ObjectID == EffectSource.ObjectID)
-		{
-		  SourceMetadata = TargetMetadata;
-		}
-
-		SourceMetadata.VisualizeActor  = History.GetVisualizer(EffectSource.ObjectID);
-		if (SourceMetadata.VisualizeActor  != none)
-		{
-		  History.GetCurrentAndPreviousGameStatesForObjectID(EffectSource.ObjectID, SourceMetadata.StateObject_OldState, SourceMetadata.StateObject_NewState, eReturnType_Reference, AssociatedState.HistoryIndex);
-		  if (SourceMetadata.StateObject_NewState == none)
-		  SourceMetadata.StateObject_NewState = SourceMetadata.StateObject_OldState;
-
-		  EffectTemplate.AddX2ActionsForVisualization_RemovedSource(AssociatedState, SourceMetadata, 'AA_Success', EffectState);
-		}
-	  }
 	}
-  }
 }
 
 // EffectsModifiedBuildVisualizationFn
 function EffectsModifiedBuildVisualizationFn(XComGameState VisualizeGameState) {
-  local VisualizationActionMetadata SourceMetadata;
-  local VisualizationActionMetadata TargetMetadata;
-  local XComGameStateHistory History;
-  local X2VisualizerInterface VisualizerInterface;
-  local XComGameState_Effect EffectState;
-  local XComGameState_BaseObject EffectTarget;
-  local XComGameState_BaseObject EffectSource;
-  local X2Effect_Persistent EffectTemplate;
-  local int i;
+	local VisualizationActionMetadata SourceMetadata;
+	local VisualizationActionMetadata TargetMetadata;
+	local XComGameStateHistory History;
+	local X2VisualizerInterface VisualizerInterface;
+	local XComGameState_Effect EffectState;
+	local XComGameState_BaseObject EffectTarget;
+	local XComGameState_BaseObject EffectSource;
+	local X2Effect_Persistent EffectTemplate;
+	local int i;
 
-  local XComGameState AssociatedState;
-  local array<StateObjectReference> RemovedEffects;
-  local array<StateObjectReference> AddedEffects;
+	local XComGameState AssociatedState;
+	local array<StateObjectReference> RemovedEffects;
+	local array<StateObjectReference> AddedEffects;
 
-  History = `XCOMHISTORY;
+	History = `XCOMHISTORY;
 
-  AddedEffects = EffectsAddedList;
-  RemovedEffects = EffectsRemovedList;
-  AssociatedState = VisualizeGameState;
+	AddedEffects = EffectsAddedList;
+	RemovedEffects = EffectsRemovedList;
+	AssociatedState = VisualizeGameState;
 
-  // remove the effects...
-  for (i = 0; i < RemovedEffects.Length; ++i)
-  {
-	EffectState = XComGameState_Effect(History.GetGameStateForObjectID(RemovedEffects[i].ObjectID));
-	if (EffectState != none)
+	// remove the effects...
+	for (i = 0; i < RemovedEffects.Length; ++i)
 	{
-	  EffectSource = History.GetGameStateForObjectID(EffectState.ApplyEffectParameters.SourceStateObjectRef.ObjectID);
-	  EffectTarget = History.GetGameStateForObjectID(EffectState.ApplyEffectParameters.TargetStateObjectRef.ObjectID);
-
-	  if (EffectTarget != none)
-	  {
-		TargetMetadata.VisualizeActor  = History.GetVisualizer(EffectTarget.ObjectID);
-		VisualizerInterface = X2VisualizerInterface(TargetMetadata.VisualizeActor);
-		if (TargetMetadata.VisualizeActor  != none)
+		EffectState = XComGameState_Effect(History.GetGameStateForObjectID(RemovedEffects[i].ObjectID));
+		if (EffectState != none)
 		{
-		  History.GetCurrentAndPreviousGameStatesForObjectID(EffectTarget.ObjectID, TargetMetadata.StateObject_OldState, TargetMetadata.StateObject_NewState, eReturnType_Reference, AssociatedState.HistoryIndex);
-		  if (TargetMetadata.StateObject_NewState == none)
-		  TargetMetadata.StateObject_NewState = TargetMetadata.StateObject_OldState;
+			EffectSource = History.GetGameStateForObjectID(EffectState.ApplyEffectParameters.SourceStateObjectRef.ObjectID);
+			EffectTarget = History.GetGameStateForObjectID(EffectState.ApplyEffectParameters.TargetStateObjectRef.ObjectID);
 
-		  if (VisualizerInterface != none)
-		  VisualizerInterface.BuildAbilityEffectsVisualization(AssociatedState, TargetMetadata);
+			if (EffectTarget != none)
+			{
+				TargetMetadata.VisualizeActor = History.GetVisualizer(EffectTarget.ObjectID);
+				VisualizerInterface = X2VisualizerInterface(TargetMetadata.VisualizeActor);
+				if (TargetMetadata.VisualizeActor != none)
+				{
+					History.GetCurrentAndPreviousGameStatesForObjectID(EffectTarget.ObjectID, TargetMetadata.StateObject_OldState, TargetMetadata.StateObject_NewState, eReturnType_Reference, AssociatedState.HistoryIndex);
+					if (TargetMetadata.StateObject_NewState == none)
+						TargetMetadata.StateObject_NewState = TargetMetadata.StateObject_OldState;
 
-		  EffectTemplate = EffectState.GetX2Effect();
-		  EffectTemplate.AddX2ActionsForVisualization_Removed(AssociatedState, TargetMetadata, 'AA_Success', EffectState);
+					if (VisualizerInterface != none)
+						VisualizerInterface.BuildAbilityEffectsVisualization(AssociatedState, TargetMetadata);
 
+					EffectTemplate = EffectState.GetX2Effect();
+					EffectTemplate.AddX2ActionsForVisualization_Removed(AssociatedState, TargetMetadata, 'AA_Success', EffectState);
+				}
+
+				if (EffectTarget.ObjectID == EffectSource.ObjectID)
+				{
+					SourceMetadata = TargetMetadata;
+				}
+
+				SourceMetadata.VisualizeActor = History.GetVisualizer(EffectSource.ObjectID);
+				if (SourceMetadata.VisualizeActor != none)
+				{
+					History.GetCurrentAndPreviousGameStatesForObjectID(EffectSource.ObjectID, SourceMetadata.StateObject_OldState, SourceMetadata.StateObject_NewState, eReturnType_Reference, AssociatedState.HistoryIndex);
+					if (SourceMetadata.StateObject_NewState == none)
+						SourceMetadata.StateObject_NewState = SourceMetadata.StateObject_OldState;
+
+					EffectTemplate.AddX2ActionsForVisualization_RemovedSource(AssociatedState, SourceMetadata, 'AA_Success', EffectState);
+				}
+			}
 		}
-
-		if (EffectTarget.ObjectID == EffectSource.ObjectID)
-		{
-		  SourceMetadata = TargetMetadata;
-		}
-
-		SourceMetadata.VisualizeActor  = History.GetVisualizer(EffectSource.ObjectID);
-		if (SourceMetadata.VisualizeActor  != none)
-		{
-		  History.GetCurrentAndPreviousGameStatesForObjectID(EffectSource.ObjectID, SourceMetadata.StateObject_OldState, SourceMetadata.StateObject_NewState, eReturnType_Reference, AssociatedState.HistoryIndex);
-		  if (SourceMetadata.StateObject_NewState == none)
-		  SourceMetadata.StateObject_NewState = SourceMetadata.StateObject_OldState;
-
-		  EffectTemplate.AddX2ActionsForVisualization_RemovedSource(AssociatedState, SourceMetadata, 'AA_Success', EffectState);
-		}
-	  }
 	}
-  } // end remove effects
-  // add new effects...
-  for (i = 0; i < AddedEffects.Length; ++i)
-  {
-	EffectState = XComGameState_Effect(History.GetGameStateForObjectID(AddedEffects[i].ObjectID));
-	if (EffectState != none)
+	// end remove effects
+	// add new effects...
+	for (i = 0; i < AddedEffects.Length; ++i)
 	{
-	  EffectSource = History.GetGameStateForObjectID(EffectState.ApplyEffectParameters.SourceStateObjectRef.ObjectID);
-	  EffectTarget = History.GetGameStateForObjectID(EffectState.ApplyEffectParameters.TargetStateObjectRef.ObjectID);
-
-	  if (EffectTarget != none)
-	  {
-		TargetMetadata.VisualizeActor  = History.GetVisualizer(EffectTarget.ObjectID);
-		VisualizerInterface = X2VisualizerInterface(TargetMetadata.VisualizeActor );
-		if (TargetMetadata.VisualizeActor  != none)
+		EffectState = XComGameState_Effect(History.GetGameStateForObjectID(AddedEffects[i].ObjectID));
+		if (EffectState != none)
 		{
-		  History.GetCurrentAndPreviousGameStatesForObjectID(EffectTarget.ObjectID, TargetMetadata.StateObject_OldState, TargetMetadata.StateObject_NewState, eReturnType_Reference, AssociatedState.HistoryIndex);
-		  if (TargetMetadata.StateObject_NewState == none)
-		  TargetMetadata.StateObject_NewState = TargetMetadata.StateObject_OldState;
+			EffectSource = History.GetGameStateForObjectID(EffectState.ApplyEffectParameters.SourceStateObjectRef.ObjectID);
+			EffectTarget = History.GetGameStateForObjectID(EffectState.ApplyEffectParameters.TargetStateObjectRef.ObjectID);
 
-		  if (VisualizerInterface != none)
-		  VisualizerInterface.BuildAbilityEffectsVisualization(AssociatedState, TargetMetadata);
+			if (EffectTarget != none)
+			{
+				TargetMetadata.VisualizeActor = History.GetVisualizer(EffectTarget.ObjectID);
+				VisualizerInterface = X2VisualizerInterface(TargetMetadata.VisualizeActor );
+				if (TargetMetadata.VisualizeActor != none)
+				{
+					History.GetCurrentAndPreviousGameStatesForObjectID(EffectTarget.ObjectID, TargetMetadata.StateObject_OldState, TargetMetadata.StateObject_NewState, eReturnType_Reference, AssociatedState.HistoryIndex);
+					if (TargetMetadata.StateObject_NewState == none)
+						TargetMetadata.StateObject_NewState = TargetMetadata.StateObject_OldState;
 
-		  EffectTemplate = EffectState.GetX2Effect();
-		  EffectTemplate.AddX2ActionsForVisualization(AssociatedState, TargetMetadata, 'AA_Success');
+					if (VisualizerInterface != none)
+						VisualizerInterface.BuildAbilityEffectsVisualization(AssociatedState, TargetMetadata);
 
+					EffectTemplate = EffectState.GetX2Effect();
+					EffectTemplate.AddX2ActionsForVisualization(AssociatedState, TargetMetadata, 'AA_Success');
+				}
+
+				if (EffectTarget.ObjectID == EffectSource.ObjectID)
+				{
+					SourceMetadata = TargetMetadata;
+				}
+
+				SourceMetadata.VisualizeActor = History.GetVisualizer(EffectSource.ObjectID);
+				if (SourceMetadata.VisualizeActor != none)
+				{
+					History.GetCurrentAndPreviousGameStatesForObjectID(EffectSource.ObjectID, SourceMetadata.StateObject_OldState, SourceMetadata.StateObject_NewState, eReturnType_Reference, AssociatedState.HistoryIndex);
+					if (SourceMetadata.StateObject_NewState == none)
+						SourceMetadata.StateObject_NewState = SourceMetadata.StateObject_OldState;
+
+					EffectTemplate.AddX2ActionsForVisualizationSource(AssociatedState, SourceMetadata, 'AA_Success');
+				}
+			}
 		}
-
-		if (EffectTarget.ObjectID == EffectSource.ObjectID)
-		{
-		  SourceMetadata = TargetMetadata;
-		}
-
-		SourceMetadata.VisualizeActor  = History.GetVisualizer(EffectSource.ObjectID);
-		if (SourceMetadata.VisualizeActor  != none)
-		{
-		  History.GetCurrentAndPreviousGameStatesForObjectID(EffectSource.ObjectID, SourceMetadata.StateObject_OldState, SourceMetadata.StateObject_NewState, eReturnType_Reference, AssociatedState.HistoryIndex);
-		  if (SourceMetadata.StateObject_NewState == none)
-		  SourceMetadata.StateObject_NewState = SourceMetadata.StateObject_OldState;
-
-		  EffectTemplate.AddX2ActionsForVisualizationSource(AssociatedState, SourceMetadata, 'AA_Success');
-
-		}
-
-	  }
-	}
-  }	// end add effects
-   ClearEffectLists();
+	}	
+	// end add effects
+	ClearEffectLists();
 }
 
 // ClearEffectLists
@@ -585,8 +580,8 @@ function EventListenerReturn RTHarbingerBonusDamage(Object EventData, Object Eve
 	}
 	//`LOG("Rising Tides: RTHarbingerBonusDamage is checking for the current ability to add damage to...");
 	if(class'RTHelpers'.static.CheckAbilityActivated(AbilityState.GetMyTemplateName(), eChecklist_SniperShots)   ||
-	   class'RTHelpers'.static.CheckAbilityActivated(AbilityState.GetMyTemplateName(), eChecklist_StandardShots) ||
-	   class'RTHelpers'.static.CheckAbilityActivated(AbilityState.GetMyTemplateName(), eChecklist_MeleeAbilities) ) {
+	 class'RTHelpers'.static.CheckAbilityActivated(AbilityState.GetMyTemplateName(), eChecklist_StandardShots) ||
+	 class'RTHelpers'.static.CheckAbilityActivated(AbilityState.GetMyTemplateName(), eChecklist_MeleeAbilities) ) {
 		InitializeAbilityForActivation(AdditionalDamageState, SourceUnitState, 'RTHarbingerBonusDamage', History);
 		ActivateAbility(AdditionalDamageState, TargetUnitState.GetReference());
 		return ELR_NoInterrupt;
@@ -612,7 +607,7 @@ function EventListenerReturn ExtendEffectDuration(Object EventData, Object Event
 	EffectTemplate = RTEffect_ExtendEffectDuration(GetX2Effect());
 	if(EffectTemplate == none) {
 		`LOG("Rising Tides: ExtendEffectDuration had no template!");
-	  return ELR_NoInterrupt;
+	return ELR_NoInterrupt;
 	}
 
 	//`LOG("Rising Tides: Extend Effect Duration activated on EVENTID: " @ EventID);
@@ -632,23 +627,23 @@ function EventListenerReturn ExtendEffectDuration(Object EventData, Object Event
 	//`LOG("Rising Tides: Attempting to extend " @ EffectTemplate.AbilityToExtendName);
 	NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("Rising Tides: Extending " @ EffectTemplate.EffectToExtendName);
 	foreach GameState.IterateByClassType(class'XComGameState_Effect', IteratorEffectState) {
-	  if(IteratorEffectState == none) {
-		  //`RedScreen("Rising Tides: What the heck, iterating through gamestate_effects returned a non-gamestate_effect object?");
-		  continue;
-	  }
+	if(IteratorEffectState == none) {
+		//`RedScreen("Rising Tides: What the heck, iterating through gamestate_effects returned a non-gamestate_effect object?");
+		continue;
+	}
 
-	  if(IteratorEffectState.bRemoved) {
-		  continue;
-	  }
+	if(IteratorEffectState.bRemoved) {
+		continue;
+	}
 
-	  if(IteratorEffectState.GetX2Effect().EffectName == EffectTemplate.EffectToExtendName) {
-		  //`LOG("Rising TIdes: EED proced on " @ EffectTemplate.AbilityToExtendName @ " for effect " @	EffectTemplate.EffectToExtendName);
-		  bDebug = true;
-		  ExtendedEffectState = XComGameState_Effect(NewGameState.CreateStateObject(class'XComGameState_Effect', IteratorEffectState.ObjectID));
-		  ExtendedEffectState.iTurnsRemaining += EffectTemplate.iDurationExtension;
-		  NewGameState.AddStateObject(ExtendedEffectState);
-		  continue;
-	  }
+	if(IteratorEffectState.GetX2Effect().EffectName == EffectTemplate.EffectToExtendName) {
+		//`LOG("Rising TIdes: EED proced on " @ EffectTemplate.AbilityToExtendName @ " for effect " @	EffectTemplate.EffectToExtendName);
+		bDebug = true;
+		ExtendedEffectState = XComGameState_Effect(NewGameState.CreateStateObject(class'XComGameState_Effect', IteratorEffectState.ObjectID));
+		ExtendedEffectState.iTurnsRemaining += EffectTemplate.iDurationExtension;
+		NewGameState.AddStateObject(ExtendedEffectState);
+		continue;
+	}
 	}
 
 	History = `XCOMHISTORY;
@@ -662,7 +657,7 @@ function EventListenerReturn ExtendEffectDuration(Object EventData, Object Event
 
 
 	if(!bDebug) {
-	  //`LOG("Rising Tides: ExtendEffectDuration fired on the right ability / event, but there was no effects on the gamestate?");
+	//`LOG("Rising Tides: ExtendEffectDuration fired on the right ability / event, but there was no effects on the gamestate?");
 	}
 
 	//`LOG("Rising Tides: ExtendEffectDuration was successful!");
@@ -700,7 +695,7 @@ function EventListenerReturn BumpInTheNightStatCheck(Object EventData, Object Ev
 	}
 
 
-	//XComGameStateContext_ChangeContainer(NewGameState.GetContext()).BuildVisualizationFn = BloodlustStackVisualizationFn;		  //TODO: this
+	//XComGameStateContext_ChangeContainer(NewGameState.GetContext()).BuildVisualizationFn = BloodlustStackVisualizationFn;		//TODO: this
 
 	NewUnitState.ApplyEffectToStats(TempEffect, NewGameState);
 
@@ -742,19 +737,17 @@ function EventListenerReturn EveryMomentMattersCheck(Object EventData, Object Ev
 						return ELR_NoInterrupt;
 				}
 
-			   if(SourceUnit.GetItemInSlot(eInvSlot_PrimaryWeapon).Ammo == 0) {
+			 if(SourceUnit.GetItemInSlot(eInvSlot_PrimaryWeapon).Ammo == 0) {
 					NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState(string(GetFuncName()));
 					XComGameStateContext_ChangeContainer(NewGameState.GetContext()).BuildVisualizationFn = EveryMomentMattersVisualizationFn;
 					SourceUnit = XComGameState_Unit(NewGameState.CreateStateObject(SourceUnit.Class, SourceUnit.ObjectID));
 					SourceUnit.ActionPoints.AddItem(class'X2CharacterTemplateManager'.default.MoveActionPoint);
 					NewGameState.AddStateObject(SourceUnit);
 					`TACTICALRULES.SubmitGameState(NewGameState);
-
 				}
 			}
 		}
 	}
-
 
 	return ELR_NoInterrupt;
 }
@@ -780,7 +773,7 @@ function EveryMomentMattersVisualizationFn(XComGameState VisualizeGameState) {
 			SoundAndFlyOver.SetSoundAndFlyOverParameters(None, "Every Moment Matters", '', eColor_Good, AbilityTemplate.IconImage);
 
 		} else {
-			`LOG("Rising Tides - Every Moment Matters: Couldn't find AbilityTemplate for visualization!");
+			class'RTHelpers'.static.RTLog("Rising Tides - Every Moment Matters: Couldn't find AbilityTemplate for visualization!");
 		}
 		break;
 	}
@@ -809,11 +802,11 @@ function EventListenerReturn GhostInTheShellCheck(Object EventData, Object Event
 	if (AbilityState == none || AbilityState.ObjectID == 0)
 		return ELR_NoInterrupt;
 
-	if(AbilityState.GetMyTemplateName() == 'Interact_OpenChest' ||  AbilityState.GetMyTemplateName() == 'Interact_TakeVial' || AbilityState.GetMyTemplateName() == 'Interact_StasisTube')
+	if(AbilityState.GetMyTemplateName() == 'Interact_OpenChest' || AbilityState.GetMyTemplateName() == 'Interact_TakeVial' || AbilityState.GetMyTemplateName() == 'Interact_StasisTube')
 			bShouldTrigger = true;
-	if(AbilityState.GetMyTemplateName() == 'Interact' ||  AbilityState.GetMyTemplateName() == 'Interact_PlantBomb' /*|| AbilityState.GetMyTemplateName() == 'Interact_OpenDoor'*/)
+	if(AbilityState.GetMyTemplateName() == 'Interact' || AbilityState.GetMyTemplateName() == 'Interact_PlantBomb' /*|| AbilityState.GetMyTemplateName() == 'Interact_OpenDoor'*/)
 			bShouldTrigger = true;
-	if(AbilityState.GetMyTemplateName() == 'FinalizeHack' ||  AbilityState.GetMyTemplateName() == 'GatherEvidence' || AbilityState.GetMyTemplateName() == 'PlantExplosiveMissionDevice')
+	if(AbilityState.GetMyTemplateName() == 'FinalizeHack' || AbilityState.GetMyTemplateName() == 'GatherEvidence' || AbilityState.GetMyTemplateName() == 'PlantExplosiveMissionDevice')
 			bShouldTrigger = true;
 
 	if(!bShouldTrigger) {

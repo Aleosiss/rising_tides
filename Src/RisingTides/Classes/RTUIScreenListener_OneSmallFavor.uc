@@ -72,6 +72,8 @@ simulated function AddOneSmallFavorSelectionCheckBox(UIScreen Screen) {
 		return;
 	}
 
+	Program.HandleOSFTutorial();
+
 	// immediately execute the init code if we're somehow late to the initialization party
 	if(MissionScreen.ConfirmButton.bIsVisible) {
 		if(MissionScreen.ConfirmButton.bIsInited && MissionScreen.ConfirmButton.bIsVisible) {
@@ -161,10 +163,10 @@ function ModifiedLaunchButtonClicked(UIButton Button) {
 simulated function bool AddOneSmallFavorSitrep(XComGameState_MissionSite MissionState) {
 	local RTGameState_ProgramFaction			Program;
 	local XComGameState							NewGameState;
-	local GeneratedMissionData					MissionData;
+	//local GeneratedMissionData					MissionData;
 	local XComGameState_HeadquartersXCom		XComHQ; //because the game stores a copy of mission data and this is where its stored in
 	local XComGameStateHistory					History;
-	local int									iNumOperativesInSquad;
+	//local int									iNumOperativesInSquad;
 
 	History = `XCOMHISTORY;
 	Program = RTGameState_ProgramFaction(History.GetSingleGameStateObjectForClass(class'RTGameState_ProgramFaction'));
@@ -230,10 +232,10 @@ simulated function bool AddOneSmallFavorSitrep(XComGameState_MissionSite Mission
 simulated function bool RemoveOneSmallFavorSitrep(XComGameState_MissionSite MissionState) {
 	local RTGameState_ProgramFaction			Program;
 	local XComGameState							NewGameState;
-	local GeneratedMissionData					MissionData;
+	//local GeneratedMissionData					MissionData;
 	local XComGameState_HeadquartersXCom		XComHQ; //because the game stores a copy of mission data and this is where its stored in
 	local XComGameStateHistory					History;
-	local int									iNumOperativesInSquad;
+	//local int									iNumOperativesInSquad;
 
 	History = `XCOMHISTORY;
 	Program = RTGameState_ProgramFaction(History.GetSingleGameStateObjectForClass(class'RTGameState_ProgramFaction'));

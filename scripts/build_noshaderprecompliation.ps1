@@ -24,10 +24,10 @@ function StageDirectory ([string]$directoryName, [string]$srcDirectory, [string]
 
 function CheckErrorCode([string] $message) {
     if ($LASTEXITCODE -ne 0) {
-        $stopwatch.stop()
+        $stopwatch.stop();
         $ts = $stopwatch.Elapsed.TotalSeconds;
 
-        Write-Host "Build failed in $ts seconds."
+        Write-Host "Build failed in $ts seconds.";
         FailureMessage  $message;
         
     }
@@ -131,6 +131,146 @@ function Launch-Make([string] $makeCmd, [string] $makeFlags, [string] $sdkPath, 
     $global:LASTEXITCODE = $process.ExitCode
 }
 
+# This function verifies that all project files in the mod subdirectories actually exist in the .x2proj file
+# AUTHOR: X2WOTCCommunityHighlander
+
+function ValidateProjectFile([string] $modProjectRoot, [string] $modName)
+{
+    # To simplify relative path building
+    $originalExecutionPath = Get-Location
+    Set-Location $modProjectRoot
+
+    Write-Host "Checking and cleaning .x2proj file..."
+    $projFilepath = "$modProjectRoot\$modName.x2proj"
+    if(Test-Path $projFilepath)
+    {
+        CheckX2ProjIncludes $modProjectRoot $modName $projFilepath
+        CleanX2ProjIncludes $modProjectRoot $modName $projFilepath
+    }
+    else
+    {
+        FailureMessage("The project file '$projFilepath' doesn't exist!")
+    }
+
+    # fuck go back
+    Set-Location $originalExecutionPath
+}
+
+function CheckX2ProjIncludes([string] $modProjectRoot, [string] $modName, [string] $projFilepath) {
+    $missingEntries = New-Object System.Collections.Generic.List[System.Object]
+    $patchedFiles = New-Object System.Collections.Generic.List[System.Object]
+    $patchedFolders = New-Object System.Collections.Generic.List[System.Object]
+    $projContent = Get-Content $projFilepath
+    $srcFolders = "Config", "Content", "Localization", "Src"
+    # Loop through all files in subdirectories and fail the build if any filenames are missing inside the project file
+    Get-ChildItem $modProjectRoot -Directory | Where-Object { $srcFolders -contains $_.Name } | Get-ChildItem -Recurse |
+    ForEach-Object {
+        $relative = Resolve-Path -relative $_.FullName
+        $relative = $relative.Substring(2)
+        if((Get-Item $_.FullName) -is [System.IO.DirectoryInfo]) {
+            $relative = $relative + "\"
+            $isDir = $true
+        }
+
+        If (!($projContent | Select-String -Pattern $_.Name)) {
+            $missingEntries.Add($relative)
+            if($isDir) {
+                $patchedFolders.Add($relative)
+            } else {
+                $patchedFiles.Add($relative);
+            }
+        }
+        $isDir = $false
+    }
+
+    if($missingEntries.Count -gt 0)
+    {
+        Write-Host ("Entries missing in the .x2proj file: $missingEntries")
+        [xml]$xmlProjContent = Get-Content $projFilepath
+
+        $patchedFiles | ForEach-Object {
+            $element = $xmlProjContent.CreateElement("Content")
+            $element.SetAttribute("Include", $_)
+            $xmlProjContent.Project.ItemGroup[1].AppendChild($element) | Out-Null
+        }
+
+        $patchedFolders | ForEach-Object {
+            $element = $xmlProjContent.CreateElement("Folder")
+            $element.SetAttribute("Include", $_)
+            $xmlProjContent.Project.ItemGroup[0].AppendChild($element) | Out-Null
+        }
+
+        # I couldn't prevent a xmlns namespace from being declared, so just hard removing it T_T
+        $xmlProjContent = [xml] $xmlProjContent.OuterXml.Replace(" xmlns=`"`"", "")
+        $xmlProjContent.save("$modProjectRoot\$modName.x2proj")
+
+        Write-Host "Patched $modName.x2proj includes successfully!"
+    } else {
+        Write-Host "No patching required."
+    }
+
+}
+
+function CleanX2ProjIncludes([string] $modProjectRoot, [string] $modName, [string] $projFilepath) {
+    # TODO
+    [xml]$xmlProjContent = Get-Content $projFilepath
+    $presentFiles = New-Object System.Collections.Generic.List[System.Object]
+    $includesToRemove = New-Object System.Collections.Generic.List[System.Object]
+    $entriesToRemove = New-Object System.Collections.Generic.List[System.Object]
+    $presentFolders = New-Object System.Collections.Generic.List[System.Object]
+    $srcFolders = "Config", "Content", "Localization", "Src"
+    Get-ChildItem $modProjectRoot -Directory -Recurse | Where-Object { $srcFolders -contains $_.Name } | Get-ChildItem -Recurse |
+    ForEach-Object {
+        $relative = Resolve-Path -relative $_.FullName
+        $relative = $relative.Substring(2)
+
+        if((Get-Item $_.FullName) -is [System.IO.DirectoryInfo]) {
+            $presentFolders.Add($relative + "\");
+        } else {
+            $presentFiles.Add($relative);
+        }
+    }
+
+    # check folder includes...
+    $srcFolders = "Config\", "Content\", "Localization\", "Src\"
+    $folders = $xmlProjContent.Project.ItemGroup[0].ChildNodes
+    $folders | ForEach-Object {
+        $include = $_.GetAttribute("Include");
+        if(!($presentFolders -contains $include -or $srcFolders -contains $include)) {
+            $entriesToRemove.Add($_)
+            $includesToRemove.Add($include)
+        }
+    }
+
+     # check file includes...
+    $hardCodedExceptions = "ReadMe.txt", "ModPreview.jpg"
+    $files = $xmlProjContent.Project.ItemGroup[1].ChildNodes
+    $files | ForEach-Object {
+        $include = $_.GetAttribute("Include");
+        if(!($presentFiles -contains $include -or $hardCodedExceptions -contains $include)) {
+            $entriesToRemove.Add($_)
+            $includesToRemove.Add($include)
+        }
+    }
+
+    if($entriesToRemove.Count -gt 0) {
+        Write-Host ("Invalid entries in the .x2proj file: $includesToRemove")
+        $entriesToRemove | ForEach-Object {
+            try {
+                $_.ParentNode.RemoveChild($_) | Out-Null
+            } catch {
+                FailureMessage("Couldn't remove child node!")
+            }
+            
+        }
+        
+        $xmlProjContent.save("$modProjectRoot\$modName.x2proj")
+        Write-Host "Cleaned $modName.x2proj includes successfully!"
+    } else {
+        Write-Host "No cleaning required."
+    }
+}
+
 function HaveDirectoryContentsChanged ([string] $srcDirPath, [string] $destDirPath) {
     $srcDir = Get-ChildItem $srcDirPath
     $destDir = Get-ChildItem $destDirPath
@@ -158,6 +298,10 @@ $modNameCanonical = $mod
 # we're going to ask that people specify the folder that has their .XCOM_sln in it as the -srcDirectory argument, but a lot of the time all we care about is
 # the folder below that that contains Config, Localization, Src, etc...
 $modSrcRoot = "$srcDirectory/"
+
+# check that all files in the mod folder are present in the .x2proj file
+ValidateProjectFile $modSrcRoot $modNameCanonical
+
 # build the staging path
 $stagingPath = "{0}/XComGame/Mods/{1}/" -f $sdkPath, $modNameCanonical
 
@@ -170,25 +314,25 @@ $canSkipShaderPrecompliation = $false
 
 # Need to store the ModShaderCache before we compare the Content directories, it will interfere with the check.
 # Also, if there are no changes and we skip precompliation, we will need a backup of the ModShaderCache since it won't be regenerated after the stagingPath is cleaned.
-if(Test-Path $tempCachePath) {
-    # if we found a shadercache in here, that means that we found it last time and cached it, but the build failed and /tmp wasn't cleaned up... we can skip precompliation.
-    $canSkipShaderPrecompliation = $true
-    Write-Host "Found previously-stashed ModShaderCache. Shader precompliation can be skipped."
-} elseif(Test-Path $shaderCachePath) {
-    Write-Host "Found ModShaderCache, stashing it..."
-    
-    if(-not (Test-Path -Path $modSrcRoot/tmp)) {
-        New-Item $modSrcRoot/tmp -type Directory
-    } 
-    
-    Copy-Item -Path $shaderCachePath -Destination $tempCachePath
-    Remove-Item -Path $shaderCachePath
-    $canSkipShaderPrecompliation = $true
-    
-    Write-Host "Stashed."
-} else {
-    Write-Host "Unable to find a ModShaderCache. Shader precompliation is required."
-}
+#if(Test-Path $tempCachePath) {
+#    # if we found a shadercache in here, that means that we found it last time and cached it, but the build failed and /tmp wasn't cleaned up... we can skip precompliation.
+#    $canSkipShaderPrecompliation = $true
+#    Write-Host "Found previously-stashed ModShaderCache. Shader precompliation can be skipped."
+#} elseif(Test-Path $shaderCachePath) {
+#    Write-Host "Found ModShaderCache, stashing it..."
+#    
+#    if(-not (Test-Path -Path $modSrcRoot/tmp)) {
+#        New-Item $modSrcRoot/tmp -type Directory
+#    } 
+#    
+#    Copy-Item -Path $shaderCachePath -Destination $tempCachePath
+#    Remove-Item -Path $shaderCachePath
+#    $canSkipShaderPrecompliation = $true
+#    
+#    Write-Host "Stashed."
+#} else {
+#    Write-Host "Unable to find a ModShaderCache. Shader precompliation is required."
+#}
 
 # check to see if the files changed
 if($canSkipShaderPrecompliation) {
@@ -208,7 +352,7 @@ if($canSkipShaderPrecompliation) {
 # clean
 Write-Host "Cleaning mod project at $stagingPath...";
 if (Test-Path $stagingPath) {
-    Remove-Item $stagingPath -Recurse -WarningAction SilentlyContinue;
+    Remove-Item $stagingPath -Recurse -Force -WarningAction SilentlyContinue;
 }
 Write-Host "Cleaned."
 
@@ -242,6 +386,15 @@ Write-Host "Mirrored."
 Write-Host "Copying the mod's scripts to Src..."
 Copy-Item "$stagingPath/Src/*" "$sdkPath/Development/Src/" -Force -Recurse -WarningAction SilentlyContinue
 Write-Host "Copied."
+
+# append extra_globals.uci to globals.uci
+if (Test-Path "$sdkPath/Development/Src/$modNameCanonical/Classes/extra_globals.uci") {
+    Write-Host "Appending macros..."
+    Get-Content "$sdkPath/Development/Src/$modNameCanonical/Classes/extra_globals.uci" | Add-Content "$sdkPath/Development/Src/Core/Globals.uci"
+    Write-Host "Appended."
+} else {
+    Write-Host "Couldn't find an extra_globals.uci to append extra macros..."
+}
 
 if ($forceFullBuild) {
     # if a full build was requested, clean all compiled scripts too
@@ -297,14 +450,10 @@ Copy-Item "$sdkPath/XComGame/Script/$modNameCanonical.u" "$stagingPath/Script" -
 Write-Host "Copied."
 
 # copy all staged files to the actual game's mods folder
-$productionPath = "$gamePath/XCom2-WarOfTheChosen/XComGame/Mods/"
 Write-Host "Copying all staging files to production..."
-if (-Not (Test-Path $productionPath)) {
-    New-Item $productionPath -ItemType Directory
-}
-Copy-Item $stagingPath $productionPath -Force -Recurse -WarningAction SilentlyContinue
-Write-Host "Copied."
+Robocopy.exe "$stagingPath" "$gamePath\XCom2-WarOfTheChosen\XComGame\Mods\RisingTides" *.* /S /E /DCOPY:DA /COPY:DAT /PURGE /MIR /NP /R:1000000 /W:30
+Write-Host "Copied mod to game directory."
 
-# we made it!
+
 # we made it!
 SuccessMessage("*** SUCCESS! ***")

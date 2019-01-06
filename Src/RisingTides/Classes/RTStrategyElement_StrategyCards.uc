@@ -32,7 +32,7 @@ static function X2DataTemplate RTCreateOneSmallFavor()
 
 static function ActivateOneSmallFavor(XComGameState NewGameState, StateObjectReference InRef, optional bool bReactivate = false) {
 	local RTGameState_ProgramFaction Program;
-	local DynamicPropertySet PropertySet; //need to delay it when the player can see it
+	//local DynamicPropertySet PropertySet; //need to delay it when the player can see it
 
 	Program = class'RTHelpers'.static.GetNewProgramState(NewGameState);
 	Program.MakeOneSmallFavorAvailable();
@@ -60,12 +60,12 @@ static function X2DataTemplate RTCreateJustPassingThrough() {
 static function JustPassingThroughModifyTacStartState(XComGameState StartState) {
 	local RTGameState_ProgramFaction Program;
 	local XComGameState_HeadquartersXCom XComHQ;
-	local array<StateObjectReference> AvailableSoldiers;
+	//local array<StateObjectReference> AvailableSoldiers;
 	local StateObjectReference SoldierObjRef;
 	local XComGameState_MissionSite MissionState;
 	local XComGameState_Unit CopyUnitState, OriginalUnitState;
 	local name CharTemplateName;
-	local X2CharacterTemplate Template;
+	//local X2CharacterTemplate Template;
 	local XComGameState_Player PlayerState;
 
 	if (IsSplitMission( StartState ))
@@ -75,12 +75,8 @@ static function JustPassingThroughModifyTacStartState(XComGameState StartState) 
 	Program.bShouldPerformPostMissionCleanup = true;
 	SoldierObjRef = Program.Master[`SYNC_RAND_STATIC(Program.Master.Length)];
 	
-	if(!class'RTHelpers'.static.DebuggingEnabled()) {
-		if(default.JustPassingThroughChance * Program.InfluenceScore < `SYNC_RAND_STATIC(100)) //TODO: Refactor to include an Operative-based modifer (location + personality)
-			return;
-	} else {
-		class'RTHelpers'.static.RTLog("Activating Just Passing Through via Debug Override!");
-	}
+	if(default.JustPassingThroughChance * (int(Program.Influence) + 1) < `SYNC_RAND_STATIC(100) /*|| true*/ ) //TODO: Refactor to include an Operative-based modifer (location + personality)
+		return;
 
 	foreach StartState.IterateByClassType( class'XComGameState_HeadquartersXCom', XComHQ )
 		break;
@@ -108,7 +104,7 @@ static function JustPassingThroughModifyTacStartState(XComGameState StartState) 
 	OriginalUnitState = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(SoldierObjRef.ObjectID));
 	CharTemplateName = OriginalUnitState.GetMyTemplateName();
 
-	Template = class'X2CharacterTemplateManager'.static.GetCharacterTemplateManager().FindCharacterTemplate( CharTemplateName );
+	//Template = class'X2CharacterTemplateManager'.static.GetCharacterTemplateManager().FindCharacterTemplate( CharTemplateName );
 
 	CopyUnitState = Program.CreateRTOperative(CharTemplateName, StartState);
 	CopyUnitState.bMissionProvided = true;
@@ -189,13 +185,26 @@ static function X2DataTemplate RTCreateFortyYearsOfWar()
 
 static function ActivateFortyYearsOfWar(XComGameState NewGameState, StateObjectReference InRef, optional bool bReactivate = false) {
 	local RTGameState_ProgramFaction Program;
+	local XComGameState_WorldRegion RegionState;
 	local Object Obj;
 
 	Program = class'RTHelpers'.static.GetNewProgramState(NewGameState);
 	Obj = Program;
 
 	class'RTHelpers'.static.RTLog("Activating Forty Years of War!");
-	`XEVENTMGR.RegisterForEvent(Obj, 'AvengerLandedScanRegion', Program.FortyYearsOfWarEventListener, ELD_OnStateSubmitted);
+	`XEVENTMGR.RegisterForEvent(Obj, 'RegionOutpostBuildStart', Program.FortyYearsOfWarEventListener, ELD_Immediate);
+
+	// Build outposts in any regions which are currently being scanned
+	foreach `XCOMHISTORY.IterateByClassType(class'XComGameState_WorldRegion', RegionState)
+	{
+		if (RegionState.bCanScanForOutpost)
+		{
+			RegionState = XComGameState_WorldRegion(NewGameState.ModifyStateObject(class'XComGameState_WorldRegion', RegionState.ObjectID));
+			RegionState.SetResistanceLevel(NewGameState, eResLevel_Outpost);
+			RegionState.bResLevelPopup = true;
+			RegionState.bCanScanForOutpost = false;
+		}
+	}
 }
 
 static function DeactivateFortyYearsOfWar(XComGameState NewGameState, StateObjectReference InRef) {
@@ -206,6 +215,7 @@ static function DeactivateFortyYearsOfWar(XComGameState NewGameState, StateObjec
 	Obj = Program;
 	class'RTHelpers'.static.RTLog("Deactivating Forty Years of War!");
 	`XEVENTMGR.UnRegisterFromEvent(Obj, 'AvengerLandedScanRegion');
+	`XEVENTMGR.UnRegisterFromEvent(Obj, 'RegionOutpostBuildStart');
 }
 
 static function X2DataTemplate RTCreateDirectNeuralManipulation()
