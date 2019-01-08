@@ -613,6 +613,9 @@
     <Content Include="Content\GameUnit_GenericHumanHostile.upk" />
     <Content Include="Config\XComGameCore.ini" />
     <Content Include="Src\RisingTides\Classes\RTAbility_TemplarAbilitySet.uc" />
+    <Content Include="Content\RT_Perk_Psi_Burst.upk" />
+    <Content Include="Content\RT_Perk_Scholar_Ionic_Storm.upk" />
+    <Content Include="Content\RT_Scholar_Perk_Volt.upk" />
   </ItemGroup>
   <Import Project="$(MSBuildLocalExtensionPath)\XCOM2.targets" />
 </Project>

@@ -83,13 +83,12 @@ static function X2CharacterTemplate CreateTemplate_TemplarWarrior(name TemplateN
 	
 	//CharTemplate.DefaultSoldierClass = 'Rookie';
 	CharTemplate.DefaultLoadout = 'RTTemplarWarrior_M1';
-	CharTemplate.Abilities.AddItem('TemplarFocus');
 	CharTemplate.Abilities.AddItem('Momentum');
+	CharTemplate.Abilities.AddItem('Overcharge');
 
 	if(TemplateName == 'RTTemplarWarrior_M2')
 	{
 		CharTemplate.DefaultLoadout = 'RTTemplarWarrior_M2';
-
 	}
 
 	if(TemplateName == 'RTTemplarWarrior_M3')
@@ -192,18 +191,19 @@ static function X2CharacterTemplate CreateTemplate_TemplarScholar(name TemplateN
 	CharTemplate.DefaultLoadout = 'RTTemplarScholar_M1';
 	CharTemplate.Abilities.AddItem('TemplarFocus');
 	CharTemplate.Abilities.AddItem('Momentum');
-
 	CharTemplate.Abilities.AddItem('RTUnwaveringResolve');
+	CharTemplate.Abilities.AddItem('Reverberation');
 
 	if(TemplateName == 'RTTemplarScholar_M2')
 	{
 		CharTemplate.DefaultLoadout = 'RTTemplarScholar_M2';
-
+		CharTemplate.Abilities.AddItem('DeepFocus');
 	}
 
 	if(TemplateName == 'RTTemplarScholar_M3')
 	{
 		CharTemplate.DefaultLoadout = 'RTTemplarScholar_M3';
+		CharTemplate.Abilities.AddItem('DeepFocus');
 	}
 
 	CharTemplate.Abilities.AddItem('CarryUnit');

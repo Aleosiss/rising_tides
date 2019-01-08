@@ -59,6 +59,14 @@ static function array<X2DataTemplate> CreateTemplates()
 	Items.AddItem(CreateRTTemplarGauntlet_Left('RTTemplarGauntlet_M1'));
 	Items.AddItem(CreateRTTemplarGauntlet_Left('RTTemplarGauntlet_M2'));
 	Items.AddItem(CreateRTTemplarGauntlet_Left('RTTemplarGauntlet_M3'));
+
+	Items.AddItem(CreateRTTemplarGauntlet('RTScholarGauntlet_M1'));
+	Items.AddItem(CreateRTTemplarGauntlet('RTScholarGauntlet_M2'));
+	Items.AddItem(CreateRTTemplarGauntlet('RTScholarGauntlet_M3'));
+
+	Items.AddItem(CreateRTTemplarGauntlet_Left('RTScholarGauntlet_M1'));
+	Items.AddItem(CreateRTTemplarGauntlet_Left('RTScholarGauntlet_M2'));
+	Items.AddItem(CreateRTTemplarGauntlet_Left('RTScholarGauntlet_M3'));
 	
 	return Items;
 }
@@ -464,55 +472,47 @@ static function X2DataTemplate CreateRTTemplarGauntlet(name TemplateName)
 	Template.CanBeBuilt = false;
 	Template.bInfiniteItem = true;
 	Template.DamageTypeTemplateName = 'Melee';
+
 	Template.Abilities.AddItem('Rend');
-	Template.Abilities.AddItem('Volt');
+	Template.Abilities.AddItem('TemplarFocus');
 
 	switch(TemplateName) {
 		case 'RTTemplarGauntlet_M1':
-			Template.WeaponTech = 'conventional';
-			Template.strImage = "img:///UILibrary_XPACK_StrategyImages.Inv_ConvTGauntlet";
-			Template.EquipSound = "Sword_Equip_Conventional";
-			Template.GameArchetype = "WP_TemplarGauntlet.WP_TemplarGauntlet";
-			Template.AltGameArchetype = "WP_TemplarGauntlet.WP_TemplarGauntlet_F";
-			Template.GenderForAltArchetype = eGender_Female;
-			Template.BaseDamage = class'X2Item_XpackWeapons'.default.SHARDGAUNTLET_CONVENTIONAL_BASEDAMAGE;
-			Template.ExtraDamage = class'X2Item_XpackWeapons'.default.SHARDGAUNTLET_CONVENTIONAL_EXTRADAMAGE;
-			Template.Aim = class'X2Item_XpackWeapons'.default.SHARDGAUNTLET_CONVENTIONAL_AIM;
-			Template.CritChance = class'X2Item_XpackWeapons'.default.SHARDGAUNTLET_CONVENTIONAL_CRITCHANCE;
-			Template.iSoundRange = class'X2Item_XpackWeapons'.default.SHARDGAUNTLET_CONVENTIONAL_ISOUNDRANGE;
-			Template.iEnvironmentDamage = class'X2Item_XpackWeapons'.default.SHARDGAUNTLET_CONVENTIONAL_IENVIRONMENTDAMAGE;
+			CreateConventionalGauntlet(Template);
 			break;
 		case 'RTTemplarGauntlet_M2':
-			Template.WeaponTech = 'magnetic';
-			Template.strImage = "img:///UILibrary_XPACK_StrategyImages.Inv_MagTGauntlet";
-			Template.EquipSound = "Sword_Equip_Magnetic";
-			Template.GameArchetype = "WP_TemplarGauntlet.WP_TemplarGauntlet_MG";
-			Template.AltGameArchetype = "WP_TemplarGauntlet.WP_TemplarGauntlet_F_MG";
-			Template.GenderForAltArchetype = eGender_Female;
-			Template.BaseDamage = class'X2Item_XpackWeapons'.default.SHARDGAUNTLET_MAGNETIC_BASEDAMAGE;
-			Template.ExtraDamage = class'X2Item_XpackWeapons'.default.SHARDGAUNTLET_MAGNETIC_EXTRADAMAGE;
-			Template.Aim = class'X2Item_XpackWeapons'.default.SHARDGAUNTLET_MAGNETIC_AIM;
-			Template.CritChance = class'X2Item_XpackWeapons'.default.SHARDGAUNTLET_MAGNETIC_CRITCHANCE;
-			Template.iSoundRange = class'X2Item_XpackWeapons'.default.SHARDGAUNTLET_MAGNETIC_ISOUNDRANGE;
-			Template.iEnvironmentDamage = class'X2Item_XpackWeapons'.default.SHARDGAUNTLET_MAGNETIC_IENVIRONMENTDAMAGE;
+			CreateMagneticGauntlet(Template);
 			Template.Abilities.AddItem('Parry');
+			Template.Abilities.AddItem('DeepFocus');
+			Template.Abilities.AddItem('TemplarInvert');
+			Template.Abilities.AddItem('Fortress');
 			break;
 		case 'RTTemplarGauntlet_M3':
-			Template.WeaponTech = 'beam';
-			Template.strImage = "img:///UILibrary_XPACK_StrategyImages.Inv_BeamTGauntlet";
-			Template.EquipSound = "Sword_Equip_Beam";
-			Template.GameArchetype = "WP_TemplarGauntlet.WP_TemplarGauntlet_BM";
-			Template.AltGameArchetype = "WP_TemplarGauntlet.WP_TemplarGauntlet_F_BM";
-			Template.GenderForAltArchetype = eGender_Female;
-			Template.BaseDamage = class'X2Item_XpackWeapons'.default.SHARDGAUNTLET_BEAM_BASEDAMAGE;
-			Template.ExtraDamage = class'X2Item_XpackWeapons'.default.SHARDGAUNTLET_BEAM_EXTRADAMAGE;
-			Template.Aim = class'X2Item_XpackWeapons'.default.SHARDGAUNTLET_BEAM_AIM;
-			Template.CritChance = class'X2Item_XpackWeapons'.default.SHARDGAUNTLET_BEAM_CRITCHANCE;
-			Template.iSoundRange = class'X2Item_XpackWeapons'.default.SHARDGAUNTLET_BEAM_ISOUNDRANGE;
-			Template.iEnvironmentDamage = class'X2Item_XpackWeapons'.default.SHARDGAUNTLET_BEAM_IENVIRONMENTDAMAGE;
+			CreateBeamGauntlet(Template);
 			Template.Abilities.AddItem('Parry');
 			Template.Abilities.AddItem('Deflect');
 			Template.Abilities.AddItem('Reflect');
+			Template.Abilities.AddItem('DeepFocus');
+			Template.Abilities.AddItem('TemplarInvert');
+			Template.Abilities.AddItem('Fortress');
+			Template.Abilities.AddItem('TemplarBladestorm');
+			Template.Abilities.AddItem('ArcWavePassive');
+			break;
+		case 'RTScholarGauntlet_M1':
+			CreateConventionalGauntlet(Template);
+			Template.Abilities.AddItem('RTScholarVolt');
+			break;
+		case 'RTScholarGauntlet_M2':
+			CreateMagneticGauntlet(Template);
+			Template.Abilities.AddItem('RTScholarVolt');
+			Template.Abilities.AddItem('StunStrike');
+			break;
+		case 'RTScholarGauntlet_M3':
+			CreateBeamGauntlet(Template);
+			Template.Abilities.AddItem('RTScholarVolt');
+			Template.Abilities.AddItem('RTScholarIonicStorm');
+			Template.Abilities.AddItem('StunStrike');
+			Template.Abilities.AddItem('Amplify');
 			break;
 		default:
 			`RTLOG("Error, CreateRTTemplarGauntlet recieved invalid TemplateName, " $ TemplateName $ "", true, false);
@@ -546,46 +546,22 @@ static function X2DataTemplate CreateRTTemplarGauntlet_Left(name TemplateName)
 
 	switch(TemplateName) {
 		case 'RTTemplarGauntlet_M1_Left':
-			Template.WeaponTech = 'conventional';
-			Template.strImage = "img:///UILibrary_XPACK_StrategyImages.Inv_ConvTGauntlet";
-			Template.EquipSound = "Sword_Equip_Conventional";
-			Template.GameArchetype = "WP_TemplarGauntlet.WP_TemplarGauntletL";
-			Template.AltGameArchetype = "WP_TemplarGauntlet.WP_TemplarGauntletL_F";
-			Template.GenderForAltArchetype = eGender_Female;
-			Template.BaseDamage = class'X2Item_XpackWeapons'.default.SHARDGAUNTLET_CONVENTIONAL_BASEDAMAGE;
-			Template.ExtraDamage = class'X2Item_XpackWeapons'.default.SHARDGAUNTLET_CONVENTIONAL_EXTRADAMAGE;
-			Template.Aim = class'X2Item_XpackWeapons'.default.SHARDGAUNTLET_CONVENTIONAL_AIM;
-			Template.CritChance = class'X2Item_XpackWeapons'.default.SHARDGAUNTLET_CONVENTIONAL_CRITCHANCE;
-			Template.iSoundRange = class'X2Item_XpackWeapons'.default.SHARDGAUNTLET_CONVENTIONAL_ISOUNDRANGE;
-			Template.iEnvironmentDamage = class'X2Item_XpackWeapons'.default.SHARDGAUNTLET_CONVENTIONAL_IENVIRONMENTDAMAGE;
+			CreateConventionalGauntlet(Template, true);
 			break;
 		case 'RTTemplarGauntlet_M2_Left':
-			Template.WeaponTech = 'magnetic';
-			Template.strImage = "img:///UILibrary_XPACK_StrategyImages.Inv_MagTGauntlet";
-			Template.EquipSound = "Sword_Equip_Magnetic";
-			Template.GameArchetype = "WP_TemplarGauntlet.WP_TemplarGauntletL_MG";
-			Template.AltGameArchetype = "WP_TemplarGauntlet.WP_TemplarGauntletL_F_MG";
-			Template.GenderForAltArchetype = eGender_Female;
-			Template.BaseDamage = class'X2Item_XpackWeapons'.default.SHARDGAUNTLET_MAGNETIC_BASEDAMAGE;
-			Template.ExtraDamage = class'X2Item_XpackWeapons'.default.SHARDGAUNTLET_MAGNETIC_EXTRADAMAGE;
-			Template.Aim = class'X2Item_XpackWeapons'.default.SHARDGAUNTLET_MAGNETIC_AIM;
-			Template.CritChance = class'X2Item_XpackWeapons'.default.SHARDGAUNTLET_MAGNETIC_CRITCHANCE;
-			Template.iSoundRange = class'X2Item_XpackWeapons'.default.SHARDGAUNTLET_MAGNETIC_ISOUNDRANGE;
-			Template.iEnvironmentDamage = class'X2Item_XpackWeapons'.default.SHARDGAUNTLET_MAGNETIC_IENVIRONMENTDAMAGE;
+			CreateMagneticGauntlet(Template, true);
 			break;
 		case 'RTTemplarGauntlet_M3_Left':
-			Template.WeaponTech = 'beam';
-			Template.strImage = "img:///UILibrary_XPACK_StrategyImages.Inv_BeamTGauntlet";
-			Template.EquipSound = "Sword_Equip_Beam";
-			Template.GameArchetype = "WP_TemplarGauntlet.WP_TemplarGauntletL_BM";
-			Template.AltGameArchetype = "WP_TemplarGauntlet.WP_TemplarGauntletL_F_BM";
-			Template.GenderForAltArchetype = eGender_Female;
-			Template.BaseDamage = class'X2Item_XpackWeapons'.default.SHARDGAUNTLET_BEAM_BASEDAMAGE;
-			Template.ExtraDamage = class'X2Item_XpackWeapons'.default.SHARDGAUNTLET_BEAM_EXTRADAMAGE;
-			Template.Aim = class'X2Item_XpackWeapons'.default.SHARDGAUNTLET_BEAM_AIM;
-			Template.CritChance = class'X2Item_XpackWeapons'.default.SHARDGAUNTLET_BEAM_CRITCHANCE;
-			Template.iSoundRange = class'X2Item_XpackWeapons'.default.SHARDGAUNTLET_BEAM_ISOUNDRANGE;
-			Template.iEnvironmentDamage = class'X2Item_XpackWeapons'.default.SHARDGAUNTLET_BEAM_IENVIRONMENTDAMAGE;
+			CreateBeamGauntlet(Template, true);
+			break;
+		case 'RTScholarGauntlet_M1_Left':
+			CreateConventionalGauntlet(Template, true);
+			break;
+		case 'RTScholarGauntlet_M2_Left':
+			CreateMagneticGauntlet(Template, true);
+			break;
+		case 'RTScholarGauntlet_M3_Left':
+			CreateBeamGauntlet(Template, true);
 			break;
 		default:
 			`RTLOG("Error, CreateRTTemplarGauntlet_Left recieved invalid TemplateName, " $ TemplateName $ "", true, false);
@@ -594,4 +570,64 @@ static function X2DataTemplate CreateRTTemplarGauntlet_Left(name TemplateName)
 	Template.BaseDamage.DamageType = 'Melee';
 
 	return Template;
+}
+
+static function CreateConventionalGauntlet(X2WeaponTemplate Template, optional bool bIsLeft = false) {
+	Template.WeaponTech = 'conventional';
+	Template.strImage = "img:///UILibrary_XPACK_StrategyImages.Inv_ConvTGauntlet";
+	Template.EquipSound = "Sword_Equip_Conventional";
+	Template.GameArchetype = "WP_TemplarGauntlet.WP_TemplarGauntlet";
+	Template.AltGameArchetype = "WP_TemplarGauntlet.WP_TemplarGauntlet_F";
+	Template.GenderForAltArchetype = eGender_Female;
+	Template.BaseDamage = class'X2Item_XpackWeapons'.default.SHARDGAUNTLET_CONVENTIONAL_BASEDAMAGE;
+	Template.ExtraDamage = class'X2Item_XpackWeapons'.default.SHARDGAUNTLET_CONVENTIONAL_EXTRADAMAGE;
+	Template.Aim = class'X2Item_XpackWeapons'.default.SHARDGAUNTLET_CONVENTIONAL_AIM;
+	Template.CritChance = class'X2Item_XpackWeapons'.default.SHARDGAUNTLET_CONVENTIONAL_CRITCHANCE;
+	Template.iSoundRange = class'X2Item_XpackWeapons'.default.SHARDGAUNTLET_CONVENTIONAL_ISOUNDRANGE;
+	Template.iEnvironmentDamage = class'X2Item_XpackWeapons'.default.SHARDGAUNTLET_CONVENTIONAL_IENVIRONMENTDAMAGE;
+
+	if(bIsLeft) {
+		Template.GameArchetype = "WP_TemplarGauntlet.WP_TemplarGauntletL";
+		Template.AltGameArchetype = "WP_TemplarGauntlet.WP_TemplarGauntletL_F";
+	}
+}
+
+static function CreateMagneticGauntlet(X2WeaponTemplate Template, optional bool bIsLeft = false) {
+	Template.WeaponTech = 'magnetic';
+	Template.strImage = "img:///UILibrary_XPACK_StrategyImages.Inv_MagTGauntlet";
+	Template.EquipSound = "Sword_Equip_Magnetic";
+	Template.GameArchetype = "WP_TemplarGauntlet.WP_TemplarGauntlet_MG";
+	Template.AltGameArchetype = "WP_TemplarGauntlet.WP_TemplarGauntlet_F_MG";
+	Template.GenderForAltArchetype = eGender_Female;
+	Template.BaseDamage = class'X2Item_XpackWeapons'.default.SHARDGAUNTLET_MAGNETIC_BASEDAMAGE;
+	Template.ExtraDamage = class'X2Item_XpackWeapons'.default.SHARDGAUNTLET_MAGNETIC_EXTRADAMAGE;
+	Template.Aim = class'X2Item_XpackWeapons'.default.SHARDGAUNTLET_MAGNETIC_AIM;
+	Template.CritChance = class'X2Item_XpackWeapons'.default.SHARDGAUNTLET_MAGNETIC_CRITCHANCE;
+	Template.iSoundRange = class'X2Item_XpackWeapons'.default.SHARDGAUNTLET_MAGNETIC_ISOUNDRANGE;
+	Template.iEnvironmentDamage = class'X2Item_XpackWeapons'.default.SHARDGAUNTLET_MAGNETIC_IENVIRONMENTDAMAGE;
+
+	if(bIsLeft) {
+		Template.GameArchetype = "WP_TemplarGauntlet.WP_TemplarGauntletL_MG";
+		Template.AltGameArchetype = "WP_TemplarGauntlet.WP_TemplarGauntletL_F_MG";
+	}
+}
+
+static function CreateBeamGauntlet(X2WeaponTemplate Template, optional bool bIsLeft = false) {
+	Template.WeaponTech = 'beam';
+	Template.strImage = "img:///UILibrary_XPACK_StrategyImages.Inv_BeamTGauntlet";
+	Template.EquipSound = "Sword_Equip_Beam";
+	Template.GameArchetype = "WP_TemplarGauntlet.WP_TemplarGauntlet_BM";
+	Template.AltGameArchetype = "WP_TemplarGauntlet.WP_TemplarGauntlet_F_BM";
+	Template.GenderForAltArchetype = eGender_Female;
+	Template.BaseDamage = class'X2Item_XpackWeapons'.default.SHARDGAUNTLET_BEAM_BASEDAMAGE;
+	Template.ExtraDamage = class'X2Item_XpackWeapons'.default.SHARDGAUNTLET_BEAM_EXTRADAMAGE;
+	Template.Aim = class'X2Item_XpackWeapons'.default.SHARDGAUNTLET_BEAM_AIM;
+	Template.CritChance = class'X2Item_XpackWeapons'.default.SHARDGAUNTLET_BEAM_CRITCHANCE;
+	Template.iSoundRange = class'X2Item_XpackWeapons'.default.SHARDGAUNTLET_BEAM_ISOUNDRANGE;
+	Template.iEnvironmentDamage = class'X2Item_XpackWeapons'.default.SHARDGAUNTLET_BEAM_IENVIRONMENTDAMAGE;
+
+	if(bIsLeft) {
+		Template.GameArchetype = "WP_TemplarGauntlet.WP_TemplarGauntletL_BM";
+		Template.AltGameArchetype = "WP_TemplarGauntlet.WP_TemplarGauntletL_F_BM";
+	}
 }

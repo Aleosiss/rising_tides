@@ -19,7 +19,7 @@ This video will focus on an approach that minimizes our exposure to ModBuddy; th
 
 ## 1. Installing Modbuddy
 
-Okay, let's get started. This episode 0 is technically about setting up your mod tools, but I will also create and publish a mod to the Steam Workshop by the end of it to show how the whole setup works from end to end.
+Okay, let's get started. This episode 0 is technically about setting up your mod tools.
 
 First, you're going to need to install the XCOM2 SDK. This isn't as simple as clicking install; there's several steps here. After the install completes, you have a decision to make: what kind of mod do you want to make?
 
