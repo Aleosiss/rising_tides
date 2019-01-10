@@ -35,6 +35,9 @@ static function ActivateOneSmallFavor(XComGameState NewGameState, StateObjectRef
 	//local DynamicPropertySet PropertySet; //need to delay it when the player can see it
 
 	Program = class'RTHelpers'.static.GetNewProgramState(NewGameState);
+	if(!Program.bOSF_FirstTimeDisplayed) { // start with three favors
+		Program.IncrementNumFavorsAvailable(3);
+	}
 	Program.MakeOneSmallFavorAvailable();
 	Program.bShouldResetOSFMonthly = true;
 }
@@ -43,7 +46,7 @@ static function DeactivateOneSmallFavor(XComGameState NewGameState, StateObjectR
 	local RTGameState_ProgramFaction Program;
 
 	Program = class'RTHelpers'.static.GetNewProgramState(NewGameState);
-	Program.bOneSmallFavorAvailable = false;
+	Program.MakeOneSmallFavorUnavailable();
 	Program.bShouldResetOSFMonthly = false;
 }
 

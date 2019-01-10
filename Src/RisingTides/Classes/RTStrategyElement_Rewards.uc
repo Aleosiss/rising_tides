@@ -402,7 +402,10 @@ static function GiveHuntTemplarsP3Reward(XComGameState NewGameState, XComGameSta
 }
 
 static function GiveTemplarQuestlineCompleteReward(XComGameState NewGameState, XComGameState_Reward RewardState, optional StateObjectReference AuxRef, optional bool bOrder = false, optional int OrderHours = -1) {
-	
+	local RTGameState_ProgramFaction ProgramState;
+
+	ProgramState = class'RTHelpers'.static.GetNewProgramState(NewGameState);
+	ProgramState.IncrementNumFavorsAvailable(99999);
 }
 
 static function GiveHuntTemplarAmbushReward(XComGameState NewGameState, XComGameState_Reward RewardState, optional StateObjectReference AuxRef, optional bool bOrder = false, optional int OrderHours = -1)
@@ -512,6 +515,7 @@ static function GiveProgramAdvanceQuestlineReward(XComGameState NewGameState, XC
 
 	ProgramState = class'RTHelpers'.static.GetNewProgramState(NewGameState);
 	ProgramState.IncrementTemplarQuestlineStage();
+	ProgramState.IncrementNumFavorsAvailable(3);
 }
 
 // why wasn't this static in the first place...

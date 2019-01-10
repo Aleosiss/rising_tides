@@ -87,8 +87,9 @@ var array<StateObjectReference>											TemplarQuestActions;
 var private int															iPreviousMaxSoldiersForMission;		// cache of the number of soldiers on a mission before OSF modfied it
 var private StateObjectReference										SelectedMissionRef;					// cache of the mission one small favor is going to go against
 var bool																bShouldResetOSFMonthly;
-var bool																bOneSmallFavorAvailable;			// can send squad on a mission, replacing XCOM
-var bool																bOneSmallFavorActivated;			// actively sending a squad on the next mission
+var private bool														bOneSmallFavorAvailable;			// can send squad on a mission, replacing XCOM
+var private bool														bOneSmallFavorActivated;			// actively sending a squad on the next mission
+var private int															iNumberOfFavorsAvailable;
 var int																	iNumberOfFavorsCalledIn;			
 var bool																bOSF_FirstTimeDisplayed;
 
@@ -97,7 +98,7 @@ var localized string OSFCheckboxAvailable;
 var localized string OSFCheckboxUnavailable;
 var localized string OSFFirstTime_Title;
 var localized string OSFFirstTime_Text;
-var localized string OSFFirstTime_ImagePath;
+var config string OSFFirstTime_ImagePath;
 
 /* *********************************************************************** */
 
@@ -153,7 +154,7 @@ function RTGameState_Unit CreateRTOperative(name GhostTemplateName, XComGameStat
 	UnitState.SetUnitName(CharTemplate.strForcedFirstName, CharTemplate.strForcedLastName, CharTemplate.strForcedNickName);
 	UnitState.SetBackground(UnitState.GetMyTemplate().strCharacterBackgroundMale[0]); // the first background is the classified one, the second one is the unclassified one
 
-	WeaponState = UnitState.GetPrimaryWeapon();
+	WeaponState = UnitState.GetItemInSlot(eInvSlot_PrimaryWeapon);
 	WeaponState = XComGameState_Item(StartState.ModifyStateObject(class'XComGameState_Item', WeaponState.ObjectID));
 	ApplyWeaponUpgrades(GhostTemplateName, WeaponState);
 
@@ -468,12 +469,44 @@ protected static function bool IsOSFMission(XComGameState_MissionSite MissionSta
 	return false;
 }
 
-function MakeOneSmallFavorAvailable() {
+function bool CanMakeOneSmallFavorAvailable() {
+	return iNumberOfFavorsAvailable > 0;
+}
+
+function IncrementNumFavorsAvailable(int NumFavors) {
+	if(NumFavors > 0) {
+		iNumberOfFavorsAvailable += NumFavors;
+	}
+}
+
+function bool IsOneSmallFavorAvailable() {
+	return bOneSmallFavorAvailable;
+}
+
+function bool MakeOneSmallFavorAvailable() {
 	if(Deployed == none) {
 		RotateRandomSquadToDeploy();
 	}
 
-	bOneSmallFavorAvailable = true;
+	if(bOneSmallFavorAvailable) {
+		return true;
+	}
+
+	if(CanMakeOneSmallFavorAvailable()) {
+		iNumberOfFavorsAvailable--;
+		bOneSmallFavorAvailable = true;
+		return true;
+	} else {
+		return false;
+	}
+}
+
+function MakeOneSmallFavorUnavailable() {
+	bOneSmallFavorAvailable = false;
+
+	if(bOneSmallFavorAvailable) { // we had a favor teed up, refund it
+		iNumberOfFavorsAvailable++;
+	}
 }
 
 function HandleOSFTutorial() {
@@ -787,6 +820,8 @@ private function AddRisingTidesTacticalTags(XComGameState_HeadquartersXCom XComH
 simulated function bool CashOneSmallFavor(XComGameState NewGameState, XComGameState_MissionSite MissionSite) {
 	local StateObjectReference GhostRef;
 	local name GhostTemplateName;
+
+	bOneSmallFavorActivated = true;
 	
 	if(Deployed == none) {
 		RotateRandomSquadToDeploy();
@@ -815,6 +850,8 @@ simulated function bool CashOneSmallFavor(XComGameState NewGameState, XComGameSt
 simulated function bool UncashOneSmallFavor(XComGameState NewGameState, XComGameState_MissionSite MissionSite) {
 	local StateObjectReference GhostRef, EmptyRef;
 	local name GhostTemplateName;
+
+	bOneSmallFavorActivated = false;
 	
 	if(MissionSite.GetReference().ObjectID != SelectedMissionRef.ObjectID) {
 		`RTLOG("MissionSite ObjectID is not the same as the SelectedMissionRef! Removing OSF from the SelectedMissionRef instead of the given one!");
