@@ -273,7 +273,6 @@ static function X2CharacterTemplate CreateKagaTemplate()
 	CharTemplate.ForceAppearance.nmTorsoDeco = 'LPW_WotC_SLD_MamaMEA_Remnant_Hvy_Torso_F';
 	CharTemplate.ForceAppearance.bGhostPawn = False;
 
-
 	// Since Kaga can't get level ups, give her some abilities now
 	CharTemplate.Abilities.AddItem('RTCrushingGrasp');
 	CharTemplate.Abilities.AddItem('RTPsionicLash');

@@ -75,10 +75,6 @@ function TSoldier CreateTemplar( optional name CharacterTemplateName, optional E
 	SetGender(eForceGender);
 	SetArmorTints(CharacterTemplate);	
 
-	BodyPartFilter.Set(EGender(kSoldier.kAppearance.iGender), ECharacterRace(kSoldier.kAppearance.iRace), kSoldier.kAppearance.nmTorso, true, , DLCNames);
-	SetBanditHead(BodyPartFilter, CharacterTemplate);
-	SetBanditAccessories(BodyPartFilter, CharacterTemplateName);
-
 	if(eForceGender == eGender_Female) {
 		kSoldier.kAppearance.nmHelmet = default.FemaleTemplarHelmets[`SYNC_RAND(FemaleTemplarHelmets.Length)];
 		kSoldier.kAppearance.nmTorso = default.FemaleTemplarTorsos[`SYNC_RAND(FemaleTemplarTorsos.Length)];
@@ -116,6 +112,10 @@ function TSoldier CreateTemplar( optional name CharacterTemplateName, optional E
 		}
 	}
 
+	BodyPartFilter.Set(EGender(kSoldier.kAppearance.iGender), ECharacterRace(kSoldier.kAppearance.iRace), kSoldier.kAppearance.nmTorso, true, , DLCNames);
+	SetBanditHead(BodyPartFilter, CharacterTemplate);
+	SetBanditAccessories(BodyPartFilter, CharacterTemplateName);
+
 	HairPalette = `CONTENT.GetColorPalette(ePalette_HairColor);
 	ColorizeHead(HairPalette);
 
@@ -146,10 +146,6 @@ function TSoldier CreateTemplarPeon( optional name CharacterTemplateName, option
 	SetGender(eForceGender);
 	SetArmorTints(CharacterTemplate);	
 
-	BodyPartFilter.Set(EGender(kSoldier.kAppearance.iGender), ECharacterRace(kSoldier.kAppearance.iRace), kSoldier.kAppearance.nmTorso, true, , DLCNames);
-	SetBanditHead(BodyPartFilter, CharacterTemplate);
-	SetBanditAccessories(BodyPartFilter, CharacterTemplateName);
-
 	if(eForceGender == eGender_Female) {
 		kSoldier.kAppearance.nmTorso = default.FemalePeonTorsos[`SYNC_RAND(FemalePeonTorsos.Length)];
 		kSoldier.kAppearance.nmLeftArm = default.FemalePeonLeftArms[`SYNC_RAND(FemalePeonLeftArms.Length)];
@@ -159,8 +155,13 @@ function TSoldier CreateTemplarPeon( optional name CharacterTemplateName, option
 		kSoldier.kAppearance.nmTorso = default.MalePeonTorsos[`SYNC_RAND(MalePeonTorsos.Length)];
 		kSoldier.kAppearance.nmLeftArm = default.MalePeonLeftArms[`SYNC_RAND(MalePeonLeftArms.Length)];
 		kSoldier.kAppearance.nmRightArm = default.MalePeonRightArms[`SYNC_RAND(MalePeonRightArms.Length)];
-		kSoldier.kAppearance.nmLegs = default.MalePeonLegs[`SYNC_RAND(MalePeonLegs.Length)];
+		kSoldier.kA cppearance.nmLegs = default.MalePeonLegs[`SYNC_RAND(MalePeonLegs.Length)];
 	}
+
+	BodyPartFilter.Set(EGender(kSoldier.kAppearance.iGender), ECharacterRace(kSoldier.kAppearance.iRace), kSoldier.kAppearance.nmTorso, true, , DLCNames);
+	SetBanditHead(BodyPartFilter, CharacterTemplate);
+	SetAccessories(BodyPartFilter, CharacterTemplateName);
+	SetBanditAccessories(BodyPartFilter, CharacterTemplateName);
 
 	HairPalette = `CONTENT.GetColorPalette(ePalette_HairColor);
 	ColorizeHead(HairPalette);
@@ -179,101 +180,6 @@ function ColorizeHead(XComLinearColorPalette HairPalette) {
 	kSoldier.kAppearance.iSkinColor = Rand(5);
 }
 
-/*
-function TSoldier CreateTSoldier( optional name CharacterTemplateName, optional EGender eForceGender, optional name nmCountry = '', optional int iRace = -1, optional name ArmorName )
-{
-	local XComLinearColorPalette HairPalette;
-	local X2SimpleBodyPartFilter BodyPartFilter;
-	local X2CharacterTemp`late CharacterTemplate;
-	local TAppearance DefaultAppearance;
-
-	kSoldier.kAppearance = DefaultAppearance;	
-	
-	CharacterTemplate = SetCharacterTemplate(CharacterTemplateName, ArmorName);
-	
-	if (nmCountry == '')
-		nmCountry = PickOriginCountry();
-
-	if(CharacterTemplateName == 'CultPaladin_M1' || CharacterTemplateName == 'CultPaladin_M2' || CharacterTemplateName == 'CultPaladin_M3')
-	{
-		SetCountry('Country_Templar');
-	}
-
-	BodyPartFilter = `XCOMGAME.SharedBodyPartFilter;
-
-	//When generating new characters, consider the DLC pack filters.
-	//Use the player's settings from Options->Game Options to pick which DLC / Mod packs this generated soldier should draw from
-	UpdateDLCPackFilters();
-	
-	
-	SetCountry(nmCountry);
-	SetRace(iRace);
-	SetGender(eForceGender);
-	SetArmorTints(CharacterTemplate);	
-	BodyPartFilter.Set(EGender(kSoldier.kAppearance.iGender), ECharacterRace(kSoldier.kAppearance.iRace), kSoldier.kAppearance.nmTorso, !IsSoldier(CharacterTemplateName), , DLCNames);
-	SetBanditHead(BodyPartFilter, CharacterTemplate);
-	SetBanditAccessories(BodyPartFilter, CharacterTemplateName);
-
-	if(CharacterTemplateName == 'CultFanatic_M1' || CharacterTemplateName == 'CultFanatic_M2' || CharacterTemplateName == 'CultFanatic_M3')
-	{
-		kSoldier.kAppearance.nmTorso = (kSoldier.kAppearance.iGender == eGender_Female) ? 'Cultist_Torso_F' : 'Cultist_Torso_M';
-
-		kSoldier.kAppearance.nmLeftArm =  (kSoldier.kAppearance.iGender == eGender_Female) ? 'Cultist_Left_Arm_Bare_F' : 'Cultist_Left_Arm_Bare_M';
-		kSoldier.kAppearance.nmRightArm =  (kSoldier.kAppearance.iGender == eGender_Female) ? 'Cultist_Right_Arm_Bare_F' : 'Cultist_Right_Arm_Bare_M';
-
-		kSoldier.kAppearance.nmLegs = (kSoldier.kAppearance.iGender == eGender_Female) ? 'CnvMed_Std_A_F' : 'CnvMed_Std_A_M';
-	}
-
-	if(CharacterTemplateName == 'CultNecro_M1' || CharacterTemplateName == 'CultNecro_M2' || CharacterTemplateName == 'CultNecro_M3')
-	{
-		kSoldier.kAppearance.nmHelmet = (kSoldier.kAppearance.iGender == eGender_Female) ? 'Helmet_A_ReconHood_F' : 'Helmet_A_ReconHood_M';
-
-		kSoldier.kAppearance.nmTorso = (kSoldier.kAppearance.iGender == eGender_Female) ? 'Cultist_Torso_B2_F' : 'Cultist_Torso_B2_M';
-
-		kSoldier.kAppearance.nmLeftArm =  (kSoldier.kAppearance.iGender == eGender_Female) ? 'Cultist_Left_Arm_Bare_F' : 'Cultist_Left_Arm_Bare_M';
-		kSoldier.kAppearance.nmRightArm =  (kSoldier.kAppearance.iGender == eGender_Female) ? 'Cultist_Right_Arm_Bare_F' : 'Cultist_Right_Arm_Bare_M';
-
-		kSoldier.kAppearance.nmLegs = (kSoldier.kAppearance.iGender == eGender_Female) ? 'CnvMed_Std_A_F' : 'CnvMed_Std_A_M';
-	}
-
-	if(CharacterTemplateName == 'CultPaladin_M1' || CharacterTemplateName == 'CultPaladin_M2' || CharacterTemplateName == 'CultPaladin_M3')
-	{
-		kSoldier.kAppearance.nmHelmet = (kSoldier.kAppearance.iGender == eGender_Female) ? 'Templar_Helmet_A_F' : 'Templar_Helmet_A_M';
-		kSoldier.kAppearance.nmTorso = (kSoldier.kAppearance.iGender == eGender_Female) ? 'CnvTemplar_Std_A_F' : 'CnvTemplar_Std_A_M';
-		kSoldier.kAppearance.nmLeftArm =  (kSoldier.kAppearance.iGender == eGender_Female) ? 'Templar_Arms_Left_A_T1_F' : 'Templar_Arms_Left_A_T1_M';
-		kSoldier.kAppearance.nmRightArm =  (kSoldier.kAppearance.iGender == eGender_Female) ? 'Templar_Arms_Right_A_T1_F' : 'Templar_Arms_Right_A_T1_M';
-		kSoldier.kAppearance.nmLegs = (kSoldier.kAppearance.iGender == eGender_Female) ? 'Templar_Legs_A_F' : 'Templar_Legs_A_M';
-		kSoldier.kAppearance.nmTorsoDeco = (kSoldier.kAppearance.iGender == eGender_Female) ? 'Templar_TorsoDeco_A_F' : 'Templar_TorsoDeco_A_M';
-		kSoldier.kAppearance.nmThighs = (kSoldier.kAppearance.iGender == eGender_Female) ? 'Templar_Thighs_A_F' : 'Templar_Thighs_A_M';
-	}
-
-	//kSoldier.kAppearance.nmHead = (kSoldier.kAppearance.iGender == eGender_Female) ? 'Invisible_Bandit_F' : 'Invisible_Bandit_M';
-
-	HairPalette = `CONTENT.GetColorPalette(ePalette_HairColor);
-	kSoldier.kAppearance.iHairColor = ChooseHairColor(kSoldier.kAppearance, HairPalette.BaseOptions); // Only generate with base options
-	kSoldier.kAppearance.iEyeColor = Rand(5); 
-	kSoldier.kAppearance.iWeaponTint = 5; //should make it gun metal grey
-	kSoldier.kAppearance.iSkinColor = Rand(5);
-
-	SetVoice(CharacterTemplateName, nmCountry);
-
-	if(CharacterTemplateName == 'CultPaladin_M1' || CharacterTemplateName == 'CultPaladin_M2' || CharacterTemplateName == 'CultPaladin_M3')
-	{
-		SetTemplarVoice(CharacterTemplateName, nmCountry);
-	}
-
-	SetAttitude();
-	//GenerateName( kSoldier.kAppearance.iGender, kSoldier.nmCountry, kSoldier.strFirstName, kSoldier.strLastName, kSoldier.kAppearance.iRace );
-
-	BioCountryName = kSoldier.nmCountry;
-	return kSoldier;
-}*/
-
-function SetRace(int iRace)
-{
-	kSoldier.kAppearance.iRace = eRace_Hispanic;
-}
-
 function SetHead(X2SimpleBodyPartFilter BodyPartFilter, X2CharacterTemplate CharacterTemplate)
 {
 	super.SetHead(BodyPartFilter, CharacterTemplate);
@@ -288,18 +194,8 @@ function SetHead(X2SimpleBodyPartFilter BodyPartFilter, X2CharacterTemplate Char
 	}
 }
 
-function SetAccessories(X2SimpleBodyPartFilter BodyPartFilter, name CharacterTemplateName)
-{
-	super.SetAccessories(BodyPartFilter, CharacterTemplateName);
-
-	if (kSoldier.kAppearance.iGender == eGender_Male)
-	{
-		kSoldier.kAppearance.nmHelmet = default.MaleHelmets[`SYNC_RAND(default.MaleHelmets.Length)];
-	}
-	else
-	{
-		kSoldier.kAppearance.nmHelmet = default.FemaleHelmets[`SYNC_RAND(default.FemaleHelmets.Length)];
-	}
+function bool IsSoldier(name CharacterTemplateName) {
+	return false;
 }
 
 function SetArmorTints(X2CharacterTemplate CharacterTemplate)
@@ -347,10 +243,10 @@ function SetBanditAccessories(X2SimpleBodyPartFilter BodyPartFilter, name Charac
 	//Custom settings depending on whether the unit is a soldier or not
 	RandomizeSetBodyPart(PartTemplateManager, kSoldier.kAppearance.nmPatterns, "Patterns", BodyPartFilter.FilterAny);
 	RandomizeSetBodyPart(PartTemplateManager, kSoldier.kAppearance.nmWeaponPattern, "Patterns", BodyPartFilter.FilterAny);
-	RandomizeSetBodyPart(PartTemplateManager, kSoldier.kAppearance.nmTattoo_LeftArm, "Tattoos", BodyPartFilter.FilterAny);
-	RandomizeSetBodyPart(PartTemplateManager, kSoldier.kAppearance.nmTattoo_RightArm, "Tattoos", BodyPartFilter.FilterAny);
+	//RandomizeSetBodyPart(PartTemplateManager, kSoldier.kAppearance.nmTattoo_LeftArm, "Tattoos", BodyPartFilter.FilterAny);
+	//RandomizeSetBodyPart(PartTemplateManager, kSoldier.kAppearance.nmTattoo_RightArm, "Tattoos", BodyPartFilter.FilterAny);
 	RandomizeSetBodyPart(PartTemplateManager, kSoldier.kAppearance.nmHaircut, "Hair", BodyPartFilter.FilterByGenderAndNonSpecialized);
-	RandomizeSetBodyPart(PartTemplateManager, kSoldier.kAppearance.nmFacepaint, "Facepaint", BodyPartFilter.FilterAny);
+	//RandomizeSetBodyPart(PartTemplateManager, kSoldier.kAppearance.nmFacepaint, "Facepaint", BodyPartFilter.FilterAny);
 	
 }
 
