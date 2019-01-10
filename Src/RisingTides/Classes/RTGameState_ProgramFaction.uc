@@ -1376,3 +1376,10 @@ static function InitFaction(optional XComGameState StartState) {
 static function DisplayFirstTimePopup() {
 	`PRESBASE.UITutorialBox(default.OSFFirstTime_Title, default.OSFFirstTime_Text, default.OSFFirstTime_ImagePath);
 }
+
+function PrintDebuggingInfo() {
+	`RTLOG("Is Favor Available");
+	`RTLOG("" $ bOneSmallFavorAvailable);
+	`RTLOG("Number of Favors remaining");
+	`RTLOG("" $ iNumberOfFavorsAvailable);
+}

@@ -45,7 +45,7 @@ exec function RT_PrintProgramFactionInformation(optional bool bShouldPrintFullIn
 	`RTLOG("" $ XComGameState_AdventChosen(History.GetGameStateForObjectID(Faction.RivalChosen.ObjectID)).GetChosenClassName());
 
 	`RTLOG("Printing Misc Information for the Program...");
-	class'RTHelpers'.static.PrintMiscInfoForFaction(Faction);
+	Faction.PrintDebuggingInfo();
 
 
 }
@@ -734,10 +734,6 @@ exec function RT_RecreateOneSmallFavor() {
 	local RTGameState_ProgramFaction ProgramState;
 	local XComGameState_StrategyCard CardState;
 	local StateObjectReference IteratorRef;
-	local X2StrategyElementTemplateManager StratMgr;
-	local array<X2StrategyElementTemplate> AllCardTemplates;
-	local RTProgramStrategyCardTemplate CardTemplate;
-	local int idx;
 
 	History = `XCOMHISTORY;
 	NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("Rising Tides: CHEAT: Regenerate One Small Favor");
@@ -764,4 +760,17 @@ exec function RT_RecreateOneSmallFavor() {
 	`XCOMGAME.GameRuleset.SubmitGameState(NewGameState);
 }
 
+exec function RT_ToggleAllToolTips(bool bHide, optional bool bAnimateOutTooltip = false) {
+	local UITooltipMgr Mgr;
+	local XComPresentationLayerBase Pres;
+	local UITooltip Tooltip;
+	pres = `PRESBASE;
 
+	Mgr = Pres.m_kTooltipMgr;
+	foreach Mgr.Tooltips(Tooltip) {
+		if(!bHide)
+			Mgr.ActivateTooltip(Tooltip);
+		else
+			Mgr.DeactivateTooltip(Tooltip, bAnimateOutTooltip);
+	}
+}

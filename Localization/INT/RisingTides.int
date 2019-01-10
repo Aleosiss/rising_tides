@@ -142,8 +142,8 @@ OSFCheckboxAvailable="Call in one small favor from the Program."
 OSFCheckboxUnavailable="The Program is not available to assist."
 OSFFirstTime_Title = "One Small Favor"
 OSFFirstTime_Text = "The Program fields small squads of elite operatives. As a result of their alliance with XCOM, you may ask them to run a mission for you.\n\nCall in One Small Favor by toggling the white checkbox now shown on Mission Launch screens.\n\nNOTE: this favor can only be called in once per month, and is refreshed after the supply drop."
-OSFFirstTime_ImagePath = "img:///RisingTidesContentPackage.UIImages.osf_tutorial"
-WhisperWepName = 'Heartspan' # ...by sacrificing the rook, I can attack the king...
+;# ...by sacrificing the rook, I can attack the king...
+WhisperWepName = 'Heartspan' 
 
 SquadTwoName="HIGHLANDER"
 SquadTwoBackground="HIGHLANDER works the people."
