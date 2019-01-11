@@ -29,6 +29,16 @@ var config int ASSAULTRIFLE_PROGRAM_ICLIPSIZE;
 var config int ASSAULTRIFLE_PROGRAM_ISOUNDRANGE;
 var config int ASSAULTRIFLE_PROGRAM_IENVIRONMENTDAMAGE;
 
+var config WeaponDamageValue WARPGRENADE_BASEDAMAGE;
+var config int WARPGRENADE_ISOUNDRANGE;
+var config int WARPGRENADE_IENVIRONMENTDAMAGE;
+var config int WARPGRENADE_ISUPPLIES;
+var config int WARPGRENADE_TRADINGPOSTVALUE;
+var config int WARPGRENADE_IPOINTS;
+var config int WARPGRENADE_ICLIPSIZE;
+var config int WARPGRENADE_RANGE;
+var config int WARPGRENADE_RADIUS;
+
 static function array<X2DataTemplate> CreateTemplates()
 {
 	local array<X2DataTemplate> Items;
@@ -278,9 +288,6 @@ static function X2DataTemplate CreateTemplate_ProgramAssaultRifle()
 
 	return Template;
 }
-
-
-
 
 static function X2DataTemplate CreateTemplate_CosmeticSilencer() {
 	local X2WeaponUpgradeTemplate Template;
@@ -637,7 +644,6 @@ static function CreateBeamGauntlet(X2WeaponTemplate Template, optional bool bIsL
 static function X2DataTemplate CreateRTTemplarWarpGrenades()
 {
 	local X2GrenadeTemplate Template;
-	local X2Effect_ApplyAcidToWorld WeaponEffect;
 	local X2Effect_ApplyWeaponDamage WeaponDamageEffect;
 
 	`CREATE_X2TEMPLATE(class'X2GrenadeTemplate', Template, 'RTWarpGrenade');
@@ -648,9 +654,9 @@ static function X2DataTemplate CreateRTTemplarWarpGrenades()
 	Template.AddAbilityIconOverride('LaunchGrenade', "img:///UILibrary_PerkIcons.UIPerk_grenade_acidbomb");
 	Template.iRange = default.WARPGRENADE_RANGE;
 	Template.iRadius = default.WARPGRENADE_RADIUS;
-	Template.fCoverage = 2/3 * 100;
-
-	Template.BaseDamage = default.WARPGRENADEM1_BASEDAMAGE;
+	Template.fCoverage = 100;
+	
+	Template.BaseDamage = default.WARPGRENADE_BASEDAMAGE;
 	Template.iSoundRange = default.WARPGRENADE_ISOUNDRANGE;
 	Template.iEnvironmentDamage = default.WARPGRENADE_IENVIRONMENTDAMAGE;
 	Template.TradingPostValue = default.WARPGRENADE_TRADINGPOSTVALUE;
@@ -660,10 +666,7 @@ static function X2DataTemplate CreateRTTemplarWarpGrenades()
 	
 	Template.Abilities.AddItem('ThrowGrenade');
 	Template.Abilities.AddItem('GrenadeFuse');
-	
-	WeaponEffect = new class'X2Effect_ApplyAcidToWorld';	
-	Template.ThrownGrenadeEffects.AddItem(WeaponEffect);
-	Template.ThrownGrenadeEffects.AddItem(class'X2StatusEffects'.static.CreateAcidBurningStatusEffect(2,1));
+
 	// immediate damage
 	WeaponDamageEffect = new class'X2Effect_ApplyWeaponDamage';
 	WeaponDamageEffect.bExplosiveDamage = true;
@@ -671,15 +674,12 @@ static function X2DataTemplate CreateRTTemplarWarpGrenades()
 
 	Template.LaunchedGrenadeEffects = Template.ThrownGrenadeEffects;
 	
-	Template.GameArchetype = "WP_Grenade_Acid.WP_Grenade_Acid";
-
-	Template.CanBeBuilt = false;
+	Template.GameArchetype = "WP_Grenade_BattleScanner.WP_Grenade_BattleScanner";
 	
-	Template.RewardDecks.AddItem('ExperimentalGrenadeRewards');
+	Template.CanBeBuilt = false;
 
 	Template.SetUIStatMarkup(class'XLocalizedData'.default.RangeLabel, , default.WARPGRENADE_RANGE);
 	Template.SetUIStatMarkup(class'XLocalizedData'.default.RadiusLabel, , default.WARPGRENADE_RADIUS);
-	Template.SetUIStatMarkup(class'XLocalizedData'.default.ShredLabel, , default.WARPGRENADEM1_BASEDAMAGE.Shred);
 
 	return Template;
 }

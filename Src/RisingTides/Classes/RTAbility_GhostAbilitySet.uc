@@ -1059,7 +1059,7 @@ static function X2AbilityTemplate RTEnterStealth() {
 //---------------------------------------------------------------------------------------
 //---Stealth-----------------------------------------------------------------------------
 //---------------------------------------------------------------------------------------
-static function X2AbilityTemplate RTProgramEvacuation() {
+/*static function X2AbilityTemplate RTProgramEvacuation() {
 	local X2AbilityTemplate Template;
 	local RTEffect_Sustain SustainEffect;
 
@@ -1139,7 +1139,7 @@ static function X2AbilityTemplate RTProgramEvacuationTriggered() {
 	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
 
 	return Template;
-}
+}*/
 
 
 defaultproperties

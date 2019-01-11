@@ -155,7 +155,7 @@ function TSoldier CreateTemplarPeon( optional name CharacterTemplateName, option
 		kSoldier.kAppearance.nmTorso = default.MalePeonTorsos[`SYNC_RAND(MalePeonTorsos.Length)];
 		kSoldier.kAppearance.nmLeftArm = default.MalePeonLeftArms[`SYNC_RAND(MalePeonLeftArms.Length)];
 		kSoldier.kAppearance.nmRightArm = default.MalePeonRightArms[`SYNC_RAND(MalePeonRightArms.Length)];
-		kSoldier.kA cppearance.nmLegs = default.MalePeonLegs[`SYNC_RAND(MalePeonLegs.Length)];
+		kSoldier.kAppearance.nmLegs = default.MalePeonLegs[`SYNC_RAND(MalePeonLegs.Length)];
 	}
 
 	BodyPartFilter.Set(EGender(kSoldier.kAppearance.iGender), ECharacterRace(kSoldier.kAppearance.iRace), kSoldier.kAppearance.nmTorso, true, , DLCNames);
@@ -170,6 +170,7 @@ function TSoldier CreateTemplarPeon( optional name CharacterTemplateName, option
 	SetAttitude();
 
 	BioCountryName = kSoldier.nmCountry;
+	kSoldier.kAppearance.nmHelmet = '';
 	return kSoldier;
 }
 
