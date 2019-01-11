@@ -1056,7 +1056,90 @@ static function X2AbilityTemplate RTEnterStealth() {
 
 }
 
+//---------------------------------------------------------------------------------------
+//---Stealth-----------------------------------------------------------------------------
+//---------------------------------------------------------------------------------------
+static function X2AbilityTemplate RTProgramEvacuation() {
+	local X2AbilityTemplate Template;
+	local RTEffect_Sustain SustainEffect;
 
+	`CREATE_X2ABILITY_TEMPLATE(Template, 'RTProgramEvacuation');
+
+	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_sustain";
+	Template.AbilitySourceName = 'eAbilitySource_Psionic';
+	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_NeverShow;
+	Template.Hostility = eHostility_Neutral;
+	Template.bIsPassive = true;
+
+	Template.AbilityToHitCalc = default.DeadEye;
+	Template.AbilityTargetStyle = default.SelfTarget;
+	Template.AbilityTriggers.AddItem(default.UnitPostBeginPlayTrigger);
+
+	SustainEffect = new class'RTEffect_Sustain';
+
+	SustainEffect.BuildPersistentEffect(1, true, true);
+	//SustainEffect.SetDisplayInfo(ePerkBuff_Passive, Template.LocFriendlyName, Template.GetMyLongDescription(), Template.IconImage, true,, Template.AbilitySourceName);
+	Template.AddTargetEffect(SustainEffect);
+
+	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
+	// Note: no visualization on purpose!
+
+	Template.AdditionalAbilities.AddItem('RTProgramEvacuationTriggered');
+
+	return Template;
+}
+
+static function X2AbilityTemplate RTProgramEvacuationTriggered() {
+	local X2AbilityTemplate Template;
+	local X2Effect_Stasis StasisEffect;
+	local X2AbilityTrigger_EventListener EventTrigger;
+
+	`CREATE_X2ABILITY_TEMPLATE(Template, 'RTProgramEvacuationTriggered');
+
+	Template.Hostility = eHostility_Neutral;
+	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_sustain";
+	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_NeverShow;
+	Template.AbilitySourceName = 'eAbilitySource_Psionic';
+
+	Template.AbilityToHitCalc = default.DeadEye;
+	Template.AbilityTargetStyle = default.SelfTarget;
+	//	check that the unit is still alive.
+	//	it's possible that multiple event listeners responded to the same event, and some of those other listeners
+	//	went ahead and killed the unit before we got to trigger sustain.
+	//	it would look weird to do the sustain visualization and then have the unit die, so just don't trigger sustain.
+	//	e.g. a unit with a homing mine on it that takes a kill shot wants to have the death stopped, but the
+	//	homing mine explosion can trigger before the sustain trigger goes off, killing the unit before it would be sustained
+	//	and making things look really weird. now the unit will just die without "sustaining" the corpse.
+	//	-jbouscher
+	
+	// It's more important that we we evac than any other consideration
+	//Template.AbilityShooterConditions.AddItem(default.LivingShooterProperty);
+
+	StasisEffect = new class'X2Effect_Stasis';
+	StasisEffect.BuildPersistentEffect(1, false, false, false, eGameRule_PlayerTurnBegin);
+	StasisEffect.bUseSourcePlayerState = true;
+	StasisEffect.bRemoveWhenTargetDies = true;          //  probably shouldn't be possible for them to die while in stasis, but just in case
+	StasisEffect.SetDisplayInfo(ePerkBuff_Penalty, Template.LocFriendlyName, Template.GetMyHelpText(), Template.IconImage);
+	StasisEffect.StunStartAnim = 'HL_PsiSustainStart';
+	StasisEffect.bSkipFlyover = true;
+	Template.AddTargetEffect(StasisEffect);
+
+	EventTrigger = new class'X2AbilityTrigger_EventListener';
+	EventTrigger.ListenerData.Deferral = ELD_OnStateSubmitted;
+	EventTrigger.ListenerData.EventID = class'RTEffect_Sustain'.default.SustainEvent;
+	EventTrigger.ListenerData.Filter = eFilter_Unit;
+	EventTrigger.ListenerData.EventFn = class'XComGameState_Ability'.static.AbilityTriggerEventListener_Self;
+	Template.AbilityTriggers.AddItem(EventTrigger);
+
+	Template.PostActivationEvents.AddItem(class'RTEffect_Sustain'.default.SustainTriggeredEvent);
+		
+	Template.bSkipFireAction = true;
+	Template.FrameAbilityCameraType = eCameraFraming_Never;
+	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
+	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
+
+	return Template;
+}
 
 
 defaultproperties

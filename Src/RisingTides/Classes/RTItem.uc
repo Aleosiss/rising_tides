@@ -67,6 +67,8 @@ static function array<X2DataTemplate> CreateTemplates()
 	Items.AddItem(CreateRTTemplarGauntlet_Left('RTScholarGauntlet_M1'));
 	Items.AddItem(CreateRTTemplarGauntlet_Left('RTScholarGauntlet_M2'));
 	Items.AddItem(CreateRTTemplarGauntlet_Left('RTScholarGauntlet_M3'));
+
+	Items.AddItem(CreateRTTemplarWarpGrenades());
 	
 	return Items;
 }
@@ -630,4 +632,54 @@ static function CreateBeamGauntlet(X2WeaponTemplate Template, optional bool bIsL
 		Template.GameArchetype = "WP_TemplarGauntlet.WP_TemplarGauntletL_BM";
 		Template.AltGameArchetype = "WP_TemplarGauntlet.WP_TemplarGauntletL_F_BM";
 	}
+}
+
+static function X2DataTemplate CreateRTTemplarWarpGrenades()
+{
+	local X2GrenadeTemplate Template;
+	local X2Effect_ApplyAcidToWorld WeaponEffect;
+	local X2Effect_ApplyWeaponDamage WeaponDamageEffect;
+
+	`CREATE_X2TEMPLATE(class'X2GrenadeTemplate', Template, 'RTWarpGrenade');
+
+	Template.strImage = "img:///UILibrary_StrategyImages.X2InventoryIcons.Inv_Acid_Bomb";
+	Template.EquipSound = "StrategyUI_Grenade_Equip";
+	Template.AddAbilityIconOverride('ThrowGrenade', "img:///UILibrary_PerkIcons.UIPerk_grenade_acidbomb");
+	Template.AddAbilityIconOverride('LaunchGrenade', "img:///UILibrary_PerkIcons.UIPerk_grenade_acidbomb");
+	Template.iRange = default.WARPGRENADE_RANGE;
+	Template.iRadius = default.WARPGRENADE_RADIUS;
+	Template.fCoverage = 2/3 * 100;
+
+	Template.BaseDamage = default.WARPGRENADEM1_BASEDAMAGE;
+	Template.iSoundRange = default.WARPGRENADE_ISOUNDRANGE;
+	Template.iEnvironmentDamage = default.WARPGRENADE_IENVIRONMENTDAMAGE;
+	Template.TradingPostValue = default.WARPGRENADE_TRADINGPOSTVALUE;
+	Template.PointsToComplete = default.WARPGRENADE_IPOINTS;
+	Template.iClipSize = default.WARPGRENADE_ICLIPSIZE;
+	Template.Tier = 1;
+	
+	Template.Abilities.AddItem('ThrowGrenade');
+	Template.Abilities.AddItem('GrenadeFuse');
+	
+	WeaponEffect = new class'X2Effect_ApplyAcidToWorld';	
+	Template.ThrownGrenadeEffects.AddItem(WeaponEffect);
+	Template.ThrownGrenadeEffects.AddItem(class'X2StatusEffects'.static.CreateAcidBurningStatusEffect(2,1));
+	// immediate damage
+	WeaponDamageEffect = new class'X2Effect_ApplyWeaponDamage';
+	WeaponDamageEffect.bExplosiveDamage = true;
+	Template.ThrownGrenadeEffects.AddItem(WeaponDamageEffect);
+
+	Template.LaunchedGrenadeEffects = Template.ThrownGrenadeEffects;
+	
+	Template.GameArchetype = "WP_Grenade_Acid.WP_Grenade_Acid";
+
+	Template.CanBeBuilt = false;
+	
+	Template.RewardDecks.AddItem('ExperimentalGrenadeRewards');
+
+	Template.SetUIStatMarkup(class'XLocalizedData'.default.RangeLabel, , default.WARPGRENADE_RANGE);
+	Template.SetUIStatMarkup(class'XLocalizedData'.default.RadiusLabel, , default.WARPGRENADE_RADIUS);
+	Template.SetUIStatMarkup(class'XLocalizedData'.default.ShredLabel, , default.WARPGRENADEM1_BASEDAMAGE.Shred);
+
+	return Template;
 }
