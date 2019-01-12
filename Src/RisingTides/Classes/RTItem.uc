@@ -674,8 +674,8 @@ static function X2DataTemplate CreateRTTemplarWarpGrenades()
 
 	Template.LaunchedGrenadeEffects = Template.ThrownGrenadeEffects;
 	
-	Template.GameArchetype = "WP_Grenade_BattleScanner.WP_Grenade_BattleScanner";
-	
+	Template.GameArchetype = "RT_Grenade_Warp.RT_WP_Grenade_Warp_Lv2";
+
 	Template.CanBeBuilt = false;
 
 	Template.SetUIStatMarkup(class'XLocalizedData'.default.RangeLabel, , default.WARPGRENADE_RANGE);
