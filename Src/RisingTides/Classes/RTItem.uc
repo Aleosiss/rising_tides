@@ -484,6 +484,7 @@ static function X2DataTemplate CreateRTTemplarGauntlet(name TemplateName)
 
 	Template.Abilities.AddItem('Rend');
 	Template.Abilities.AddItem('TemplarFocus');
+	Template.Abilities.AddItem('RTScholarVolt');
 
 	switch(TemplateName) {
 		case 'RTTemplarGauntlet_M1':
@@ -509,19 +510,17 @@ static function X2DataTemplate CreateRTTemplarGauntlet(name TemplateName)
 			break;
 		case 'RTScholarGauntlet_M1':
 			CreateConventionalGauntlet(Template);
-			Template.Abilities.AddItem('RTScholarVolt');
 			break;
 		case 'RTScholarGauntlet_M2':
 			CreateMagneticGauntlet(Template);
-			Template.Abilities.AddItem('RTScholarVolt');
 			Template.Abilities.AddItem('StunStrike');
 			Template.Abilities.AddItem('Amplify');
 			break;
 		case 'RTScholarGauntlet_M3':
 			CreateBeamGauntlet(Template);
-			Template.Abilities.AddItem('RTScholarVolt');
 			Template.Abilities.AddItem('RTScholarIonicStorm');
 			Template.Abilities.AddItem('StunStrike');
+			Template.Abilities.AddItem('Amplify');
 			break;
 		default:
 			`RTLOG("Error, CreateRTTemplarGauntlet recieved invalid TemplateName, " $ TemplateName $ "", true, false);
