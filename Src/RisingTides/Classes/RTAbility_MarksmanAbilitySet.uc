@@ -2292,7 +2292,6 @@ static function X2AbilityTemplate RTHarbingerPsionicLance() {
 	return Template;
 }
 
-
 //---------------------------------------------------------------------------------------
 //---Harbinger Cleanse Listener----------------------------------------------------------
 //---------------------------------------------------------------------------------------
@@ -2341,7 +2340,6 @@ static function X2AbilityTemplate HarbingerCleanseListener()
 	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
 	Template.bSkipFireAction = true;
 
-
 	Template.bCrossClassEligible = false;
 	return Template;
 }
@@ -2361,7 +2359,6 @@ static function X2AbilityTemplate RTKillZone()
 	local X2Effect_MarkValidActivationTiles		MarkTilesEffect;
 	local X2Condition_UnitEffects				SuppressedCondition;
 	local X2Effect_Persistent					Effect, Effect2;
-
 
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'RTKillZone');
 
@@ -2704,7 +2701,7 @@ static function X2AbilityTemplate RTKubikuriDamage()
 	Template.AbilityToHitCalc = default.DeadEye;
 	Template.AbilityTargetStyle = default.SelfTarget;
 	Template.AbilityTriggers.AddItem(default.UnitPostBeginPlayTrigger);
-	DamageEffect=new class'X2Effect_Kubikuri';
+	DamageEffect = new class'X2Effect_Kubikuri';
 	DamageEffect.BuildPersistentEffect(1, true, false, false);
 	DamageEffect.SetDisplayInfo(0, Template.LocFriendlyName, Template.GetMyLongDescription(), Template.IconImage, false,, Template.AbilitySourceName);
 	Template.AddTargetEffect(DamageEffect);
@@ -2757,27 +2754,27 @@ static function bool AbilityTagExpandHandler(string InString, out string OutStri
 
 	switch(Tag)
 	{
-	case 'RTREPOSITIONING_MAX_POSITIONS_SAVED':
-		OutString = string(default.REPOSITIONING_MAX_POSITIONS_SAVED);
-		return true;
-	case 'RTREPOSITIONING_TILE_DISTANCE':
-		OutString = string(default.REPOSITIONING_TILES_MOVED_REQUIREMENT);
-		return true;
-	case 'RTPRECISION_SHOT_CRIT_CHANCE':
-		OutString = string(default.HEADSHOT_CRIT_BONUS);
-		return true;
-	case 'RTPRECISION_SHOT_CRIT_DAMAGE':
-		OutString = string(default.HEADSHOT_CRITDMG_BONUS);
-		return true;
-	case 'RTPRECISION_SHOT_AIM_PENALITY':
-		OutString = string(default.HEADSHOT_AIM_MULTIPLIER);
-		return true;
-	case 'AGGRESSION_CRIT_PER_UNIT':
-		OutString = string(default.AGGRESSION_CRIT_PER_UNIT);
-		return true;
-	case 'AGGRESSION_MAX_CRIT':
-		OutString = string(default.AGGRESSION_UNITS_FOR_MAX_BONUS * default.AGGRESSION_CRIT_PER_UNIT);
-		return true;
+		case 'RTREPOSITIONING_MAX_POSITIONS_SAVED':
+			OutString = string(default.REPOSITIONING_MAX_POSITIONS_SAVED);
+			return true;
+		case 'RTREPOSITIONING_TILE_DISTANCE':
+			OutString = string(default.REPOSITIONING_TILES_MOVED_REQUIREMENT);
+			return true;
+		case 'RTPRECISION_SHOT_CRIT_CHANCE':
+			OutString = string(default.HEADSHOT_CRIT_BONUS);
+			return true;
+		case 'RTPRECISION_SHOT_CRIT_DAMAGE':
+			OutString = string(default.HEADSHOT_CRITDMG_BONUS);
+			return true;
+		case 'RTPRECISION_SHOT_AIM_PENALITY':
+			OutString = string(default.HEADSHOT_AIM_MULTIPLIER);
+			return true;
+		case 'AGGRESSION_CRIT_PER_UNIT':
+			OutString = string(default.AGGRESSION_CRIT_PER_UNIT);
+			return true;
+		case 'AGGRESSION_MAX_CRIT':
+			OutString = string(default.AGGRESSION_UNITS_FOR_MAX_BONUS * default.AGGRESSION_CRIT_PER_UNIT);
+			return true;
 	}
 
 	return false;
