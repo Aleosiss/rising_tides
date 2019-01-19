@@ -774,3 +774,60 @@ exec function RT_ToggleAllToolTips(bool bHide, optional bool bAnimateOutTooltip 
 			Mgr.DeactivateTooltip(Tooltip, bAnimateOutTooltip);
 	}
 }
+
+exec function RT_DebugParticleSystemComponents() {
+	local Actor A;
+	local ParticleSystemComponent PSC;
+	local int count, total;
+	local XComCheatManager CheatManager;
+
+	CheatManager = `CHEATMGR;
+
+	total = 0;
+	// what the fuck is an outer
+	foreach CheatManager.Outer.AllActors(class'Actor', A)
+	{
+		count = 0;
+		foreach A.AllOwnedComponents(class'ParticleSystemComponent', PSC) {
+			total++;
+			count++;
+		}
+
+		if(count > 0)
+			`RTLOG(A @ count $ "", false, true);
+	}
+	
+	`RTLOG("Total: " $ total, false, true);
+}
+
+exec function RT_DebugEmitterPool_1() {
+	local Actor A;
+	local ParticleSystemComponent PSC;
+	local XComCheatManager CheatManager;
+
+	CheatManager = `CHEATMGR;
+
+	// what the fuck is an outer
+	foreach CheatManager.Outer.AllActors(class'Actor', A)
+	{
+		if(A.Name == 'EmitterPool_1') {
+			break;
+		}
+	}
+
+	`RTLOG("Name = " $ A.Name, false, true);
+	`RTLOG("Class = " $ A.Class, false, true);
+	`RTLOG("Printing PSCs...", false, true);
+	foreach A.AllOwnedComponents(class'ParticleSystemComponent', PSC)
+	{
+		`RTLOG("" $ PSC $ 
+			", LastRenderTime: " $ PSC.LastRenderTime $  
+			", bWasCompleted: " $ PSC.bWasCompleted $
+			", bWasDeactivated: " $ PSC.bWasDeactivated $
+			"",
+			
+		
+			false, true);
+	}
+
+}
