@@ -617,6 +617,7 @@
     <Content Include="Content\RT_Perk_Scholar_Ionic_Storm.upk" />
     <Content Include="Content\RT_Scholar_Perk_Volt.upk" />
     <Content Include="Content\RT_Grenade_Warp.upk" />
+    <Content Include="Config\XComAI.ini" />
   </ItemGroup>
   <Import Project="$(MSBuildLocalExtensionPath)\XCOM2.targets" />
 </Project>
