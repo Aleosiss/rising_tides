@@ -29,6 +29,9 @@ TimeStopEffectRemovedString="Time Stop Ended!"
 TimeStopLostFlyover="Time Stop Ended!"
 LargeUnitTimeStopLostFlyover="Time Stop Ended!"
 
+[RTEffect_GhostPerkBase]
+GhostPerkBaseName="Combat Veteran"
+
 [RTGameState_MeldEffect]
 MeldLeftText="Left the meld!"
 MeldJoinedText="Joined the meld!"

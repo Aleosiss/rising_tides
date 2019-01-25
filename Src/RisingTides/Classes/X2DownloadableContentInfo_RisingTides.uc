@@ -15,6 +15,7 @@ var config int MajorVer;
 var config int MinorVer;
 var config int PatchVer;
 var config bool bShouldRemoveHelmets;
+var config array<name> TemplarUnitNames;
 
 /// <summary>
 /// This method is run if the player loads a saved game that was created prior to this DLC / Mod being installed, and allows the
@@ -183,9 +184,29 @@ simulated static function MakePsiAbilitiesInterruptable() {
 
 				if(AbilityTemplate.BuildInterruptGameStateFn == none) {
 					AbilityTemplate.BuildInterruptGameStateFn = class'X2Ability'.static.TypicalAbility_BuildInterruptGameState;
+					if(AbilityTemplate.bSkipMoveStop) {
+						AbilityTemplate.BuildInterruptGameStateFn = class'X2Ability'.static.TypicalMoveEndAbility_BuildInterruptGameState;
+					}
 				}
 		}
 	}
+}
+
+/// <summary>
+/// Called from XComGameState_Unit:GatherUnitAbilitiesForInit after the game has built what it believes is the full list of
+/// abilities for the unit based on character, class, equipment, et cetera. You can add or remove abilities in SetupData.
+/// </summary>
+static function FinalizeUnitAbilitiesForInit(XComGameState_Unit UnitState, out array<AbilitySetupData> SetupData, optional XComGameState StartState, optional XComGameState_Player PlayerState, optional bool bMultiplayerDisplay)
+{
+	/*local AbilitySetupData IteratorData;
+
+	if(default.TemplarUnitNames.Find(UnitState.GetMyTemplateName()) != INDEX_NONE)
+	{
+		`RTLOG("Initializing a Templar, printing their AbiltySetupData for debugging!");
+		foreach SetupData(IteratorData) {
+			`RTLOG("" $ IteratorData.TemplateName);
+		}
+	}*/
 }
 
 static function bool DebuggingEnabled() {

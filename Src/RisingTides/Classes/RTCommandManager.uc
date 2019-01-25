@@ -537,7 +537,7 @@ exec function RT_DebugKismetVariables() {
 	local array<StateObjectReference> GameStates;
 
 	//CheatsManager = `CHEATMGR;
-
+	EmptyName = '';
 	WorldInfo = `XWORLDINFO;
 	WorldInfo.MyKismetVariableMgr.RebuildVariableMap();
 	MainSequence = WorldInfo.GetGameSequence();
@@ -598,7 +598,7 @@ exec function RT_DebugKismetVariables() {
 	}
 }
 
-exec function RT_DebugClosestUnitToCursorAvailableAbilties() {
+exec function RT_DebugClosestUnitToCursorAvailableAbilties(bool bPrintFullInfo = false) {
 	local XComGameState_Unit UnitState;
 	local StateObjectReference AbilityRef;
 	local XComGameState_Ability AbilityState;
@@ -621,11 +621,13 @@ exec function RT_DebugClosestUnitToCursorAvailableAbilties() {
 	foreach UnitState.Abilities(AbilityRef) {
 		AbilityState = XComGameState_Ability(History.GetGameStateForObjectID(AbilityRef.ObjectID));
 		if(AbilityState == none) {
+			`RTLOG("Found a null AbilityState in the Unit's abilties?!!!");
 			continue;
 		}
 
 		AbilityState.UpdateAbilityAvailability(Action);
 		if(!Action.bInputTriggered) {
+			`RTLOG(AbilityState.GetMyTemplateName() $ " isn't input-triggered, continuing!");
 			continue;
 		}
 		
@@ -830,4 +832,47 @@ exec function RT_DebugEmitterPool_1() {
 			false, true);
 	}
 
+}
+
+exec function RT_ShowTacticalForceLevel() {
+	local XComGameState_BattleData BattleData;
+
+	BattleData = XComGameState_BattleData(`XCOMHISTORY.GetSingleGameStateObjectForClass(class'XComGameState_BattleData'));
+	if(BattleData == none) {
+		`RTLOG("Couldn't find BattleData!", false, true);
+		return;
+	}
+	`RTLOG("Current Force Level is: " $ BattleData.GetForceLevel(), false, true);
+
+}
+
+exec function RT_SetTacticalForceLevel(int iNewForceLevel) {
+	local XComGameState_BattleData BattleData;
+	local XComGameState	NewGameState;
+
+	BattleData = XComGameState_BattleData(`XCOMHISTORY.GetSingleGameStateObjectForClass(class'XComGameState_BattleData'));
+	if(BattleData == none) {
+		`RTLOG("Couldn't find BattleData!", false, true);
+		return;
+	}
+
+	NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("CHEAT: Setting Tactical Force Level to " $ iNewForceLevel);
+	BattleData = XComGameState_BattleData(NewGameState.ModifyStateObject(class'XComGameState_BattleData', BattleData.ObjectID));
+	BattleData.SetForceLevel(iNewForceLevel);
+
+	`TACTICALRULES.SubmitGameState(NewGameState);
+}
+
+exec function RT_DebugAIBehavior() {
+	/*local XComGameState_Unit UnitState;
+	local StateObjectReference AbilityRef;
+	local XComGameState_Ability AbilityState;
+	local XComGameStateHistory History;
+	local AvailableAction Action;
+	
+	UnitState = `CHEATMGR.GetClosestUnitToCursor();
+	*/
+
+
+	
 }
