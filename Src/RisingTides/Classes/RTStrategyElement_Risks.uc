@@ -2,22 +2,22 @@ class RTStrategyElement_Risks extends X2StrategyElement_DefaultCovertActionRisks
 
 static function array <X2DataTemplate> CreateTemplates()
 {
-    local array<X2DataTemplate> Risks;
+	local array<X2DataTemplate> Risks;
 
-    Risks.AddItem(CreateTemplarAmbushRiskTemplate());
+	Risks.AddItem(CreateTemplarAmbushRiskTemplate());
 
-    return Risks;
+	return Risks;
 }
 
 static function X2DataTemplate CreateTemplarAmbushRiskTemplate()
 {
-    local X2CovertActionRiskTemplate Template;
+	local X2CovertActionRiskTemplate Template;
 
-    `CREATE_X2TEMPLATE(class'X2CovertActionRiskTemplate', Template, 'CovertActionRisk_TemplarAmbush');
-    Template.ApplyRiskFn = CreateTemplarAmbush;
-    Template.bBlockOtherRisks = true;
+	`CREATE_X2TEMPLATE(class'X2CovertActionRiskTemplate', Template, 'CovertActionRisk_TemplarAmbush');
+	Template.ApplyRiskFn = CreateTemplarAmbush;
+	Template.bBlockOtherRisks = true;
 
-    return Template;
+	return Template;
 }
 
 static function CreateTemplarAmbush(XComGameState NewGameState, XComGameState_CovertAction ActionState, optional StateObjectReference TargetRef)

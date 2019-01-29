@@ -476,17 +476,19 @@ simulated function Burst_BuildVisualization(XComGameState VisualizeGameState)
 
 	if( AvatarUnit != none )
 	{
-		if (Context.InterruptionStatus != eInterruptionStatus_None)
-		{
-			//Insert markers for the subsequent interrupt to insert into
-			class'X2Action'.static.AddInterruptMarkerPair(ActionMetadata, Context, WaitAction);
-		}
+		
 
 		class'X2Action_Fire_OpenUnfinishedAnim'.static.AddToVisualizationTree(ActionMetadata, Context);
 
 		// Wait to time the start of the warning FX
 		WaitAction = X2Action_TimedWait(class'X2Action_TimedWait'.static.AddToVisualizationTree(ActionMetadata, Context));
 		WaitAction.DelayTimeSec = 4;
+
+		if (Context.InterruptionStatus != eInterruptionStatus_None)
+		{
+			//Insert markers for the subsequent interrupt to insert into
+			class'X2Action'.static.AddInterruptMarkerPair(ActionMetadata, Context, WaitAction);
+		}
 
 		EffectAction = X2Action_PlayEffect(class'X2Action_PlayEffect'.static.AddToVisualizationTree(ActionMetadata, Context));
 		EffectAction.EffectName = default.BurstParticleString;

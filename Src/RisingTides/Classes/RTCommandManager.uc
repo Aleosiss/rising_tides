@@ -537,7 +537,7 @@ exec function RT_DebugKismetVariables() {
 	local array<StateObjectReference> GameStates;
 
 	//CheatsManager = `CHEATMGR;
-
+	EmptyName = '';
 	WorldInfo = `XWORLDINFO;
 	WorldInfo.MyKismetVariableMgr.RebuildVariableMap();
 	MainSequence = WorldInfo.GetGameSequence();
@@ -598,7 +598,7 @@ exec function RT_DebugKismetVariables() {
 	}
 }
 
-exec function RT_DebugClosestUnitToCursorAvailableAbilties() {
+exec function RT_DebugClosestUnitToCursorAvailableAbilties(bool bPrintFullInfo = false) {
 	local XComGameState_Unit UnitState;
 	local StateObjectReference AbilityRef;
 	local XComGameState_Ability AbilityState;
@@ -621,11 +621,13 @@ exec function RT_DebugClosestUnitToCursorAvailableAbilties() {
 	foreach UnitState.Abilities(AbilityRef) {
 		AbilityState = XComGameState_Ability(History.GetGameStateForObjectID(AbilityRef.ObjectID));
 		if(AbilityState == none) {
+			`RTLOG("Found a null AbilityState in the Unit's abilties?!!!");
 			continue;
 		}
 
 		AbilityState.UpdateAbilityAvailability(Action);
 		if(!Action.bInputTriggered) {
+			`RTLOG(AbilityState.GetMyTemplateName() $ " isn't input-triggered, continuing!");
 			continue;
 		}
 		
@@ -773,4 +775,104 @@ exec function RT_ToggleAllToolTips(bool bHide, optional bool bAnimateOutTooltip 
 		else
 			Mgr.DeactivateTooltip(Tooltip, bAnimateOutTooltip);
 	}
+}
+
+exec function RT_DebugParticleSystemComponents() {
+	local Actor A;
+	local ParticleSystemComponent PSC;
+	local int count, total;
+	local XComCheatManager CheatManager;
+
+	CheatManager = `CHEATMGR;
+
+	total = 0;
+	// what the fuck is an outer
+	foreach CheatManager.Outer.AllActors(class'Actor', A)
+	{
+		count = 0;
+		foreach A.AllOwnedComponents(class'ParticleSystemComponent', PSC) {
+			total++;
+			count++;
+		}
+
+		if(count > 0)
+			`RTLOG(A @ count $ "", false, true);
+	}
+	
+	`RTLOG("Total: " $ total, false, true);
+}
+
+exec function RT_DebugEmitterPool_1() {
+	local Actor A;
+	local ParticleSystemComponent PSC;
+	local XComCheatManager CheatManager;
+
+	CheatManager = `CHEATMGR;
+
+	// what the fuck is an outer
+	foreach CheatManager.Outer.AllActors(class'Actor', A)
+	{
+		if(A.Name == 'EmitterPool_1') {
+			break;
+		}
+	}
+
+	`RTLOG("Name = " $ A.Name, false, true);
+	`RTLOG("Class = " $ A.Class, false, true);
+	`RTLOG("Printing PSCs...", false, true);
+	foreach A.AllOwnedComponents(class'ParticleSystemComponent', PSC)
+	{
+		`RTLOG("" $ PSC $ 
+			", LastRenderTime: " $ PSC.LastRenderTime $  
+			", bWasCompleted: " $ PSC.bWasCompleted $
+			", bWasDeactivated: " $ PSC.bWasDeactivated $
+			"",
+			
+		
+			false, true);
+	}
+
+}
+
+exec function RT_ShowTacticalForceLevel() {
+	local XComGameState_BattleData BattleData;
+
+	BattleData = XComGameState_BattleData(`XCOMHISTORY.GetSingleGameStateObjectForClass(class'XComGameState_BattleData'));
+	if(BattleData == none) {
+		`RTLOG("Couldn't find BattleData!", false, true);
+		return;
+	}
+	`RTLOG("Current Force Level is: " $ BattleData.GetForceLevel(), false, true);
+
+}
+
+exec function RT_SetTacticalForceLevel(int iNewForceLevel) {
+	local XComGameState_BattleData BattleData;
+	local XComGameState	NewGameState;
+
+	BattleData = XComGameState_BattleData(`XCOMHISTORY.GetSingleGameStateObjectForClass(class'XComGameState_BattleData'));
+	if(BattleData == none) {
+		`RTLOG("Couldn't find BattleData!", false, true);
+		return;
+	}
+
+	NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("CHEAT: Setting Tactical Force Level to " $ iNewForceLevel);
+	BattleData = XComGameState_BattleData(NewGameState.ModifyStateObject(class'XComGameState_BattleData', BattleData.ObjectID));
+	BattleData.SetForceLevel(iNewForceLevel);
+
+	`TACTICALRULES.SubmitGameState(NewGameState);
+}
+
+exec function RT_DebugAIBehavior() {
+	/*local XComGameState_Unit UnitState;
+	local StateObjectReference AbilityRef;
+	local XComGameState_Ability AbilityState;
+	local XComGameStateHistory History;
+	local AvailableAction Action;
+	
+	UnitState = `CHEATMGR.GetClosestUnitToCursor();
+	*/
+
+
+	
 }
