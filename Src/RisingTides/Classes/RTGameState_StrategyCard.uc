@@ -11,15 +11,36 @@ static function SetUpStrategyCards(XComGameState StartState)
 	local XComGameState_Continent ContinentState;
 	local int idx, RandIndex;
 	local bool bReplace;
+	local array<name> AllCardTemplateNames;
+	local XComGameStateHistory History;
 	
 	StratMgr = class'X2StrategyElementTemplateManager'.static.GetStrategyElementTemplateManager();
-	class'RTHelpers'.static.RTLog("Creating Strategy Cards!");
+	`RTLOG("Creating Strategy Cards!");
 	AllCardTemplates = StratMgr.GetAllTemplatesOfClass(class'RTProgramStrategyCardTemplate');
+
+	History = `XCOMHISTORY;
+
+	foreach History.IterateByClassType(class'XComGameState_StrategyCard', CardState) {
+		if(CardState.GetMyTemplate().Category == "ResistanceCard") {
+			AllCardTemplateNames.AddItem(CardState.GetMyTemplateName());
+		}
+	}
+
+	foreach StartState.IterateByClassType(class'XComGameState_StrategyCard', CardState) {
+		if(CardState.GetMyTemplate().Category == "ResistanceCard" && AllCardTemplateNames.Find(CardState.GetMyTemplateName()) != INDEX_NONE) {
+			AllCardTemplateNames.AddItem(CardState.GetMyTemplateName());
+		}
+	}
 
 	for(idx = 0; idx < AllCardTemplates.Length; idx++)
 	{
 		CardTemplate = RTProgramStrategyCardTemplate(AllCardTemplates[idx]);
-		class'RTHelpers'.static.RTLog("Creating StrategyCard with TemplateName " $ CardTemplate.DataName );
+		if(AllCardTemplateNames.Find(CardTemplate.DataName) != INDEX_NONE) {
+			`RTLOG("Found duplicate card template, continuing...");
+			continue;
+		}
+
+		`RTLOG("Creating StrategyCard with TemplateName " $ CardTemplate.DataName );
 		// Only Create Resistance Cards here, Chosen cards need to be created on the fly
 		if(CardTemplate != none && CardTemplate.Category == "ResistanceCard")
 		{
