@@ -4,7 +4,7 @@ pipeline {
       srcDir = credentials('RisingTidesSrcDir')
       sdkPath = credentials('SDKPath')
       gamePath = credentials('GamePath')
-      PSPath = credentials('PowershellPath')
+      PSPath = credentials('PSPath')
   }
 
   options {
