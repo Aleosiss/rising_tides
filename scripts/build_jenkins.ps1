@@ -99,7 +99,7 @@ else {
     if (Test-Path "$sdkPath\XComGame\Script\$modNameCanonical.u") {
         Remove-Item "$sdkPath\XComGame\Script\$modNameCanonical.u"
     }
-    
+
     Write-Host "Cleaned."
 }
 
@@ -114,17 +114,6 @@ Write-Host "Compiling mod scripts..."
 &"$sdkPath/binaries/Win64/XComGame.com" make -nopause -mods $modNameCanonical "$stagingPath"
 CheckErrorCode "Failed to compile mod scripts."
 Write-Host "Compiled."
-
-# build the mod's shader cache
-if (Test-Path -Path "$stagingPath/Content/*" -Include *.upk, *.umap) {
-    Write-Host "Precompiling mod shaders..."
-    &"$sdkPath/binaries/Win64/XComGame.com" precompileshaders -nopause platform=pc_sm4 DLC=$modNameCanonical
-    CheckErrorCode "Failed to precompile mod shaders."
-    Write-Host "Precompiled."
-}
-else {
-    Write-Host "Mod doesn't have any shader content. Skipping shader precompilation."
-}
 
 # copy compiled mod scripts to the staging area
 Write-Host "Copying the compiled mod scripts to staging..."
