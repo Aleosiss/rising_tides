@@ -1107,9 +1107,7 @@ private function bool IsTemplarFactionMet() {
 
 	foreach `XCOMHISTORY.IterateByClassType(class'XComGameState_ResistanceFaction', FactionState) {
 		if(FactionState.GetMyTemplateName() == 'Faction_Templars') {
-			if(FactionState.bMetXCom) {
-				return true;
-			} else return false;
+			return FactionState.bMetXCom;
 		}
 	}
 

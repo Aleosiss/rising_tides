@@ -520,7 +520,11 @@ function EventListenerReturn RTPsionicInterrupt(Object EventData, Object EventSo
 	if(class'RTHelpers'.static.CheckAbilityActivated(AbilityState.GetMyTemplateName(), eChecklist_PsionicAbilities)) {
 		NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("Rising Tides: recording interrupted AbilityStateObjectRef: " $ AbilityState.ObjectID);
 		TargetUnitState = XComGameState_Unit(NewGameState.ModifyStateObject(TargetUnitState.class, TargetUnitState.ObjectID));
+
+		// set a flag here so we can look it up in the visualization
 		TargetUnitState.SetUnitFloatValue('RT_InterruptAbilityStateObjectID', AbilityState.ObjectID, eCleanup_BeginTurn);
+
+		// put the ability on cooldown
 		AbilityState = XComGameState_Ability(NewGameState.ModifyStateObject(AbilityState.class, AbilityState.ObjectID));
 		AbilityState.iCooldown = class'RTAbility_GathererAbilitySet'.default.RUDIMENTARY_CREATURES_INTERRUPT_ABILITY_COOLDOWN;
 		SubmitNewGameState(NewGameState);

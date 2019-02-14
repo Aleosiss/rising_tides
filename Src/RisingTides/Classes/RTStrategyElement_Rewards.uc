@@ -447,12 +447,12 @@ static function EliminateFaction(XComGameState NewGameState, XComGameState_Resis
 	
 	/** What, exactly, goes into removing a faction?
 		-> Remove FactionState.GetReference() from XCGS_HeadquartersResistance.Factions
-		-> Call DeactivateCard on all activated Templar cards
-		-> Check Covert Actions, if there are any from the Templars they need to be canceled
-		-> Need to clean up Templar soldiers? It would be more realistic for them to stick around then leave randomly, perhaps even sabotage the avenger
+		-> Call DeactivateCard on all activated faction cards
+		-> Check Covert Actions, if there are any from the faction they need to be canceled
+		-> Need to clean up faction soldiers? It would be more realistic for them to stick around then leave randomly, perhaps even sabotage the avenger
 			but fuck that
 		-> Clean up the Resistance Haven
-		-> Find soldiers in the XCOM barracks that are Templars, and remove them
+		-> Find soldiers in the XCOM barracks that are faction heroes, and remove them
 		-> Generate a popup displaying all of what has transpired
 		-> Transfer Chosen missions to Program(?)
 	*/
@@ -488,7 +488,7 @@ static function EliminateFaction(XComGameState NewGameState, XComGameState_Resis
 			UnitState = XComGameState_Unit(History.GetGameStateForObjectID(IteratorRef.ObjectID));
 			if(UnitState != none && UnitState.GetMyTemplateName() == FactionState.GetChampionCharacterName())
 			{
-				FireUnit(NewGameState, IteratorRef);
+				XComHQ.FireUnit(NewGameState, IteratorRef);
 			}
 		}
 	}
@@ -516,33 +516,4 @@ static function GiveProgramAdvanceQuestlineReward(XComGameState NewGameState, XC
 	ProgramState = class'RTHelpers'.static.GetNewProgramState(NewGameState);
 	ProgramState.IncrementTemplarQuestlineStage();
 	ProgramState.IncrementNumFavorsAvailable(3);
-}
-
-// why wasn't this static in the first place...
-static function FireUnit(XComGameState NewGameState, StateObjectReference UnitReference)
-{
-	local XComGameState_HeadquartersXCom XComHQ;
-	local XComGameStateHistory History;
-	local XComGameState_Unit UnitState;
-	local StateObjectReference EmptyRef;
-	local int idx;
-
-	History = `XCOMHISTORY;
-	XComHQ = XComGameState_HeadquartersXCom(History.GetSingleGameStateObjectForClass(class'XComGameState_HeadquartersXCom'));
-	XComHQ = XComGameState_HeadquartersXCom(NewGameState.ModifyStateObject(class'XComGameState_HeadquartersXCom', XComHQ.ObjectID));
-	XComHQ.RemoveFromCrew(UnitReference);
-		
-	for(idx = 0; idx < XComHQ.Squad.Length; idx++)
-	{
-		if(XComHQ.Squad[idx] == UnitReference)
-		{
-			XComHQ.Squad[idx] = EmptyRef;
-			break;
-		}
-	}
-
-	UnitState = XComGameState_Unit(NewGameState.ModifyStateObject(class'XComGameState_Unit', UnitReference.ObjectID));
-	class'X2StrategyGameRulesetDataStructures'.static.ResetAllBonds(NewGameState, UnitState);
-	// REMOVE FIRED UNIT?
-	//NewGameState.RemoveStateObject(UnitReference.ObjectID);
 }

@@ -103,7 +103,7 @@ exec function RT_PrintAppearence(int ObjectID) {
 
 	UnitState = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(ObjectID));
 	if(UnitState == none) {
-		`RTLOG("UnitState was null for PrintAppearance!");
+		`RTLOG("UnitState was null for PrintAppearance!", false, true);
 		return;
 	}	
 
@@ -451,16 +451,16 @@ exec function RT_TestUIPopup() {
 
 exec function RT_ReduceSoldierCurrentWill(int MinusWill) {
 	local XComTacticalController TacticalController;
-	local XGUnit ActiveUnit;
+	local StateObjectReference ActiveUnitRef;
 	local XComGameState_Unit ActiveUnitState;
 	local XComGameState NewGameState;
 	// Pawn is the CURSOR in the Combat game
 	TacticalController = XComTacticalController(class'WorldInfo'.static.GetWorldInfo().GetALocalPlayerController());
 
 	if (TacticalController != none) {
-		ActiveUnit = TacticalController.GetActiveUnit();
+		ActiveUnitRef = TacticalController.GetActiveUnitStateRef();
 		NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState( "Cheat: Reduce Unit Will" );
-		ActiveUnitState = XComGameState_Unit(NewGameState.ModifyStateObject(class'XComGameState_Unit', ActiveUnit.ObjectID));
+		ActiveUnitState = XComGameState_Unit(NewGameState.ModifyStateObject(class'XComGameState_Unit', ActiveUnitRef.ObjectID));
 		ActiveUnitState.ModifyCurrentStat(eStat_Will, float(MinusWill));
 		`TACTICALRULES.SubmitGameState(NewGameState);
 	}
