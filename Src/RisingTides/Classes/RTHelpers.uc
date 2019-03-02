@@ -23,35 +23,36 @@ static function ListDefaultAbilityLists() {
 	local name n;
 
 	foreach default.StandardShots(n) {
-		`RTLOG("Standard Shots: " @ n);
+		`LOG("Rising Tides: Standard Shots: " @ n);
 	}
 
 	foreach default.MeleeAbilities(n) {
-		`RTLOG("Melee Abilities: " @ n);
+		`LOG("Rising Tides: Melee Abilities: " @ n);
 	}
 
 	foreach default.SniperShots(n) {
-		`RTLOG("Sniper Shots: " @ n);
+		`LOG("Rising Tides: Sniper Shots: " @ n);
 	}
 
 	foreach default.OverwatchShots(n) {
-		`RTLOG("Overwatch Shots: " @ n);
+		`LOG("Rising Tides: Overwatch Shots: " @ n);
 	}
 
 	foreach default.PsionicAbilities(n) {
-		`RTLOG("Psionic Abilities: " @ n);
+		`LOG("Rising Tides: Psionic Abilities: " @ n);
 	}
 
 	foreach default.FreeActions(n) {
-		`RTLOG("Free Actions: " @ n);
+		`LOG("Rising Tides: Free Actions: " @ n);
 	}
 }
 
 
-static function bool CheckAbilityActivated(name AbilityTemplateName, ERTChecklist Checklist, optional bool bDebug = false) {
-	local bool b;
+static function bool CheckAbilityActivated(name AbilityTemplateName, ERTChecklist Checklist) {
+	local bool b, d;
 	local string n;
 	b = true;
+	d = false; // debug flag
 
 	//ListDefaultAbilityLists();
 
@@ -90,20 +91,20 @@ static function bool CheckAbilityActivated(name AbilityTemplateName, ERTChecklis
 					b = false;
 	}
 
-	if(!b && bDebug) {
-		`RTLOG(AbilityTemplateName $ " was not found in " $ n);
+	if(!b && d) {
+		`LOG("Rising Tides: " @ AbilityTemplateName @ " was not found in " @ n);
 	}
 
 	return b;
 }
 
-static function bool MultiCatCheckAbilityActivated(name AbilityTemplateName, array<ERTChecklist> Checklists, optional bool bDebug = false) {
+static function bool MultiCatCheckAbilityActivated (name AbilityTemplateName, array<ERTChecklist> Checklists) {
 	local ERTChecklist Iterator;
 	local bool b;
 
 	b = false;
 	foreach Checklists(Iterator) {
-		b = CheckAbilityActivated(AbilityTemplateName, Iterator, bDebug);
+		b = CheckAbilityActivated(AbilityTemplateName, Iterator);
 		if(b) {
 			break;
 		}
@@ -129,6 +130,28 @@ static function GetAdjacentTiles(TTile TargetTile, out array<TTile> AdjacentTile
 	}
 }
 
+static function PanicLoopBeginFn( X2Effect_Persistent PersistentEffect, const out EffectAppliedData ApplyEffectParameters, XComGameState_BaseObject kNewTargetState, XComGameState NewGameState )
+{
+	local XComGameState_Unit UnitState;
+
+	// change the height
+	UnitState = XComGameState_Unit( NewGameState.CreateStateObject( class'XComGameState_Unit', ApplyEffectParameters.TargetStateObjectRef.ObjectID ) );
+	UnitState.bPanicked = true;
+
+	NewGameState.AddStateObject( UnitState );
+}
+
+static function PanicLoopEndFn( X2Effect_Persistent PersistentEffect, const out EffectAppliedData ApplyEffectParameters, XComGameState NewGameState, bool bCleansed )
+{
+	local XComGameState_Unit UnitState;
+
+	// change the height
+	UnitState = XComGameState_Unit( NewGameState.CreateStateObject( class'XComGameState_Unit', ApplyEffectParameters.TargetStateObjectRef.ObjectID ) );
+	UnitState.bPanicked = false;
+
+	NewGameState.AddStateObject( UnitState );
+}
+
 static function RTGameState_ProgramFaction GetProgramState(optional XComGameState NewGameState) {
 	local RTGameState_ProgramFaction Program;
 
@@ -148,10 +171,6 @@ static function RTGameState_ProgramFaction GetProgramState(optional XComGameStat
 		Program = RTGameState_ProgramFaction(`XCOMHISTORY.GetSingleGameStateObjectForClass(class'RTGameState_ProgramFaction'));
 	}
 
-	if(Program == none) {
-		`RTLOG("ERROR, Could not find a ProgramStateObject, returning NONE!", true, false);
-	}
-	
 	return Program;
 }
 
@@ -159,10 +178,6 @@ static function RTGameState_ProgramFaction GetNewProgramState(XComGameState NewG
 	local RTGameState_ProgramFaction Program;
 
 	Program = GetProgramState(NewGameState);
-	if(Program == none) {
-		return none;
-	}
-
 	Program = RTGameState_ProgramFaction(NewGameState.ModifyStateObject(class'RTGameState_ProgramFaction', Program.ObjectID));
 	return Program;
 }
@@ -173,10 +188,10 @@ static function RTLog(string message, optional bool bShouldRedScreenToo = false,
 
 	b = DebuggingEnabled();
 	`LOG(message, b, 'Rising Tides');
-	if(bShouldRedScreenToo && b) {
+	if(bShouldRedScreenToo) {
 		`RedScreen("RisingTides: " $ message);
 	}
-	if(bShouldOutputToConsoleToo && b) {
+	if(bShouldOutputToConsoleToo) {
 		class'Helpers'.static.OutputMsg(message);
 	}
 }
@@ -213,6 +228,11 @@ static function PrintGoldenPathActionsForFaction(XComGameState_ResistanceFaction
 	}
 }
 
+static function PrintMiscInfoForFaction(XComGameState_ResistanceFaction Faction) {
+	//local XComGameState_HeadquartersXCom XComHQ;
+
+}
+
 static function SubmitGameState(XComGameState NewGameState) {
 	if(NewGameState.GetNumGameStateObjects() > 0)
 	{
@@ -235,26 +255,6 @@ static function XComGameState_HeadquartersXCom GetXComHQState()
 	}
 
 	return NewXComHQ;
-}
-
-static function XComGameState_ResistanceFaction GetTemplarFactionState()
-{
-	local XComGameState_ResistanceFaction TemplarState;
-
-	foreach `XCOMHISTORY.IterateByClassType(class'XComGameState_ResistanceFaction', TemplarState)
-	{
-		if(TemplarState.GetMyTemplateName() == 'Faction_Templars')
-		{
-			break;
-		}
-	}
-
-	if(TemplarState == none) {
-		RTLog("Warning, could not find TemplarState, returning null!");
-		return none;
-	}
-
-	return TemplarState;
 }
 
 simulated static function bool IsInvalidMission(X2MissionSourceTemplate Template) {

@@ -34,10 +34,10 @@ function int GetAttackingDamageModifier(XComGameState_Effect EffectState, XComGa
 					{
 						return (CurrentDamage * 3);
 					}
-					`LOG ("Kubikiri Target" @ TargetUnit.GetMyTemplateName() @ "CurrentHP:" @ string(TargetUnit.GetCurrentStat(eStat_HP)) @ "MAXHP:" @ string (TargetUnit.GetMaxStat(eStat_HP)));
+					//`LOG ("Kubikiri Target" @ TargetUnit.GetMyTemplateName() @ "CurrentHP:" @ string(TargetUnit.GetCurrentStat(eStat_HP)) @ "MAXHP:" @ string (TargetUnit.GetMaxStat(eStat_HP)));
 					if (TargetUnit.GetCurrentStat(eStat_HP) / TargetUnit.GetMaxStat(eStat_HP) < 1)	
 					{			
-						`LOG ("Kubikiri dealing" @ int(2 * (TargetUnit.GetCurrentStat(eStat_HP)+TargetUnit.GetCurrentStat(eStat_ShieldHP)+TargetUnit.GetCurrentStat(eStat_ArmorMitigation)+CurrentDamage)) @ "damage.");
+						//`LOG ("Kubikiri dealing" @ int(2 * (TargetUnit.GetCurrentStat(eStat_HP)+TargetUnit.GetCurrentStat(eStat_ShieldHP)+TargetUnit.GetCurrentStat(eStat_ArmorMitigation)+CurrentDamage)) @ "damage.");
 						return int(2 * (TargetUnit.GetCurrentStat(eStat_HP)+TargetUnit.GetCurrentStat(eStat_ShieldHP)+TargetUnit.GetCurrentStat(eStat_ArmorMitigation)+CurrentDamage));
 					}
 				}

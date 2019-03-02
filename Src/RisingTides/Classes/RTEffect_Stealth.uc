@@ -29,7 +29,7 @@ simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffe
 
 	StealthEffectState = RTGameState_Effect(NewEffectState);
 	if(StealthEffectState == none) {
-		`RTLOG("Couldn't find RTGameState_Effect for RTEffect_Stealth!", true);
+		class'RTHelpers'.static.RTLog("Couldn't find RTGameState_Effect for RTEffect_Stealth!", true);
 	}
 
 	StealthEffectState.bWasPreviouslyConcealed = UnitState.IsConcealed();
@@ -55,7 +55,7 @@ simulated function OnEffectRemoved(const out EffectAppliedData ApplyEffectParame
 	OldUnitState = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(ApplyEffectParameters.TargetStateObjectRef.ObjectID));
 	StealthEffectState = RTGameState_Effect(RemovedEffectState);
 	if(StealthEffectState == none) {
-		`RTLOG("Couldn't find RTGameState_Effect for RTEffect_Stealth!", true);
+		class'RTHelpers'.static.RTLog("Couldn't find RTGameState_Effect for RTEffect_Stealth!", true);
 	}
 
 	NewUnitState = XComGameState_Unit(NewGameState.ModifyStateObject(class'XComGameState_Unit', OldUnitState.ObjectID));

@@ -1,17 +1,8 @@
-class RTGameState_Effect extends XComGameState_Effect dependson(RTHelpers);
+class RTGameState_Effect extends XComGameState_Effect;
 
-// RTEffect_OverTheShoulder
 var array<StateObjectReference> EffectsAddedList;
 var array<StateObjectReference> EffectsRemovedList;
-
-// RTEffect_Repositioning
-var array<TTile> PreviousTilePositions;
-var bool bRepositioningActive;
-
-// RTEffect_LinkedIntelligence
 var bool bCanTrigger;
-
-// RTEffect_Stealth
 var bool bWasPreviouslyConcealed;
 
 var localized string LocPsionicallyInterruptedName;
@@ -22,7 +13,7 @@ function EventListenerReturn OnTacticalGameEnd(Object EventData, Object EventSou
 	local Object ListenerObj;
 	local XComGameState NewGameState;
 
-	//`RTLOG("'TacticalGameEnd' event listener delegate invoked.");
+	//`LOG("Rising Tides: 'TacticalGameEnd' event listener delegate invoked.");
 
 	EventManager = `XEVENTMGR;
 
@@ -46,7 +37,7 @@ protected function ActivateAbility(XComGameState_Ability AbilityState, StateObje
 	local XComGameState					NewGameState;
 
 	if(AbilityState.CanActivateAbilityForObserverEvent(XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(TargetRef.ObjectID))) != 'AA_Success') {
-		`RTLOG("Couldn't Activate "@ AbilityState.GetMyTemplateName() @ " for observer event.");
+		`LOG("Rising Tides: Couldn't Activate "@ AbilityState.GetMyTemplateName() @ " for observer event.");
 	} else {
 		NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("Activating Ability " $ AbilityState.GetMyTemplateName());
 		AbilityState = XComGameState_Ability(NewGameState.CreateStateObject(AbilityState.Class, AbilityState.ObjectID));
@@ -59,7 +50,7 @@ protected function ActivateAbility(XComGameState_Ability AbilityState, StateObje
 	if( AbilityContext.Validate() ) {
 		`TACTICALRULES.SubmitGameStateContext(AbilityContext);
 	} else {
-		`RTLOG("Couldn't validate AbilityContext, " @ AbilityState.GetMyTemplateName() @ " not activated.");
+		`LOG("Rising Tides: Couldn't validate AbilityContext, " @ AbilityState.GetMyTemplateName() @ " not activated.");
 	}
 }
 
@@ -70,7 +61,7 @@ protected function InitializeAbilityForActivation(out XComGameState_Ability Abil
 	AbilityRef = AbilityOwnerUnit.FindAbility(AbilityName);
 	AbilityState = XComGameState_Ability(History.GetGameStateForObjectID(AbilityRef.ObjectID));
 	if(AbilityState == none) {
-		`RTLOG("Couldn't initialize ability for activation!");
+		`LOG("Rising Tides: Couldn't initialize ability for activation!");
 	}
 }
 
@@ -456,7 +447,7 @@ function EventListenerReturn RTOverkillDamageRecorder(Object EventData, Object E
 		History.GetCurrentAndPreviousGameStatesForObjectID(DeadUnitState.GetReference().ObjectID, PreviousObject, CurrentObject,, GameState.HistoryIndex - i);
 		PreviousDeadUnitState = XComGameState_Unit(PreviousObject);
 		iHPValue = PreviousDeadUnitState.GetCurrentStat( eStat_HP );
-		//`RTLOG("iHPValue"@iHPValue);
+		//`LOG("Rising Tides: iHPValue"@iHPValue);
 	}
 
 	iOverKillDamage = abs(PreviousDeadUnitState.GetCurrentStat( eStat_HP ) - LastEffectDamageValue.fValue);
@@ -464,7 +455,7 @@ function EventListenerReturn RTOverkillDamageRecorder(Object EventData, Object E
 	NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("Rising Tides: Recording Overkill Damage!");
 	NewKillerUnitState = XComGameState_Unit(NewGameState.CreateStateObject(KillerUnitState.class, KillerUnitState.ObjectID));
 	NewKillerUnitState.SetUnitFloatValue('RTLastOverkillDamage', iOverKillDamage, eCleanup_BeginTactical);
-	// `RTLOG("Logging overkill damage =" @iOverkillDamage);
+	// `LOG("Rising Tides: Logging overkill damage =" @iOverkillDamage);
 	NewGameState.AddStateObject(NewKillerUnitState);
 	SubmitNewGameState(NewGameState);
 
@@ -494,19 +485,19 @@ function EventListenerReturn RTPsionicInterrupt(Object EventData, Object EventSo
 	History = `XCOMHISTORY;
 	AbilityState = XComGameState_Ability(EventData);
 	if(AbilityState == none) {
-		//`RTLOG("" @ GetFuncName() @ " has invalid EventData!");
+		//`LOG("Rising Tides: " @ GetFuncName() @ " has invalid EventData!");
 		return ELR_NoInterrupt;
 	}
 
 	TargetUnitState = XComGameState_Unit(EventSource);
 	if(TargetUnitState == none) {
-		//`RTLOG("" @ GetFuncName() @ " has invalid EventSource!");
+		//`LOG("Rising Tides: " @ GetFuncName() @ " has invalid EventSource!");
 		return ELR_NoInterrupt;
 	}
 
 	SourceUnitState = XComGameState_Unit(History.GetGameStateForObjectID(ApplyEffectParameters.SourceStateObjectRef.ObjectID));
 	if(SourceUnitState == none) {
-		//`RTLOG("" @ GetFuncName() @ " has no SourceUnit?! ");
+		//`LOG("Rising Tides: " @ GetFuncName() @ " has no SourceUnit?! ");
 		return ELR_NoInterrupt;
 	}
 
@@ -520,11 +511,7 @@ function EventListenerReturn RTPsionicInterrupt(Object EventData, Object EventSo
 	if(class'RTHelpers'.static.CheckAbilityActivated(AbilityState.GetMyTemplateName(), eChecklist_PsionicAbilities)) {
 		NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("Rising Tides: recording interrupted AbilityStateObjectRef: " $ AbilityState.ObjectID);
 		TargetUnitState = XComGameState_Unit(NewGameState.ModifyStateObject(TargetUnitState.class, TargetUnitState.ObjectID));
-
-		// set a flag here so we can look it up in the visualization
 		TargetUnitState.SetUnitFloatValue('RT_InterruptAbilityStateObjectID', AbilityState.ObjectID, eCleanup_BeginTurn);
-
-		// put the ability on cooldown
 		AbilityState = XComGameState_Ability(NewGameState.ModifyStateObject(AbilityState.class, AbilityState.ObjectID));
 		AbilityState.iCooldown = class'RTAbility_GathererAbilitySet'.default.RUDIMENTARY_CREATURES_INTERRUPT_ABILITY_COOLDOWN;
 		SubmitNewGameState(NewGameState);
@@ -549,49 +536,49 @@ function EventListenerReturn RTHarbingerBonusDamage(Object EventData, Object Eve
 
 	Context = GameState.GetContext();
 	if(Context == none) {
-		//`RTLOG("No Context!");
+		//`LOG("Rising Tides: No Context!");
 		return ELR_NoInterrupt;
 	}
 	AbilityContext = XComGameStateContext_Ability(Context);
 	if(AbilityContext == none) {
-		//`RTLOG("No Ability Context!");
+		//`LOG("Rising Tides: No Ability Context!");
 		return ELR_NoInterrupt;
 	}
 
 	// we want to do the additional damage before, i think
 	if(AbilityContext.InterruptionStatus != eInterruptionStatus_Interrupt) {
-		//`RTLOG("only on interrupt stage!");
+		//`LOG("Rising Tides: only on interrupt stage!");
 		return ELR_NoInterrupt;
 	}
 
 	History = `XCOMHISTORY;
 	AbilityState = XComGameState_Ability(EventData);
 	if(AbilityState == none) {
-		//`RTLOG("" @ GetFuncName() @ " has invalid EventData!");
+		//`LOG("Rising Tides: " @ GetFuncName() @ " has invalid EventData!");
 		return ELR_NoInterrupt;
 	}
 
 	if(AbilityState.GetMyTemplateName() != 'DaybreakFlame') {
 	// don't add bonus damage to an attack that missed...
 		if(AbilityContext.ResultContext.HitResult != eHit_Success || AbilityContext.ResultContext.HitResult != eHit_Crit || AbilityContext.ResultContext.HitResult != eHit_Graze) {
-			//`RTLOG("Shot didn't hit!");
+			//`LOG("Rising Tides: Shot didn't hit!");
 			return ELR_NoInterrupt;
 		}
 	}
 
 	SourceUnitState = XComGameState_Unit(EventSource);
 	if(SourceUnitState == none) {
-		//`RTLOG("" @ GetFuncName() @ " has invalid EventSource!");
+		//`LOG("Rising Tides: " @ GetFuncName() @ " has invalid EventSource!");
 		return ELR_NoInterrupt;
 	}
 
 	TargetUnitState = XComGameState_Unit(History.GetGameStateForObjectID(AbilityContext.InputContext.PrimaryTarget.ObjectID));
 	if(TargetUnitState == none) {
-		//`RTLOG("" @ GetFuncName() @ " has no TargetUnit?! ");
+		//`LOG("Rising Tides: " @ GetFuncName() @ " has no TargetUnit?! ");
 		return ELR_NoInterrupt;
 
 	}
-	//`RTLOG("RTHarbingerBonusDamage is checking for the current ability to add damage to...");
+	//`LOG("Rising Tides: RTHarbingerBonusDamage is checking for the current ability to add damage to...");
 	if(class'RTHelpers'.static.CheckAbilityActivated(AbilityState.GetMyTemplateName(), eChecklist_SniperShots)   ||
 	 class'RTHelpers'.static.CheckAbilityActivated(AbilityState.GetMyTemplateName(), eChecklist_StandardShots) ||
 	 class'RTHelpers'.static.CheckAbilityActivated(AbilityState.GetMyTemplateName(), eChecklist_MeleeAbilities) ) {
@@ -600,7 +587,7 @@ function EventListenerReturn RTHarbingerBonusDamage(Object EventData, Object Eve
 		return ELR_NoInterrupt;
 	}
 
-	//`RTLOG("RTHarbingerBonusDamage failed!");
+	//`LOG("Rising Tides: RTHarbingerBonusDamage failed!");
 
 	return ELR_NoInterrupt;
 }
@@ -619,11 +606,11 @@ function EventListenerReturn ExtendEffectDuration(Object EventData, Object Event
 
 	EffectTemplate = RTEffect_ExtendEffectDuration(GetX2Effect());
 	if(EffectTemplate == none) {
-		`RTLOG("ExtendEffectDuration had no template!");
+		`LOG("Rising Tides: ExtendEffectDuration had no template!");
 	return ELR_NoInterrupt;
 	}
 
-	//`RTLOG("Extend Effect Duration activated on EVENTID: " @ EventID);
+	//`LOG("Rising Tides: Extend Effect Duration activated on EVENTID: " @ EventID);
 
 	if(EventID == 'AbilityActivated') {
 		AbilityContext = XComGameStateContext_Ability(GameState.GetContext());
@@ -637,7 +624,7 @@ function EventListenerReturn ExtendEffectDuration(Object EventData, Object Event
 		}
 	}
 	bDebug = false;
-	//`RTLOG("Attempting to extend " @ EffectTemplate.AbilityToExtendName);
+	//`LOG("Rising Tides: Attempting to extend " @ EffectTemplate.AbilityToExtendName);
 	NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("Rising Tides: Extending " @ EffectTemplate.EffectToExtendName);
 	foreach GameState.IterateByClassType(class'XComGameState_Effect', IteratorEffectState) {
 	if(IteratorEffectState == none) {
@@ -650,7 +637,7 @@ function EventListenerReturn ExtendEffectDuration(Object EventData, Object Event
 	}
 
 	if(IteratorEffectState.GetX2Effect().EffectName == EffectTemplate.EffectToExtendName) {
-		//`RTLOG("EED proced on " @ EffectTemplate.AbilityToExtendName @ " for effect " @	EffectTemplate.EffectToExtendName);
+		//`LOG("Rising TIdes: EED proced on " @ EffectTemplate.AbilityToExtendName @ " for effect " @	EffectTemplate.EffectToExtendName);
 		bDebug = true;
 		ExtendedEffectState = XComGameState_Effect(NewGameState.CreateStateObject(class'XComGameState_Effect', IteratorEffectState.ObjectID));
 		ExtendedEffectState.iTurnsRemaining += EffectTemplate.iDurationExtension;
@@ -670,10 +657,10 @@ function EventListenerReturn ExtendEffectDuration(Object EventData, Object Event
 
 
 	if(!bDebug) {
-	//`RTLOG("ExtendEffectDuration fired on the right ability / event, but there was no effects on the gamestate?");
+	//`LOG("Rising Tides: ExtendEffectDuration fired on the right ability / event, but there was no effects on the gamestate?");
 	}
 
-	//`RTLOG("ExtendEffectDuration was successful!");
+	//`LOG("Rising Tides: ExtendEffectDuration was successful!");
 
 	return ELR_NoInterrupt;
 }
@@ -750,7 +737,7 @@ function EventListenerReturn EveryMomentMattersCheck(Object EventData, Object Ev
 						return ELR_NoInterrupt;
 				}
 
-				if(SourceUnit.GetItemInSlot(eInvSlot_PrimaryWeapon).Ammo == 0) {
+			 if(SourceUnit.GetItemInSlot(eInvSlot_PrimaryWeapon).Ammo == 0) {
 					NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState(string(GetFuncName()));
 					XComGameStateContext_ChangeContainer(NewGameState.GetContext()).BuildVisualizationFn = EveryMomentMattersVisualizationFn;
 					SourceUnit = XComGameState_Unit(NewGameState.CreateStateObject(SourceUnit.Class, SourceUnit.ObjectID));
@@ -783,10 +770,10 @@ function EveryMomentMattersVisualizationFn(XComGameState VisualizeGameState) {
 		if (AbilityTemplate != none)
 		{
 			SoundAndFlyOver = X2Action_PlaySoundAndFlyOver(class'X2Action_PlaySoundAndFlyOver'.static.AddToVisualizationTree(ActionMetadata, VisualizeGameState.GetContext(), false, ActionMetadata.LastActionAdded));
-			SoundAndFlyOver.SetSoundAndFlyOverParameters(None, AbilityTemplate.LocFriendlyName, '', eColor_Good, AbilityTemplate.IconImage);
+			SoundAndFlyOver.SetSoundAndFlyOverParameters(None, "Every Moment Matters", '', eColor_Good, AbilityTemplate.IconImage);
 
 		} else {
-			`RTLOG("Rising Tides - Every Moment Matters: Couldn't find AbilityTemplate for visualization!");
+			class'RTHelpers'.static.RTLog("Rising Tides - Every Moment Matters: Couldn't find AbilityTemplate for visualization!");
 		}
 		break;
 	}
@@ -864,7 +851,7 @@ function TriggerGhostInTheShellFlyoverVisualizationFn(XComGameState VisualizeGam
 		if (AbilityState == none)
 		{
 			`RedScreenOnce("Ability state missing from" @ GetFuncName() @ "-jbouscher @gameplay");
-			//`RTLOG("ITS BROKEN");
+			//`LOG("Rising Tides: ITS BROKEN");
 			return;
 		}
 
@@ -876,7 +863,7 @@ function TriggerGhostInTheShellFlyoverVisualizationFn(XComGameState VisualizeGam
 		if (AbilityTemplate != none)
 		{
 			SoundAndFlyOver = X2Action_PlaySoundAndFlyOver(class'X2Action_PlaySoundAndFlyOver'.static.AddToVisualizationTree(ActionMetadata, VisualizeGameState.GetContext(), false, ActionMetadata.LastActionAdded));
-			SoundAndFlyOver.SetSoundAndFlyOverParameters(None, AbilityTemplate.LocFriendlyName, '', eColor_Good, AbilityTemplate.IconImage);
+			SoundAndFlyOver.SetSoundAndFlyOverParameters(None,"Ghost in the Shell", '', eColor_Good, AbilityTemplate.IconImage);
 
 		}
 		break;
@@ -893,7 +880,7 @@ function EventListenerReturn RemoveHarbingerEffect(Object EventData, Object Even
 
 	if (!bRemoved)
 	{
-		`RTLOG("Removing the Harbinger Effect due to Meld Loss!");
+		`LOG("Rising Tides: Removing the Harbinger Effect due to Meld Loss!");
 
 		History = `XCOMHISTORY;
 		RemoveContext = class'XComGameStateContext_EffectRemoved'.static.CreateEffectRemovedContext(self);
@@ -913,7 +900,7 @@ function EventListenerReturn RemoveHarbingerEffect(Object EventData, Object Even
 
 		SubmitNewGameState(NewGameState);
 	} else {
-		`RTLOG("Harbinger effect tried to remove itself, but it was already bRemoved?!");
+		`LOG("Rising Tides: Harbinger effect tried to remove itself, but it was already bRemoved?!");
 	}
 
 	return ELR_NoInterrupt;
@@ -931,7 +918,7 @@ function EventListenerReturn HeatChannelCheck(Object EventData, Object EventSour
 
   local XComGameState_Ability CooldownAbilityState;
 
-  //`RTLOG("Starting HeatChannel");
+  //`LOG("Rising Tides: Starting HeatChannel");
   // EventData = AbilityState to Channel
   OldAbilityState = XComGameState_Ability(EventData);
   // Event Source = UnitState of AbilityState
@@ -955,7 +942,7 @@ function EventListenerReturn HeatChannelCheck(Object EventData, Object EventSour
   OldSourceUnit.GetUnitValue('RTEffect_HeatChannel_Cooldown', HeatChannelValue);
   if(HeatChannelValue.fValue > 0) {
 	// still on cooldown
-	//`RTLOG("Heat Channel was on cooldown! @" @ HeatChannelValue.fValue);
+	//`LOG("Rising Tides: Heat Channel was on cooldown! @" @ HeatChannelValue.fValue);
 	return ELR_NoInterrupt;
   }
 
@@ -999,7 +986,7 @@ function EventListenerReturn HeatChannelCheck(Object EventData, Object EventSour
   // put the ability on cooldown
   NewSourceUnit.SetUnitFloatValue('RTEffect_HeatChannel_Cooldown', class'RTAbility_MarksmanAbilitySet'.default.HEATCHANNEL_COOLDOWN, eCleanUp_BeginTactical);
 
-  //`RTLOG("Finishing HeatChannel");
+  //`LOG("Rising Tides: Finishing HeatChannel");
 
 
   // submit gamestate
@@ -1049,7 +1036,7 @@ function TriggerHeatChannelFlyoverVisualizationFn(XComGameState VisualizeGameSta
 		if (AbilityTemplate != none)
 		{
 			SoundAndFlyOver = X2Action_PlaySoundAndFlyOver(class'X2Action_PlaySoundAndFlyOver'.static.AddToVisualizationTree(ActionMetadata, VisualizeGameState.GetContext(), false, ActionMetadata.LastActionAdded));
-			SoundAndFlyOver.SetSoundAndFlyOverParameters(None, AbilityTemplate.LocFriendlyName, '', eColor_Good, AbilityTemplate.IconImage);
+			SoundAndFlyOver.SetSoundAndFlyOverParameters(None, "Heat Channel", '', eColor_Good, "img:///UILibrary_PerkIcons.UIPerk_reload");
 
 
 		}
@@ -1069,7 +1056,7 @@ function EventListenerReturn LinkedFireCheck (Object EventData, Object EventSour
 	local RTGameState_Effect NewLinkedEffectState;
 
 	if(!bCanTrigger) {
-		`RTLOG("this should never happen");
+		`LOG("Rising Tides: this should never happen");
 		return ELR_NoInterrupt;
 	}
 
@@ -1125,10 +1112,10 @@ function EventListenerReturn LinkedFireCheck (Object EventData, Object EventSour
 
 	if(AbilityState == none) {
 		`RedScreenOnce("Couldn't find an ability to shoot!");
-		`RTLOG("AbilityContext.InputContext.AbilityTemplateName = " @ AbilityContext.InputContext.AbilityTemplateName);
+		`LOG("Rising Tides: AbilityContext.InputContext.AbilityTemplateName = " @ AbilityContext.InputContext.AbilityTemplateName);
 	}
 
-	// if we allowed shots at this step, we'd interrupt our own linked shot chain. Looks neater this way.
+	//  if we allowed shots at this step, we'd interrupt our own linked shot chain. Looks neater this way.
 	if (AbilityContext.InterruptionStatus == eInterruptionStatus_Interrupt)	{
 		return ELR_NoInterrupt;
 	}
@@ -1243,7 +1230,7 @@ function TriggerLinkedEffectFlyoverVisualizationFn(XComGameState VisualizeGameSt
 		if (AbilityTemplate != none)
 		{
 			SoundAndFlyOver = X2Action_PlaySoundAndFlyOver(class'X2Action_PlaySoundAndFlyOver'.static.AddToVisualizationTree(ActionMetadata, VisualizeGameState.GetContext(), false, ActionMetadata.LastActionAdded));
-			SoundAndFlyOver.SetSoundAndFlyOverParameters(None, AbilityTemplate.LocFriendlyName, '', eColor_Good, AbilityTemplate.IconImage);
+			SoundAndFlyOver.SetSoundAndFlyOverParameters(None, "Networked OI", '', eColor_Good, "img:///UILibrary_PerkIcons.UIPerk_insanity");
 
 		}
 		break;
@@ -1289,19 +1276,19 @@ function EventListenerReturn TwitchFireCheck (Object EventData, Object EventSour
 	local StateObjectReference	EmptyRef;
 
 	if(!bCanTrigger) {
-		`RTLOG("TwitchEffect is probably being called before it finishes resolving!");
+		`LOG("Rising Tides: TwitchEffect is probably being called before it finishes resolving!");
 		return ELR_NoInterrupt;
 	}
 
 	EmptyRef.ObjectID = 0;
 
-	`RTLOG("Twitch Fire Check startup.");
+	`LOG("Rising Tides: Twitch Fire Check startup.");
 	History = `XCOMHISTORY;
 	AbilityContext = XComGameStateContext_Ability(GameState.GetContext());
 	if (AbilityContext == none) {
 		return ELR_NoInterrupt;
 	}
-	`RTLOG("Twitch Fire Check Stage 1");
+	`LOG("Rising Tides: Twitch Fire Check Stage 1");
 	// The AttackingUnit should be the unit that is currently attacking
 	AttackingUnit = class'X2TacticalGameRulesetDataStructures'.static.GetAttackingUnitState(GameState);
 
@@ -1318,12 +1305,12 @@ function EventListenerReturn TwitchFireCheck (Object EventData, Object EventSour
 	if(!TwitchLinkedUnit.IsUnitAffectedByEffectName('RTEffect_Meld')|| !TwitchAttackingUnit.IsUnitAffectedByEffectName('RTEffect_Meld')) {
 		return ELR_NoInterrupt;
 	}
-	`RTLOG("Twitch Fire Check Stage 2");
+	`LOG("Rising Tides: Twitch Fire Check Stage 2");
 	// Don't reveal ourselves
 	if(TwitchAttackingUnit.IsConcealed()) {
 		return ELR_NoInterrupt;
 	}
-	`RTLOG("Twitch Fire Check Stage 3");
+	`LOG("Rising Tides: Twitch Fire Check Stage 3");
 
 
 	// The parent template of this RTGameState_TwitchEffect
@@ -1340,19 +1327,19 @@ function EventListenerReturn TwitchFireCheck (Object EventData, Object EventSour
 
 	if(AbilityState == none) {
 		`RedScreenOnce("Couldn't find an ability to shoot!");
-		`RTLOG("TwitchEffect.AbilityToActivate = " @ TwitchEffect.AbilityToActivate);
+		`LOG("Rising Tides: TwitchEffect.AbilityToActivate = " @ TwitchEffect.AbilityToActivate);
 	}
 
-	`RTLOG("Twitch Fire Check Stage 4");
+	`LOG("Rising Tides: Twitch Fire Check Stage 4");
 	// only shoot enemy units
 	if (AttackingUnit != none && AttackingUnit.IsEnemyUnit(TwitchAttackingUnit)) {
-		`RTLOG("Twitch Fire Check Stage 5");
+		`LOG("Rising Tides: Twitch Fire Check Stage 5");
 		// break out if we can't shoot
 		if (AbilityState != none) {
-				`RTLOG("Twitch Fire Check Stage 6");
+				`LOG("Rising Tides: Twitch Fire Check Stage 6");
 				// break out if we can't grant an action point to shoot with
 				if (TwitchEffect.GrantActionPoint != '') {
-					`RTLOG("Twitch Fire Check Stage 7");
+					`LOG("Rising Tides: Twitch Fire Check Stage 7");
 					// create an new gamestate and increment the number of grants
 					NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState(string(GetFuncName()));
 					NewTwitchEffectState = RTGameState_Effect(NewGameState.CreateStateObject(Class, ObjectID));
@@ -1363,7 +1350,7 @@ function EventListenerReturn TwitchFireCheck (Object EventData, Object EventSour
 					TwitchAttackingUnit = XComGameState_Unit(NewGameState.CreateStateObject(TwitchAttackingUnit.Class, TwitchAttackingUnit.ObjectID));
 					TwitchAttackingUnit.ReserveActionPoints.AddItem(TwitchEffect.GrantActionPoint);
 					NewGameState.AddStateObject(TwitchAttackingUnit);
-					`RTLOG("Twitch Fire Check Stage 8");
+					`LOG("Rising Tides: Twitch Fire Check Stage 8");
 					// check if we can shoot. if we can't, clean up the gamestate from history
 					if (AbilityState.CanActivateAbilityForObserverEvent(AttackingUnit, TwitchAttackingUnit) != 'AA_Success')
 					{
@@ -1372,7 +1359,7 @@ function EventListenerReturn TwitchFireCheck (Object EventData, Object EventSour
 					}
 					else
 					{
-						`RTLOG("Twitch Fire Check Stage 9");
+						`LOG("Rising Tides: Twitch Fire Check Stage 9");
 						bCanTrigger = false;
 						AbilityState = XComGameState_Ability(NewGameState.CreateStateObject(AbilityState.Class, AbilityState.ObjectID));
 						NewGameState.AddStateObject(AbilityState);
@@ -1388,9 +1375,9 @@ function EventListenerReturn TwitchFireCheck (Object EventData, Object EventSour
 							AbilityContext = class'XComGameStateContext_Ability'.static.BuildContextFromAbility(AbilityState, AttackingUnit.ObjectID);
 							if( AbilityContext.Validate() )
 							{
-								`RTLOG("Twitch Fire Check Stage 11");
+								`LOG("Rising Tides: Twitch Fire Check Stage 11");
 								`TACTICALRULES.SubmitGameStateContext(AbilityContext);
-								`RTLOG("Twitch Fire Check Stage 12");
+								`LOG("Rising Tides: Twitch Fire Check Stage 12");
 							}
 						}
 						bCanTrigger = true;
@@ -1438,7 +1425,7 @@ function EventListenerReturn RTBumpInTheNight(Object EventData, Object EventSour
 		return ELR_NoInterrupt;
 
 	if(AbilityContext.InterruptionStatus == eInterruptionStatus_Interrupt) {
-		//`RTLOG("not on the interrupt stage!");
+		//`LOG("Rising Tides: not on the interrupt stage!");
 		return ELR_NoInterrupt;
 	}
 
@@ -1580,7 +1567,7 @@ function TriggerBumpInTheNightFlyoverVisualizationFn(XComGameState VisualizeGame
 		if (AbilityState == none)
 		{
 			`RedScreenOnce("Ability state missing from" @ GetFuncName() @ "-jbouscher @gameplay");
-			`RTLOG("ITS BROKEN");
+			`LOG("Rising Tides: ITS BROKEN");
 			return;
 		}
 
@@ -1608,7 +1595,7 @@ function EventListenerReturn RTApplyTimeStop(Object EventData, Object EventSourc
 
 	TargetState = XComGameState_Unit(EventData);
 	if(TargetState == none) {
-		`RTLOG("Couldn't apply time stop, target was not an XComGameState_Unit");
+		`LOG("Rising Tides: Couldn't apply time stop, target was not an XComGameState_Unit");
 		return ELR_NoInterrupt;
 	}
 
@@ -1619,245 +1606,6 @@ function EventListenerReturn RTApplyTimeStop(Object EventData, Object EventSourc
 	}
 
 	return ELR_NoInterrupt;
-}
-
-// Event ID: AbilityActivated
-// EventData: AbilityState
-// EventSource: SourceUnitState
-// Passed a NewGameState
-// When we shoot, we need to update the tile cache.
-function EventListenerReturn HandleRepositioning(Object EventData, Object EventSource, XComGameState NewGameState, Name EventID, Object CallbackData)
-{
-	local XComGameState_Unit UnitState;
-	local TTile CurrentTile;
-//	local XComGameStateHistory History;
-	local RTEffect_Repositioning EffectTemplate;
-	local RTGameState_Effect RTEffectState;
-	local XComGameState_Ability AbilityState; // what just activated
-	local array<ERTChecklist> Checklists;
-	local XComGameStateContext AbilityContext;
-
-	AbilityContext = NewGameState.GetContext();
-	if(AbilityContext == none) {
-		return ELR_NoInterrupt;
-	}
-
-	if (AbilityContext.InterruptionStatus == eInterruptionStatus_Interrupt) {
-			return ELR_NoInterrupt;
-	}
-	
-	AbilityState = XComGameState_Ability(EventData);
-	
-	// if we fired a shot, we need to update repositioning
-	// ...for some reason, the normal syntax doesn't work here?
-	Checklists.AddItem(eChecklist_StandardShots);
-	Checklists.AddItem(eChecklist_SniperShots);
-	Checklists.AddItem(eChecklist_OverwatchShots);
-
-	if(!class'RTHelpers'.static.MultiCatCheckAbilityActivated(AbilityState.GetMyTemplateName(), Checklists))
-	{
-		`RTLOG("HandlingRepositioning triggered by an invalid ability: " $ AbilityState.GetMyTemplateName());
-		return ELR_NoInterrupt;
-	}
-
-	EffectTemplate = RTEffect_Repositioning(GetX2Effect());
-	if(EffectTemplate == none)
-	{
-		`RTLOG("HandleRepositioning triggered by an invalid X2Effect!", true, false);
-		return ELR_NoInterrupt;
-	}
-
-	UnitState = XComGameState_Unit(EventSource);
-	if(UnitState == none || ApplyEffectParameters.TargetStateObjectRef.ObjectID != UnitState.ObjectID)
-	{
-		`RTLOG("HandleRepositioning triggered by an invalid unit!", true, false);
-		return ELR_NoInterrupt;
-	}
-	
-	CurrentTile = UnitState.TileLocation;
-	RTEffectState = RTGameState_Effect(NewGameState.ModifyStateObject(Class, ObjectID));
-
-	// remove the last tile
-	if(PreviousTilePositions.Length < EffectTemplate.MaxPositionsSaved)
-	{
-		RTEffectState.PreviousTilePositions.Remove(0, 1);
-	}
-	RTEffectState.PreviousTilePositions.AddItem(CurrentTile);
-
-	return ELR_NoInterrupt;
-}
-
-// Event ID: RetainConcealmentOnActivation
-// Event Data: XComLWTuple containing 1 bool
-// Event Source ActivatedAbilityStateContext 
-// When we're about to break concealment, check to see if we can trigger Repositioning
-function EventListenerReturn HandleRetainConcealmentRepositioning(Object EventData, Object EventSource, XComGameState GameState, name EventID, Object CallbackData)
-{
-	local XComGameStateContext_Ability ActivatedAbilityStateContext;
-//	local XComGameState_Unit UnitState;
-//	local bool bTooClose;
-//	local TTile CurrentTile, IteratorTile;
-//	local RTEffect_Repositioning EffectTemplate;
-	local RTGameState_Effect EffectState;
-	local XComGameState NewGameState;
-	local XComLWTuple Tuple;
-
-	if(ActivatedAbilityStateContext.InputContext.SourceObject.ObjectID != ApplyEffectParameters.TargetStateObjectRef.ObjectID)
-	{
-		//`RTLOG("RTEffct_Repositioning attempted to trigger on a unit that doesn't have it.", true, false);
-		return ELR_NoInterrupt;
-	}
-
-	//`RTLOG("HandleRetainConcealmentRepositioning");
-
-	Tuple = XComLWTuple(EventData);
-	ActivatedAbilityStateContext = XComGameStateContext_Ability(EventSource);
-
-	if(Tuple == none || ActivatedAbilityStateContext == none)
-	{
-		`RTLOG("One of the event objectives for RTE_Repositioning::HandleRetainConcealment was invalid!", true, false);
-		return ELR_NoInterrupt;
-	}
-
-	// if what broke concealment ISN'T what has this effect
-	if(ActivatedAbilityStateContext.InputContext.SourceObject.ObjectID != ApplyEffectParameters.TargetStateObjectRef.ObjectID)
-	{
-		`RTLOG("RTEffct_Repositioning attempted to trigger on a unit that doesn't have it.", true, false);
-		return ELR_NoInterrupt;
-	}
-
-	if(Tuple.Data[0].b == true) {
-		// already going to retain concealment
-		// might want to take the current tile out of the cache...
-		`RTLOG("Already going to retain concealment, no need to process Repositioning...");
-		return ELR_NoInterrupt;
-	}	
-
-	if(bRepositioningActive) {
-		NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState(string(GetFuncName()));
-		XComGameStateContext_ChangeContainer(NewGameState.GetContext()).BuildVisualizationFn = RepositoningVisualizationFn;
-		EffectState = RTGameState_Effect(NewGameState.ModifyStateObject(Class, ObjectID));
-		EffectState.bRepositioningActive = false;
-		`TACTICALRULES.SubmitGameState(NewGameState);
-		Tuple.Data[0].b = true;
-	}
-
-	return ELR_NoInterrupt;
-}
-
-function RepositoningVisualizationFn(XComGameState VisualizeGameState) {
-	local XComGameState_Unit UnitState;
-	local X2Action_PlaySoundAndFlyOver SoundAndFlyOver;
-	local VisualizationActionMetadata ActionMetadata;
-	local XComGameStateHistory History;
-	local X2AbilityTemplate AbilityTemplate;
-
-	History = `XCOMHISTORY;
-
-	UnitState = XComGameState_Unit(History.GetGameStateForObjectID(ApplyEffectParameters.TargetStateObjectRef.ObjectID));
-
-	History.GetCurrentAndPreviousGameStatesForObjectID(UnitState.ObjectID, ActionMetadata.StateObject_OldState, ActionMetadata.StateObject_NewState, , VisualizeGameState.HistoryIndex);
-	ActionMetadata.StateObject_NewState = UnitState;
-	ActionMetadata.VisualizeActor  = UnitState.GetVisualizer();
-
-	AbilityTemplate = class'X2AbilityTemplateManager'.static.GetAbilityTemplateManager().FindAbilityTemplate('RTRepositioning');
-	if (AbilityTemplate != none)
-	{
-		SoundAndFlyOver = X2Action_PlaySoundAndFlyOver(class'X2Action_PlaySoundAndFlyOver'.static.AddToVisualizationTree(ActionMetadata, VisualizeGameState.GetContext(), false, ActionMetadata.LastActionAdded));
-		SoundAndFlyOver.SetSoundAndFlyOverParameters(None, AbilityTemplate.LocFlyOverText, '', eColor_Good, AbilityTemplate.IconImage);
-
-	} else {
-		`RTLOG("Rising Tides - Repositioning: Couldn't find AbilityTemplate for visualization!");
-	}
-}
-
-function EventListenerReturn HandleRepositioningAvaliable(Object EventData, Object EventSource, XComGameState GameState, name EventID, Object CallbackData)
-{
-//	local XComGameStateContext_Ability ActivatedAbilityStateContext;
-	local XComGameState_Unit UnitState;
-	local bool bTooClose;
-	local XComGameState NewGameState;
-	local TTile CurrentTile, IteratorTile;
-	local RTEffect_Repositioning EffectTemplate;
-	local RTGameState_Effect EffectState;
-
-	`RTLOG("HandleRepositioningAvaliable");
-
-	UnitState = XComGameState_Unit(EventData);
-
-	// if what broke concealment ISN'T what has this effect
-	if(UnitState.ObjectID != ApplyEffectParameters.TargetStateObjectRef.ObjectID)
-	{
-		`RTLOG("HandleRepositioningAvaliable attempted to trigger on a unit that doesn't have it.", true, false);
-		return ELR_NoInterrupt;
-	}
-
-	bTooClose = false;
-	EffectTemplate = RTEffect_Repositioning(GetX2Effect());
-	CurrentTile = UnitState.TileLocation;
-	foreach PreviousTilePositions(IteratorTile)
-	{
-		if(class'Helpers'.static.DistanceBetweenTiles(CurrentTile, IteratorTile) < Square(`TILESTOUNITS(EffectTemplate.TilesMovedRequired)))
-		{
-			bTooClose = true;
-		}
-	}
-
-	// if we're too close to our last position and it is active, deactivate.
-	// if we're far enough away from our last position and it is not active, activate.
-	// otherwise do nothing.
-	if(bTooClose == bRepositioningActive)
-	{
-		NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState(string(GetFuncName()));
-		EffectState = RTGameState_Effect(NewGameState.ModifyStateObject(Class, ObjectID));
-		EffectState.bRepositioningActive = !bRepositioningActive;
-		XComGameStateContext_ChangeContainer(NewGameState.GetContext()).BuildVisualizationFn = RepositoningCheckVisualizationFn;
-		`TACTICALRULES.SubmitGameState(NewGameState);
-	}
-
-
-	return ELR_NoInterrupt;
-}
-
-function RepositoningCheckVisualizationFn(XComGameState VisualizeGameState) {
-	local XComGameState_Unit UnitState;
-	local X2Action_PlaySoundAndFlyOver SoundAndFlyOver;
-	local VisualizationActionMetadata ActionMetadata;
-	local XComGameStateHistory History;
-	local X2AbilityTemplate AbilityTemplate;
-	local RTGameState_Effect RTEffectState;
-
-	History = `XCOMHISTORY;
-
-	UnitState = XComGameState_Unit(History.GetGameStateForObjectID(ApplyEffectParameters.TargetStateObjectRef.ObjectID));
-
-	//History.GetCurrentAndPreviousGameStatesForObjectID(UnitState.ObjectID, ActionMetadata.StateObject_OldState, ActionMetadata.StateObject_NewState, , VisualizeGameState.HistoryIndex);
-	ActionMetadata.StateObject_NewState = UnitState;
-	ActionMetadata.VisualizeActor  = UnitState.GetVisualizer();
-
-	foreach VisualizeGameState.IterateByClassType(class'RTGameState_Effect', RTEffectState)
-	{
-		if(RTEffectState.ObjectID == ObjectID) {
-			break;
-		}
-	}
-
-	if(RTEffectState == none) {
-		`RTLOG("Couldn't find EffectState for RepositoningCheckVisualizationFn!", true, false);
-	}
-
-	AbilityTemplate = class'X2AbilityTemplateManager'.static.GetAbilityTemplateManager().FindAbilityTemplate('RTRepositioning');
-	if (AbilityTemplate != none)
-	{
-		SoundAndFlyOver = X2Action_PlaySoundAndFlyOver(class'X2Action_PlaySoundAndFlyOver'.static.AddToVisualizationTree(ActionMetadata, VisualizeGameState.GetContext(), false, ActionMetadata.LastActionAdded));
-		if(RTEffectState.bRepositioningActive) {
-			SoundAndFlyOver.SetSoundAndFlyOverParameters(None, AbilityTemplate.LocHitMessage, '', eColor_Good, AbilityTemplate.IconImage);
-		} else {
-			SoundAndFlyOver.SetSoundAndFlyOverParameters(None, AbilityTemplate.LocMissMessage, '', eColor_Bad, AbilityTemplate.IconImage);
-		}
-	} else {
-		`RTLOG("Rising Tides - Repositioning: Couldn't find AbilityTemplate for visualization!");
-	}
 }
 
 defaultproperties

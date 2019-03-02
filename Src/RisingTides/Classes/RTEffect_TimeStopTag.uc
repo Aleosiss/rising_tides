@@ -17,7 +17,7 @@ function int GetAttackingDamageModifier(XComGameState_Effect EffectState, XComGa
 	local StateObjectReference			EffectRef;
 	local XComGameState_Unit			TargetUnit;
 
-	`RTLOG("RTEffect_TimeStopMaster.GetAttackingDamageModifier called...");
+	`LOG("Rising Tides: RTEffect_TimeStopMaster.GetAttackingDamageModifier called...");
 	TargetUnit = XComGameState_Unit(TargetDamageable);
 		if(TargetUnit != none) {
 			foreach TargetUnit.AffectedByEffects(EffectRef)
@@ -26,7 +26,7 @@ function int GetAttackingDamageModifier(XComGameState_Effect EffectState, XComGa
 				if(TempEffectState != none){
 					TimeStopEffectState	= RTGameState_TimeStopEffect(TempEffectState);
 					if(TimeStopEffectState != none && TimeStopEffectState.ApplyEffectParameters.TargetStateObjectRef.ObjectID == TargetUnit.ObjectID) {
-						`RTLOG("TimeStopEffectState Found, proceeding...");
+						`LOG("Rising Tides: TimeStopEffectState Found, proceeding...");
 						break;
 					}
 				}
@@ -48,7 +48,7 @@ function int GetExtraArmorPiercing(XComGameState_Effect EffectState, XComGameSta
 	local StateObjectReference			EffectRef;
 	local XComGameState_Unit			TargetUnit;
 
-	`RTLOG("RTEffect_TimeStopMaster.GetExtraArmorPiercing called...");
+	`LOG("Rising Tides: RTEffect_TimeStopMaster.GetExtraArmorPiercing called...");
 	TargetUnit = XComGameState_Unit(TargetDamageable);
 	if(TargetUnit != none) {
 		foreach TargetUnit.AffectedByEffects(EffectRef)
@@ -57,7 +57,7 @@ function int GetExtraArmorPiercing(XComGameState_Effect EffectState, XComGameSta
 			if(TempEffectState != none){
 				TimeStopEffectState	= RTGameState_TimeStopEffect(TempEffectState);
 				if(TimeStopEffectState != none && TimeStopEffectState.ApplyEffectParameters.TargetStateObjectRef.ObjectID == TargetUnit.ObjectID) {
-					`RTLOG("TimeStopEffectState Found, proceeding...");
+					`LOG("Rising Tides: TimeStopEffectState Found, proceeding...");
 					break;
 				}
 			}
@@ -66,13 +66,13 @@ function int GetExtraArmorPiercing(XComGameState_Effect EffectState, XComGameSta
 	if(TimeStopEffectState != none) {
 		if(TimeStopEffectState.iShouldRecordCounter == 1) {
 			TimeStopEffectState.bShouldRecordDamageValue = true;
-			`RTLOG("TimeStopEffectState should record the damage value!");
+			`LOG("Rising Tides: TimeStopEffectState should record the damage value!");
 		}
 		else {
 			if(TimeStopEffectState.iShouldRecordCounter == 2)
-				`RTLOG("TimeStopEffectState detected a damage preview attempt and will not record a damage value.");
+				`LOG("Rising Tides: TimeStopEffectState detected a damage preview attempt and will not record a damage value.");
 			TimeStopEffectState.bShouldRecordDamageValue = false;
-			`RTLOG("TimeStopEffectState.bShouldRecordDamageValue is incorrect: " @ TimeStopEffectState.iShouldRecordCounter);
+			`LOG("Rising Tides: TimeStopEffectState.bShouldRecordDamageValue is incorrect: " @ TimeStopEffectState.iShouldRecordCounter);
 		}
 		TimeStopEffectState.iShouldRecordCounter = 0;
 	}

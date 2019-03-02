@@ -510,9 +510,9 @@ static function X2AbilityTemplate RTExtinctionEventPartTwo() {
 	Template.AbilitySourceName = 'eAbilitySource_Psionic';
 
 	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
-	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
-	Template.bSkipFireAction = true;
-	Template.bCrossClassEligible = false;
+		Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
+		Template.bSkipFireAction = true;
+		Template.bCrossClassEligible = false;
 
 	Trigger = new class'X2AbilityTrigger_EventListener';
 	Trigger.ListenerData.EventID = 'RTExtinctionEventPartTwo';
@@ -531,8 +531,8 @@ static function X2AbilityTemplate RTExtinctionEventPartTwo() {
 	VFXEffect = new class'X2Effect_Persistent';
 	VFXEffect.BuildPersistentEffect(1, false, false, , eGameRule_PlayerTurnBegin);
 	VFXEffect.VFXTemplateName = default.ExtinctionEventChargingParticleString;
-	VFXEffect.EffectAddedFn = PanicLoopBeginFn;
-	VFXEffect.EffectRemovedFn = PanicLoopEndFn;
+	VFXEffect.EffectAddedFn = class'RTHelpers'.static.PanicLoopBeginFn;
+	VFXEffect.EffectRemovedFn = class'RTHelpers'.static.PanicLoopEndFn;
 	Template.AddTargetEffect(VFXEffect);
 
 	ActivationEffect = new class'X2Effect_DelayedAbilityActivation';
@@ -543,27 +543,7 @@ static function X2AbilityTemplate RTExtinctionEventPartTwo() {
 	Template.AbilityShooterConditions.AddItem(default.LivingShooterProperty);
 
 	return Template;
-}
-
-static function PanicLoopBeginFn( X2Effect_Persistent PersistentEffect, const out EffectAppliedData ApplyEffectParameters, XComGameState_BaseObject kNewTargetState, XComGameState NewGameState )
-{
-	local XComGameState_Unit UnitState;
-
-	UnitState = XComGameState_Unit( NewGameState.CreateStateObject( class'XComGameState_Unit', ApplyEffectParameters.TargetStateObjectRef.ObjectID ) );
-	UnitState.bPanicked = true;
-
-	NewGameState.AddStateObject( UnitState );
-}
-
-static function PanicLoopEndFn( X2Effect_Persistent PersistentEffect, const out EffectAppliedData ApplyEffectParameters, XComGameState NewGameState, bool bCleansed )
-{
-	local XComGameState_Unit UnitState;
-
-	UnitState = XComGameState_Unit( NewGameState.CreateStateObject( class'XComGameState_Unit', ApplyEffectParameters.TargetStateObjectRef.ObjectID ) );
-	UnitState.bPanicked = false;
-
-	NewGameState.AddStateObject( UnitState );
-}
+  }
 
 static function X2AbilityTemplate RTExtinctionEventPartThree() {
 	local X2AbilityTemplate Template;
@@ -1069,7 +1049,7 @@ function RudimentaryCreaturesAffectTargetVisualization(XComGameState VisualizeGa
 
 	AbilityState = XComGameState_Ability(`XCOMHISTORY.GetGameStateForObjectID(ObjectID));
 	if(AbilityState == none) {
-		`RTLOG("RudimentaryCreaturesAffectTargetVisualization failed to find an abilitystate for object ID " $ ObjectID);
+		`LOG("Rising Tides: RudimentaryCreaturesAffectTargetVisualization failed to find an abilitystate for object ID " $ ObjectID);
 		return;
 	}
 
@@ -2767,16 +2747,16 @@ static simulated function PsionicLash_BuildVisualization(XComGameState Visualize
 
 static function X2AbilityTemplate RTUnfurlTheVeil() {
 	local X2AbilityTemplate						Template;
-	local X2Effect_RangerStealth				StealthEffect;
-	local RTCondition_UnfurlTheVeil				VeilCondition;
-	local X2AbilityCost_ActionPoints			Cost;
+	local X2Effect_RangerStealth			StealthEffect;
+	local RTCondition_UnfurlTheVeil			VeilCondition;
+	local X2AbilityCost_ActionPoints		Cost;
 	local X2AbilityCooldown						Cooldown;
 
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'RTUnfurlTheVeil');
-	Template.IconImage = "img:///RisingTidesContentPackage.PerkIcons.rt_unfurltheveil";
+	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_swordSlash";
 
 	Template.AbilitySourceName = 'eAbilitySource_Psionic';
-	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_AlwaysShow;
+	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_ShowIfAvailable;
 	Template.Hostility = eHostility_Defensive;
 
 	Template.AbilityToHitCalc = default.DeadEye;
@@ -2803,8 +2783,8 @@ static function X2AbilityTemplate RTUnfurlTheVeil() {
 	StealthEffect.BuildPersistentEffect(1, true, true, false, eGameRule_PlayerTurnEnd);
 	StealthEffect.SetDisplayInfo(ePerkBuff_Bonus, Template.LocFriendlyName, Template.GetMyHelpText(), Template.IconImage, true);
 	StealthEffect.bRemoveWhenTargetConcealmentBroken = true;
-
 	Template.AddTargetEffect(StealthEffect);
+
 	Template.AddTargetEffect(class'X2Effect_Spotted'.static.CreateUnspottedEffect());
 
 	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
@@ -2813,6 +2793,9 @@ static function X2AbilityTemplate RTUnfurlTheVeil() {
 
 	return Template;
 }
+
+
+
 
 defaultproperties
 {
@@ -2825,23 +2808,10 @@ defaultproperties
 	GuiltyConscienceEffectName = "GuiltyConscienceEffect"
 	PostOverTheShoulderEventName = "TriangulationEvent"
 	KnowledgeIsPowerEffectName = "KnowledgeIsPowerEffectName"
+
 	PsionicStormSustainedActivationEffectName = "PsionicStormSustainedDamageEffectName"
 	PsionicStormSustainedDamageEvent = "PsionicStormSustainedDamageEventName"
 	PsistormMarkedEffectName = "PsionicStormDamageMarkName"
 
 	PSIONICSTORM_RADIUS = 7.5
-}
-
-static function bool AbilityTagExpandHandler(string InString, out string OutString)
-{
-	local name Tag;
-
-	Tag = name(InString);
-
-	switch(Tag)
-	{
-
-	}
-
-	return false;
 }

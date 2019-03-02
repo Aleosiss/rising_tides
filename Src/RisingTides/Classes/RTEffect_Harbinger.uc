@@ -52,6 +52,7 @@ simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffe
 
 	m_aStatChanges.Length = 0;
 
+
 	// gain bonus will and psi offense
 	AddPersistentStatChange(eStat_Will, BONUS_WILL);
 	AddPersistentStatChange(eStat_PsiOffense, BONUS_WILL);

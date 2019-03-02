@@ -9,20 +9,14 @@ var private string							SquadBackground;
 var private int								SquadID;
 var bool									bIsDeployed;
 var private name							AssociatedSitRepTemplateName;
-var private bool							bCanBeDeployed;
 
 
 
-function CreateSquad(int ID, String LocName, String LocBackground, name LocSitRepTemplateName, bool LocCanBeDeployed) {
+function CreateSquad(int ID, String LocName, String LocBackground, name LocSitRepTemplateName) {
 	SquadID = ID;
 	SquadName = LocName;
 	SquadBackground = LocBackground;
 	AssociatedSitRepTemplateName = LocSitRepTemplateName;
-	bCanBeDeployed = LocCanBeDeployed;
-}
-
-function bool CanBeDeployed() {
-	return bCanBeDeployed;
 }
 
 

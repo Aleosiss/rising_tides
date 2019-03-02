@@ -35,5 +35,5 @@ static function bool IsUnitNotTemplar(XComGameState_StaffSlot SlotState, StaffUn
 
 defaultproperties
 {
-	StaffSlotTemplateName = "RTSoldierStaffSlot"
+	StaffSlotTemplateName = 'RTSoldierStaffSlot'
 }

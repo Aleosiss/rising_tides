@@ -1,39 +1,21 @@
 // This is an Unreal Script
 class RTUIScreenListener_OneSmallFavor extends UIScreenListener config(ProgramFaction);
 
-var UICheckbox						cb;
-var UIMission						ms;
-var StateObjectReference			mr;
-var bool							bDebugging;
-var bool							bHasSeenTutorial;
+var UICheckbox 	cb;
+var UIMission	ms;
+var StateObjectReference mr;
+var bool		bDebugging;
 
-var config array<name> 				FatLaunchButtonMissionTypes;
-var config float 					OSFCheckboxDistortOnClickDuration;
+var config array<name> FatLaunchButtonMissionTypes;
 
 delegate OldOnClickedDelegate(UIButton Button);
 
 event OnInit(UIScreen Screen)
 {
-	local RTGameState_ProgramFaction Program;
-	
-	if(UIStrategyMap(Screen) != none && !bHasSeenTutorial) {
-		Program = RTGameState_ProgramFaction(`XCOMHISTORY.GetSingleGameStateObjectForClass(class'RTGameState_ProgramFaction'));
-		if(Program == none) {
-			return;
-		}
-	
-		if(!Program.bMetXCom) {
-			return;
-		}
-	
-		Program.HandleOSFTutorial();
-		bHasSeenTutorial = Program.bOSF_FirstTimeDisplayed;
-	}
-
 	if(UIMission(Screen) == none) {
 		return;
 	}
-
+	
 	bDebugging = false;
 
 	ms = UIMission(Screen);
@@ -68,7 +50,6 @@ event OnRemoved(UIScreen Screen) {
 simulated function ManualGC() {
 	OldOnClickedDelegate = none;
 	ms = none;
-	HandleInput(false);
 	cb.Remove();
 	cb = none;
 }
@@ -91,6 +72,8 @@ simulated function AddOneSmallFavorSelectionCheckBox(UIScreen Screen) {
 		return;
 	}
 
+	Program.HandleOSFTutorial();
+
 	// immediately execute the init code if we're somehow late to the initialization party
 	if(MissionScreen.ConfirmButton.bIsVisible) {
 		if(MissionScreen.ConfirmButton.bIsInited && MissionScreen.ConfirmButton.bIsVisible) {
@@ -111,7 +94,7 @@ simulated function AddOneSmallFavorSelectionCheckBox(UIScreen Screen) {
 	}
 	
 	else {
-		`RTLOG("Could not find a confirm button for the mission!", true);
+		class'RTHelpers'.static.RTLog("Could not find a confirm button for the mission!", true);
 	}
 }
 
@@ -132,16 +115,15 @@ function OnConfirmButtonInited(UIPanel Panel) {
 	Program = RTGameState_ProgramFaction(`XCOMHISTORY.GetSingleGameStateObjectForClass(class'RTGameState_ProgramFaction'));
 	Button = UIButton(Panel);
 	if(Button == none) {
-		`RTLOG("This isn't a button!");
+		class'RTHelpers'.static.RTLog("This isn't a button!");
 	}
 
 	// the checkbox shouldn't be clickable if the favor isn't available
-	bReadOnly = !Program.IsOneSmallFavorAvailable();
+	bReadOnly = !Program.bOneSmallFavorAvailable;
 	if(!bReadOnly) {
 		bReadOnly = class'RTHelpers'.static.IsInvalidMission(MissionScreen.GetMission().GetMissionSource());
 		if(bReadOnly) {
-			`RTLOG("This MissionSource is invalid!", false, false);
-			return; // don't even make the checkbox in this case...
+			class'RTHelpers'.static.RTLog("This MissionSource is invalid!", true);
 		}
 	}
 
@@ -155,21 +137,20 @@ function OnConfirmButtonInited(UIPanel Panel) {
 	GetPositionByMissionType(MissionScreen.GetMission().GetMissionSource().DataName, PosX, PosY);
 
 	cb = MissionScreen.Spawn(class'UICheckbox', MissionScreen.ButtonGroup);	
-	cb.InitCheckbox('OSFActivateCheckbox', , false, OnCheckboxChange, bReadOnly)
+	cb.InitCheckbox('OSFActivateCheckbox', , false, , bReadOnly)
 		.SetSize(Button.Height, Button.Height)
 		.OriginTopLeft()
 		.SetPosition(PosX, PosY)
 		.SetColor(class'UIUtilities_Colors'.static.ColorToFlashHex(Program.GetMyTemplate().FactionColor))
 		.SetTooltipText(strCheckboxDesc, , , 10, , , true, 0.0f);
-	`RTLOG("Created a checkbox at position " $ PosX $ " x and " $ PosY $ " y.");
-	HandleInput(true);
+	class'RTHelpers'.static.RTLog("Created a checkbox at position " $ PosX $ " x and " $ PosY $ " y.");
 
 	// Modify the OnLaunchButtonClicked Delegate
 	if(Button != none) {
 		OldOnClickedDelegate = Button.OnClickedDelegate;
 		Button.OnClickedDelegate = ModifiedLaunchButtonClicked;
 	} else {
-		`RTLOG("Panel was not a button?", true);
+		class'RTHelpers'.static.RTLog("Panel was not a button?", true);
 	}
 }
 
@@ -177,11 +158,6 @@ function ModifiedLaunchButtonClicked(UIButton Button) {
 	mr = ms.GetMission().GetReference();
 	AddOneSmallFavorSitrep(XComGameState_MissionSite(`XCOMHISTORY.GetGameStateForObjectID(mr.ObjectID)));
 	OldOnClickedDelegate(Button);
-}
-
-simulated function OnCheckboxChange(UICheckbox checkboxControl)
-{
-	ms.Movie.Pres.StartDistortUI(default.OSFCheckboxDistortOnClickDuration);
 }
 
 simulated function bool AddOneSmallFavorSitrep(XComGameState_MissionSite MissionState) {
@@ -199,7 +175,7 @@ simulated function bool AddOneSmallFavorSitrep(XComGameState_MissionSite Mission
 	}
 
 	if(!bDebugging) {
-		if(!Program.IsOneSmallFavorAvailable()) {
+		if(!Program.bOneSmallFavorAvailable) {
 			return false;
 		}
 	
@@ -207,25 +183,26 @@ simulated function bool AddOneSmallFavorSitrep(XComGameState_MissionSite Mission
 			return false;
 		}
 
-		`RTLOG("Adding One Small Favor SITREP due to it being available and activated!");
-	} else {
-		`RTLOG("Adding One Small Favor SITREP via debug override!"); 
+		class'RTHelpers'.static.RTLog("Adding One Small Favor SITREP due to it being available and activated!");
+	} else { 
+		class'RTHelpers'.static.RTLog("Adding One Small Favor SITREP via debug override!"); 
 	}
+
 
 	XComHQ = class'UIUtilities_Strategy'.static.GetXComHQ();
 
 	if(MissionState.GeneratedMission.SitReps.Find('RTOneSmallFavor') != INDEX_NONE) {
-		`RTLOG("This map already has the One Small Favor tag!", true);
+		class'RTHelpers'.static.RTLog("This map already has the One Small Favor tag!", true);
 		return false;
 	}
 	
 	if(class'RTHelpers'.static.IsInvalidMission(MissionState.GetMissionSource())) {
-		`RTLOG("This map is invalid!", true);
+		class'RTHelpers'.static.RTLog("This map is invalid!", true);
 		return false;
 	}
 
 	if(MissionState.TacticalGameplayTags.Find('RTOneSmallFavor') != INDEX_NONE) {
-		`RTLOG("This mission is already tagged for one small favor!");
+		class'RTHelpers'.static.RTLog("This mission is already tagged for one small favor!");
 		return false;
 	}
 
@@ -234,9 +211,9 @@ simulated function bool AddOneSmallFavorSitrep(XComGameState_MissionSite Mission
 	XComHQ = XComGameState_HeadquartersXCom(NewGameState.ModifyStateObject(XComHQ.class, XComHQ.ObjectID));
 	MissionState = XComGameState_MissionSite(NewGameState.ModifyStateObject(class'XComGameState_MissionSite', MissionState.ObjectID));
 
-	
+	Program.bOneSmallFavorActivated = true; // we're doing it boys
 	MissionState.TacticalGameplayTags.AddItem('RTOneSmallFavor');
-	Program.CashOneSmallFavor(NewGameState, MissionState); // we're doing it boys
+	Program.CashOneSmallFavor(NewGameState, MissionState);
 	ModifyOneSmallFavorSitrepForGeneratedMission(Program, MissionState, true);
 
 	ModifyMissionData(XComHQ, MissionState);
@@ -245,7 +222,7 @@ simulated function bool AddOneSmallFavorSitrep(XComGameState_MissionSite Mission
 		`XCOMGAME.GameRuleset.SubmitGameState(NewGameState);
 		//MissionScreen.UpdateData();
 	} else {
-		`RTLOG("Warning: One Small Favor activated but didn't add any objects to the GameState?!", true);
+		class'RTHelpers'.static.RTLog("Warning: One Small Favor activated but didn't add any objects to the GameState?!", true);
 		History.CleanupPendingGameState(NewGameState);
 	}
 
@@ -277,6 +254,7 @@ simulated function bool RemoveOneSmallFavorSitrep(XComGameState_MissionSite Miss
 	Program = RTGameState_ProgramFaction(NewGameState.ModifyStateObject(Program.class, Program.ObjectID));
 	XComHQ = XComGameState_HeadquartersXCom(NewGameState.ModifyStateObject(XComHQ.class, XComHQ.ObjectID));
 	MissionState = XComGameState_MissionSite(NewGameState.ModifyStateObject(class'XComGameState_MissionSite', MissionState.ObjectID));
+	Program.bOneSmallFavorActivated = false;
 	Program.UncashOneSmallFavor(NewGameState, MissionState);
 	ModifyOneSmallFavorSitrepForGeneratedMission(Program, MissionState, false);
 
@@ -331,39 +309,6 @@ simulated function GetPositionByMissionType(name MissionSource, out float PosX, 
 		PosX = -198;
 		PosY = 125;
 	}
-}
-
-function HandleInput(bool bIsSubscribing)
-{
-	local delegate<UIScreenStack.CHOnInputDelegate> inputDelegate;
-	inputDelegate = OnUnrealCommand;
-	if(bIsSubscribing)
-	{
-		`SCREENSTACK.SubscribeToOnInput(inputDelegate);
-	}
-	else
-	{
-		`SCREENSTACK.UnsubscribeFromOnInput(inputDelegate);
-	}
-}
-
-protected function bool OnUnrealCommand(int cmd, int arg)
-{
-	if (cmd == class'UIUtilities_Input'.const.FXS_BUTTON_X && arg == class'UIUtilities_Input'.const.FXS_ACTION_RELEASE)
-	{
-		// Cannot open screen during flight
-		if (class'XComEngine'.static.GetHQPres().StrategyMap2D.m_eUIState != eSMS_Flight)
-		{
-			// flip the checkbox
-			if(cb != none)
-			{
-				cb.bChecked = !cb.bChecked;
-			}
-			
-		}
-		return true;
-	}
-	return false;
 }
 
 defaultproperties

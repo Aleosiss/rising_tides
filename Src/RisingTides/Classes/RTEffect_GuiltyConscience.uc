@@ -17,9 +17,9 @@ simulated function bool OnEffectTicked(const out EffectAppliedData ApplyEffectPa
 	TargetUnitState = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(ApplyEffectParameters.TargetStateObjectRef.ObjectID));
 	SourceUnitState = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(ApplyEffectParameters.SourceStateObjectRef.ObjectID));
 
-	//`RTLOG("Guilty Conscience ticked" @ kNewEffectState.iStacks);
+	//`LOG("Rising Tides: Guilty Conscience ticked" @ kNewEffectState.iStacks);
 	if(kNewEffectState.iStacks >= iTriggerThreshold) {
-		//`RTLOG("Guilty Conscience TRIGGERED on " @ TargetUnitState.GetFullName());
+		//`LOG("Rising Tides: Guilty Conscience TRIGGERED on " @ TargetUnitState.GetFullName());
 		`XEVENTMGR.TriggerEvent(GuiltyConscienceEventName, TargetUnitState, SourceUnitState, NewGameState);
 		kNewEffectState.iStacks = 1;
 	} else {

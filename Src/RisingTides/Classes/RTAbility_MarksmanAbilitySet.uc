@@ -40,10 +40,6 @@ class RTAbility_MarksmanAbilitySet extends RTAbility_GhostAbilitySet
 	var config int SND_DEFENSE_BONUS;
 	var config float EMM_DAMAGE_PERCENT;
 	var config int SIS_CONCEALMENT_TURNS;
-	var config int REPOSITIONING_TILES_MOVED_REQUIREMENT;
-	var config int REPOSITIONING_MAX_POSITIONS_SAVED;
-	var config int AGGRESSION_CRIT_PER_UNIT;
-	var config int AGGRESSION_UNITS_FOR_MAX_BONUS;
 
 	var config int HARBINGER_SHIELD_AMOUNT, HARBINGER_COOLDOWN, HARBINGER_DAMAGE_BONUS, HARBINGER_WILL_BONUS, HARBINGER_AIM_BONUS, HARBINGER_ARMOR_BONUS;
 	var config WeaponDamageValue HARBINGER_DMG;
@@ -112,7 +108,6 @@ static function array<X2DataTemplate> CreateTemplates()
 	Templates.AddItem(RTOverflowBarrierEvent());
 	Templates.AddItem(RTKubikuri());
 	Templates.AddItem(RTKubikuriDamage());
-	Templates.AddItem(RTRepositioning());
 
 	return Templates;
 }
@@ -584,8 +579,6 @@ static function X2AbilityTemplate RTAggression()
 	Template.AbilityTriggers.AddItem(default.UnitPostBeginPlayTrigger);
 
 	AgroEffect = new class'RTEffect_Aggression';
-	AgroEffect.iCritBonusPerUnit = default.AGGRESSION_CRIT_PER_UNIT;
-	AgroEffect.iUnitsForMaxBonus = default.AGGRESSION_UNITS_FOR_MAX_BONUS;
 	AgroEffect.BuildPersistentEffect(1, true, true, true);
 	AgroEffect.SetDisplayInfo(ePerkBuff_Passive, Template.LocFriendlyName, Template.LocLongDescription, Template.IconImage, true,,Template.AbilitySourceName);
 	Template.AddTargetEffect(AgroEffect);
@@ -2292,6 +2285,7 @@ static function X2AbilityTemplate RTHarbingerPsionicLance() {
 	return Template;
 }
 
+
 //---------------------------------------------------------------------------------------
 //---Harbinger Cleanse Listener----------------------------------------------------------
 //---------------------------------------------------------------------------------------
@@ -2340,6 +2334,7 @@ static function X2AbilityTemplate HarbingerCleanseListener()
 	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
 	Template.bSkipFireAction = true;
 
+
 	Template.bCrossClassEligible = false;
 	return Template;
 }
@@ -2359,6 +2354,7 @@ static function X2AbilityTemplate RTKillZone()
 	local X2Effect_MarkValidActivationTiles		MarkTilesEffect;
 	local X2Condition_UnitEffects				SuppressedCondition;
 	local X2Effect_Persistent					Effect, Effect2;
+
 
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'RTKillZone');
 
@@ -2701,7 +2697,7 @@ static function X2AbilityTemplate RTKubikuriDamage()
 	Template.AbilityToHitCalc = default.DeadEye;
 	Template.AbilityTargetStyle = default.SelfTarget;
 	Template.AbilityTriggers.AddItem(default.UnitPostBeginPlayTrigger);
-	DamageEffect = new class'X2Effect_Kubikuri';
+	DamageEffect=new class'X2Effect_Kubikuri';
 	DamageEffect.BuildPersistentEffect(1, true, false, false);
 	DamageEffect.SetDisplayInfo(0, Template.LocFriendlyName, Template.GetMyLongDescription(), Template.IconImage, false,, Template.AbilitySourceName);
 	Template.AddTargetEffect(DamageEffect);
@@ -2709,73 +2705,10 @@ static function X2AbilityTemplate RTKubikuriDamage()
 	return Template;
 }
 
-//---------------------------------------------------------------------------------------
-//---Repositioning-----------------------------------------------------------------------
-//---------------------------------------------------------------------------------------
-static function X2AbilityTemplate RTRepositioning() {
-	local X2AbilityTemplate Template;
-	local RTEffect_Repositioning RTEffect;
 
-	`CREATE_X2ABILITY_TEMPLATE(Template, 'RTRepositioning');
-
-	Template.IconImage = "img:///RisingTidesContentPackage.PerkIcons.rt_repositioning";
-	Template.AbilitySourceName = 'eAbilitySource_Perk';
-	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_NeverShow;
-	Template.Hostility = eHostility_Neutral;
-	Template.bCrossClassEligible = false;
-
-	Template.AbilityTriggers.AddItem(default.UnitPostBeginPlayTrigger);
-	Template.AbilityToHitCalc = default.DeadEye;
-	Template.AbilityTargetStyle = default.SelfTarget;
-
-	RTEffect = new class 'RTEffect_Repositioning';
-	RTEffect.BuildPersistentEffect(1, true, false, false, eGameRule_PlayerTurnEnd);
-	RTEffect.TilesMovedRequired = default.REPOSITIONING_TILES_MOVED_REQUIREMENT;
-	RTEffect.MaxPositionsSaved = default.REPOSITIONING_MAX_POSITIONS_SAVED;
-	RTEffect.SetDisplayInfo(ePerkBuff_Passive, Template.LocFriendlyName, Template.LocLongDescription, Template.IconImage, true,, Template.AbilitySourceName);
-	Template.AddTargetEffect(RTEffect);
-
-	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
-
-	return Template;
-}
 
 defaultproperties
 {
 	KillZoneReserveType = "KillZone"
 	TimeStopEffectName = "TimeStopEffect"
-}
-
-static function bool AbilityTagExpandHandler(string InString, out string OutString)
-{
-	local name Tag;
-
-	Tag = name(InString);
-
-	switch(Tag)
-	{
-		case 'RTREPOSITIONING_MAX_POSITIONS_SAVED':
-			OutString = string(default.REPOSITIONING_MAX_POSITIONS_SAVED);
-			return true;
-		case 'RTREPOSITIONING_TILE_DISTANCE':
-			OutString = string(default.REPOSITIONING_TILES_MOVED_REQUIREMENT);
-			return true;
-		case 'RTPRECISION_SHOT_CRIT_CHANCE':
-			OutString = string(default.HEADSHOT_CRIT_BONUS);
-			return true;
-		case 'RTPRECISION_SHOT_CRIT_DAMAGE':
-			OutString = string(default.HEADSHOT_CRITDMG_BONUS);
-			return true;
-		case 'RTPRECISION_SHOT_AIM_PENALITY':
-			OutString = string(default.HEADSHOT_AIM_MULTIPLIER);
-			return true;
-		case 'AGGRESSION_CRIT_PER_UNIT':
-			OutString = string(default.AGGRESSION_CRIT_PER_UNIT);
-			return true;
-		case 'AGGRESSION_MAX_CRIT':
-			OutString = string(default.AGGRESSION_UNITS_FOR_MAX_BONUS * default.AGGRESSION_CRIT_PER_UNIT);
-			return true;
-	}
-
-	return false;
 }
