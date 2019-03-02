@@ -5,7 +5,7 @@ var UIBGBox OutlinePanel;
 
 var UIImage TheImage;
 var UIText InfoBoxHeader;
-var UIScrollingTextBox InfoBoxDescription;
+var UIScrollingHTMLText InfoBoxDescription;
 
 var string PrimaryColor;
 var string TextColor;

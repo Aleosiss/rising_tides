@@ -8,36 +8,36 @@ class RTAbility_Program extends X2Ability_HackRewards
 	var config int		PROGRAM_ARMOR_MITIGATION_CHANCE;
 	var config int		PROGRAM_ARMOR_MITIGATION_AMOUNT;
 
-	static function array<X2DataTemplate> CreateTemplates()
-	{
-		local array<X2DataTemplate> Templates;
-
-		Templates.AddItem(RTProfessionalsHaveStandards());
-		Templates.AddItem(RTPsionicJamming());
-		Templates.AddItem(RTProgramArmorStats());
-
-        Template = ForceAbilityTriggerPostBeginPlay(BuildStatModifyingAbility('RTProfessionalsHaveStandards', "img:///UILibrary_PerkIcons.UIPerk_hack_reward_debuff", EETS_Self, , ePerkBuff_Bonus, eStat_DetectionModifier, default.ProfessionalsHaveStandards_DetectionModifierIncrease));
-
-	static function X2AbilityTemplate RTProfessionalsHaveStandards() {
-		local X2AbilityTemplate Template;
-
-		Template = ForceAbilityTriggerPostBeginPlay(BuildStatModifyingAbility('RTProfessionalsHaveStandards', "img:///UILibrary_PerkIcons.UIPerk_hack_reward_debuff", EETS_Self, , ePerkBuff_Bonus, eStat_DetectionModifier, default.PROFESSIONALS_HAVE_STANDARDS_DETECTION_MODIFIER_INCREASE));
-
-		return Template;
-	}
-
-	
-	static function X2AbilityTemplate RTPsionicJamming() {
-		local X2AbilityTemplate Template;
-
-		Template = ForceAbilityTriggerPostBeginPlay(BuildStatModifyingAbility('RTPsionicJamming', "img:///UILibrary_PerkIcons.UIPerk_hack_reward_debuff", EETS_Self, , ePerkBuff_Penalty, eStat_Will, default.PSIONIC_JAMMING_WILL_PENALTY * -1));
-
-		return Template;
-	}
-
-	static function X2AbilityTemplate RTProgramArmorStats()
+static function array<X2DataTemplate> CreateTemplates()
 {
-	local X2AbilityTemplate                 Template;
+	local array<X2DataTemplate> Templates;
+
+	Templates.AddItem(RTProfessionalsHaveStandards());
+	Templates.AddItem(RTPsionicJamming());
+	Templates.AddItem(RTProgramArmorStats());
+
+	return Templates;
+}
+
+static function X2AbilityTemplate RTProfessionalsHaveStandards() {
+	local X2AbilityTemplate Template;
+
+	Template = ForceAbilityTriggerPostBeginPlay(BuildStatModifyingAbility('RTProfessionalsHaveStandards', "img:///UILibrary_PerkIcons.UIPerk_hack_reward_debuff", EETS_Self, , ePerkBuff_Bonus, eStat_DetectionModifier, default.PROFESSIONALS_HAVE_STANDARDS_DETECTION_MODIFIER_INCREASE));
+
+	return Template;
+}
+
+static function X2AbilityTemplate RTPsionicJamming() {
+	local X2AbilityTemplate Template;
+
+	Template = ForceAbilityTriggerPostBeginPlay(BuildStatModifyingAbility('RTPsionicJamming', "img:///UILibrary_PerkIcons.UIPerk_hack_reward_debuff", EETS_Self, , ePerkBuff_Penalty, eStat_Will, default.PSIONIC_JAMMING_WILL_PENALTY * -1));
+
+	return Template;
+}
+
+static function X2AbilityTemplate RTProgramArmorStats()
+{
+	local X2AbilityTemplate					Template;
 	local X2AbilityTrigger					Trigger;
 	local X2AbilityTarget_Self				TargetStyle;
 	local X2Effect_PersistentStatChange		PersistentStatChangeEffect;
@@ -72,10 +72,9 @@ class RTAbility_Program extends X2Ability_HackRewards
 	return Template;
 }
 
+static function X2AbilityTemplate ForceAbilityTriggerPostBeginPlay(X2AbilityTemplate Template) {
+	Template.AbilityTriggers.Length = 0;
+	Template.AbilityTriggers.AddItem(default.UnitPostBeginPlayTrigger);
 
-	static function X2AbilityTemplate ForceAbilityTriggerPostBeginPlay(X2AbilityTemplate Template) {
-		Template.AbilityTriggers.Length = 0;
-		Template.AbilityTriggers.AddItem(default.UnitPostBeginPlayTrigger);
-
-		return Template;
-	}
+	return Template;
+}
