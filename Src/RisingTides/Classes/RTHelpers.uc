@@ -4,6 +4,9 @@ class RTHelpers extends Object config(RisingTides);
 var config array<name> StandardShots, MeleeAbilities, SniperShots, OverwatchShots, PsionicAbilities, FreeActions;
 var config name ProgramFactionName;
 
+var config string PROGRAM_RED_COLOR;
+var config string PROGRAM_WHITE_COLOR;
+
 enum ERTChecklist {
 	eChecklist_StandardShots,
 	eChecklist_SniperShots,
@@ -11,6 +14,11 @@ enum ERTChecklist {
 	eChecklist_PsionicAbilities,
 	eChecklist_MeleeAbilities,
 	eChecklist_FreeActions
+};
+
+enum ERTColor {
+	eRTColor_ProgramRed,
+	eRTColor_ProgramWhite
 };
 
 // copied here from X2Helpers_DLC_Day60.uc
@@ -259,4 +267,23 @@ static function XComGameState_HeadquartersXCom GetXComHQState()
 
 simulated static function bool IsInvalidMission(X2MissionSourceTemplate Template) {
 	return class'RTGameState_ProgramFaction'.default.InvalidMissionSources.Find(Template.DataName) != INDEX_NONE;
+}
+
+
+
+static function String GetProgramColor(optional ERTColor colorEnum) {
+	local ERTColor EmptyColor;
+
+	if(colorEnum == EmptyColor) {
+		return default.PROGRAM_RED_COLOR;
+	}
+
+	switch(colorEnum) {
+		case eRTColor_ProgramRed:
+			return default.PROGRAM_RED_COLOR;
+		case eRTColor_ProgramWhite:
+			return default.PROGRAM_WHITE_COLOR;
+		default:
+			return default.PROGRAM_RED_COLOR;
+	}
 }

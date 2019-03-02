@@ -1056,6 +1056,19 @@ BriefSummary="The Program XCR29 is previous-generation Program combat rifle tech
 TacticalText="<Bullet/> The Program XCR29 is previous-generation Program combat rifle technology.\n<Bullet/> Firing the primary weapon always ends the soldier's turn."
 AbilityDescName="assault rifle"
 
+[ProgramBlade X2WeaponTemplate]
+FriendlyName="Program CEFC2"
+FriendlyNamePlural="Program CEFC2"
+BriefSummary="Queen's blade is a custom-made addition to her arsenal, a greatly lengthened version of a cutting tool used to shape armor alloys in production."
+TacticalText="<Bullet/> Queen's custom blade. Deals massive damage and is upgraded by her perks."
+AbilityDescName="sword"
+
+[ProgramArmor X2ArmorTemplate]
+FriendlyName="Program XPHS41"
+FriendlyNamePlural="Program XPHS41s"
+BriefSummary="The Program's Experimental Psionic Hardsuit is the newest variant of psiweave-embedded, AI-integrated powersuit. It enhances the user's physical attributes using their psionic capabilities and allows them to enter Stealth."
+TacticalText="<Bullet/> Compared to XCOM's Warden Armor, the XPHS sacrifices soldier endurance for additional armor plating.\n<Bullet/> The Hardsuit has 2 inventory item slots."
+
 [RTCosmetic_Suppressor X2WeaponUpgradeTemplate]
 FriendlyName="Cosmetic Silencer"
 FriendlyNamePlural="Cosmetic Silencers"

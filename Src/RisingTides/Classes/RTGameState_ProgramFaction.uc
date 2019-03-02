@@ -94,11 +94,24 @@ var localized string OSFFirstTime_Title;
 var localized string OSFFirstTime_Text;
 var localized string OSFFirstTime_ImagePath;
 
-/* *********************************************************************** */
+// not a bool, want to see how many times this is called
+var private int iNumTimesProgramSetup;
+
+/* *************F********************************************************** */
+
+defaultproperties
+{
+	iNumTimesProgramSetup = 0
+}
 
 // SetUpProgramFaction(XComGameState StartState)
 function SetUpProgramFaction(XComGameState StartState)
 {
+	iNumTimesProgramSetup++;
+	if(iNumTimesProgramSetup > 1) {
+		return;
+	}
+	`RTLOG("Running Program-specific setup...");
 	InitListeners();
 	class'RTGameState_StrategyCard'.static.SetUpStrategyCards(StartState);
 	OperativeTemplates = class'RTCharacter_DefaultCharacters'.static.CreateTemplates();
@@ -164,9 +177,12 @@ function ApplyWeaponUpgrades(name GhostTemplateName, XComGameState_Item NewWeapo
 	local X2ItemTemplateManager ItemTemplateMgr;
 	//local name WeaponUpgradeName;
 	local int idx;
+	local String HexColor;
 
 	//local name DebugIteratorName;
 	//local array<name> DebuggingNames;
+
+	HexColor = class'RTHelpers'.static.GetProgramColor();
 
 	ItemTemplateMgr = class'X2ItemTemplateManager'.static.GetItemTemplateManager();
 	NewWeaponState.WipeUpgradeTemplates();
@@ -186,7 +202,8 @@ function ApplyWeaponUpgrades(name GhostTemplateName, XComGameState_Item NewWeapo
 					NewWeaponState.ApplyWeaponUpgradeTemplate(UpgradeTemplate, idx);
 				}
 			}
-			NewWeaponState.Nickname = default.WhisperWepName;
+			//NewWeaponState.Nickname = "'<font color='#" $ HexColor $ "'>" $ default.WhisperWepName $ "</font>'";
+			NewWeaponState.Nickname = "'" $ default.WhisperWepName $ "'";
 			break;
 		case 'RTGhostGatherer':
 			for(idx = 0; idx < default.GathererWeaponUpgrades.Length; idx++) {
@@ -440,7 +457,25 @@ protected static function bool IsOSFMission(XComGameState_MissionSite MissionSta
 	return false;
 }
 
-function MakeOneSmallFavorAvailable() {
+function bool CanMakeOneSmallFavorAvailable() {
+	return iNumberOfFavorsAvailable > 0;
+}
+
+function int GetNumFavorsAvailable() {
+	return iNumberOfFavorsAvailable;
+}
+
+function IncrementNumFavorsAvailable(int NumFavors) {
+	if(NumFavors > 0) {
+		iNumberOfFavorsAvailable += NumFavors;
+	}
+}
+
+function bool IsOneSmallFavorAvailable() {
+	return bOneSmallFavorAvailable;
+}
+
+function bool MakeOneSmallFavorAvailable() {
 	if(Deployed == none) {
 		RotateRandomSquadToDeploy();
 	}

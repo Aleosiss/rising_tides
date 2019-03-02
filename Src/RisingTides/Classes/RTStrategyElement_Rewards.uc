@@ -360,6 +360,113 @@ static function GiveProgramFactionInfluenceReward(XComGameState NewGameState, XC
 	FactionState.IncreaseInfluenceLevel(NewGameState);
 }
 
+static function GiveHuntTemplarsP3Reward(XComGameState NewGameState, XComGameState_Reward RewardState, optional StateObjectReference AuxRef, optional bool bOrder = false, optional int OrderHours = -1)
+{
+	local XComGameState_ResistanceFaction TemplarState;
+
+	TemplarState = class'RTHelpers'.static.GetTemplarFactionState();
+
+	GiveProgramAdvanceQuestlineReward(NewGameState, RewardState, AuxRef, bOrder, OrderHours);
+	EliminateFaction(NewGameState, TemplarState);
+	GiveTemplarQuestlineCompleteReward(NewGameState, RewardState, AuxRef, bOrder, OrderHours);
+}
+
+static function GiveTemplarQuestlineCompleteReward(XComGameState NewGameState, XComGameState_Reward RewardState, optional StateObjectReference AuxRef, optional bool bOrder = false, optional int OrderHours = -1) {
+	local RTGameState_ProgramFaction ProgramState;
+
+	ProgramState = class'RTHelpers'.static.GetNewProgramState(NewGameState);
+	ProgramState.IncrementNumFavorsAvailable(99999);
+}
+
+static function GiveHuntTemplarAmbushReward(XComGameState NewGameState, XComGameState_Reward RewardState, optional StateObjectReference AuxRef, optional bool bOrder = false, optional int OrderHours = -1)
+{
+	local RTGameState_ProgramFaction ProgramFaction;
+
+	ProgramFaction = class'RTHelpers'.static.GetNewProgramState(NewGameState);
+	switch(ProgramFaction.iTemplarQuestlineStage) {
+		case 0:
+			GiveProgramAdvanceQuestlineReward(NewGameState, RewardState, AuxRef, bOrder, OrderHours);
+			break;
+		case 1:
+			GiveProgramAdvanceQuestlineReward(NewGameState, RewardState, AuxRef, bOrder, OrderHours);
+			break;
+		case 2:
+			GiveHuntTemplarsP3Reward(NewGameState, RewardState, AuxRef, bOrder, OrderHours);
+			break;
+		default:
+			`RTLOG("Something broke, GiveHuntTemplarAmbushReward is out of bounds!", true, false);
+			break;
+	}
+}
+static function EliminateFaction(XComGameState NewGameState, XComGameState_ResistanceFaction FactionState, optional bool bShouldFactionSoldiersDesert = true) {
+	local XComGameState_HeadquartersXCom XComHQ;
+	local XComGameStateHistory History;
+	local XComGameState_HeadquartersResistance ResistHQ;
+	local XComGameState_Haven FactionHavenState;
+	local StateObjectReference IteratorRef;
+//	local StateObjectReference EmptyRef;
+	local XComGameState_Unit UnitState;
+	local XComGameState_StrategyCard CardState;
+//	local XComGameState_WorldRegion RegionState;
+//	local int i;
+
+	History = `XCOMHISTORY;
+	XComHQ = class'RTHelpers'.static.GetXComHQState();
+	ResistHQ = XComGameState_HeadquartersResistance(History.GetSingleGameStateObjectForClass(class'XComGameState_HeadquartersResistance'));
+	FactionState = XComGameState_ResistanceFaction(NewGameState.ModifyStateObject(class'XComGameState_ResistanceFaction', FactionState.GetReference().ObjectID));
+	
+	/** What, exactly, goes into removing a faction?
+		-> Remove FactionState.GetReference() from XCGS_HeadquartersResistance.Factions
+		-> Call DeactivateCard on all activated faction cards
+		-> Check Covert Actions, if there are any from the faction they need to be canceled
+		-> Need to clean up faction soldiers? It would be more realistic for them to stick around then leave randomly, perhaps even sabotage the avenger
+			but fuck that
+		-> Clean up the Resistance Haven
+		-> Find soldiers in the XCOM barracks that are faction heroes, and remove them
+		-> Generate a popup displaying all of what has transpired
+		-> Transfer Chosen missions to Program(?)
+	*/
+
+	// remove from resistance hq
+	ResistHQ = XComGameState_HeadquartersResistance(NewGameState.ModifyStateObject(class'XComGameState_HeadquartersResistance', ResistHQ.GetReference().ObjectID));
+	ResistHQ.Factions.RemoveItem(FactionState.GetReference());
+
+	// remove covert actions
+	FactionState.CleanUpFactionCovertActions(NewGameState);
+	FactionState.CovertActions.Length = 0;
+
+	// remove resistance orders
+	foreach FactionState.CardSlots(IteratorRef) 
+	{
+		CardState = XComGameState_StrategyCard(History.GetGameStateForObjectID(IteratorRef.ObjectID));
+		if(CardState != none) {
+			CardState.DeactivateCard(NewGameState);
+			FactionState.PlayableCards.AddItem(IteratorRef);
+		}
+//		i++;
+	}
+
+	// remove haven
+	FactionHavenState = XComGameState_Haven(`XCOMHISTORY.GetGameStateForObjectID(FactionState.FactionHQ.ObjectID));
+	NewGameState.RemoveStateObject(FactionHavenState.ObjectID);
+
+	// remove faction solders
+	if(bShouldFactionSoldiersDesert) {
+		XComHQ = XComGameState_HeadquartersXCom(NewGameState.ModifyStateObject(class'XComGameState_HeadquartersXCom', XComHQ.GetReference().ObjectID));
+		foreach XComHQ.Crew(IteratorRef)
+		{
+			UnitState = XComGameState_Unit(History.GetGameStateForObjectID(IteratorRef.ObjectID));
+			if(UnitState != none && UnitState.GetMyTemplateName() == FactionState.GetChampionCharacterName())
+			{
+				FireUnit(NewGameState, IteratorRef);
+			}
+		}
+	}
+
+	// rip
+	NewGameState.RemoveStateObject(FactionState.ObjectID);
+}
+
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 //---Misc Delegates--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -371,4 +478,42 @@ static function ProgramFactionInfluenceRewardPopup(XComGameState_Reward RewardSt
 	
 	class'X2StrategyGameRulesetDataStructures'.static.BuildDynamicPropertySet(PropertySet, 'UIAlert_ProgramLevelup', 'UIFactionPopup', none, false, false, true, false);
 	class'XComPresentationLayerBase'.static.QueueDynamicPopup(PropertySet);
+}
+
+static function GiveProgramAdvanceQuestlineReward(XComGameState NewGameState, XComGameState_Reward RewardState, optional StateObjectReference AuxRef, optional bool bOrder = false, optional int OrderHours = -1) {
+	local RTGameState_ProgramFaction ProgramState;
+
+	ProgramState = class'RTHelpers'.static.GetNewProgramState(NewGameState);
+	ProgramState.IncrementTemplarQuestlineStage();
+	ProgramState.IncrementNumFavorsAvailable(3);
+}
+
+// why wasn't this static in the first place...
+static function FireUnit(XComGameState NewGameState, StateObjectReference UnitReference)
+{
+	local XComGameState_HeadquartersXCom XComHQ;
+	local XComGameStateHistory History;
+	local XComGameState_Unit UnitState;
+	local StateObjectReference EmptyRef;
+	local int idx;
+
+	History = `XCOMHISTORY;
+	XComHQ = XComGameState_HeadquartersXCom(History.GetSingleGameStateObjectForClass(class'XComGameState_HeadquartersXCom'));
+	XComHQ = XComGameState_HeadquartersXCom(NewGameState.ModifyStateObject(class'XComGameState_HeadquartersXCom', XComHQ.ObjectID));
+	XComHQ.RemoveFromCrew(UnitReference);
+
+	for(idx = 0; idx < XComHQ.Squad.Length; idx++)
+	{
+		if(XComHQ.Squad[idx] == UnitReference)
+		{
+			XComHQ.Squad[idx] = EmptyRef;
+			break;
+		}
+	}
+
+	UnitState = XComGameState_Unit(NewGameState.ModifyStateObject(class'XComGameState_Unit', UnitReference.ObjectID));
+	class'X2StrategyGameRulesetDataStructures'.static.ResetAllBonds(NewGameState, UnitState);
+
+	// REMOVE FIRED UNIT?
+	//NewGameState.RemoveStateObject(UnitReference.ObjectID);
 }

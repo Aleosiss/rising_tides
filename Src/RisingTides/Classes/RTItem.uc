@@ -29,6 +29,24 @@ var config int ASSAULTRIFLE_PROGRAM_ICLIPSIZE;
 var config int ASSAULTRIFLE_PROGRAM_ISOUNDRANGE;
 var config int ASSAULTRIFLE_PROGRAM_IENVIRONMENTDAMAGE;
 
+var config WeaponDamageValue SWORD_PROGRAM_BASEDAMAGE;
+var config int SWORD_PROGRAM_AIM;
+var config int SWORD_PROGRAM_CRITCHANCE;
+var config int SWORD_PROGRAM_ISOUNDRANGE;
+var config int SWORD_PROGRAM_IENVIRONMENTDAMAGE;
+
+var config WeaponDamageValue WARPGRENADE_BASEDAMAGE;
+var config int WARPGRENADE_ISOUNDRANGE;
+var config int WARPGRENADE_IENVIRONMENTDAMAGE;
+var config int WARPGRENADE_ISUPPLIES;
+var config int WARPGRENADE_TRADINGPOSTVALUE;
+var config int WARPGRENADE_IPOINTS;
+var config int WARPGRENADE_ICLIPSIZE;
+var config int WARPGRENADE_RANGE;
+var config int WARPGRENADE_RADIUS;
+
+
+
 static function array<X2DataTemplate> CreateTemplates()
 {
     local array<X2DataTemplate> Items;
@@ -37,12 +55,14 @@ static function array<X2DataTemplate> CreateTemplates()
 	Items.AddItem(CreateTemplate_ProgramPistol());
 	Items.AddItem(CreateTemplate_ProgramSniperRifle());
 	Items.AddItem(CreateTemplate_ProgramShotgun());
+	Items.AddItem(CreateTemplate_ProgramBlade());
 	Items.AddItem(CreateTemplate_ProgramAssaultRifle());
 
 	// Weapon Upgrades
 	Items.AddItem(CreateTemplate_CosmeticSilencer());
 
 	// Armor
+	Items.AddItem(CreateTemplate_ProgramArmor());
 
 	// Gear
 
@@ -98,6 +118,8 @@ static function X2DataTemplate CreateTemplate_ProgramPistol()
 
 	Template.bHideClipSizeStat = true;
 
+	//class'RTHelpers_ItemTemplates'.static.AddFontColor(Template, class'RTHelpers'.static.GetProgramColor());
+
 	return Template;
 }
 
@@ -147,7 +169,9 @@ static function X2DataTemplate CreateTemplate_ProgramSniperRifle()
 	Template.CanBeBuilt = false;
 	Template.bInfiniteItem = false;
 
-	Template.DamageTypeTemplateName = 'Projectile_BeamXCom'; 
+	Template.DamageTypeTemplateName = 'Projectile_BeamXCom';
+
+	//class'RTHelpers_ItemTemplates'.static.AddFontColor(Template, class'RTHelpers'.static.GetProgramColor());
 
 	return Template;
 }
@@ -203,6 +227,8 @@ static function X2DataTemplate CreateTemplate_ProgramShotgun()
 
 	Template.DamageTypeTemplateName = 'Projectile_BeamXCom';
 
+	//class'RTHelpers_ItemTemplates'.static.AddFontColor(Template, class'RTHelpers'.static.GetProgramColor());
+
 	return Template;
 }
 
@@ -252,11 +278,76 @@ static function X2DataTemplate CreateTemplate_ProgramAssaultRifle()
 
 	Template.DamageTypeTemplateName = 'Projectile_BeamXCom';
 
+	//class'RTHelpers_ItemTemplates'.static.AddFontColor(Template, class'RTHelpers'.static.GetProgramColor());
+
 	return Template;
 }
 
+static function X2DataTemplate CreateTemplate_ProgramBlade()
+{
+	local X2WeaponTemplate Template;
 
+	`CREATE_X2TEMPLATE(class'X2WeaponTemplate', Template, 'ProgramBlade');
+	Template.WeaponPanelImage = "_Sword";                       // used by the UI. Probably determines iconview of the weapon.
 
+	Template.ItemCat = 'weapon';
+	Template.WeaponCat = 'sword';
+	Template.WeaponTech = 'beam';
+	Template.strImage = "img:///UILibrary_Common.BeamSecondaryWeapons.BeamSword";
+	Template.EquipSound = "Sword_Equip_Beam";
+	Template.InventorySlot = eInvSlot_SecondaryWeapon;
+	Template.StowedLocation = eSlot_RightBack;
+	// This all the resources; sounds, animations, models, physics, the works.
+	Template.GameArchetype = "FX_Beam_Sword_RT.WP_Sword_RT";
+	Template.AddDefaultAttachment('R_Back', "BeamSword.Meshes.SM_BeamSword_Sheath", false);
+	Template.Tier = 4;
+
+	Template.iRadius = 1;
+	Template.NumUpgradeSlots = 2;
+	Template.InfiniteAmmo = true;
+	Template.iPhysicsImpulse = 5;
+
+	Template.iRange = 0;
+	Template.BaseDamage = default.SWORD_PROGRAM_BASEDAMAGE;
+	Template.Aim = default.SWORD_PROGRAM_AIM;
+	Template.CritChance = default.SWORD_PROGRAM_CRITCHANCE;
+	Template.iSoundRange = default.SWORD_PROGRAM_ISOUNDRANGE;
+	Template.iEnvironmentDamage = default.SWORD_PROGRAM_IENVIRONMENTDAMAGE;
+	Template.BaseDamage.DamageType='Melee';
+
+	Template.CanBeBuilt = false;
+	Template.bInfiniteItem = false;
+
+	Template.DamageTypeTemplateName = 'Melee';
+
+	//class'RTHelpers_ItemTemplates'.static.AddFontColor(Template, class'RTHelpers'.static.GetProgramColor());
+	
+	return Template;
+}
+
+static function X2DataTemplate CreateTemplate_ProgramArmor()
+{
+	local X2ArmorTemplate Template;
+
+	`CREATE_X2TEMPLATE(class'X2ArmorTemplate', Template, 'ProgramArmor');
+	Template.strImage = "img:///UILibrary_StrategyImages.X2InventoryIcons.Inv_Warden_Armor";
+	Template.ItemCat = 'armor';
+	Template.bAddsUtilitySlot = true;
+	Template.StartingItem = false;
+	Template.CanBeBuilt = false;
+	Template.bInfiniteItem = false;
+	Template.Abilities.AddItem('RTProgramArmorStats');
+	Template.ArmorTechCat = 'powered';
+	Template.ArmorClass = 'medium';
+	Template.Tier = 3;
+	
+	Template.SetUIStatMarkup(class'XLocalizedData'.default.HealthLabel, eStat_HP, class'RTAbility_Program'.default.PROGRAM_ARMOR_HEALTH_BONUS, true);
+	Template.SetUIStatMarkup(class'XLocalizedData'.default.ArmorLabel, eStat_ArmorMitigation, class'RTAbility_Program'.default.PROGRAM_ARMOR_MITIGATION_AMOUNT);
+
+	//class'RTHelpers_ItemTemplates'.static.AddFontColor(Template, class'RTHelpers'.static.GetProgramColor());
+	
+	return Template;
+}
 
 static function X2DataTemplate CreateTemplate_CosmeticSilencer() {
 	local X2WeaponUpgradeTemplate Template;
