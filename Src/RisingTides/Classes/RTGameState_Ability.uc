@@ -22,7 +22,7 @@ public static function int getBloodlustStackCount(XComGameState_Unit WaltzUnit) 
 			iStackCount = 0;
 		}
 	} else  {
-		`LOG("Rising Tides: No SourceUnit found for getBloodlustStackCount!");
+		`RTLOG("No SourceUnit found for getBloodlustStackCount!");
 	}
 	return iStackCount;
 }
@@ -74,21 +74,21 @@ simulated function name GatherAbilityTargets(out array<AvailableTarget> Targets,
 		AvailableCode = m_Template.AbilityTargetStyle.GetPrimaryTargetOptions(self, Targets);
 		if (AvailableCode != 'AA_Success') {
 			if(bDebug)
-				`LOG("Rising Tides: ShadowStrike failed, here's why " @ AvailableCode);
+				`RTLOG("ShadowStrike failed, here's why " @ AvailableCode);
 			return AvailableCode;
 		}
 		for (i = Targets.Length - 1; i >= 0; --i)
 		{
 			AvailableCode = m_Template.CheckTargetConditions(self, kOwner, History.GetGameStateForObjectID(Targets[i].PrimaryTarget.ObjectID));
 			if(bDebug) {
-				`LOG("Rising Tides: ShadowStrike checking target " @  XComGameState_Unit(History.GetGameStateForObjectID(Targets[i].PrimaryTarget.ObjectID)).GetFullName());
+				`RTLOG("ShadowStrike checking target " @  XComGameState_Unit(History.GetGameStateForObjectID(Targets[i].PrimaryTarget.ObjectID)).GetFullName());
 			}
 
 
 			if (AvailableCode != 'AA_Success')
 			{
 				if(bDebug)
-					`LOG("Rising Tides: ShadowStrike failed, here's why " @ AvailableCode);
+					`RTLOG("ShadowStrike failed, here's why " @ AvailableCode);
 				Targets.Remove(i, 1);
 			}
 		}
@@ -176,11 +176,11 @@ function EventListenerReturn UnwillingConduitEvent(Object EventData, Object Even
 	local int									iConduits;
 	local XComGameStateContext_Ability			AbilityContext;
 
-	`LOG("Rising Tides: Starting Unwilling Conduit check!");
+	`RTLOG("Starting Unwilling Conduit check!");
 
 	AbilityContext = XComGameStateContext_Ability(GameState.GetContext());
 	if (AbilityContext == none) {
-		`LOG("Rising Tides: Unwilling Conduit Event failed, no AbilityContext!");
+		`RTLOG("Unwilling Conduit Event failed, no AbilityContext!");
 		`RedScreenOnce("Rising Tides: Unwilling Conduit Event failed, no AbilityContext!");
 		return ELR_NoInterrupt;
 	}
@@ -224,9 +224,11 @@ function EventListenerReturn UnwillingConduitEvent(Object EventData, Object Even
 	NewGameState.AddStateObject(NewAbilityState);
 	NewGameState.AddStateObject(NewSourceUnitState);
 
-	XComGameStateContext_ChangeContainer(NewGameState.GetContext()).BuildVisualizationFn = ConduitVisualizationFn;
+	if(iConduits > 0) {
+		XComGameStateContext_ChangeContainer(NewGameState.GetContext()).BuildVisualizationFn = ConduitVisualizationFn;
+	}
 
-	`LOG("Rising Tides: Finishing Unwilling Conduit check!");
+	`RTLOG("Finishing Unwilling Conduit check!");
 
 	`TACTICALRULES.SubmitGameState(NewGameState);
 
@@ -301,7 +303,7 @@ function EventListenerReturn EchoedAgonyListener(Object EventData, Object EventS
 			PanicStrength = class'RTEffectBuilder'.default.AGONY_STRENGTH_TAKE_ECHO;
 			break;
 		default:
-			`LOG("Rising Tides: Echoed Agony had an invalid EventID: " @ EventID);
+			`RTLOG("Echoed Agony had an invalid EventID: " @ EventID);
 			PanicStrength = class'RTEffectBuilder'.default.AGONY_STRENGTH_TAKE_FEEDBACK;
 	}
 
@@ -317,7 +319,7 @@ function EventListenerReturn EchoedAgonyListener(Object EventData, Object EventS
 	AbilityTriggerAgainstSingleTarget(OwnerStateObject, false);
 
 	if(!bDebug) {
-		`LOG("Rising Tides: EchoedAgonyListener did not find Echoed Agony!");
+		`RTLOG("EchoedAgonyListener did not find Echoed Agony!");
 	}
 	return ELR_NoInterrupt;
 }
@@ -416,8 +418,8 @@ function EventListenerReturn RTAbilityTriggerEventListener_ValidAbilityLocations
 // mostly used for debugging
 function EventListenerReturn RTAbilityTriggerEventListener_Self(Object EventData, Object EventSource, XComGameState GameState, Name EventID, Object CallbackData)
 {
-	class'RTHelpers'.static.RTLog("RTAbilityTriggerEventListener_Self");
-	class'RTHelpers'.static.RTLog(XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(OwnerStateObject.ObjectID)).GetFullName());
+	`RTLOG("RTAbilityTriggerEventListener_Self");
+	`RTLOG(XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(OwnerStateObject.ObjectID)).GetFullName());
 	//RTAbilityTriggerAgainstSingleTarget(OwnerStateObject, false);
 	ActivateAbility(OwnerStateObject);
 
@@ -432,7 +434,7 @@ protected function bool ActivateAbility(StateObjectReference TargetRef) {
 
 	AvailableCode = CanActivateAbilityForObserverEvent(XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(TargetRef.ObjectID)));
 	if(AvailableCode != 'AA_Success') {
-		class'RTHelpers'.static.RTLog("Couldn't Activate "@ self.GetMyTemplateName() @ " for observer event, Code = "$ AvailableCode);
+		`RTLOG("Couldn't Activate "@ self.GetMyTemplateName() @ " for observer event, Code = "$ AvailableCode);
 		return false;
 	} else {
 		NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("Activating Ability " $ GetMyTemplateName());
@@ -443,16 +445,16 @@ protected function bool ActivateAbility(StateObjectReference TargetRef) {
 	AbilityContext = class'XComGameStateContext_Ability'.static.BuildContextFromAbility(self, TargetRef.ObjectID);
 
 	if( AbilityContext.Validate() ) {
-		class'RTHelpers'.static.RTLog("The AbilityContext was validated, submitting it!");
+		`RTLOG("The AbilityContext was validated, submitting it!");
 		if(!`TACTICALRULES.SubmitGameStateContext(AbilityContext)) {
-			class'RTHelpers'.static.RTLog("The Context failed to be submitted!");
+			`RTLOG("The Context failed to be submitted!");
 			return false;
 		} else {
-			class'RTHelpers'.static.RTLog("The Context was submitted successfully!");
+			`RTLOG("The Context was submitted successfully!");
 			return true;
 		}
 	} else {
-		class'RTHelpers'.static.RTLog("Rising Tides: Couldn't validate AbilityContext, " @ self.GetMyTemplateName() @ " not activated.");
+		`RTLOG("Rising Tides: Couldn't validate AbilityContext, " @ self.GetMyTemplateName() @ " not activated.");
 		return false;
 	}
 }

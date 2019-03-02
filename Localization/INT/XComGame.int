@@ -30,12 +30,21 @@ LocHelpText="Killing a flanked or uncovered target with a sniper rifle does not 
 LocFlyOverText="Scoped And Dropped"
 LocPromotionPopupText="<Bullet/> This unit does not suffer from squadsight penalties.<br/><Bullet/> Additional shots taken via this ability will suffer reduced chance to critically hit.<br/>"
 
+[RTRepositioning X2AbilityTemplate]
+LocFriendlyName="Repositioning"
+LocLongDescription="If your last <Ability:RTREPOSITIONING_MAX_POSITIONS_SAVED> firing positions are <Ability:RTREPOSITIONING_TILE_DISTANCE> tiles away, your next shot retains concealment."
+LocHelpText="If your last <Ability:RTREPOSITIONING_MAX_POSITIONS_SAVED> shots taken were <Ability:RTREPOSITIONING_TILE_DISTANCE> tiles away, your next shot retains concealment."
+LocFlyOverText="Repositioning - Concealment retained!"
+LocPromotionPopupText="<Bullet/> <br/><Bullet/> <br/><Bullet/> <br/><Bullet/> <br/>"
+LocHitMessage="Repositioning - Activated"
+LocMissMessage="Repositioning - Deactivated"
+
 [RTOverflowBarrier X2AbilityTemplate]
 LocFriendlyName="Overflow Barrier"
 LocLongDescription="When this unit deals overkill damage, it converts that damage into shielding for itself and its melded allies."
 LocHelpText="When this unit deals overkill damage, it converts that damage into shielding for itself and its melded allies."
 LocFlyOverText="Overflow Barrier"
-LocPromotionPopupText="<Bullet/> Try to use in combination with powerful damage abilities such as Precision Shot or Time Stands Still.<br/><Bullet/> Minimum of 1 Shield HP if overkill damage is dealt.<br/><Bullet/> The unit with Overflow Barrier must be melded to generate any shielding.<br/><Bullet/> Shields persist even if the meld is lost.<br/>"
+LocPromotionPopupText="<Bullet/> Minimum of 1 Shield HP if overkill damage is dealt.<br/><Bullet/> Try to use in combination with powerful damage abilities such as Precision Shot or Time Stands Still.<br/><Bullet/> Minimum of 1 Shield HP if overkill damage is dealt.<br/><Bullet/> The unit with Overflow Barrier must be melded to generate any shielding.<br/><Bullet/> Shields persist even if the meld is lost.<br/>"
 
 [RTOverflowBarrierEvent X2AbilityTemplate]
 LocFriendlyName="Overflow Barrier"
@@ -46,17 +55,17 @@ LocPromotionPopupText="<Bullet/> Minimum of 1 Shield HP if overkill damage is de
 
 [RTPrecisionShot X2AbilityTemplate]
 LocFriendlyName="Precision Shot"
-LocLongDescription="A carefully aimed shot, suffering decreased chance to hit, but increased critical chance and critical damage."
+LocLongDescription="A carefully aimed shot, suffering <Ability:RTPRECISION_SHOT_AIM_PENALITY> chance to hit, but <Ability:RTPRECISION_SHOT_CRIT_CHANCE>% increased critical chance and <Ability:RTPRECISION_SHOT_CRIT_DAMAGE>% critical damage."
 LocHelpText="Shoot with decreased chance to hit, but increased critical chance and critical damage."
 LocFlyOverText="Precision Shot"
-LocPromotionPopupText="<Bullet> <Ability:SelfCooldown/> turn cooldown.<br/><Bullet/> Shoot a precision shot, suffering from decreased chance to hit, but increased critical chance and critical damage.<br/>"
+LocPromotionPopupText="<Bullet> <Ability:SelfCooldown/> turn cooldown.<br/>"
 
 [RTAggression X2AbilityTemplate]
 LocFriendlyName="Aggression"
-LocLongDescription="Gain 10% critical chance per visible enemy unit, up to 30%. (Squadsight included)"
-LocHelpText="Gain 10% critical chance per enemy spotted."
+LocLongDescription="Gain <Ability:AGGRESSION_CRIT_PER_UNIT>% critical chance per visible enemy unit, up to <Ability:AGGRESSION_MAX_CRIT>%. (Squadsight included)"
+LocHelpText="Gain <Ability:AGGRESSION_CRIT_PER_UNIT>% critical chance per enemy spotted."
 LocFlyOverText="Aggression"
-LocPromotionPopupText="<Bullet/> Gain 10% critical chance per visible enemy unit, up to 30%. (Squadsight included).<br/>"
+LocPromotionPopupText=""
 
 [KnockThemDown X2AbilityTemplate]
 LocFriendlyName="Knock Them Down"
@@ -558,6 +567,13 @@ LocHelpText="Peer over the shoulder of enemy units, seeing what they see. "
 LocFlyOverText="Over The Shoulder"
 LocPromotionPopupText="<Bullet/> Peer over the shoulder of enemy units, seeing what they see.<br/>"
 
+[RTUnfurlTheVeil X2AbilityTemplate]
+LocFriendlyName="Unfurl The Veil"
+LocLongDescription="If all active enemy units are affected by Over the Shoulder, gain concealment."
+LocHelpText="If all active enemy units are affected by Over the Shoulder, gain concealment."
+LocFlyOverText="Unfurl The Veil"
+LocPromotionPopupText="<Bullet> <Ability:SelfCooldown/> turn cooldown.<br/>"
+
 [RTTheSixPathsOfPain X2AbilityTemplate]
 LocFriendlyName="The Six Paths of Pain"
 LocLongDescription="Automatically cast Over the Shoulder for free at the start of each turn."
@@ -797,9 +813,46 @@ AbilityAvailabilityStrings[95]="There are too many stacks for the ability to fun
 AbilityAvailabilityStrings[96]="The effect was not found."
 
 ;----------------------------------------------------------------------------------------------------------------------------
+[RTUnwaveringResolve X2AbilityTemplate]
+LocFriendlyName="Unwavering Resolve"
+LocLongDescription="When this unit's focus reaches 0, gain another point of focus."
+LocHelpText="When this unit's focus reaches 0, gain another point of focus."
+LocFlyOverText="Unwavering Resolve"
+LocPromotionPopupText=""
+
+[RTUnwaveringResolveIcon X2AbilityTemplate]
+LocFriendlyName="Unwavering Resolve"
+LocLongDescription="When this unit's focus reaches 0, gain another point of focus."
+LocHelpText="When this unit's focus reaches 0, gain another point of focus."
+LocFlyOverText="Unwavering Resolve"
+LocPromotionPopupText=""
+
+[RTScholarVolt X2AbilityTemplate]
+LocFriendlyName="Volt"
+LocLongDescription="Psionic attack that deals low damage, but jumps to nearby units at higher Focus levels. Costs 1 Focus."
+LocHelpText="Psionic attack that can jump to nearby units. Costs 1 Focus."
+LocPromotionPopupText="<Bullet/> Volt has no cooldown, but costs 1 Focus.<br/><Bullet/> Volt deals double damage to Psionic units.<br/><Bullet/> Volt can jump to a number of enemies equal to the current Focus level.<br/>"
+
+[RTScholarIonicStorm X2AbilityTemplate]
+LocFriendlyName="Ionic Storm"
+LocLongDescription="Summon lightning to strike all nearby enemies. Damage increases with Focus level. Costs all Focus, but generates Focus on kills."
+LocHelpText="Summon lightning to strike all nearby enemies. Costs all Focus, but generates Focus on kills."
+LocPromotionPopupText="<Bullet/> Ionic Storm's radius increases at higher Focus levels.<br/><Bullet/> Ionic Storm deals double damage to Psionic units.<br/><Bullet/> Use Ionic Storm at a high Focus level when it will kill many targets to immediately refund the Focus cost.<br/><Bullet/> Ionic Storm has a <Ability:SelfCooldown/> turn cooldown.<br/>"
+
+[RTWarpGrenade X2GrenadeTemplate]
+FriendlyName="Warp Grenade"
+FriendlyNamePlural="Warp Grenades"
+BriefSummary="Warp grenades, the result of a basic Templar training method, are just one example of the many brutish ways the Templars work psionic energy with technology. Upon detonation, they release a burst of energy that distorts reality around the point of impact, weakening anything caught against further trauma."
+TacticalText="<Bullet/> Warp grenades rupture enemies caught within the blast radius."
+ThrownAbilityName="Throw Warp Grenade"
+ThrownAbilityHelpText="Ruptures enemies within the blast radius."
+LaunchedAbilityname="Launch Warp Grenade"
+LaunchedAbilityHelpText="Ruptures enemies within the blast radius."
+
+;----------------------------------------------------------------------------------------------------------------------------
 [RTProfessionalsHaveStandards X2AbilityTemplate]
 LocFriendlyName="Old World Training"
-LocLongDescription="Old World training techniques improve the soldier's ability to remain concealed at a distance."
+LocLongDescription="Old World-era training techniques improve the soldier's ability to remain concealed at a distance."
 LocHelpText="Decrease range at which enemy units will can reveal this unit."
 LocFlyOverText="Old World Training"
 LocPromotionPopupText="<Bullet/> Decrease range at which enemy units will can reveal this unit.<br/>"
@@ -988,8 +1041,45 @@ ActionObjective="Hunt the Templars"
 
 [CovertActionNarrative_HuntTemplarsP3_Program X2CovertActionNarrativeTemplate]
 ActionName="Lure Them Out"
-ActionPreNarrative="Lanner--Geist, is extremely paranoid, and revealing a vulnerablity remains a challenge. If you have some soldiers to spare, we can use them to conduct a false-flag operation and draw him out. - Dr. Hadley"
-ActionPostNarrative="The trap is set. The bait is primed. All that remains is spring it. I will send my best, and if you do the same, victory is assured. - Dr. Hadley"
+ActionPreNarrative="Lanner, or Geist, as he is now known, is extremely paranoid, and revealing a vulnerablity remains a challenge. Instead of attacking the compound directly, MILADVISE is giving 98.2 percent odds that leaking the location of the First Contact site will prompt Geist to investigate personally. In order to make it convincing, I'll need some of your soldiers to join mine for one final operation. - Dr. Hadley"
+ActionPostNarrative="The trap is primed. The bait is set. All that remains is spring it. I will send my best, and if you do the same, victory is assured. - Dr. Hadley"
+;///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+;//---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+;//---Missions-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+;//---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+;///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+[RT_TemplarAmbush X2MissionTemplate]
+DisplayName="Templar Ambush"
+Briefing="Eliminate Templar Investigation Squad"
+PostMissionType="Kill all hostiles"
+BriefingImage="img:///UILibrary_StrategyImages.X2StrategyMap.Alert_Advent_Facility"
+ObjectiveTextPools[0]="Neutralize all enemy targets"
+
+[RT_TemplarAmbush X2MissionNarrativeTemplate]
+ObjectiveTextPools[0]="Neutralize all Templars in the AO"
+ObjectiveTextPools[1]="Kill Templar Coven Leader"
+ObjectiveTextPools[2]="Secure Area of Operations"
+
+[RT_TemplarCovenAssault X2MissionTemplate]
+DisplayName="Templar Coven Assault"
+Briefing="Eliminate Geist. Leave No Survivors"
+PostMissionType="Kill all hostiles"
+BriefingImage="img:///UILibrary_StrategyImages.X2StrategyMap.Alert_Advent_Facility"
+ObjectiveTextPools[0]="Neutralize Templar Leadership"
+
+[RT_TemplarCovenAssault X2MissionNarrativeTemplate]
+ObjectiveTextPools[0]="Neutralize all Templars in the AO"
+ObjectiveTextPools[1]="Kill Geist"
+ObjectiveTextPools[2]="Secure Area of Operations"
+
+[RTUIMission_TemplarAmbush]
+m_strTitle=COUNTERINTELLIGENCE
+m_strBody=Our soldiers have been discovered during the undertaking of a Covert Action!  Prevent hostile forces from reporting back to leadership!
+m_strConfirmMission=BEGIN COUNTERINTELLIGENCE OPERATION
+m_strConfirmLabel=BEGIN
+m_strObjective=OBJECTIVE
+m_strObjectiveDesc=Eliminate Templar forces.
+
 ;///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ;//---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 ;//---Misc-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -1075,3 +1165,37 @@ FriendlyNamePlural="Cosmetic Silencers"
 BriefSummary="Does nothing, but looks cool."
 TinySummary="Cosmetic Only"
 LootTooltip="This weapon upgrade, when installed, does nothing except look cool."
+
+;///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+;//---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+;//---Enemies-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+;//---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+;///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+[RTTemplarWarrior_M1 X2CharacterTemplate]
+strCharacterName="Templar Knight"
+
+[RTTemplarWarrior_M2 X2CharacterTemplate]
+strCharacterName="Templar Bishop"
+
+[RTTemplarWarrior_M3 X2CharacterTemplate]
+strCharacterName="Templar Prior"
+
+[RTTemplarScholar_M1 X2CharacterTemplate]
+strCharacterName="Templar Disciple"
+
+[RTTemplarScholar_M2 X2CharacterTemplate]
+strCharacterName="Templar Acolyte"
+
+[RTTemplarScholar_M3 X2CharacterTemplate]
+strCharacterName="Templar Advisor"
+
+[RTTemplarPeon_M1 X2CharacterTemplate]
+strCharacterName="Templar Intiate"
+
+[RTTemplarPeon_M2 X2CharacterTemplate]
+strCharacterName="Templar Follower"
+
+[RTTemplarPeon_M3 X2CharacterTemplate]
+strCharacterName="Templar Idealist"
+

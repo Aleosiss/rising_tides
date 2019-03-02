@@ -1,3 +1,39 @@
+2.1.0
+- Add new covert action line to the Program to eliminate the Templars!
+    - 3 New Covert Actions
+        - New mission (Templar Ambush Retaliation)
+            - A local Templar cult has stumbled upon your plans
+            - You can escape, but if word gets back to Geist, your efforts will have been for nothing!
+    - New mission (Assault Templar Coven)
+        - Attack the heart of Templar activities and kill Geist once and for all
+        - The Program will grant excellent rewards for completing this action, but be warned: your Templar soldiers WILL NOT BE HAPPY with your decision... (they will desert)
+- New perks. If you want them in an ongoing campaign, regenerate your Program operatives with the command 'RT_RegenerateProgramOperatives'.
+    - Repositioning: Replaces Damn Good Ground on the Infiltrator's perk tree.
+        - If your last (3) shots were taken from (9) tiles away, retain concealment on your next shot.
+    - Unfurl The Veil: Replaces Meld Induction on the Gatherer's perk tree.
+        - If all active enemies are affected by Over the Shoulder, gain concealment. (6) turn cooldown.
+    
+2.0.7
+- Fixed issues where clicking the Button did not actually activate One Small Favor.
+- New Campaigns are not affected by the bug.
+- Campaigns affected by the bug should try to run the console command 'RT_RegenerateProgramOperatives' and see if that fixes it
+
+2.0.6:
+- Updated short localization of Mind Wrack to include Feedback
+- Updated Guardian Angel long localization to clearly state that it will not cleanse nor prevent Feedback's effect
+- Fixed a bug where Six Paths of Pain still had an input-trigger even though it could not be input-triggered, which caused the Gatherer to not be able to end turn by default.
+- Switched how One Small Favor is gained. Instead of being the only low-influence Resistance Order available, it now is forcibly selected by the Program when the faction is met and the Program gains Faction Orders like other factions.
+
+2.0.5:
+- Removed any possibility that the Program could try to hunt the Chosen
+- Adding missing icon for Resistance Order tab filtering
+
+2.0.4:
+- Fixed an issue where JPT was activating at every opportunity (I toggled the debug flag by accident)
+
+2.0.3
+- Fixed a bug where Resistance Sabotage could be activated repeatedly
+
 2.0.2
 - Fix a long-standing bug with Over The Shoulder erronously showing units FOW
 - Increase the range of Over the Shoulder a bit to match the VFX better

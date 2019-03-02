@@ -10,9 +10,9 @@ static function array<X2DataTemplate> CreateTemplates()
 	CovertActions.AddItem(CreateFindProgramFarAwayFactionTemplate());
 
 	// TODO: Hunt Templars
-	//CovertActions.AddItem(CreateHuntTemplarsP1Template());
-	//CovertActions.AddItem(CreateHuntTemplarsP2Template());
-	//CovertActions.AddItem(CreateHuntTemplarsP3Template());
+	CovertActions.AddItem(CreateHuntTemplarsP1Template());
+	CovertActions.AddItem(CreateHuntTemplarsP2Template());
+	CovertActions.AddItem(CreateHuntTemplarsP3Template());
 
 	return CovertActions;
 }
@@ -173,6 +173,7 @@ static function X2DataTemplate CreateHuntTemplarsP1Template() {
 	Template.OverworldMeshPath = "UI_3D.Overwold_Final.CovertAction";
 	Template.bGoldenPath = false;
 	Template.bUnique = true;
+	Template.RequiredFactionInfluence = eFactionInfluence_Respected;
 
 	Template.Narratives.AddItem('CovertActionNarrative_HuntTemplarsP1_Program');
 
@@ -182,7 +183,7 @@ static function X2DataTemplate CreateHuntTemplarsP1Template() {
 	Template.Slots.AddItem(_CreateDefaultStaffSlot('CovertActionEngineerStaffSlot'));
 	Template.OptionalCosts.AddItem(_CreateOptionalCostSlot('Intel', 25));
 
-	Template.Risks.AddItem('Templar_Ambush');
+	Template.Risks.AddItem('CovertActionRisk_TemplarAmbush');
 
 	Template.Rewards.AddItem('RTReward_ProgramHuntTemplarsP1');
 
@@ -200,6 +201,7 @@ static function X2DataTemplate CreateHuntTemplarsP2Template() {
 	Template.OverworldMeshPath = "UI_3D.Overwold_Final.CovertAction";
 	Template.bGoldenPath = false;
 	Template.bUnique = true;
+	Template.RequiredFactionInfluence = eFactionInfluence_Influential;
 
 	Template.Narratives.AddItem('CovertActionNarrative_HuntTemplarsP2_Program');
 
@@ -209,7 +211,7 @@ static function X2DataTemplate CreateHuntTemplarsP2Template() {
 	Template.Slots.AddItem(_CreateDefaultStaffSlot('CovertActionEngineerStaffSlot'));
 	Template.OptionalCosts.AddItem(_CreateOptionalCostSlot('Intel', 50));
 
-	Template.Risks.AddItem('Templar_Ambush');
+	Template.Risks.AddItem('CovertActionRisk_TemplarAmbush');
 
 	Template.Rewards.AddItem('RTReward_ProgramHuntTemplarsP2');
 
@@ -227,6 +229,7 @@ static function X2DataTemplate CreateHuntTemplarsP3Template() {
 	Template.OverworldMeshPath = "UI_3D.Overwold_Final.CovertAction";
 	Template.bGoldenPath = false;
 	Template.bUnique = true;
+	Template.RequiredFactionInfluence = eFactionInfluence_MAX;
 
 	Template.Narratives.AddItem('CovertActionNarrative_HuntTemplarsP3_Program');
 
@@ -236,7 +239,7 @@ static function X2DataTemplate CreateHuntTemplarsP3Template() {
 	Template.Slots.AddItem(_CreateDefaultSoldierSlot(class'RTStrategyElement_ProgramStaffSlots'.default.StaffSlotTemplateName, 5));
 	Template.OptionalCosts.AddItem(_CreateOptionalCostSlot('Intel', 75));
 
-	Template.Risks.AddItem('Templar_Discovery');
+	Template.Risks.AddItem('CovertActionRisk_TemplarAmbush');
 
 	Template.Rewards.AddItem('RTReward_ProgramHuntTemplarsP3');
 

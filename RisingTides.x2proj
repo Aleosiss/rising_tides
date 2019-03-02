@@ -16,7 +16,6 @@
     <Folder Include="Localization\INT\" />
     <Folder Include="Localization\ESN\" />
     <Folder Include="Src\" />
-    <Folder Include="Src\XComGame\" />
     <Folder Include="Src\RisingTides\" />
     <Folder Include="Src\RisingTides\Classes\" />
     <Folder Include="Localization\JPN\" />

@@ -82,8 +82,12 @@ Copy-Item "$stagingPath/Src/*" "$sdkPath/Development/Src/" -Force -Recurse -Warn
 Write-Host "Copied."
 
 # append extra_globals.uci to globals.uci
-if (Test-Path "$sdkPath/Development/Src/extra_globals.uci") {
-    Get-Content "$sdkPath/Development/Src/extra_globals.uci" | Add-Content "$sdkPath/Development/Src/Core/Globals.uci"
+if (Test-Path "$sdkPath/Development/Src/$modNameCanonical/Classes/extra_globals.uci") {
+    Write-Host "Appending macros..."
+    Get-Content "$sdkPath/Development/Src/$modNameCanonical/Classes/extra_globals.uci" | Add-Content "$sdkPath/Development/Src/Core/Globals.uci"
+    Write-Host "Appended."
+} else {
+    Write-Host "Couldn't find an extra_globals.uci to append extra macros..."
 }
 
 if ($forceFullBuild) {
@@ -99,7 +103,7 @@ else {
     if (Test-Path "$sdkPath\XComGame\Script\$modNameCanonical.u") {
         Remove-Item "$sdkPath\XComGame\Script\$modNameCanonical.u"
     }
-    
+
     Write-Host "Cleaned."
 }
 
@@ -114,17 +118,6 @@ Write-Host "Compiling mod scripts..."
 &"$sdkPath/binaries/Win64/XComGame.com" make -nopause -mods $modNameCanonical "$stagingPath"
 CheckErrorCode "Failed to compile mod scripts."
 Write-Host "Compiled."
-
-# build the mod's shader cache
-if (Test-Path -Path "$stagingPath/Content/*" -Include *.upk, *.umap) {
-    Write-Host "Precompiling mod shaders..."
-    &"$sdkPath/binaries/Win64/XComGame.com" precompileshaders -nopause platform=pc_sm4 DLC=$modNameCanonical
-    CheckErrorCode "Failed to precompile mod shaders."
-    Write-Host "Precompiled."
-}
-else {
-    Write-Host "Mod doesn't have any shader content. Skipping shader precompilation."
-}
 
 # copy compiled mod scripts to the staging area
 Write-Host "Copying the compiled mod scripts to staging..."
