@@ -220,26 +220,7 @@ static function X2AbilityTemplate StandardGhostShot()
 	Template.AddTargetEffect(default.WeaponUpgradeMissDamage);
 
 	// Siphon Effect
-	SiphonEffect = new class'RTEffect_Siphon';
-	SiphonEffect.SiphonAmountMultiplier = class'RTAbility_BerserkerAbilitySet'.default.SIPHON_AMOUNT_MULTIPLIER;
-	SiphonEffect.SiphonMinVal = class'RTAbility_BerserkerAbilitySet'.default.SIPHON_MIN_VAL;
-	SiphonEffect.SiphonMaxVal = class'RTAbility_BerserkerAbilitySet'.default.SIPHON_MAX_VAL;
-	SiphonEffect.DamageTypes.AddItem('Psi');
-
-	TargetUnitPropertyCondition = new class'X2Condition_UnitProperty';
-	TargetUnitPropertyCondition.ExcludeDead = false;
-	TargetUnitPropertyCondition.ExcludeRobotic = true;
-	TargetUnitPropertyCondition.ExcludeFriendlyToSource = false;
-	TargetUnitPropertyCondition.ExcludeHostileToSource = false;
-	TargetUnitPropertyCondition.FailOnNonUnits = true;
-	TargetUnitPropertyCondition.RequireWithinRange = true;
-	TargetUnitPropertyCondition.WithinRange = class'RTAbility_BerserkerAbilitySet'.default.SIPHON_RANGE;
-
-	SiphonCondition = new class'X2Condition_AbilityProperty';
-	SiphonCondition.OwnerHasSoldierAbilities.AddItem('RTSiphon');
-
-	SiphonEffect.TargetConditions.AddItem(SiphonCondition);
-	SiphonEffect.TargetConditions.AddItem(TargetUnitPropertyCondition);
+	SiphonEffect = class'RTEffectBuilder'.static.RTCreateSiphonEffect(class'RTAbility_BerserkerAbilitySet'.default.SIPHON_AMOUNT_MULTIPLIER, class'RTAbility_BerserkerAbilitySet'.default.SIPHON_MIN_VAL, class'RTAbility_BerserkerAbilitySet'.default.SIPHON_MAX_VAL);
 	Template.AddTargetEffect(SiphonEffect);
 	Template.AssociatedPassives.AddItem('RTSiphon');
 

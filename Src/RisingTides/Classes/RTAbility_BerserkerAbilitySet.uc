@@ -316,24 +316,7 @@ static function X2AbilityTemplate RTBerserkerKnifeAttack()
 	Template.AddTargetEffect(AcidEffect);
 
 	// Siphon Effect
-	SiphonEffect = new class'RTEffect_Siphon';
-	SiphonEffect.SiphonAmountMultiplier = default.SIPHON_AMOUNT_MULTIPLIER;
-	SiphonEffect.SiphonMinVal = default.SIPHON_MIN_VAL;
-	SiphonEffect.SiphonMaxVal = default.SIPHON_MAX_VAL;
-	SiphonEffect.DamageTypes.AddItem('Psi');
-
-	TargetUnitPropertyCondition = new class'X2Condition_UnitProperty';
-	TargetUnitPropertyCondition.ExcludeDead = false;
-	TargetUnitPropertyCondition.ExcludeRobotic = true;
-	TargetUnitPropertyCondition.ExcludeFriendlyToSource = false;
-	TargetUnitPropertyCondition.ExcludeHostileToSource = false;
-	TargetUnitPropertyCondition.FailOnNonUnits = true;
-
-	SiphonCondition = new class'X2Condition_AbilityProperty';
-	SiphonCondition.OwnerHasSoldierAbilities.AddItem('RTSiphon');
-
-	SiphonEffect.TargetConditions.AddItem(SiphonCondition);
-	SiphonEffect.TargetConditions.AddItem(TargetUnitPropertyCondition);
+	SiphonEffect = class'RTEffectBuilder'.static.RTCreateSiphonEffect(default.SIPHON_AMOUNT_MULTIPLIER, default.SIPHON_MIN_VAL, default.SIPHON_MAX_VAL);
 	Template.AddTargetEffect(SiphonEffect);
 
 	Template.bAllowBonusWeaponEffects = true;
@@ -849,25 +832,7 @@ static function X2AbilityTemplate RTReprobateWaltz()
 	Template.AddTargetEffect(AcidEffect);
 
 	// Siphon Effect
-	SiphonEffect = new class'RTEffect_Siphon';
-	SiphonEffect.SiphonAmountMultiplier = default.SIPHON_AMOUNT_MULTIPLIER;
-	SiphonEffect.SiphonMinVal = default.SIPHON_MIN_VAL;
-	SiphonEffect.SiphonMaxVal = default.SIPHON_MAX_VAL;
-	SiphonEffect.DamageTypes.AddItem('Psi');
-
-	TargetUnitPropertyCondition = new class'X2Condition_UnitProperty';
-	TargetUnitPropertyCondition.ExcludeDead = true;
-	TargetUnitPropertyCondition.ExcludeRobotic = false;
-	TargetUnitPropertyCondition.ExcludeFriendlyToSource = false;
-	TargetUnitPropertyCondition.ExcludeHostileToSource = false;
-	TargetUnitPropertyCondition.FailOnNonUnits = true;
-	Template.AbilityTargetConditions.AddItem(TargetUnitPropertyCondition);
-
-	SiphonCondition = new class'X2Condition_AbilityProperty';
-	SiphonCondition.OwnerHasSoldierAbilities.AddItem('RTSiphon');
-
-	SiphonEffect.TargetConditions.AddItem(SiphonCondition);
-	SiphonEffect.TargetConditions.AddItem(TargetUnitPropertyCondition);
+	SiphonEffect = class'RTEffectBuilder'.static.RTCreateSiphonEffect(default.SIPHON_AMOUNT_MULTIPLIER, default.SIPHON_MIN_VAL, default.SIPHON_MAX_VAL);
 	Template.AddTargetEffect(SiphonEffect);
 
 	Template.bAllowBonusWeaponEffects = true;
@@ -1158,24 +1123,7 @@ static function X2AbilityTemplate RTPyroclasticSlash()
 	Template.AddTargetEffect(AcidEffect);
 
 	// Siphon Effect
-	SiphonEffect = new class'RTEffect_Siphon';
-	SiphonEffect.SiphonAmountMultiplier = default.SIPHON_AMOUNT_MULTIPLIER;
-	SiphonEffect.SiphonMinVal = default.SIPHON_MIN_VAL;
-	SiphonEffect.SiphonMaxVal = default.SIPHON_MAX_VAL;
-	SiphonEffect.DamageTypes.AddItem('Psi');
-
-	TargetUnitPropertyCondition = new class'X2Condition_UnitProperty';
-	TargetUnitPropertyCondition.ExcludeDead = false;
-	TargetUnitPropertyCondition.ExcludeRobotic = true;
-	TargetUnitPropertyCondition.ExcludeFriendlyToSource = false;
-	TargetUnitPropertyCondition.ExcludeHostileToSource = false;
-	TargetUnitPropertyCondition.FailOnNonUnits = true;
-
-	SiphonCondition = new class'X2Condition_AbilityProperty';
-	SiphonCondition.OwnerHasSoldierAbilities.AddItem('RTSiphon');
-
-	SiphonEffect.TargetConditions.AddItem(SiphonCondition);
-	SiphonEffect.TargetConditions.AddItem(TargetUnitPropertyCondition);
+	SiphonEffect = class'RTEffectBuilder'.static.RTCreateSiphonEffect(default.SIPHON_AMOUNT_MULTIPLIER, default.SIPHON_MIN_VAL, default.SIPHON_MAX_VAL);
 	Template.AddTargetEffect(SiphonEffect);
 
 	Template.bAllowBonusWeaponEffects = true;
@@ -1759,24 +1707,7 @@ static function X2DataTemplate RTShadowStrike()
 	Template.AddTargetEffect(AcidEffect);
 
 	// Siphon Effect
-	SiphonEffect = new class'RTEffect_Siphon';
-	SiphonEffect.SiphonAmountMultiplier = default.SIPHON_AMOUNT_MULTIPLIER;
-	SiphonEffect.SiphonMinVal = default.SIPHON_MIN_VAL;
-	SiphonEffect.SiphonMaxVal = default.SIPHON_MAX_VAL;
-	SiphonEffect.DamageTypes.AddItem('Psi');
-
-	TargetUnitPropertyCondition = new class'X2Condition_UnitProperty';
-	TargetUnitPropertyCondition.ExcludeDead = false;
-	TargetUnitPropertyCondition.ExcludeRobotic = true;
-	TargetUnitPropertyCondition.ExcludeFriendlyToSource = false;
-	TargetUnitPropertyCondition.ExcludeHostileToSource = false;
-	TargetUnitPropertyCondition.FailOnNonUnits = true;
-
-	SiphonCondition = new class'X2Condition_AbilityProperty';
-	SiphonCondition.OwnerHasSoldierAbilities.AddItem('RTSiphon');
-
-	SiphonEffect.TargetConditions.AddItem(SiphonCondition);
-	SiphonEffect.TargetConditions.AddItem(TargetUnitPropertyCondition);
+	SiphonEffect = class'RTEffectBuilder'.static.RTCreateSiphonEffect(default.SIPHON_AMOUNT_MULTIPLIER, default.SIPHON_MIN_VAL, default.SIPHON_MAX_VAL);
 	Template.AddTargetEffect(SiphonEffect);
 
 	Template.bAllowBonusWeaponEffects = true;
@@ -2451,9 +2382,9 @@ static function X2DataTemplate RTDashingStrike()
 
 
 	local X2AbilityToHitCalc_StandardMelee StandardMelee;
-	local RTEffect_BerserkerMeleeDamage     WeaponDamageEffect;
+	local RTEffect_BerserkerMeleeDamage		WeaponDamageEffect;
 	local RTEffect_Acid						AcidEffect;
-	local X2Condition_AbilityProperty  		AcidCondition, SiphonCondition;
+	local X2Condition_AbilityProperty		AcidCondition, SiphonCondition;
 	local X2Condition_UnitProperty			TargetUnitPropertyCondition;
 	local RTEffect_Siphon					SiphonEffect;
 
@@ -2527,24 +2458,7 @@ static function X2DataTemplate RTDashingStrike()
 	Template.AddMultiTargetEffect(AcidEffect);
 
 	// Siphon Effect
-	SiphonEffect = new class'RTEffect_Siphon';
-	SiphonEffect.SiphonAmountMultiplier = default.SIPHON_AMOUNT_MULTIPLIER;
-	SiphonEffect.SiphonMinVal = default.SIPHON_MIN_VAL;
-	SiphonEffect.SiphonMaxVal = default.SIPHON_MAX_VAL;
-	SiphonEffect.DamageTypes.AddItem('Psi');
-
-	TargetUnitPropertyCondition = new class'X2Condition_UnitProperty';
-	TargetUnitPropertyCondition.ExcludeDead = true;
-	TargetUnitPropertyCondition.ExcludeRobotic = true;
-	TargetUnitPropertyCondition.ExcludeFriendlyToSource = false;
-	TargetUnitPropertyCondition.ExcludeHostileToSource = false;
-	TargetUnitPropertyCondition.FailOnNonUnits = true;
-
-	SiphonCondition = new class'X2Condition_AbilityProperty';
-	SiphonCondition.OwnerHasSoldierAbilities.AddItem('RTSiphon');
-
-	SiphonEffect.TargetConditions.AddItem(SiphonCondition);
-	SiphonEffect.TargetConditions.AddItem(TargetUnitPropertyCondition);
+	SiphonEffect = class'RTEffectBuilder'.static.RTCreateSiphonEffect(default.SIPHON_AMOUNT_MULTIPLIER, default.SIPHON_MIN_VAL, default.SIPHON_MAX_VAL);
 	Template.AddMultiTargetEffect(SiphonEffect);
 
 	Template.bAllowBonusWeaponEffects = true;
