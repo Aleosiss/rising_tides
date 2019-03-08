@@ -287,3 +287,19 @@ static function String GetProgramColor(optional ERTColor colorEnum) {
 			return default.PROGRAM_RED_COLOR;
 	}
 }
+
+static function String AddFontColor(String inString, String HexColor) {
+	local String EmptyString;
+
+	if(inString == EmptyString) {
+		`RTLOG("AddFontColor Failed: empty, returning inString!");
+		return inString;
+	}
+
+	if(InStr(inString, "</font>") != -1) {
+		`RTLOG("AddFontColor Failed: fontdata present, returning inString!");
+		return inString;
+	}
+
+	return "<font color='#" $ HexColor $ "'>" $ inString $ "</font>";
+}

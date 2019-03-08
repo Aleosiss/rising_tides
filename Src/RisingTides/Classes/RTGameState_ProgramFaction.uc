@@ -1093,7 +1093,7 @@ function HandleTemplarQuestActions(XComGameState NewGameState) {
 
 	switch(iTemplarQuestlineStage) {
 		case 0:
-			if(!IsTemplarFactionMet()) { return; } // don't print the action if we haven't met the templars yet
+			if(!IsTemplarFactionMet()) { return; } // don't print the action if we haven't met the Templars yet
 			QuestTemplateName = 'CovertAction_HuntTemplarsP1Template';
 			`RTLOG("Adding CovertAction_HuntTemplarsP1Template");
 			break;
@@ -1105,6 +1105,10 @@ function HandleTemplarQuestActions(XComGameState NewGameState) {
 			QuestTemplateName = 'CovertAction_HuntTemplarsP3Template';
 			`RTLOG("Adding CovertAction_HuntTemplarsP3Template");
 			break;
+		case 3:
+			`RTLOG("Adding Templar Coven Assault Mission!");
+		case 4:
+			`RTLOG("Templar Questline Completed!");
 		default:
 			`RTLOG("iTemplarQuestStage is out-of-bounds! Ending early...");
 			return;
@@ -1123,7 +1127,7 @@ function IncrementTemplarQuestlineStage() {
 	iTemplarQuestlineStage++;
 }
 
-private function bool IsTemplarFactionMet() {
+function bool IsTemplarFactionMet() {
 	local XComGameState_ResistanceFaction FactionState;
 
 	foreach `XCOMHISTORY.IterateByClassType(class'XComGameState_ResistanceFaction', FactionState) {

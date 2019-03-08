@@ -174,6 +174,29 @@ static function X2DataTemplate CreateProgramHuntTemplarsAmbushReward() {
 	return Template;
 }
 
+static function X2DataTemplate CreateProgramTemplarCovenAssaultReward() {
+	local X2RewardTemplate Template;
+
+	`CREATE_X2Reward_TEMPLATE(Template, 'RTReward_TemplarCovenAssault');
+	
+	Template.IsRewardAvailableFn = none;
+	Template.IsRewardNeededFn = none; 
+	Template.GenerateRewardFn = none;
+	Template.SetRewardFn = none;
+	Template.GiveRewardFn = GiveTemplarCovenAssaultReward; // TODO
+	Template.GetRewardStringFn = none; // TODO
+	Template.GetRewardPreviewStringFn = none; // TODO
+	Template.GetRewardDetailsStringFn = none; // TODO
+	Template.GetRewardImageFn = none; // TODO
+	Template.SetRewardByTemplateFn = none;
+	Template.GetBlackMarketStringFn = none;
+	Template.GetRewardIconFn = none;
+	Template.CleanUpRewardFn = none;
+	Template.RewardPopupFn = none; // TODO
+
+	return Template;
+}
+
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 //---Is Available Delegates--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -392,11 +415,15 @@ static function GiveProgramFactionInfluenceReward(XComGameState NewGameState, XC
 
 static function GiveHuntTemplarsP3Reward(XComGameState NewGameState, XComGameState_Reward RewardState, optional StateObjectReference AuxRef, optional bool bOrder = false, optional int OrderHours = -1)
 {
+	GiveProgramAdvanceQuestlineReward(NewGameState, RewardState, AuxRef, bOrder, OrderHours);
+}
+
+static function GiveTemplarCovenAssaultReward(XComGameState NewGameState, XComGameState_Reward RewardState, optional StateObjectReference AuxRef, optional bool bOrder = false, optional int OrderHours = -1)
+{
 	local XComGameState_ResistanceFaction TemplarState;
 
 	TemplarState = class'RTHelpers'.static.GetTemplarFactionState();
 
-	GiveProgramAdvanceQuestlineReward(NewGameState, RewardState, AuxRef, bOrder, OrderHours);
 	EliminateFaction(NewGameState, TemplarState);
 	GiveTemplarQuestlineCompleteReward(NewGameState, RewardState, AuxRef, bOrder, OrderHours);
 }
@@ -405,7 +432,10 @@ static function GiveTemplarQuestlineCompleteReward(XComGameState NewGameState, X
 	local RTGameState_ProgramFaction ProgramState;
 
 	ProgramState = class'RTHelpers'.static.GetNewProgramState(NewGameState);
-	ProgramState.IncrementNumFavorsAvailable(99999);
+	ProgramState.IncrementNumFavorsAvailable(30);
+	ProgramState.IncrementTemplarQuestlineStage(); // should be 4 now
+
+	// TODO
 }
 
 static function GiveHuntTemplarAmbushReward(XComGameState NewGameState, XComGameState_Reward RewardState, optional StateObjectReference AuxRef, optional bool bOrder = false, optional int OrderHours = -1)
@@ -415,13 +445,9 @@ static function GiveHuntTemplarAmbushReward(XComGameState NewGameState, XComGame
 	ProgramFaction = class'RTHelpers'.static.GetNewProgramState(NewGameState);
 	switch(ProgramFaction.iTemplarQuestlineStage) {
 		case 0:
-			GiveProgramAdvanceQuestlineReward(NewGameState, RewardState, AuxRef, bOrder, OrderHours);
-			break;
 		case 1:
-			GiveProgramAdvanceQuestlineReward(NewGameState, RewardState, AuxRef, bOrder, OrderHours);
-			break;
 		case 2:
-			GiveHuntTemplarsP3Reward(NewGameState, RewardState, AuxRef, bOrder, OrderHours);
+			GiveProgramAdvanceQuestlineReward(NewGameState, RewardState, AuxRef, bOrder, OrderHours);
 			break;
 		default:
 			`RTLOG("Something broke, GiveHuntTemplarAmbushReward is out of bounds!", true, false);

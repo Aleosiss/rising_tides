@@ -14,6 +14,30 @@ var UIVerticalProgressBar QuestlineTrackerBar;
 var UIBGBox QuestlineTrackerOutline;
 var UIBGBox QuestlineTrackerBarSectionLine1, QuestlineTrackerBarSectionLine2, QuestlineTrackerBarSectionLine3;
 
+var RTUIInfoBox StageOne;
+var localized String m_strStageOneTitle;
+var localized String m_strStageOneDescription;
+var localized String m_strStageOneRewardTitle;
+var localized String m_strStageOneRewardDescription;
+
+var RTUIInfoBox StageTwo;
+var localized String m_strStageTwoTitle;
+var localized String m_strStageTwoDescription;
+var localized String m_strStageTwoRewardTitle;
+var localized String m_strStageTwoRewardDescription;
+
+var RTUIInfoBox StageThree;
+var localized String m_strStageThreeTitle;
+var localized String m_strStageThreeDescription;
+var localized String m_strStageThreeRewardTitle;
+var localized String m_strStageThreeRewardDescription;
+
+var RTUIInfoBox StageFour;
+var localized String m_strStageFourTitle;
+var localized String m_strStageFourDescription;
+var localized String m_strStageFourRewardTitle;
+var localized String m_strStageFourRewardDescription;
+
 var int iStatIconSize;
 var int horizontalMargin;
 var int horizontalPadding;
@@ -141,8 +165,38 @@ simulated function InitScreen(XComPlayerController InitController, UIMovie InitM
 	FavorCounter.InitColors(PrimaryColor, TextColor, HeaderColor, SecondaryColor);
 	FavorCounter.InitCounter('RT_OSFCounter', m_strProgramFactionInfoCounterTitle, m_strProgramFactionInfoCounterDescriptionText, 516, 410);
 	FavorCounter.SetPosition(10, topRunningY);
-	
 
+	StageOne = Spawn(class'RTUIInfoBox', Container);
+	StageOne.InitColors(PrimaryColor, TextColor, HeaderColor, SecondaryColor);
+	StageOne.InitText(m_strStageOneTitle, m_strStageOneDescription, m_strStageOneRewardTitle, m_strStageOneRewardDescription);
+	StageOne.InitImages("", "");
+	StageOne.InitInfoBox('RT_ProgramInfoScreenStageOne', 700, 160, 1);
+	StageOne.SetPosition(QuestlineTrackerBarSectionLine3.X + 4 + QuestlineTrackerBar.Width, QuestlineTrackerBarSectionLine3.Y + 11);
+	StageOne.SetLocked();
+	
+	StageTwo = Spawn(class'RTUIInfoBox', Container);
+	StageTwo.InitColors(PrimaryColor, TextColor, HeaderColor, SecondaryColor);
+	StageTwo.InitText(m_strStageTwoTitle, m_strStageTwoDescription, m_strStageTwoRewardTitle, m_strStageTwoRewardDescription);
+	StageTwo.InitImages("", "");
+	StageTwo.InitInfoBox('RT_ProgramInfoScreenStageTwo', 700, 160, 2);
+	StageTwo.SetPosition(QuestlineTrackerBarSectionLine2.X + 4 + QuestlineTrackerBar.Width, QuestlineTrackerBarSectionLine2.Y + 11);
+	StageTwo.SetLocked();
+	
+	StageThree = Spawn(class'RTUIInfoBox', Container);
+	StageThree.InitColors(PrimaryColor, TextColor, HeaderColor, SecondaryColor);
+	StageThree.InitText(m_strStageThreeTitle, m_strStageThreeDescription, m_strStageThreeRewardTitle, m_strStageThreeRewardDescription);
+	StageThree.InitImages("", "");
+	StageThree.InitInfoBox('RT_ProgramInfoScreenStageThree', 700, 160, 3);
+	StageThree.SetPosition(QuestlineTrackerBarSectionLine1.X + 4 + QuestlineTrackerBar.Width, QuestlineTrackerBarSectionLine1.Y + 11);
+	StageThree.SetLocked();
+
+	StageFour = Spawn(class'RTUIInfoBox', Container);
+	StageFour.InitColors(PrimaryColor, TextColor, HeaderColor, SecondaryColor);
+	StageFour.InitText(m_strStageFourTitle, m_strStageFourDescription, m_strStageFourRewardTitle, m_strStageFourRewardDescription);
+	StageFour.InitImages("", "");
+	StageFour.InitInfoBox('RT_ProgramInfoScreenStageFour', 700, 160, 4);
+	StageFour.SetPosition(QuestlineTrackerBarSectionLine1.X + 4 + QuestlineTrackerBar.Width, QuestlineTrackerBarSectionLine1.Y - 158);
+	StageFour.SetLocked();
 }
 
 simulated function PopulateData()
@@ -150,8 +204,6 @@ simulated function PopulateData()
 	local RTGameState_ProgramFaction ProgramState;
 	local int iTemplarQuestlineStage, iTotalFavors;
 	local float questlinePercent;
-
-
 
 	ProgramState = class'RTHelpers'.static.GetProgramState();
 	if(ProgramState == none) {
@@ -167,7 +219,6 @@ simulated function PopulateData()
 	// 0 = not started, 1-3 for CAs, 4 for Coven Assault Completed
 	QuestlineTrackerBar.SetPercent(min(iTemplarQuestlineStage * 25, 100) * 0.01);
 
-	`RTLOG("" $ ProgramState.GetNumFavorsAvailable());
 	iTotalFavors = ProgramState.GetNumFavorsAvailable();
 	if(ProgramState.IsOneSmallFavorAvailable()) {
 		iTotalFavors++; // this checks for the active favor waiting to be called in, which can only be set once per month via the card.
@@ -175,7 +226,51 @@ simulated function PopulateData()
 
 	FavorCounter.SetCounter(iTotalFavors);
 	FavorCounter.MC.FunctionVoid("realize");
-	
+
+	// There must be a better way, I'm just too tired and lazy to figure it out
+	switch(iTemplarQuestlineStage) {
+		case 0:
+			if(!ProgramState.IsTemplarFactionMet()) {
+				StageOne.SetLocked();
+			} else {
+				StageOne.SetAvailable();
+			}
+
+			StageTwo.SetLocked();
+			StageThree.SetLocked();
+			StageFour.SetLocked();
+			break;
+		case 1:
+			StageOne.SetCompleted();
+			StageTwo.SetAvailable();
+			StageThree.SetLocked();
+			StageFour.SetLocked();
+			break;
+		case 2:
+			StageOne.SetCompleted();
+			StageTwo.SetCompleted();
+			StageThree.SetAvailable();
+			StageFour.SetLocked();
+			break;
+		case 3:
+			StageOne.SetCompleted();
+			StageTwo.SetCompleted();
+			StageThree.SetCompleted();
+			StageFour.SetAvailable();
+			break;
+		case 4:
+			StageOne.SetCompleted();
+			StageTwo.SetCompleted();
+			StageThree.SetCompleted();
+			StageFour.SetCompleted();
+			break;
+		default:
+			StageOne.SetLocked();
+			StageTwo.SetLocked();
+			StageThree.SetLocked();
+			StageFour.SetLocked();
+	}
+
 	SetColors();
 	Show();
 }
@@ -204,7 +299,6 @@ simulated function bool OnUnrealCommand(int cmd, int arg)
 			break;
 	}
 
-	PopulateData();
 	// don't route through the navigator
 	return bHandled;
 }

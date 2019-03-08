@@ -319,3 +319,29 @@ m_strProgramFactionInfoHeaderText="Program Briefing"
 m_strProgramFactionInfoDescriptionText="Latest intelligence enclosed within. - @phoenix"
 m_strProgramFactionInfoCounterTitle="Favors Owed"
 m_strProgramFactionInfoCounterDescriptionText="In exchange for a favor, the Program will send in one of their squads in the place of XCOM's for a mission."
+
+m_strStageOneTitle="Find Them"
+m_strStageOneDescription="In order to eliminate the threat the Templars represent, we first need to find them via a Covert Action."
+m_strStageOneRewardTitle="Rewards"
+m_strStageOneRewardDescription="+3 Program Favors. 'Gain Their Trust' Covert Action now available."
+
+m_strStageTwoTitle="Gain Their Trust"
+m_strStageTwoDescription="The Templars keep their leadership well protected. Gain their trust via a Covert Action before any meaningful progress can be made."
+m_strStageTwoRewardTitle="Rewards"
+m_strStageTwoRewardDescription="+3 Program Favors. 'Lure Them Out' Covert Action now available."
+
+m_strStageThreeTitle="Lure Them Out"
+m_strStageThreeDescription="Instead attacking where they're strong, we'll draw them out into the open via a Covert Action."
+m_strStageThreeRewardTitle="Rewards"
+m_strStageThreeRewardDescription="+3 Program Favors. 'Templar Coven Assault' mission now available."
+
+m_strStageFourTitle="End It"
+m_strStageFourDescription="Assault the Templar High Coven."
+m_strStageFourRewardTitle="Rewards"
+m_strStageFourRewardDescription="+30 Program Favors. Program Stealth Drone blueprint. +2 Wildcard Resistance Order slots."
+
+[RTUIInfoBox]
+m_strLockedTitle="Locked"
+m_strLockedDescription="Locked"
+m_strSwapToRewards="Show Rewards"
+m_strSwapFromRewards="Hide Rewards"
