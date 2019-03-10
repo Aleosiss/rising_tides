@@ -1199,3 +1199,6 @@ strCharacterName="Templar Follower"
 [RTTemplarPeon_M3 X2CharacterTemplate]
 strCharacterName="Templar Idealist"
 
+[RTUIScreenListener_ProgramFactionScreen]
+m_strProgramFactionButton="Briefing"
+

@@ -345,3 +345,6 @@ m_strLockedTitle="Locked"
 m_strLockedDescription="Locked"
 m_strSwapToRewards="Show Rewards"
 m_strSwapFromRewards="Hide Rewards"
+
+[RTUIScreenListener_ProgramFactionScreen]
+m_strProgramFactionButton="Briefing"
