@@ -70,6 +70,7 @@ static function JustPassingThroughModifyTacStartState(XComGameState StartState) 
 	local name CharTemplateName;
 	//local X2CharacterTemplate Template;
 	local XComGameState_Player PlayerState;
+	local float jPTRoll, RandRoll;
 
 	if (IsSplitMission( StartState ))
 		return;
@@ -78,8 +79,14 @@ static function JustPassingThroughModifyTacStartState(XComGameState StartState) 
 	Program.bShouldPerformPostMissionCleanup = true;
 	SoldierObjRef = Program.Master[`SYNC_RAND_STATIC(Program.Master.Length)];
 	
-	if(default.JustPassingThroughChance * (int(Program.Influence) + 1) < `SYNC_RAND_STATIC(100) /*|| true*/ ) //TODO: Refactor to include an Operative-based modifer (location + personality)
+	RandRoll = `SYNC_RAND_STATIC(100);
+	jPTRoll = default.JustPassingThroughChance * (int(Program.Influence) + 1);
+
+	if(jPTRoll < RandRoll /*|| true*/ ) {//TODO: Refactor to include an Operative-based modifer (location + personality)
+		`RTLOG("JustPassingThrough roll failed, returning! JPT: " $ jPTRoll $ ", Value to beat: " $ RandRoll);
 		return;
+	}
+	`RTLOG("JustPassingThrough roll succeeded, continuing! JPT: " $ jPTRoll $ ", Value to beat: " $ RandRoll);
 
 	foreach StartState.IterateByClassType( class'XComGameState_HeadquartersXCom', XComHQ )
 		break;

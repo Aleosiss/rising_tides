@@ -45,7 +45,7 @@ defaultproperties
 
 	CompletedColor = "5CD16C"
 	LockedColor = "828282"
-	theImagePath = ""
+	DefaultImagePath = ""
 	RewardImagePath = ""
 }
 

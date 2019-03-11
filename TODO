@@ -15,7 +15,7 @@ Todo:
     ✔ Add Program Shotgun @done(18-12-09 16:55)
     ✔ Add Program Carbine @done(18-12-09 16:55)
     ✔ Add Program Pistol @done(18-04-24 23:18)
-    ☐ Add Program Armor
+    ✔ Add Program Armor @done(19-03-10 17:31)
   ☐ Add supporting UI to new stuff
     ☐ Add Tooltip to OSF checkbox
     ✔ Add Popup after meeting the Program @done(18-04-26 14:43)
@@ -38,7 +38,15 @@ Todo:
   ✔ Add system to manage Hunt_Templars covert actions @done(18-12-09 16:55)
   ☐ Add Assault Templar Leadership mission
   ☐ Add Enemy Templar Faction
-    ☐ Templar Abiity Set
-    ☐ Templar Character Generator
-    ☐ Templar AI.ini
+    ✔ Templar Abiity Set @done(19-03-10 17:32)
+    ✔ Templar Character Generator @done(19-03-10 17:32)
+    ✔ Templar AI.ini @done(19-03-10 17:32)
     ☐ Templar Encounter configuration
+  ☐ Add Program Favors System
+    ✔ Implement @done(19-03-10 17:33)
+    ✔ Fixes to current systems @done(19-03-10 17:33)
+    ☐ Add Program Info Screen
+      ✔ Create Screen @done(19-03-10 17:33)
+      ☐ Create Localization
+      ☐ Create Tutorial
+      ✔ Create UIScreenListener @done(19-03-10 17:33)

@@ -622,6 +622,7 @@
     <Content Include="Src\RisingTides\Classes\RTHelpers_ItemTemplates.uc" />
     <Content Include="Src\RisingTides\Classes\RTUICounter.uc" />
     <Content Include="Src\RisingTides\Classes\RTUIInfoBox.uc" />
+    <Content Include="Src\RisingTides\Classes\RTUIScreenListener_ProgramFactionScreen.uc" />
   </ItemGroup>
   <Import Project="$(MSBuildLocalExtensionPath)\XCOM2.targets" />
 </Project>
