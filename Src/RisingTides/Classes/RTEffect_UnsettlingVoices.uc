@@ -25,7 +25,6 @@ function GetToHitAsTargetModifiers(XComGameState_Effect EffectState, XComGameSta
 {
 	local ShotModifierInfo ModInfoAim;
 
-
 	ModInfoAim.ModType = eHit_Success;
 	ModInfoAim.Reason = FriendlyName;
 	ModInfoAim.Value = UV_DEFENSE_PENALTY;

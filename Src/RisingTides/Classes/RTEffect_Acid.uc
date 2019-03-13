@@ -32,7 +32,7 @@ simulated function SetAcidDamage(int Damage, int Spread, int Shred, name DamageT
 {
 	local X2Effect_ApplyWeaponDamage AcidDamage;
 
-	AcidDamage= GetAcidDamage();
+	AcidDamage = GetAcidDamage();
 	AcidDamage.EffectDamageValue.Damage = Damage;
 	AcidDamage.EffectDamageValue.Spread = Spread;
 	AcidDamage.EffectDamageValue.Shred = Shred;

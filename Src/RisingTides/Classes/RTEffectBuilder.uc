@@ -147,7 +147,7 @@ static function RTEffect_Meld RTCreateMeldEffect(int iDuration = 1, optional boo
 }
 
 static function RTEffect_Panicked RTCreateFeedbackEffect(int _EffectDuration, name _EffectName, string _EffectDisplayTitle, string _EffectDisplayDesc, string _IconImage) {
-	local RTEffect_Panicked     PanickedEffect;
+	local RTEffect_Panicked	PanickedEffect;
 
 	PanickedEffect = new class'RTEffect_Panicked';
 	PanickedEffect.EffectName = _EffectName;

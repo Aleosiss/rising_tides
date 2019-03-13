@@ -2294,10 +2294,7 @@ simulated function DimensionalRiftStage2_BuildVisualization(XComGameState Visual
 		WaitAction = X2Action_TimedWait(class'X2Action_TimedWait'.static.AddToVisualizationTree(AvatarBuildData, VisualizeGameState.GetContext(), false, AvatarBuildData.LastActionAdded));
 		WaitAction.DelayTimeSec = class'X2Ability_PsiWitch'.default.DIMENSIONAL_RIFT_STAGE1_START_WARNING_FX_SEC / 10;
 
-
-
 		foreach SustainedAbility.ValidActivationTiles(Tile) {
-
 			SoundAction = X2Action_StartStopSound(class'X2Action_StartStopSound'.static.AddToVisualizationTree(AvatarBuildData, VisualizeGameState.GetContext(), false, AvatarBuildData.LastActionAdded));
 			SoundAction.Sound = new class'SoundCue';
 			SoundAction.Sound.AkEventOverride = AkEvent'SoundX2AvatarFX.Stop_AvatarDimensionalRiftLoop';
@@ -2315,8 +2312,6 @@ simulated function DimensionalRiftStage2_BuildVisualization(XComGameState Visual
 			EffectAction = X2Action_PlayEffect(class'X2Action_PlayEffect'.static.AddToVisualizationTree(AvatarBuildData, VisualizeGameState.GetContext(), false, AvatarBuildData.LastActionAdded));
 			EffectAction.EffectName = "FX_Psi_Void_Rift.P_Psi_Void_Rift_Deactivation";
 			EffectAction.EffectLocation = Location;
-
-
 		}
 
 		// Notify multi targets of explosion

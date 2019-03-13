@@ -1630,7 +1630,7 @@ function EventListenerReturn HandleRepositioning(Object EventData, Object EventS
 {
 	local XComGameState_Unit UnitState;
 	local TTile CurrentTile;
-//	local XComGameStateHistory History;
+	//local XComGameStateHistory History;
 	local RTEffect_Repositioning EffectTemplate;
 	local RTGameState_Effect RTEffectState;
 	local XComGameState_Ability AbilityState; // what just activated
