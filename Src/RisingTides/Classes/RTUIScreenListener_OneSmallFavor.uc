@@ -5,7 +5,8 @@ var UICheckbox						cb;
 var UIMission						ms;
 var StateObjectReference			mr;
 var bool							bDebugging;
-var bool							bHasSeenTutorial;
+var bool							bHasSeenOSFTutorial;
+var bool							bHasSeenProgramScreenTutorial;
 
 var config array<name> 				FatLaunchButtonMissionTypes;
 var config float 					OSFCheckboxDistortOnClickDuration;
@@ -16,18 +17,24 @@ event OnInit(UIScreen Screen)
 {
 	local RTGameState_ProgramFaction Program;
 	
-	if(UIStrategyMap(Screen) != none && !bHasSeenTutorial) {
+	if(UIStrategyMap(Screen) != none) {
 		Program = RTGameState_ProgramFaction(`XCOMHISTORY.GetSingleGameStateObjectForClass(class'RTGameState_ProgramFaction'));
 		if(Program == none) {
 			return;
 		}
-	
+
 		if(!Program.bMetXCom) {
 			return;
 		}
-	
-		Program.HandleOSFTutorial();
-		bHasSeenTutorial = Program.bOSF_FirstTimeDisplayed;
+
+		if(!bHasSeenOSFTutorial) {
+			Program.HandleOSFTutorial();
+			bHasSeenOSFTutorial = Program.bOSF_FirstTimeDisplayed;
+		}
+		else if(!bHasSeenProgramScreenTutorial) {
+			Program.HandleProgramScreenTutorial();
+			bHasSeenProgramScreenTutorial = Program.bPIS_FirstTimeDisplayed;
+		}
 	}
 
 	if(UIMission(Screen) == none) {

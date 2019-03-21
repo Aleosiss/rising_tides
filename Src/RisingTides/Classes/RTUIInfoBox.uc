@@ -28,8 +28,8 @@ var string SecondaryColor;
 var string CompletedColor;
 var string LockedColor;
 
-var localized String m_strLockedTitle;
 var String LockedImagePath;
+var localized String m_strLockedTitle;
 var localized String m_strLockedDescription;
 
 var localized String m_strSwapToRewards;
@@ -113,7 +113,7 @@ simulated function RTUIInfoBox InitInfoBox(name PanelName, float newWidth, float
 	Button = Spawn(class'UIButton', self);
 	Button.InitButton('RT_InfoBoxButton', "default", OnButtonClicked);
 	Button.SetPosition(InfoBoxDescription.X + InfoBoxDescription.Width - 160, InfoBoxDescription.Y - 35);
-	Button.SetSize(400, 25);
+	Button.SetSize(400, 30);
 	Button.ShowBG(true);
 	return self;
 }

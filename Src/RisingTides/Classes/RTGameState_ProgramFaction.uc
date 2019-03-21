@@ -92,6 +92,7 @@ var private bool														bOneSmallFavorActivated;			// actively sending a s
 var private int															iNumberOfFavorsAvailable;
 var int																	iNumberOfFavorsCalledIn;			
 var bool																bOSF_FirstTimeDisplayed;
+var bool																bPIS_FirstTimeDisplayed;
 
 // ONE SMALL FAVOR LOCALIZED STRINGS
 var localized string OSFCheckboxAvailable;
@@ -99,6 +100,11 @@ var localized string OSFCheckboxUnavailable;
 var localized string OSFFirstTime_Title;
 var localized string OSFFirstTime_Text;
 var config string OSFFirstTime_ImagePath;
+
+// PROGRAM INFO SCREEN LOCALIZED STRINGS
+var localized string PISFirstTime_Title;
+var localized string PISFirstTime_Text;
+var config string PISFirstTime_ImagePath;
 
 // not a bool, want to see how many times this is called
 var private int iNumTimesProgramSetup;
@@ -544,6 +550,24 @@ function HandleOSFTutorial() {
 
 		// Display the tutorial popup, this also requires a newgamestate
 		class'X2StrategyGameRulesetDataStructures'.static.BuildDynamicPropertySet(PropertySet, 'UIAlert_OSFFirstTime', 'UITutorialBox', none, false, false, true, false);
+		class'XComPresentationLayerBase'.static.QueueDynamicPopup(PropertySet);
+	}
+}
+
+function HandleProgramScreenTutorial() {
+	local DynamicPropertySet PropertySet;
+	local XComGameState NewGameState;
+	local RTGameState_ProgramFaction ProgramState;
+
+	if(!bPIS_FirstTimeDisplayed) {
+		// Update the bool, this requires a newgamestate
+		NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("RisingTides: setting One Small Favor tutorial flag...");
+		ProgramState = RTGameState_ProgramFaction(NewGameState.ModifyStateObject(class'RTGameState_ProgramFaction', self.ObjectID));
+		ProgramState.bPIS_FirstTimeDisplayed = true;
+		`XCOMGAME.GameRuleset.SubmitGameState(NewGameState);
+
+		// Display the tutorial popup, this also requires a newgamestate
+		class'X2StrategyGameRulesetDataStructures'.static.BuildDynamicPropertySet(PropertySet, 'UIAlert_PISFirstTime', 'UITutorialBox', none, false, false, true, false);
 		class'XComPresentationLayerBase'.static.QueueDynamicPopup(PropertySet);
 	}
 }
@@ -1433,8 +1457,12 @@ static function InitFaction(optional XComGameState StartState) {
 	}
 }
 
-static function DisplayFirstTimePopup() {
+static function DisplayOSFFirstTimePopup() {
 	`PRESBASE.UITutorialBox(default.OSFFirstTime_Title, default.OSFFirstTime_Text, default.OSFFirstTime_ImagePath);
+}
+
+static function DisplayPISFirstTimePopup() {
+	`PRESBASE.UITutorialBox(default.PISFirstTime_Title, default.PISFirstTime_Text, default.PISFirstTime_ImagePath);
 }
 
 function PrintDebuggingInfo() {

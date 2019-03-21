@@ -112,7 +112,12 @@ static function bool DisplayQueuedDynamicPopup(DynamicPropertySet PropertySet)
 	}
 
 	if(PropertySet.PrimaryRoutingKey == 'UIAlert_OSFFirstTime') {
-		class'RTGameState_ProgramFaction'.static.DisplayFirstTimePopup();
+		class'RTGameState_ProgramFaction'.static.DisplayOSFFirstTimePopup();
+		return true;
+	}
+
+	if(PropertySet.PrimaryRoutingKey == 'UIAlert_PISFirstTime') {
+		class'RTGameState_ProgramFaction'.static.DisplayPISFirstTimePopup();
 		return true;
 	}
 

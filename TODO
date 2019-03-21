@@ -10,14 +10,13 @@ Todo:
     ✔ Track number of OSFs granted @done(18-04-24 23:18)
     ✔ Add influence reward template @done(18-04-24 23:18)
     ✔ Add Faction influence popup after grant @done(18-04-24 23:18)
-  ☐ Add Program Equipment
+  ✔ Add Program Equipment @done(19-03-19 23:22)
     ✔ Add Program DMR @done(18-12-09 16:55)
     ✔ Add Program Shotgun @done(18-12-09 16:55)
     ✔ Add Program Carbine @done(18-12-09 16:55)
     ✔ Add Program Pistol @done(18-04-24 23:18)
     ✔ Add Program Armor @done(19-03-10 17:31)
-  ☐ Add supporting UI to new stuff
-    ☐ Add Tooltip to OSF checkbox
+  ✔ Add supporting UI to new stuff @done(19-03-19 23:22)
     ✔ Add Popup after meeting the Program @done(18-04-26 14:43)
   ✔ Add Encyclopedia Entries @done(18-04-26 16:40)
   ✔ Add a range limit to mind wrack @done(18-04-26 17:32)
@@ -28,11 +27,11 @@ Todo:
     ✔ Tracks Concealment / Superconcealment gained before Stealth was applied @done(18-04-30 18:32)
   ☐ Add Hunt_Templar Risks
     ☐ Add Templar Ambush
-    ✔ Add RTGameState_MissionStateTemplarAmbush @done(18-12-16 02:10)
-    ☐ Add Templar Ambush Mission *.inis (Schedules, Mission, Encounters)
-    ☐ Add Templar Ambush Obj.umap
-    ✔ Add Templar Ambush UIAlert @done(18-12-16 02:10)
-    ✔ Add Templar Ambush UIMission @done(18-12-16 02:10)
+      ✔ Add RTGameState_MissionStateTemplarAmbush @done(18-12-16 02:10)
+      ☐ Add Templar Ambush Mission *.inis (Schedules, Mission, Encounters)
+      ☐ Add Templar Ambush Obj.umap
+      ✔ Add Templar Ambush UIAlert @done(18-12-16 02:10)
+      ✔ Add Templar Ambush UIMission @done(18-12-16 02:10)
   ☐ Add Hunt_Templars narratives
   ☐ Add Hunt_Templars rewards
   ✔ Add system to manage Hunt_Templars covert actions @done(18-12-09 16:55)

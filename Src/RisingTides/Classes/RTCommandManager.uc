@@ -732,7 +732,7 @@ exec function RT_CheatEliminateTemplarFaction() {
 	`XCOMGAME.GameRuleset.SubmitGameState(NewGameState);
 }
 
-exec function GenerateTemplarAmbush() {
+exec function RT_GenerateTemplarAmbush() {
 	local XComGameState NewGameState;
 	local XComGameState_MissionSite MissionState;
 
@@ -985,4 +985,20 @@ exec function RT_CheatProgramQuestline() {
 	ProgramState.IncrementNumFavorsAvailable(3);
 	
 	`GAMERULES.SubmitGameState(NewGameState);
+}
+
+exec function RT_TestProgramInfoScreenTutorial() {
+	local RTGameState_ProgramFaction	ProgramState;
+	local XComGameState					NewGameState;
+
+	ProgramState = class'RTHelpers'.static.GetProgramState();
+	ProgramState.HandleProgramScreenTutorial();
+}
+
+exec function RT_TestOSFTutorial() {
+	local RTGameState_ProgramFaction	ProgramState;
+	local XComGameState					NewGameState;
+
+	ProgramState = class'RTHelpers'.static.GetProgramState();
+	ProgramState.HandleOSFTutorial();
 }
