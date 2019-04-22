@@ -517,7 +517,7 @@ function EventListenerReturn RTPsionicInterrupt(Object EventData, Object EventSo
 		return ELR_NoInterrupt;
 	}
 
-	if(class'RTHelpers'.static.CheckAbilityActivated(AbilityState.GetMyTemplateName(), eChecklist_PsionicAbilities)) {
+	if(`RTS.CheckAbilityActivated(AbilityState.GetMyTemplateName(), eChecklist_PsionicAbilities)) {
 		NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("Rising Tides: recording interrupted AbilityStateObjectRef: " $ AbilityState.ObjectID);
 		TargetUnitState = XComGameState_Unit(NewGameState.ModifyStateObject(TargetUnitState.class, TargetUnitState.ObjectID));
 
@@ -592,9 +592,9 @@ function EventListenerReturn RTHarbingerBonusDamage(Object EventData, Object Eve
 
 	}
 	//`RTLOG("RTHarbingerBonusDamage is checking for the current ability to add damage to...");
-	if(class'RTHelpers'.static.CheckAbilityActivated(AbilityState.GetMyTemplateName(), eChecklist_SniperShots)   ||
-	 class'RTHelpers'.static.CheckAbilityActivated(AbilityState.GetMyTemplateName(), eChecklist_StandardShots) ||
-	 class'RTHelpers'.static.CheckAbilityActivated(AbilityState.GetMyTemplateName(), eChecklist_MeleeAbilities) ) {
+	if(`RTS.CheckAbilityActivated(AbilityState.GetMyTemplateName(), eChecklist_SniperShots)   ||
+	 `RTS.CheckAbilityActivated(AbilityState.GetMyTemplateName(), eChecklist_StandardShots) ||
+	 `RTS.CheckAbilityActivated(AbilityState.GetMyTemplateName(), eChecklist_MeleeAbilities) ) {
 		InitializeAbilityForActivation(AdditionalDamageState, SourceUnitState, 'RTHarbingerBonusDamage', History);
 		ActivateAbility(AdditionalDamageState, TargetUnitState.GetReference());
 		return ELR_NoInterrupt;
@@ -746,7 +746,7 @@ function EventListenerReturn EveryMomentMattersCheck(Object EventData, Object Ev
 			if (`TACTICALRULES.GetCachedUnitActionPlayerRef().ObjectID == SourceUnit.ControllingPlayer.ObjectID) {
 
 				// We only want to grant points when the source is actually shooting a shot
-				if( !class'RTHelpers'.static.CheckAbilityActivated(AbilityContext.InputContext.AbilityTemplateName, eChecklist_SniperShots)) {
+				if( !`RTS.CheckAbilityActivated(AbilityContext.InputContext.AbilityTemplateName, eChecklist_SniperShots)) {
 						return ELR_NoInterrupt;
 				}
 
@@ -1451,15 +1451,15 @@ function EventListenerReturn RTBumpInTheNight(Object EventData, Object EventSour
 	if (AbilityState == none || AbilityState.ObjectID == 0)
 		return ELR_NoInterrupt;
 
-	if(class'RTHelpers'.default.StandardShots.Find(AbilityState.GetMyTemplateName()) != INDEX_NONE) {
+	if(`RTD.StandardShots.Find(AbilityState.GetMyTemplateName()) != INDEX_NONE) {
 		bShouldTriggerStandard = true;
 	}
 
-	if(class'RTHelpers'.default.OverwatchShots.Find(AbilityState.GetMyTemplateName()) != INDEX_NONE) {
+	if(`RTD.OverwatchShots.Find(AbilityState.GetMyTemplateName()) != INDEX_NONE) {
 		bShouldTriggerStandard = true;
 	}
 
-	if(class'RTHelpers'.default.MeleeAbilities.Find(AbilityState.GetMyTemplateName()) != INDEX_NONE) {
+	if(`RTD.MeleeAbilities.Find(AbilityState.GetMyTemplateName()) != INDEX_NONE) {
 		bShouldTriggerMelee = true;
 	}
 
@@ -1613,7 +1613,7 @@ function EventListenerReturn RTApplyTimeStop(Object EventData, Object EventSourc
 	}
 
 	SourceState = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(ApplyEffectParameters.SourceStateObjectRef.ObjectID));
-	if(SourceState.AffectedByEffectNames.Find('TimeStopMasterEffect') != INDEX_NONE) {
+	if(SourceState.AffectedByEffectNames.Find(class'RTAbility_MarksmanAbilitySet'.default.TimeStopMasterEffectName) != INDEX_NONE) {
 		InitializeAbilityForActivation(AbilityState, SourceState, 'TimeStandsStillInterruptListener', `XCOMHISTORY);
 		ActivateAbility(AbilityState, TargetState.GetReference());
 	}
@@ -1654,7 +1654,7 @@ function EventListenerReturn HandleRepositioning(Object EventData, Object EventS
 	Checklists.AddItem(eChecklist_SniperShots);
 	Checklists.AddItem(eChecklist_OverwatchShots);
 
-	if(!class'RTHelpers'.static.MultiCatCheckAbilityActivated(AbilityState.GetMyTemplateName(), Checklists))
+	if(!`RTS.MultiCatCheckAbilityActivated(AbilityState.GetMyTemplateName(), Checklists))
 	{
 		`RTLOG("HandlingRepositioning triggered by an invalid ability: " $ AbilityState.GetMyTemplateName());
 		return ELR_NoInterrupt;

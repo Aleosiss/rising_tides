@@ -28,7 +28,7 @@ function int GetAttackingDamageModifier(XComGameState_Effect EffectState, XComGa
 		ExtraDamage -= CurrentDamage;
 	}
 
-	if(class'RTHelpers'.static.CheckAbilityActivated(AbilityState.GetMyTemplateName(), eChecklist_SniperShots)) {
+	if(`RTS.CheckAbilityActivated(AbilityState.GetMyTemplateName(), eChecklist_SniperShots)) {
 		return int(ExtraDamage);
 	}
 
@@ -40,12 +40,12 @@ function bool PostAbilityCostPaid(XComGameState_Effect EffectState, XComGameStat
 
 	SourceUnit.GetUnitValue('RT_KnockThemDownVal', UnitVal);
 
-	if(class'RTHelpers'.static.CheckAbilityActivated(kAbility.GetMyTemplateName(), eChecklist_SniperShots)) {
+	if(`RTS.CheckAbilityActivated(kAbility.GetMyTemplateName(), eChecklist_SniperShots)) {
 		SourceUnit.SetUnitFloatValue('RT_KnockThemDownVal', UnitVal.fValue + 1, eCleanup_BeginTurn);
 		return false;
 	}
 
-	if(class'RTHelpers'.static.CheckAbilityActivated(kAbility.GetMyTemplateName(), eChecklist_FreeActions)) {
+	if(`RTS.CheckAbilityActivated(kAbility.GetMyTemplateName(), eChecklist_FreeActions)) {
 		return false;
 	}
 

@@ -1,4 +1,4 @@
-2.1.0
+2.1.0:
 - Add new covert action line to the Program to eliminate the Templars!
     - 3 New Covert Actions
         - New mission (Templar Ambush Retaliation)
@@ -12,8 +12,31 @@
         - If your last (3) shots were taken from (9) tiles away, retain concealment on your next shot.
     - Unfurl The Veil: Replaces Meld Induction on the Gatherer's perk tree.
         - If all active enemies are affected by Over the Shoulder, gain concealment. (6) turn cooldown.
-    
-2.0.7
+- Balance Changes
+  - Daybreak Flame no longer auto procs Scoped and Dropped by default.
+  - Program operative HP nerfed by 5.
+  - Program operative aim decreased by 10.
+  - Program operative weaponry now scales with XCOM's.
+- Changes
+  - - Time Stands Still now takes place over a single turn. Instead of three turns with 2 AP each, the unit now receives 6 AP immediately and no action is turn-ending.
+
+
+2.0.11:
+- (hopefully) Fixed issue with duplicate strategy cards being generated through resistance ops, will not fix in-progress campaigns affected
+- Fixed issue where you could access the soldier customization page of Program Operatives through the bond process (by removing the ability to bond at all)
+
+2.0.10:
+- Updated Perk Icons with new art thanks to Steam user ne|V|esis.
+- Pour one out for UIPerk_swordSlash, ladies and gents.
+
+2.0.9:
+- Fix issue where removing One Small Favor wouldn't return it to the deck.
+- If this issue affects your campaign, execute the console command "RT_RecreateOneSmallFavor" to fix it.
+
+2.0.8:
+- Updated Program Resistance Order and Rectangular portrait image, courtesy of Steam user ne|V|esis
+
+2.0.7:
 - Fixed issues where clicking the Button did not actually activate One Small Favor.
 - New Campaigns are not affected by the bug.
 - Campaigns affected by the bug should try to run the console command 'RT_RegenerateProgramOperatives' and see if that fixes it
@@ -84,7 +107,6 @@
 - Moved Over The Shoulder visual effect to foot level
 
 1.1.2
-
 - enabled WOTC class features such as bonding
 - made nearly every psionic ability interruptible (if you notice one that isn't, post it in the bugs discussion)
 - Sovereign actually works now, because of this.
@@ -92,7 +114,6 @@
 - possibly some other random tweaks
 
 1.1.1
-
 - removed X2MeleePathingPawn override (should be fully compatible with Gotcha)
 - let Ghosts (Gatherer and Berserker) Headshot The Lost (Infiltrator already does this by default)
 - removed accidentally-included debugging loadouts (this is why they started with endgame armor/weapons)

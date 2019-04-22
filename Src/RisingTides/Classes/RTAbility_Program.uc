@@ -4,7 +4,9 @@ class RTAbility_Program extends X2Ability_HackRewards
 	var config float	PROFESSIONALS_HAVE_STANDARDS_DETECTION_MODIFIER_INCREASE;
 	var config int		PSIONIC_JAMMING_WILL_PENALTY;
 
-	var config int		PROGRAM_ARMOR_HEALTH_BONUS;
+	var config int		PROGRAM_ARMOR_HEALTH_BONUS_T1;
+	var config int		PROGRAM_ARMOR_HEALTH_BONUS_T2;
+	var config int		PROGRAM_ARMOR_HEALTH_BONUS_T3;
 	var config int		PROGRAM_ARMOR_MITIGATION_CHANCE;
 	var config int		PROGRAM_ARMOR_MITIGATION_AMOUNT;
 
@@ -58,11 +60,11 @@ static function X2AbilityTemplate RTProgramArmorStats()
 	Trigger = new class'X2AbilityTrigger_UnitPostBeginPlay';
 	Template.AbilityTriggers.AddItem(Trigger);
 
-	//
+	// the armor
 	PersistentStatChangeEffect = new class'X2Effect_PersistentStatChange';
 	PersistentStatChangeEffect.BuildPersistentEffect(1, true, false, false);
 	// PersistentStatChangeEffect.SetDisplayInfo(ePerkBuff_Passive, default.MediumPlatedHealthBonusName, default.MediumPlatedHealthBonusDesc, Template.IconImage);
-	PersistentStatChangeEffect.AddPersistentStatChange(eStat_HP, default.PROGRAM_ARMOR_HEALTH_BONUS);
+	PersistentStatChangeEffect.AddPersistentStatChange(eStat_HP, default.PROGRAM_ARMOR_HEALTH_BONUS_T3);
 	PersistentStatChangeEffect.AddPersistentStatChange(eStat_ArmorChance, default.PROGRAM_ARMOR_MITIGATION_CHANCE);
 	PersistentStatChangeEffect.AddPersistentStatChange(eStat_ArmorMitigation, default.PROGRAM_ARMOR_MITIGATION_AMOUNT);
 	Template.AddTargetEffect(PersistentStatChangeEffect);

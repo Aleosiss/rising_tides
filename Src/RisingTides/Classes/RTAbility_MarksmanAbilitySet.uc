@@ -23,6 +23,8 @@ class RTAbility_MarksmanAbilitySet extends RTAbility_GhostAbilitySet
 	var config float SIXOCLOCK_PSI_BONUS;
 	var config float SIXOCLOCK_DEFENSE_BONUS;
 	var config int TIMESTANDSSTILL_COOLDOWN;
+	var config int TIMESTANDSSTILL_NUMTURNS;
+	var config int TIMESTANDSSTILL_ACTIONPOINTSPERTURN;
 	var config int BARRIER_STRENGTH, BARRIER_COOLDOWN;
 	var config int VITAL_POINT_TARGETING_DAMAGE;
 	var config int SURGE_COOLDOWN;
@@ -58,6 +60,7 @@ class RTAbility_MarksmanAbilitySet extends RTAbility_GhostAbilitySet
 
 	var name KillZoneReserveType;
 	var name TimeStopEffectName;
+	var name TimeStopMasterEffectName;
 
 	var config array<name> AbilityPerksToLoad;
 
@@ -1399,13 +1402,14 @@ static function X2AbilityTemplate TimeStandsStill()
 
 	SetUnitValueEffect = new class'X2Effect_SetUnitValue';
 	SetUnitValueEffect.UnitName = 'TimeStopCounter';
-	SetUnitValueEffect.NewValueToSet = 3;
+	SetUnitValueEffect.NewValueToSet = default.TIMESTANDSSTILL_NUMTURNS;
 	SetUnitValueEffect.CleanupType = eCleanup_BeginTactical;
 	Template.AddShooterEffect(SetUnitValueEffect);
 
 	TimeMasterEffect = new class'RTEffect_TimeStopMaster';
 	TimeMasterEffect.BuildPersistentEffect(1, true, true, false, eGameRule_PlayerTurnEnd);
-	TimeMasterEffect.EffectName = 'TimeStopMasterEffect';
+	TimeMasterEffect.EffectName = default.TimeStopMasterEffectName;
+	TimeMasterEffect.bNumAdditionalActionPointsPerTurn = default.TIMESTANDSSTILL_ACTIONPOINTSPERTURN;
 	Template.AddShooterEffect(TimeMasterEffect);
 
 	TagEffect = new class'RTEffect_TimeStopTag';
@@ -1586,7 +1590,7 @@ static function X2AbilityTemplate TimeStandsStillEndListener()
 
 	RemoveSelfEffect = new class'X2Effect_RemoveEffects';
 	RemoveSelfEffect.EffectNamesToRemove.AddItem('TimeStandsStillCounterEffect');
-	RemoveSelfEffect.EffectNamesToRemove.AddItem('TimeStopMasterEffect');
+	RemoveSelfEffect.EffectNamesToRemove.AddItem(default.TimeStopMasterEffectName);
 	RemoveSelfEffect.EffectNamesToRemove.AddItem('TimeStopTagEffect');
 	RemoveSelfEffect.bCheckSource = false;
 
@@ -1609,6 +1613,37 @@ static function X2AbilityTemplate TimeStandsStillEndListener()
 
 	Template.bCrossClassEligible = false;
 	return Template;
+}
+
+static function MakeAbilitiesNotTurnEndingForTimeStandsStill() {
+	local array<name> AbilityTemplateNames;
+	local name AbilityTemplateName;
+	local X2AbilityTemplate AbilityTemplate;
+	local array<X2AbilityTemplate> AbilityTemplates;
+	local X2AbilityTemplateManager AbilityTemplateMgr;
+	local X2AbilityCost Cost;
+	local X2AbilityCost_ActionPoints ActionPointCost;
+
+	`RTLOG("Patching All Abilities for TimeStandsStill");
+	AbilityTemplateMgr = class'X2AbilityTemplateManager'.static.GetAbilityTemplateManager();
+	AbilityTemplateMgr.GetTemplateNames(AbilityTemplateNames);
+	foreach AbilityTemplateNames(AbilityTemplateName) {
+		AbilityTemplates.Length = 0;
+		AbilityTemplateMgr.FindAbilityTemplateAllDifficulties(AbilityTemplateName, AbilityTemplates);
+
+		foreach AbilityTemplates(AbilityTemplate) {
+
+			if(AbilityTemplate.DataName == 'PistolOverwatch')
+				continue;
+
+			foreach AbilityTemplate.AbilityCosts(Cost) {
+				ActionPointCost = X2AbilityCost_ActionPoints(Cost);
+				if (ActionPointCost != None) {
+					ActionPointCost.DoNotConsumeAllEffects.AddItem(default.TimeStopMasterEffectName);
+				}
+			}
+		}
+	}
 }
 
 //---------------------------------------------------------------------------------------
@@ -2744,6 +2779,7 @@ defaultproperties
 {
 	KillZoneReserveType = "KillZone"
 	TimeStopEffectName = "TimeStopEffect"
+	TimeStopMasterEffectName = "TimeStopMasterEffect"
 }
 
 static function bool AbilityTagExpandHandler(string InString, out string OutString)

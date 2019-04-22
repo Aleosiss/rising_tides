@@ -289,7 +289,7 @@ simulated function WeaponDamageValue SetTotalWeaponDamageValue(int CurrentDamage
 
 static function bool ShouldTimeStopAsLargeUnit(XComGameState_Unit TargetUnit)
 {
-	return (TargetUnit.GetMyTemplate().UnitSize > 1 || TargetUnit.GetMyTemplateName() == 'Avatar') && !class'RTHelpers'.static.IsUnitAlienRuler(TargetUnit);
+	return (TargetUnit.GetMyTemplate().UnitSize > 1 || TargetUnit.GetMyTemplateName() == 'Avatar') && !`RTS.IsUnitAlienRuler(TargetUnit);
 }
 
 simulated function AddX2ActionsForVisualization(XComGameState VisualizeGameState, out VisualizationActionMetadata ActionMetadata, name EffectApplyResult)
@@ -322,7 +322,7 @@ static protected function string GetFlyoverTickText(XComGameState_Unit UnitState
 	local X2AbilityTag AbilityTag;
 
 	EffectState = UnitState.GetUnitAffectedByEffectState(default.EffectName);
-	if(class'RTHelpers'.static.IsUnitAlienRuler(UnitState))
+	if(`RTS.IsUnitAlienRuler(UnitState))
 	{
 		EffectState = UnitState.GetUnitAffectedByEffectState(default.EffectName);
 		AbilityTag = X2AbilityTag(XComEngine(class'Engine'.static.GetEngine()).LocalizeContext.FindTag("Ability"));

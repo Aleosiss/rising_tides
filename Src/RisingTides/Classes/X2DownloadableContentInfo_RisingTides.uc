@@ -51,8 +51,14 @@ static event OnPostTemplatesCreated()
 	`RTLOG("Script package loaded.");
 
 	MakePsiAbilitiesInterruptable();
+	MakeAbilitiesNotTurnEndingForTimeStandsStill();
 	AddProgramFactionCovertActions();
 	AddProgramAttachmentTemplates();
+	
+}
+
+static function MakeAbilitiesNotTurnEndingForTimeStandsStill() {
+	class'RTAbility_MarksmanAbilitySet'.static.MakeAbilitiesNotTurnEndingForTimeStandsStill();
 }
 
 /// <summary>
@@ -62,7 +68,7 @@ static event OnPreMission(XComGameState NewGameState, XComGameState_MissionSite 
 {
 	local RTGameState_ProgramFaction ProgramState;
 	
-	ProgramState = class'RTHelpers'.static.GetNewProgramState(NewGameState);
+	ProgramState = `RTS.GetNewProgramState(NewGameState);
 	ProgramState.PreMissionUpdate(NewGameState, MissionState);
 }
 
@@ -83,19 +89,25 @@ static event OnExitPostMissionSequence()
 	local RTGameState_ProgramFaction ProgramState, Program;
 	local XComGameState_BattleData BattleData;
 
-	Program = class'RTHelpers'.static.GetProgramState();
+	Program = `RTS.GetProgramState();
 	if(Program.bShouldPerformPostMissionCleanup) {
 		NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("Cleanup Program Operatives from XCOMHQ!");
-		ProgramState = class'RTHelpers'.static.GetNewProgramState(NewGameState);
+		ProgramState = `RTS.GetNewProgramState(NewGameState);
 		ProgramState.PerformPostMissionCleanup(NewGameState);
 
 		`GAMERULES.SubmitGameState(NewGameState);
 
+		// Might be useful later, but for now disabled because losing one mission would make it impossible to gain more favors
+		/*
 		BattleData = XComGameState_BattleData(`XCOMHISTORY.GetSingleGameStateObjectForClass(class'XComGameState_BattleData'));
 		if(BattleData.bLocalPlayerWon) {
 			// This method creates and submits two new xcgs's
 			ProgramState.TryIncreaseInfluence();
 		}
+		*/
+
+		// Always try to increase influence
+		ProgramState.TryIncreaseInfluence();
 	}
 }
 
@@ -173,8 +185,8 @@ simulated static function MakePsiAbilitiesInterruptable() {
 	local int i;
 
 	`RTLOG("Patching Psionic Abilities...");
-	for(i = 0; i < class'RTHelpers'.default.PsionicAbilities.Length; ++i) {
-		PsionicTemplateNames.AddItem(class'RTHelpers'.default.PsionicAbilities[i]);
+	for(i = 0; i < `RTD.PsionicAbilities.Length; ++i) {
+		PsionicTemplateNames.AddItem(`RTD.PsionicAbilities[i]);
 	}
 
 	AbilityTemplateMgr = class'X2AbilityTemplateManager'.static.GetAbilityTemplateManager();

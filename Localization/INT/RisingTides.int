@@ -148,7 +148,7 @@ OSFFirstTime_Text = "The Program fields small squads of elite operatives. As a r
 PISFirstTime_Title = "Program Briefing Screen"
 PISFirstTime_Text = "The Program makes a special briefing available at their outpost.\n\n Here, you can view the number of favors available to call in, check the status of the Eliminate Templars questline, and view your earned rewards."
 ;# ...by sacrificing the rook, I can attack the king...
-WhisperWepName = Heartspan
+WhisperWepName = "'<font color='#a51515'><b>Heartspan</b></font>'"
 
 SquadTwoName="HIGHLANDER"
 SquadTwoBackground="HIGHLANDER works the people."

@@ -301,5 +301,19 @@ static function String AddFontColor(String inString, String HexColor) {
 		return inString;
 	}
 
-	return "<font color='#" $ HexColor $ "'>" $ inString $ "</font>";
+	RTLOG("AddFontColor succeeded, final string is: \n<font color='#" $ HexColor $ "'><b>" $ inString $ "<b/></font>");
+	return "<font color='#" $ HexColor $ "'><b>" $ inString $ "<b/></font>";
+}
+
+static function array<Name> GetCompletedXCOMTechNames() {
+	local array<Name> names;
+	local array<XComGameState_Tech> CompletedTechs;
+	local XComGameState_Tech CompletedTechState;
+
+	CompletedTechs = `XCOMHQ.GetAllCompletedTechStates();
+	foreach CompletedTechs(CompletedTechState) { // Check if a tech which upgrades the base has been researched
+		names.AddItem(CompletedTechState.GetMyTemplateName());
+	}
+
+	return names;
 }

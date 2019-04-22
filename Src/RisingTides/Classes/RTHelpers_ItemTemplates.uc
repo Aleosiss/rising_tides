@@ -5,7 +5,8 @@ class RTHelpers_ItemTemplates extends X2ItemTemplate;
 // Grimy code
 static function AddFontColor(X2ItemTemplate EditTemplate, string HexColor) {
 	if ( EditTemplate != none && InStr( EditTemplate.FriendlyName, "</font>" ) == -1 ) {
-		EditTemplate.FriendlyName = "<font color='#" $ HexColor $ "'>" $ EditTemplate.FriendlyName $ "</font>";
-		EditTemplate.FriendlyNamePlural = "<font color='#" $ HexColor $ "'>" $ EditTemplate.FriendlyNamePlural $ "</font>";
+		`RTLOG("AddFontColor succeeded, final string is: \n<font color='#" $ HexColor $ "'><b>" $ EditTemplate.FriendlyName $ "<b/></font>");
+		EditTemplate.FriendlyName = "<font color='#" $ HexColor $ "'><b>" $ EditTemplate.FriendlyName $ "<b/></font>";
+		EditTemplate.FriendlyNamePlural = "<font color='#" $ HexColor $ "'><b>" $ EditTemplate.FriendlyNamePlural $ "<b/></font>";
 	}
 }

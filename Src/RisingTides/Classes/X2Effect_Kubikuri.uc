@@ -11,8 +11,8 @@ var config float KUBIKURI_MAX_HP_PCT;
 
 function int GetAttackingDamageModifier(XComGameState_Effect EffectState, XComGameState_Unit Attacker, Damageable TargetDamageable, XComGameState_Ability AbilityState, const out EffectAppliedData AppliedData, const int CurrentDamage, optional XComGameState NewGameState)
 {
-    local XComGameState_Item SourceWeapon;
-    local XComGameState_Unit TargetUnit;
+	local XComGameState_Item SourceWeapon;
+	local XComGameState_Unit TargetUnit;
 	local StateObjectReference AbilityRef;
 
 	if (AppliedData.AbilityResultContext.CalculatedHitChance <= 0) {
@@ -34,10 +34,10 @@ function int GetAttackingDamageModifier(XComGameState_Effect EffectState, XComGa
 					{
 						return (CurrentDamage * 3);
 					}
-					`LOG ("Kubikiri Target" @ TargetUnit.GetMyTemplateName() @ "CurrentHP:" @ string(TargetUnit.GetCurrentStat(eStat_HP)) @ "MAXHP:" @ string (TargetUnit.GetMaxStat(eStat_HP)));
+					//`RTLOG ("Kubikiri Target" @ TargetUnit.GetMyTemplateName() @ "CurrentHP:" @ string(TargetUnit.GetCurrentStat(eStat_HP)) @ "MAXHP:" @ string (TargetUnit.GetMaxStat(eStat_HP)));
 					if (TargetUnit.GetCurrentStat(eStat_HP) / TargetUnit.GetMaxStat(eStat_HP) < 1)	
 					{			
-						`LOG ("Kubikiri dealing" @ int(2 * (TargetUnit.GetCurrentStat(eStat_HP)+TargetUnit.GetCurrentStat(eStat_ShieldHP)+TargetUnit.GetCurrentStat(eStat_ArmorMitigation)+CurrentDamage)) @ "damage.");
+						//`RTLOG ("Kubikiri dealing" @ int(2 * (TargetUnit.GetCurrentStat(eStat_HP)+TargetUnit.GetCurrentStat(eStat_ShieldHP)+TargetUnit.GetCurrentStat(eStat_ArmorMitigation)+CurrentDamage)) @ "damage.");
 						return int(2 * (TargetUnit.GetCurrentStat(eStat_HP)+TargetUnit.GetCurrentStat(eStat_ShieldHP)+TargetUnit.GetCurrentStat(eStat_ArmorMitigation)+CurrentDamage));
 					}
 				}

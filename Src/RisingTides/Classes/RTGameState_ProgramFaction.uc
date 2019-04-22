@@ -89,10 +89,11 @@ var private StateObjectReference										SelectedMissionRef;					// cache of th
 var bool																bShouldResetOSFMonthly;
 var private bool														bOneSmallFavorAvailable;			// can send squad on a mission, replacing XCOM
 var private bool														bOneSmallFavorActivated;			// actively sending a squad on the next mission
-var private int															iNumberOfFavorsAvailable;
-var int																	iNumberOfFavorsCalledIn;			
+var private int															iNumberOfFavorsAvailable;			// number of Favors banked
+var int																	iNumberOfFavorsCalledIn;			// number of Favors remaining towards next influence gain
 var bool																bOSF_FirstTimeDisplayed;
 var bool																bPIS_FirstTimeDisplayed;
+var protected int														iCurrentProgramGearTier;			// Current Tier of Program gear (used to match XCOM gear progression)
 
 // ONE SMALL FAVOR LOCALIZED STRINGS
 var localized string OSFCheckboxAvailable;
@@ -128,11 +129,6 @@ function SetUpProgramFaction(XComGameState StartState)
 	class'RTGameState_StrategyCard'.static.SetUpStrategyCards(StartState);
 	OperativeTemplates = class'RTCharacter_DefaultCharacters'.static.CreateTemplates();
 	iNumberOfFavorsCalledIn = 0;
-}
-
-function InitializeHQ(XComGameState NewGameState, int idx) {
-	super.InitializeHQ(NewGameState, idx);
-	SetUpProgramFaction(NewGameState);
 }
 
 // CreateRTOperatives(XComGameState NewGameState)
@@ -195,7 +191,7 @@ function ApplyWeaponUpgrades(name GhostTemplateName, XComGameState_Item NewWeapo
 	//local name DebugIteratorName;
 	//local array<name> DebuggingNames;
 
-	HexColor = class'RTHelpers'.static.GetProgramColor();
+	HexColor = `RTS.GetProgramColor();
 
 	ItemTemplateMgr = class'X2ItemTemplateManager'.static.GetItemTemplateManager();
 	NewWeaponState.WipeUpgradeTemplates();
@@ -209,14 +205,13 @@ function ApplyWeaponUpgrades(name GhostTemplateName, XComGameState_Item NewWeapo
 			}
 			break;
 		case 'RTGhostMarksman':
+			NewWeaponState.Nickname = default.WhisperWepName;
 			for(idx = 0; idx < default.MarksmanWeaponUpgrades.Length; idx++) {
 				UpgradeTemplate = X2WeaponUpgradeTemplate(ItemTemplateMgr.FindItemTemplate(default.MarksmanWeaponUpgrades[idx]));
 				if (UpgradeTemplate != none) {
 					NewWeaponState.ApplyWeaponUpgradeTemplate(UpgradeTemplate, idx);
 				}
 			}
-			//NewWeaponState.Nickname = "'<font color='#" $ HexColor $ "'>" $ default.WhisperWepName $ "</font>'";
-			NewWeaponState.Nickname = "'" $ default.WhisperWepName $ "'";
 			break;
 		case 'RTGhostGatherer':
 			for(idx = 0; idx < default.GathererWeaponUpgrades.Length; idx++) {
@@ -536,12 +531,12 @@ function MakeOneSmallFavorUnavailable() {
 	}
 }
 
-function HandleOSFTutorial() {
+function HandleOSFTutorial(optional bool bOverrideFirstTime = false) {
 	local DynamicPropertySet PropertySet;
 	local XComGameState NewGameState;
 	local RTGameState_ProgramFaction ProgramState;
 
-	if(!bOSF_FirstTimeDisplayed) {
+	if(!bOSF_FirstTimeDisplayed || bOverrideFirstTime) {
 		// Update the bool, this requires a newgamestate
 		NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("RisingTides: setting One Small Favor tutorial flag...");
 		ProgramState = RTGameState_ProgramFaction(NewGameState.ModifyStateObject(class'RTGameState_ProgramFaction', self.ObjectID));
@@ -554,12 +549,12 @@ function HandleOSFTutorial() {
 	}
 }
 
-function HandleProgramScreenTutorial() {
+function HandleProgramScreenTutorial(optional bool bOverrideFirstTime = false) {
 	local DynamicPropertySet PropertySet;
 	local XComGameState NewGameState;
 	local RTGameState_ProgramFaction ProgramState;
 
-	if(!bPIS_FirstTimeDisplayed) {
+	if(!bPIS_FirstTimeDisplayed || bOverrideFirstTime) {
 		// Update the bool, this requires a newgamestate
 		NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("RisingTides: setting One Small Favor tutorial flag...");
 		ProgramState = RTGameState_ProgramFaction(NewGameState.ModifyStateObject(class'RTGameState_ProgramFaction', self.ObjectID));
@@ -865,6 +860,7 @@ private function AddRisingTidesTacticalTags(XComGameState_HeadquartersXCom XComH
 simulated function bool CashOneSmallFavor(XComGameState NewGameState, XComGameState_MissionSite MissionSite) {
 	local StateObjectReference GhostRef;
 	local name GhostTemplateName;
+	local int iXComGearTier;
 
 	bOneSmallFavorActivated = true;
 	
@@ -884,6 +880,8 @@ simulated function bool CashOneSmallFavor(XComGameState NewGameState, XComGameSt
 		`RTLOG("Adding a " $ GhostTemplateName $ " to the SpecialSoldiers for Mission " $ MissionSite.GeneratedMission.Mission.MissionName);
 		MissionSite.GeneratedMission.Mission.SpecialSoldiers.AddItem(GhostTemplateName);
 	}
+
+	AdjustProgramGearLevel(NewGameState);
 	
 	iPreviousMaxSoldiersForMission = MissionSite.GeneratedMission.Mission.MaxSoldiers;
 	MissionSite.GeneratedMission.Mission.MaxSoldiers = Deployed.Operatives.Length;
@@ -977,7 +975,7 @@ function XComGameState_Unit GetOperative(string Nickname) {
 
 	foreach Active(IteratorRef) {
 		UnitState = XComGameState_Unit(History.GetGameStateForObjectID(IteratorRef.ObjectID));
-		if(UnitState.GetName(eNameType_FullNick) == Nickname) {
+		if(UnitState.GetNickName(true) == Nickname) {
 			return UnitState;
 		}
 	}
@@ -1293,8 +1291,184 @@ function PreMissionUpdate(XComGameState NewGameState, XComGameState_MissionSite 
 		bShouldPerformPostMissionCleanup = true;
 	}
 
-	if(MissionSiteState.Source == 'MissionSource_TemplarAmbush') {
+	if(MissionSiteState.Source == 'RTMissionSource_TemplarAmbush') {
 		bShouldPerformPostMissionCleanup = true;
+	}
+}
+
+protected function int GetXComGearTier() {
+	local array<Name> CompletedTechs;
+	return 1;
+	CompletedTechs = `RTS.GetCompletedXCOMTechNames();
+	if(CompletedTechs.Find('PlasmaRifle') != INDEX_NONE) {
+		return 3;
+	}
+	if(CompletedTechs.Find('MagnetizedWeapons') != INDEX_NONE) {
+		return 2;
+	}
+	
+	return 1;
+}
+
+protected function int GetAlienForceTier() {
+	local XComGameState_HeadquartersAlien AlienHQ;
+	local int iAlienForceLevel;
+
+	AlienHQ = XComGameState_HeadquartersAlien(`XCOMHISTORY.GetSingleGameStateObjectForClass(class'XComGameState_HeadquartersAlien'));
+	iAlienForceLevel = AlienHQ.GetForceLevel();
+
+	if(iAlienForceLevel > 13)
+		return 3;
+	if(iAlienForceLevel > 7)
+		return 2;
+
+	return 1;
+}
+
+protected function ModifyProgramGearTier(XComGameState NewGameState, int newGearTier) {
+	// method assumes that there needs to be a swap
+	`RTLOG("Modifying gear tier, old tier was " $ iCurrentProgramGearTier $ ", new tier is " $ newGearTier);
+	if(newGearTier < 1 || newGearTier > 3) {
+		`RTLOG("new gear tier is out of bounds. Reseting to T3.");
+		newGearTier = 3;
+	}
+	iCurrentProgramGearTier = newGearTier;
+	ModifyArmorStats(newGearTier);
+	ModifyWeaponStats(newGearTier);
+	ReloadOperativeArmaments(NewGameState);
+}
+
+protected function ModifyArmorStats(int newGearTier) {
+	local array<name> AbilityTemplateNames;
+	local name AbilityTemplateName;
+	local X2AbilityTemplate AbilityTemplate;
+	local array<X2AbilityTemplate> AbilityTemplates;
+	local X2AbilityTemplateManager AbilityTemplateMgr;
+	local X2AbilityCost Cost;
+	local X2AbilityCost_ActionPoints ActionPointCost;
+
+	local X2Effect IteratorEffect;
+	local X2Effect_PersistentStatChange ArmorEffect;
+	local StatChange IteratorStatChange;
+	local X2ItemTemplateManager ItemTemplateMgr;
+	local X2ArmorTemplate ArmorTemplate;
+
+	// BEGIN ABILITY TEMPLATE MODIFICATION ****************************************************************************************************
+	AbilityTemplateMgr = class'X2AbilityTemplateManager'.static.GetAbilityTemplateManager();
+	AbilityTemplateMgr.GetTemplateNames(AbilityTemplateNames);
+	foreach AbilityTemplateNames(AbilityTemplateName) {
+		AbilityTemplates.Length = 0;
+		AbilityTemplateMgr.FindAbilityTemplateAllDifficulties(AbilityTemplateName, AbilityTemplates);
+
+		foreach AbilityTemplates(AbilityTemplate) {
+
+			if(AbilityTemplate.DataName != 'RTProgramArmorStats')
+				continue;
+
+			foreach AbilityTemplate.AbilityTargetEffects(IteratorEffect) {
+				ArmorEffect = X2Effect_PersistentStatChange(IteratorEffect);
+				if (ArmorEffect == None) {
+					continue;
+				}
+				
+				foreach ArmorEffect.m_aStatChanges(IteratorStatChange) {
+					if(IteratorStatChange.StatType == eStat_HP) {
+						switch(newGearTier) {
+							case 1:
+								IteratorStatChange.StatAmount = class'RTAbility_Program'.default.PROGRAM_ARMOR_HEALTH_BONUS_T1;
+								break;
+							case 2:
+								IteratorStatChange.StatAmount = class'RTAbility_Program'.default.PROGRAM_ARMOR_HEALTH_BONUS_T2;
+								break;
+							case 3:
+								IteratorStatChange.StatAmount = class'RTAbility_Program'.default.PROGRAM_ARMOR_HEALTH_BONUS_T3;
+								break;
+							default:
+								`RTLOG("Invalid Gear Tier, defaulting to T3.");
+								IteratorStatChange.StatAmount = class'RTAbility_Program'.default.PROGRAM_ARMOR_HEALTH_BONUS_T3;
+						}
+					}
+				}
+			}
+		}
+	}
+	// END ABILITY TEMPLATE MODIFICATION ******************************************************************************************************
+
+	ItemTemplateMgr = class'X2ItemTemplateManager'.static.GetItemTemplateManager();
+	ArmorTemplate = X2ArmorTemplate(ItemTemplateMgr.FindItemTemplate('ProgramArmor'));
+	switch(newGearTier) {
+		case 1:
+			ArmorTemplate.SetUIStatMarkup(class'XLocalizedData'.default.HealthLabel, eStat_HP, class'RTAbility_Program'.default.PROGRAM_ARMOR_HEALTH_BONUS_T1, true);
+			break;
+		case 2:
+			ArmorTemplate.SetUIStatMarkup(class'XLocalizedData'.default.HealthLabel, eStat_HP, class'RTAbility_Program'.default.PROGRAM_ARMOR_HEALTH_BONUS_T2, true);
+			break;
+		case 3:
+			ArmorTemplate.SetUIStatMarkup(class'XLocalizedData'.default.HealthLabel, eStat_HP, class'RTAbility_Program'.default.PROGRAM_ARMOR_HEALTH_BONUS_T3, true);
+			break;
+		default:
+			ArmorTemplate.SetUIStatMarkup(class'XLocalizedData'.default.HealthLabel, eStat_HP, class'RTAbility_Program'.default.PROGRAM_ARMOR_HEALTH_BONUS_T3, true);
+	}
+}
+
+protected function ModifyWeaponStats(int newGearTier) {
+	local X2ItemTemplateManager ItemTemplateManager;
+	local array<Name> ProgramWeaponTemplateNames;
+	local name IteratorName;
+	local X2WeaponTemplate WeaponTemplate;
+	local WeaponDamageValue ModifiedDamageValue;
+	local int iDamageMalus;
+	
+	ItemTemplateManager = class'X2ItemTemplateManager'.static.GetItemTemplateManager();
+	ProgramWeaponTemplateNames = class'RTItem'.static.GetProgramWeaponTemplateNames();
+	foreach ProgramWeaponTemplateNames(IteratorName) {
+		WeaponTemplate = X2WeaponTemplate(ItemTemplateManager.FindItemTemplate(IteratorName));
+		iDamageMalus = (3 - newGearTier) * 2;	// -> tier 1 = 2 tiers of reduction, tier 2 = 1 tier of reduction, tier 3 = 0 tiers of reduction
+												// -> 2 damage per tier
+		switch(WeaponTemplate.WeaponCat) {
+			case 'pistol':
+				iDamageMalus = iDamageMalus / 2;
+				ModifiedDamageValue = class'RTItem'.default.PISTOL_PROGRAM_BASEDAMAGE;
+				ModifiedDamageValue.Damage -= iDamageMalus;
+				WeaponTemplate.BaseDamage = ModifiedDamageValue;
+				break;
+			case 'sniper_rifle':
+				ModifiedDamageValue = class'RTItem'.default.SNIPERRIFLE_PROGRAM_BASEDAMAGE;
+				ModifiedDamageValue.Damage -= iDamageMalus;
+				WeaponTemplate.BaseDamage = ModifiedDamageValue;
+				break;
+			case 'shotgun':
+				ModifiedDamageValue = class'RTItem'.default.SHOTGUN_PROGRAM_BASEDAMAGE;
+				ModifiedDamageValue.Damage -= iDamageMalus;
+				WeaponTemplate.BaseDamage = ModifiedDamageValue;
+				break;
+			case 'rifle':
+				ModifiedDamageValue = class'RTItem'.default.ASSAULTRIFLE_PROGRAM_BASEDAMAGE;
+				ModifiedDamageValue.Damage -= iDamageMalus;
+				WeaponTemplate.BaseDamage = ModifiedDamageValue;
+				break;
+			case 'sword':
+				ModifiedDamageValue = class'RTItem'.default.SWORD_PROGRAM_BASEDAMAGE;
+				ModifiedDamageValue.Damage -= iDamageMalus;
+				WeaponTemplate.BaseDamage = ModifiedDamageValue;
+				break;
+			default:
+				//continue;
+		}
+	}
+}
+
+public function AdjustProgramGearLevel(XComGameState NewGameState) {
+	local int iXComGearTier;
+	local int iAlienForceTier;
+
+	iXComGearTier = GetXComGearTier();
+	iAlienForceTier = GetAlienForceTier();
+	`RTLOG("XComGearTier = " $ iXComGearTier);
+	`RTLOG("AlienForceTier = " $ iAlienForceTier);
+	`RTLOG("CurrentProgramGearTier = " $ iCurrentProgramGearTier);
+	if(iCurrentProgramGearTier != iAlienForceTier) {
+		ModifyProgramGearTier(NewGameState, iAlienForceTier);
 	}
 }
 
@@ -1398,9 +1572,13 @@ static function InitFaction(optional XComGameState StartState) {
 	local X2StrategyElementTemplateManager StratMgr;
 	local X2StrategyElementTemplate DataTemplate;
 	local RTGameState_ProgramFaction FactionState;
+	local array<StateObjectReference> AllRegions;
 	local array<StateObjectReference> AllHavens;
-	local XComGameState_Haven HavenState;
+	local RTGameState_Haven HavenState;
+	local XComGameState_Haven IteratorHavenState;
 	local XComGameState_HeadquartersResistance ResHQ;
+	local XComGameState_WorldRegion RegionState;
+	local StateObjectReference RegionRef;
 
 	History = class'XComGameStateHistory'.static.GetGameStateHistory();
 	ResHQ = XComGameState_HeadquartersResistance(History.GetSingleGameStateObjectForClass(class'XComGameState_HeadquartersResistance'));
@@ -1424,24 +1602,33 @@ static function InitFaction(optional XComGameState StartState) {
 			FactionState.FactionIconData = FactionTemplate.GenerateFactionIcon();
 		}
 
-		foreach History.IterateByClassType(class'XComGameState_Haven', HavenState)
+		foreach History.IterateByClassType(class'XComGameState_Haven', IteratorHavenState)
 		{
-			if(!HavenState.IsFactionHQ())
-				AllHavens.AddItem(HavenState.GetReference());
+			if(!IteratorHavenState.IsFactionHQ())
+				AllHavens.AddItem(IteratorHavenState.GetReference());
 		}
+		IteratorHavenState = XComGameState_Haven(History.GetGameStateForObjectID(AllHavens[`SYNC_RAND_STATIC(AllHavens.Length)].ObjectID));
+		RegionRef = IteratorHavenState.Region;
 
-		if(AllHavens.Length == 0) {
-			`RTLOG("Couldn't find a Haven to attach the Faction to!");
-		}
+		RegionState = XComGameState_WorldRegion(History.GetGameStateForObjectID(RegionRef.ObjectID));
+		RegionState = XComGameState_WorldRegion(NewGameState.ModifyStateObject(class'XComGameState_WorldRegion', RegionRef.ObjectID));
 
-		HavenState = XComGameState_Haven(NewGameState.ModifyStateObject(class'XComGameState_Haven', AllHavens[`SYNC_RAND_STATIC(AllHavens.Length)].ObjectID));
+		FactionState.HomeRegion = RegionRef;
+		FactionState.Region = RegionRef;
+		FactionState.Continent = RegionState.Continent;
 
-		FactionState.HomeRegion = HavenState.Region;
-		FactionState.Region = FactionState.HomeRegion;
-		FactionState.Continent = FactionState.GetWorldRegion().Continent;
+		HavenState = RTGameState_Haven(NewGameState.CreateNewStateObject(class'RTGameState_Haven'));
+		HavenState.Region = RegionRef;
+		HavenState.Continent = IteratorHavenState.Continent;
 		HavenState.FactionRef = FactionState.GetReference();
 		HavenState.SetScanHoursRemaining(`ScaleStrategyArrayInt(HavenState.MinScanDays), `ScaleStrategyArrayInt(HavenState.MaxScanDays));
 		HavenState.MakeScanRepeatable();
+		HavenState.Location = IteratorHavenState.Location;
+		HavenState.Rotation = IteratorHavenState.Rotation;
+		HavenState.bNeedsLocationUpdate = true;
+
+		RegionState.RemoveHaven(NewGameState);
+		RegionState.Haven = HavenState.GetReference();
 	
 		FactionState.FactionHQ = HavenState.GetReference();
 		FactionState.SetUpProgramFaction(NewGameState);

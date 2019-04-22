@@ -159,7 +159,7 @@ simulated function RTUIInfoBox SetCompleted() {
 	SetPanelColors(2);
 
 	Button.EnableButton();
-	Button.SetText(class'RTHelpers'.static.AddFontColor(m_strSwapToRewards, "0x" $ PrimaryColor));
+	Button.SetText(`RTS.AddFontColor(m_strSwapToRewards, "0x" $ PrimaryColor));
 	return self;
 }
 
@@ -170,7 +170,7 @@ simulated function RTUIInfoBox ShowRewards() {
 	InfoBoxImage.LoadImage(RewardImagePath);
 	SetTextColors(2);
 
-	Button.SetText(class'RTHelpers'.static.AddFontColor(m_strSwapFromRewards, CompletedColor));
+	Button.SetText(`RTS.AddFontColor(m_strSwapFromRewards, CompletedColor));
 	return self;
 }
 
@@ -181,7 +181,7 @@ simulated function RTUIInfoBox HideRewards() {
 	InfoBoxImage.LoadImage(DefaultImagePath);
 	SetTextColors(1);
 
-	Button.SetText(class'RTHelpers'.static.AddFontColor(m_strSwapToRewards, PrimaryColor));
+	Button.SetText(`RTS.AddFontColor(m_strSwapToRewards, PrimaryColor));
 
 	return self;
 }

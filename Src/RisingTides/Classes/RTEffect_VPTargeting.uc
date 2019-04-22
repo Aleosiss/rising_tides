@@ -46,7 +46,7 @@ var int BonusDamage;
       //local int ReturnValue;
   //
 //
-      //TargetingDataState = class'RTHelpers'.static.GetVPTargetingData();
+      //TargetingDataState = `RTS.GetVPTargetingData();
       //TargetUnitState = XComGameState_Unit(TargetDamageable);
 //
       //TemplateManager = class'X2CharacterTemplateManager'.static.GetCharacterTemplateManager();

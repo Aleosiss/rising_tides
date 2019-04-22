@@ -1,5 +1,5 @@
 
-Todo:
+2.0.0 TODOS:
   ✔ Add RTCharacterTemplate
     ✔ Add to x2proj
     ✔ Create
@@ -25,10 +25,11 @@ Todo:
   ✔ Rework RTEffect_Stealth @done(18-04-30 18:32)
     ✔ Add RTGameState_Effect handling for it @done(18-04-30 18:32)
     ✔ Tracks Concealment / Superconcealment gained before Stealth was applied @done(18-04-30 18:32)
+2.1.0 TODOS: 
   ☐ Add Hunt_Templar Risks
     ☐ Add Templar Ambush
       ✔ Add RTGameState_MissionStateTemplarAmbush @done(18-12-16 02:10)
-      ☐ Add Templar Ambush Mission *.inis (Schedules, Mission, Encounters)
+      ✔ Add Templar Ambush Mission *.inis (Schedules, Mission, Encounters) @done(19-03-23 10:02)
       ☐ Add Templar Ambush Obj.umap
       ✔ Add Templar Ambush UIAlert @done(18-12-16 02:10)
       ✔ Add Templar Ambush UIMission @done(18-12-16 02:10)
@@ -40,12 +41,14 @@ Todo:
     ✔ Templar Abiity Set @done(19-03-10 17:32)
     ✔ Templar Character Generator @done(19-03-10 17:32)
     ✔ Templar AI.ini @done(19-03-10 17:32)
-    ☐ Templar Encounter configuration
+    ✔ Templar Encounter configuration @done(19-03-23 09:58)
   ☐ Add Program Favors System
     ✔ Implement @done(19-03-10 17:33)
     ✔ Fixes to current systems @done(19-03-10 17:33)
-    ☐ Add Program Info Screen
+    ✔ Influence Change: Should always try to increase influence even if Player did not win @done(19-03-23 10:01)
+    ✔ Add Program Info Screen @done(19-04-09 23:28)
       ✔ Create Screen @done(19-03-10 17:33)
-      ☐ Create Localization
-      ☐ Create Tutorial
+      ✔ Create Localization @done(19-04-09 23:28)
+      ✔ Create Tutorial @done(19-04-09 23:28)
       ✔ Create UIScreenListener @done(19-03-10 17:33)
+  ☐ Remove -debug flag from build script before releasing

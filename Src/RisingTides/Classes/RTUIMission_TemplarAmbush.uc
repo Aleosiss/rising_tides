@@ -135,7 +135,7 @@ simulated function BuildMissionPanel()
 {
 	local XComGameState_ResistanceFaction TemplarFaction;
 
-	TemplarFaction = class'RTHelpers'.static.GetTemplarFactionState();
+	TemplarFaction = `RTS.GetTemplarFactionState();
 
 	BuildChosenIcon(TemplarFaction.GetFactionIcon());
 
@@ -208,11 +208,21 @@ function BuildChosenIcon(StackedUIIconData IconInfo)
 simulated function OnLaunchClicked(UIButton button)
 {
 	local RTGameState_MissionSiteTemplarAmbush AmbushSite;
+	local GeneratedMissionData EmptyMissionData;
 	
 	CloseScreen();
 
 	AmbushSite = RTGameState_MissionSiteTemplarAmbush(GetMission());
 	AmbushSite.SelectSquad();
+
+	`RTLOG("Logging the mission we're about to embark on!");
+	`RTLOG(AmbushSite.ToString(true));
+	`RTLOG(AmbushSite.ToString(false));
+	`RTLOG("Mission Name: " $ AmbushSite.GeneratedMission.Mission.MissionName);
+	if(AmbushSite.GeneratedMission == EmptyMissionData) {
+		`RTLOG("No mission data available!");
+	}
+
 	AmbushSite.StartMission();
 }
 

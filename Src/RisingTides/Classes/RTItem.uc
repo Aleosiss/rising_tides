@@ -7,6 +7,7 @@ var config int PISTOL_PROGRAM_ICLIPSIZE;
 var config int PISTOL_PROGRAM_ISOUNDRANGE;
 var config int PISTOL_PROGRAM_IENVIRONMENTDAMAGE;
 var config int PISTOL_PROGRAM_IPOINTS;
+var config name PISTOL_PROGRAM_TEMPLATENAME;
 
 var config WeaponDamageValue SNIPERRIFLE_PROGRAM_BASEDAMAGE;
 var config int SNIPERRIFLE_PROGRAM_AIM;
@@ -14,6 +15,7 @@ var config int SNIPERRIFLE_PROGRAM_CRITCHANCE;
 var config int SNIPERRIFLE_PROGRAM_ICLIPSIZE;
 var config int SNIPERRIFLE_PROGRAM_ISOUNDRANGE;
 var config int SNIPERRIFLE_PROGRAM_IENVIRONMENTDAMAGE;
+var config name SNIPERRIFLE_PROGRAM_TEMPLATENAME;
 
 var config WeaponDamageValue SHOTGUN_PROGRAM_BASEDAMAGE;
 var config int SHOTGUN_PROGRAM_AIM;
@@ -21,6 +23,7 @@ var config int SHOTGUN_PROGRAM_CRITCHANCE;
 var config int SHOTGUN_PROGRAM_ICLIPSIZE;
 var config int SHOTGUN_PROGRAM_ISOUNDRANGE;
 var config int SHOTGUN_PROGRAM_IENVIRONMENTDAMAGE;
+var config name SHOTGUN_PROGRAM_TEMPLATENAME;
 
 var config WeaponDamageValue ASSAULTRIFLE_PROGRAM_BASEDAMAGE;
 var config int ASSAULTRIFLE_PROGRAM_AIM;
@@ -28,12 +31,14 @@ var config int ASSAULTRIFLE_PROGRAM_CRITCHANCE;
 var config int ASSAULTRIFLE_PROGRAM_ICLIPSIZE;
 var config int ASSAULTRIFLE_PROGRAM_ISOUNDRANGE;
 var config int ASSAULTRIFLE_PROGRAM_IENVIRONMENTDAMAGE;
+var config name ASSAULTRIFLE_PROGRAM_TEMPLATENAME;
 
 var config WeaponDamageValue SWORD_PROGRAM_BASEDAMAGE;
 var config int SWORD_PROGRAM_AIM;
 var config int SWORD_PROGRAM_CRITCHANCE;
 var config int SWORD_PROGRAM_ISOUNDRANGE;
 var config int SWORD_PROGRAM_IENVIRONMENTDAMAGE;
+var config name SWORD_PROGRAM_TEMPLATENAME;
 
 var config WeaponDamageValue WARPGRENADE_BASEDAMAGE;
 var config int WARPGRENADE_ISOUNDRANGE;
@@ -45,7 +50,17 @@ var config int WARPGRENADE_ICLIPSIZE;
 var config int WARPGRENADE_RANGE;
 var config int WARPGRENADE_RADIUS;
 
+static function array<name> GetProgramWeaponTemplateNames() {
+	local array<name> names;
 
+	names.AddItem(default.PISTOL_PROGRAM_TEMPLATENAME);
+	names.AddItem(default.SNIPERRIFLE_PROGRAM_TEMPLATENAME);
+	names.AddItem(default.SHOTGUN_PROGRAM_TEMPLATENAME);
+	names.AddItem(default.ASSAULTRIFLE_PROGRAM_TEMPLATENAME);
+	names.AddItem(default.SWORD_PROGRAM_TEMPLATENAME);
+
+	return names;
+};
 
 static function array<X2DataTemplate> CreateTemplates()
 {
@@ -98,7 +113,7 @@ static function X2DataTemplate CreateTemplate_ProgramPistol()
 {
 	local X2WeaponTemplate Template;
 
-	`CREATE_X2TEMPLATE(class'X2WeaponTemplate', Template, 'ProgramPistol');
+	`CREATE_X2TEMPLATE(class'X2WeaponTemplate', Template, default.PISTOL_PROGRAM_TEMPLATENAME);
 	Template.WeaponPanelImage = "_Pistol";                       // used by the UI. Probably determines iconview of the weapon.
 
 	Template.ItemCat = 'weapon';
@@ -142,7 +157,7 @@ static function X2DataTemplate CreateTemplate_ProgramPistol()
 
 	Template.bHideClipSizeStat = true;
 
-	//class'RTHelpers_ItemTemplates'.static.AddFontColor(Template, class'RTHelpers'.static.GetProgramColor());
+	//class'RTHelpers_ItemTemplates'.static.AddFontColor(Template, `RTS.GetProgramColor());
 
 	return Template;
 }
@@ -151,7 +166,7 @@ static function X2DataTemplate CreateTemplate_ProgramSniperRifle()
 {
 	local X2WeaponTemplate Template;
 
-	`CREATE_X2TEMPLATE(class'X2WeaponTemplate', Template, 'ProgramSniperRifle');
+	`CREATE_X2TEMPLATE(class'X2WeaponTemplate', Template, default.SNIPERRIFLE_PROGRAM_TEMPLATENAME);
 	Template.WeaponPanelImage = "_BeamSniperRifle";
 
 	Template.ItemCat = 'weapon';
@@ -195,7 +210,7 @@ static function X2DataTemplate CreateTemplate_ProgramSniperRifle()
 
 	Template.DamageTypeTemplateName = 'Projectile_BeamXCom';
 
-	//class'RTHelpers_ItemTemplates'.static.AddFontColor(Template, class'RTHelpers'.static.GetProgramColor());
+	//class'RTHelpers_ItemTemplates'.static.AddFontColor(Template, `RTS.GetProgramColor());
 
 	return Template;
 }
@@ -204,7 +219,7 @@ static function X2DataTemplate CreateTemplate_ProgramShotgun()
 {
 	local X2WeaponTemplate Template;
 
-	`CREATE_X2TEMPLATE(class'X2WeaponTemplate', Template, 'ProgramShotgun');
+	`CREATE_X2TEMPLATE(class'X2WeaponTemplate', Template, default.SHOTGUN_PROGRAM_TEMPLATENAME);
 	Template.WeaponPanelImage = "_BeamShotgun";
 
 	Template.ItemCat = 'weapon';
@@ -251,7 +266,7 @@ static function X2DataTemplate CreateTemplate_ProgramShotgun()
 
 	Template.DamageTypeTemplateName = 'Projectile_BeamXCom';
 
-	//class'RTHelpers_ItemTemplates'.static.AddFontColor(Template, class'RTHelpers'.static.GetProgramColor());
+	//class'RTHelpers_ItemTemplates'.static.AddFontColor(Template, `RTS.GetProgramColor());
 
 	return Template;
 }
@@ -260,7 +275,7 @@ static function X2DataTemplate CreateTemplate_ProgramAssaultRifle()
 {
 	local X2WeaponTemplate Template;
 
-	`CREATE_X2TEMPLATE(class'X2WeaponTemplate', Template, 'ProgramAssaultRifle');
+	`CREATE_X2TEMPLATE(class'X2WeaponTemplate', Template, default.ASSAULTRIFLE_PROGRAM_TEMPLATENAME);
 	Template.WeaponPanelImage = "_BeamRifle";                       // used by the UI. Probably determines iconview of the weapon.
 
 	Template.WeaponCat = 'rifle';
@@ -302,7 +317,7 @@ static function X2DataTemplate CreateTemplate_ProgramAssaultRifle()
 
 	Template.DamageTypeTemplateName = 'Projectile_BeamXCom';
 
-	//class'RTHelpers_ItemTemplates'.static.AddFontColor(Template, class'RTHelpers'.static.GetProgramColor());
+	//class'RTHelpers_ItemTemplates'.static.AddFontColor(Template, `RTS.GetProgramColor());
 
 	return Template;
 }
@@ -311,7 +326,7 @@ static function X2DataTemplate CreateTemplate_ProgramBlade()
 {
 	local X2WeaponTemplate Template;
 
-	`CREATE_X2TEMPLATE(class'X2WeaponTemplate', Template, 'ProgramBlade');
+	`CREATE_X2TEMPLATE(class'X2WeaponTemplate', Template, default.SWORD_PROGRAM_TEMPLATENAME);
 	Template.WeaponPanelImage = "_Sword";                       // used by the UI. Probably determines iconview of the weapon.
 
 	Template.ItemCat = 'weapon';
@@ -344,7 +359,7 @@ static function X2DataTemplate CreateTemplate_ProgramBlade()
 
 	Template.DamageTypeTemplateName = 'Melee';
 
-	//class'RTHelpers_ItemTemplates'.static.AddFontColor(Template, class'RTHelpers'.static.GetProgramColor());
+	//class'RTHelpers_ItemTemplates'.static.AddFontColor(Template, `RTS.GetProgramColor());
 	
 	return Template;
 }
@@ -365,10 +380,10 @@ static function X2DataTemplate CreateTemplate_ProgramArmor()
 	Template.ArmorClass = 'medium';
 	Template.Tier = 3;
 	
-	Template.SetUIStatMarkup(class'XLocalizedData'.default.HealthLabel, eStat_HP, class'RTAbility_Program'.default.PROGRAM_ARMOR_HEALTH_BONUS, true);
+	Template.SetUIStatMarkup(class'XLocalizedData'.default.HealthLabel, eStat_HP, class'RTAbility_Program'.default.PROGRAM_ARMOR_HEALTH_BONUS_T3, true);
 	Template.SetUIStatMarkup(class'XLocalizedData'.default.ArmorLabel, eStat_ArmorMitigation, class'RTAbility_Program'.default.PROGRAM_ARMOR_MITIGATION_AMOUNT);
 
-	//class'RTHelpers_ItemTemplates'.static.AddFontColor(Template, class'RTHelpers'.static.GetProgramColor());
+	//class'RTHelpers_ItemTemplates'.static.AddFontColor(Template, `RTS.GetProgramColor());
 	
 	return Template;
 }
@@ -766,3 +781,4 @@ static function X2DataTemplate CreateRTTemplarWarpGrenades()
 
 	return Template;
 }
+

@@ -298,12 +298,12 @@ static function X2AbilityTemplate RTBerserkerKnifeAttack()
 	// Damage Effect
 	//		var int iBaseBladeDamage, iBaseBladeCritDamage, iBaseBladeDamageSpread, iAcidicBladeShred;var float fHiddenBladeCritModifier;
 	WeaponDamageEffect = new class'RTEffect_BerserkerMeleeDamage';
-	WeaponDamageEffect.iBaseBladeDamage = default.BLADE_DAMAGE;
-	WeaponDamageEffect.iBaseBladeCritDamage = default.BLADE_CRIT_DAMAGE;
-	WeaponDamageEffect.iBaseBladeDamageSpread = default.BLADE_DAMAGE_SPREAD;
+	//WeaponDamageEffect.iBaseBladeDamage = default.BLADE_DAMAGE;
+	//WeaponDamageEffect.iBaseBladeCritDamage = default.BLADE_CRIT_DAMAGE;
+	//WeaponDamageEffect.iBaseBladeDamageSpread = default.BLADE_DAMAGE_SPREAD;
 	WeaponDamageEffect.iAcidicBladeShred = default.ACID_BLADE_SHRED;
 	WeaponDamageEffect.fHiddenBladeCritModifier = default.HIDDEN_BLADE_CRIT_MODIFIER;
-	WeaponDamageEffect.bIgnoreBaseDamage = true;
+	//WeaponDamageEffect.bIgnoreBaseDamage = true;
 	Template.AddTargetEffect(WeaponDamageEffect);
 
 	// Acid Effect
@@ -814,12 +814,12 @@ static function X2AbilityTemplate RTReprobateWaltz()
 	// Damage Effect
 	//		var int iBaseBladeDamage, iBaseBladeCritDamage, iBaseBladeDamageSpread, iAcidicBladeShred;var float fHiddenBladeCritModifier;
 	WeaponDamageEffect = new class'RTEffect_BerserkerMeleeDamage';
-	WeaponDamageEffect.iBaseBladeDamage = default.BLADE_DAMAGE;
-	WeaponDamageEffect.iBaseBladeCritDamage = default.BLADE_CRIT_DAMAGE;
-	WeaponDamageEffect.iBaseBladeDamageSpread = default.BLADE_DAMAGE_SPREAD;
+	//WeaponDamageEffect.iBaseBladeDamage = default.BLADE_DAMAGE;
+	//WeaponDamageEffect.iBaseBladeCritDamage = default.BLADE_CRIT_DAMAGE;
+	//WeaponDamageEffect.iBaseBladeDamageSpread = default.BLADE_DAMAGE_SPREAD;
 	WeaponDamageEffect.iAcidicBladeShred = default.ACID_BLADE_SHRED;
 	WeaponDamageEffect.fHiddenBladeCritModifier = default.HIDDEN_BLADE_CRIT_MODIFIER;
-	WeaponDamageEffect.bIgnoreBaseDamage = true;
+	//WeaponDamageEffect.bIgnoreBaseDamage = true;
 	Template.AddTargetEffect(WeaponDamageEffect);
 
 	// Acid Effect
@@ -1105,12 +1105,12 @@ static function X2AbilityTemplate RTPyroclasticSlash()
 	// Damage Effect
 	//		var int iBaseBladeDamage, iBaseBladeCritDamage, iBaseBladeDamageSpread, iAcidicBladeShred;var float fHiddenBladeCritModifier;
 	WeaponDamageEffect = new class'RTEffect_BerserkerMeleeDamage';
-	WeaponDamageEffect.iBaseBladeDamage = default.BLADE_DAMAGE;
-	WeaponDamageEffect.iBaseBladeCritDamage = default.BLADE_CRIT_DAMAGE;
-	WeaponDamageEffect.iBaseBladeDamageSpread = default.BLADE_DAMAGE_SPREAD;
+	//WeaponDamageEffect.iBaseBladeDamage = default.BLADE_DAMAGE;
+	//WeaponDamageEffect.iBaseBladeCritDamage = default.BLADE_CRIT_DAMAGE;
+	//WeaponDamageEffect.iBaseBladeDamageSpread = default.BLADE_DAMAGE_SPREAD;
 	WeaponDamageEffect.iAcidicBladeShred = default.ACID_BLADE_SHRED;
 	WeaponDamageEffect.fHiddenBladeCritModifier = default.HIDDEN_BLADE_CRIT_MODIFIER;
-	WeaponDamageEffect.bIgnoreBaseDamage = true;
+	//WeaponDamageEffect.bIgnoreBaseDamage = true;
 	Template.AddTargetEffect(WeaponDamageEffect);
 
 	// Acid Effect
@@ -1689,12 +1689,12 @@ static function X2DataTemplate RTShadowStrike()
 	// Damage Effect
 	//		var int iBaseBladeDamage, iBaseBladeCritDamage, iBaseBladeDamageSpread, iAcidicBladeShred;var float fHiddenBladeCritModifier;
 	WeaponDamageEffect = new class'RTEffect_BerserkerMeleeDamage';
-	WeaponDamageEffect.iBaseBladeDamage = default.BLADE_DAMAGE;
-	WeaponDamageEffect.iBaseBladeCritDamage = default.BLADE_CRIT_DAMAGE;
-	WeaponDamageEffect.iBaseBladeDamageSpread = default.BLADE_DAMAGE_SPREAD;
+	//WeaponDamageEffect.iBaseBladeDamage = default.BLADE_DAMAGE;
+	//WeaponDamageEffect.iBaseBladeCritDamage = default.BLADE_CRIT_DAMAGE;
+	//WeaponDamageEffect.iBaseBladeDamageSpread = default.BLADE_DAMAGE_SPREAD;
 	WeaponDamageEffect.iAcidicBladeShred = default.ACID_BLADE_SHRED;
 	WeaponDamageEffect.fHiddenBladeCritModifier = default.HIDDEN_BLADE_CRIT_MODIFIER;
-	WeaponDamageEffect.bIgnoreBaseDamage = true;
+	//WeaponDamageEffect.bIgnoreBaseDamage = true;
 	Template.AddTargetEffect(WeaponDamageEffect);
 
 	// Acid Effect
@@ -2440,12 +2440,12 @@ static function X2DataTemplate RTDashingStrike()
 	// Damage Effect
 	//		var int iBaseBladeDamage, iBaseBladeCritDamage, iBaseBladeDamageSpread, iAcidicBladeShred;var float fHiddenBladeCritModifier;
 	WeaponDamageEffect = new class'RTEffect_BerserkerMeleeDamage';
-	WeaponDamageEffect.iBaseBladeDamage = default.BLADE_DAMAGE;
-	WeaponDamageEffect.iBaseBladeCritDamage = default.BLADE_CRIT_DAMAGE;
-	WeaponDamageEffect.iBaseBladeDamageSpread = default.BLADE_DAMAGE_SPREAD;
+	//WeaponDamageEffect.iBaseBladeDamage = default.BLADE_DAMAGE;
+	//WeaponDamageEffect.iBaseBladeCritDamage = default.BLADE_CRIT_DAMAGE;
+	//WeaponDamageEffect.iBaseBladeDamageSpread = default.BLADE_DAMAGE_SPREAD;
 	WeaponDamageEffect.iAcidicBladeShred = default.ACID_BLADE_SHRED;
 	WeaponDamageEffect.fHiddenBladeCritModifier = default.HIDDEN_BLADE_CRIT_MODIFIER;
-	WeaponDamageEffect.bIgnoreBaseDamage = true;
+	//WeaponDamageEffect.bIgnoreBaseDamage = true;
 	Template.AddMultiTargetEffect(WeaponDamageEffect);
 
 	// Acid Effect

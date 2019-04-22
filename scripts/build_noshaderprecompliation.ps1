@@ -416,13 +416,13 @@ else {
 # build the base game scripts
 Write-Host "Compiling base game scripts..."
 # This could be replaced with a Launch-Make call as well for highlanders.
-& "$sdkPath/binaries/Win64/XComGame.com" make -nopause -unattended
+& "$sdkPath/binaries/Win64/XComGame.com" make -nopause -unattended -debug
 Write-Host "Compiled."
 CheckErrorCode "Failed to compile the base game scripts. This probably isn't a problem with your mod. Have you been monkeying around with SrcOrig, perchance?"
 
 # build the mod's scripts
 Write-Host "Compiling mod scripts..."
-Launch-Make "$sdkPath/binaries/Win64/XComGame.com" "make -nopause -mods $modNameCanonical $stagingPath" $sdkPath $modSrcRoot
+Launch-Make "$sdkPath/binaries/Win64/XComGame.com" "make -nopause -debug -mods $modNameCanonical $stagingPath" $sdkPath $modSrcRoot
 CheckErrorCode "Failed to compile mod scripts."
 Write-Host "Compiled."
 

@@ -1,1 +1,4 @@
-`define RTLOG(msg, showredscreen, showconsole) class'RTHelpers'.static.RTLog(`msg, `showredscreen, `showconsole)
+`define RT class'RTHelpers'
+`define RTS `RT.static
+`define RTD `RT.default
+`define RTLOG(msg, showredscreen, showconsole) `RTS.RTLog(`msg, `showredscreen, `showconsole)

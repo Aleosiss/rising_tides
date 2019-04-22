@@ -1,31 +1,52 @@
 class RTUIScreenListener_ProgramFactionScreen extends UIScreenListener;
 
-var UIButton b;
+var bool bExists;
 var localized String m_strProgramFactionButton;
+var name buttonName;
 
 event OnInit(UIScreen Screen)
 {
-	
 	if(UIStrategyMap(Screen) != none) {
-		`RTLOG("Loading Program Info Screen button...");
+		if(bExists) {
+			`RTLOG("Program Info Screen button already present, returning...");
+			return;
+		}
+		`RTLOG("Loading Program Info Screen button in OnInit...");
+		ShowProgramFactionScreenButton(UIStrategyMap(Screen));
+	}
+}
+
+event OnReceiveFocus(UIScreen Screen) {
+	if(UIStrategyMap(Screen) != none) {
+		if(bExists) {
+			`RTLOG("Program Info Screen button already present, returning...");
+			return;
+		}
+		`RTLOG("Loading Program Info Screen button in OnRecieveFocus...");
 		ShowProgramFactionScreenButton(UIStrategyMap(Screen));
 	}
 }
 
 event OnRemoved(UIScreen Screen) {
-	if(UIStrategyMap(Screen) != none) {
-		`RTLOG("Cleaning up Program Info Screen button...");
-		ManualGC();
+	if(UIStrategyMap(Screen) != none && bExists) {
+		`RTLOG("Cleaning up Program Info Screen button in OnRemoved...");
+		ManualGC(UIStrategyMap(Screen));
+	}
+}
+
+event OnLoseFocus(UIScreen Screen) {
+	if(UIStrategyMap(Screen) != none && bExists) {
+		`RTLOG("Cleaning up Program Info Screen button in OnLoseFocus...");
+		ManualGC(UIStrategyMap(Screen));
 	}
 }
 
 simulated function ShowProgramFactionScreenButton(UIStrategyMap Screen) {
 	local RTGameState_ProgramFaction ProgramState;
 	local XComGameState_Haven HavenState;
+	local UIStrategyMapItem_ResistanceHQ MapItem;
 
-	local UIStrategyMapItem MapItem;
-
-	ProgramState = class'RTHelpers'.static.GetProgramState();
+	ProgramState = `RTS.GetProgramState();
 	if(!ProgramState.bMetXCom) {
 		`RTLOG("Program hasn't met XCom, returning...");
 		return;
@@ -36,15 +57,20 @@ simulated function ShowProgramFactionScreenButton(UIStrategyMap Screen) {
 		return;
 	}
 
-	MapItem = `HQPRES.StrategyMap2D.GetMapItem(HavenState);
+	MapItem = UIStrategyMapItem_ResistanceHQ(`HQPRES.StrategyMap2D.GetMapItem(HavenState));
+	if(MapItem == none) {
+		`RTLOG("Couldn't find a MapItem for the Program!");
+	}
 
-	b = Screen.Spawn(class'UIButton', MapItem);
-	b.InitButton('RT_ProgramScreenButton', m_strProgramFactionButton, OnButtonClicked);
-	b.SetSize(MapItem.Width, MapItem.Height);
-	b.SetPosition(-90, 80);
+	MapItem.ScanButton.SetButtonIcon(class'UIUtilities_Image'.const.MissionIcon_Resistance);
+	MapItem.ScanButton.SetFactionDelegate(OnButtonClicked);
+	MapItem.ScanButton.SetFactionTooltip(m_strProgramFactionButton);
+	MapItem.ScanButton.bDirty = true;
+	MapItem.ScanButton.Realize();
+	//bExists = true;
 }
 
-simulated function OnButtonClicked(UIButton _button)
+simulated function OnButtonClicked()
 {
 	local UIScreen TempScreen;
 	local XComHQPresentationLayer Pres;
@@ -95,7 +121,6 @@ simulated function XComGameState_ScanningSite GetProgramScanningSite(UIStrategyM
 
 	foreach Screen.MissionItemUI.ScanSites(IteratorState) {
 		if(ProgramState.FactionHQ == IteratorState.GetReference()) {
-			`RTLOG("Found it...");
 			return IteratorState;
 		}
 	}
@@ -106,15 +131,23 @@ simulated function XComGameState_ScanningSite GetProgramScanningSite(UIStrategyM
 
 }
 
-simulated function ManualGC() {
-	if(b != none) {
-		b.Remove();
+simulated function ManualGC(UIStrategyMap Screen) {
+	//local UIButton button;
+	local UIScanButton button;
+	bExists = false;
+
+	//button = UIButton(Screen.GetChildByName(buttonName));
+	button = UIScanButton(Screen.GetChildByName(buttonName));
+	if(button != none) {
+		button.Remove();
+		button = none;
 	}
-	b = none;
 }
 
 defaultproperties
 {
 	// Leaving this assigned to none will cause every screen to trigger its signals on this class
 	ScreenClass = none;
+
+	buttonName = "RT_ProgramBriefingButton"
 }

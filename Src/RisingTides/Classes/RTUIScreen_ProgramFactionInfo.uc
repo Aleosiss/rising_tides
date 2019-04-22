@@ -205,7 +205,7 @@ simulated function PopulateData()
 	local int iTemplarQuestlineStage, iTotalFavors;
 	local float questlinePercent;
 
-	ProgramState = class'RTHelpers'.static.GetProgramState();
+	ProgramState = `RTS.GetProgramState();
 	if(ProgramState == none) {
 		`RTLOG("Couldn't find a ProgramState to populate data from, returning!");
 		return;

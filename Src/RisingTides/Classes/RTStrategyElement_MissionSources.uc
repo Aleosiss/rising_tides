@@ -84,7 +84,7 @@ static function int GetMissionDifficultyFromQuestlineStage(XComGameState_Mission
 {
 	local int Difficulty;
 
-	Difficulty = 1 + class'RTHelpers'.static.GetProgramState().iTemplarQuestlineStage;
+	Difficulty = 1 + `RTS.GetProgramState().iTemplarQuestlineStage;
 
 	Difficulty = Clamp(Difficulty, class'X2StrategyGameRulesetDataStructures'.default.MinMissionDifficulty,
 	class'X2StrategyGameRulesetDataStructures'.default.MaxMissionDifficulty);

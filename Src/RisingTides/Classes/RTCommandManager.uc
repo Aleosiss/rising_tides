@@ -28,7 +28,7 @@ exec function RT_PrintProgramFactionInformation(optional bool bShouldPrintFullIn
 	History = `XCOMHISTORY;
 
 	`RTLOG("Gathering Debug Information for the Program...");
-	Faction = class'RTHelpers'.static.GetProgramState();
+	Faction = `RTS.GetProgramState();
 
 	if(bShouldPrintFullInfo) {
 		`RTLOG(Faction.ToString(bShouldPrintAllFields), , true);
@@ -36,10 +36,10 @@ exec function RT_PrintProgramFactionInformation(optional bool bShouldPrintFullIn
 	}
 
 	`RTLOG("Printing Golden Path covert actions for the Program...");
-	class'RTHelpers'.static.PrintGoldenPathActionsForFaction(Faction);
+	`RTS.PrintGoldenPathActionsForFaction(Faction);
 
 	`RTLOG("Printing Standard covert actions for the Program...");
-	class'RTHelpers'.static.PrintCovertActionsForFaction(Faction);
+	`RTS.PrintCovertActionsForFaction(Faction);
 
 	`RTLOG("Printing Rival Chosen for the Program...");
 	`RTLOG("" $ XComGameState_AdventChosen(History.GetGameStateForObjectID(Faction.RivalChosen.ObjectID)).GetChosenClassName());
@@ -162,7 +162,7 @@ exec function RT_ActivateOneSmallFavor() {
 	local XComGameState					NewGameState;
 
 	NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("CHEAT: Force One Small Favor!");
-	ProgramState = class'RTHelpers'.static.GetNewProgramState(NewGameState);
+	ProgramState = `RTS.GetNewProgramState(NewGameState);
 
 	ProgramState.MakeOneSmallFavorAvailable();
 	
@@ -175,7 +175,7 @@ exec function RT_GenerateProgramCards() {
 	local int							idx;
 
 	NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("CHEAT: Add Program Faction Cards!");
-	ProgramState = class'RTHelpers'.static.GetNewProgramState(NewGameState);
+	ProgramState = `RTS.GetNewProgramState(NewGameState);
 	ProgramState.IncreaseInfluenceLevel(NewGameState);
 	ProgramState.IncreaseInfluenceLevel(NewGameState);
 	ProgramState.IncreaseInfluenceLevel(NewGameState);
@@ -183,7 +183,7 @@ exec function RT_GenerateProgramCards() {
 	`GAMERULES.SubmitGameState(NewGameState);
 
 	NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("CHEAT: Add Program Faction Cards!");
-	ProgramState = class'RTHelpers'.static.GetNewProgramState(NewGameState);
+	ProgramState = `RTS.GetNewProgramState(NewGameState);
 	`RTLOG("Generating cards...", false, true);
 	for(idx = 0; idx < 20; idx++)
 	{
@@ -199,7 +199,7 @@ exec function RT_DebugActiveOperatives() {
 	local XComGameStateHistory				History;
 	local XComGameState_Unit				UnitState;
 
-	ProgramState = class'RTHelpers'.static.GetProgramState();
+	ProgramState = `RTS.GetProgramState();
 	History = `XCOMHISTORY;
 	
 	`RTLOG("Printing Active Operatives...");
@@ -256,7 +256,7 @@ exec function RT_RegenerateProgramOperatives() {
 
 	History = `XCOMHISTORY;
 	NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("Rising Tides: CHEAT: Regenerate Program Operatives, Part 1");
-	ProgramState = class'RTHelpers'.static.GetNewProgramState(NewGameState);
+	ProgramState = `RTS.GetNewProgramState(NewGameState);
 	`RTLOG("CHEAT: Regenerate Program Operatives ####################", false, true);
 
 	`RTLOG("Wiping Squads...", false, true);
@@ -283,7 +283,7 @@ exec function RT_RegenerateProgramOperatives() {
 
 	`RTLOG("Recreating Operatives...", false, true);
 	NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("Rising Tides: CHEAT: Regenerate Program Operatives, Part 2");
-	ProgramState = class'RTHelpers'.static.GetNewProgramState(NewGameState);
+	ProgramState = `RTS.GetNewProgramState(NewGameState);
 
 	ProgramState.CreateRTOperatives(NewGameState);
 	ProgramState.CreateRTSquads(NewGameState);
@@ -291,7 +291,7 @@ exec function RT_RegenerateProgramOperatives() {
 	`XCOMGAME.GameRuleset.SubmitGameState(NewGameState);
 
 	NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("Rising Tides: CHEAT: Regenerate Program Operatives, Part 3");
-	ProgramState = class'RTHelpers'.static.GetNewProgramState(NewGameState);
+	ProgramState = `RTS.GetNewProgramState(NewGameState);
 
 	for(i = 0; i < ProgramState.iOperativeLevel; i++) {
 		ProgramState.PromoteAllOperatives(NewGameState);
@@ -710,13 +710,13 @@ exec function TestScreen() {
 }
 
 exec function RT_ListAbilityLists() {
-	class'RTHelpers'.static.ListDefaultAbilityLists();
+	`RTS.ListDefaultAbilityLists();
 }
 
 exec function RT_CheatProgramInfluence() {
 	local RTGameState_ProgramFaction ProgramState;
 
-	ProgramState = class'RTHelpers'.static.GetProgramState();
+	ProgramState = `RTS.GetProgramState();
 	ProgramState.TryIncreaseInfluence();
 }
 
@@ -725,7 +725,7 @@ exec function RT_CheatEliminateTemplarFaction() {
 	local XComGameState_ResistanceFaction TemplarState;
 
 	NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("CHEAT - ELIMINATE TEMPLAR FACTION");
-	TemplarState = class'RTHelpers'.static.GetTemplarFactionState();
+	TemplarState = `RTS.GetTemplarFactionState();
 
 	class'RTStrategyElement_Rewards'.static.EliminateFaction(NewGameState, TemplarState);
 
@@ -739,8 +739,29 @@ exec function RT_GenerateTemplarAmbush() {
 	NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("CHEAT - ELIMINATE TEMPLAR FACTION");
 	MissionState = CreateFakeTemplarAmbush(NewGameState);
 	`XCOMGAME.GameRuleset.SubmitGameState(NewGameState);
-	class'RTStrategyElement_MissionSources'.static.TemplarAmbushPopup(MissionState);
-	//class'RTStrategyElement_MissionSources'.static.Test(MissionState);
+	
+	MissionState = GetMission('RTMissionSource_TemplarAmbush'); // Find the Ambush mission and display its popup
+	if (MissionState != none && MissionState.GetMissionSource().MissionPopupFn != none)
+	{
+		MissionState.GetMissionSource().MissionPopupFn(MissionState);
+		`GAME.GetGeoscape().Pause();
+	}
+}
+
+simulated function XComGameState_MissionSite GetMission(name MissionSource)
+{
+	local XComGameStateHistory History;
+	local XComGameState_MissionSite MissionState;
+
+	History = `XCOMHISTORY;
+
+	foreach History.IterateByClassType(class'XComGameState_MissionSite', MissionState)
+	{
+		if (MissionState.Source == MissionSource && MissionState.Available)
+		{
+			return MissionState;
+		}
+	}
 }
 
 function XComGameState_MissionSite CreateFakeTemplarAmbush(XComGameState NewGameState) {
@@ -757,16 +778,17 @@ function XComGameState_MissionSite CreateFakeTemplarAmbush(XComGameState NewGame
 	RegionState = `XCOMHQ.GetContinent().GetRandomRegionInContinent();
 
 	MissionRewards.Length = 0;
-	RewardTemplate = X2RewardTemplate(StratMgr.FindStrategyElementTemplate('Reward_None')); // rewards are given by the X2MissionSourceTemplate
+	RewardTemplate = X2RewardTemplate(StratMgr.FindStrategyElementTemplate('RTReward_TemplarAmbush')); // rewards are given by the X2MissionSourceTemplate
 	RewardState = RewardTemplate.CreateInstanceFromTemplate(NewGameState);
 	MissionRewards.AddItem(RewardState);
 
 	MissionSource = X2MissionSourceTemplate(StratMgr.FindStrategyElementTemplate('RTMissionSource_TemplarAmbush'));
 	MissionState = RTGameState_MissionSiteTemplarAmbush(NewGameState.CreateNewStateObject(class'RTGameState_MissionSiteTemplarAmbush'));
 	MissionState.CovertActionRef = EmptyRef;
+	MissionState.bGeneratedFromDebugCommand = true;
 	
 	MissionState.BuildMission(MissionSource, RegionState.GetRandom2DLocationInRegion(), RegionState.GetReference(), MissionRewards, true);
-	MissionState.ResistanceFaction = class'RTHelpers'.static.GetProgramState().GetReference();
+	MissionState.ResistanceFaction = `RTS.GetProgramState().GetReference();
 
 	return MissionState;
 }
@@ -780,7 +802,7 @@ exec function RT_RecreateOneSmallFavor() {
 
 	History = `XCOMHISTORY;
 	NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("Rising Tides: CHEAT: Regenerate One Small Favor");
-	ProgramState = class'RTHelpers'.static.GetNewProgramState(NewGameState);
+	ProgramState = `RTS.GetNewProgramState(NewGameState);
 
 	// try to find One Small Favor
 	foreach ProgramState.PlayableCards(IteratorRef) {
@@ -978,7 +1000,7 @@ exec function RT_CheatProgramQuestline() {
 	local XComGameState					NewGameState;
 
 	NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("CHEAT: Force Templar Questline!");
-	ProgramState = class'RTHelpers'.static.GetNewProgramState(NewGameState);
+	ProgramState = `RTS.GetNewProgramState(NewGameState);
 
 	ProgramState.ForceIncreaseInfluence();
 	ProgramState.IncrementTemplarQuestlineStage();
@@ -989,16 +1011,53 @@ exec function RT_CheatProgramQuestline() {
 
 exec function RT_TestProgramInfoScreenTutorial() {
 	local RTGameState_ProgramFaction	ProgramState;
-	local XComGameState					NewGameState;
 
-	ProgramState = class'RTHelpers'.static.GetProgramState();
-	ProgramState.HandleProgramScreenTutorial();
+	ProgramState = `RTS.GetProgramState();
+	ProgramState.HandleProgramScreenTutorial(true);
 }
 
 exec function RT_TestOSFTutorial() {
 	local RTGameState_ProgramFaction	ProgramState;
-	local XComGameState					NewGameState;
 
-	ProgramState = class'RTHelpers'.static.GetProgramState();
-	ProgramState.HandleOSFTutorial();
+	ProgramState = `RTS.GetProgramState();
+	ProgramState.HandleOSFTutorial(true);
+}
+
+exec function RT_DebugEncounterIDs()
+{
+	local XComTacticalMissionManager MissionManager;
+	local ConfigurableEncounter Encounter;
+	local bool bFound;
+	local string DebugText;
+
+	MissionManager = `TACTICALMISSIONMGR;
+	foreach MissionManager.ConfigurableEncounters(Encounter)
+	{
+		DebugText = DebugText $ Encounter.EncounterID $ "\n";
+	}
+	`RTLOG("Valid EncounterIDs:\n"@DebugText);
+}
+
+exec function RT_DebugObjectiveParcelsAndPCPs() {
+	local XComParcelManager ParcelManager;
+	local XComPlotCoverParcelManager PCPManager;
+
+	local PlotDefinition Plot;
+	local PCPDefinition PCP;
+
+	ParcelManager = `PARCELMGR;
+	PCPManager = new class'XComPlotCoverParcelManager';
+
+	`RTLOG("--------- PLOTS -------------------------------------------------------------------------------------------------------------------------------------");
+	foreach ParcelManager.arrPlots(Plot) {
+		if(Plot.ObjectiveTags.Length > 0) {
+			`RTLOG(Plot.MapName $ " has an objectiveTag: " $ Plot.ObjectiveTags[0], false, true);
+		}
+	}
+	`RTLOG("--------- PCPS -------------------------------------------------------------------------------------------------------------------------------------");
+	foreach PCPManager.arrAllPCPDefs(PCP) {
+		if(PCP.ObjectiveTags.Length > 0) {
+			`RTLOG(PCP.MapName $ " has an objectiveTag: " $ PCP.ObjectiveTags[0], false, true);
+		}
+	}
 }
