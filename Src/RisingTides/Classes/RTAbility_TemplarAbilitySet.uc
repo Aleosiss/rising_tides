@@ -46,13 +46,43 @@ static function X2AbilityTemplate RTUnwaveringResolve()
 
 	Template.bSkipFireAction = true;
 	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
-	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
+	Template.BuildVisualizationFn = UnwaveringResolve_BuildVisualization;
 	Template.MergeVisualizationFn = DesiredVisualizationBlock_MergeVisualization;
 	Template.bShowActivation = true;
+	Template.bFrameEvenWhenUnitIsHidden = false;
 	
 	Template.AdditionalAbilities.AddItem('RTUnwaveringResolveIcon');
 
 	return Template;
+}
+
+simulated function UnwaveringResolve_BuildVisualization(XComGameState VisualizeGameState)
+{
+	local XComGameStateHistory History;
+	local XComGameStateContext_Ability  Context;
+	local StateObjectReference InteractingUnitRef;
+	//Tree metadata
+	local VisualizationActionMetadata   InitData;
+	local VisualizationActionMetadata   SourceData;
+	local XComGameState_Unit	UnitState;
+
+	History = `XCOMHISTORY;
+
+	Context = XComGameStateContext_Ability(VisualizeGameState.GetContext());
+	InteractingUnitRef = Context.InputContext.SourceObject;
+
+	//Configure the visualization track for the shooter
+	//****************************************************************************************
+	SourceData = InitData;
+	SourceData.StateObject_OldState = History.GetGameStateForObjectID(InteractingUnitRef.ObjectID, eReturnType_Reference, VisualizeGameState.HistoryIndex - 1);
+	SourceData.StateObject_NewState = VisualizeGameState.GetGameStateForObjectID(InteractingUnitRef.ObjectID);
+	SourceData.VisualizeActor = History.GetVisualizer(InteractingUnitRef.ObjectID);
+
+	UnitState = XComGameState_Unit(SourceData.StateObject_OldState);
+
+	if(class'RTCondition_VisibleToPlayer'.static.IsTargetVisibleToLocalPlayer(UnitState.GetReference(), , true)) {
+		TypicalAbility_BuildVisualization(VisualizeGameState);
+	}
 }
 
 static function EventListenerReturn UnwaveringResolveListener(Object EventData, Object EventSource, XComGameState GameState, Name EventID, Object CallbackData)
