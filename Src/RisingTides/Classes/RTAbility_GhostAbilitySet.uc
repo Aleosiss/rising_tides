@@ -121,7 +121,7 @@ static function X2AbilityTemplate GhostPsiSuite()
 	local X2Effect_StayConcealed				PhantomEffect;
 
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'GhostPsiSuite');
-	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_adventpsiwitch_mindcontrol"; //TODO: Change this
+	Template.IconImage = "img:///RisingTidesContentPackage.PerkIcons.rt_program_shield";
 
 	Template.AbilitySourceName = 'eAbilitySource_Psionic';
 	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_NeverShow;
@@ -163,8 +163,6 @@ static function X2AbilityTemplate StandardGhostShot()
 	local array<name>                       SkipExclusions;
 	local X2Effect_Knockback				KnockbackEffect;
 	local X2Condition_Visibility            VisibilityCondition;
-	local X2Condition_AbilityProperty		SiphonCondition;
-	local X2Condition_UnitProperty			TargetUnitPropertyCondition;
 	local RTEffect_Siphon					SiphonEffect;
 
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'StandardGhostShot');
@@ -220,26 +218,7 @@ static function X2AbilityTemplate StandardGhostShot()
 	Template.AddTargetEffect(default.WeaponUpgradeMissDamage);
 
 	// Siphon Effect
-	SiphonEffect = new class'RTEffect_Siphon';
-	SiphonEffect.SiphonAmountMultiplier = class'RTAbility_BerserkerAbilitySet'.default.SIPHON_AMOUNT_MULTIPLIER;
-	SiphonEffect.SiphonMinVal = class'RTAbility_BerserkerAbilitySet'.default.SIPHON_MIN_VAL;
-	SiphonEffect.SiphonMaxVal = class'RTAbility_BerserkerAbilitySet'.default.SIPHON_MAX_VAL;
-	SiphonEffect.DamageTypes.AddItem('Psi');
-
-	TargetUnitPropertyCondition = new class'X2Condition_UnitProperty';
-	TargetUnitPropertyCondition.ExcludeDead = false;
-	TargetUnitPropertyCondition.ExcludeRobotic = true;
-	TargetUnitPropertyCondition.ExcludeFriendlyToSource = false;
-	TargetUnitPropertyCondition.ExcludeHostileToSource = false;
-	TargetUnitPropertyCondition.FailOnNonUnits = true;
-	TargetUnitPropertyCondition.RequireWithinRange = true;
-	TargetUnitPropertyCondition.WithinRange = class'RTAbility_BerserkerAbilitySet'.default.SIPHON_RANGE;
-
-	SiphonCondition = new class'X2Condition_AbilityProperty';
-	SiphonCondition.OwnerHasSoldierAbilities.AddItem('RTSiphon');
-
-	SiphonEffect.TargetConditions.AddItem(SiphonCondition);
-	SiphonEffect.TargetConditions.AddItem(TargetUnitPropertyCondition);
+	SiphonEffect = class'RTEffectBuilder'.static.RTCreateSiphonEffect(class'RTAbility_BerserkerAbilitySet'.default.SIPHON_AMOUNT_MULTIPLIER, class'RTAbility_BerserkerAbilitySet'.default.SIPHON_MIN_VAL, class'RTAbility_BerserkerAbilitySet'.default.SIPHON_MAX_VAL);
 	Template.AddTargetEffect(SiphonEffect);
 	Template.AssociatedPassives.AddItem('RTSiphon');
 
@@ -520,7 +499,7 @@ static function X2AbilityTemplate Fade()
 	local X2Effect_Persistent		CooldownTrackerEffect;
 
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'Fade');
-	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_phantom";
+	Template.IconImage = "img:///RisingTidesContentPackage.PerkIcons.rt_fade";
 
 	Template.AbilitySourceName = 'eAbilitySource_Psionic';
 	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_NeverShow;
@@ -575,7 +554,7 @@ static function X2AbilityTemplate Teek() {
 	local X2Effect_PersistentStatChange BlurEffect;
 
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'Teek');
-	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_voidrift";
+	Template.IconImage = "img:///RisingTidesContentPackage.PerkIcons.rt_teek";
 
 	Template.AbilitySourceName = 'eAbilitySource_Psionic';
 	Template.eAbilityIconBehaviorHUD = EAbilityIconBehavior_NeverShow;
@@ -1056,7 +1035,90 @@ static function X2AbilityTemplate RTEnterStealth() {
 
 }
 
+//---------------------------------------------------------------------------------------
+//---Stealth-----------------------------------------------------------------------------
+//---------------------------------------------------------------------------------------
+/*static function X2AbilityTemplate RTProgramEvacuation() {
+	local X2AbilityTemplate Template;
+	local RTEffect_Sustain SustainEffect;
 
+	`CREATE_X2ABILITY_TEMPLATE(Template, 'RTProgramEvacuation');
+
+	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_sustain";
+	Template.AbilitySourceName = 'eAbilitySource_Psionic';
+	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_NeverShow;
+	Template.Hostility = eHostility_Neutral;
+	Template.bIsPassive = true;
+
+	Template.AbilityToHitCalc = default.DeadEye;
+	Template.AbilityTargetStyle = default.SelfTarget;
+	Template.AbilityTriggers.AddItem(default.UnitPostBeginPlayTrigger);
+
+	SustainEffect = new class'RTEffect_Sustain';
+
+	SustainEffect.BuildPersistentEffect(1, true, true);
+	//SustainEffect.SetDisplayInfo(ePerkBuff_Passive, Template.LocFriendlyName, Template.GetMyLongDescription(), Template.IconImage, true,, Template.AbilitySourceName);
+	Template.AddTargetEffect(SustainEffect);
+
+	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
+	// Note: no visualization on purpose!
+
+	Template.AdditionalAbilities.AddItem('RTProgramEvacuationTriggered');
+
+	return Template;
+}
+
+static function X2AbilityTemplate RTProgramEvacuationTriggered() {
+	local X2AbilityTemplate Template;
+	local X2Effect_Stasis StasisEffect;
+	local X2AbilityTrigger_EventListener EventTrigger;
+
+	`CREATE_X2ABILITY_TEMPLATE(Template, 'RTProgramEvacuationTriggered');
+
+	Template.Hostility = eHostility_Neutral;
+	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_sustain";
+	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_NeverShow;
+	Template.AbilitySourceName = 'eAbilitySource_Psionic';
+
+	Template.AbilityToHitCalc = default.DeadEye;
+	Template.AbilityTargetStyle = default.SelfTarget;
+	//	check that the unit is still alive.
+	//	it's possible that multiple event listeners responded to the same event, and some of those other listeners
+	//	went ahead and killed the unit before we got to trigger sustain.
+	//	it would look weird to do the sustain visualization and then have the unit die, so just don't trigger sustain.
+	//	e.g. a unit with a homing mine on it that takes a kill shot wants to have the death stopped, but the
+	//	homing mine explosion can trigger before the sustain trigger goes off, killing the unit before it would be sustained
+	//	and making things look really weird. now the unit will just die without "sustaining" the corpse.
+	//	-jbouscher
+	
+	// It's more important that we we evac than any other consideration
+	//Template.AbilityShooterConditions.AddItem(default.LivingShooterProperty);
+
+	StasisEffect = new class'X2Effect_Stasis';
+	StasisEffect.BuildPersistentEffect(1, false, false, false, eGameRule_PlayerTurnBegin);
+	StasisEffect.bUseSourcePlayerState = true;
+	StasisEffect.bRemoveWhenTargetDies = true;          //  probably shouldn't be possible for them to die while in stasis, but just in case
+	StasisEffect.SetDisplayInfo(ePerkBuff_Penalty, Template.LocFriendlyName, Template.GetMyHelpText(), Template.IconImage);
+	StasisEffect.StunStartAnim = 'HL_PsiSustainStart';
+	StasisEffect.bSkipFlyover = true;
+	Template.AddTargetEffect(StasisEffect);
+
+	EventTrigger = new class'X2AbilityTrigger_EventListener';
+	EventTrigger.ListenerData.Deferral = ELD_OnStateSubmitted;
+	EventTrigger.ListenerData.EventID = class'RTEffect_Sustain'.default.SustainEvent;
+	EventTrigger.ListenerData.Filter = eFilter_Unit;
+	EventTrigger.ListenerData.EventFn = class'XComGameState_Ability'.static.AbilityTriggerEventListener_Self;
+	Template.AbilityTriggers.AddItem(EventTrigger);
+
+	Template.PostActivationEvents.AddItem(class'RTEffect_Sustain'.default.SustainTriggeredEvent);
+		
+	Template.bSkipFireAction = true;
+	Template.FrameAbilityCameraType = eCameraFraming_Never;
+	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
+	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
+
+	return Template;
+}*/
 
 
 defaultproperties
@@ -1113,9 +1175,9 @@ defaultproperties
 
 static function bool AbilityTagExpandHandler(string InString, out string OutString)
 {
-	local name Tag;
+//	local name Tag;
 
-	Tag = name(InString);
+//	Tag = name(InString);
 
 	return false;
 }

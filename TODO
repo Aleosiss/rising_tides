@@ -1,5 +1,5 @@
 
-Todo:
+2.0.0 TODOS:
   ✔ Add RTCharacterTemplate
     ✔ Add to x2proj
     ✔ Create
@@ -10,14 +10,13 @@ Todo:
     ✔ Track number of OSFs granted @done(18-04-24 23:18)
     ✔ Add influence reward template @done(18-04-24 23:18)
     ✔ Add Faction influence popup after grant @done(18-04-24 23:18)
-  ☐ Add Program Equipment
-    ☐ Add Program DMR
-    ☐ Add Program Shotgun
-    ☐ Add Program Carbine
+  ✔ Add Program Equipment @done(19-03-19 23:22)
+    ✔ Add Program DMR @done(18-12-09 16:55)
+    ✔ Add Program Shotgun @done(18-12-09 16:55)
+    ✔ Add Program Carbine @done(18-12-09 16:55)
     ✔ Add Program Pistol @done(18-04-24 23:18)
-    ☐ Add Program Armor
-  ☐ Add supporting UI to new stuff
-    ☐ Add Tooltip to OSF checkbox
+    ✔ Add Program Armor @done(19-03-10 17:31)
+  ✔ Add supporting UI to new stuff @done(19-03-19 23:22)
     ✔ Add Popup after meeting the Program @done(18-04-26 14:43)
   ✔ Add Encyclopedia Entries @done(18-04-26 16:40)
   ✔ Add a range limit to mind wrack @done(18-04-26 17:32)
@@ -26,8 +25,31 @@ Todo:
   ✔ Rework RTEffect_Stealth @done(18-04-30 18:32)
     ✔ Add RTGameState_Effect handling for it @done(18-04-30 18:32)
     ✔ Tracks Concealment / Superconcealment gained before Stealth was applied @done(18-04-30 18:32)
+2.1.0 TODOS: 
   ☐ Add Hunt_Templar Risks
+    ☐ Add Templar Ambush
+      ✔ Add RTGameState_MissionStateTemplarAmbush @done(18-12-16 02:10)
+      ✔ Add Templar Ambush Mission *.inis (Schedules, Mission, Encounters) @done(19-03-23 10:02)
+      ☐ Add Templar Ambush Obj.umap
+      ✔ Add Templar Ambush UIAlert @done(18-12-16 02:10)
+      ✔ Add Templar Ambush UIMission @done(18-12-16 02:10)
   ☐ Add Hunt_Templars narratives
+  ☐ Add Hunt_Templars images
   ☐ Add Hunt_Templars rewards
-  ☐ Add system to manage Hunt_Templars covert actions
+  ✔ Add system to manage Hunt_Templars covert actions @done(18-12-09 16:55)
   ☐ Add Assault Templar Leadership mission
+  ☐ Add Enemy Templar Faction
+    ✔ Templar Abiity Set @done(19-03-10 17:32)
+    ✔ Templar Character Generator @done(19-03-10 17:32)
+    ✔ Templar AI.ini @done(19-03-10 17:32)
+    ✔ Templar Encounter configuration @done(19-03-23 09:58)
+  ☐ Add Program Favors System
+    ✔ Implement @done(19-03-10 17:33)
+    ✔ Fixes to current systems @done(19-03-10 17:33)
+    ✔ Influence Change: Should always try to increase influence even if Player did not win @done(19-03-23 10:01)
+    ✔ Add Program Info Screen @done(19-04-09 23:28)
+      ✔ Create Screen @done(19-03-10 17:33)
+      ✔ Create Localization @done(19-04-09 23:28)
+      ✔ Create Tutorial @done(19-04-09 23:28)
+      ✔ Create UIScreenListener @done(19-03-10 17:33)
+  ☐ Remove -debug flag from build script before releasing

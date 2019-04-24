@@ -34,7 +34,10 @@ static function ActivateOneSmallFavor(XComGameState NewGameState, StateObjectRef
 	local RTGameState_ProgramFaction Program;
 	//local DynamicPropertySet PropertySet; //need to delay it when the player can see it
 
-	Program = class'RTHelpers'.static.GetNewProgramState(NewGameState);
+	Program = `RTS.GetNewProgramState(NewGameState);
+	if(!Program.bOSF_FirstTimeDisplayed) { // start with three favors
+		Program.IncrementNumFavorsAvailable(3);
+	}
 	Program.MakeOneSmallFavorAvailable();
 	Program.bShouldResetOSFMonthly = true;
 }
@@ -42,8 +45,8 @@ static function ActivateOneSmallFavor(XComGameState NewGameState, StateObjectRef
 static function DeactivateOneSmallFavor(XComGameState NewGameState, StateObjectReference InRef) {
 	local RTGameState_ProgramFaction Program;
 
-	Program = class'RTHelpers'.static.GetNewProgramState(NewGameState);
-	Program.bOneSmallFavorAvailable = false;
+	Program = `RTS.GetNewProgramState(NewGameState);
+	Program.MakeOneSmallFavorUnavailable();
 	Program.bShouldResetOSFMonthly = false;
 }
 
@@ -67,16 +70,23 @@ static function JustPassingThroughModifyTacStartState(XComGameState StartState) 
 	local name CharTemplateName;
 	//local X2CharacterTemplate Template;
 	local XComGameState_Player PlayerState;
+	local float jPTRoll, RandRoll;
 
 	if (IsSplitMission( StartState ))
 		return;
 
-	Program = class'RTHelpers'.static.GetNewProgramState(StartState);
+	Program = `RTS.GetNewProgramState(StartState);
 	Program.bShouldPerformPostMissionCleanup = true;
 	SoldierObjRef = Program.Master[`SYNC_RAND_STATIC(Program.Master.Length)];
 	
-	if(default.JustPassingThroughChance * (int(Program.Influence) + 1) < `SYNC_RAND_STATIC(100) /*|| true*/ ) //TODO: Refactor to include an Operative-based modifer (location + personality)
+	RandRoll = `SYNC_RAND_STATIC(100);
+	jPTRoll = default.JustPassingThroughChance * (int(Program.Influence) + 1);
+
+	if(jPTRoll < RandRoll /*|| true*/ ) {//TODO: Refactor to include an Operative-based modifer (location + personality)
+		`RTLOG("JustPassingThrough roll failed, returning! JPT: " $ jPTRoll $ ", Value to beat: " $ RandRoll);
 		return;
+	}
+	`RTLOG("JustPassingThrough roll succeeded, continuing! JPT: " $ jPTRoll $ ", Value to beat: " $ RandRoll);
 
 	foreach StartState.IterateByClassType( class'XComGameState_HeadquartersXCom', XComHQ )
 		break;
@@ -85,7 +95,7 @@ static function JustPassingThroughModifyTacStartState(XComGameState StartState) 
 		return;
 	}
 	MissionState = XComGameState_MissionSite(`XCOMHISTORY.GetGameStateForObjectID(XComHQ.MissionRef.ObjectID));
-	if(class'RTHelpers'.static.IsInvalidMission(MissionState.GetMissionSource())) {
+	if(`RTS.IsInvalidMission(MissionState.GetMissionSource())) {
 		//`RTLOG("Invalid Mission Type for JPT!");
 		return;
 	}
@@ -188,7 +198,7 @@ static function ActivateFortyYearsOfWar(XComGameState NewGameState, StateObjectR
 	local XComGameState_WorldRegion RegionState;
 	local Object Obj;
 
-	Program = class'RTHelpers'.static.GetNewProgramState(NewGameState);
+	Program = `RTS.GetNewProgramState(NewGameState);
 	Obj = Program;
 
 	`RTLOG("Activating Forty Years of War!");
@@ -211,7 +221,7 @@ static function DeactivateFortyYearsOfWar(XComGameState NewGameState, StateObjec
 	local RTGameState_ProgramFaction Program;
 	local Object Obj;
 
-	Program = class'RTHelpers'.static.GetNewProgramState(NewGameState);
+	Program = `RTS.GetNewProgramState(NewGameState);
 	Obj = Program;
 	`RTLOG("Deactivating Forty Years of War!");
 	`XEVENTMGR.UnRegisterFromEvent(Obj, 'AvengerLandedScanRegion');
@@ -234,7 +244,7 @@ static function X2DataTemplate RTCreateDirectNeuralManipulation()
 static function ActivateDirectNeuralManipulation(XComGameState NewGameState, StateObjectReference InRef, optional bool bReactivate = false) {
 	local RTGameState_ProgramFaction Program;
 
-	Program = class'RTHelpers'.static.GetNewProgramState(NewGameState);
+	Program = `RTS.GetNewProgramState(NewGameState);
 	`RTLOG("Activating Direct Neural Manipulation!");
 	Program.bDirectNeuralManipulation = true;
 
@@ -243,7 +253,7 @@ static function ActivateDirectNeuralManipulation(XComGameState NewGameState, Sta
 static function DeactivateDirectNeuralManipulation(XComGameState NewGameState, StateObjectReference InRef) {
 	local RTGameState_ProgramFaction Program;
 
-	Program = class'RTHelpers'.static.GetNewProgramState(NewGameState);
+	Program = `RTS.GetNewProgramState(NewGameState);
 	`RTLOG("Deactivating Direct Neural Manipulation!");
 	Program.bDirectNeuralManipulation = false;
 
@@ -269,7 +279,7 @@ static function ActivateResistanceSabotage(XComGameState NewGameState, StateObje
 
 	//`RTLOG("Activating Resistance Sabotage!");
 	History = `XCOMHISTORY;
-	ProgramState = class'RTHelpers'.static.GetNewProgramState(NewGameState);
+	ProgramState = `RTS.GetNewProgramState(NewGameState);
 	if(ProgramState.bResistanceSabotageActivated) {
 		//`RTLOG("Oops, it's already activated. Aborting.");
 		return;
@@ -296,7 +306,7 @@ static function DeactivateResistanceSabotage(XComGameState NewGameState, StateOb
 
 	//`RTLOG("Deactivating Resistance Sabotage!");
 	History = `XCOMHISTORY;
-	ProgramState = class'RTHelpers'.static.GetNewProgramState(NewGameState);
+	ProgramState = `RTS.GetNewProgramState(NewGameState);
 	if(!ProgramState.bResistanceSabotageActivated) {
 		//`RTLOG("Wait, it's not activated. Aborting.");
 		return;

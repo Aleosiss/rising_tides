@@ -28,7 +28,7 @@ exec function RT_PrintProgramFactionInformation(optional bool bShouldPrintFullIn
 	History = `XCOMHISTORY;
 
 	`RTLOG("Gathering Debug Information for the Program...");
-	Faction = class'RTHelpers'.static.GetProgramState();
+	Faction = `RTS.GetProgramState();
 
 	if(bShouldPrintFullInfo) {
 		`RTLOG(Faction.ToString(bShouldPrintAllFields), , true);
@@ -36,16 +36,16 @@ exec function RT_PrintProgramFactionInformation(optional bool bShouldPrintFullIn
 	}
 
 	`RTLOG("Printing Golden Path covert actions for the Program...");
-	class'RTHelpers'.static.PrintGoldenPathActionsForFaction(Faction);
+	`RTS.PrintGoldenPathActionsForFaction(Faction);
 
 	`RTLOG("Printing Standard covert actions for the Program...");
-	class'RTHelpers'.static.PrintCovertActionsForFaction(Faction);
+	`RTS.PrintCovertActionsForFaction(Faction);
 
 	`RTLOG("Printing Rival Chosen for the Program...");
 	`RTLOG("" $ XComGameState_AdventChosen(History.GetGameStateForObjectID(Faction.RivalChosen.ObjectID)).GetChosenClassName());
 
 	`RTLOG("Printing Misc Information for the Program...");
-	class'RTHelpers'.static.PrintMiscInfoForFaction(Faction);
+	Faction.PrintDebuggingInfo();
 
 
 }
@@ -68,15 +68,15 @@ exec function RT_DebugModVersion() {
 }
 
 exec function RT_ToggleCustomDebugOutput() {
-    class'UIDebugStateMachines'.static.GetThisScreen().ToggleVisible();
+	class'UIDebugStateMachines'.static.GetThisScreen().ToggleVisible();
 }
 
 exec function RT_PrintPerkContentsForXCom() {
-    class'UIDebugStateMachines'.static.PrintOutPerkContentsForXComUnits();
+	class'UIDebugStateMachines'.static.PrintOutPerkContentsForXComUnits();
 }
 
 exec function RT_PrintLoadedPerkContents() {
-    class'UIDebugStateMachines'.static.PrintOutLoadedPerkContents();
+	class'UIDebugStateMachines'.static.PrintOutLoadedPerkContents();
 }
 
 exec function RT_TryForceAppendAbilityPerks(name AbilityName) {
@@ -103,7 +103,7 @@ exec function RT_PrintAppearence(int ObjectID) {
 
 	UnitState = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(ObjectID));
 	if(UnitState == none) {
-		`RTLOG("UnitState was null for PrintAppearance!");
+		`RTLOG("UnitState was null for PrintAppearance!", false, true);
 		return;
 	}	
 
@@ -162,7 +162,7 @@ exec function RT_ActivateOneSmallFavor() {
 	local XComGameState					NewGameState;
 
 	NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("CHEAT: Force One Small Favor!");
-	ProgramState = class'RTHelpers'.static.GetNewProgramState(NewGameState);
+	ProgramState = `RTS.GetNewProgramState(NewGameState);
 
 	ProgramState.MakeOneSmallFavorAvailable();
 	
@@ -175,13 +175,15 @@ exec function RT_GenerateProgramCards() {
 	local int							idx;
 
 	NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("CHEAT: Add Program Faction Cards!");
-	ProgramState = class'RTHelpers'.static.GetNewProgramState(NewGameState);
-	ProgramState.Influence = eFactionInfluence_Influential;
+	ProgramState = `RTS.GetNewProgramState(NewGameState);
+	ProgramState.IncreaseInfluenceLevel(NewGameState);
+	ProgramState.IncreaseInfluenceLevel(NewGameState);
+	ProgramState.IncreaseInfluenceLevel(NewGameState);
+	ProgramState.IncreaseInfluenceLevel(NewGameState);
 	`GAMERULES.SubmitGameState(NewGameState);
 
-
 	NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("CHEAT: Add Program Faction Cards!");
-	ProgramState = class'RTHelpers'.static.GetNewProgramState(NewGameState);
+	ProgramState = `RTS.GetNewProgramState(NewGameState);
 	`RTLOG("Generating cards...", false, true);
 	for(idx = 0; idx < 20; idx++)
 	{
@@ -197,7 +199,7 @@ exec function RT_DebugActiveOperatives() {
 	local XComGameStateHistory				History;
 	local XComGameState_Unit				UnitState;
 
-	ProgramState = class'RTHelpers'.static.GetProgramState();
+	ProgramState = `RTS.GetProgramState();
 	History = `XCOMHISTORY;
 	
 	`RTLOG("Printing Active Operatives...");
@@ -222,7 +224,11 @@ exec function RT_AddProgramOperativeToXCOMCrew() {
 	bFoundAtLeastOne = false;
 	foreach History.IterateByClassType(class'XComGameState_Unit', UnitState)
 	{
-		if(UnitState.GetMyTemplateName() == 'RTGhostMarksman' || UnitState.GetMyTemplateName() == 'RTGhostBerserker' || UnitState.GetMyTemplateName() == 'RTGhostGatherer')
+		if(	UnitState.GetMyTemplateName() == 'RTGhostMarksman' || 
+			UnitState.GetMyTemplateName() == 'RTGhostBerserker' || 
+			UnitState.GetMyTemplateName() == 'RTGhostGatherer' ||
+			UnitState.GetMyTemplateName() == 'RTGhostOperator'
+			)
 		{
 			`RTLOG("Found a " $ UnitState.GetMyTemplateName() $ ", adding them to XCOM!");
 			NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("Rising Tides: CHEAT: AddSPECTREToCrew");
@@ -246,10 +252,11 @@ exec function RT_RegenerateProgramOperatives() {
 	local RTGameState_ProgramFaction ProgramState;
 	local StateObjectReference SquadRef;
 	local RTGameState_PersistentGhostSquad SquadState;
+	local int i;
 
 	History = `XCOMHISTORY;
 	NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("Rising Tides: CHEAT: Regenerate Program Operatives, Part 1");
-	ProgramState = class'RTHelpers'.static.GetNewProgramState(NewGameState);
+	ProgramState = `RTS.GetNewProgramState(NewGameState);
 	`RTLOG("CHEAT: Regenerate Program Operatives ####################", false, true);
 
 	`RTLOG("Wiping Squads...", false, true);
@@ -276,7 +283,7 @@ exec function RT_RegenerateProgramOperatives() {
 
 	`RTLOG("Recreating Operatives...", false, true);
 	NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("Rising Tides: CHEAT: Regenerate Program Operatives, Part 2");
-	ProgramState = class'RTHelpers'.static.GetNewProgramState(NewGameState);
+	ProgramState = `RTS.GetNewProgramState(NewGameState);
 
 	ProgramState.CreateRTOperatives(NewGameState);
 	ProgramState.CreateRTSquads(NewGameState);
@@ -284,7 +291,7 @@ exec function RT_RegenerateProgramOperatives() {
 	`XCOMGAME.GameRuleset.SubmitGameState(NewGameState);
 
 	NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("Rising Tides: CHEAT: Regenerate Program Operatives, Part 3");
-	ProgramState = class'RTHelpers'.static.GetNewProgramState(NewGameState);
+	ProgramState = `RTS.GetNewProgramState(NewGameState);
 
 	for(i = 0; i < ProgramState.iOperativeLevel; i++) {
 		ProgramState.PromoteAllOperatives(NewGameState);
@@ -321,7 +328,7 @@ exec function RT_PrintCrew()
 }
 
 // Courtesy of bountygiver
-exec function TestPanel(int X, int Y, optional int Width = -1, optional int Height = -1, optional name PanelName = 'TestDebugPanel')
+exec function RT_TestPanelLocation(int X, int Y, optional int Width = -1, optional int Height = -1, optional name PanelName = 'TestDebugPanel')
 {
 	local UIScreen Screen;
 	local UIBGBox BGPanel;
@@ -329,11 +336,14 @@ exec function TestPanel(int X, int Y, optional int Width = -1, optional int Heig
 
 	Screen = `SCREENSTACK.GetCurrentScreen();
 
+	`RTLOG("Using " $ Screen.MCName $ " as the base for the TestPanel!");
+
 	Panel = Screen.GetChildByName(PanelName, false);
 	if(Width == -1 || Height == -1) {
 		Width = 32;
 		Height = 32;
 	}
+
 
 	if (Panel != none)
 	{
@@ -342,9 +352,10 @@ exec function TestPanel(int X, int Y, optional int Width = -1, optional int Heig
 	}
 	else
 	{
+		`RTLOG("Couldn't find a " $ PanelName $ ", creating one!");
 		BGPanel = Screen.Spawn(class'UIBGBox', Screen);
 		BGPanel.InitBG(PanelName, X, Y, Width, Height);
-		BGPanel.SetBGColor("FF0000");
+		BGPanel.SetBGColorState(eUIState_Cash);
 		BGPanel.AnimateIn(0);
 	}
 }
@@ -356,10 +367,13 @@ exec function DestroyTestPanel(optional name PanelName = 'TestDebugPanel') {
 	Screen = `SCREENSTACK.GetCurrentScreen();
 
 	BGPanel = UIBGBox(Screen.GetChildByName(PanelName, false));
+	if(BGPanel == none) {
+		`RTLOG("Couldn't find a " $ PanelName $ "!");
+	}
 	BGPanel.Remove();
 }
 
-exec function ReportTestPanelLocation(optional name PanelName = 'TestDebugPanel') {
+exec function RT_ReportTestPanelMCLocation(optional name PanelName = 'TestDebugPanel') {
 	local UIScreen Screen;
 	local UIPanel TestPanel;
 	local string MissionType, LogOutput;
@@ -382,6 +396,40 @@ exec function ReportTestPanelLocation(optional name PanelName = 'TestDebugPanel'
 		`RTLOG(LogOutput);
 
 	}
+}
+
+exec function RT_ReportTestPanelLocation(optional name PanelName = 'TestDebugPanel') {
+	local UIScreen Screen;
+	local UIPanel TestPanel;
+	local string LogOutput;
+	//local StateObjectReference MissionRef;
+
+	Screen = `SCREENSTACK.GetCurrentScreen();
+	/*
+var float X;
+var float Y;
+var float Width;
+var float Height;
+var float Alpha;
+var float RotationDegrees;
+var int Anchor;
+var int Origin;
+	*/
+
+	TestPanel = Screen.GetChildByName(PanelName, false);
+
+	
+	LogOutput = ("" $ PanelName $ " located at (" $ TestPanel.X $ ", " $ TestPanel.Y $ ")");
+	`RTLOG(LogOutput, false, true);
+
+	LogOutput = ("With a size of (" $ TestPanel.Width $ "x" $ TestPanel.Height $ ")");
+	`RTLOG(LogOutput, false, true);
+
+	LogOutput = ("With an Alpha of" $ TestPanel.Alpha $ " and a Rotation of " $ TestPanel.RotationDegrees);
+	`RTLOG(LogOutput, false, true);
+
+	LogOutput = ("With Anchor set to " $ TestPanel.Anchor $ " and Origin set to " $ TestPanel.Origin);
+	`RTLOG(LogOutput, false, true);
 }
 
 exec function RT_DebugVisibilityAll() {	
@@ -444,16 +492,16 @@ exec function RT_TestUIPopup() {
 
 exec function RT_ReduceSoldierCurrentWill(int MinusWill) {
 	local XComTacticalController TacticalController;
-	local XGUnit ActiveUnit;
+	local StateObjectReference ActiveUnitRef;
 	local XComGameState_Unit ActiveUnitState;
 	local XComGameState NewGameState;
 	// Pawn is the CURSOR in the Combat game
 	TacticalController = XComTacticalController(class'WorldInfo'.static.GetWorldInfo().GetALocalPlayerController());
 
 	if (TacticalController != none) {
-		ActiveUnit = TacticalController.GetActiveUnit();
+		ActiveUnitRef = TacticalController.GetActiveUnitStateRef();
 		NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState( "Cheat: Reduce Unit Will" );
-		ActiveUnitState = XComGameState_Unit(NewGameState.ModifyStateObject(class'XComGameState_Unit', ActiveUnit.ObjectID));
+		ActiveUnitState = XComGameState_Unit(NewGameState.ModifyStateObject(class'XComGameState_Unit', ActiveUnitRef.ObjectID));
 		ActiveUnitState.ModifyCurrentStat(eStat_Will, float(MinusWill));
 		`TACTICALRULES.SubmitGameState(NewGameState);
 	}
@@ -511,7 +559,7 @@ exec function RT_GetTeamStatusOfClosestUnitToCursor() {
 	`RTLOG("TeamFlag: " $ TeamFlag,,true);
 }
 
-// Based on code from "Configurable Mission Timers by wghost"
+// Based on code from "Configurable Mission Timers" by wghost
 exec function RT_DebugKismetVariables() {
 	//local XComGameState_Unit UnitState;
 	//local ETeam TeamFlag;
@@ -530,7 +578,7 @@ exec function RT_DebugKismetVariables() {
 	local array<StateObjectReference> GameStates;
 
 	//CheatsManager = `CHEATMGR;
-
+	EmptyName = '';
 	WorldInfo = `XWORLDINFO;
 	WorldInfo.MyKismetVariableMgr.RebuildVariableMap();
 	MainSequence = WorldInfo.GetGameSequence();
@@ -591,7 +639,7 @@ exec function RT_DebugKismetVariables() {
 	}
 }
 
-exec function RT_DebugClosestUnitToCursorAvailableAbilties() {
+exec function RT_DebugClosestUnitToCursorAvailableAbilties(bool bPrintFullInfo = false) {
 	local XComGameState_Unit UnitState;
 	local StateObjectReference AbilityRef;
 	local XComGameState_Ability AbilityState;
@@ -614,11 +662,13 @@ exec function RT_DebugClosestUnitToCursorAvailableAbilties() {
 	foreach UnitState.Abilities(AbilityRef) {
 		AbilityState = XComGameState_Ability(History.GetGameStateForObjectID(AbilityRef.ObjectID));
 		if(AbilityState == none) {
+			`RTLOG("Found a null AbilityState in the Unit's abilties?!!!");
 			continue;
 		}
 
 		AbilityState.UpdateAbilityAvailability(Action);
 		if(!Action.bInputTriggered) {
+			`RTLOG(AbilityState.GetMyTemplateName() $ " isn't input-triggered, continuing!");
 			continue;
 		}
 		
@@ -651,24 +701,23 @@ exec function RT_CheatLadderPoints(int Points) {
 }
 
 exec function TestScreen() {
-	local XComPresentationLayerBase pres;
+	/*local XComPresentationLayerBase pres;
 	local UISCreenStack	ScreenStack;
-
 	local RTUIScreen_AdvanceTemplarQuestlineStage Screen;
 
 	pres = `PRESBASE;
-	ScreenStack = `SCREENSTACK;
+	ScreenStack = `SCREENSTACK;*/
 }
 
 exec function RT_ListAbilityLists() {
-	class'RTHelpers'.static.ListDefaultAbilityLists();
+	`RTS.ListDefaultAbilityLists();
 }
 
 exec function RT_CheatProgramInfluence() {
-    local RTGameState_ProgramFaction ProgramState;
+	local RTGameState_ProgramFaction ProgramState;
 
-    ProgramState = class'RTHelpers'.static.GetProgramState();
-    ProgramState.TryIncreaseInfluence();
+	ProgramState = `RTS.GetProgramState();
+	ProgramState.TryIncreaseInfluence();
 }
 
 exec function RT_CheatEliminateTemplarFaction() {
@@ -676,10 +725,350 @@ exec function RT_CheatEliminateTemplarFaction() {
 	local XComGameState_ResistanceFaction TemplarState;
 
 	NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("CHEAT - ELIMINATE TEMPLAR FACTION");
-	TemplarState = class'RTHelpers'.static.GetTemplarFactionState();
+	TemplarState = `RTS.GetTemplarFactionState();
 
-	class'RTStrategyElement_Rewards'.static.EliminateTemplars(NewGameState, TemplarState);
+	class'RTStrategyElement_Rewards'.static.EliminateFaction(NewGameState, TemplarState);
 
 	`XCOMGAME.GameRuleset.SubmitGameState(NewGameState);
 }
 
+exec function RT_GenerateTemplarAmbush() {
+	local XComGameState NewGameState;
+	local XComGameState_MissionSite MissionState;
+
+	NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("CHEAT - ELIMINATE TEMPLAR FACTION");
+	MissionState = CreateFakeTemplarAmbush(NewGameState);
+	`XCOMGAME.GameRuleset.SubmitGameState(NewGameState);
+	
+	MissionState = GetMission('RTMissionSource_TemplarAmbush'); // Find the Ambush mission and display its popup
+	if (MissionState != none && MissionState.GetMissionSource().MissionPopupFn != none)
+	{
+		MissionState.GetMissionSource().MissionPopupFn(MissionState);
+		`GAME.GetGeoscape().Pause();
+	}
+}
+
+simulated function XComGameState_MissionSite GetMission(name MissionSource)
+{
+	local XComGameStateHistory History;
+	local XComGameState_MissionSite MissionState;
+
+	History = `XCOMHISTORY;
+
+	foreach History.IterateByClassType(class'XComGameState_MissionSite', MissionState)
+	{
+		if (MissionState.Source == MissionSource && MissionState.Available)
+		{
+			return MissionState;
+		}
+	}
+}
+
+function XComGameState_MissionSite CreateFakeTemplarAmbush(XComGameState NewGameState) {
+	local RTGameState_MissionSiteTemplarAmbush MissionState;
+	local XComGameState_WorldRegion RegionState;
+	local XComGameState_Reward RewardState;
+	local X2StrategyElementTemplateManager StratMgr;
+	local X2RewardTemplate RewardTemplate;
+	local X2MissionSourceTemplate MissionSource;
+	local array<XComGameState_Reward> MissionRewards;
+	local StateObjectReference EmptyRef;
+
+	StratMgr = class'X2StrategyElementTemplateManager'.static.GetStrategyElementTemplateManager();
+	RegionState = `XCOMHQ.GetContinent().GetRandomRegionInContinent();
+
+	MissionRewards.Length = 0;
+	RewardTemplate = X2RewardTemplate(StratMgr.FindStrategyElementTemplate('RTReward_TemplarAmbush')); // rewards are given by the X2MissionSourceTemplate
+	RewardState = RewardTemplate.CreateInstanceFromTemplate(NewGameState);
+	MissionRewards.AddItem(RewardState);
+
+	MissionSource = X2MissionSourceTemplate(StratMgr.FindStrategyElementTemplate('RTMissionSource_TemplarAmbush'));
+	MissionState = RTGameState_MissionSiteTemplarAmbush(NewGameState.CreateNewStateObject(class'RTGameState_MissionSiteTemplarAmbush'));
+	MissionState.CovertActionRef = EmptyRef;
+	MissionState.bGeneratedFromDebugCommand = true;
+	
+	MissionState.BuildMission(MissionSource, RegionState.GetRandom2DLocationInRegion(), RegionState.GetReference(), MissionRewards, true);
+	MissionState.ResistanceFaction = `RTS.GetProgramState().GetReference();
+
+	return MissionState;
+}
+
+exec function RT_RecreateOneSmallFavor() {
+	local XComGameStateHistory History;
+	local XComGameState NewGameState;
+	local RTGameState_ProgramFaction ProgramState;
+	local XComGameState_StrategyCard CardState;
+	local StateObjectReference IteratorRef;
+
+	History = `XCOMHISTORY;
+	NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("Rising Tides: CHEAT: Regenerate One Small Favor");
+	ProgramState = `RTS.GetNewProgramState(NewGameState);
+
+	// try to find One Small Favor
+	foreach ProgramState.PlayableCards(IteratorRef) {
+		CardState = XComGameState_StrategyCard(History.GetGameStateForObjectID(IteratorRef.ObjectID));
+		if(CardState.GetMyTemplateName() == 'ResCard_RTOneSmallFavor') {
+			return;
+		}
+	}
+
+	// didn't find it, bugged campaign
+	foreach History.IterateByClassType(class'XComGameState_StrategyCard', CardState)
+	{
+		if(CardState.GetMyTemplateName() == 'ResCard_RTOneSmallFavor') {
+			ProgramState.PlayableCards.AddItem(CardState.GetReference());
+			`XCOMGAME.GameRuleset.SubmitGameState(NewGameState);
+			return;
+		}
+	}
+
+	`XCOMGAME.GameRuleset.SubmitGameState(NewGameState);
+}
+
+exec function RT_ToggleAllToolTips(bool bHide, optional bool bAnimateOutTooltip = false) {
+	local UITooltipMgr Mgr;
+	local XComPresentationLayerBase Pres;
+	local UITooltip Tooltip;
+	pres = `PRESBASE;
+
+	Mgr = Pres.m_kTooltipMgr;
+	foreach Mgr.Tooltips(Tooltip) {
+		if(!bHide)
+			Mgr.ActivateTooltip(Tooltip);
+		else
+			Mgr.DeactivateTooltip(Tooltip, bAnimateOutTooltip);
+	}
+}
+
+exec function RT_DebugParticleSystemComponents() {
+	local Actor A;
+	local ParticleSystemComponent PSC;
+	local int count, total;
+	local XComCheatManager CheatManager;
+
+	CheatManager = `CHEATMGR;
+
+	total = 0;
+	// what the fuck is an outer
+	foreach CheatManager.Outer.AllActors(class'Actor', A)
+	{
+		count = 0;
+		foreach A.AllOwnedComponents(class'ParticleSystemComponent', PSC) {
+			total++;
+			count++;
+		}
+
+		if(count > 0)
+			`RTLOG(A @ count $ "", false, true);
+	}
+	
+	`RTLOG("Total: " $ total, false, true);
+}
+
+exec function RT_DebugEmitterPool_1() {
+	local Actor A;
+	local ParticleSystemComponent PSC;
+	local XComCheatManager CheatManager;
+
+	CheatManager = `CHEATMGR;
+
+	// what the fuck is an outer
+	foreach CheatManager.Outer.AllActors(class'Actor', A)
+	{
+		if(A.Name == 'EmitterPool_1') {
+			break;
+		}
+	}
+
+	`RTLOG("Name = " $ A.Name, false, true);
+	`RTLOG("Class = " $ A.Class, false, true);
+	`RTLOG("Printing PSCs...", false, true);
+	foreach A.AllOwnedComponents(class'ParticleSystemComponent', PSC)
+	{
+		`RTLOG("" $ PSC $ 
+			", LastRenderTime: " $ PSC.LastRenderTime $  
+			", bWasCompleted: " $ PSC.bWasCompleted $
+			", bWasDeactivated: " $ PSC.bWasDeactivated $
+			"",
+			
+		
+			false, true);
+	}
+
+}
+
+exec function RT_ShowTacticalForceLevel() {
+	local XComGameState_BattleData BattleData;
+
+	BattleData = XComGameState_BattleData(`XCOMHISTORY.GetSingleGameStateObjectForClass(class'XComGameState_BattleData'));
+	if(BattleData == none) {
+		`RTLOG("Couldn't find BattleData!", false, true);
+		return;
+	}
+	`RTLOG("Current Force Level is: " $ BattleData.GetForceLevel(), false, true);
+
+}
+
+exec function RT_SetTacticalForceLevel(int iNewForceLevel) {
+	local XComGameState_BattleData BattleData;
+	local XComGameState	NewGameState;
+
+	BattleData = XComGameState_BattleData(`XCOMHISTORY.GetSingleGameStateObjectForClass(class'XComGameState_BattleData'));
+	if(BattleData == none) {
+		`RTLOG("Couldn't find BattleData!", false, true);
+		return;
+	}
+
+	NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("CHEAT: Setting Tactical Force Level to " $ iNewForceLevel);
+	BattleData = XComGameState_BattleData(NewGameState.ModifyStateObject(class'XComGameState_BattleData', BattleData.ObjectID));
+	BattleData.SetForceLevel(iNewForceLevel);
+
+	`TACTICALRULES.SubmitGameState(NewGameState);
+}
+
+exec function RT_DebugAIBehavior() {
+	/*local XComGameState_Unit UnitState;
+	local StateObjectReference AbilityRef;
+	local XComGameState_Ability AbilityState;
+	local XComGameStateHistory History;
+	local AvailableAction Action;
+	
+	UnitState = `CHEATMGR.GetClosestUnitToCursor();
+	*/
+}
+
+exec function RT_ListAllStrategyCards() {
+	local XComGameStateHistory History;
+	local XComGameState_StrategyCard CardState;
+
+	History = `XCOMHISTORY;
+
+	foreach History.IterateByClassType(class'XComGameState_StrategyCard', CardState)
+	{
+		`RTLOG("Found Strategy Card with TemplateName " $ CardState.GetMyTemplateName() $ " and StateObjectRef " $ CardState.GetReference().ObjectID, false, true);
+	}
+}
+
+exec function bool RT_DebugProgramFactionScreen()
+{
+	local UIScreen TempScreen;
+	local XComHQPresentationLayer Pres;
+	local UIScreenStack ScreenStack;
+
+	Pres = `HQPres;
+
+	ScreenStack = Pres.ScreenStack;
+	TempScreen = ScreenStack.GetFirstInstanceOf(class'RTUIScreen_ProgramFactionInfo');
+	if (TempScreen != none && ScreenStack.GetCurrentScreen() == TempScreen)
+	{
+		TempScreen.CloseScreen();
+		return true;
+	}
+	
+	// don't show when paused or showing popups
+	if (Pres.IsBusy())
+	{
+		return false;
+	}
+	
+	TempScreen = GetProgramFactionInfoScreen();
+	ScreenStack.Push(TempScreen, Pres.Get2DMovie());
+	RTUIScreen_ProgramFactionInfo(TempScreen).PopulateData();
+
+	return true;
+}
+
+static function RTUIScreen_ProgramFactionInfo GetProgramFactionInfoScreen()
+{
+	local RTUIScreen_ProgramFactionInfo TempScreen;
+	local XComPresentationLayerBase Pres;
+
+	Pres = `PRESBASE;
+	TempScreen = RTUIScreen_ProgramFactionInfo(FindObject(class'X2DownloadableContentInfo_RisingTides'.default.screen_path, class'RTUIScreen_ProgramFactionInfo'));
+	if (Pres != none && TempScreen == none)
+	{
+		TempScreen = Pres.Spawn(class'RTUIScreen_ProgramFactionInfo', Pres);
+		TempScreen.InitScreen(XComPlayerController(Pres.Owner), Pres.Get2DMovie());
+		TempScreen.Movie.LoadScreen(TempScreen);
+		class'X2DownloadableContentInfo_RisingTides'.default.screen_path = PathName(TempScreen);
+	}
+	return TempScreen;
+}
+
+exec function RT_CheatProgramQuestline() {
+	local RTGameState_ProgramFaction	ProgramState;
+	local XComGameState					NewGameState;
+
+	NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("CHEAT: Force Templar Questline!");
+	ProgramState = `RTS.GetNewProgramState(NewGameState);
+
+	ProgramState.ForceIncreaseInfluence();
+	ProgramState.IncrementTemplarQuestlineStage();
+	ProgramState.IncrementNumFavorsAvailable(3);
+	
+	`GAMERULES.SubmitGameState(NewGameState);
+}
+
+exec function RT_TestProgramInfoScreenTutorial() {
+	local RTGameState_ProgramFaction	ProgramState;
+
+	ProgramState = `RTS.GetProgramState();
+	ProgramState.HandleProgramScreenTutorial(true);
+}
+
+exec function RT_TestOSFTutorial() {
+	local RTGameState_ProgramFaction	ProgramState;
+
+	ProgramState = `RTS.GetProgramState();
+	ProgramState.HandleOSFTutorial(true);
+}
+
+exec function RT_DebugEncounterIDs()
+{
+	local XComTacticalMissionManager MissionManager;
+	local ConfigurableEncounter Encounter;
+	local string DebugText;
+
+	MissionManager = `TACTICALMISSIONMGR;
+	foreach MissionManager.ConfigurableEncounters(Encounter)
+	{
+		DebugText = DebugText $ Encounter.EncounterID $ "\n";
+	}
+	`RTLOG("Valid EncounterIDs:\n"@DebugText);
+}
+
+exec function RT_DebugObjectiveParcelsAndPCPs() {
+	local XComParcelManager ParcelManager;
+	local XComPlotCoverParcelManager PCPManager;
+
+	local PlotDefinition Plot;
+	local PCPDefinition PCP;
+
+	ParcelManager = `PARCELMGR;
+	PCPManager = new class'XComPlotCoverParcelManager';
+
+	`RTLOG("--------- PLOTS -------------------------------------------------------------------------------------------------------------------------------------");
+	foreach ParcelManager.arrPlots(Plot) {
+		if(Plot.ObjectiveTags.Length > 0) {
+			`RTLOG(Plot.MapName $ " has an objectiveTag: " $ Plot.ObjectiveTags[0], false, true);
+		}
+	}
+	`RTLOG("--------- PCPS -------------------------------------------------------------------------------------------------------------------------------------");
+	foreach PCPManager.arrAllPCPDefs(PCP) {
+		if(PCP.ObjectiveTags.Length > 0) {
+			`RTLOG(PCP.MapName $ " has an objectiveTag: " $ PCP.ObjectiveTags[0], false, true);
+		}
+	}
+}
+
+exec function RT_DebugRisks() {
+	local XComGameStateHistory History;
+	local XComGameState_CovertAction ActionState;
+
+	History = `XCOMHISTORY;
+	foreach History.IterateByClassType(class'XComGameState_CovertAction', ActionState) {
+		if (ActionState.bStarted) {
+			
+		}
+	}
+}

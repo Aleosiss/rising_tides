@@ -14,9 +14,14 @@ static function array<X2DataTemplate> CreateTemplates()
 	Rewards.AddItem(CreateProgramHuntTemplarsP2Reward());
 	Rewards.AddItem(CreateProgramHuntTemplarsP3Reward());
 
+	Rewards.AddItem(CreateProgramHuntTemplarsAmbushReward());
+
 	// Misc Rewards
 	Rewards.AddItem(CreateProgramAddCardSlotTemplate());
 	Rewards.AddItem(CreateProgramIncreaseInfluenceTemplate());
+
+	// Empty Reward
+	Rewards.AddItem(CreateProgramNullReward());
 
 	return Rewards;
 }
@@ -89,7 +94,7 @@ static function X2DataTemplate CreateProgramHuntTemplarsP1Reward() {
 	Template.IsRewardNeededFn = none; // allows logical augmentation of reward availability. Used to indicate if the player desperately needs this resource
 	Template.GenerateRewardFn = none;
 	Template.SetRewardFn = none;
-	Template.GiveRewardFn = GiveProgramAdvanceQuestlineReward;
+	Template.GiveRewardFn = GiveHuntTemplarsP1Reward;
 	Template.GetRewardStringFn = none;
 	Template.GetRewardPreviewStringFn = none;
 	Template.GetRewardDetailsStringFn = none;
@@ -112,7 +117,7 @@ static function X2DataTemplate CreateProgramHuntTemplarsP2Reward() {
 	Template.IsRewardNeededFn = none; // allows logical augmentation of reward availability. Used to indicate if the player desperately needs this resource
 	Template.GenerateRewardFn = none;
 	Template.SetRewardFn = none;
-	Template.GiveRewardFn = GiveProgramAdvanceQuestlineReward;
+	Template.GiveRewardFn = GiveHuntTemplarsP2Reward;
 	Template.GetRewardStringFn = none;
 	Template.GetRewardPreviewStringFn = none;
 	Template.GetRewardDetailsStringFn = none;
@@ -136,6 +141,60 @@ static function X2DataTemplate CreateProgramHuntTemplarsP3Reward() {
 	Template.GenerateRewardFn = none;
 	Template.SetRewardFn = none;
 	Template.GiveRewardFn = GiveHuntTemplarsP3Reward; // TODO
+	Template.GetRewardStringFn = none; // TODO
+	Template.GetRewardPreviewStringFn = none; // TODO
+	Template.GetRewardDetailsStringFn = none; // TODO
+	Template.GetRewardImageFn = none; // TODO
+	Template.SetRewardByTemplateFn = none;
+	Template.GetBlackMarketStringFn = none;
+	Template.GetRewardIconFn = none;
+	Template.CleanUpRewardFn = none;
+	Template.RewardPopupFn = none; // TODO
+
+	return Template;
+}
+
+static function X2DataTemplate CreateProgramNullReward() {
+	local X2RewardTemplate Template;
+
+	`CREATE_X2Reward_TEMPLATE(Template, 'RTReward_None');
+
+	return Template;
+}
+
+static function X2DataTemplate CreateProgramHuntTemplarsAmbushReward() {
+	local X2RewardTemplate Template;
+
+	`CREATE_X2Reward_TEMPLATE(Template, 'RTReward_TemplarAmbush');
+	
+	Template.IsRewardAvailableFn = none;
+	Template.IsRewardNeededFn = none; 
+	Template.GenerateRewardFn = none;
+	Template.SetRewardFn = none;
+	Template.GiveRewardFn = GiveHuntTemplarAmbushReward; // TODO
+	Template.GetRewardStringFn = none; // TODO
+	Template.GetRewardPreviewStringFn = none; // TODO
+	Template.GetRewardDetailsStringFn = none; // TODO
+	Template.GetRewardImageFn = none; // TODO
+	Template.SetRewardByTemplateFn = none;
+	Template.GetBlackMarketStringFn = none;
+	Template.GetRewardIconFn = none;
+	Template.CleanUpRewardFn = none;
+	Template.RewardPopupFn = none; // TODO
+
+	return Template;
+}
+
+static function X2DataTemplate CreateProgramTemplarCovenAssaultReward() {
+	local X2RewardTemplate Template;
+
+	`CREATE_X2Reward_TEMPLATE(Template, 'RTReward_TemplarCovenAssault');
+	
+	Template.IsRewardAvailableFn = none;
+	Template.IsRewardNeededFn = none; 
+	Template.GenerateRewardFn = none;
+	Template.SetRewardFn = none;
+	Template.GiveRewardFn = GiveTemplarCovenAssaultReward; // TODO
 	Template.GetRewardStringFn = none; // TODO
 	Template.GetRewardPreviewStringFn = none; // TODO
 	Template.GetRewardDetailsStringFn = none; // TODO
@@ -185,7 +244,7 @@ static function bool IsFindProgramFactionRewardAvailable(optional XComGameState 
 	//History = `XCOMHISTORY;
 	FactionState = GetFactionState(NewGameState, AuxRef);
 
-	if(FactionState.GetMyTemplateName() == class'RTHelpers'.default.ProgramFactionName)
+	if(FactionState.GetMyTemplateName() == `RTD.ProgramFactionName)
 		return IsFindFactionRewardAvailable(NewGameState, AuxRef);
 	else return false;
 }
@@ -197,7 +256,7 @@ static function bool IsFindFarthestProgramFactionRewardAvailable(optional XComGa
 	//History = `XCOMHISTORY;
 	FactionState = GetFactionState(NewGameState, AuxRef);
 
-	if(FactionState.GetMyTemplateName() == class'RTHelpers'.default.ProgramFactionName)
+	if(FactionState.GetMyTemplateName() == `RTD.ProgramFactionName)
 		return IsFindFarthestFactionRewardAvailable(NewGameState, AuxRef);
 	else return false;
 }
@@ -365,46 +424,89 @@ static function GiveProgramFactionInfluenceReward(XComGameState NewGameState, XC
 	}
 }
 
+static function GiveHuntTemplarsP1Reward(XComGameState NewGameState, XComGameState_Reward RewardState, optional StateObjectReference AuxRef, optional bool bOrder = false, optional int OrderHours = -1)
+{
+	GiveProgramAdvanceQuestlineReward(NewGameState, RewardState, AuxRef, bOrder, OrderHours);
+	`RTLOG("Granting GiveHuntTemplarsP1Reward!");
+}
+
+static function GiveHuntTemplarsP2Reward(XComGameState NewGameState, XComGameState_Reward RewardState, optional StateObjectReference AuxRef, optional bool bOrder = false, optional int OrderHours = -1)
+{
+	GiveProgramAdvanceQuestlineReward(NewGameState, RewardState, AuxRef, bOrder, OrderHours);
+	`RTLOG("Granting GiveHuntTemplarsP2Reward!");
+}
+
 static function GiveHuntTemplarsP3Reward(XComGameState NewGameState, XComGameState_Reward RewardState, optional StateObjectReference AuxRef, optional bool bOrder = false, optional int OrderHours = -1)
+{
+	GiveProgramAdvanceQuestlineReward(NewGameState, RewardState, AuxRef, bOrder, OrderHours);
+	`RTLOG("Granting GiveHuntTemplarsP3Reward!");
+}
+
+static function GiveTemplarCovenAssaultReward(XComGameState NewGameState, XComGameState_Reward RewardState, optional StateObjectReference AuxRef, optional bool bOrder = false, optional int OrderHours = -1)
 {
 	local XComGameState_ResistanceFaction TemplarState;
 
-	TemplarState = class'RTHelpers'.static.GetTemplarFactionState();
+	TemplarState = `RTS.GetTemplarFactionState();
 
-	GiveProgramAdvanceQuestlineReward(NewGameState, RewardState, AuxRef, bOrder, OrderHours);
 	EliminateFaction(NewGameState, TemplarState);
 	GiveTemplarQuestlineCompleteReward(NewGameState, RewardState, AuxRef, bOrder, OrderHours);
 }
 
 static function GiveTemplarQuestlineCompleteReward(XComGameState NewGameState, XComGameState_Reward RewardState, optional StateObjectReference AuxRef, optional bool bOrder = false, optional int OrderHours = -1) {
-	
+	local RTGameState_ProgramFaction ProgramState;
+
+	ProgramState = `RTS.GetNewProgramState(NewGameState);
+	ProgramState.IncrementNumFavorsAvailable(30);
+	ProgramState.IncrementTemplarQuestlineStage(); // should be 4 now
+
+	// TODO
 }
 
+static function GiveHuntTemplarAmbushReward(XComGameState NewGameState, XComGameState_Reward RewardState, optional StateObjectReference AuxRef, optional bool bOrder = false, optional int OrderHours = -1)
+{
+	local RTGameState_ProgramFaction ProgramFaction;
+
+	ProgramFaction = `RTS.GetNewProgramState(NewGameState);
+	switch(ProgramFaction.iTemplarQuestlineStage) {
+		case 0:
+			GiveHuntTemplarsP1Reward(NewGameState, RewardState, AuxRef, bOrder, OrderHours);
+			break;
+		case 1:
+			GiveHuntTemplarsP2Reward(NewGameState, RewardState, AuxRef, bOrder, OrderHours);
+			break;
+		case 2:
+			GiveHuntTemplarsP3Reward(NewGameState, RewardState, AuxRef, bOrder, OrderHours);
+			break;
+		default:
+			`RTLOG("Something broke, GiveHuntTemplarAmbushReward is out of bounds!", true, false);
+			break;
+	}
+}
 static function EliminateFaction(XComGameState NewGameState, XComGameState_ResistanceFaction FactionState, optional bool bShouldFactionSoldiersDesert = true) {
 	local XComGameState_HeadquartersXCom XComHQ;
 	local XComGameStateHistory History;
 	local XComGameState_HeadquartersResistance ResistHQ;
 	local XComGameState_Haven FactionHavenState;
 	local StateObjectReference IteratorRef;
-	local StateObjectReference EmptyRef;
+//	local StateObjectReference EmptyRef;
 	local XComGameState_Unit UnitState;
 	local XComGameState_StrategyCard CardState;
-	local XComGameState_WorldRegion RegionState;
-	local int i;
+//	local XComGameState_WorldRegion RegionState;
+//	local int i;
 
 	History = `XCOMHISTORY;
-	XComHQ = class'RTHelpers'.static.GetXComHQState();
+	XComHQ = `RTS.GetXComHQState();
 	ResistHQ = XComGameState_HeadquartersResistance(History.GetSingleGameStateObjectForClass(class'XComGameState_HeadquartersResistance'));
 	FactionState = XComGameState_ResistanceFaction(NewGameState.ModifyStateObject(class'XComGameState_ResistanceFaction', FactionState.GetReference().ObjectID));
 	
 	/** What, exactly, goes into removing a faction?
 		-> Remove FactionState.GetReference() from XCGS_HeadquartersResistance.Factions
-		-> Call DeactivateCard on all activated Templar cards
-		-> Check Covert Actions, if there are any from the Templars they need to be canceled
-		-> Need to clean up Templar soldiers? It would be more realistic for them to stick around then leave randomly, perhaps even sabotage the avenger
+		-> Call DeactivateCard on all activated faction cards
+		-> Check Covert Actions, if there are any from the faction they need to be canceled
+		-> Need to clean up faction soldiers? It would be more realistic for them to stick around then leave randomly, perhaps even sabotage the avenger
 			but fuck that
 		-> Clean up the Resistance Haven
-		-> Find soldiers in the XCOM barracks that are Templars, and remove them
+		-> Find soldiers in the XCOM barracks that are faction heroes, and remove them
 		-> Generate a popup displaying all of what has transpired
 		-> Transfer Chosen missions to Program(?)
 	*/
@@ -425,7 +527,7 @@ static function EliminateFaction(XComGameState NewGameState, XComGameState_Resis
 			CardState.DeactivateCard(NewGameState);
 			FactionState.PlayableCards.AddItem(IteratorRef);
 		}
-		i++;
+//		i++;
 	}
 
 	// remove haven
@@ -438,7 +540,7 @@ static function EliminateFaction(XComGameState NewGameState, XComGameState_Resis
 		foreach XComHQ.Crew(IteratorRef)
 		{
 			UnitState = XComGameState_Unit(History.GetGameStateForObjectID(IteratorRef.ObjectID));
-			if(UnitState != none && UnitState.GetMyTemplateName() == FactionState.ChampionCharacterClass)
+			if(UnitState != none && UnitState.GetMyTemplateName() == FactionState.GetChampionCharacterName())
 			{
 				FireUnit(NewGameState, IteratorRef);
 			}
@@ -465,8 +567,9 @@ static function ProgramFactionInfluenceRewardPopup(XComGameState_Reward RewardSt
 static function GiveProgramAdvanceQuestlineReward(XComGameState NewGameState, XComGameState_Reward RewardState, optional StateObjectReference AuxRef, optional bool bOrder = false, optional int OrderHours = -1) {
 	local RTGameState_ProgramFaction ProgramState;
 
-	ProgramState = class'RTHelpers'.static.GetNewProgramState(NewGameState);
+	ProgramState = `RTS.GetNewProgramState(NewGameState);
 	ProgramState.IncrementTemplarQuestlineStage();
+	ProgramState.IncrementNumFavorsAvailable(3);
 }
 
 // why wasn't this static in the first place...
@@ -482,7 +585,7 @@ static function FireUnit(XComGameState NewGameState, StateObjectReference UnitRe
 	XComHQ = XComGameState_HeadquartersXCom(History.GetSingleGameStateObjectForClass(class'XComGameState_HeadquartersXCom'));
 	XComHQ = XComGameState_HeadquartersXCom(NewGameState.ModifyStateObject(class'XComGameState_HeadquartersXCom', XComHQ.ObjectID));
 	XComHQ.RemoveFromCrew(UnitReference);
-		
+
 	for(idx = 0; idx < XComHQ.Squad.Length; idx++)
 	{
 		if(XComHQ.Squad[idx] == UnitReference)
@@ -494,6 +597,7 @@ static function FireUnit(XComGameState NewGameState, StateObjectReference UnitRe
 
 	UnitState = XComGameState_Unit(NewGameState.ModifyStateObject(class'XComGameState_Unit', UnitReference.ObjectID));
 	class'X2StrategyGameRulesetDataStructures'.static.ResetAllBonds(NewGameState, UnitState);
+
 	// REMOVE FIRED UNIT?
 	//NewGameState.RemoveStateObject(UnitReference.ObjectID);
 }

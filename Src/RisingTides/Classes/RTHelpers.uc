@@ -4,6 +4,9 @@ class RTHelpers extends Object config(RisingTides);
 var config array<name> StandardShots, MeleeAbilities, SniperShots, OverwatchShots, PsionicAbilities, FreeActions;
 var config name ProgramFactionName;
 
+var config string PROGRAM_RED_COLOR;
+var config string PROGRAM_WHITE_COLOR;
+
 enum ERTChecklist {
 	eChecklist_StandardShots,
 	eChecklist_SniperShots,
@@ -11,6 +14,11 @@ enum ERTChecklist {
 	eChecklist_PsionicAbilities,
 	eChecklist_MeleeAbilities,
 	eChecklist_FreeActions
+};
+
+enum ERTColor {
+	eRTColor_ProgramRed,
+	eRTColor_ProgramWhite
 };
 
 // copied here from X2Helpers_DLC_Day60.uc
@@ -129,28 +137,6 @@ static function GetAdjacentTiles(TTile TargetTile, out array<TTile> AdjacentTile
 	}
 }
 
-static function PanicLoopBeginFn( X2Effect_Persistent PersistentEffect, const out EffectAppliedData ApplyEffectParameters, XComGameState_BaseObject kNewTargetState, XComGameState NewGameState )
-{
-	local XComGameState_Unit UnitState;
-
-	// change the height
-	UnitState = XComGameState_Unit( NewGameState.CreateStateObject( class'XComGameState_Unit', ApplyEffectParameters.TargetStateObjectRef.ObjectID ) );
-	UnitState.bPanicked = true;
-
-	NewGameState.AddStateObject( UnitState );
-}
-
-static function PanicLoopEndFn( X2Effect_Persistent PersistentEffect, const out EffectAppliedData ApplyEffectParameters, XComGameState NewGameState, bool bCleansed )
-{
-	local XComGameState_Unit UnitState;
-
-	// change the height
-	UnitState = XComGameState_Unit( NewGameState.CreateStateObject( class'XComGameState_Unit', ApplyEffectParameters.TargetStateObjectRef.ObjectID ) );
-	UnitState.bPanicked = false;
-
-	NewGameState.AddStateObject( UnitState );
-}
-
 static function RTGameState_ProgramFaction GetProgramState(optional XComGameState NewGameState) {
 	local RTGameState_ProgramFaction Program;
 
@@ -170,6 +156,10 @@ static function RTGameState_ProgramFaction GetProgramState(optional XComGameStat
 		Program = RTGameState_ProgramFaction(`XCOMHISTORY.GetSingleGameStateObjectForClass(class'RTGameState_ProgramFaction'));
 	}
 
+	if(Program == none) {
+		`RTLOG("ERROR, Could not find a ProgramStateObject, returning NONE!", true, false);
+	}
+	
 	return Program;
 }
 
@@ -177,6 +167,10 @@ static function RTGameState_ProgramFaction GetNewProgramState(XComGameState NewG
 	local RTGameState_ProgramFaction Program;
 
 	Program = GetProgramState(NewGameState);
+	if(Program == none) {
+		return none;
+	}
+
 	Program = RTGameState_ProgramFaction(NewGameState.ModifyStateObject(class'RTGameState_ProgramFaction', Program.ObjectID));
 	return Program;
 }
@@ -187,10 +181,10 @@ static function RTLog(string message, optional bool bShouldRedScreenToo = false,
 
 	b = DebuggingEnabled();
 	`LOG(message, b, 'Rising Tides');
-	if(bShouldRedScreenToo) {
+	if(bShouldRedScreenToo && b) {
 		`RedScreen("RisingTides: " $ message);
 	}
-	if(bShouldOutputToConsoleToo) {
+	if(bShouldOutputToConsoleToo && b) {
 		class'Helpers'.static.OutputMsg(message);
 	}
 }
@@ -225,11 +219,6 @@ static function PrintGoldenPathActionsForFaction(XComGameState_ResistanceFaction
 		CovertActionTemplate = CovertActionState.GetMyTemplate();
 		RTLog("" $ CovertActionTemplate.DataName);
 	}
-}
-
-static function PrintMiscInfoForFaction(XComGameState_ResistanceFaction Faction) {
-	//local XComGameState_HeadquartersXCom XComHQ;
-
 }
 
 static function SubmitGameState(XComGameState NewGameState) {
@@ -278,4 +267,53 @@ static function XComGameState_ResistanceFaction GetTemplarFactionState()
 
 simulated static function bool IsInvalidMission(X2MissionSourceTemplate Template) {
 	return class'RTGameState_ProgramFaction'.default.InvalidMissionSources.Find(Template.DataName) != INDEX_NONE;
+}
+
+
+
+static function String GetProgramColor(optional ERTColor colorEnum) {
+	local ERTColor EmptyColor;
+
+	if(colorEnum == EmptyColor) {
+		return default.PROGRAM_RED_COLOR;
+	}
+
+	switch(colorEnum) {
+		case eRTColor_ProgramRed:
+			return default.PROGRAM_RED_COLOR;
+		case eRTColor_ProgramWhite:
+			return default.PROGRAM_WHITE_COLOR;
+		default:
+			return default.PROGRAM_RED_COLOR;
+	}
+}
+
+static function String AddFontColor(String inString, String HexColor) {
+	local String EmptyString;
+
+	if(inString == EmptyString) {
+		`RTLOG("AddFontColor Failed: empty, returning inString!");
+		return inString;
+	}
+
+	if(InStr(inString, "</font>") != -1) {
+		`RTLOG("AddFontColor Failed: fontdata present, returning inString!");
+		return inString;
+	}
+
+	RTLOG("AddFontColor succeeded, final string is: \n<font color='#" $ HexColor $ "'><b>" $ inString $ "<b/></font>");
+	return "<font color='#" $ HexColor $ "'><b>" $ inString $ "<b/></font>";
+}
+
+static function array<Name> GetCompletedXCOMTechNames() {
+	local array<Name> names;
+	local array<XComGameState_Tech> CompletedTechs;
+	local XComGameState_Tech CompletedTechState;
+
+	CompletedTechs = `XCOMHQ.GetAllCompletedTechStates();
+	foreach CompletedTechs(CompletedTechState) { // Check if a tech which upgrades the base has been researched
+		names.AddItem(CompletedTechState.GetMyTemplateName());
+	}
+
+	return names;
 }

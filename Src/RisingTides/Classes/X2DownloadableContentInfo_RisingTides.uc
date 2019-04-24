@@ -14,6 +14,12 @@ var config bool bDebuggingEnabled;
 var config int MajorVer;
 var config int MinorVer;
 var config int PatchVer;
+var config bool bShouldRemoveHelmets;
+var config array<name> TemplarUnitNames;
+
+// weak ref to the screen
+// config is just so we can write to it via default.
+var config String screen_path;
 
 /// <summary>
 /// This method is run if the player loads a saved game that was created prior to this DLC / Mod being installed, and allows the
@@ -45,8 +51,14 @@ static event OnPostTemplatesCreated()
 	`RTLOG("Script package loaded.");
 
 	MakePsiAbilitiesInterruptable();
+	MakeAbilitiesNotTurnEndingForTimeStandsStill();
 	AddProgramFactionCovertActions();
 	AddProgramAttachmentTemplates();
+	
+}
+
+static function MakeAbilitiesNotTurnEndingForTimeStandsStill() {
+	class'RTAbility_MarksmanAbilitySet'.static.MakeAbilitiesNotTurnEndingForTimeStandsStill();
 }
 
 /// <summary>
@@ -56,7 +68,7 @@ static event OnPreMission(XComGameState NewGameState, XComGameState_MissionSite 
 {
 	local RTGameState_ProgramFaction ProgramState;
 	
-	ProgramState = class'RTHelpers'.static.GetNewProgramState(NewGameState);
+	ProgramState = `RTS.GetNewProgramState(NewGameState);
 	ProgramState.PreMissionUpdate(NewGameState, MissionState);
 }
 
@@ -75,21 +87,27 @@ static event OnExitPostMissionSequence()
 {
 	local XComGameState NewGameState;
 	local RTGameState_ProgramFaction ProgramState, Program;
-	local XComGameState_BattleData BattleData;
+	//local XComGameState_BattleData BattleData;
 
-	Program = class'RTHelpers'.static.GetProgramState();
+	Program = `RTS.GetProgramState();
 	if(Program.bShouldPerformPostMissionCleanup) {
 		NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("Cleanup Program Operatives from XCOMHQ!");
-		ProgramState = class'RTHelpers'.static.GetNewProgramState(NewGameState);
+		ProgramState = `RTS.GetNewProgramState(NewGameState);
 		ProgramState.PerformPostMissionCleanup(NewGameState);
 
 		`GAMERULES.SubmitGameState(NewGameState);
 
+		// Might be useful later, but for now disabled because losing one mission would make it impossible to gain more favors
+		/*
 		BattleData = XComGameState_BattleData(`XCOMHISTORY.GetSingleGameStateObjectForClass(class'XComGameState_BattleData'));
 		if(BattleData.bLocalPlayerWon) {
 			// This method creates and submits two new xcgs's
 			ProgramState.TryIncreaseInfluence();
 		}
+		*/
+
+		// Always try to increase influence
+		ProgramState.TryIncreaseInfluence();
 	}
 }
 
@@ -106,11 +124,32 @@ static function bool DisplayQueuedDynamicPopup(DynamicPropertySet PropertySet)
 	}
 
 	if(PropertySet.PrimaryRoutingKey == 'UIAlert_OSFFirstTime') {
-		class'RTGameState_ProgramFaction'.static.DisplayFirstTimePopup();
+		class'RTGameState_ProgramFaction'.static.DisplayOSFFirstTimePopup();
+		return true;
+	}
+
+	if(PropertySet.PrimaryRoutingKey == 'UIAlert_PISFirstTime') {
+		class'RTGameState_ProgramFaction'.static.DisplayPISFirstTimePopup();
+		return true;
+	}
+
+	if(PropertySet.PrimaryRoutingKey == 'RTUIAlert') {
+		CallAlert(PropertySet);
 		return true;
 	}
 
 	return false;
+}
+
+static function CallAlert(const out DynamicPropertySet PropertySet)
+{
+	local RTUIAlert Alert;
+
+	Alert = `HQPRES.Spawn(class'RTUIAlert', `HQPRES);
+	Alert.DisplayPropertySet = PropertySet;
+	Alert.eAlertName = PropertySet.SecondaryRoutingKey;
+
+	`SCREENSTACK.Push(Alert);
 }
 
 static function CallUIFactionPopup(const out DynamicPropertySet PropertySet)
@@ -146,8 +185,8 @@ simulated static function MakePsiAbilitiesInterruptable() {
 	local int i;
 
 	`RTLOG("Patching Psionic Abilities...");
-	for(i = 0; i < class'RTHelpers'.default.PsionicAbilities.Length; ++i) {
-		PsionicTemplateNames.AddItem(class'RTHelpers'.default.PsionicAbilities[i]);
+	for(i = 0; i < `RTD.PsionicAbilities.Length; ++i) {
+		PsionicTemplateNames.AddItem(`RTD.PsionicAbilities[i]);
 	}
 
 	AbilityTemplateMgr = class'X2AbilityTemplateManager'.static.GetAbilityTemplateManager();
@@ -166,9 +205,29 @@ simulated static function MakePsiAbilitiesInterruptable() {
 
 				if(AbilityTemplate.BuildInterruptGameStateFn == none) {
 					AbilityTemplate.BuildInterruptGameStateFn = class'X2Ability'.static.TypicalAbility_BuildInterruptGameState;
+					if(AbilityTemplate.bSkipMoveStop) {
+						AbilityTemplate.BuildInterruptGameStateFn = class'X2Ability'.static.TypicalMoveEndAbility_BuildInterruptGameState;
+					}
 				}
 		}
 	}
+}
+
+/// <summary>
+/// Called from XComGameState_Unit:GatherUnitAbilitiesForInit after the game has built what it believes is the full list of
+/// abilities for the unit based on character, class, equipment, et cetera. You can add or remove abilities in SetupData.
+/// </summary>
+static function FinalizeUnitAbilitiesForInit(XComGameState_Unit UnitState, out array<AbilitySetupData> SetupData, optional XComGameState StartState, optional XComGameState_Player PlayerState, optional bool bMultiplayerDisplay)
+{
+	/*local AbilitySetupData IteratorData;
+
+	if(default.TemplarUnitNames.Find(UnitState.GetMyTemplateName()) != INDEX_NONE)
+	{
+		`RTLOG("Initializing a Templar, printing their AbiltySetupData for debugging!");
+		foreach SetupData(IteratorData) {
+			`RTLOG("" $ IteratorData.TemplateName);
+		}
+	}*/
 }
 
 static function bool DebuggingEnabled() {

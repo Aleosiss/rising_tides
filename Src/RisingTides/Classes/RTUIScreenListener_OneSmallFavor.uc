@@ -1,22 +1,46 @@
 // This is an Unreal Script
 class RTUIScreenListener_OneSmallFavor extends UIScreenListener config(ProgramFaction);
 
-var UICheckbox 	cb;
-var UIMission	ms;
-var StateObjectReference mr;
-var bool		bDebugging;
+var UICheckbox						cb;
+var UIMission						ms;
+var StateObjectReference			mr;
+var bool							bDebugging;
+var bool							bHasSeenOSFTutorial;
+var bool							bHasSeenProgramScreenTutorial;
 
-var config array<name> FatLaunchButtonMissionTypes;
-var config float OSFCheckboxDistortOnClickDuration;
+var config array<name> 				FatLaunchButtonMissionTypes;
+var config float 					OSFCheckboxDistortOnClickDuration;
 
 delegate OldOnClickedDelegate(UIButton Button);
 
 event OnInit(UIScreen Screen)
 {
+	local RTGameState_ProgramFaction Program;
+	
+	if(UIStrategyMap(Screen) != none) {
+		Program = RTGameState_ProgramFaction(`XCOMHISTORY.GetSingleGameStateObjectForClass(class'RTGameState_ProgramFaction'));
+		if(Program == none) {
+			return;
+		}
+
+		if(!Program.bMetXCom) {
+			return;
+		}
+
+		if(!bHasSeenOSFTutorial) {
+			Program.HandleOSFTutorial();
+			bHasSeenOSFTutorial = Program.bOSF_FirstTimeDisplayed;
+		}
+		else if(!bHasSeenProgramScreenTutorial) {
+			Program.HandleProgramScreenTutorial();
+			bHasSeenProgramScreenTutorial = Program.bPIS_FirstTimeDisplayed;
+		}
+	}
+
 	if(UIMission(Screen) == none) {
 		return;
 	}
-	
+
 	bDebugging = false;
 
 	ms = UIMission(Screen);
@@ -74,8 +98,6 @@ simulated function AddOneSmallFavorSelectionCheckBox(UIScreen Screen) {
 		return;
 	}
 
-	Program.HandleOSFTutorial();
-
 	// immediately execute the init code if we're somehow late to the initialization party
 	if(MissionScreen.ConfirmButton.bIsVisible) {
 		if(MissionScreen.ConfirmButton.bIsInited && MissionScreen.ConfirmButton.bIsVisible) {
@@ -121,11 +143,12 @@ function OnConfirmButtonInited(UIPanel Panel) {
 	}
 
 	// the checkbox shouldn't be clickable if the favor isn't available
-	bReadOnly = !Program.bOneSmallFavorAvailable;
+	bReadOnly = !Program.IsOneSmallFavorAvailable();
 	if(!bReadOnly) {
-		bReadOnly = class'RTHelpers'.static.IsInvalidMission(MissionScreen.GetMission().GetMissionSource());
+		bReadOnly = `RTS.IsInvalidMission(MissionScreen.GetMission().GetMissionSource());
 		if(bReadOnly) {
-			`RTLOG("This MissionSource is invalid!", true);
+			`RTLOG("This MissionSource is invalid!", false, false);
+			return; // don't even make the checkbox in this case...
 		}
 	}
 
@@ -183,7 +206,7 @@ simulated function bool AddOneSmallFavorSitrep(XComGameState_MissionSite Mission
 	}
 
 	if(!bDebugging) {
-		if(!Program.bOneSmallFavorAvailable) {
+		if(!Program.IsOneSmallFavorAvailable()) {
 			return false;
 		}
 	
@@ -196,7 +219,6 @@ simulated function bool AddOneSmallFavorSitrep(XComGameState_MissionSite Mission
 		`RTLOG("Adding One Small Favor SITREP via debug override!"); 
 	}
 
-
 	XComHQ = class'UIUtilities_Strategy'.static.GetXComHQ();
 
 	if(MissionState.GeneratedMission.SitReps.Find('RTOneSmallFavor') != INDEX_NONE) {
@@ -204,7 +226,7 @@ simulated function bool AddOneSmallFavorSitrep(XComGameState_MissionSite Mission
 		return false;
 	}
 	
-	if(class'RTHelpers'.static.IsInvalidMission(MissionState.GetMissionSource())) {
+	if(`RTS.IsInvalidMission(MissionState.GetMissionSource())) {
 		`RTLOG("This map is invalid!", true);
 		return false;
 	}
@@ -219,9 +241,9 @@ simulated function bool AddOneSmallFavorSitrep(XComGameState_MissionSite Mission
 	XComHQ = XComGameState_HeadquartersXCom(NewGameState.ModifyStateObject(XComHQ.class, XComHQ.ObjectID));
 	MissionState = XComGameState_MissionSite(NewGameState.ModifyStateObject(class'XComGameState_MissionSite', MissionState.ObjectID));
 
-	Program.bOneSmallFavorActivated = true; // we're doing it boys
+	
 	MissionState.TacticalGameplayTags.AddItem('RTOneSmallFavor');
-	Program.CashOneSmallFavor(NewGameState, MissionState);
+	Program.CashOneSmallFavor(NewGameState, MissionState); // we're doing it boys
 	ModifyOneSmallFavorSitrepForGeneratedMission(Program, MissionState, true);
 
 	ModifyMissionData(XComHQ, MissionState);
@@ -262,7 +284,6 @@ simulated function bool RemoveOneSmallFavorSitrep(XComGameState_MissionSite Miss
 	Program = RTGameState_ProgramFaction(NewGameState.ModifyStateObject(Program.class, Program.ObjectID));
 	XComHQ = XComGameState_HeadquartersXCom(NewGameState.ModifyStateObject(XComHQ.class, XComHQ.ObjectID));
 	MissionState = XComGameState_MissionSite(NewGameState.ModifyStateObject(class'XComGameState_MissionSite', MissionState.ObjectID));
-	Program.bOneSmallFavorActivated = false;
 	Program.UncashOneSmallFavor(NewGameState, MissionState);
 	ModifyOneSmallFavorSitrepForGeneratedMission(Program, MissionState, false);
 
