@@ -1,4 +1,4 @@
-class RTStrategyElement_Risks extends X2StrategyElement_DefaultCovertActionRisks config(ProgramFaction);
+class RTStrategyElement_Risks extends X2StrategyElement_DefaultCovertActionRisks config(Gameboard);
 
 static function array <X2DataTemplate> CreateTemplates()
 {
@@ -31,6 +31,8 @@ static function CreateTemplarAmbush(XComGameState NewGameState, XComGameState_Co
 	local X2MissionSourceTemplate MissionSource;
 	local array<XComGameState_Reward> MissionRewards;
 
+	`RTLOG("Creating Templar Ambush!");
+
 	ResHQ = XComGameState_HeadquartersResistance(`XCOMHISTORY.GetSingleGameStateObjectForClass(class'XComGameState_HeadquartersResistance'));
 	if (ResHQ.CanCovertActionsBeAmbushed()) // If a Covert Action was supposed to be ambushed, but now the Order is active, don't spawn the mission
 	{
@@ -44,7 +46,7 @@ static function CreateTemplarAmbush(XComGameState NewGameState, XComGameState_Co
 		RewardState = RewardTemplate.CreateInstanceFromTemplate(NewGameState);
 		MissionRewards.AddItem(RewardState);
 
-		MissionSource = X2MissionSourceTemplate(StratMgr.FindStrategyElementTemplate('MissionSource_TemplarAmbush'));
+		MissionSource = X2MissionSourceTemplate(StratMgr.FindStrategyElementTemplate('RTMissionSource_TemplarAmbush'));
 
 		MissionState = RTGameState_MissionSiteTemplarAmbush(NewGameState.CreateNewStateObject(class'RTGameState_MissionSiteTemplarAmbush'));
 		MissionState.CovertActionRef = ActionState.GetReference();

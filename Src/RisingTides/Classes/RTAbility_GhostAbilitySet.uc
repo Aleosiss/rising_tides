@@ -163,8 +163,6 @@ static function X2AbilityTemplate StandardGhostShot()
 	local array<name>                       SkipExclusions;
 	local X2Effect_Knockback				KnockbackEffect;
 	local X2Condition_Visibility            VisibilityCondition;
-	local X2Condition_AbilityProperty		SiphonCondition;
-	local X2Condition_UnitProperty			TargetUnitPropertyCondition;
 	local RTEffect_Siphon					SiphonEffect;
 
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'StandardGhostShot');

@@ -70,7 +70,6 @@ simulated function InitColors(String newPrimaryColor, String newTextColor, Strin
 
 simulated function RTUIInfoBox InitInfoBox(name PanelName, float newWidth, float newHeight, optional int number)
 {
-	local String strTextTemp;
 	local int imageY;
 	local name textContainerName;
 

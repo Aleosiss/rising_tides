@@ -94,7 +94,7 @@ static function X2DataTemplate CreateProgramHuntTemplarsP1Reward() {
 	Template.IsRewardNeededFn = none; // allows logical augmentation of reward availability. Used to indicate if the player desperately needs this resource
 	Template.GenerateRewardFn = none;
 	Template.SetRewardFn = none;
-	Template.GiveRewardFn = GiveProgramAdvanceQuestlineReward;
+	Template.GiveRewardFn = GiveHuntTemplarsP1Reward;
 	Template.GetRewardStringFn = none;
 	Template.GetRewardPreviewStringFn = none;
 	Template.GetRewardDetailsStringFn = none;
@@ -117,7 +117,7 @@ static function X2DataTemplate CreateProgramHuntTemplarsP2Reward() {
 	Template.IsRewardNeededFn = none; // allows logical augmentation of reward availability. Used to indicate if the player desperately needs this resource
 	Template.GenerateRewardFn = none;
 	Template.SetRewardFn = none;
-	Template.GiveRewardFn = GiveProgramAdvanceQuestlineReward;
+	Template.GiveRewardFn = GiveHuntTemplarsP2Reward;
 	Template.GetRewardStringFn = none;
 	Template.GetRewardPreviewStringFn = none;
 	Template.GetRewardDetailsStringFn = none;
@@ -424,9 +424,22 @@ static function GiveProgramFactionInfluenceReward(XComGameState NewGameState, XC
 	}
 }
 
+static function GiveHuntTemplarsP1Reward(XComGameState NewGameState, XComGameState_Reward RewardState, optional StateObjectReference AuxRef, optional bool bOrder = false, optional int OrderHours = -1)
+{
+	GiveProgramAdvanceQuestlineReward(NewGameState, RewardState, AuxRef, bOrder, OrderHours);
+	`RTLOG("Granting GiveHuntTemplarsP1Reward!");
+}
+
+static function GiveHuntTemplarsP2Reward(XComGameState NewGameState, XComGameState_Reward RewardState, optional StateObjectReference AuxRef, optional bool bOrder = false, optional int OrderHours = -1)
+{
+	GiveProgramAdvanceQuestlineReward(NewGameState, RewardState, AuxRef, bOrder, OrderHours);
+	`RTLOG("Granting GiveHuntTemplarsP2Reward!");
+}
+
 static function GiveHuntTemplarsP3Reward(XComGameState NewGameState, XComGameState_Reward RewardState, optional StateObjectReference AuxRef, optional bool bOrder = false, optional int OrderHours = -1)
 {
 	GiveProgramAdvanceQuestlineReward(NewGameState, RewardState, AuxRef, bOrder, OrderHours);
+	`RTLOG("Granting GiveHuntTemplarsP3Reward!");
 }
 
 static function GiveTemplarCovenAssaultReward(XComGameState NewGameState, XComGameState_Reward RewardState, optional StateObjectReference AuxRef, optional bool bOrder = false, optional int OrderHours = -1)
@@ -456,9 +469,13 @@ static function GiveHuntTemplarAmbushReward(XComGameState NewGameState, XComGame
 	ProgramFaction = `RTS.GetNewProgramState(NewGameState);
 	switch(ProgramFaction.iTemplarQuestlineStage) {
 		case 0:
+			GiveHuntTemplarsP1Reward(NewGameState, RewardState, AuxRef, bOrder, OrderHours);
+			break;
 		case 1:
+			GiveHuntTemplarsP2Reward(NewGameState, RewardState, AuxRef, bOrder, OrderHours);
+			break;
 		case 2:
-			GiveProgramAdvanceQuestlineReward(NewGameState, RewardState, AuxRef, bOrder, OrderHours);
+			GiveHuntTemplarsP3Reward(NewGameState, RewardState, AuxRef, bOrder, OrderHours);
 			break;
 		default:
 			`RTLOG("Something broke, GiveHuntTemplarAmbushReward is out of bounds!", true, false);

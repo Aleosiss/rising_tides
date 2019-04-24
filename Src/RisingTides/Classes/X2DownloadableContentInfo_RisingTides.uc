@@ -87,7 +87,7 @@ static event OnExitPostMissionSequence()
 {
 	local XComGameState NewGameState;
 	local RTGameState_ProgramFaction ProgramState, Program;
-	local XComGameState_BattleData BattleData;
+	//local XComGameState_BattleData BattleData;
 
 	Program = `RTS.GetProgramState();
 	if(Program.bShouldPerformPostMissionCleanup) {

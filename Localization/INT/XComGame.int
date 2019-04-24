@@ -1094,6 +1094,18 @@ RewardDetails="Uncover signal source."
 DisplayName="Unknown"
 RewardDetails="Uncover signal source."
 
+[RTReward_ProgramHuntTemplarsP1 X2RewardTemplate]
+DisplayName="Templar High Coven Coordinates"
+RewardDetails="The location of the High Coven... and Geist."
+
+[RTReward_ProgramHuntTemplarsP2 X2RewardTemplate]
+DisplayName="Insider Intel"
+RewardDetails="Operatives undercover in the Templar High Coven can help us identify a weakness."
+
+[RTReward_ProgramHuntTemplarsP3 X2RewardTemplate]
+DisplayName="Assault Opportunity"
+RewardDetails="A momentary window to strike at the Templar High Coven."
+
 [ResistanceMode_PsiTraining X2ResistanceModeTemplate]
 DisplayName="Scanning Bonus: Psionic Expertise"
 SummaryText="Program scientists assist with operating the psi-lab while the Avenger is scanning at this location, decreasing the training time of soldiers inside it.\n\nWARNING: Purchasing this ability will overwrite the current Resistance HQ scanning bonus. The Scanning Bonus may only be modified once per month."
@@ -1108,10 +1120,10 @@ Description="The Program has lent one of their squads to handle this operation."
 EmptyText="NON-TEMPLAR SOLDIER"
 BonusText="ON COVERT ACTION"
 
-[RTCovertActionRisk_TemplarAmbush X2CovertActionRiskTemplate]
+[CovertActionRisk_TemplarAmbush X2CovertActionRiskTemplate]
 RiskName="Templar Ambush"
 
-[RTCovertActionRisk_TemplarDiscovery X2CovertActionRiskTemplate]
+[CovertActionRisk_TemplarDiscovery X2CovertActionRiskTemplate]
 RiskName="Templar Discovery"
 
 
@@ -1205,6 +1217,6 @@ strCharacterName="Templar Follower"
 [RTTemplarPeon_M3 X2CharacterTemplate]
 strCharacterName="Templar Idealist"
 
-[RTUIScreenListener_ProgramFactionScreen]
+[RTUIStrategyMapItem_ProgramHQ]
 m_strProgramFactionButton="Briefing"
 

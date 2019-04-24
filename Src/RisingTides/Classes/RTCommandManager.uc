@@ -1027,7 +1027,6 @@ exec function RT_DebugEncounterIDs()
 {
 	local XComTacticalMissionManager MissionManager;
 	local ConfigurableEncounter Encounter;
-	local bool bFound;
 	local string DebugText;
 
 	MissionManager = `TACTICALMISSIONMGR;
@@ -1058,6 +1057,18 @@ exec function RT_DebugObjectiveParcelsAndPCPs() {
 	foreach PCPManager.arrAllPCPDefs(PCP) {
 		if(PCP.ObjectiveTags.Length > 0) {
 			`RTLOG(PCP.MapName $ " has an objectiveTag: " $ PCP.ObjectiveTags[0], false, true);
+		}
+	}
+}
+
+exec function RT_DebugRisks() {
+	local XComGameStateHistory History;
+	local XComGameState_CovertAction ActionState;
+
+	History = `XCOMHISTORY;
+	foreach History.IterateByClassType(class'XComGameState_CovertAction', ActionState) {
+		if (ActionState.bStarted) {
+			
 		}
 	}
 }

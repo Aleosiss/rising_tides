@@ -1,5 +1,5 @@
 class RTUIScreenListener_ProgramFactionScreen extends UIScreenListener;
-
+/*
 var bool bExists;
 var localized String m_strProgramFactionButton;
 var name buttonName;
@@ -29,15 +29,15 @@ event OnReceiveFocus(UIScreen Screen) {
 
 event OnRemoved(UIScreen Screen) {
 	if(UIStrategyMap(Screen) != none && bExists) {
-		`RTLOG("Cleaning up Program Info Screen button in OnRemoved...");
-		ManualGC(UIStrategyMap(Screen));
+		//`RTLOG("Cleaning up Program Info Screen button in OnRemoved...");
+		//ManualGC(UIStrategyMap(Screen));
 	}
 }
 
 event OnLoseFocus(UIScreen Screen) {
 	if(UIStrategyMap(Screen) != none && bExists) {
-		`RTLOG("Cleaning up Program Info Screen button in OnLoseFocus...");
-		ManualGC(UIStrategyMap(Screen));
+		//`RTLOG("Cleaning up Program Info Screen button in OnLoseFocus...");
+		//ManualGC(UIStrategyMap(Screen));
 	}
 }
 
@@ -151,3 +151,4 @@ defaultproperties
 
 	buttonName = "RT_ProgramBriefingButton"
 }
+*/

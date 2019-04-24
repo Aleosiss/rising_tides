@@ -55,7 +55,7 @@ function SuccessMessage($message)
 # to the copies. If you try to jump to these files (e.g. by tying this output to the build commands in your editor)
 # you'll be editting the copies, which will then be overwritten the next time you build with the sources in your mod folder
 # that haven't been changed.
-function Launch-Make([string] $makeCmd, [string] $makeFlags, [string] $sdkPath, [string] $modSrcRoot) {
+function Invoke-Make([string] $makeCmd, [string] $makeFlags, [string] $sdkPath, [string] $modSrcRoot) {
     # Create a ProcessStartInfo object to hold the details of the make command, its arguments, and set up
     # stdout/stderr redirection.
     $pinfo = New-Object System.Diagnostics.ProcessStartInfo
@@ -83,13 +83,36 @@ function Launch-Make([string] $makeCmd, [string] $makeFlags, [string] $sdkPath, 
     $outAction = {
         $outTxt = $Event.SourceEventArgs.Data
         # Match warning/error lines
-        if ($outTxt -Match "Error|Warning") {
+        $messagePattern = "^(.*)\(([0-9]*)\) : (.*)$"
+        if (($outTxt -Match "Error|Warning") -And ($outTxt -Match $messagePattern)) {
             # And just do a regex replace on the sdk Development directory with the mod src directory.
             # The pattern needs escaping to avoid backslashes in the path being interpreted as regex escapes, etc.
             $pattern = [regex]::Escape($event.MessageData.developmentDirectory)
             # n.b. -Replace is case insensitive
             $replacementTxt = $outtxt -Replace $pattern, $event.MessageData.modSrcRoot
-            Write-Host $replacementTxt
+            $outTxt = $replacementTxt -Replace $messagePattern, '$1:$2 : $3'
+        }
+
+        $summPattern = "^(Success|Failure) - ([0-9]+) error\(s\), ([0-9]+) warning\(s\) \(([0-9]+) Unique Errors, ([0-9]+) Unique Warnings\)"
+        if (-Not ($outTxt -Match "Warning/Error Summary") -And $outTxt -Match "Warning|Error") {
+            if ($outTxt -Match $summPattern) {
+                $numErr = $outTxt -Replace $summPattern, '$2'
+                $numWarn = $outTxt -Replace $summPattern, '$3'
+                if (([int]$numErr) -gt 0) {
+                    $clr = "Red"
+                } elseif (([int]$numWarn) -gt 0) {
+                    $clr = "Yellow"
+                } else {
+                    $clr = "Green"
+                }
+            } else {
+                if ($outTxt -Match "Error") {
+                    $clr = "Red"
+                } else {
+                    $clr = "Yellow"
+                }
+            }
+            Write-Host $outTxt -ForegroundColor $clr
         } else {
             Write-Host $outTxt
         }
@@ -296,7 +319,7 @@ $stopwatch.Start()
 $modNameCanonical = $mod
 # we're going to ask that people specify the folder that has their .XCOM_sln in it as the -srcDirectory argument, but a lot of the time all we care about is
 # the folder below that that contains Config, Localization, Src, etc...
-$modSrcRoot = "$srcDirectory/"
+$modSrcRoot = "$srcDirectory"
 
 # check that all files in the mod folder are present in the .x2proj file
 ValidateProjectFile $modSrcRoot $modNameCanonical
@@ -415,14 +438,14 @@ else {
 
 # build the base game scripts
 Write-Host "Compiling base game scripts..."
-# This could be replaced with a Launch-Make call as well for highlanders.
+# This could be replaced with a Invoke-Make call as well for highlanders.
 & "$sdkPath/binaries/Win64/XComGame.com" make -nopause -unattended -debug
 Write-Host "Compiled."
 CheckErrorCode "Failed to compile the base game scripts. This probably isn't a problem with your mod. Have you been monkeying around with SrcOrig, perchance?"
 
 # build the mod's scripts
 Write-Host "Compiling mod scripts..."
-Launch-Make "$sdkPath/binaries/Win64/XComGame.com" "make -nopause -debug -mods $modNameCanonical $stagingPath" $sdkPath $modSrcRoot
+Invoke-Make "$sdkPath/binaries/Win64/XComGame.com" "make -nopause -debug -mods $modNameCanonical $stagingPath" $sdkPath $modSrcRoot
 CheckErrorCode "Failed to compile mod scripts."
 Write-Host "Compiled."
 

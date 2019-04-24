@@ -50,7 +50,7 @@ function SelectSquad()
 		}
 	}
 
-	// temporary, for testing purposes
+	// for testing purposes
 	if(bGeneratedFromDebugCommand) {
 		MissionSoldiers = GetRandomSoldiers();
 	}

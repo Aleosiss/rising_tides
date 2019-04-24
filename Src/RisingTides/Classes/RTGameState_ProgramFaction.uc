@@ -186,12 +186,10 @@ function ApplyWeaponUpgrades(name GhostTemplateName, XComGameState_Item NewWeapo
 	local X2ItemTemplateManager ItemTemplateMgr;
 	//local name WeaponUpgradeName;
 	local int idx;
-	local String HexColor;
 
 	//local name DebugIteratorName;
 	//local array<name> DebuggingNames;
 
-	HexColor = `RTS.GetProgramColor();
 
 	ItemTemplateMgr = class'X2ItemTemplateManager'.static.GetItemTemplateManager();
 	NewWeaponState.WipeUpgradeTemplates();
@@ -860,7 +858,6 @@ private function AddRisingTidesTacticalTags(XComGameState_HeadquartersXCom XComH
 simulated function bool CashOneSmallFavor(XComGameState NewGameState, XComGameState_MissionSite MissionSite) {
 	local StateObjectReference GhostRef;
 	local name GhostTemplateName;
-	local int iXComGearTier;
 
 	bOneSmallFavorActivated = true;
 	
@@ -1102,9 +1099,22 @@ function InitTemplarQuestActions(XComGameState NewGameState) {
 		if (ActionTemplate != none && 
 			TemplarQuestCovertActionTemplateNames.Find(ActionTemplate.DataName) != INDEX_NONE)
 		{
-			TemplarQuestActions.AddItem(CreateCovertAction(NewGameState, ActionTemplate, ActionTemplate.RequiredFactionInfluence));
+			TemplarQuestActions.AddItem(CreateTemplarCovertAction(NewGameState, ActionTemplate, ActionTemplate.RequiredFactionInfluence));
 		}
 	}
+}
+
+function StateObjectReference CreateTemplarCovertAction(XComGameState NewGameState, X2CovertActionTemplate ActionTemplate, optional EFactionInfluence UnlockLevel)
+{
+	local XComGameState_CovertAction ActionState;
+
+	ActionState = ActionTemplate.CreateInstanceFromTemplate(NewGameState, GetReference());
+	ActionState.Spawn(NewGameState);
+	ActionState.AmbushMissionSource = 'RTMissionSource_TemplarAmbush';
+	ActionState.RequiredFactionInfluence = UnlockLevel; // Set the Influence level required to unlock this Action
+	ActionState.bNewAction = true;
+
+	return ActionState.GetReference();
 }
 
 function HandleTemplarQuestActions(XComGameState NewGameState) {
@@ -1143,6 +1153,31 @@ function HandleTemplarQuestActions(XComGameState NewGameState) {
 			CovertActions.AddItem(QuestRef);
 		}
 	}
+}
+
+// clean up the Templar Quest Actions too
+function CleanUpFactionCovertActions(XComGameState NewGameState)
+{
+	local XComGameStateHistory History;
+	local XComGameState_CovertAction ActionState;
+	local int idx;
+
+	History = `XCOMHISTORY;
+
+	super.CleanUpFactionCovertActions(NewGameState);
+
+	for(idx = 0; idx < TemplarQuestActions.Length; idx++)
+	{
+		// Clean up any non-started actions created for the facility.
+		ActionState = XComGameState_CovertAction(History.GetGameStateForObjectID(TemplarQuestActions[idx].ObjectID));
+		if (ActionState != none && !ActionState.bStarted)
+		{
+			ActionState = XComGameState_CovertAction(NewGameState.ModifyStateObject(class'XComGameState_CovertAction', ActionState.ObjectID));
+			ActionState.RemoveEntity(NewGameState);
+		}
+	}
+
+	TemplarQuestActions.Length = 0;
 }
 
 function IncrementTemplarQuestlineStage() {
@@ -1344,8 +1379,6 @@ protected function ModifyArmorStats(int newGearTier) {
 	local X2AbilityTemplate AbilityTemplate;
 	local array<X2AbilityTemplate> AbilityTemplates;
 	local X2AbilityTemplateManager AbilityTemplateMgr;
-	local X2AbilityCost Cost;
-	local X2AbilityCost_ActionPoints ActionPointCost;
 
 	local X2Effect IteratorEffect;
 	local X2Effect_PersistentStatChange ArmorEffect;
@@ -1498,6 +1531,7 @@ function TryIncreaseInfluence() {
 
 	if(iNumberOfFavorsCalledIn >= default.iNumberOfFavorsRequiredToIncreaseInfluence) {
 		// Award influence increase
+		`RTLOG("Enough Favors have been called in. Increasing influence.", false, true);
 		NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("RisingTides: Increasing Influence");
 		Program = RTGameState_ProgramFaction(NewGameState.ModifyStateObject(class'RTGameState_ProgramFaction', self.ObjectID));
 		StratMgr = class'X2StrategyElementTemplateManager'.static.GetStrategyElementTemplateManager();
@@ -1515,6 +1549,7 @@ function TryIncreaseInfluence() {
 		// This method creates and submits another new game state
 		RewardState.DisplayRewardPopup();
 	} else {
+		`RTLOG("Not enough Favors have been called in. Not increasing influence.", false, true);
 		NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("RisingTides: Increasing Influence");
 		Program = RTGameState_ProgramFaction(NewGameState.ModifyStateObject(class'RTGameState_ProgramFaction', self.ObjectID));
 		Program.iNumberOfFavorsCalledIn = iGuarenteedCorrectValue;
@@ -1572,7 +1607,6 @@ static function InitFaction(optional XComGameState StartState) {
 	local X2StrategyElementTemplateManager StratMgr;
 	local X2StrategyElementTemplate DataTemplate;
 	local RTGameState_ProgramFaction FactionState;
-	local array<StateObjectReference> AllRegions;
 	local array<StateObjectReference> AllHavens;
 	local RTGameState_Haven HavenState;
 	local XComGameState_Haven IteratorHavenState;

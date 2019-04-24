@@ -13,7 +13,7 @@
                 "owner": "unrealscript",
                 "fileLocation": ["absolute"],
                 "pattern": {
-                    "regexp": "^(.*)\\(([0-9]*)\\) : (Warning|Error), ([^\n]*)$",
+                    "regexp": "^(.*):([0-9]*) : (Warning|Error), ([^\n]*)",
                     "file": 1,
                     "line": 2,
                     "severity": 3,

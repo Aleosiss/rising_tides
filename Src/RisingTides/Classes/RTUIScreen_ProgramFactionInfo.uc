@@ -88,6 +88,7 @@ simulated function InitScreen(XComPlayerController InitController, UIMovie InitM
 	columnWidth = ((Width - horizontalPadding) / 2) - horizontalMargin;
 
 	Container = Spawn(class'UIPanel', self).InitPanel();
+	Container.Width = columnWidth;
 	Container.Width = Width;
 	Container.Height = Height;
 	Container.SetPosition((Movie.UI_RES_X - Container.Width) / 2, (Movie.UI_RES_Y - Container.Height) / 2);
@@ -203,7 +204,6 @@ simulated function PopulateData()
 {
 	local RTGameState_ProgramFaction ProgramState;
 	local int iTemplarQuestlineStage, iTotalFavors;
-	local float questlinePercent;
 
 	ProgramState = `RTS.GetProgramState();
 	if(ProgramState == none) {
@@ -330,12 +330,9 @@ simulated function AS_SetMCColor(string ClipPath, string HexColor)
 
 simulated function SetColors()
 {
-	local string clr, textclr, headerclr;
-	local int i;
+	local string clr;
 
 	clr = default.PrimaryColor;
-	textclr = default.TextColor;
-	headerclr = default.HeaderColor;
 	
 	TitleHeader.SetColor(clr);
 

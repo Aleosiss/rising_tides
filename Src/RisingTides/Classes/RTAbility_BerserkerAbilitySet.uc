@@ -250,8 +250,7 @@ static function X2AbilityTemplate RTBerserkerKnifeAttack()
 	local RTEffect_BerserkerMeleeDamage     WeaponDamageEffect;
 	local RTEffect_Acid						AcidEffect;
 	//local array<name>                       SkipExclusions;
-	local X2Condition_AbilityProperty  		AcidCondition, SiphonCondition;
-	local X2Condition_UnitProperty			TargetUnitPropertyCondition;
+	local X2Condition_AbilityProperty  		AcidCondition;
 	local RTEffect_Siphon					SiphonEffect;
 	local RTCondition_VisibleToPlayer		PlayerVisibilityCondition;
 
@@ -792,8 +791,6 @@ static function X2AbilityTemplate RTReprobateWaltz()
 	local RTEffect_Acid                     AcidEffect;
 	local X2Condition_AbilityProperty       AcidCondition;
 	local RTEffect_Siphon                   SiphonEffect;
-	local X2Condition_AbilityProperty       SiphonCondition;
-	local X2Condition_UnitProperty          TargetUnitPropertyCondition;
 
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'RTReprobateWaltz');
 
@@ -1055,8 +1052,7 @@ static function X2AbilityTemplate RTPyroclasticSlash()
 	local RTEffect_BerserkerMeleeDamage     WeaponDamageEffect;
 	local RTEffect_Acid						AcidEffect;
 	local array<name>                       SkipExclusions;
-	local X2Condition_AbilityProperty  		AcidCondition, SiphonCondition;
-	local X2Condition_UnitProperty			TargetUnitPropertyCondition;
+	local X2Condition_AbilityProperty  		AcidCondition;
 	local RTEffect_Siphon					SiphonEffect;
 
 	local RTCondition_VisibleToPlayer			PlayerVisibilityCondition;
@@ -1646,8 +1642,7 @@ static function X2DataTemplate RTShadowStrike()
 	local RTEffect_BerserkerMeleeDamage     WeaponDamageEffect;
 	local RTEffect_Acid						AcidEffect;
 	// local array<name>                       SkipExclusions;
-	local X2Condition_AbilityProperty  		AcidCondition, SiphonCondition;
-	local X2Condition_UnitProperty			TargetUnitPropertyCondition;
+	local X2Condition_AbilityProperty  		AcidCondition;
 	local RTEffect_Siphon					SiphonEffect;
 	local X2AbilityTarget_MovingMelee TargetStyle;
 	local RTCondition_VisibleToPlayer PlayerVisibilityCondition;
@@ -2384,8 +2379,7 @@ static function X2DataTemplate RTDashingStrike()
 	local X2AbilityToHitCalc_StandardMelee StandardMelee;
 	local RTEffect_BerserkerMeleeDamage		WeaponDamageEffect;
 	local RTEffect_Acid						AcidEffect;
-	local X2Condition_AbilityProperty		AcidCondition, SiphonCondition;
-	local X2Condition_UnitProperty			TargetUnitPropertyCondition;
+	local X2Condition_AbilityProperty		AcidCondition;
 	local RTEffect_Siphon					SiphonEffect;
 
 	local X2Effect_AdditionalAnimSets AnimSets;
