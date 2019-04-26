@@ -1142,6 +1142,7 @@ FriendlyName="<font color='#a51515'><b>Program XSK33</b></font>"
 FriendlyNamePlural="<font color='#a51515'><b>Program XSK33s</b></font>"
 BriefSummary="The Program XSK33, or Shadowkeeper, is most popular sidearm of choice for Program operatives." 
 TacticalText="<Bullet/> The Program XSK33, or Shadowkeeper, is most popular sidearm of choice for Program operatives.\n<Bullet/> The Program XSK33 has improved aim and chance to critical hit.\n<Bullet/> Pistols can be fired with a single action."
+AbilityDescName="pistol"
 
 [ProgramSniperRifle X2WeaponTemplate]
 FriendlyName="<font color='#a51515'><b>Program XSR37</b></font>"
