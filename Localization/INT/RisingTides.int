@@ -160,6 +160,9 @@ strTemplarAmbushStr2="Field Team: HIGHLANDER"
 strTemplarAmbushStr3="Operator: 'Kaga'"
 strTemplarAmbushHeader="TEMPLAR DISCOVERY"
 strTemplarAmbushBegin="Begin Operation"
+m_strTemplarQuestlineFailedTitle="TEMPLAR BETRAYAL EXPOSED"
+m_strTemplarQuestlineFailedHeader="The Templars have withdrawn from the alliance."
+m_strTemplarQuestlineFailedDescription="With our plans exposed, the Templars have withdrawn from their alliance with XCOM and have gone into hiding. Additionally, your Templar operatives have deserted."
 
 [RTUIMission_TemplarAmbush]
 m_strTitle="COUNTERINTELLIGENCE"
@@ -343,10 +346,12 @@ m_strStageFourRewardTitle="Rewards"
 m_strStageFourRewardDescription="+30 Program Favors. Program Stealth Drone blueprint."
 
 [RTUIInfoBox]
-m_strLockedTitle="Locked"
+m_strLockedTitle="LOCKED"
 m_strLockedDescription="Locked"
 m_strSwapToRewards="Show Rewards"
 m_strSwapFromRewards="Hide Rewards"
+m_strFailedTitle="FAILED"
+m_strFailedDescription="With our plans exposed, the Templars have withdrawn from our alliance and have gone into hiding."
 
 [RTUIStrategyMapItem_ProgramHQ]
-m_strProgramFactionButton="Briefing"
+m_strProgramFactionButton="Program Status Briefing"

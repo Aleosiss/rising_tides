@@ -1060,15 +1060,3 @@ exec function RT_DebugObjectiveParcelsAndPCPs() {
 		}
 	}
 }
-
-exec function RT_DebugRisks() {
-	local XComGameStateHistory History;
-	local XComGameState_CovertAction ActionState;
-
-	History = `XCOMHISTORY;
-	foreach History.IterateByClassType(class'XComGameState_CovertAction', ActionState) {
-		if (ActionState.bStarted) {
-			
-		}
-	}
-}

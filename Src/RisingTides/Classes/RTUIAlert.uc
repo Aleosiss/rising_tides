@@ -6,6 +6,9 @@ var localized string strTemplarAmbushStr2;
 var localized string strTemplarAmbushStr3;
 var localized string strTemplarAmbushHeader;
 var localized string strTemplarAmbushBegin;
+var localized string m_strTemplarQuestlineFailedHeader;
+var localized string m_strTemplarQuestlineFailedTitle;
+var localized string m_strTemplarQuestlineFailedDescription;
 
 defaultProperties
 {
@@ -18,6 +21,10 @@ simulated function BuildAlert()
 {
 	`RTLOG("Building Alert: " $ eAlertName);
 	switch( eAlertName ) {
+		case 'RTAlert_TemplarQuestlineFailed':
+			BindLibraryItem();
+			BuildTemplarQuestlineFailedAlert();
+			break;
 		case 'RTAlert_TemplarAmbush':
 			BindLibraryItem();
 			BuildTemplarAmbushAlert();
@@ -44,10 +51,21 @@ simulated function Name GetLibraryID() {
 	switch( eAlertName )
 	{
 		case 'RTAlert_TemplarAmbush':					return 'Alert_ChosenSplash';
+		case 'RTAlert_TemplarQuestlineFailed':			return 'Alert_AlienSplash';
 	
 		default:
 			return '';
 	}
+}
+
+simulated function BuildTemplarQuestlineFailedAlert() {
+
+
+	BuildAlienSplashAlert(m_strTemplarQuestlineFailedHeader, m_strTemplarQuestlineFailedTitle, m_strTemplarQuestlineFailedDescription, m_strMissionExpiredImage, m_strOK, "");
+	
+	//Unused in this alert. 
+	Button2.DisableNavigation(); 
+	Button2.Hide();
 }
 
 simulated function BuildTemplarAmbushAlert()

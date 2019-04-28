@@ -79,9 +79,11 @@ var config int															iNumberOfFavorsRequiredToIncreaseInfluence;
 var array<X2DataTemplate>												OperativeTemplates;
 
 // TEMPLAR QUESTLINE VARIABLES
-var bool																bTemplarsDestroyed;
-var int																	iTemplarQuestlineStage;
-var array<StateObjectReference>											TemplarQuestActions;
+var private bool																bTemplarsDestroyed;
+var private bool																bTemplarQuestFailed;
+var private int																	iTemplarQuestlineStage;
+var private array<StateObjectReference>											TemplarQuestActions;
+var private bool 																bTemplarAmbushMissionSucceeded;
 
 // ONE SMALL FAVOR HANDLING VARIABLES
 var private int															iPreviousMaxSoldiersForMission;		// cache of the number of soldiers on a mission before OSF modfied it
@@ -106,6 +108,7 @@ var config string OSFFirstTime_ImagePath;
 var localized string PISFirstTime_Title;
 var localized string PISFirstTime_Text;
 var config string PISFirstTime_ImagePath;
+
 
 // not a bool, want to see how many times this is called
 var private int iNumTimesProgramSetup;
@@ -1117,11 +1120,24 @@ function StateObjectReference CreateTemplarCovertAction(XComGameState NewGameSta
 	return ActionState.GetReference();
 }
 
+function SetAmbushMissionSucceededFlag(bool _bTemplarAmbushMissionSucceed) {
+	bTemplarAmbushMissionSucceeded = _bTemplarAmbushMissionSucceed;
+}
+
+function bool didTemplarAmbushMissionSucceed() {
+	return bTemplarAmbushMissionSucceeded;
+}
+
 function HandleTemplarQuestActions(XComGameState NewGameState) {
 	local XComGameState_CovertAction ActionState;
 	local StateObjectReference QuestRef;
 	local name QuestTemplateName;
 	local XComGameStateHistory History;
+
+	if(hasFailedTemplarQuestline()) {
+		`RTLOG("Templar questline failed. Not adding a Covert Action!");
+		return;
+	}
 
 	switch(iTemplarQuestlineStage) {
 		case 0:
@@ -1155,6 +1171,8 @@ function HandleTemplarQuestActions(XComGameState NewGameState) {
 	}
 }
 
+
+
 // clean up the Templar Quest Actions too
 function CleanUpFactionCovertActions(XComGameState NewGameState)
 {
@@ -1182,6 +1200,10 @@ function CleanUpFactionCovertActions(XComGameState NewGameState)
 
 function IncrementTemplarQuestlineStage() {
 	iTemplarQuestlineStage++;
+}
+
+function int getTemplarQuestlineStage() {
+	return iTemplarQuestlineStage;
 }
 
 function bool IsTemplarFactionMet() {
@@ -1331,6 +1353,10 @@ function PreMissionUpdate(XComGameState NewGameState, XComGameState_MissionSite 
 	}
 }
 
+function bool isOneSmallFavorActivated() {
+	return bOneSmallFavorActivated;
+}
+
 protected function int GetXComGearTier() {
 	local array<Name> CompletedTechs;
 	return 1;
@@ -1371,6 +1397,14 @@ protected function ModifyProgramGearTier(XComGameState NewGameState, int newGear
 	ModifyArmorStats(newGearTier);
 	ModifyWeaponStats(newGearTier);
 	ReloadOperativeArmaments(NewGameState);
+}
+
+function bool hasFailedTemplarQuestline() {
+	return bTemplarQuestFailed;
+}
+
+function FailTemplarQuestline() {
+	bTemplarQuestFailed = true;
 }
 
 protected function ModifyArmorStats(int newGearTier) {
@@ -1441,7 +1475,7 @@ protected function ModifyArmorStats(int newGearTier) {
 			break;
 		default:
 			ArmorTemplate.SetUIStatMarkup(class'XLocalizedData'.default.HealthLabel, eStat_HP, class'RTAbility_Program'.default.PROGRAM_ARMOR_HEALTH_BONUS_T3, true);
-	}
+	} 
 }
 
 protected function ModifyWeaponStats(int newGearTier) {

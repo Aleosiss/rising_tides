@@ -1,6 +1,10 @@
 // This is an Unreal Script
 class RTStrategyElement_CovertActions extends X2StrategyElement_DefaultCovertActions config (ProgramFaction);
 
+var config int HuntTemplarsIntelCost_P1;
+var config int HuntTemplarsIntelCost_P2;
+var config int HuntTemplarsIntelCost_P3;
+
 static function array<X2DataTemplate> CreateTemplates()
 {
 	local array<X2DataTemplate> CovertActions;
@@ -181,7 +185,7 @@ static function X2DataTemplate CreateHuntTemplarsP1Template() {
 	Template.Slots.AddItem(_CreateDefaultSoldierSlot(class'RTStrategyElement_ProgramStaffSlots'.default.StaffSlotTemplateName, 1));
 	Template.Slots.AddItem(_CreateDefaultStaffSlot('CovertActionScientistStaffSlot'));
 	Template.Slots.AddItem(_CreateDefaultStaffSlot('CovertActionEngineerStaffSlot'));
-	Template.OptionalCosts.AddItem(_CreateOptionalCostSlot('Intel', 25));
+	Template.OptionalCosts.AddItem(_CreateOptionalCostSlot('Intel', default.HuntTemplarsIntelCost_P1));
 
 	Template.Risks.AddItem('CovertActionRisk_TemplarAmbush');
 
@@ -209,7 +213,7 @@ static function X2DataTemplate CreateHuntTemplarsP2Template() {
 	Template.Slots.AddItem(_CreateDefaultSoldierSlot(class'RTStrategyElement_ProgramStaffSlots'.default.StaffSlotTemplateName, 3));
 	Template.Slots.AddItem(_CreateDefaultSoldierSlot(class'RTStrategyElement_ProgramStaffSlots'.default.StaffSlotTemplateName, 3));
 	Template.Slots.AddItem(_CreateDefaultStaffSlot('CovertActionEngineerStaffSlot'));
-	Template.OptionalCosts.AddItem(_CreateOptionalCostSlot('Intel', 50));
+	Template.OptionalCosts.AddItem(_CreateOptionalCostSlot('Intel', default.HuntTemplarsIntelCost_P2));
 
 	Template.Risks.AddItem('CovertActionRisk_TemplarAmbush');
 
@@ -237,7 +241,7 @@ static function X2DataTemplate CreateHuntTemplarsP3Template() {
 	Template.Slots.AddItem(_CreateDefaultSoldierSlot(class'RTStrategyElement_ProgramStaffSlots'.default.StaffSlotTemplateName, 5));
 	Template.Slots.AddItem(_CreateDefaultSoldierSlot(class'RTStrategyElement_ProgramStaffSlots'.default.StaffSlotTemplateName, 5));
 	Template.Slots.AddItem(_CreateDefaultSoldierSlot(class'RTStrategyElement_ProgramStaffSlots'.default.StaffSlotTemplateName, 5));
-	Template.OptionalCosts.AddItem(_CreateOptionalCostSlot('Intel', 75));
+	Template.OptionalCosts.AddItem(_CreateOptionalCostSlot('Intel', default.HuntTemplarsIntelCost_P3));
 
 	Template.Risks.AddItem('CovertActionRisk_TemplarAmbush');
 

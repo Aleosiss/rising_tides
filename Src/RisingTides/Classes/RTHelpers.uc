@@ -301,7 +301,7 @@ static function String AddFontColor(String inString, String HexColor) {
 		return inString;
 	}
 
-	RTLOG("AddFontColor succeeded, final string is: \n<font color='#" $ HexColor $ "'><b>" $ inString $ "<b/></font>");
+	//RTLOG("AddFontColor succeeded, final string is: \n<font color='#" $ HexColor $ "'><b>" $ inString $ "<b/></font>");
 	return "<font color='#" $ HexColor $ "'><b>" $ inString $ "<b/></font>";
 }
 

@@ -26,11 +26,15 @@ var string HeaderColor;
 var string SecondaryColor;
 
 var string CompletedColor;
+var string FailedColor;
 var string LockedColor;
 
 var String LockedImagePath;
 var localized String m_strLockedTitle;
 var localized String m_strLockedDescription;
+
+var localized String m_strFailedTitle;
+var localized String m_strFailedDescription;
 
 var localized String m_strSwapToRewards;
 var localized String m_strSwapFromRewards;
@@ -45,6 +49,7 @@ defaultproperties
 
 	CompletedColor = "5CD16C"
 	LockedColor = "828282"
+	FailedColor = "bf1e2e"
 	DefaultImagePath = ""
 	RewardImagePath = ""
 }
@@ -133,11 +138,27 @@ simulated function RTUIInfoBox SetLocked() {
 
 	InfoBoxHeader.SetText(m_strLockedTitle);
 	InfoBoxHeader.MC.FunctionVoid("realize");
-	InfoBoxDescription.SetText(m_strLockedDescription);
+	InfoBoxDescription.SetText(" ");
 	InfoBoxImage.LoadImage(LockedImagePath);
 
 	SetPanelColors(0);
 	SetTextColors(0);
+
+	Button.DisableButton(m_strLockedDescription);
+	Button.SetText(m_strLockedTitle);
+	return self;
+}
+
+simulated function RTUIInfoBox SetFailed() {
+	HideRewards();
+
+	InfoBoxHeader.SetText(m_strFailedTitle);
+	InfoBoxHeader.MC.FunctionVoid("realize");
+	InfoBoxDescription.SetText(m_strFailedDescription);
+	InfoBoxImage.LoadImage(LockedImagePath);
+
+	SetPanelColors(3);
+	SetTextColors(3);
 
 	Button.DisableButton(m_strLockedDescription);
 	Button.SetText(m_strLockedTitle);
@@ -188,6 +209,7 @@ simulated function RTUIInfoBox HideRewards() {
 // 0 = locked
 // 1 = program white
 // 2 = cash money green
+// 3 = Status: Black red
 simulated function SetTextColors(int i) {
 	switch(i) {
 		case 0:
@@ -202,6 +224,10 @@ simulated function SetTextColors(int i) {
 			InfoBoxHeader.SetColor(CompletedColor);
 			InfoBoxDescription.SetColor("0x" $ CompletedColor);
 			break;
+		case 3:
+			InfoBoxHeader.SetColor(FailedColor);
+			InfoBoxDescription.SetColor("0x" $ FailedColor);
+			break;
 		default:
 			InfoBoxHeader.SetColor(PrimaryColor);
 			InfoBoxDescription.SetColor("0x" $ PrimaryColor);
@@ -212,6 +238,7 @@ simulated function SetTextColors(int i) {
 // 0 = locked
 // 1 = program white
 // 2 = cash money green
+// 3 = Status: Black red
 simulated function SetPanelColors(int i) {
 	switch(i) {
 		case 0:
@@ -225,6 +252,10 @@ simulated function SetPanelColors(int i) {
 		case 2:
 			OutlinePanel.SetOutline(true, "0x" $ CompletedColor);
 			ImageOutline.SetOutline(true, "0x" $ CompletedColor);
+			break;
+		case 3:
+			OutlinePanel.SetOutline(true, "0x" $ FailedColor);
+			ImageOutline.SetOutline(true, "0x" $ FailedColor);
 			break;
 		default:
 			OutlinePanel.SetOutline(true, "0x" $ PrimaryColor);

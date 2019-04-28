@@ -44,6 +44,9 @@ static function TemplarAmbushOnSuccess(XComGameState NewGameState, XComGameState
 {
 	local XComGameState_HeadquartersXCom XComHQ;
 	local XComGameState_HeadquartersResistance ResHQ;
+	local RTGameState_ProgramFaction ProgramState;
+
+	`RTLOG("TemplarAmbushOnSuccess");
 		
 	// Spawn a POI and save the next time ambushes can occur
 	ResHQ = GetAndAddResHQ(NewGameState);
@@ -55,7 +58,8 @@ static function TemplarAmbushOnSuccess(XComGameState NewGameState, XComGameState
 	XComHQ.bWaitingForChosenAmbush = false;
 
 	// victory stuff
-	GiveRewards(NewGameState, MissionState);
+	ProgramState = `RTS.GetNewProgramState(NewGameState);
+	ProgramState.SetAmbushMissionSucceededFlag(true);
 	ResHQ.AttemptSpawnRandomPOI(NewGameState);
 
 	MissionState.RemoveEntity(NewGameState);
@@ -66,6 +70,9 @@ static function TemplarAmbushOnFailure(XComGameState NewGameState, XComGameState
 {
 	local XComGameState_HeadquartersXCom XComHQ;
 	local XComGameState_HeadquartersResistance ResHQ;
+	local RTGameState_ProgramFaction ProgramState;
+
+	`RTLOG("TemplarAmbushOnFailure");
 
 	// Save the next time ambushes can occur
 	ResHQ = GetAndAddResHQ(NewGameState);
@@ -76,6 +83,10 @@ static function TemplarAmbushOnFailure(XComGameState NewGameState, XComGameState
 	XComHQ = GetAndAddXComHQ(NewGameState);
 	XComHQ.bWaitingForChosenAmbush = false;
 
+	// defeat stuff
+	ProgramState = `RTS.GetNewProgramState(NewGameState);
+	ProgramState.SetAmbushMissionSucceededFlag(false);
+
 	MissionState.RemoveEntity(NewGameState);
 	class'XComGameState_HeadquartersResistance'.static.RecordResistanceActivity(NewGameState, 'ResAct_ChosenAmbushFailed');
 }
@@ -84,7 +95,7 @@ static function int GetMissionDifficultyFromQuestlineStage(XComGameState_Mission
 {
 	local int Difficulty;
 
-	Difficulty = 1 + `RTS.GetProgramState().iTemplarQuestlineStage;
+	Difficulty = 1 + `RTS.GetProgramState().getTemplarQuestlineStage();
 
 	Difficulty = Clamp(Difficulty, class'X2StrategyGameRulesetDataStructures'.default.MinMissionDifficulty,
 	class'X2StrategyGameRulesetDataStructures'.default.MaxMissionDifficulty);

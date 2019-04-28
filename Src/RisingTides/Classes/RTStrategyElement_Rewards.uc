@@ -94,7 +94,7 @@ static function X2DataTemplate CreateProgramHuntTemplarsP1Reward() {
 	Template.IsRewardNeededFn = none; // allows logical augmentation of reward availability. Used to indicate if the player desperately needs this resource
 	Template.GenerateRewardFn = none;
 	Template.SetRewardFn = none;
-	Template.GiveRewardFn = GiveHuntTemplarsP1Reward;
+	Template.GiveRewardFn = GiveHuntTemplarAmbushReward;
 	Template.GetRewardStringFn = none;
 	Template.GetRewardPreviewStringFn = none;
 	Template.GetRewardDetailsStringFn = none;
@@ -117,7 +117,7 @@ static function X2DataTemplate CreateProgramHuntTemplarsP2Reward() {
 	Template.IsRewardNeededFn = none; // allows logical augmentation of reward availability. Used to indicate if the player desperately needs this resource
 	Template.GenerateRewardFn = none;
 	Template.SetRewardFn = none;
-	Template.GiveRewardFn = GiveHuntTemplarsP2Reward;
+	Template.GiveRewardFn = GiveHuntTemplarAmbushReward;
 	Template.GetRewardStringFn = none;
 	Template.GetRewardPreviewStringFn = none;
 	Template.GetRewardDetailsStringFn = none;
@@ -140,7 +140,7 @@ static function X2DataTemplate CreateProgramHuntTemplarsP3Reward() {
 	Template.IsRewardNeededFn = none; 
 	Template.GenerateRewardFn = none;
 	Template.SetRewardFn = none;
-	Template.GiveRewardFn = GiveHuntTemplarsP3Reward; // TODO
+	Template.GiveRewardFn = GiveHuntTemplarAmbushReward; // TODO
 	Template.GetRewardStringFn = none; // TODO
 	Template.GetRewardPreviewStringFn = none; // TODO
 	Template.GetRewardDetailsStringFn = none; // TODO
@@ -295,6 +295,10 @@ static function bool IsHuntTemplarsP1Available(optional XComGameState NewGameSta
 		`RTLOG("wut", true);
 	}
 
+	if(ProgramState.hasFailedTemplarQuestline()) {
+		return false;
+	}
+
 	foreach `XCOMHISTORY.IterateByClassType(class'XComGameState_ResistanceFaction', FactionState) {
 		if(FactionState.GetMyTemplateName() == 'Faction_Templars') {
 			if(FactionState.bMetXCom) {
@@ -326,7 +330,11 @@ static function bool IsHuntTemplarsP2Available(optional XComGameState NewGameSta
 		`RTLOG("wut", true);
 	}
 
-	if(ProgramState.iTemplarQuestlineStage == 1) {
+	if(ProgramState.hasFailedTemplarQuestline()) {
+		return false;
+	}
+
+	if(ProgramState.getTemplarQuestlineStage() == 1) {
 		`RTLOG("The questline stage has been met, returning TRUE!");
 		return true;
 	}
@@ -354,7 +362,11 @@ static function bool IsHuntTemplarsP3Available(optional XComGameState NewGameSta
 		`RTLOG("wut", true);
 	}
 
-	if(ProgramState.iTemplarQuestlineStage == 2) {
+	if(ProgramState.hasFailedTemplarQuestline()) {
+		return false;
+	}
+
+	if(ProgramState.getTemplarQuestlineStage() == 2) {
 		`RTLOG("The questline stage has been met, returning TRUE!");
 		return true;
 	}
@@ -426,20 +438,41 @@ static function GiveProgramFactionInfluenceReward(XComGameState NewGameState, XC
 
 static function GiveHuntTemplarsP1Reward(XComGameState NewGameState, XComGameState_Reward RewardState, optional StateObjectReference AuxRef, optional bool bOrder = false, optional int OrderHours = -1)
 {
-	GiveProgramAdvanceQuestlineReward(NewGameState, RewardState, AuxRef, bOrder, OrderHours);
-	`RTLOG("Granting GiveHuntTemplarsP1Reward!");
+	local RTGameState_ProgramFaction ProgramFaction;
+	
+	ProgramFaction = `RTS.GetNewProgramState(NewGameState);
+	if(ProgramFaction.getTemplarQuestlineStage() == 0) {
+		`RTLOG("Granting GiveHuntTemplarsP1Reward!");
+		GiveProgramAdvanceQuestlineReward(NewGameState, RewardState, AuxRef, bOrder, OrderHours);
+	} else {
+		`RTLOG("Not granting GiveHuntTemplarsP1Reward, incorrect questline stage. Expecting 0 but received " $ ProgramFaction.getTemplarQuestlineStage());
+	}
 }
 
 static function GiveHuntTemplarsP2Reward(XComGameState NewGameState, XComGameState_Reward RewardState, optional StateObjectReference AuxRef, optional bool bOrder = false, optional int OrderHours = -1)
 {
-	GiveProgramAdvanceQuestlineReward(NewGameState, RewardState, AuxRef, bOrder, OrderHours);
-	`RTLOG("Granting GiveHuntTemplarsP2Reward!");
+	local RTGameState_ProgramFaction ProgramFaction;
+	
+	ProgramFaction = `RTS.GetNewProgramState(NewGameState);
+	if(ProgramFaction.getTemplarQuestlineStage() == 1) {
+		`RTLOG("Granting GiveHuntTemplarsP2Reward!");
+		GiveProgramAdvanceQuestlineReward(NewGameState, RewardState, AuxRef, bOrder, OrderHours);
+	} else {
+		`RTLOG("Not granting GiveHuntTemplarsP2Reward, incorrect questline stage. Expecting 1 but received " $ ProgramFaction.getTemplarQuestlineStage());
+	}
 }
 
 static function GiveHuntTemplarsP3Reward(XComGameState NewGameState, XComGameState_Reward RewardState, optional StateObjectReference AuxRef, optional bool bOrder = false, optional int OrderHours = -1)
 {
-	GiveProgramAdvanceQuestlineReward(NewGameState, RewardState, AuxRef, bOrder, OrderHours);
-	`RTLOG("Granting GiveHuntTemplarsP3Reward!");
+	local RTGameState_ProgramFaction ProgramFaction;
+	
+	ProgramFaction = `RTS.GetNewProgramState(NewGameState);
+	if(ProgramFaction.getTemplarQuestlineStage() == 2) {
+		`RTLOG("Granting GiveHuntTemplarsP3Reward!");
+		GiveProgramAdvanceQuestlineReward(NewGameState, RewardState, AuxRef, bOrder, OrderHours);
+	} else {
+		`RTLOG("Not granting GiveHuntTemplarsP3Reward, incorrect questline stage. Expecting 2 but received " $ ProgramFaction.getTemplarQuestlineStage());
+	}
 }
 
 static function GiveTemplarCovenAssaultReward(XComGameState NewGameState, XComGameState_Reward RewardState, optional StateObjectReference AuxRef, optional bool bOrder = false, optional int OrderHours = -1)
@@ -450,6 +483,35 @@ static function GiveTemplarCovenAssaultReward(XComGameState NewGameState, XComGa
 
 	EliminateFaction(NewGameState, TemplarState);
 	GiveTemplarQuestlineCompleteReward(NewGameState, RewardState, AuxRef, bOrder, OrderHours);
+	// TODO: Success notification
+}
+
+static function GiveTemplarCovenAssaultFailed(XComGameState NewGameState, XComGameState_Reward RewardState, optional StateObjectReference AuxRef, optional bool bOrder = false, optional int OrderHours = -1)
+{
+	local XComGameState_ResistanceFaction TemplarState;
+
+	TemplarState = `RTS.GetTemplarFactionState();
+
+	EliminateFaction(NewGameState, TemplarState);
+	// TODO: Failure notification
+}
+
+static function GiveTemplarQuestlineFailedReward(XComGameState NewGameState, XComGameState_Reward RewardState, optional StateObjectReference AuxRef, optional bool bOrder = false, optional int OrderHours = -1)
+{
+	local XComGameState_ResistanceFaction TemplarState;
+	local RTGameState_ProgramFaction ProgramState;
+
+	ProgramState = `RTS.GetNewProgramState(NewGameState);
+	TemplarState = `RTS.GetTemplarFactionState();
+
+	ProgramState.IncrementTemplarQuestlineStage(); // we still need to increment this
+	ProgramState.FailTemplarQuestline();
+	
+
+	`RTLOG("Templar Questline FAILED!");
+
+	EliminateFaction(NewGameState, TemplarState);
+	// TODO: Failure Notification
 }
 
 static function GiveTemplarQuestlineCompleteReward(XComGameState NewGameState, XComGameState_Reward RewardState, optional StateObjectReference AuxRef, optional bool bOrder = false, optional int OrderHours = -1) {
@@ -459,7 +521,6 @@ static function GiveTemplarQuestlineCompleteReward(XComGameState NewGameState, X
 	ProgramState.IncrementNumFavorsAvailable(30);
 	ProgramState.IncrementTemplarQuestlineStage(); // should be 4 now
 
-	// TODO
 }
 
 static function GiveHuntTemplarAmbushReward(XComGameState NewGameState, XComGameState_Reward RewardState, optional StateObjectReference AuxRef, optional bool bOrder = false, optional int OrderHours = -1)
@@ -467,20 +528,26 @@ static function GiveHuntTemplarAmbushReward(XComGameState NewGameState, XComGame
 	local RTGameState_ProgramFaction ProgramFaction;
 
 	ProgramFaction = `RTS.GetNewProgramState(NewGameState);
-	switch(ProgramFaction.iTemplarQuestlineStage) {
-		case 0:
-			GiveHuntTemplarsP1Reward(NewGameState, RewardState, AuxRef, bOrder, OrderHours);
-			break;
-		case 1:
-			GiveHuntTemplarsP2Reward(NewGameState, RewardState, AuxRef, bOrder, OrderHours);
-			break;
-		case 2:
-			GiveHuntTemplarsP3Reward(NewGameState, RewardState, AuxRef, bOrder, OrderHours);
-			break;
-		default:
-			`RTLOG("Something broke, GiveHuntTemplarAmbushReward is out of bounds!", true, false);
-			break;
+	if(!ProgramFaction.didTemplarAmbushMissionSucceed()) {
+		GiveTemplarQuestlineFailedReward(NewGameState, RewardState, AuxRef, bOrder, OrderHours);
+	} else {
+		switch(ProgramFaction.getTemplarQuestlineStage()) {
+			case 0:
+				GiveHuntTemplarsP1Reward(NewGameState, RewardState, AuxRef, bOrder, OrderHours);
+				break;
+			case 1:
+				GiveHuntTemplarsP2Reward(NewGameState, RewardState, AuxRef, bOrder, OrderHours);
+				break;
+			case 2:
+				GiveHuntTemplarsP3Reward(NewGameState, RewardState, AuxRef, bOrder, OrderHours);
+				break;
+			default:
+				`RTLOG("Something broke, GiveHuntTemplarAmbushReward is out of bounds!", true, false);
+				break;
+		}
 	}
+
+	ProgramFaction.SetAmbushMissionSucceededFlag(false);
 }
 static function EliminateFaction(XComGameState NewGameState, XComGameState_ResistanceFaction FactionState, optional bool bShouldFactionSoldiersDesert = true) {
 	local XComGameState_HeadquartersXCom XComHQ;
@@ -488,11 +555,12 @@ static function EliminateFaction(XComGameState NewGameState, XComGameState_Resis
 	local XComGameState_HeadquartersResistance ResistHQ;
 	local XComGameState_Haven FactionHavenState;
 	local StateObjectReference IteratorRef;
-//	local StateObjectReference EmptyRef;
 	local XComGameState_Unit UnitState;
 	local XComGameState_StrategyCard CardState;
-//	local XComGameState_WorldRegion RegionState;
-//	local int i;
+	local DynamicPropertySet PropertySet;
+	//local XComGameState_WorldRegion RegionState;
+	//local StateObjectReference EmptyRef;
+	//local int i;
 
 	History = `XCOMHISTORY;
 	XComHQ = `RTS.GetXComHQState();
@@ -503,8 +571,7 @@ static function EliminateFaction(XComGameState NewGameState, XComGameState_Resis
 		-> Remove FactionState.GetReference() from XCGS_HeadquartersResistance.Factions
 		-> Call DeactivateCard on all activated faction cards
 		-> Check Covert Actions, if there are any from the faction they need to be canceled
-		-> Need to clean up faction soldiers? It would be more realistic for them to stick around then leave randomly, perhaps even sabotage the avenger
-			but fuck that
+		-> Need to clean up faction soldiers? It would be more realistic for them to stick around then leave randomly, perhaps even sabotage the avenger but fuck that
 		-> Clean up the Resistance Haven
 		-> Find soldiers in the XCOM barracks that are faction heroes, and remove them
 		-> Generate a popup displaying all of what has transpired
@@ -527,7 +594,7 @@ static function EliminateFaction(XComGameState NewGameState, XComGameState_Resis
 			CardState.DeactivateCard(NewGameState);
 			FactionState.PlayableCards.AddItem(IteratorRef);
 		}
-//		i++;
+		//i++;
 	}
 
 	// remove haven
@@ -549,6 +616,10 @@ static function EliminateFaction(XComGameState NewGameState, XComGameState_Resis
 
 	// rip
 	NewGameState.RemoveStateObject(FactionState.ObjectID);
+
+	// Notify
+	class'X2StrategyGameRulesetDataStructures'.static.BuildDynamicPropertySet(PropertySet, 'RTUIAlert', 'RTAlert_TemplarQuestlineFailed', none, true, true, true, false);
+	class'XComPresentationLayerBase'.static.QueueDynamicPopup(PropertySet, NewGameState);
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -568,6 +639,11 @@ static function GiveProgramAdvanceQuestlineReward(XComGameState NewGameState, XC
 	local RTGameState_ProgramFaction ProgramState;
 
 	ProgramState = `RTS.GetNewProgramState(NewGameState);
+
+	if(ProgramState.hasFailedTemplarQuestline()) {
+		`RTLOG("Questline FAILED, not giving questline reward!");
+	}
+
 	ProgramState.IncrementTemplarQuestlineStage();
 	ProgramState.IncrementNumFavorsAvailable(3);
 }

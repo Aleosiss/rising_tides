@@ -203,7 +203,8 @@ simulated function InitScreen(XComPlayerController InitController, UIMovie InitM
 simulated function PopulateData()
 {
 	local RTGameState_ProgramFaction ProgramState;
-	local int iTemplarQuestlineStage, iTotalFavors;
+	local int iQuestlineStage, iTotalFavors;
+	local bool bFailed;
 
 	ProgramState = `RTS.GetProgramState();
 	if(ProgramState == none) {
@@ -211,13 +212,14 @@ simulated function PopulateData()
 		return;
 	}
 
-	iTemplarQuestlineStage = ProgramState.iTemplarQuestlineStage;
+	iQuestlineStage = ProgramState.getTemplarQuestlineStage();
+	bFailed = ProgramState.hasFailedTemplarQuestline();
 	
 	TitleHeader.SetText(m_strProgramFactionInfoHeaderText, m_strProgramFactionInfoDescriptionText);
 	TitleHeader.MC.FunctionVoid("realize");
 
 	// 0 = not started, 1-3 for CAs, 4 for Coven Assault Completed
-	QuestlineTrackerBar.SetPercent(min(iTemplarQuestlineStage * 25, 100) * 0.01);
+	QuestlineTrackerBar.SetPercent(min(iQuestlineStage * 25, 100) * 0.01);
 
 	iTotalFavors = ProgramState.GetNumFavorsAvailable();
 	if(ProgramState.IsOneSmallFavorAvailable()) {
@@ -228,7 +230,7 @@ simulated function PopulateData()
 	FavorCounter.MC.FunctionVoid("realize");
 
 	// There must be a better way, I'm just too tired and lazy to figure it out
-	switch(iTemplarQuestlineStage) {
+	switch(iQuestlineStage) {
 		case 0:
 			if(!ProgramState.IsTemplarFactionMet()) {
 				StageOne.SetLocked();
@@ -241,28 +243,52 @@ simulated function PopulateData()
 			StageFour.SetLocked();
 			break;
 		case 1:
-			StageOne.SetCompleted();
-			StageTwo.SetAvailable();
+			if(bFailed) {
+				StageOne.SetFailed();
+				StageTwo.SetLocked();
+			} else {
+				StageOne.SetCompleted();
+				StageTwo.SetAvailable();
+			}
+
 			StageThree.SetLocked();
 			StageFour.SetLocked();
 			break;
 		case 2:
 			StageOne.SetCompleted();
-			StageTwo.SetCompleted();
+			if(bFailed) {
+				StageTwo.SetFailed();
+				StageThree.SetLocked();
+			} else {
+				StageTwo.SetCompleted();
+				StageThree.SetAvailable();
+			}
+
 			StageThree.SetAvailable();
 			StageFour.SetLocked();
 			break;
 		case 3:
 			StageOne.SetCompleted();
 			StageTwo.SetCompleted();
-			StageThree.SetCompleted();
+			if(bFailed) {
+				StageThree.SetFailed();
+				StageFour.SetLocked();
+			} else {
+				StageThree.SetCompleted();
+				StageFour.SetAvailable();
+			}
+
 			StageFour.SetAvailable();
 			break;
 		case 4:
 			StageOne.SetCompleted();
 			StageTwo.SetCompleted();
 			StageThree.SetCompleted();
-			StageFour.SetCompleted();
+			if(bFailed) {
+				StageFour.SetFailed();
+			} else {
+				StageFour.SetCompleted();
+			}
 			break;
 		default:
 			StageOne.SetLocked();

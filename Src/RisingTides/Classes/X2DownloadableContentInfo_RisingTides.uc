@@ -86,14 +86,16 @@ static event OnPostMission()
 static event OnExitPostMissionSequence()
 {
 	local XComGameState NewGameState;
-	local RTGameState_ProgramFaction ProgramState, Program;
+	local RTGameState_ProgramFaction NewProgramState, ProgramState;
+	local bool bShouldTryToIncreaseInfluence;
 	//local XComGameState_BattleData BattleData;
 
-	Program = `RTS.GetProgramState();
-	if(Program.bShouldPerformPostMissionCleanup) {
+	ProgramState = `RTS.GetProgramState();
+	bShouldTryToIncreaseInfluence = ProgramState.isOneSmallFavorActivated();
+	if(ProgramState.bShouldPerformPostMissionCleanup) {
 		NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("Cleanup Program Operatives from XCOMHQ!");
-		ProgramState = `RTS.GetNewProgramState(NewGameState);
-		ProgramState.PerformPostMissionCleanup(NewGameState);
+		NewProgramState = `RTS.GetNewProgramState(NewGameState);
+		NewProgramState.PerformPostMissionCleanup(NewGameState);
 
 		`GAMERULES.SubmitGameState(NewGameState);
 
@@ -106,8 +108,10 @@ static event OnExitPostMissionSequence()
 		}
 		*/
 
-		// Always try to increase influence
-		ProgramState.TryIncreaseInfluence();
+		// Try to increase influence
+		if(bShouldTryToIncreaseInfluence) {
+			NewProgramState.TryIncreaseInfluence();
+		}
 	}
 }
 
