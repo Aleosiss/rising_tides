@@ -14,12 +14,11 @@ static function array<X2DataTemplate> CreateTemplates()
 	return Templates;
 }
 
-
 // Passive - Gain one focus when it is drained to 0
 static function X2AbilityTemplate RTUnwaveringResolve()
 {
 	local X2AbilityTemplate						Template;
-	local X2Effect_ModifyTemplarFocus			Effect;
+	local RTEffect_ModifyTemplarFocus			Effect;
 	local X2AbilityTrigger_EventListener		EventTrigger;
 
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'RTUnwaveringResolve');
@@ -40,7 +39,8 @@ static function X2AbilityTemplate RTUnwaveringResolve()
 
 	Template.AbilityTriggers.AddItem(default.UnitPostBeginPlayTrigger);
 	
-	Effect = new class'X2Effect_ModifyTemplarFocus';
+	Effect = new class'RTEffect_ModifyTemplarFocus';
+	Effect.bSkipFocusVisualization = true;
 	Effect.TargetConditions.AddItem(new class'X2Condition_GhostShooter');
 	Template.AddTargetEffect(Effect);
 
@@ -61,24 +61,13 @@ simulated function UnwaveringResolve_BuildVisualization(XComGameState VisualizeG
 	local XComGameStateHistory History;
 	local XComGameStateContext_Ability  Context;
 	local StateObjectReference InteractingUnitRef;
-	//Tree metadata
-	local VisualizationActionMetadata   InitData;
-	local VisualizationActionMetadata   SourceData;
 	local XComGameState_Unit	UnitState;
 
 	History = `XCOMHISTORY;
 
 	Context = XComGameStateContext_Ability(VisualizeGameState.GetContext());
 	InteractingUnitRef = Context.InputContext.SourceObject;
-
-	//Configure the visualization track for the shooter
-	//****************************************************************************************
-	SourceData = InitData;
-	SourceData.StateObject_OldState = History.GetGameStateForObjectID(InteractingUnitRef.ObjectID, eReturnType_Reference, VisualizeGameState.HistoryIndex - 1);
-	SourceData.StateObject_NewState = VisualizeGameState.GetGameStateForObjectID(InteractingUnitRef.ObjectID);
-	SourceData.VisualizeActor = History.GetVisualizer(InteractingUnitRef.ObjectID);
-
-	UnitState = XComGameState_Unit(SourceData.StateObject_OldState);
+	UnitState = XComGameState_Unit(History.GetGameStateForObjectID(InteractingUnitRef.ObjectID, eReturnType_Reference, VisualizeGameState.HistoryIndex - 1););
 
 	if(class'RTCondition_VisibleToPlayer'.static.IsTargetVisibleToLocalPlayer(UnitState.GetReference(), , true)) {
 		TypicalAbility_BuildVisualization(VisualizeGameState);

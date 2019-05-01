@@ -364,6 +364,8 @@ static function RTCharacterTemplate CreateProgramSoldierTemplate(optional name T
 	//CharTemplate.Abilities.AddItem('BondmateReturnFire_Improved_Adjacency');
 	CharTemplate.Abilities.AddItem('BondmateDualStrike');
 
+	CharTemplate.Abilities.AddItem('RTProgramEvacuation');
+
 	CharTemplate.AddTemplateAvailablility(CharTemplate.BITFIELD_GAMEAREA_Multiplayer); // Allow in MP!
 	CharTemplate.MPPointValue = CharTemplate.XpKillscore * 10;
 	
