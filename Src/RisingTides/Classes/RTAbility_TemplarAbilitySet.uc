@@ -67,7 +67,7 @@ simulated function UnwaveringResolve_BuildVisualization(XComGameState VisualizeG
 
 	Context = XComGameStateContext_Ability(VisualizeGameState.GetContext());
 	InteractingUnitRef = Context.InputContext.SourceObject;
-	UnitState = XComGameState_Unit(History.GetGameStateForObjectID(InteractingUnitRef.ObjectID, eReturnType_Reference, VisualizeGameState.HistoryIndex - 1););
+	UnitState = XComGameState_Unit(History.GetGameStateForObjectID(InteractingUnitRef.ObjectID, eReturnType_Reference, VisualizeGameState.HistoryIndex - 1));
 
 	if(class'RTCondition_VisibleToPlayer'.static.IsTargetVisibleToLocalPlayer(UnitState.GetReference(), , true)) {
 		TypicalAbility_BuildVisualization(VisualizeGameState);
