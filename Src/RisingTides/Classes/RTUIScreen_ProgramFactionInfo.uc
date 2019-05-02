@@ -264,7 +264,6 @@ simulated function PopulateData()
 				StageThree.SetAvailable();
 			}
 
-			StageThree.SetAvailable();
 			StageFour.SetLocked();
 			break;
 		case 3:
@@ -277,8 +276,6 @@ simulated function PopulateData()
 				StageThree.SetCompleted();
 				StageFour.SetAvailable();
 			}
-
-			StageFour.SetAvailable();
 			break;
 		case 4:
 			StageOne.SetCompleted();
