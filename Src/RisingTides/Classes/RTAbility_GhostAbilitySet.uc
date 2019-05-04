@@ -1229,7 +1229,7 @@ simulated function ProgramOperativeDefeatedEscape_BuildVisualization(XComGameSta
 	EffectAction = X2Action_PlayEffect(class'X2Action_PlayEffect'.static.AddToVisualizationTree(ActionMetadata, Context, false, PlayAnimation));
 	EffectAction.EffectName = "FX_Chosen_Teleport.P_Chosen_Teleport_Out_w_Sound";
 	EffectAction.EffectLocation = ActionMetadata.VisualizeActor.Location;
-	EffectAction.bWaitForCompletion = true;
+	EffectAction.bWaitForCompletion = false;
 
 	DelayAction = X2Action_Delay(class'X2Action_Delay'.static.AddToVisualizationTree(ActionMetadata, Context, false, PlayAnimation));
 	DelayAction.Duration = 0.25;
