@@ -4,7 +4,7 @@ simulated function AddX2ActionsForVisualization_Removed(XComGameState VisualizeG
 {
 	local X2Action_PlayAnimation PlayAnimation;
 
-	super.AddX2ActionsForVisualization_Removed(VisualizeGameState, ActionMetadata, EffectApplyResult, RemovedEffect);
+	super(X2Effect_Persistent).AddX2ActionsForVisualization_Removed(VisualizeGameState, ActionMetadata, EffectApplyResult, RemovedEffect);
 
 	if (XComGameState_Unit(ActionMetadata.StateObject_NewState) != none)
 	{
