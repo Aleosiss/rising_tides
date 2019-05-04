@@ -224,8 +224,8 @@ exec function RT_AddProgramOperativeToXCOMCrew() {
 	bFoundAtLeastOne = false;
 	foreach History.IterateByClassType(class'XComGameState_Unit', UnitState)
 	{
-		if(	UnitState.GetMyTemplateName() == 'RTGhostMarksman' || 
-			UnitState.GetMyTemplateName() == 'RTGhostBerserker' || 
+		if(	UnitState.GetMyTemplateName() == 'RTGhostMarksman' ||
+			UnitState.GetMyTemplateName() == 'RTGhostBerserker' ||
 			UnitState.GetMyTemplateName() == 'RTGhostGatherer' ||
 			UnitState.GetMyTemplateName() == 'RTGhostOperator'
 			)
@@ -668,7 +668,7 @@ exec function RT_DebugClosestUnitToCursorAvailableAbilties(bool bPrintFullInfo =
 
 		AbilityState.UpdateAbilityAvailability(Action);
 		if(!Action.bInputTriggered) {
-			`RTLOG(AbilityState.GetMyTemplateName() $ " isn't input-triggered, continuing!");
+			`RTLOG(AbilityState.GetMyTemplateName() $ " isn't input-triggered, continuing!", false, true);
 			continue;
 		}
 		

@@ -27,10 +27,10 @@
     ✔ Tracks Concealment / Superconcealment gained before Stealth was applied @done(18-04-30 18:32)
 2.1.0 TODOS: 
   ☐ Add Hunt_Templar Risks
-    ☐ Add Templar Ambush
+    ✔ Add Templar Ambush @done(19-05-04 10:55)
       ✔ Add RTGameState_MissionStateTemplarAmbush @done(18-12-16 02:10)
       ✔ Add Templar Ambush Mission *.inis (Schedules, Mission, Encounters) @done(19-03-23 10:02)
-      ☐ Add Templar Ambush Obj.umap
+      ✔ Add Templar Ambush Obj.umap @done(19-05-04 10:55)
       ✔ Add Templar Ambush UIAlert @done(18-12-16 02:10)
       ✔ Add Templar Ambush UIMission @done(18-12-16 02:10)
   ☐ Add Hunt_Templars narratives
@@ -53,3 +53,4 @@
       ✔ Create Tutorial @done(19-04-09 23:28)
       ✔ Create UIScreenListener @done(19-03-10 17:33)
   ☐ Remove -debug flag from build script before releasing
+  ☐ Fix Psionic Storm visualizaton (its broken)

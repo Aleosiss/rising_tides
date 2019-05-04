@@ -631,6 +631,7 @@
     <Content Include="Localization\INT\RisingTidesContentPackage.int" />
     <Content Include="Src\RisingTides\Classes\RTEffect_ModifyTemplarFocus.uc" />
     <Content Include="Src\RisingTides\Classes\RTEffect_Sustain.uc" />
+    <Content Include="Src\RisingTides\Classes\RTEffect_Stasis.uc" />
   </ItemGroup>
   <Import Project="$(MSBuildLocalExtensionPath)\XCOM2.targets" />
 </Project>

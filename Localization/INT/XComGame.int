@@ -206,6 +206,27 @@ LocHelpText="Overload an organic unit's brain with pure psionic energy, killing 
 LocFlyOverText="Mind Wrack"
 LocPromotionPopupText="<Bullet> <Ability:SelfCooldown/> turn cooldown.<br/><Bullet/> Overload an organic unit's brain with pure psionic energy, killing it immediately. The feedback from the ability will cause a significant moment of panic.<br/>"
 
+[RTProgramEvacuation X2AbilityTemplate]
+LocFriendlyName="Program Evacuation"
+LocLongDescription="You should not be able to see this."
+LocHelpText="You should not be able to see this."
+LocFlyOverText="Program Evacuation"
+LocPromotionPopupText="<Bullet/> <br/><Bullet/> <br/><Bullet/> <br/><Bullet/> <br/>"
+
+[RTProgramEvacuationPartOne X2AbilityTemplate]
+LocFriendlyName="Program Evacuation"
+LocLongDescription="You should not be able to see this."
+LocHelpText="You should not be able to see this."
+LocFlyOverText="Program Evacuation"
+LocPromotionPopupText="<Bullet/> <br/><Bullet/> <br/><Bullet/> <br/><Bullet/> <br/>"
+
+[RTProgramEvacuationPartTwo X2AbilityTemplate]
+LocFriendlyName="Program Evacuation"
+LocLongDescription="You should not be able to see this."
+LocHelpText="You should not be able to see this."
+LocFlyOverText="Program Evacuation"
+LocPromotionPopupText="<Bullet/> <br/><Bullet/> <br/><Bullet/> <br/><Bullet/> <br/>"
+
 [RTMindControl X2AbilityTemplate]
 LocFriendlyName="Mind Control"
 LocLongDescription="Temporarily dominate an enemy unit psionically."

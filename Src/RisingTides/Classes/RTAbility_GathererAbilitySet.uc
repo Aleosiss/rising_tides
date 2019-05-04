@@ -152,6 +152,9 @@ static function X2AbilityTemplate OverTheShoulder()
 	Template.AdditionalAbilities.AddItem('RTFeedback');
 	Template.AdditionalAbilities.AddItem('RTMindControl');
 	Template.AdditionalAbilities.AddItem('RTEnterStealth');
+	Template.AdditionalAbilities.AddItem('RTProgramEvacuation');
+	Template.AdditionalAbilities.AddItem('RTProgramEvacuationPartOne');
+	Template.AdditionalAbilities.AddItem('RTProgramEvacuationPartTwo');
 
 	// special meld abilities
 	Template.AdditionalAbilities.AddItem('LIOverwatchShot');
@@ -727,6 +730,7 @@ static function X2AbilityTemplate RTTheSixPathsOfPainIcon() {
 
 static function X2AbilityTemplate RTTheSixPathsOfPainOverride() {
 	local X2AbilityTemplate Template;
+
 	`CREATE_X2TEMPLATE(class'RTAbilityTemplate', Template, 'RTTheSixPathsOfPainOverride');
 
 	Template = CreateOverTheShoulderAbility(Template, 2);
@@ -2208,6 +2212,13 @@ static function X2AbilityTemplate RTEndPsistorms_Dead() {
 
 	Trigger = new class'X2AbilityTrigger_EventListener';
 	Trigger.ListenerData.EventID = 'UnitDied';
+	Trigger.ListenerData.EventFn = class'XComGameState_Ability'.static.AbilityTriggerEventListener_Self;
+	Trigger.ListenerData.Filter  = eFilter_Unit;
+	Trigger.ListenerData.Deferral = ELD_OnStateSubmitted;
+	Template.AbilityTriggers.AddItem(Trigger);
+
+	Trigger = new class'X2AbilityTrigger_EventListener';
+	Trigger.ListenerData.EventID = 'UnitRemovedFromPlay';
 	Trigger.ListenerData.EventFn = class'XComGameState_Ability'.static.AbilityTriggerEventListener_Self;
 	Trigger.ListenerData.Filter  = eFilter_Unit;
 	Trigger.ListenerData.Deferral = ELD_OnStateSubmitted;

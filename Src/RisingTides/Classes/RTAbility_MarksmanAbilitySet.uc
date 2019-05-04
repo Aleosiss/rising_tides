@@ -162,6 +162,9 @@ static function X2AbilityTemplate ScopedAndDropped()
 	Template.AdditionalAbilities.AddItem('RTFeedback');
 	Template.AdditionalAbilities.AddItem('RTMindControl');
 	Template.AdditionalAbilities.AddItem('RTEnterStealth');
+	Template.AdditionalAbilities.AddItem('RTProgramEvacuation');
+	Template.AdditionalAbilities.AddItem('RTProgramEvacuationPartOne');
+	Template.AdditionalAbilities.AddItem('RTProgramEvacuationPartTwo');
 
 	// unique abilities for Scoped and Dropped
 	Template.AdditionalAbilities.AddItem('RTStandardSniperShot');
