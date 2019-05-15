@@ -65,8 +65,3 @@ This would be a bare-bones content mod. I also have the following content in min
 	- Networked OI does not work with CloseCombatSpecialistAttack or KillzoneShot. Unsure of exact cause, appears that CCS does not tick AbilityActivated
 	- Shadow Strike does not highlight the tiles it can activate to
 	- Have to travel to a region that is building an outpost to activate Forty Years of War
-
-
-
-
-

@@ -50,6 +50,16 @@ var config int WARPGRENADE_ICLIPSIZE;
 var config int WARPGRENADE_RANGE;
 var config int WARPGRENADE_RADIUS;
 
+var config WeaponDamageValue WARPBOMB_BASEDAMAGE;
+var config int WARPBOMB_ISOUNDRANGE;
+var config int WARPBOMB_IENVIRONMENTDAMAGE;
+var config int WARPBOMB_TRADINGPOSTVALUE;
+var config int WARPBOMB_IPOINTS;
+var config int WARPBOMB_ICLIPSIZE;
+var config int WARPBOMB_RANGE;
+var config int WARPBOMB_RADIUS;
+
+
 static function array<name> GetProgramWeaponTemplateNames() {
 	local array<name> names;
 
@@ -104,6 +114,7 @@ static function array<X2DataTemplate> CreateTemplates()
 	Items.AddItem(CreateRTTemplarGauntlet_Left('RTScholarGauntlet_M3'));
 
 	Items.AddItem(CreateRTTemplarWarpGrenades());
+	Items.AddItem(CreateRTTemplarWarpbombs());
 	
 	return Items;
 }
@@ -778,6 +789,49 @@ static function X2DataTemplate CreateRTTemplarWarpGrenades()
 
 	Template.SetUIStatMarkup(class'XLocalizedData'.default.RangeLabel, , default.WARPGRENADE_RANGE);
 	Template.SetUIStatMarkup(class'XLocalizedData'.default.RadiusLabel, , default.WARPGRENADE_RADIUS);
+
+	return Template;
+}
+
+static function X2DataTemplate CreateRTTemplarWarpBombs()
+{
+	local X2GrenadeTemplate Template;
+	local X2Effect_ApplyWeaponDamage WeaponDamageEffect;
+
+	`CREATE_X2TEMPLATE(class'X2GrenadeTemplate', Template, 'RTWarpBomb');
+
+	Template.strImage = "img:///UILibrary_StrategyImages.X2InventoryIcons.Inv_Acid_Bomb";
+	Template.EquipSound = "StrategyUI_Grenade_Equip";
+	Template.AddAbilityIconOverride('ThrowGrenade', "img:///UILibrary_PerkIcons.UIPerk_grenade_acidbomb");
+	Template.AddAbilityIconOverride('LaunchGrenade', "img:///UILibrary_PerkIcons.UIPerk_grenade_acidbomb");
+	Template.iRange = default.WARPBOMB_RANGE;
+	Template.iRadius = default.WARPBOMB_RADIUS;
+	Template.fCoverage = 100;
+	
+	Template.BaseDamage = default.WARPBOMB_BASEDAMAGE;
+	Template.iSoundRange = default.WARPBOMB_ISOUNDRANGE;
+	Template.iEnvironmentDamage = default.WARPBOMB_IENVIRONMENTDAMAGE;
+	Template.TradingPostValue = default.WARPBOMB_TRADINGPOSTVALUE;
+	Template.PointsToComplete = default.WARPBOMB_IPOINTS;
+	Template.iClipSize = default.WARPBOMB_ICLIPSIZE;
+	Template.Tier = 1;
+	
+	Template.Abilities.AddItem('ThrowGrenade');
+	Template.Abilities.AddItem('GrenadeFuse');
+
+	// immediate damage
+	WeaponDamageEffect = new class'X2Effect_ApplyWeaponDamage';
+	WeaponDamageEffect.bExplosiveDamage = true;
+	Template.ThrownGrenadeEffects.AddItem(WeaponDamageEffect);
+
+	Template.LaunchedGrenadeEffects = Template.ThrownGrenadeEffects;
+	
+	Template.GameArchetype = "RT_Grenade_Warp.RT_WP_Grenade_Warp_Lv2";
+
+	Template.CanBeBuilt = false;
+
+	Template.SetUIStatMarkup(class'XLocalizedData'.default.RangeLabel, , default.WARPBOMB_RANGE);
+	Template.SetUIStatMarkup(class'XLocalizedData'.default.RadiusLabel, , default.WARPBOMB_RADIUS);
 
 	return Template;
 }
