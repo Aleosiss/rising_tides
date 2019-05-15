@@ -1046,7 +1046,7 @@ ActionObjective="Hunt the Templars"
 
 [CovertActionNarrative_HuntTemplarsP1_Program X2CovertActionNarrativeTemplate]
 ActionName="Find Them"
-ActionPreNarrative="As you might recall, Commander, six days after the Temple Ship crash-landed, I initiated Operation: New World. Unfortunately, there was a lone survivor. Staff Sergeant Lanner was left a mangled wreck, his mind in shambles from my operative's psionic assault, but he managed to limp away during the chaos of the beginning of Operation: Ashes and Temples, Part Three. Only recently have we managed to pinpoint his general location, but we need your manpower to figure out where he's hiding. - Dr. Hadley"
+ActionPreNarrative="As you might recall, Commander, six days after the Temple Ship crash-landed, I initiated Operation: New World. Unfortunately, there was a lone survivor. Staff Sergeant Lanner was left a mangled wreck, his mind in shambles from my operative's psionic assault, but he managed to limp away during the chaos of the beginning of Operation: Ashes and Temples, Act III. Only recently have we managed to pinpoint his general location, but we need your manpower to figure out where he's hiding. - Dr. Hadley"
 ActionPostNarrative="Excellent. You should be proud of your soldiers, Commander. Keeping up with my operatives is not an easy task. - Dr. Hadley"
 
 [CovertAction_HuntTemplarsP2Template X2CovertActionTemplate]
@@ -1082,25 +1082,23 @@ ObjectiveTextPools[1]="Kill the Templar Coven Leader"
 ObjectiveTextPools[2]="Neutralize all enemy targets"
 ObjectiveTextPools[3]="Extract all XCOM operatives"
 
-[RT_TemplarCovenAssault X2MissionTemplate]
-DisplayName="Templar Coven Assault"
-Briefing="Eliminate Geist. Destroy the Archives. Leave No Survivors"
+[RT_TemplarHighCovenAssault X2MissionTemplate]
+DisplayName="Destroy the Templar High Coven"
+Briefing="Eliminate Geist. Destroy the Archives. End this conflict, once and for all."
 PostMissionType="Kill all hostiles"
 BriefingImage="img:///UILibrary_StrategyImages.X2StrategyMap.Alert_Advent_Facility"
-ObjectiveTextPools[0]="Neutralize Templar Leadership"
+ObjectiveTextPools[0]="Destroy the Templar High Coven Compound"
 
 [RTNarrative_TemplarCovenAssault X2MissionNarrativeTemplate]
-ObjectiveTextPools[0]="Kill Geist"
-ObjectiveTextPools[1]="Neutralize all Templars in the AO"
-ObjectiveTextPools[2]="Destroy Templar Archives"
+ObjectiveTextPools[0]="Destroy Templar Archives"
+ObjectiveTextPools[1]="Kill Geist"
+ObjectiveTextPools[1]="Eliminate High Coven members"
+ObjectiveTextPools[2]="Neutralize all Templars in the AO"
 
-[RTUIMission_TemplarAmbush]
-m_strTitle=COUNTERINTELLIGENCE
-m_strBody=Our soldiers have been discovered during the undertaking of a Covert Action!  Prevent hostile forces from reporting back to leadership!
-m_strConfirmMission=BEGIN COUNTERINTELLIGENCE OPERATION
-m_strConfirmLabel=BEGIN
-m_strObjective=OBJECTIVE
-m_strObjectiveDesc=Eliminate Templar forces.
+[RTMissionSource_TemplarHighCovenAssault X2MissionSourceTemplate]
+MissionPinLabel="Templar High Coven Compound"
+MissionFlavorText="With the High Coven exposed and only a fraction of the Honor Guard remaining, now is the time to end this terrible game once and for all. This strike, on our own kind, for the first time since the fall, does not increase our chances at victory over the Alien threat. Rather, it is our only hope that our society might survive it."
+BattleOpName="Operation: New World - Act II"
 
 ;///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ;//---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------

@@ -15,6 +15,7 @@ static function array<X2DataTemplate> CreateTemplates()
 	Rewards.AddItem(CreateProgramHuntTemplarsP3Reward());
 
 	Rewards.AddItem(CreateProgramHuntTemplarsAmbushReward());
+	Rewards.AddItem(CreateProgramTemplarCovenAssaultReward());
 
 	// Misc Rewards
 	Rewards.AddItem(CreateProgramAddCardSlotTemplate());
@@ -188,7 +189,7 @@ static function X2DataTemplate CreateProgramHuntTemplarsAmbushReward() {
 static function X2DataTemplate CreateProgramTemplarCovenAssaultReward() {
 	local X2RewardTemplate Template;
 
-	`CREATE_X2Reward_TEMPLATE(Template, 'RTReward_TemplarCovenAssault');
+	`CREATE_X2Reward_TEMPLATE(Template, 'RTReward_TemplarHighCovenAssault');
 	
 	Template.IsRewardAvailableFn = none;
 	Template.IsRewardNeededFn = none; 
@@ -478,22 +479,19 @@ static function GiveHuntTemplarsP3Reward(XComGameState NewGameState, XComGameSta
 static function GiveTemplarCovenAssaultReward(XComGameState NewGameState, XComGameState_Reward RewardState, optional StateObjectReference AuxRef, optional bool bOrder = false, optional int OrderHours = -1)
 {
 	local XComGameState_ResistanceFaction TemplarState;
+	local RTGameState_ProgramFaction ProgramFaction;
 
+	ProgramFaction = `RTS.GetProgramState(NewGameState);
 	TemplarState = `RTS.GetTemplarFactionState();
 
-	EliminateFaction(NewGameState, TemplarState);
-	GiveTemplarQuestlineCompleteReward(NewGameState, RewardState, AuxRef, bOrder, OrderHours);
-	// TODO: Success notification
-}
-
-static function GiveTemplarCovenAssaultFailed(XComGameState NewGameState, XComGameState_Reward RewardState, optional StateObjectReference AuxRef, optional bool bOrder = false, optional int OrderHours = -1)
-{
-	local XComGameState_ResistanceFaction TemplarState;
-
-	TemplarState = `RTS.GetTemplarFactionState();
-
-	EliminateFaction(NewGameState, TemplarState);
-	// TODO: Failure notification
+	if(!ProgramFaction.didTemplarMissionSucceed()) {
+		GiveTemplarQuestlineFailedReward(NewGameState, RewardState, AuxRef, bOrder, OrderHours);
+	} else {
+		`RTLOG("Templar Questline Succeeded!");
+		EliminateFaction(NewGameState, TemplarState);
+		GiveTemplarQuestlineCompleteReward(NewGameState, RewardState, AuxRef, bOrder, OrderHours);
+		// TODO: Success notification
+	}
 }
 
 static function GiveTemplarQuestlineFailedReward(XComGameState NewGameState, XComGameState_Reward RewardState, optional StateObjectReference AuxRef, optional bool bOrder = false, optional int OrderHours = -1)
@@ -528,7 +526,7 @@ static function GiveHuntTemplarAmbushReward(XComGameState NewGameState, XComGame
 	local RTGameState_ProgramFaction ProgramFaction;
 
 	ProgramFaction = `RTS.GetNewProgramState(NewGameState);
-	if(!ProgramFaction.didTemplarAmbushMissionSucceed()) {
+	if(!ProgramFaction.didTemplarMissionSucceed()) {
 		GiveTemplarQuestlineFailedReward(NewGameState, RewardState, AuxRef, bOrder, OrderHours);
 	} else {
 		switch(ProgramFaction.getTemplarQuestlineStage()) {
@@ -547,7 +545,7 @@ static function GiveHuntTemplarAmbushReward(XComGameState NewGameState, XComGame
 		}
 	}
 
-	ProgramFaction.SetAmbushMissionSucceededFlag(false);
+	ProgramFaction.SetTemplarMissionSucceededFlag(false);
 }
 static function EliminateFaction(XComGameState NewGameState, XComGameState_ResistanceFaction FactionState, optional bool bShouldFactionSoldiersDesert = true) {
 	local XComGameState_HeadquartersXCom XComHQ;

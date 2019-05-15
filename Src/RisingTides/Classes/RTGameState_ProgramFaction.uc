@@ -83,7 +83,7 @@ var private bool																bTemplarsDestroyed;
 var private bool																bTemplarQuestFailed;
 var private int																	iTemplarQuestlineStage;
 var private array<StateObjectReference>											TemplarQuestActions;
-var private bool 																bTemplarAmbushMissionSucceeded;
+var private bool 																bTemplarMissionSucceeded;
 
 // ONE SMALL FAVOR HANDLING VARIABLES
 var private int															iPreviousMaxSoldiersForMission;		// cache of the number of soldiers on a mission before OSF modfied it
@@ -1124,12 +1124,16 @@ function StateObjectReference CreateTemplarCovertAction(XComGameState NewGameSta
 	return ActionState.GetReference();
 }
 
-function SetAmbushMissionSucceededFlag(bool _bTemplarAmbushMissionSucceed) {
-	bTemplarAmbushMissionSucceeded = _bTemplarAmbushMissionSucceed;
+function SetTemplarMissionSucceededFlag(bool _bTemplarAmbushMissionSucceed) {
+	bTemplarMissionSucceeded = _bTemplarAmbushMissionSucceed;
 }
 
-function bool didTemplarAmbushMissionSucceed() {
-	return bTemplarAmbushMissionSucceeded;
+function bool didTemplarMissionSucceed() {
+	return bTemplarMissionSucceeded;
+}
+
+function bool TemplarQuestlineSucceeded() {
+	return iTemplarQuestlineStage == 4;
 }
 
 function HandleTemplarQuestActions(XComGameState NewGameState) {

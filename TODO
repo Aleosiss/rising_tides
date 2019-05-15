@@ -54,3 +54,5 @@
       ✔ Create UIScreenListener @done(19-03-10 17:33)
   ☐ Remove -debug flag from build script before releasing
   ☐ Fix Psionic Storm visualizaton (its broken)
+  ☐ Add Call in One Small Favor covert action (hard) -> available if program questline completed
+  ☐ Add +1 Program Favors covert action (medium) -> available if program favors < 1

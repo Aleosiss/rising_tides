@@ -748,6 +748,22 @@ exec function RT_GenerateTemplarAmbush() {
 	}
 }
 
+exec function RT_GenerateTemplarHighCovenAssault() {
+	local XComGameState NewGameState;
+	local XComGameState_MissionSite MissionState;
+
+	NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("CHEAT - ELIMINATE TEMPLAR FACTION");
+	MissionState = CreateFakeTemplarAssault(NewGameState);
+	`XCOMGAME.GameRuleset.SubmitGameState(NewGameState);
+	
+	MissionState = GetMission('RTMissionSource_TemplarHighCovenAssault'); // Find the Ambush mission and display its popup
+	if (MissionState != none && MissionState.GetMissionSource().MissionPopupFn != none)
+	{
+		MissionState.GetMissionSource().MissionPopupFn(MissionState);
+		`GAME.GetGeoscape().Pause();
+	}
+}
+
 simulated function XComGameState_MissionSite GetMission(name MissionSource)
 {
 	local XComGameStateHistory History;
@@ -785,6 +801,38 @@ function XComGameState_MissionSite CreateFakeTemplarAmbush(XComGameState NewGame
 	MissionSource = X2MissionSourceTemplate(StratMgr.FindStrategyElementTemplate('RTMissionSource_TemplarAmbush'));
 	MissionState = RTGameState_MissionSiteTemplarAmbush(NewGameState.CreateNewStateObject(class'RTGameState_MissionSiteTemplarAmbush'));
 	MissionState.CovertActionRef = EmptyRef;
+	MissionState.bGeneratedFromDebugCommand = true;
+	
+	MissionState.BuildMission(MissionSource, RegionState.GetRandom2DLocationInRegion(), RegionState.GetReference(), MissionRewards, true);
+	MissionState.ResistanceFaction = `RTS.GetProgramState().GetReference();
+
+	return MissionState;
+}
+
+function XComGameState_MissionSite CreateFakeTemplarAssault(XComGameState NewGameState) {
+	local RTGameState_MissionSiteTemplarHighCoven MissionState;
+	local XComGameState_WorldRegion RegionState;
+	local array<XComGameState_WorldRegion> RegionStates;
+	local XComGameState_Reward RewardState;
+	local X2StrategyElementTemplateManager StratMgr;
+	local X2RewardTemplate RewardTemplate;
+	local X2MissionSourceTemplate MissionSource;
+	local array<XComGameState_Reward> MissionRewards;
+	local StateObjectReference EmptyRef;
+	local XComGameState_Haven TemplarHavenState;
+
+	StratMgr = class'X2StrategyElementTemplateManager'.static.GetStrategyElementTemplateManager();
+	TemplarHavenState = XComGameState_Haven(`XCOMHISTORY.GetGameStateForObjectID(`RTS.GetTemplarFactionState().FactionHQ.ObjectID));
+	RegionStates = `RTS.GetTemplarFactionState().GetTerritoryRegions();
+	RegionState = RegionStates[`SYNC_RAND(RegionStates.Length - 1)];
+
+	MissionRewards.Length = 0;
+	RewardTemplate = X2RewardTemplate(StratMgr.FindStrategyElementTemplate('RTReward_TemplarHighCovenAssault')); // rewards are given by the X2MissionSourceTemplate
+	RewardState = RewardTemplate.CreateInstanceFromTemplate(NewGameState);
+	MissionRewards.AddItem(RewardState);
+
+	MissionSource = X2MissionSourceTemplate(StratMgr.FindStrategyElementTemplate('RTMissionSource_TemplarHighCovenAssault'));
+	MissionState = RTGameState_MissionSiteTemplarHighCoven(NewGameState.CreateNewStateObject(class'RTGameState_MissionSiteTemplarHighCoven'));
 	MissionState.bGeneratedFromDebugCommand = true;
 	
 	MissionState.BuildMission(MissionSource, RegionState.GetRandom2DLocationInRegion(), RegionState.GetReference(), MissionRewards, true);

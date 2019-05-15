@@ -67,7 +67,7 @@ static function X2MissionNarrativeTemplate CreateTemplarCovenAssaultNarrative() 
 
 	`CREATE_X2MISSIONNARRATIVE_TEMPLATE(Template, 'RTNarrative_TemplarCovenAssault');
 
-	Template.MissionType = "RT_TemplarCovenAssault";
+	Template.MissionType = "RT_TemplarHighCovenAssault";
 
 	// intro narrative	
 	// menance 1-5, target location confirmed, kill any hostile units in the AO

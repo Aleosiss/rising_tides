@@ -390,15 +390,19 @@ New-Item "$stagingPath/Script" -ItemType Directory
 Write-Host "Reading mod metadata from $modSrcRoot/$modNameCanonical.x2proj..."
 [xml]$x2projXml = Get-Content -Path "$modSrcRoot/$modNameCanonical.x2proj"
 $modProperties = $x2projXml.Project.PropertyGroup
-$modPublishedId = $modProperties.SteamPublishedId
+$modPublishedId = $modProperties.SteamPublishID[0]
 $modTitle = $modProperties.Name
 $modDescription = $modProperties.Description
 Write-Host "Read."
+
+Write-Host $modTitle
 
 # write mod metadata - used by Firaxis' "make" tooling
 Write-Host "Writing mod metadata..."
 WriteModMetadata -mod $modNameCanonical -sdkPath $sdkPath -publishedId $modPublishedId -title $modTitle -description $modDescription
 Write-Host "Written."
+
+return
 
 # mirror the SDK's SrcOrig to its Src
 Write-Host "Mirroring SrcOrig to Src..."

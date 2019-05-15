@@ -632,6 +632,8 @@
     <Content Include="Src\RisingTides\Classes\RTEffect_ModifyTemplarFocus.uc" />
     <Content Include="Src\RisingTides\Classes\RTEffect_Sustain.uc" />
     <Content Include="Src\RisingTides\Classes\RTEffect_Stasis.uc" />
+    <Content Include="Src\RisingTides\Classes\RTGameState_MissionSiteTemplarHighCoven.uc" />
+    <Content Include="Src\RisingTides\Classes\RTUIMission_TemplarHighCovenAssault.uc" />
   </ItemGroup>
   <Import Project="$(MSBuildLocalExtensionPath)\XCOM2.targets" />
 </Project>

@@ -1829,7 +1829,6 @@ static function X2AbilityTemplate RTPsionicStorm() {
 
 	ImmediateDamageEffect = new class'X2Effect_ApplyWeaponDamage';
 	ImmediateDamageEffect.bIgnoreBaseDamage = true;
-	ImmediateDamageEffect.DamageTag = 'PsionicStormImmediate';
 	ImmediateDamageEffect.bIgnoreArmor = true;
 	ImmediateDamageEffect.EffectDamageValue = default.PSISTORM_DMG;
 
@@ -1932,7 +1931,6 @@ simulated function DimensionalRiftStage1_BuildVisualization(XComGameState Visual
 
 		EffectAction = X2Action_PlayEffect(class'X2Action_PlayEffect'.static.AddToVisualizationTree(AvatarBuildData, VisualizeGameState.GetContext(), false, AvatarBuildData.LastActionAdded));
 		EffectAction.EffectName = "FX_Psi_Void_Rift.P_Psi_Void_Rift_Activation";
-		//EffectAction.EffectName = "FX_Psi_Dimensional_Rift.P_Psi_Dimensional_Rift_Warning";
 		TargetLocation = Context.InputContext.TargetLocations[0];
 		TargetTile = World.GetTileCoordinatesFromPosition(TargetLocation);
 		EffectAction.EffectLocation = World.GetPositionFromTileCoordinates(TargetTile);
@@ -1943,7 +1941,6 @@ simulated function DimensionalRiftStage1_BuildVisualization(XComGameState Visual
 		// Display the Warning FX (covert to tile and back to vector because stage 2 is at the GetPositionFromTileCoordinates coord
 		EffectAction = X2Action_PlayEffect(class'X2Action_PlayEffect'.static.AddToVisualizationTree(AvatarBuildData, VisualizeGameState.GetContext(), false, AvatarBuildData.LastActionAdded));
 		EffectAction.EffectName = "FX_Psi_Void_Rift.P_Psi_Void_Rift";
-		//EffectAction.EffectName = "FX_Psi_Void_Rift.P_Psi_Void_Rift";
 		TargetLocation = Context.InputContext.TargetLocations[0];
 		TargetTile = World.GetTileCoordinatesFromPosition(TargetLocation);
 		EffectAction.EffectLocation = World.GetPositionFromTileCoordinates(TargetTile);
@@ -2112,7 +2109,6 @@ static function X2AbilityTemplate RTPsionicStormSustained() {
 
 	ImmediateDamageEffect = new class'X2Effect_ApplyWeaponDamage';
 	ImmediateDamageEffect.bIgnoreBaseDamage = true;
-	ImmediateDamageEffect.DamageTag = 'PsionicStormSustained';
 	ImmediateDamageEffect.bIgnoreArmor = true;
 	ImmediateDamageEffect.EffectDamageValue = default.PSISTORM_DMG;
 
