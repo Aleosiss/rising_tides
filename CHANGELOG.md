@@ -1,6 +1,6 @@
 2.1.0:
 - Add new covert action line to the Program to eliminate the Templars!
-    - 3 New Covert Actions
+    - 3 New Covert Actions - locate, inflitrate, and lure the Templars out from their HQ.
         - New mission (Templar Ambush Retaliation)
             - A local Templar cult has stumbled upon your plans.
             - You can escape, but if word gets back to Geist, your efforts will have been for nothing!
@@ -18,7 +18,9 @@
   - Program operative aim decreased by 10.
   - Program operative weaponry now scales with XCOM's.
 - Changes
-  - - Time Stands Still now takes place over a single turn. Instead of three turns with 2 AP each, the unit now receives 6 AP immediately and no action is turn-ending.
+  - Time Stands Still now takes place over a single turn. Instead of three turns with 2 AP each, the unit now receives 6 AP immediately and no action is turn-ending.
+  - Program operatives now evacuate the combat zone when greviously wounded.
+
 
 
 2.0.11:
