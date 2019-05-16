@@ -1049,10 +1049,8 @@ exec function RT_CheatProgramQuestline() {
 
 	NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("CHEAT: Force Templar Questline!");
 	ProgramState = `RTS.GetNewProgramState(NewGameState);
-
 	ProgramState.ForceIncreaseInfluence();
-	ProgramState.IncrementTemplarQuestlineStage();
-	ProgramState.IncrementNumFavorsAvailable(3);
+	class'RTStrategyElement_Rewards'.static.GiveProgramAdvanceQuestlineReward(NewGameState, none);
 	
 	`GAMERULES.SubmitGameState(NewGameState);
 }

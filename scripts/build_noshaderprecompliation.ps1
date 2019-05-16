@@ -402,8 +402,6 @@ Write-Host "Writing mod metadata..."
 WriteModMetadata -mod $modNameCanonical -sdkPath $sdkPath -publishedId $modPublishedId -title $modTitle -description $modDescription
 Write-Host "Written."
 
-return
-
 # mirror the SDK's SrcOrig to its Src
 Write-Host "Mirroring SrcOrig to Src..."
 Robocopy.exe "$sdkPath/Development/SrcOrig" "$sdkPath/Development/Src" *.uc *.uci /S /E /DCOPY:DA /COPY:DAT /PURGE /MIR /NP /R:1000000 /W:30

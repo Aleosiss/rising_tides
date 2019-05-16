@@ -482,13 +482,12 @@ static function GiveTemplarCovenAssaultReward(XComGameState NewGameState, XComGa
 	local RTGameState_ProgramFaction ProgramFaction;
 
 	ProgramFaction = `RTS.GetProgramState(NewGameState);
-	TemplarState = `RTS.GetTemplarFactionState();
+
 
 	if(!ProgramFaction.didTemplarMissionSucceed()) {
 		GiveTemplarQuestlineFailedReward(NewGameState, RewardState, AuxRef, bOrder, OrderHours);
 	} else {
 		`RTLOG("Templar Questline Succeeded!");
-		EliminateFaction(NewGameState, TemplarState);
 		GiveTemplarQuestlineCompleteReward(NewGameState, RewardState, AuxRef, bOrder, OrderHours);
 		// TODO: Success notification
 	}
@@ -496,8 +495,8 @@ static function GiveTemplarCovenAssaultReward(XComGameState NewGameState, XComGa
 
 static function GiveTemplarQuestlineFailedReward(XComGameState NewGameState, XComGameState_Reward RewardState, optional StateObjectReference AuxRef, optional bool bOrder = false, optional int OrderHours = -1)
 {
-	local XComGameState_ResistanceFaction TemplarState;
 	local RTGameState_ProgramFaction ProgramState;
+	local XComGameState_ResistanceFaction TemplarState;
 
 	ProgramState = `RTS.GetNewProgramState(NewGameState);
 	TemplarState = `RTS.GetTemplarFactionState();
@@ -513,11 +512,19 @@ static function GiveTemplarQuestlineFailedReward(XComGameState NewGameState, XCo
 }
 
 static function GiveTemplarQuestlineCompleteReward(XComGameState NewGameState, XComGameState_Reward RewardState, optional StateObjectReference AuxRef, optional bool bOrder = false, optional int OrderHours = -1) {
+	local XComGameState_ResistanceFaction TemplarState;
 	local RTGameState_ProgramFaction ProgramState;
+	local DynamicPropertySet PropertySet;
 
 	ProgramState = `RTS.GetNewProgramState(NewGameState);
 	ProgramState.IncrementNumFavorsAvailable(30);
 	ProgramState.IncrementTemplarQuestlineStage(); // should be 4 now
+	
+	TemplarState = `RTS.GetTemplarFactionState();
+	EliminateFaction(NewGameState, TemplarState);
+	
+	class'X2StrategyGameRulesetDataStructures'.static.BuildDynamicPropertySet(PropertySet, 'RTUIAlert', 'RTAlert_TemplarQuestlineComplete', none, true, true, true, false);
+	class'XComPresentationLayerBase'.static.QueueDynamicPopup(PropertySet, NewGameState);
 
 }
 
@@ -635,6 +642,7 @@ static function ProgramFactionInfluenceRewardPopup(XComGameState_Reward RewardSt
 
 static function GiveProgramAdvanceQuestlineReward(XComGameState NewGameState, XComGameState_Reward RewardState, optional StateObjectReference AuxRef, optional bool bOrder = false, optional int OrderHours = -1) {
 	local RTGameState_ProgramFaction ProgramState;
+	local DynamicPropertySet PropertySet;
 
 	ProgramState = `RTS.GetNewProgramState(NewGameState);
 
@@ -644,6 +652,10 @@ static function GiveProgramAdvanceQuestlineReward(XComGameState NewGameState, XC
 
 	ProgramState.IncrementTemplarQuestlineStage();
 	ProgramState.IncrementNumFavorsAvailable(3);
+
+	// notification
+	class'X2StrategyGameRulesetDataStructures'.static.BuildDynamicPropertySet(PropertySet, 'RTUIAlert', 'RTAlert_TemplarQuestlineAdvanced', none, true, true, true, false);
+	class'XComPresentationLayerBase'.static.QueueDynamicPopup(PropertySet, NewGameState);
 }
 
 // why wasn't this static in the first place...

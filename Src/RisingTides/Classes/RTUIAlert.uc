@@ -6,9 +6,22 @@ var localized string strTemplarAmbushStr2;
 var localized string strTemplarAmbushStr3;
 var localized string strTemplarAmbushHeader;
 var localized string strTemplarAmbushBegin;
+
 var localized string m_strTemplarQuestlineFailedHeader;
 var localized string m_strTemplarQuestlineFailedTitle;
 var localized string m_strTemplarQuestlineFailedDescription;
+
+var localized string m_strTemplarQuestlineAdvancedHeader;
+var localized string m_strTemplarQuestlineAdvancedTitle;
+var localized string m_strTemplarQuestlineAdvancedBody;
+
+var localized string m_strTemplarQuestlineCompleteHeader;
+var localized string m_strTemplarQuestlineCompleteTitle;
+var localized string m_strTemplarQuestlineCompleteBody;
+
+var localized string m_strHighCovenAssaultAvailableBody;
+var localized string m_strHighCovenAssaultAvailableImage;
+	
 
 defaultProperties
 {
@@ -20,20 +33,27 @@ defaultProperties
 simulated function BuildAlert()
 {
 	`RTLOG("Building Alert: " $ eAlertName);
+	BindLibraryItem();
 	switch( eAlertName ) {
+		case 'RTAlert_HighCovenAssaultAvailable':
+			BuildHighCovenAssaultAvailableAlert();
+			break;
+		case 'RTAlert_TemplarQuestlineComplete':
+			BuildTemplarQuestlineCompleteAlert();
+			break;
+		case 'RTAlert_TemplarQuestlineAdvanced':
+			BuildTemplarQuestlineAdvancedAlert();
+			break;
 		case 'RTAlert_TemplarQuestlineFailed':
-			BindLibraryItem();
 			BuildTemplarQuestlineFailedAlert();
 			break;
 		case 'RTAlert_TemplarAmbush':
-			BindLibraryItem();
 			BuildTemplarAmbushAlert();
 			break;
 		case 'RTAlert_Test':
 			BuildTestingAlert();
 			break;
 		default:
-			BindLibraryItem();
 			AddBG(MakeRect(0, 0, 1000, 500), eUIState_Normal).SetAlpha(0.75f);
 			break;
 	}
@@ -52,6 +72,9 @@ simulated function Name GetLibraryID() {
 	{
 		case 'RTAlert_TemplarAmbush':					return 'Alert_ChosenSplash';
 		case 'RTAlert_TemplarQuestlineFailed':			return 'Alert_AlienSplash';
+		case 'RTAlert_TemplarQuestlineAdvanced':		return 'Alert_XComGeneric';
+		case 'RTAlert_TemplarQuestlineComplete':		return 'Alert_XComGeneric';
+		case 'RTAlert_HighCovenAssaultAvailable':		return 'Alert_SpecialPOI';
 	
 		default:
 			return '';
@@ -68,8 +91,7 @@ simulated function BuildTemplarQuestlineFailedAlert() {
 	Button2.Hide();
 }
 
-simulated function BuildTemplarAmbushAlert()
-{
+simulated function BuildTemplarAmbushAlert() {
 	local XComGameState_ResistanceFaction FactionState;
 	local XComGameStateHistory History;
 
@@ -98,6 +120,69 @@ simulated function BuildTemplarAmbushAlert()
 		"");																												// cancel string
 
 	BuildChosenIcon(FactionState.GetFactionIcon());
+}
+
+simulated function BuildTemplarQuestlineAdvancedAlert() {
+	// Send over to flash
+	LibraryPanel.MC.BeginFunctionOp("UpdateData");
+	LibraryPanel.MC.QueueString(m_strTemplarQuestlineAdvancedHeader); // Header (ATTENTION)
+	LibraryPanel.MC.QueueString(m_strTemplarQuestlineAdvancedTitle); // Title
+	LibraryPanel.MC.QueueString(m_strTemplarQuestlineAdvancedBody); // Body
+	LibraryPanel.MC.QueueString(""); // Button 0
+	LibraryPanel.MC.QueueString(m_strOK); // Button 1
+	LibraryPanel.MC.EndOp();
+	Button2.SetGamepadIcon(class'UIUtilities_Input'.static.GetAdvanceButtonIcon());
+
+	Button1.Hide(); 
+	Button1.DisableNavigation();
+}
+
+simulated function BuildTemplarQuestlineCompleteAlert() {
+	// Send over to flash
+	LibraryPanel.MC.BeginFunctionOp("UpdateData");
+	LibraryPanel.MC.QueueString(m_strTemplarQuestlineCompleteHeader); // Header (ATTENTION)
+	LibraryPanel.MC.QueueString(m_strTemplarQuestlineCompleteTitle); // Title
+	LibraryPanel.MC.QueueString(m_strTemplarQuestlineCompleteBody); // Body
+	LibraryPanel.MC.QueueString(""); // Button 0
+	LibraryPanel.MC.QueueString(m_strOK); // Button 1
+	LibraryPanel.MC.EndOp();
+	Button2.SetGamepadIcon(class'UIUtilities_Input'.static.GetAdvanceButtonIcon());
+
+	Button1.Hide(); 
+	Button1.DisableNavigation();
+}
+
+simulated function BuildHighCovenAssaultAvailableAlert() {
+	local XComGameStateHistory History;
+	local XGParamTag ParamTag;
+	local XComGameState_PointOfInterest POIState;
+	local TAlertPOIAvailableInfo kInfo;
+
+	History = `XCOMHISTORY;
+	POIState = XComGameState_PointOfInterest(History.GetGameStateForObjectID(
+		class'X2StrategyGameRulesetDataStructures'.static.GetDynamicIntProperty(DisplayPropertySet, 'POIRef')));
+
+	ParamTag = XGParamTag(`XEXPANDCONTEXT.FindTag("XGParam"));
+	ParamTag.StrValue0 = POIState.GetResistanceRegionName();
+
+	kInfo.zoomLocation = POIState.Get2DLocation();
+	kInfo.strTitle = m_strPOITitle; // Unused
+	kInfo.strLabel = m_strPOILabel; // Unused
+	kInfo.strBody = m_strHighCovenAssaultAvailableBody;
+	kInfo.strImage = m_strHighCovenAssaultAvailableImage;
+	kInfo.strReport = POIState.GetDisplayName();
+	kInfo.strReward = POIState.GetRewardDescriptionString();
+	kInfo.strRewardIcon = POIState.GetRewardIconString();
+	kInfo.strDurationLabel = m_strPOIDuration;
+	kInfo.strDuration = class'UIUtilities_Text'.static.GetTimeRemainingString(POIState.GetNumScanHoursRemaining());
+	kInfo.strInvestigate = m_strPOIInvestigate;
+	kInfo.strIgnore = m_strNotNow;
+	kInfo.strFlare = m_strPOIFlare; // Unused
+	kInfo.strUIIcon = POIState.GetUIButtonIcon();
+	kInfo.eColor = eUIState_Normal;
+	kInfo.clrAlert = MakeLinearColor(0.75f, 0.75f, 0, 1);
+
+	BuildPointOfInterestAvailableAlert(kInfo);
 }
 
 simulated function BuildTestingAlert()
