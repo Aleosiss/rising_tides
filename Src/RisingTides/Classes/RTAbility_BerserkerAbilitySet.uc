@@ -8,7 +8,7 @@
 //	Queen's perks.
 //---------------------------------------------------------------------------------------
 
-class RTAbility_BerserkerAbilitySet extends RTAbility_GhostAbilitySet config(RisingTides);
+class RTAbility_BerserkerAbilitySet extends RTAbility config(RisingTides);
 
 	var config int BITN_TILEDISTANCE;
 	var config int ACID_BLADE_DOT_DAMAGE;

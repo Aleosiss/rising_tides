@@ -7,7 +7,7 @@
 //---------------------------------------------------------------------------------------
 //	Nova's perks.
 //---------------------------------------------------------------------------------------
-class RTAbility_GathererAbilitySet extends RTAbility_GhostAbilitySet config(RisingTides);
+class RTAbility_GathererAbilitySet extends RTAbility config(RisingTides);
 
 	var config float OTS_RADIUS;
 	var config float OTS_RADIUS_SQ;

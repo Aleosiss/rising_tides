@@ -242,13 +242,13 @@ static function bool AbilityTagExpandHandler(string InString, out string OutStri
 {
 	local array<Object>				AbilitySetArray;
 	local Object					AbilitySetObject;
-	local RTAbility_GhostAbilitySet	AbilitySet;
+	local RTAbility					AbilitySet;
 
 
-	AbilitySetArray = class'XComEngine'.static.GetClassDefaultObjects(class'RTAbility_GhostAbilitySet');
+	AbilitySetArray = class'XComEngine'.static.GetClassDefaultObjects(class'RTAbility');
 	foreach AbilitySetArray(AbilitySetObject)
 	{
-		AbilitySet = RTAbility_GhostAbilitySet(AbilitySetObject);
+		AbilitySet = RTAbility(AbilitySetObject);
 		if(AbilitySet.static.AbilityTagExpandHandler(InString, OutString)) {
 			return true;
 		} else {

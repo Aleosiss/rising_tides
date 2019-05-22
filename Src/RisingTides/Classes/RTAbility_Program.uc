@@ -17,6 +17,7 @@ static function array<X2DataTemplate> CreateTemplates()
 	Templates.AddItem(RTProfessionalsHaveStandards());
 	Templates.AddItem(RTPsionicJamming());
 	Templates.AddItem(RTProgramArmorStats());
+	Templates.AddItem(RTProgramDroneCloakingField());
 
 	return Templates;
 }
@@ -77,6 +78,15 @@ static function X2AbilityTemplate RTProgramArmorStats()
 static function X2AbilityTemplate ForceAbilityTriggerPostBeginPlay(X2AbilityTemplate Template) {
 	Template.AbilityTriggers.Length = 0;
 	Template.AbilityTriggers.AddItem(default.UnitPostBeginPlayTrigger);
+
+	return Template;
+}
+
+static function X2AbilityTemplate RTProgramDroneCloakingField() {
+	local X2AbilityTemplate Template;
+	local RTEffect_Stealth StealthEffect;
+
+
 
 	return Template;
 }

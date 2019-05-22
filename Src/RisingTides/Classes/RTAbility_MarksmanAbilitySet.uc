@@ -8,7 +8,7 @@
 //	Whisper's perks.
 //---------------------------------------------------------------------------------------
 
-class RTAbility_MarksmanAbilitySet extends RTAbility_GhostAbilitySet
+class RTAbility_MarksmanAbilitySet extends RTAbility
 	config(RisingTides);
 
 	var config int SLOWISSMOOTH_AIM_BONUS, SLOWISSMOOTH_CRIT_BONUS;

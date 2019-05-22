@@ -8,15 +8,8 @@
 //	General Perks
 //---------------------------------------------------------------------------------------
 
-class RTAbility_GhostAbilitySet extends X2Ability
+class RTAbility_GhostAbilitySet extends RTAbility
 	config(RisingTides);
-
-	var protected X2Condition_UnitProperty						LivingFriendlyUnitOnlyProperty;
-	var protected X2Condition_UnitEffectsWithAbilitySource		OverTheShoulderProperty;
-	var protected X2Condition_UnitProperty						LivingHostileUnitOnlyNonRoboticProperty;
-	var protected RTCondition_PsionicTarget						PsionicTargetingProperty;
-	var protected RTCondition_UnitSize							StandardSizeProperty;
-	var protected EffectReason									TagReason;
 
 	var localized string FEEDBACK_TITLE;
 	var localized string FEEDBACK_DESC;
@@ -800,7 +793,7 @@ static function X2Condition_UnitValue CreateOverTheShoulderProperty() {
 
 }
 
-static function X2AbilityTemplate CreateRTCooldownCleanse (name TemplateName, name EffectNameToRemove, name EventIDToListenFor) {
+static function X2AbilityTemplate CreateRTCooldownCleanse(name TemplateName, name EffectNameToRemove, name EventIDToListenFor) {
 	local X2AbilityTemplate Template;
 	local X2Effect_RemoveEffects RemoveEffectEffect;
 	local X2AbilityTrigger_EventListener Trigger;
@@ -1261,43 +1254,6 @@ simulated function ProgramOperativeDefeatedEscape_BuildVisualization(XComGameSta
 
 defaultproperties
 {
-	Begin Object Class=X2Condition_UnitProperty Name=DefaultLivingFriendlyUnitOnlyProperty
-		ExcludeAlive=false
-		ExcludeDead=true
-		ExcludeFriendlyToSource=false
-		ExcludeHostileToSource=true
-		TreatMindControlledSquadmateAsHostile=false
-		FailOnNonUnits=true
-		ExcludeCivilian=true
-	End Object
-	LivingFriendlyUnitOnlyProperty = DefaultLivingFriendlyUnitOnlyProperty
-
-	Begin Object Class=X2Condition_UnitProperty Name=DefaultLivingHostileUnitOnlyNonRoboticProperty
-		ExcludeAlive=false
-		ExcludeDead=true
-		ExcludeFriendlyToSource=true
-		ExcludeHostileToSource=false
-		TreatMindControlledSquadmateAsHostile=true
-		ExcludeRobotic=true
-		FailOnNonUnits=true
-	End Object
-	LivingHostileUnitOnlyNonRoboticProperty = DefaultLivingHostileUnitOnlyNonRoboticProperty
-
-	Begin Object Class=RTCondition_PsionicTarget Name=DefaultPsionicTargetingProperty
-		bIgnoreRobotic=false
-		bIgnorePsionic=false
-		bIgnoreGHOSTs=false
-		bIgnoreDead=true
-		bIgnoreEnemies=false
-		bTargetAllies=false
-		bTargetCivilians=false
-	End Object
-	PsionicTargetingProperty = DefaultPsionicTargetingProperty
-
-	Begin Object Class=RTCondition_UnitSize Name=DefaultStandardSizeProperty
-	End Object
-	StandardSizeProperty = DefaultStandardSizeProperty
-
 	RTFeedbackEffectName = "RTFeedback"
 	RTFeedbackWillDebuffName = "RTFeedbackWillDebuff"
 	UnitUsedPsionicAbilityEvent = "UnitUsedPsionicAbility"
