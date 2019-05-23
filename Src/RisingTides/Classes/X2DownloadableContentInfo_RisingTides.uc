@@ -11,15 +11,11 @@
 class X2DownloadableContentInfo_RisingTides extends X2DownloadableContentInfo config(RisingTides);
 
 var config bool bDebuggingEnabled;
-var config int MajorVer;
-var config int MinorVer;
-var config int PatchVer;
+var int MajorVer;
+var int MinorVer;
+var int PatchVer;
 var config bool bShouldRemoveHelmets;
 var config array<name> TemplarUnitNames;
-
-// weak ref to the screen
-// config is just so we can write to it via default.
-var config String screen_path;
 
 /// <summary>
 /// This method is run if the player loads a saved game that was created prior to this DLC / Mod being installed, and allows the
@@ -31,7 +27,23 @@ static event OnLoadedSavedGame() {
 }
 
 static event OnLoadedSavedGameToStrategy() {
-	class'RTGameState_ProgramFaction'.static.InitFaction();
+	HandleModUpdate();
+}
+
+private static void HandleModUpdate() {
+	local RTGameState_ProgramFaction ProgramState;
+	local XComGameState NewGameState;
+
+	ProgramState = `RTS.GetProgramState();
+	if(!ProgramState.CompareVersion(GetVersionInt(), true)) {
+		return;
+	}
+	`RTLOG("New version of the mod found: \nOld Version: " $ ProgramState.GetVersion() $ "\nNew Version: " $ GetVersionInt());
+	NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("Mod version updated, sending popup!");
+	ProgramState = `RTS.GetNewProgramState(NewGameState);
+	ProgramState.CompareVersion(GetVersionInt);
+
+	`GAMERULES.SubmitGameState(NewGameState);
 }
 
 /// <summary>
@@ -238,6 +250,14 @@ static function bool DebuggingEnabled() {
 	return default.bDebuggingEnabled;
 }
 
+static function String GetVersionString() {
+	return "" + default.MajorVer + "." + default.MinorVer + "." + default.PatchVer;
+}
+
+static function int GetVersionInt() {
+	return (default.MajorVer * 1000000) + (default.MinorVer * 1000) + (default.PatchVer);
+}
+
 static function bool AbilityTagExpandHandler(string InString, out string OutString)
 {
 	local array<Object>				AbilitySetArray;
@@ -257,4 +277,11 @@ static function bool AbilityTagExpandHandler(string InString, out string OutStri
 	}
 
 	return false;
+}
+
+defaultproperties
+{
+	MajorVer = 2
+	MinorVer = 0
+	PatchVer = 11
 }

@@ -180,7 +180,7 @@ static function RTLog(string message, optional bool bShouldRedScreenToo = false,
 	local bool b;
 
 	b = DebuggingEnabled();
-	`LOG(message, b, 'Rising Tides');
+	`LOG(message, b, 'Rising Tides [' + class'X2DownloadableContentInfo_RisingTides'.static.GetVersionString() +']');
 	if(bShouldRedScreenToo && b) {
 		`RedScreen("RisingTides: " $ message);
 	}
@@ -268,8 +268,6 @@ static function XComGameState_ResistanceFaction GetTemplarFactionState()
 simulated static function bool IsInvalidMission(X2MissionSourceTemplate Template) {
 	return class'RTGameState_ProgramFaction'.default.InvalidMissionSources.Find(Template.DataName) != INDEX_NONE;
 }
-
-
 
 static function String GetProgramColor(optional ERTColor colorEnum) {
 	local ERTColor EmptyColor;

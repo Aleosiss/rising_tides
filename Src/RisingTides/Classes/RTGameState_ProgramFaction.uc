@@ -113,11 +113,15 @@ var config string PISFirstTime_ImagePath;
 // not a bool, want to see how many times this is called
 var private int iNumTimesProgramSetup;
 
+// the latest version of the mod
+var private int Version;
+
 /* *************F********************************************************** */
 
 defaultproperties
 {
 	iNumTimesProgramSetup = 0
+	Version = 0;
 }
 
 // SetUpProgramFaction(XComGameState StartState)
@@ -131,7 +135,7 @@ function SetUpProgramFaction(XComGameState StartState)
 	InitListeners();
 	class'RTGameState_StrategyCard'.static.SetUpStrategyCards(StartState);
 	OperativeTemplates = class'RTCharacter_DefaultCharacters'.static.CreateTemplates();
-	iNumberOfFavorsCalledIn = 0;
+	Version = class'X2DownloadableContentInfo_RisingTides'.static.GetVersionInt();
 }
 
 // CreateRTOperatives(XComGameState NewGameState)
@@ -1656,6 +1660,8 @@ static function InitFaction(optional XComGameState StartState) {
 	local XComGameState_WorldRegion RegionState;
 	local StateObjectReference RegionRef;
 
+	`RTLOG("Trying to add the Program as a Faction...");
+
 	History = class'XComGameStateHistory'.static.GetGameStateHistory();
 	ResHQ = XComGameState_HeadquartersResistance(History.GetSingleGameStateObjectForClass(class'XComGameState_HeadquartersResistance'));
 	StratMgr = class'X2StrategyElementTemplateManager'.static.GetStrategyElementTemplateManager();
@@ -1666,6 +1672,7 @@ static function InitFaction(optional XComGameState StartState) {
 	}
 
 	if(ResHQ.GetFactionByTemplateName('Faction_Program') == none) { // no faction, add it ourselves 
+		`RTLOG("Didn't find it, adding the Program to the campaign!");
 		ResHQ = XComGameState_HeadquartersResistance(NewGameState.ModifyStateObject(class'XComGameState_HeadquartersResistance', ResHQ.ObjectID)); 
 		DataTemplate = StratMgr.FindStrategyElementTemplate('Faction_Program');
 		if(DataTemplate != none)
@@ -1711,6 +1718,9 @@ static function InitFaction(optional XComGameState StartState) {
 		FactionState.CreateGoldenPathActions(NewGameState);
 		FactionState.InitTemplarQuestActions(NewGameState);
 	}
+	else {
+		`RTLOG("The Program was already present.");
+	}
 
 	if(NewGameState.GetNumGameStateObjects() > 0) {
 		`XCOMGAME.GameRuleset.SubmitGameState(NewGameState);
@@ -1733,4 +1743,23 @@ function PrintDebuggingInfo() {
 	`RTLOG("" $ bOneSmallFavorAvailable);
 	`RTLOG("Number of Favors remaining");
 	`RTLOG("" $ iNumberOfFavorsAvailable);
+}
+
+public function GetCurrentVersion() {
+	return Version;
+}
+
+public function bool CompareVersion(int newVersion, // the version to compare against
+									optional bool bShouldNotUpdateVersion = false // if this is set, do not update the version to the newerVersion
+) {
+	if(newVersion > GetCurrentVersion()) {
+		// the new version is newer
+		if(!bShouldNotUpdateVersion) {
+			Version = newVersion;
+		}
+		return true;
+	} else {
+		// the new version is either equal or older
+		return false;
+	}
 }
