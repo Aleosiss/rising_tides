@@ -77,19 +77,25 @@ simulated function BindLibraryItem()
 
 simulated function BuildScreen()
 {
+	local Vector2D v2Loc;
+
 	PlaySFX("GeoscapeFanfares_AlienFacility");
 	XComHQPresentationLayer(Movie.Pres).CAMSaveCurrentLocation();
 
+	v2Loc = GetMission().Get2DLocation();
+	`RTLOG("Building High Coven Assault Screen, 2DLoc is positioned at (" $ v2Loc.x $ ", " $ v2Loc.y $ ") !");
 	if (bInstantInterp)
 	{
-		XComHQPresentationLayer(Movie.Pres).CAMLookAtEarth(GetMission().Get2DLocation(), CAMERA_ZOOM, 0);
+		XComHQPresentationLayer(Movie.Pres).CAMLookAtEarth(v2Loc, CAMERA_ZOOM, 0);
 	}
 	else
 	{
-		XComHQPresentationLayer(Movie.Pres).CAMLookAtEarth(GetMission().Get2DLocation(), CAMERA_ZOOM);
+		XComHQPresentationLayer(Movie.Pres).CAMLookAtEarth(v2Loc, CAMERA_ZOOM);
 	}
 	// Add Interception warning and Shadow Chamber info
+	`RTLOG("Building the Screen...");
 	super.BuildScreen();
+	`RTLOG("Screen built.");
 }
 
 simulated function BuildMissionPanel()

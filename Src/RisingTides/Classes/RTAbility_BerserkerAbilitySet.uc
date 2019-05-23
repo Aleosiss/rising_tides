@@ -10,6 +10,9 @@
 
 class RTAbility_BerserkerAbilitySet extends RTAbility config(RisingTides);
 
+	var localized string BLOODLUST_TITLE;
+	var localized string BLOODLUST_DESC;
+
 	var config int BITN_TILEDISTANCE;
 	var config int ACID_BLADE_DOT_DAMAGE;
 	var config int ACID_BLADE_DOT_SHRED;
@@ -179,7 +182,7 @@ static function X2AbilityTemplate BumpInTheNightBloodlustListener()
 	BloodlustEffect.iMeleeHitChanceMod = 5;
 	BloodlustEffect.fCritDamageMod = 0.1f;
 	BloodlustEffect.BuildPersistentEffect(2, false, true, false, eGameRule_PlayerTurnEnd);
-	BloodlustEffect.SetDisplayInfo(ePerkBuff_Bonus, "Bloodlust", "Gain bonus melee crit chance and crit damage, but lose movement speed.", Template.IconImage, true,,Template.AbilitySourceName);
+	BloodlustEffect.SetDisplayInfo(ePerkBuff_Bonus, default.BLOODLUST_TITLE, default.BLOODLUST_DESC, Template.IconImage, true,,Template.AbilitySourceName);
 	Template.AddTargetEffect(BloodlustEffect);
 
 	StealthEffect = class'RTEffectBuilder'.static.RTCreateStealthEffect(1, false, 1.0f, eGameRule_PlayerTurnBegin, Template.AbilitySourceName);

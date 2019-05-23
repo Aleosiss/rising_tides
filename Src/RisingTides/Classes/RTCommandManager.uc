@@ -481,13 +481,10 @@ static function ForceVisibilityUpdatesAll_BuildVisualization(XComGameState Visua
 }
 
 exec function RT_TestUIPopup() {
-	local string Title; 
-	local string alertText;
-
-	Title = "ALERT: One Small Favor";
-	alertText = "The Program fields small squads of elite operatives. As a result of their alliance with XCOM, you may ask them to run a mission for you.\n NOTE: that this favor can only be called in once per month. \n \nCall in One Small Favor by toggling the white checkbox now shown on Mission Launch screens.";
-
-	`PRESBASE.UITutorialBox(Title, alertText, "img:///RisingTidesContentPackage.UIImages.osf_tutorial");
+	local DynamicPropertySet PropertySet;
+	// notification
+	class'X2StrategyGameRulesetDataStructures'.static.BuildDynamicPropertySet(PropertySet, 'RTUIAlert', 'RTAlert_TemplarQuestlineAdvanced', none, true, true, true, false);
+	class'XComPresentationLayerBase'.static.QueueDynamicPopup(PropertySet);
 }
 
 exec function RT_ReduceSoldierCurrentWill(int MinusWill) {
@@ -1053,6 +1050,10 @@ exec function RT_CheatProgramQuestline() {
 	class'RTStrategyElement_Rewards'.static.GiveProgramAdvanceQuestlineReward(NewGameState, none);
 	
 	`GAMERULES.SubmitGameState(NewGameState);
+
+	ProgramState = `RTS.GetProgramState();
+	`RTLOG("Templar Questline Stage is now: " $ ProgramState.getTemplarQuestlineStage(), false, true);
+	`RTLOG("Program influnce is now: " $ ProgramState.GetInfluence(), false, true);
 }
 
 exec function RT_TestProgramInfoScreenTutorial() {
@@ -1105,4 +1106,43 @@ exec function RT_DebugObjectiveParcelsAndPCPs() {
 			`RTLOG(PCP.MapName $ " has an objectiveTag: " $ PCP.ObjectiveTags[0], false, true);
 		}
 	}
+}
+
+exec function RT_CheatToggleTemplarMissionFlag() {
+	local XComGameState NewGameState;
+	local RTGameState_ProgramFaction ProgramState;
+	local string status;
+
+	NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("Rising Tides: CHEAT: RT_CheatToggleTemplarMissionFlag");
+	ProgramState = `RTS.GetNewProgramState(NewGameState);
+	
+	ProgramState.SetTemplarMissionSucceededFlag(!ProgramState.didTemplarMissionSucceed());
+	`XCOMGAME.GameRuleset.SubmitGameState(NewGameState);
+
+	ProgramState = `RTS.GetProgramState();
+	if(ProgramState.didTemplarMissionSucceed()) {
+		status = "succeeded.";
+	} else {
+		status = "failed";
+	}
+	`RTLOG("The last templar mission " $ status, false, true);
+}
+
+exec function RT_CheatGiveReward(name RewardTemplateName) {
+	local XComGameState_Reward RewardState;
+	local X2RewardTemplate RewardTemplate;
+	local XComGameState NewGameState;
+	local X2StrategyElementTemplateManager StratMgr;
+
+	NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("Rising Tides: CHEAT: Giving Reward template " $ RewardTemplateName);
+	StratMgr = class'X2StrategyElementTemplateManager'.static.GetStrategyElementTemplateManager();
+	
+	RewardTemplate = X2RewardTemplate(StratMgr.FindStrategyElementTemplate(RewardTemplateName));
+	RewardState = RewardTemplate.CreateInstanceFromTemplate(NewGameState);
+	RewardState.GiveReward(NewGameState);
+
+	`XCOMGAME.GameRuleset.SubmitGameState(NewGameState);
+
+	// Display any popups associated with the reward we just cheated
+	RewardState.DisplayRewardPopup();
 }

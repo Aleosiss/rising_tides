@@ -150,7 +150,7 @@ static function X2DataTemplate CreateProgramHuntTemplarsP3Reward() {
 	Template.GetBlackMarketStringFn = none;
 	Template.GetRewardIconFn = none;
 	Template.CleanUpRewardFn = none;
-	Template.RewardPopupFn = none; // TODO
+	Template.RewardPopupFn = HuntTemplarsP3RewardPopup; // TODO
 
 	return Template;
 }
@@ -470,10 +470,99 @@ static function GiveHuntTemplarsP3Reward(XComGameState NewGameState, XComGameSta
 	ProgramFaction = `RTS.GetNewProgramState(NewGameState);
 	if(ProgramFaction.getTemplarQuestlineStage() == 2) {
 		`RTLOG("Granting GiveHuntTemplarsP3Reward!");
-		GiveProgramAdvanceQuestlineReward(NewGameState, RewardState, AuxRef, bOrder, OrderHours);
+		GiveHighCovenAssaultMission(NewGameState, RewardState, AuxRef, bOrder, OrderHours);
 	} else {
 		`RTLOG("Not granting GiveHuntTemplarsP3Reward, incorrect questline stage. Expecting 2 but received " $ ProgramFaction.getTemplarQuestlineStage());
 	}
+}
+
+static function GiveHighCovenAssaultMission(XComGameState NewGameState, XComGameState_Reward RewardState, optional StateObjectReference AuxRef, optional bool bOrder = false, optional int OrderHours = -1)
+{
+	local RTGameState_ProgramFaction ProgramState;
+	local RTGameState_MissionSiteTemplarHighCoven MissionState;
+	local DynamicPropertySet PropertySet;
+
+
+	ProgramState = `RTS.GetNewProgramState(NewGameState);
+	ProgramState.IncrementTemplarQuestlineStage();
+	ProgramState.IncrementNumFavorsAvailable(3);
+
+	MissionState = CreateTemplarHighCovenAssaultMission(NewGameState);
+
+	RewardState.RewardObjectReference = MissionState.GetReference();
+}
+
+static function HuntTemplarsP3RewardPopup(XComGameState_Reward RewardState)
+{
+	local XComGameState_MissionSite MissionSite;
+	local StateObjectReference EmptyRef;
+
+	if(RewardState.RewardObjectReference == EmptyRef) {
+		`RTLOG("We have failed the HuntTemplarsP3 mission, not sending the mission popup!");
+		return;
+	}
+
+	MissionSite = XComGameState_MissionSite(`XCOMHISTORY.GetGameStateForObjectID(RewardState.RewardObjectReference.ObjectID));
+	if (MissionSite != none && MissionSite.GetMissionSource().MissionPopupFn != none)
+	{
+		MissionSite.GetMissionSource().MissionPopupFn(MissionSite);
+	}
+}
+
+static function RTGameState_MissionSiteTemplarHighCoven CreateTemplarHighCovenAssaultMission(XComGameState NewGameState) {
+	local RTGameState_MissionSiteTemplarHighCoven MissionState;
+	local array<XComGameState_WorldRegion> RegionStates;
+	local XComGameState_Reward RewardState;
+	local X2StrategyElementTemplateManager StratMgr;
+	local X2RewardTemplate RewardTemplate;
+	local X2MissionSourceTemplate MissionSource;
+	local array<XComGameState_Reward> MissionRewards;
+	local XComGameState_Haven TemplarHavenState;
+	local Vector2D v2Loc;
+
+	StratMgr = class'X2StrategyElementTemplateManager'.static.GetStrategyElementTemplateManager();
+	TemplarHavenState = XComGameState_Haven(`XCOMHISTORY.GetGameStateForObjectID(`RTS.GetTemplarFactionState().FactionHQ.ObjectID));
+
+	MissionRewards.Length = 0;
+	RewardTemplate = X2RewardTemplate(StratMgr.FindStrategyElementTemplate('RTReward_TemplarHighCovenAssault')); // rewards are given by the X2MissionSourceTemplate
+	RewardState = RewardTemplate.CreateInstanceFromTemplate(NewGameState);
+	MissionRewards.AddItem(RewardState);
+
+	MissionSource = X2MissionSourceTemplate(StratMgr.FindStrategyElementTemplate('RTMissionSource_TemplarHighCovenAssault'));
+	MissionState = RTGameState_MissionSiteTemplarHighCoven(NewGameState.CreateNewStateObject(class'RTGameState_MissionSiteTemplarHighCoven'));
+	MissionState.bGeneratedFromDebugCommand = false;
+
+	// the high coven is +- variance 'units' from the Templar HQ map pin
+	`RTLOG("Generating Random Location for CreateTemplarHighCovenAssaultMission...");
+	v2Loc = GetNearbyLocation(TemplarHavenState.Get2DLocation(), 500, 2000);
+	`RTLOG("Building High Coven Assault Mission, 2DLoc is positioned at (" $ v2Loc.x $ ", " $ v2Loc.y $ ") !");
+	MissionState.BuildMission(MissionSource, v2Loc, TemplarHavenState.GetWorldRegion().GetReference(), MissionRewards, true);
+	MissionState.ResistanceFaction = `RTS.GetProgramState().GetReference();
+
+	return MissionState;
+}
+
+private static function Vector2D GetNearbyLocation(Vector2D initial2DPos, int iMin, int iMax) {
+	local Vector2D new2DPos;
+	local bool bFoundNewPos;
+	local int x, y;
+
+	x = `SYNC_RAND_STATIC(iMax) + iMin;
+	y = `SYNC_RAND_STATIC(iMax) + iMin;
+
+	if(`SYNC_RAND_STATIC(2) >= 1) {
+		x *= -1;
+	}
+
+	if(`SYNC_RAND_STATIC(2) >= 1) {
+		y *= -1;
+	}
+
+	new2DPos = initial2DPos;
+	new2DPos.x += x;
+	new2DPos.y += y;
+
+	return new2DPos;
 }
 
 static function GiveTemplarCovenAssaultReward(XComGameState NewGameState, XComGameState_Reward RewardState, optional StateObjectReference AuxRef, optional bool bOrder = false, optional int OrderHours = -1)
@@ -482,8 +571,6 @@ static function GiveTemplarCovenAssaultReward(XComGameState NewGameState, XComGa
 	local RTGameState_ProgramFaction ProgramFaction;
 
 	ProgramFaction = `RTS.GetProgramState(NewGameState);
-
-
 	if(!ProgramFaction.didTemplarMissionSucceed()) {
 		GiveTemplarQuestlineFailedReward(NewGameState, RewardState, AuxRef, bOrder, OrderHours);
 	} else {
@@ -504,7 +591,6 @@ static function GiveTemplarQuestlineFailedReward(XComGameState NewGameState, XCo
 	ProgramState.IncrementTemplarQuestlineStage(); // we still need to increment this
 	ProgramState.FailTemplarQuestline();
 	
-
 	`RTLOG("Templar Questline FAILED!");
 
 	EliminateFaction(NewGameState, TemplarState);

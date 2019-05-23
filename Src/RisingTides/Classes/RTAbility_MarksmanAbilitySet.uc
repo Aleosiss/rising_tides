@@ -11,6 +11,9 @@
 class RTAbility_MarksmanAbilitySet extends RTAbility
 	config(RisingTides);
 
+	var localized string SOC_TITLE;
+	var localized string SOC_DESC;
+
 	var config int SLOWISSMOOTH_AIM_BONUS, SLOWISSMOOTH_CRIT_BONUS;
 	var config float HEADSHOT_CRITDMG_BONUS;
 	var config int HEADSHOT_CRIT_BONUS, HEADSHOT_COOLDOWN;

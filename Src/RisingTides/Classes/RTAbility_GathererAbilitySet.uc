@@ -9,6 +9,13 @@
 //---------------------------------------------------------------------------------------
 class RTAbility_GathererAbilitySet extends RTAbility config(RisingTides);
 
+	var localized string OTS_TITLE;
+	var localized string OTS_DESC_SELF;
+	var localized string OTS_DESC_ALLY;
+	var localized string OTS_DESC_ENEMY;
+	var localized string UV_TITLE;
+	var localized string UV_DESC;
+	
 	var config float OTS_RADIUS;
 	var config float OTS_RADIUS_SQ;
 	var config int OTS_ACTION_POINT_COST;
