@@ -13,6 +13,4 @@ ADD entrypoint.ps1 /entrypoint.ps1
 
 COPY LICENSE Readme.md /
 
-RUN chmod +x /entrypoint.ps1
-
 ENTRYPOINT [ "pwsh", "/entrypoint.ps1" ]
