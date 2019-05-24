@@ -4,5 +4,6 @@ workflow "Build on Push" {
 }
 
 action ".github/actions/XCOM2_Build" {
-  uses = ".github/actions/XCOM2_Build"
+  uses = "./.github/actions/XCOM2_Build"
+  args = "mod=RisingTides"
 }
