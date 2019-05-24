@@ -1,4 +1,4 @@
-FROM aleosiss/xcom2sdk:latest
+FROM microsoft/windowsservercore:1803
 
 LABEL "com.github.actions.name"         = "XCOM 2 WOTC SDK"
 LABEL "com.github.actions.description"  = "Build an XCOM 2 WOTC mod project using the SDK."
