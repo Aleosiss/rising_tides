@@ -17,6 +17,9 @@ var int PatchVer;
 var config bool bShouldRemoveHelmets;
 var config array<name> TemplarUnitNames;
 
+// weak ref to the screen (I just copied this from RJ and don't know if it's really necessary)
+var config String screen_path;
+
 /// <summary>
 /// This method is run if the player loads a saved game that was created prior to this DLC / Mod being installed, and allows the
 /// DLC / Mod to perform custom processing in response. This will only be called once the first time a player loads a save that was
@@ -30,7 +33,7 @@ static event OnLoadedSavedGameToStrategy() {
 	HandleModUpdate();
 }
 
-private static void HandleModUpdate() {
+private static function HandleModUpdate() {
 	local RTGameState_ProgramFaction ProgramState;
 	local XComGameState NewGameState;
 
@@ -38,10 +41,10 @@ private static void HandleModUpdate() {
 	if(!ProgramState.CompareVersion(GetVersionInt(), true)) {
 		return;
 	}
-	`RTLOG("New version of the mod found: \nOld Version: " $ ProgramState.GetVersion() $ "\nNew Version: " $ GetVersionInt());
+	`RTLOG("New version of the mod found: \nOld Version: " $ ProgramState.GetCurrentVersion() $ "\nNew Version: " $ GetVersionInt());
 	NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("Mod version updated, sending popup!");
 	ProgramState = `RTS.GetNewProgramState(NewGameState);
-	ProgramState.CompareVersion(GetVersionInt);
+	ProgramState.CompareVersion(GetVersionInt());
 
 	`GAMERULES.SubmitGameState(NewGameState);
 }
@@ -251,7 +254,11 @@ static function bool DebuggingEnabled() {
 }
 
 static function String GetVersionString() {
-	return "" + default.MajorVer + "." + default.MinorVer + "." + default.PatchVer;
+	local string s;
+	
+	s = string(default.MajorVer) $ "." $ string(default.MinorVer) $ "." $ string(default.PatchVer);
+
+	return s;
 }
 
 static function int GetVersionInt() {
@@ -283,5 +290,5 @@ defaultproperties
 {
 	MajorVer = 2
 	MinorVer = 0
-	PatchVer = 11
+	PatchVer = 12
 }

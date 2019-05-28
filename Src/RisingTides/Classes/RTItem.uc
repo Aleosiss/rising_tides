@@ -113,6 +113,10 @@ static function array<X2DataTemplate> CreateTemplates()
 	Items.AddItem(CreateRTTemplarGauntlet_Left('RTScholarGauntlet_M2'));
 	Items.AddItem(CreateRTTemplarGauntlet_Left('RTScholarGauntlet_M3'));
 
+	Items.AddItem(CreateRTTemplarPsiAmp('RTTemplarPsiAmp_M1'));
+	Items.AddItem(CreateRTTemplarPsiAmp('RTTemplarPsiAmp_M2'));
+	Items.AddItem(CreateRTTemplarPsiAmp('RTTemplarPsiAmp_M3'));
+
 	Items.AddItem(CreateRTTemplarWarpGrenades());
 	Items.AddItem(CreateRTTemplarWarpbombs());
 	
@@ -836,3 +840,52 @@ static function X2DataTemplate CreateRTTemplarWarpBombs()
 	return Template;
 }
 
+static function X2DataTemplate CreateRTTemplarPsiAmp(name TemplateName)
+{
+	local X2WeaponTemplate Template;
+
+	`CREATE_X2TEMPLATE(class'X2WeaponTemplate', Template, TemplateName);
+	Template.WeaponPanelImage = "_PsiAmp";                       // used by the UI. Probably determines iconview of the weapon.
+	Template.RemoveTemplateAvailablility(Template.BITFIELD_GAMEAREA_Multiplayer); //invalidates multiplayer availability
+
+	Template.ItemCat = 'weapon';
+	Template.WeaponCat = 'psiamp';
+	Template.CanBeBuilt = false;
+	Template.DamageTypeTemplateName = 'Psi';
+
+	Template.strImage = "img:///UILibrary_StrategyImages.X2InventoryIcons.Inv_Psi_Amp";
+	Template.InventorySlot = eInvSlot_TertiaryWeapon;
+	Template.StowedLocation = eSlot_RightBack;
+	// This all the resources; sounds, animations, models, physics, the works.
+
+	Template.GameArchetype = "WP_AdvPriestPsiAmp.WP_AdvPriestPsiAmp";
+
+	Template.Abilities.AddItem('PriestPsiMindControl');
+
+	switch(TemplateName) {
+		case 'RTTemplarPsiAmp_M1':
+			Template.WeaponTech = 'conventional';
+			
+			Template.Abilities.AddItem('PriestStasis');
+			Template.Abilities.AddItem('HolyWarriorM1');
+			break;
+		case 'RTTemplarPsiAmp_M2':
+			Template.WeaponTech = 'magnetic';
+
+			Template.Abilities.AddItem('PriestStasis');
+			Template.Abilities.AddItem('HolyWarriorM2');
+			break;
+		case 'RTTemplarPsiAmp_M3':
+			Template.WeaponTech = 'beam';
+
+			Template.Abilities.AddItem('PriestStasis');
+			Template.Abilities.AddItem('HolyWarriorM3');
+			Template.Abilities.AddItem('Fortress');
+			break;
+		default:
+			`RTLOG("Error, tried to make an invalid RTTemplarPsiAmp! " $ TemplateName $ "", true, false);
+			return none;
+	}	
+
+	return Template;
+}

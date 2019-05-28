@@ -1214,10 +1214,10 @@ LootTooltip="This weapon upgrade, when installed, does nothing except look cool.
 ;///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 [RTTemplarWarrior_M1 X2CharacterTemplate]
-strCharacterName="Templar Knight"
+strCharacterName="Templar Warrior"
 
 [RTTemplarWarrior_M2 X2CharacterTemplate]
-strCharacterName="Templar Bishop"
+strCharacterName="Templar Knight"
 
 [RTTemplarWarrior_M3 X2CharacterTemplate]
 strCharacterName="Templar Prior"
@@ -1239,4 +1239,25 @@ strCharacterName="Templar Follower"
 
 [RTTemplarPeon_M3 X2CharacterTemplate]
 strCharacterName="Templar Idealist"
+
+[RTTemplarPriest_M1 X2CharacterTemplate]
+strCharacterName="Templar Reverend"
+
+[RTTemplarPriest_M2 X2CharacterTemplate]
+strCharacterName="Templar Vicar"
+
+[RTTemplarPriest_M3 X2CharacterTemplate]
+strCharacterName="Templar Bishop"
+
+[RTTemplar_HighCovenWarrior X2CharacterTemplate]
+strCharacterName="High Coven Seneschal"
+
+[RTTemplar_HighCovenScholar X2CharacterTemplate]
+strCharacterName="High Coven Inquisitor"
+
+[RTTemplar_HighCovenPriest X2CharacterTemplate]
+strCharacterName="High Coven Archbishop"
+
+[RTTemplar_Geist X2CharacterTemplate]
+strCharacterName="Geist"
 

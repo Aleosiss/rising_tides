@@ -178,9 +178,12 @@ static function RTGameState_ProgramFaction GetNewProgramState(XComGameState NewG
 
 static function RTLog(string message, optional bool bShouldRedScreenToo = false, optional bool bShouldOutputToConsoleToo = false) {
 	local bool b;
+	local name mod;
 
+	mod = 'Rising Tides';
 	b = DebuggingEnabled();
-	`LOG(message, b, 'Rising Tides [' + class'X2DownloadableContentInfo_RisingTides'.static.GetVersionString() +']');
+
+	`LOG(message, b, mod);
 	if(bShouldRedScreenToo && b) {
 		`RedScreen("RisingTides: " $ message);
 	}
@@ -190,7 +193,7 @@ static function RTLog(string message, optional bool bShouldRedScreenToo = false,
 }
 
 static function bool DebuggingEnabled() {
-	return class'X2DownloadableContentInfo_RisingTides'.static.DebuggingEnabled();
+	return `DLCINFO.DebuggingEnabled();
 }
 
 static function PrintCovertActionsForFaction(XComGameState_ResistanceFaction Faction) {

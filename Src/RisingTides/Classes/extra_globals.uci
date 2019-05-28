@@ -2,3 +2,4 @@
 `define RTS `RT.static
 `define RTD `RT.default
 `define RTLOG(msg, showredscreen, showconsole) `RTS.RTLog(`msg, `showredscreen, `showconsole)
+`define DLCINFO class'X2DownloadableContentInfo_RisingTides'.static

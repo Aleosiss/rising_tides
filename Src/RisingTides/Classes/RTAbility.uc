@@ -31,8 +31,6 @@ class RTAbility extends X2Ability config(RisingTides);
 	var config int FEEDBACK_DURATION;
 	var config int MAX_BLOODLUST_MELDJOIN;
 
-	
-
 	var float DefaultPsionicAnimDelay;
 
 // helpers
@@ -133,6 +131,10 @@ static function bool AbilityTagExpandHandler(string InString, out string OutStri
 //	Tag = name(InString);
 
 	return false;
+}
+
+static function TestAbilitySetValues() {
+	
 }
 
 

@@ -26,19 +26,19 @@
     ✔ Add RTGameState_Effect handling for it @done(18-04-30 18:32)
     ✔ Tracks Concealment / Superconcealment gained before Stealth was applied @done(18-04-30 18:32)
 2.1.0 TODOS: 
-  ☐ Add Hunt_Templar Risks
+  ✔ Add Hunt_Templar Risks @done(19-05-26 14:01)
     ✔ Add Templar Ambush @done(19-05-04 10:55)
       ✔ Add RTGameState_MissionStateTemplarAmbush @done(18-12-16 02:10)
       ✔ Add Templar Ambush Mission *.inis (Schedules, Mission, Encounters) @done(19-03-23 10:02)
       ✔ Add Templar Ambush Obj.umap @done(19-05-04 10:55)
       ✔ Add Templar Ambush UIAlert @done(18-12-16 02:10)
       ✔ Add Templar Ambush UIMission @done(18-12-16 02:10)
-  ☐ Add Hunt_Templars narratives
+  ✔ Add Hunt_Templars narratives @done(19-05-26 14:01)
   ☐ Add Hunt_Templars images
-  ☐ Add Hunt_Templars rewards
+  ✔ Add Hunt_Templars rewards @done(19-05-26 14:01)
   ✔ Add system to manage Hunt_Templars covert actions @done(18-12-09 16:55)
   ☐ Add Assault Templar Leadership mission
-  ☐ Add Enemy Templar Faction
+  ✔ Add Enemy Templar Faction @done(19-05-26 14:01)
     ✔ Templar Abiity Set @done(19-03-10 17:32)
     ✔ Templar Character Generator @done(19-03-10 17:32)
     ✔ Templar AI.ini @done(19-03-10 17:32)
@@ -52,7 +52,9 @@
       ✔ Create Localization @done(19-04-09 23:28)
       ✔ Create Tutorial @done(19-04-09 23:28)
       ✔ Create UIScreenListener @done(19-03-10 17:33)
+    ☐ Stretch: Add Program Requests System
   ☐ Remove -debug flag from build script before releasing
   ☐ Fix Psionic Storm visualizaton (its broken)
   ☐ Add Call in One Small Favor covert action (hard) -> available if program questline completed
   ☐ Add +1 Program Favors covert action (medium) -> available if program favors < 1
+  ☐ Stretch: Add Templar High Coven Special Abilities

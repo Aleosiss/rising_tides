@@ -64,7 +64,7 @@ exec function RT_TriggerEvent(name EventID) {
 }
 
 exec function RT_DebugModVersion() {
-	`RTLOG("Mod Version is: " $ default.MajorVer $ "." $ default.MinorVer $ "." $ default.PatchVer);
+	`RTLOG("Mod Version is: " $ `DLCINFO.GetVersionString());
 }
 
 exec function RT_ToggleCustomDebugOutput() {
@@ -1145,4 +1145,18 @@ exec function RT_CheatGiveReward(name RewardTemplateName) {
 
 	// Display any popups associated with the reward we just cheated
 	RewardState.DisplayRewardPopup();
+}
+
+exec function TestAbilitySetValues() {
+	local array<Object>				AbilitySetArray;
+	local Object					AbilitySetObject;
+	local RTAbility					AbilitySet;
+
+
+	AbilitySetArray = class'XComEngine'.static.GetClassDefaultObjects(class'RTAbility');
+	foreach AbilitySetArray(AbilitySetObject)
+	{
+		AbilitySet = RTAbility(AbilitySetObject);
+		AbilitySet.static.TestAbilitySetValues();
+	}
 }

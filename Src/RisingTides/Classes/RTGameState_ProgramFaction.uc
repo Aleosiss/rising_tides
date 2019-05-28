@@ -135,7 +135,7 @@ function SetUpProgramFaction(XComGameState StartState)
 	InitListeners();
 	class'RTGameState_StrategyCard'.static.SetUpStrategyCards(StartState);
 	OperativeTemplates = class'RTCharacter_DefaultCharacters'.static.CreateTemplates();
-	Version = class'X2DownloadableContentInfo_RisingTides'.static.GetVersionInt();
+	Version = `DLCINFO.GetVersionInt();
 }
 
 // CreateRTOperatives(XComGameState NewGameState)
@@ -1745,7 +1745,7 @@ function PrintDebuggingInfo() {
 	`RTLOG("" $ iNumberOfFavorsAvailable);
 }
 
-public function GetCurrentVersion() {
+public function int GetCurrentVersion() {
 	return Version;
 }
 
