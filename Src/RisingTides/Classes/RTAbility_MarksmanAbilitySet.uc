@@ -1354,7 +1354,7 @@ static function X2AbilityTemplate YourHandsMyEyes()
 	local X2AbilityTemplate						Template;
 	local RTEffect_YourHandsMyEyes				RTEffect;
 
-	 `CREATE_X2ABILITY_TEMPLATE(Template, 'YourHandsMyEyes');
+	`CREATE_X2ABILITY_TEMPLATE(Template, 'YourHandsMyEyes');
 	Template.IconImage = "img:///RisingTidesContentPackage.PerkIcons.UIPerk_psi_box_yhme";
 
 	Template.AbilitySourceName = 'eAbilitySource_Psionic';

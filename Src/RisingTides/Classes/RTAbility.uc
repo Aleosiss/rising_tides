@@ -77,9 +77,9 @@ static function X2AbilityTemplate CreateRTCooldownCleanse(name TemplateName, nam
 }
 
 static function X2AbilityTemplate CreateRTPassiveAbilityCooldown(name TemplateName, name CooldownTrackerEffectName, optional bool bTriggerCooldownViaEvent = false, optional name EventIDToListenFor) {
-		local X2AbilityTemplate Template;
-		local X2Effect_Persistent Effect;
-		local X2AbilityTrigger_EventListener Trigger;
+	local X2AbilityTemplate Template;
+	local X2Effect_Persistent Effect;
+	local X2AbilityTrigger_EventListener Trigger;
 
 	`CREATE_X2ABILITY_TEMPLATE(Template, TemplateName);
 	Template.AbilitySourceName = 'eAbilitySource_Perk';
@@ -136,7 +136,6 @@ static function bool AbilityTagExpandHandler(string InString, out string OutStri
 static function TestAbilitySetValues() {
 	
 }
-
 
 defaultproperties
 {

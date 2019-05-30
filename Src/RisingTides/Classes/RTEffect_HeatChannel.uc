@@ -12,7 +12,7 @@ function RegisterForEvents(XComGameState_Effect EffectGameState)
 	EffectObj = HeatEffectState;
 	FilterObj = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(EffectGameState.ApplyEffectParameters.SourceStateObjectRef.ObjectID));
 
-	EventMgr.RegisterForEvent(EffectObj, class'RTAbility_GhostAbilitySet'.default.UnitUsedPsionicAbilityEvent, HeatEffectState.HeatChannelCheck, ELD_OnStateSubmitted, , FilterObj);
+	EventMgr.RegisterForEvent(EffectObj, class'RTAbility'.default.UnitUsedPsionicAbilityEvent, HeatEffectState.HeatChannelCheck, ELD_OnStateSubmitted, , FilterObj);
 }
 
 DefaultProperties

@@ -38,6 +38,10 @@ private static function HandleModUpdate() {
 	local XComGameState NewGameState;
 
 	ProgramState = `RTS.GetProgramState();
+	if(ProgramState == none) {
+		return;
+	}
+	
 	if(!ProgramState.CompareVersion(GetVersionInt(), true)) {
 		return;
 	}
@@ -218,8 +222,8 @@ simulated static function MakePsiAbilitiesInterruptable() {
 
 		AbilityTemplateMgr.FindAbilityTemplateAllDifficulties(AbilityTemplateName, AbilityTemplates);
 		foreach AbilityTemplates(AbilityTemplate) {
-				if(AbilityTemplate.PostActivationEvents.Find(class'RTAbility_GhostAbilitySet'.default.UnitUsedPsionicAbilityEvent) == INDEX_NONE) {
-					AbilityTemplate.PostActivationEvents.AddItem(class'RTAbility_GhostAbilitySet'.default.UnitUsedPsionicAbilityEvent);
+				if(AbilityTemplate.PostActivationEvents.Find(class'RTAbility'.default.UnitUsedPsionicAbilityEvent) == INDEX_NONE) {
+					AbilityTemplate.PostActivationEvents.AddItem(class'RTAbility'.default.UnitUsedPsionicAbilityEvent);
 				}
 
 				if(AbilityTemplate.BuildInterruptGameStateFn == none) {

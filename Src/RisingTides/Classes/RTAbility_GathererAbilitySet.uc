@@ -1650,7 +1650,7 @@ static function RTEffect_KnowledgeIsPower CreateKnowledgeIsPowerEffect(int _Stac
 
 	Effect = new class'RTEffect_KnowledgeIsPower';
 	Effect.BuildPersistentEffect(2, false, true, false, eGameRule_PlayerTurnEnd);
-	Effect.TargetConditions.AddItem(class'RTAbility_GhostAbilitySet'.default.PsionicTargetingProperty);
+	Effect.TargetConditions.AddItem(class'RTAbility'.default.PsionicTargetingProperty);
 	Effect.DuplicateResponse = eDupe_Refresh;
 	Effect.bRemoveWhenTargetDies = true;
 	Effect.bRemoveWhenSourceDies = true;
