@@ -234,7 +234,7 @@ static function X2CharacterTemplate CreateKagaTemplate()
 	CharTemplate.ForceAppearance.nmBeard = 'MaleBeard_Blank';
 	CharTemplate.ForceAppearance.iSkinColor = 0;
 	CharTemplate.ForceAppearance.iEyeColor = 6;
-	CharTemplate.ForceAppearance.nmFlag = 'Country_USA';;
+	CharTemplate.ForceAppearance.nmFlag = 'Country_USA';
 	CharTemplate.ForceAppearance.iVoice = 0;
 	CharTemplate.ForceAppearance.iAttitude = 6;
 	CharTemplate.ForceAppearance.iArmorDeco = 0;

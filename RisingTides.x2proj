@@ -387,7 +387,7 @@
     <Content Include="Src\RisingTides\Classes\RTEffect_OverflowBarrier.uc">
       <SubType>Content</SubType>
     </Content>
-    <Content Include="Src\RisingTides\Classes\RTEffect_OverTheShoulder.uc">
+    <Content Include="Src\RisingTides\Classes\RTEffect_AuraSource.uc">
       <SubType>Content</SubType>
     </Content>
     <Content Include="Src\RisingTides\Classes\RTEffect_Panicked.uc">

@@ -511,7 +511,6 @@ static function HuntTemplarsP3RewardPopup(XComGameState_Reward RewardState)
 
 static function RTGameState_MissionSiteTemplarHighCoven CreateTemplarHighCovenAssaultMission(XComGameState NewGameState) {
 	local RTGameState_MissionSiteTemplarHighCoven MissionState;
-	local array<XComGameState_WorldRegion> RegionStates;
 	local XComGameState_Reward RewardState;
 	local X2StrategyElementTemplateManager StratMgr;
 	local X2RewardTemplate RewardTemplate;
@@ -544,7 +543,6 @@ static function RTGameState_MissionSiteTemplarHighCoven CreateTemplarHighCovenAs
 
 private static function Vector2D GetNearbyLocation(Vector2D initial2DPos, int iMin, int iMax) {
 	local Vector2D new2DPos;
-	local bool bFoundNewPos;
 	local int x, y;
 
 	x = `SYNC_RAND_STATIC(iMax) + iMin;
@@ -567,7 +565,6 @@ private static function Vector2D GetNearbyLocation(Vector2D initial2DPos, int iM
 
 static function GiveTemplarCovenAssaultReward(XComGameState NewGameState, XComGameState_Reward RewardState, optional StateObjectReference AuxRef, optional bool bOrder = false, optional int OrderHours = -1)
 {
-	local XComGameState_ResistanceFaction TemplarState;
 	local RTGameState_ProgramFaction ProgramFaction;
 
 	ProgramFaction = `RTS.GetProgramState(NewGameState);

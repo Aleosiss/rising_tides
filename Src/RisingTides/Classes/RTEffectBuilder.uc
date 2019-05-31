@@ -79,7 +79,7 @@ private static function bool CheckSuccessfulUnitEffectApplication(XComGameState 
 }
 
 
-static function RTEffect_Stealth RTCreateStealthEffect(int iDuration = 1, optional bool bInfinite = false, optional float fModifier = 1.0f,
+static function RTEffect_Stealth CreateStealthEffect(int iDuration = 1, optional bool bInfinite = false, optional float fModifier = 1.0f,
 				optional GameRuleStateChange WatchRule = eGameRule_PlayerTurnEnd, optional name AbilitySourceName = 'eAbilitySource_Psionic') {
 	local RTEffect_Stealth Effect;
 
@@ -126,7 +126,7 @@ static function StealthRemovedVisualization(XComGameState VisualizeGameState, ou
 	BuildEffectParticle(VisualizeGameState, ActionMetadata, default.StealthStopParticleName, default.StealthSocketName, default.StealthSocketsArrayName, true, false);
 }
 
-static function RTEffect_Meld RTCreateMeldEffect(int iDuration = 1, optional bool bInfinite = true) {
+static function RTEffect_Meld CreateMeldEffect(int iDuration = 1, optional bool bInfinite = true) {
 	local RTEffect_Meld Effect;
 
 	Effect = new class'RTEffect_Meld';
@@ -146,7 +146,7 @@ static function RTEffect_Meld RTCreateMeldEffect(int iDuration = 1, optional boo
 	return Effect;
 }
 
-static function RTEffect_Panicked RTCreateFeedbackEffect(int _EffectDuration, name _EffectName, string _EffectDisplayTitle, string _EffectDisplayDesc, string _IconImage) {
+static function RTEffect_Panicked CreateFeedbackEffect(int _EffectDuration, name _EffectName, string _EffectDisplayTitle, string _EffectDisplayDesc, string _IconImage) {
 	local RTEffect_Panicked	PanickedEffect;
 
 	PanickedEffect = new class'RTEffect_Panicked';
@@ -159,7 +159,7 @@ static function RTEffect_Panicked RTCreateFeedbackEffect(int _EffectDuration, na
 }
 
 
-static function X2Effect_Stunned RTCreateLiftEffect(int StunLevel) {
+static function X2Effect_Stunned CreateLiftEffect(int StunLevel) {
 	local X2Effect_Stunned Effect;
 	local RTCondition_UnitSize Condition;
 
@@ -183,7 +183,7 @@ static function X2Effect_Stunned RTCreateLiftEffect(int StunLevel) {
 	return Effect;
 }
 
-static function RTEffect_Siphon RTCreateSiphonEffect(float fMultiplier, int iMinVal, int iMaxVal) {
+static function RTEffect_Siphon CreateSiphonEffect(float fMultiplier, int iMinVal, int iMaxVal) {
 	local RTEffect_Siphon SiphonEffect;
 	local X2Condition_UnitProperty TargetUnitPropertyCondition;
 	local X2Condition_AbilityProperty SiphonCondition;
@@ -209,4 +209,14 @@ static function RTEffect_Siphon RTCreateSiphonEffect(float fMultiplier, int iMin
 	SiphonEffect.TargetConditions.AddItem(TargetUnitPropertyCondition);
 
 	return SiphonEffect;
+}
+
+static function X2Effect_RangerStealth CreateConcealmentEffect() {
+	local X2Effect_RangerStealth Effect;
+
+	Effect = new class'X2Effect_RangerStealth';
+	Effect.BuildPersistentEffect(1, true, true, false, eGameRule_PlayerTurnEnd);
+	Effect.bRemoveWhenTargetConcealmentBroken = true;
+	
+	return Effect;
 }

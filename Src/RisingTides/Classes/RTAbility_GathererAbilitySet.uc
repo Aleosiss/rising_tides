@@ -181,7 +181,7 @@ static function X2AbilityTemplate CreateOverTheShoulderAbility(X2AbilityTemplate
 	local X2Condition_UnitProperty				AllyCondition, LivingNonAllyUnitOnlyProperty;
 	local array<name>							SkipExclusions;
 
-	local RTEffect_OverTheShoulder				OTSEffect;		// I'm unsure of how this works... but it appears that
+	local RTEffect_AuraSource				OTSEffect;		// I'm unsure of how this works... but it appears that
 																// this will control the application and removal of aura effects within its range
 
 	// Over The Shoulder
@@ -315,7 +315,7 @@ static function X2AbilityTemplate CreateOverTheShoulderAbility(X2AbilityTemplate
 
 
 	// aura controller effect	------------------------------------------
-	OTSEffect = new class'RTEffect_OverTheShoulder';
+	OTSEffect = new class'RTEffect_AuraSource';
 	OTSEffect.BuildPersistentEffect(AuraEffectDuration,,,, eGameRule_PlayerTurnBegin);
 	OTSEffect.SetDisplayInfo(ePerkBuff_Bonus, default.OTS_TITLE, default.OTS_DESC_SELF, Template.IconImage, true,,Template.AbilitySourceName);
 	OTSEffect.DuplicateResponse = eDupe_Refresh;
@@ -323,7 +323,8 @@ static function X2AbilityTemplate CreateOverTheShoulderAbility(X2AbilityTemplate
 	OTSEffect.VFXTemplateName = "RisingTidesContentPackage.fX.P_Nova_Psi_OTS";
 	OTSEffect.VFXSocket = 'CIN_Root';
 	OTSEffect.VFXSocketsArrayName = 'None';
-	OTSEffect.Scale = 2.5;
+	OTSEffect.fScale = 2.5;
+	OTSEffect.fRadius = default.OTS_RADIUS;
 	Template.AddTargetEffect(OTSEffect);
 
 	// tag effect. add this last
@@ -439,7 +440,7 @@ static function X2AbilityTemplate RTForcedIntroversion() {
 	Trigger.ListenerData.Priority = 50;
 	Template.AbilityTriggers.AddItem(Trigger);
 
-	StealthEffect = class'RTEffectBuilder'.static.RTCreateStealthEffect(default.FEEDBACK_DURATION, false, 1.0f, eGameRule_PlayerTurnBegin, Template.AbilitySourceName);
+	StealthEffect = `RTEB.CreateStealthEffect(default.FEEDBACK_DURATION, false, 1.0f, eGameRule_PlayerTurnBegin, Template.AbilitySourceName);
 	Template.AddTargetEffect(StealthEffect);
 
 	Template.AddTargetEffect(class'X2Effect_Spotted'.static.CreateUnspottedEffect());
@@ -535,7 +536,7 @@ static function X2AbilityTemplate RTExtinctionEventPartTwo() {
 	Template.AbilityTargetStyle = default.SelfTarget;
 	Template.AbilityToHitCalc = default.Deadeye;
 
-	StealthEffect = class'RTEffectBuilder'.static.RTCreateStealthEffect(1, false, 1.0f, eGameRule_PlayerTurnBegin, Template.AbilitySourceName);
+	StealthEffect = `RTEB.CreateStealthEffect(1, false, 1.0f, eGameRule_PlayerTurnBegin, Template.AbilitySourceName);
 	Template.AddTargetEffect(StealthEffect);
 
 	VFXEffect = new class'X2Effect_Persistent';
@@ -809,7 +810,7 @@ static function X2AbilityTemplate RTMeldInduction() {
 
 	Template.AbilityTargetConditions.AddItem(default.GameplayVisibilityCondition);
 
-	MeldEffect = class'RTEffectBuilder'.static.RTCreateMeldEffect(default.MELD_INDUCTION_DURATION, default.MELD_INDUCTION_INFINITE);
+	MeldEffect = `RTEB.CreateMeldEffect(default.MELD_INDUCTION_DURATION, default.MELD_INDUCTION_INFINITE);
 	MeldEffect.bRemoveWhenSourceDies = true;
 	MeldEffect.bRemoveWhenTargetDies = true;
 	Template.AddTargetEffect(MeldEffect);
@@ -1514,7 +1515,7 @@ static function X2AbilityTemplate RTLift() {
 	TraversalEffect.AddTraversalChange(eTraversal_Flying, true);
 
 	Template.AddMultiTargetEffect(TraversalEffect);
-	Template.AddMultiTargetEffect(class'RTEffectBuilder'.static.RTCreateLiftEffect(default.LIFT_DURATION * 2));
+	Template.AddMultiTargetEffect(`RTEB.CreateLiftEffect(default.LIFT_DURATION * 2));
 
 	Template.ModifyNewContextFn = RTLift_ModifyActivatedAbilityContext;
 	Template.BuildNewGameStateFn = RTLift_BuildGameState;

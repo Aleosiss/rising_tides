@@ -176,7 +176,7 @@ static function X2AbilityTemplate StandardGhostShot()
 	Template.AddTargetEffect(default.WeaponUpgradeMissDamage);
 
 	// Siphon Effect
-	SiphonEffect = class'RTEffectBuilder'.static.RTCreateSiphonEffect(class'RTAbility_BerserkerAbilitySet'.default.SIPHON_AMOUNT_MULTIPLIER, class'RTAbility_BerserkerAbilitySet'.default.SIPHON_MIN_VAL, class'RTAbility_BerserkerAbilitySet'.default.SIPHON_MAX_VAL);
+	SiphonEffect = `RTEB.CreateSiphonEffect(class'RTAbility_BerserkerAbilitySet'.default.SIPHON_AMOUNT_MULTIPLIER, class'RTAbility_BerserkerAbilitySet'.default.SIPHON_MIN_VAL, class'RTAbility_BerserkerAbilitySet'.default.SIPHON_MAX_VAL);
 	Template.AddTargetEffect(SiphonEffect);
 	Template.AssociatedPassives.AddItem('RTSiphon');
 
@@ -271,7 +271,7 @@ static function X2AbilityTemplate JoinMeld()
 	Template.AbilityToHitCalc = default.DeadEye;
 	Template.AbilityTargetStyle = default.SelfTarget;
 
-	MeldEffect = class'RTEffectBuilder'.static.RTCreateMeldEffect(1, true);
+	MeldEffect = `RTEB.CreateMeldEffect(1, true);
 	Template.AddTargetEffect(MeldEffect);
 
 	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
@@ -422,7 +422,7 @@ static function X2AbilityTemplate RTFeedback()
 	Template.AbilityTriggers.AddItem(Trigger);
 
 	// Build the effect
-	PanicEffect = class'RTEffectBuilder'.static.RTCreateFeedbackEffect(default.FEEDBACK_DURATION, default.RTFeedbackEffectName, default.FEEDBACK_TITLE, default.FEEDBACK_DESC, Template.IconImage);
+	PanicEffect = `RTEB.CreateFeedbackEffect(default.FEEDBACK_DURATION, default.RTFeedbackEffectName, default.FEEDBACK_TITLE, default.FEEDBACK_DESC, Template.IconImage);
 	Template.AddTargetEffect(PanicEffect);
 
 	// Add dead eye to guarantee
@@ -477,7 +477,7 @@ static function X2AbilityTemplate Fade()
 	Trigger.ListenerData.EventFn = class'XComGameState_Ability'.static.AbilityTriggerEventListener_Self;
 	Template.AbilityTriggers.AddItem(Trigger);
 
-	StealthEffect = class'RTEffectBuilder'.static.RTCreateStealthEffect(default.FADE_DURATION, , , eGameRule_PlayerTurnBegin, Template.AbilitySourceName);
+	StealthEffect = `RTEB.CreateStealthEffect(default.FADE_DURATION, , , eGameRule_PlayerTurnBegin, Template.AbilitySourceName);
 	Template.AddTargetEffect(StealthEffect);
 
 	Template.AddTargetEffect(class'X2Effect_Spotted'.static.CreateUnspottedEffect());
@@ -888,7 +888,7 @@ static function X2AbilityTemplate RTEnterStealth() {
 	Template.AbilityShooterConditions.AddItem(EffectCondition);
 	Template.AbilityShooterConditions.AddItem(default.LivingShooterProperty);
 
-	StealthEffect = class'RTEffectBuilder'.static.RTCreateStealthEffect(2, false);
+	StealthEffect = `RTEB.CreateStealthEffect(2, false);
 	Template.AddTargetEffect(StealthEffect);
 
 	Template.AddTargetEffect(class'X2Effect_Spotted'.static.CreateUnspottedEffect());

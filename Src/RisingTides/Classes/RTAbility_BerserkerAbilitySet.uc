@@ -185,7 +185,7 @@ static function X2AbilityTemplate BumpInTheNightBloodlustListener()
 	BloodlustEffect.SetDisplayInfo(ePerkBuff_Bonus, default.BLOODLUST_TITLE, default.BLOODLUST_DESC, Template.IconImage, true,,Template.AbilitySourceName);
 	Template.AddTargetEffect(BloodlustEffect);
 
-	StealthEffect = class'RTEffectBuilder'.static.RTCreateStealthEffect(1, false, 1.0f, eGameRule_PlayerTurnBegin, Template.AbilitySourceName);
+	StealthEffect = `RTEB.CreateStealthEffect(1, false, 1.0f, eGameRule_PlayerTurnBegin, Template.AbilitySourceName);
 	Template.AddTargetEffect(StealthEffect);
 
 	Template.AddTargetEffect(class'X2Effect_Spotted'.static.CreateUnspottedEffect());
@@ -225,7 +225,7 @@ static function X2AbilityTemplate BumpInTheNightStealthListener()
 	Template.AbilityToHitCalc = default.DeadEye;
 	Template.AbilityTargetStyle = default.SelfTarget;
 
-	StealthEffect = class'RTEffectBuilder'.static.RTCreateStealthEffect(1, false, 1.0f, eGameRule_PlayerTurnBegin, Template.AbilitySourceName);
+	StealthEffect = `RTEB.CreateStealthEffect(1, false, 1.0f, eGameRule_PlayerTurnBegin, Template.AbilitySourceName);
 	Template.AddTargetEffect(StealthEffect);
 
 	Template.AddTargetEffect(class'X2Effect_Spotted'.static.CreateUnspottedEffect());
@@ -321,7 +321,7 @@ static function X2AbilityTemplate RTBerserkerKnifeAttack()
 	Template.AddTargetEffect(AcidEffect);
 
 	// Siphon Effect
-	SiphonEffect = class'RTEffectBuilder'.static.RTCreateSiphonEffect(default.SIPHON_AMOUNT_MULTIPLIER, default.SIPHON_MIN_VAL, default.SIPHON_MAX_VAL);
+	SiphonEffect = `RTEB.CreateSiphonEffect(default.SIPHON_AMOUNT_MULTIPLIER, default.SIPHON_MIN_VAL, default.SIPHON_MAX_VAL);
 	Template.AddTargetEffect(SiphonEffect);
 
 	Template.bAllowBonusWeaponEffects = true;
@@ -835,7 +835,7 @@ static function X2AbilityTemplate RTReprobateWaltz()
 	Template.AddTargetEffect(AcidEffect);
 
 	// Siphon Effect
-	SiphonEffect = class'RTEffectBuilder'.static.RTCreateSiphonEffect(default.SIPHON_AMOUNT_MULTIPLIER, default.SIPHON_MIN_VAL, default.SIPHON_MAX_VAL);
+	SiphonEffect = `RTEB.CreateSiphonEffect(default.SIPHON_AMOUNT_MULTIPLIER, default.SIPHON_MIN_VAL, default.SIPHON_MAX_VAL);
 	Template.AddTargetEffect(SiphonEffect);
 
 	Template.bAllowBonusWeaponEffects = true;
@@ -1125,7 +1125,7 @@ static function X2AbilityTemplate RTPyroclasticSlash()
 	Template.AddTargetEffect(AcidEffect);
 
 	// Siphon Effect
-	SiphonEffect = class'RTEffectBuilder'.static.RTCreateSiphonEffect(default.SIPHON_AMOUNT_MULTIPLIER, default.SIPHON_MIN_VAL, default.SIPHON_MAX_VAL);
+	SiphonEffect = `RTEB.CreateSiphonEffect(default.SIPHON_AMOUNT_MULTIPLIER, default.SIPHON_MIN_VAL, default.SIPHON_MAX_VAL);
 	Template.AddTargetEffect(SiphonEffect);
 
 	Template.bAllowBonusWeaponEffects = true;
@@ -1221,7 +1221,7 @@ static function X2AbilityTemplate RTContainedFuryMeldJoin()
 	Template.AbilityToHitCalc = default.DeadEye;
 	Template.AbilityTargetStyle = default.SelfTarget;
 
-	MeldEffect = class'RTEffectBuilder'.static.RTCreateMeldEffect(1, true) ;
+	MeldEffect = `RTEB.CreateMeldEffect(1, true);
 	Template.AddTargetEffect(MeldEffect);
 
 	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
@@ -1586,7 +1586,7 @@ static function X2AbilityTemplate RTGhostInTheShellEffect()
 	ConcealEffect.bRemoveWhenTargetConcealmentBroken = true;
 	Template.AddTargetEffect(ConcealEffect);
 
-	StealthEffect = class'RTEffectBuilder'.static.RTCreateStealthEffect(default.GITS_STEALTH_DURATION, false, 1.0f, eGameRule_PlayerTurnBegin, Template.AbilitySourceName);
+	StealthEffect = `RTEB.CreateStealthEffect(default.GITS_STEALTH_DURATION, false, 1.0f, eGameRule_PlayerTurnBegin, Template.AbilitySourceName);
 	Template.AddTargetEffect(StealthEffect);
 
 	Template.AddTargetEffect(class'X2Effect_Spotted'.static.CreateUnspottedEffect());
@@ -1708,7 +1708,7 @@ static function X2DataTemplate RTShadowStrike()
 	Template.AddTargetEffect(AcidEffect);
 
 	// Siphon Effect
-	SiphonEffect = class'RTEffectBuilder'.static.RTCreateSiphonEffect(default.SIPHON_AMOUNT_MULTIPLIER, default.SIPHON_MIN_VAL, default.SIPHON_MAX_VAL);
+	SiphonEffect = `RTEB.CreateSiphonEffect(default.SIPHON_AMOUNT_MULTIPLIER, default.SIPHON_MIN_VAL, default.SIPHON_MAX_VAL);
 	Template.AddTargetEffect(SiphonEffect);
 
 	Template.bAllowBonusWeaponEffects = true;
@@ -2458,7 +2458,7 @@ static function X2DataTemplate RTDashingStrike()
 	Template.AddMultiTargetEffect(AcidEffect);
 
 	// Siphon Effect
-	SiphonEffect = class'RTEffectBuilder'.static.RTCreateSiphonEffect(default.SIPHON_AMOUNT_MULTIPLIER, default.SIPHON_MIN_VAL, default.SIPHON_MAX_VAL);
+	SiphonEffect = `RTEB.CreateSiphonEffect(default.SIPHON_AMOUNT_MULTIPLIER, default.SIPHON_MIN_VAL, default.SIPHON_MAX_VAL);
 	Template.AddMultiTargetEffect(SiphonEffect);
 
 	Template.bAllowBonusWeaponEffects = true;

@@ -64,7 +64,7 @@ exec function RT_TriggerEvent(name EventID) {
 }
 
 exec function RT_DebugModVersion() {
-	`RTLOG("Mod Version is: " $ `DLCINFO.GetVersionString());
+	`RTLOG("Mod Version is: " $ `DLCINFO.GetVersionString(), false, true);
 }
 
 exec function RT_ToggleCustomDebugOutput() {
@@ -97,9 +97,14 @@ exec function RT_ForceLoadPerkOnToUnit(name AbilityName) {
 	class'UIDebugStateMachines'.static.TryForceAppendAbilityPerks(AbilityName);
 }
 
-exec function RT_PrintAppearence(int ObjectID) {
+exec function RT_PrintAppearence(optional int ObjectID = -1) {
 	local XComGameState_Unit UnitState;
 	local TAppearance a;
+
+
+	if(ObjectID == -1) {
+		ObjectID = UIArmory(`SCREENSTACK.GetFirstInstanceOf(class'UIArmory')).UnitReference.ObjectID;
+	}
 
 	UnitState = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(ObjectID));
 	if(UnitState == none) {
@@ -108,53 +113,53 @@ exec function RT_PrintAppearence(int ObjectID) {
 	}	
 
 	a = UnitState.kAppearance;
-	`LOG(a.nmHead);
-	`LOG(a.iGender);
-	`LOG(a.iRace);
-	`LOG(a.nmHaircut);
-	`LOG(a.iHairColor);
-	`LOG(a.iFacialHair);
-	`LOG(a.nmBeard);
-	`LOG(a.iSkinColor);
-	`LOG(a.iEyeColor);
-	`LOG(a.nmFlag);
-	`LOG(a.iVoice);
-	`LOG(a.iAttitude);
-	`LOG(a.iArmorDeco);
-	`LOG(a.iArmorTint);
-	`LOG(a.iArmorTintSecondary);
-	`LOG(a.iWeaponTint);
-	`LOG(a.iTattooTint);
-	`LOG(a.nmWeaponPattern);
-	`LOG(a.nmPawn);
-	`LOG(a.nmTorso);
-	`LOG(a.nmArms);
-	`LOG(a.nmLegs);
-	`LOG(a.nmHelmet);
-	`LOG(a.nmEye);
-	`LOG(a.nmTeeth);
-	`LOG(a.nmFacePropLower);
-	`LOG(a.nmFacePropUpper);
-	`LOG(a.nmPatterns);
-	`LOG(a.nmVoice);
-	`LOG(a.nmLanguage);
-	`LOG(a.nmTattoo_LeftArm);
-	`LOG(a.nmTattoo_RightArm);
-	`LOG(a.nmScars);
-	`LOG(a.nmTorso_Underlay);
-	`LOG(a.nmArms_Underlay);
-	`LOG(a.nmLegs_Underlay);
-	`LOG(a.nmFacePaint);
-	`LOG(a.nmLeftArm);
-	`LOG(a.nmRightArm);
-	`LOG(a.nmLeftArmDeco);
-	`LOG(a.nmRightArmDeco);
-	`LOG(a.nmLeftForearm);
-	`LOG(a.nmRightForearm);
-	`LOG(a.nmThighs);
-	`LOG(a.nmShins);
-	`LOG(a.nmTorsoDeco);
-	`LOG(a.bGhostPawn);
+	`RTLOG("" $ a.nmHead);
+	`RTLOG("" $ a.iGender);
+	`RTLOG("" $ a.iRace);
+	`RTLOG("" $ a.nmHaircut);
+	`RTLOG("" $ a.iHairColor);
+	`RTLOG("" $ a.iFacialHair);
+	`RTLOG("" $ a.nmBeard);
+	`RTLOG("" $ a.iSkinColor);
+	`RTLOG("" $ a.iEyeColor);
+	`RTLOG("" $ a.nmFlag);
+	`RTLOG("" $ a.iVoice);
+	`RTLOG("" $ a.iAttitude);
+	`RTLOG("" $ a.iArmorDeco);
+	`RTLOG("" $ a.iArmorTint);
+	`RTLOG("" $ a.iArmorTintSecondary);
+	`RTLOG("" $ a.iWeaponTint);
+	`RTLOG("" $ a.iTattooTint);
+	`RTLOG("" $ a.nmWeaponPattern);
+	`RTLOG("" $ a.nmPawn);
+	`RTLOG("" $ a.nmTorso);
+	`RTLOG("" $ a.nmArms);
+	`RTLOG("" $ a.nmLegs);
+	`RTLOG("" $ a.nmHelmet);
+	`RTLOG("" $ a.nmEye);
+	`RTLOG("" $ a.nmTeeth);
+	`RTLOG("" $ a.nmFacePropLower);
+	`RTLOG("" $ a.nmFacePropUpper);
+	`RTLOG("" $ a.nmPatterns);
+	`RTLOG("" $ a.nmVoice);
+	`RTLOG("" $ a.nmLanguage);
+	`RTLOG("" $ a.nmTattoo_LeftArm);
+	`RTLOG("" $ a.nmTattoo_RightArm);
+	`RTLOG("" $ a.nmScars);
+	`RTLOG("" $ a.nmTorso_Underlay);
+	`RTLOG("" $ a.nmArms_Underlay);
+	`RTLOG("" $ a.nmLegs_Underlay);
+	`RTLOG("" $ a.nmFacePaint);
+	`RTLOG("" $ a.nmLeftArm);
+	`RTLOG("" $ a.nmRightArm);
+	`RTLOG("" $ a.nmLeftArmDeco);
+	`RTLOG("" $ a.nmRightArmDeco);
+	`RTLOG("" $ a.nmLeftForearm);
+	`RTLOG("" $ a.nmRightForearm);
+	`RTLOG("" $ a.nmThighs);
+	`RTLOG("" $ a.nmShins);
+	`RTLOG("" $ a.nmTorsoDeco);
+	`RTLOG("" $ a.bGhostPawn);
 }
 
 exec function RT_ActivateOneSmallFavor() {
@@ -816,10 +821,8 @@ function XComGameState_MissionSite CreateFakeTemplarAssault(XComGameState NewGam
 	local X2MissionSourceTemplate MissionSource;
 	local array<XComGameState_Reward> MissionRewards;
 	local StateObjectReference EmptyRef;
-	local XComGameState_Haven TemplarHavenState;
 
 	StratMgr = class'X2StrategyElementTemplateManager'.static.GetStrategyElementTemplateManager();
-	TemplarHavenState = XComGameState_Haven(`XCOMHISTORY.GetGameStateForObjectID(`RTS.GetTemplarFactionState().FactionHQ.ObjectID));
 	RegionStates = `RTS.GetTemplarFactionState().GetTerritoryRegions();
 	RegionState = RegionStates[`SYNC_RAND(RegionStates.Length - 1)];
 

@@ -200,7 +200,6 @@ static function X2DataTemplate CreateTemplarHighCovenAssaultTemplate()
 
 static function TemplarHighCovenAssaultOnSuccess(XComGameState NewGameState, XComGameState_MissionSite MissionState)
 {
-	local XComGameState_HeadquartersXCom XComHQ;
 	local XComGameState_HeadquartersResistance ResHQ;
 	local RTGameState_ProgramFaction ProgramState;
 
@@ -219,8 +218,6 @@ static function TemplarHighCovenAssaultOnSuccess(XComGameState NewGameState, XCo
 
 static function TemplarHighCovenAssaultOnFailure(XComGameState NewGameState, XComGameState_MissionSite MissionState)
 {
-	local XComGameState_HeadquartersXCom XComHQ;
-	local XComGameState_HeadquartersResistance ResHQ;
 	local RTGameState_ProgramFaction ProgramState;
 
 	`RTLOG("TemplarHighCovenAssaultOnFailure");

@@ -1,6 +1,6 @@
 class RTGameState_Effect extends XComGameState_Effect dependson(RTHelpers);
 
-// RTEffect_OverTheShoulder
+// RTEffect_AuraSource
 var array<StateObjectReference> EffectsAddedList;
 var array<StateObjectReference> EffectsRemovedList;
 
@@ -408,7 +408,7 @@ function EventListenerReturn OnTotalAuraCheck(Object EventData, Object EventSour
 	ThisEffect = self;
 
 	// Create a new gamestate
-	NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("RTEffect_OverTheShoulder: Affecting Target");
+	NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("RTEffect_AuraSource: Affecting Target");
 
 	/// All Units must be checked and possibly have the aura effects added or removed
 	foreach History.IterateByClassType(class'XComGameState_Unit', TargetUnitState)

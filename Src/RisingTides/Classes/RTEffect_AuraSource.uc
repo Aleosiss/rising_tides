@@ -1,6 +1,7 @@
-class RTEffect_OverTheShoulder extends X2Effect_AuraSource;
+class RTEffect_AuraSource extends X2Effect_AuraSource;
 
-var float Scale;
+var float fScale;
+var float fRadius;
 
 function RegisterForEvents(XComGameState_Effect EffectGameState)
 {
@@ -22,15 +23,15 @@ function RegisterForEvents(XComGameState_Effect EffectGameState)
 }
 
 protected function bool CheckAuraConditions(XComGameState_Unit SourceUnitState, XComGameState_Unit TargetUnitState, XComGameState_Effect SourceAuraEffectGameState, X2AbilityTemplate AuraEffectTemplate) {
-	if(class'Helpers'.static.IsTileInRange(SourceUnitState.TileLocation, TargetUnitState.TileLocation, class'RTAbility_GathererAbilitySet'.default.OTS_RADIUS_SQ)) {
+	if(class'Helpers'.static.IsTileInRange(SourceUnitState.TileLocation, TargetUnitState.TileLocation, Square(fRadius))) {
 		return true;
 	}
 	return false;
 }
 
 protected function X2AbilityTemplate GetAuraTemplate(XComGameState_Unit SourceUnitState, XComGameState_Unit TargetUnitState, XComGameState_Effect SourceAuraEffectGameState, XComGameState NewGameState) {
-		local X2AbilityTemplate Template;
-		local XComGameState_Ability AbilityState;
+	local X2AbilityTemplate Template;
+	local XComGameState_Ability AbilityState;
 
 	AbilityState = XComGameState_Ability(`XCOMHISTORY.GetGameStateForObjectID(SourceAuraEffectGameState.ApplyEffectParameters.AbilityStateObjectRef.ObjectID));
 	Template = AbilityState.GetMyTemplate();
@@ -45,15 +46,9 @@ function UpdateBasedOnAuraTarget(XComGameState_Unit SourceUnitState, XComGameSta
 	local X2AbilityTemplate AbilityTemplate;
 	local int i;
 	local name EffectAttachmentResult;
-
 	local X2Effect_Persistent PersistentAuraEffect;
 	local XComGameState_Effect NewAuraEffectState;
-
 	local RTGameState_Effect RTSourceAuraEffectGameState;
-
-	NewTargetState = XComGameState_Unit(NewGameState.CreateStateObject(TargetUnitState.Class, TargetUnitState.ObjectID));
-	NewTargetState.bRequiresVisibilityUpdate = true;
-	NewGameState.AddStateObject(NewTargetState);
 
 	AuraTargetApplyData = SourceAuraEffectGameState.ApplyEffectParameters;
 	AuraTargetApplyData.EffectRef.LookupType = TELT_AbilityMultiTargetEffects;
@@ -67,6 +62,10 @@ function UpdateBasedOnAuraTarget(XComGameState_Unit SourceUnitState, XComGameSta
 	}
 
 	if(CheckAuraConditions(SourceUnitState, NewTargetState, SourceAuraEffectGameState, AbilityTemplate)) {
+		NewTargetState = XComGameState_Unit(NewGameState.CreateStateObject(TargetUnitState.Class, TargetUnitState.ObjectID));
+		NewTargetState.bRequiresVisibilityUpdate = true;
+		NewGameState.AddStateObject(NewTargetState);
+
 		for (i = 0; i < AbilityTemplate.AbilityMultiTargetEffects.Length; ++i)
 		{
 			// Apply each of the aura's effects to the target
@@ -99,10 +98,8 @@ protected function RemoveAuraTargetEffects(XComGameState_Unit SourceUnitState, X
 	local X2AbilityTemplate AuraAbilityTemplate;
 	local XComGameStateHistory History;
 	local int i;
-
 	local array<XComGameState_Effect> EffectsToRemove;
 	local X2Effect_Persistent PersistentAuraEffect;
-
 	local RTGameState_Effect RTSourceAuraEffectGameState;
 
 	History = `XCOMHISTORY;
@@ -168,7 +165,7 @@ simulated function AddX2ActionsForVisualization(XComGameState VisualizeGameState
 			PlayEffectAction.EffectName = VFXTemplateName;
 			PlayEffectAction.AttachToSocketName = VFXSocket;
 			PlayEffectAction.AttachToSocketsArrayName = VFXSocketsArrayName;
-			PlayEffectAction.Scale = Scale;
+			PlayEffectAction.Scale = fScale;
 		}
 
 		//  anything inside of ApplyOnTick needs handling here because when bTickWhenApplied is true, there is no separate context (which normally handles the visualization)
@@ -208,7 +205,7 @@ simulated function AddX2ActionsForVisualization_Sync( XComGameState VisualizeGam
 		PlayEffectAction.EffectName = VFXTemplateName;
 		PlayEffectAction.AttachToSocketName = VFXSocket;
 		PlayEffectAction.AttachToSocketsArrayName = VFXSocketsArrayName;
-		PlayEffectAction.Scale = Scale;
+		PlayEffectAction.Scale = fScale;
 	}
 }
 
