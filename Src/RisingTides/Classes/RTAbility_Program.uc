@@ -12,8 +12,6 @@ class RTAbility_Program extends X2Ability_HackRewards
 
 	var name 				CloakingFieldEffectName;
 	var config float		CLOAKING_FIELD_RADIUS_METERS;
-	var localized string	CloakingFieldTitle;
-	var localized string	CloakingFieldSelfDescription;
 
 static function array<X2DataTemplate> CreateTemplates()
 {
@@ -150,7 +148,7 @@ static function X2AbilityTemplate RTProgramDroneCloakingFieldOn() {
 	// aura controller effect	------------------------------------------
 	AuraEffect = new class'RTEffect_AuraSource';
 	AuraEffect.BuildPersistentEffect(1, true,,, eGameRule_PlayerTurnBegin);
-	AuraEffect.SetDisplayInfo(ePerkBuff_Bonus, default.CloakingFieldTitle, default.CloakingFieldSelfDescription, Template.IconImage, true,,Template.AbilitySourceName);
+	//AuraEffect.SetDisplayInfo(ePerkBuff_Bonus, default.CloakingFieldTitle, default.CloakingFieldSelfDescription, Template.IconImage, true,,Template.AbilitySourceName);
 	AuraEffect.DuplicateResponse = eDupe_Refresh;
 	AuraEffect.EffectName = default.CloakingFieldEffectName;
 	AuraEffect.VFXTemplateName = "RisingTidesContentPackage.fX.P_Nova_Psi_OTS";
@@ -203,4 +201,9 @@ static function X2AbilityTemplate RTProgramDroneCloakingFieldOff() {
 	Template.AddMultiTargetEffect(RemoveEffect);
 
 	return Template;
+}
+
+defaultproperties
+{
+	CloakingFieldEffectName = "RTProgramDroneCloakingFieldAura"
 }
