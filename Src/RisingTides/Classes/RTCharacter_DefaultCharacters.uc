@@ -373,3 +373,66 @@ static function RTCharacterTemplate CreateProgramSoldierTemplate(optional name T
 
 	return CharTemplate;
 }
+
+static function RTCharacterTemplate CreateProgramDroneTemplate(name TemplateName) {
+	local RTCharacterTemplate CharTemplate;
+
+	`CREATE_X2TEMPLATE(class'RTCharacterTemplate', CharTemplate, TemplateName);
+	CharTemplate.CharacterGroupName = 'ProgramDrone';
+
+	CharTemplate.BehaviorClass=class'XGAIBehavior';
+
+	CharTemplate.DefaultLoadout='ProgramDrone_Loadout';
+	CharTemplate.strPawnArchetypes.AddItem("LWDrone.Archetypes.ARC_GameUnit_DroneM3"); 
+
+	//NEW CINEMATIC?
+
+	CharTemplate.UnitSize = 1;
+
+	CharTemplate.bCanUse_eTraversal_Normal = true;
+	CharTemplate.bCanUse_eTraversal_ClimbOver = false;
+	CharTemplate.bCanUse_eTraversal_ClimbOnto = false;
+	CharTemplate.bCanUse_eTraversal_ClimbLadder = false;
+	CharTemplate.bCanUse_eTraversal_DropDown = false;
+	CharTemplate.bCanUse_eTraversal_Grapple = false;
+	CharTemplate.bCanUse_eTraversal_Landing = true;
+	CharTemplate.bCanUse_eTraversal_BreakWindow = true;
+	CharTemplate.bCanUse_eTraversal_KickDoor = true;
+	CharTemplate.bCanUse_eTraversal_JumpUp = false;
+	CharTemplate.bCanUse_eTraversal_WallClimb = false;
+	CharTemplate.bCanUse_eTraversal_BreakWall = false;
+	CharTemplate.bCanUse_eTraversal_Launch = true;
+	CharTemplate.bCanUse_eTraversal_Flying = true;
+	CharTemplate.bCanUse_eTraversal_Land = true;
+	CharTemplate.bAppearanceDefinesPawn = false;    
+	CharTemplate.bCanTakeCover = false;
+
+	CharTemplate.bIsAlien = false;
+	CharTemplate.bIsAdvent = false;
+	CharTemplate.bIsCivilian = false;
+	CharTemplate.bIsPsionic = false;
+	CharTemplate.bIsRobotic = true;
+	CharTemplate.bIsSoldier = false;
+
+	CharTemplate.bCanBeTerrorist = false;
+	CharTemplate.bCanBeCriticallyWounded = false;
+	CharTemplate.bIsAfraidOfFire = false;
+
+	CharTemplate.bAllowSpawnFromATT = false;  // If true, this unit can be spawned from an Advent Troop Transport
+	CharTemplate.bWeakAgainstTechLikeRobot = true;
+
+	CharTemplate.Abilities.AddItem('RTProgramDroneCloakingField');
+	CharTemplate.Abilities.AddItem('RobotImmunities');
+	//CharTemplate.Abilities.AddItem('FireOnDeath');
+
+	CharTemplate.strBehaviorTree = "LWDroneRoot"; // new config behavior tree parsing means we could use the group instead
+	CharTemplate.strScamperBT = "ScamperRoot_NoCover";
+
+	//TODO: (ID 507) investigate possibilities for adding first-sighting narrative moment for new unit
+	//CharTemplate.SightedNarrativeMoments.AddItem(XComNarrativeMoment'X2NarrativeMoments.TACTICAL.AlienSitings.T_Central_AlienSightings_Muton');
+
+	CharTemplate.strHackIconImage = "UILibrary_Common.TargetIcons.Hack_robot_icon";
+	CharTemplate.strTargetIconImage = class'UIUtilities_Image'.const.TargetIcon_Advent;  
+
+	return CharTemplate;
+}
