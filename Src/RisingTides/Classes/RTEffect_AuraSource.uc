@@ -61,7 +61,7 @@ function UpdateBasedOnAuraTarget(XComGameState_Unit SourceUnitState, XComGameSta
 		`RedScreenOnce("The source aura isn't of type RTGameState_Effect! The Visualization may fail!");
 	}
 
-	if(CheckAuraConditions(SourceUnitState, NewTargetState, SourceAuraEffectGameState, AbilityTemplate)) {
+	if(CheckAuraConditions(SourceUnitState, TargetUnitState, SourceAuraEffectGameState, AbilityTemplate)) {
 		NewTargetState = XComGameState_Unit(NewGameState.CreateStateObject(TargetUnitState.Class, TargetUnitState.ObjectID));
 		NewTargetState.bRequiresVisibilityUpdate = true;
 		NewGameState.AddStateObject(NewTargetState);
