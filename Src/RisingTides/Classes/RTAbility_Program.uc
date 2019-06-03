@@ -102,7 +102,6 @@ static function X2AbilityTemplate RTProgramDroneCloakingField() {
 
 static function X2AbilityTemplate RTProgramDroneCloakingFieldOn() {
 	local X2AbilityTemplate Template;
-	local X2Effect_RangerStealth SelfConcealEffect;
 	local X2AbilityCost_Charges Charges;
 	local X2AbilityCost_ActionPoints ActionPointCost;
 	local X2AbilityMultiTarget_Radius Radius;

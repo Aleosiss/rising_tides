@@ -1101,6 +1101,8 @@ function InitTemplarQuestActions(XComGameState NewGameState) {
 	TemplarQuestCovertActionTemplateNames.AddItem('CovertAction_HuntTemplarsP2Template');
 	TemplarQuestCovertActionTemplateNames.AddItem('CovertAction_HuntTemplarsP3Template');
 
+	TemplarQuestCovertActionTemplateNames.AddItem('CovertAction_CallInFavorTemplate');
+
 	StratMgr = class'X2StrategyElementTemplateManager'.static.GetStrategyElementTemplateManager();
 	AllActionTemplates = StratMgr.GetAllTemplatesOfClass(class'X2CovertActionTemplate');
 
@@ -1128,6 +1130,7 @@ function StateObjectReference CreateTemplarCovertAction(XComGameState NewGameSta
 	return ActionState.GetReference();
 }
 
+// if NOT set, the next templar mission (ambush or coven assault) will be considered as failed
 function SetTemplarMissionSucceededFlag(bool _bTemplarAmbushMissionSucceed) {
 	bTemplarMissionSucceeded = _bTemplarAmbushMissionSucceed;
 }
@@ -1169,6 +1172,8 @@ function HandleTemplarQuestActions(XComGameState NewGameState) {
 			`RTLOG("Adding Templar Coven Assault Mission!");
 		case 4:
 			`RTLOG("Templar Questline Completed!");
+			QuestTemplateName = 'CovertAction_CallInFavorTemplate';
+			`RTLOG("Adding CovertAction_CallInFavorTemplate");
 		default:
 			`RTLOG("iTemplarQuestStage is out-of-bounds! Ending early...");
 			return;
@@ -1608,6 +1613,10 @@ function ForceIncreaseInfluence() {
 
 	iInfluence = Influence;
 	iInfluence++;
+
+	if(iInfluence > 4) {
+		return;
+	}
 
 	Influence = EFactionInfluence(iInfluence);
 }

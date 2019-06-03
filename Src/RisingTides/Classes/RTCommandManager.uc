@@ -820,7 +820,6 @@ function XComGameState_MissionSite CreateFakeTemplarAssault(XComGameState NewGam
 	local X2RewardTemplate RewardTemplate;
 	local X2MissionSourceTemplate MissionSource;
 	local array<XComGameState_Reward> MissionRewards;
-	local StateObjectReference EmptyRef;
 
 	StratMgr = class'X2StrategyElementTemplateManager'.static.GetStrategyElementTemplateManager();
 	RegionStates = `RTS.GetTemplarFactionState().GetTerritoryRegions();
@@ -1043,20 +1042,54 @@ static function RTUIScreen_ProgramFactionInfo GetProgramFactionInfoScreen()
 	return TempScreen;
 }
 
-exec function RT_CheatProgramQuestline() {
+exec function RT_CheatProgramQuestline(optional bool bSucceed = true) {
 	local RTGameState_ProgramFaction	ProgramState;
 	local XComGameState					NewGameState;
 
-	NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("CHEAT: Force Templar Questline!");
+	if(ProgramState.getTemplarQuestlineStage() == 4) {
+		`RTLOG("The questline is completed.");
+		return;
+	}
+
+	NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("CHEAT: Force Templar Questline Part One!");
 	ProgramState = `RTS.GetNewProgramState(NewGameState);
 	ProgramState.ForceIncreaseInfluence();
-	class'RTStrategyElement_Rewards'.static.GiveProgramAdvanceQuestlineReward(NewGameState, none);
+	ProgramState.SetTemplarMissionSucceededFlag(bSucceed);
 	
-	`GAMERULES.SubmitGameState(NewGameState);
+	`XCOMGAME.GameRuleset.SubmitGameState(NewGameState);
+
+	NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("CHEAT: Force Templar Questline Part Two!");
+
+	if(ProgramState.getTemplarQuestlineStage() == 3) {
+		CleanupHighCovenMission(NewGameState);
+		class'RTStrategyElement_Rewards'.static.GiveTemplarCovenAssaultReward(NewGameState, none);
+
+	} else {
+		class'RTStrategyElement_Rewards'.static.GiveHuntTemplarAmbushReward(NewGameState, none);
+	}
+	
+	`XCOMGAME.GameRuleset.SubmitGameState(NewGameState);
 
 	ProgramState = `RTS.GetProgramState();
 	`RTLOG("Templar Questline Stage is now: " $ ProgramState.getTemplarQuestlineStage(), false, true);
 	`RTLOG("Program influnce is now: " $ ProgramState.GetInfluence(), false, true);
+}
+
+private function CleanupHighCovenMission(XComGameState NewGameState) {
+	local RTGameState_MissionSiteTemplarHighCoven MissionState;
+	local XComGameStateHistory History;
+
+	History = `XCOMHISTORY;
+
+	foreach History.IterateByClassType(class'RTGameState_MissionSiteTemplarHighCoven', MissionState) {
+		break;
+	}
+
+	if(MissionState == none) {
+		`RTLOG("Couldn't find a RTGameState_MissionSiteTemplarHighCoven to clean up!", false, true);
+	}
+
+	MissionState.RemoveEntity(NewGameState);
 }
 
 exec function RT_TestProgramInfoScreenTutorial() {
@@ -1162,4 +1195,68 @@ exec function TestAbilitySetValues() {
 		AbilitySet = RTAbility(AbilitySetObject);
 		AbilitySet.static.TestAbilitySetValues();
 	}
+}
+
+exec function RT_TestRisk(name RiskTemplateName) {
+	local X2CovertActionRiskTemplate Template;
+	local XComGameState_CovertAction ActionState;
+	local StateObjectReference TargetRef, EmptyRef;
+	local array<StateObjectReference> ExclusionList;
+	local X2StrategyElementTemplateManager StrategyElementManager;
+	local XComGameState NewGameState;
+
+
+	StrategyElementManager = class'X2StrategyElementTemplateManager'.static.GetStrategyElementTemplateManager();
+
+	Template = X2CovertActionRiskTemplate(StrategyElementManager.FindStrategyElementTemplate(RiskTemplateName));
+	if(Template == none) {
+		`RTLOG("Couldn't find a X2CovertActionRiskTemplate matching " $ RiskTemplateName $ "." );
+		return;
+	}
+
+	NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("Rising Tides: RT_TestRisk: " $ RiskTemplateName);
+
+	ActionState = GetCurrentCovertAction();
+	if(ActionState == none) {
+		`RTLOG("Couldn't find an ActionState for the Risk test. Continuing, but behavior is likely to be undefined.", false, true);
+	}
+
+	TargetRef = Template.FindTargetFn(ActionState, ExclusionList);
+	if(TargetRef == EmptyRef) {
+		`RTLOG("Couldn't find a TargetRef for the Risk. Continuing under the assumption that the target would have been an XCOM soldier. Behavior will be undefined if that is not the case.", false, true);
+		TargetRef = GetRandomSoldierFromXCOMBarracks();
+		if(TargetRef == EmptyRef) {
+			`RTLOG("Couldn't find a TargetRef from the XCOM Barracks. Continuing, behavior will be undefined.", false, true);
+		}
+	}
+
+	if (Template.ApplyRiskFn != none) {
+		Template.ApplyRiskFn(NewGameState, ActionState, TargetRef);
+	}
+	`XCOMGAME.GameRuleset.SubmitGameState(NewGameState);
+
+	if (Template.RiskPopupFn != none) {
+		Template.RiskPopupFn(ActionState, TargetRef);
+		`GAME.GetGeoscape().Pause();
+	}
+}
+
+simulated static function XComGameState_CovertAction GetCurrentCovertAction() {
+	local XComGameStateHistory History;
+	local XComGameState_CovertAction ActionState;
+
+	History = `XCOMHISTORY;
+	foreach History.IterateByClassType(class'XComGameState_CovertAction', ActionState)
+	{
+		if (ActionState.bStarted) {
+			return ActionState;
+		}
+	}
+
+	return none;
+	
+}
+
+simulated static function StateObjectReference GetRandomSoldierFromXCOMBarracks() {
+	return `XCOMHQ.Crew[`SYNC_RAND_STATIC(`XCOMHQ.Crew.Length) - 1];
 }

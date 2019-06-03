@@ -257,6 +257,10 @@ static function bool DebuggingEnabled() {
 	return default.bDebuggingEnabled;
 }
 
+static function string GetDLCIdentifier() {
+	return default.DLCIdentifier;
+}
+
 static function String GetVersionString() {
 	local string s;
 	

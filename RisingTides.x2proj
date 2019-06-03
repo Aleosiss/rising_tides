@@ -634,6 +634,9 @@
     <Content Include="Src\RisingTides\Classes\RTGameState_MissionSiteTemplarHighCoven.uc" />
     <Content Include="Src\RisingTides\Classes\RTUIMission_TemplarHighCovenAssault.uc" />
     <Content Include="Src\RisingTides\Classes\RTAbility.uc" />
+    <Content Include="Config\XComParcels.ini" />
+    <Content Include="Src\RisingTides\Classes\RTGameState_DestroyedHaven.uc" />
+    <Content Include="Src\RisingTides\Classes\RTGameState_DestroyedFaction.uc" />
   </ItemGroup>
   <Import Project="$(MSBuildLocalExtensionPath)\XCOM2.targets" />
 </Project>

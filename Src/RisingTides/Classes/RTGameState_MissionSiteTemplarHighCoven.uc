@@ -45,3 +45,4 @@ function SetMissionData(X2RewardTemplate MissionReward, bool bUseSpecifiedLevelS
 	`RTLOG("Source: " $ Source);
 	super.SetMissionData(MissionReward, bUseSpecifiedLevelSeed, LevelSeedOverride, ExcludeFamilies);
 }
+

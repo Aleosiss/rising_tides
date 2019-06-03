@@ -13,17 +13,22 @@ static function array<X2DataTemplate> CreateTemplates()
 	CovertActions.AddItem(CreateFindProgramFactionTemplate());
 	CovertActions.AddItem(CreateFindProgramFarAwayFactionTemplate());
 
-	// TODO: Hunt Templars
+	// Hunt Templars
 	CovertActions.AddItem(CreateHuntTemplarsP1Template());
 	CovertActions.AddItem(CreateHuntTemplarsP2Template());
 	CovertActions.AddItem(CreateHuntTemplarsP3Template());
+
+	// One Small Favor
+	CovertActions.AddItem(CreateGrantFavorTemplate());
+	CovertActions.AddItem(CreateCallInFavorTemplate());
+
 
 	return CovertActions;
 }
 
 //---------------------------------------------------------------------------------------
 // FIND FACTION
-//-------------------------------------------------     --------------------------------------
+//---------------------------------------------------------------------------------------
 static function X2DataTemplate CreateFindProgramFactionTemplate() {
 	local X2CovertActionTemplate Template;
 	`CREATE_X2TEMPLATE(class'X2CovertActionTemplate', Template, 'CovertAction_FindProgramFaction');
@@ -168,9 +173,10 @@ private static function AddFactionToCovertActionNarratives(array<X2DataTemplate>
 
 //---------------------------------------------------------------------------------------
 // TEMPLAR QUEST CHAIN P1
-//-------------------------------------------------     --------------------------------------
+//---------------------------------------------------------------------------------------
 static function X2DataTemplate CreateHuntTemplarsP1Template() {
 	local X2CovertActionTemplate Template;
+
 	`CREATE_X2TEMPLATE(class'X2CovertActionTemplate', Template, 'CovertAction_HuntTemplarsP1Template');
 
 	Template.ChooseLocationFn = ChooseTemplarRegion;
@@ -196,9 +202,10 @@ static function X2DataTemplate CreateHuntTemplarsP1Template() {
 
 //---------------------------------------------------------------------------------------
 // TEMPLAR QUEST CHAIN P2
-//-------------------------------------------------     --------------------------------------
+//---------------------------------------------------------------------------------------
 static function X2DataTemplate CreateHuntTemplarsP2Template() {
 	local X2CovertActionTemplate Template;
+
 	`CREATE_X2TEMPLATE(class'X2CovertActionTemplate', Template, 'CovertAction_HuntTemplarsP2Template');
 
 	Template.ChooseLocationFn = ChooseTemplarRegion;
@@ -224,9 +231,10 @@ static function X2DataTemplate CreateHuntTemplarsP2Template() {
 
 //---------------------------------------------------------------------------------------
 // TEMPLAR QUEST CHAIN P3
-//-------------------------------------------------     --------------------------------------
+//---------------------------------------------------------------------------------------
 static function X2DataTemplate CreateHuntTemplarsP3Template() {
 	local X2CovertActionTemplate Template;
+
 	`CREATE_X2TEMPLATE(class'X2CovertActionTemplate', Template, 'CovertAction_HuntTemplarsP3Template');
 
 	Template.ChooseLocationFn = ChooseTemplarRegion;
@@ -246,6 +254,59 @@ static function X2DataTemplate CreateHuntTemplarsP3Template() {
 	Template.Risks.AddItem('CovertActionRisk_TemplarAmbush');
 
 	Template.Rewards.AddItem('RTReward_ProgramHuntTemplarsP3');
+
+	return Template;
+}
+
+//---------------------------------------------------------------------------------------
+// Grant Favor
+//---------------------------------------------------------------------------------------
+static function X2DataTemplate CreateGrantFavorTemplate() {
+	local X2CovertActionTemplate Template;
+
+	`CREATE_X2TEMPLATE(class'X2CovertActionTemplate', Template, 'CovertAction_GrantFavorTemplate');
+
+	Template.ChooseLocationFn = ChooseRandomRegion;
+	Template.OverworldMeshPath = "UI_3D.Overwold_Final.CovertAction";
+
+	Template.RequiredFactionInfluence = eFactionInfluence_Influential;
+
+	Template.Narratives.AddItem('CovertActionNarrative_GrantFavor_Program');
+
+	// 3 captain soldiers, 1 optional intel 
+	Template.Slots.AddItem(_CreateDefaultSoldierSlot('CovertActionSoldierStaffSlot'));
+	Template.Slots.AddItem(_CreateDefaultSoldierSlot('CovertActionSoldierStaffSlot'));
+	Template.Slots.AddItem(_CreateDefaultSoldierSlot('CovertActionSoldierStaffSlot'));
+
+	Template.Risks.AddItem('CovertActionRisk_SoldierShaken');
+
+	Template.Rewards.AddItem('RTReward_ProgramGrantFavor');
+
+	return Template;
+}
+
+//---------------------------------------------------------------------------------------
+// Grant Favor
+//---------------------------------------------------------------------------------------
+static function X2DataTemplate CreateCallInFavorTemplate() {
+	local X2CovertActionTemplate Template;
+
+	`CREATE_X2TEMPLATE(class'X2CovertActionTemplate', Template, 'CovertAction_CallInFavorTemplate');
+
+	Template.ChooseLocationFn = ChooseRandomRegion;
+	Template.OverworldMeshPath = "UI_3D.Overwold_Final.CovertAction";
+
+	Template.bGoldenPath = false;
+	Template.bUnique = true;
+
+	Template.RequiredFactionInfluence = eFactionInfluence_MAX;
+
+	Template.Narratives.AddItem('CovertActionNarrative_CallInFavor_Program');
+
+	// 3 captain soldiers, 1 optional intel 
+	Template.Slots.AddItem(_CreateDefaultStaffSlot('CovertActionScientistStaffSlot'));
+
+	Template.Rewards.AddItem('RTReward_ProgramCallInFavor');
 
 	return Template;
 }

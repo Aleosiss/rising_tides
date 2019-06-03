@@ -2154,7 +2154,7 @@ static function X2AbilityTemplate RTEndPsistorms() {
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'RTEndPsistorms');
 	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_defend_panic";
 	Template.AbilitySourceName = 'eAbilitySource_Psionic';
-	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_AlwaysShow;
+	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_ShowIfAvailable;
 	Template.Hostility = eHostility_Neutral;
 
 	Template.AbilityTargetStyle = default.SelfTarget;

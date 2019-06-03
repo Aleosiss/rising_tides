@@ -5,6 +5,7 @@ static function array <X2DataTemplate> CreateTemplates()
 	local array<X2DataTemplate> Risks;
 
 	Risks.AddItem(CreateTemplarAmbushRiskTemplate());
+	Risks.AddItem(CreateSoldierShakenRiskTemplate());
 
 	return Risks;
 }
@@ -53,4 +54,88 @@ static function CreateTemplarAmbush(XComGameState NewGameState, XComGameState_Co
 		MissionState.BuildMission(MissionSource, RegionState.GetRandom2DLocationInRegion(), RegionState.GetReference(), MissionRewards, true);
 		MissionState.ResistanceFaction = ActionState.Faction;
 	}
+}
+
+static function X2DataTemplate CreateSoldierShakenRiskTemplate() {
+	local X2CovertActionRiskTemplate Template;
+
+	`CREATE_X2TEMPLATE(class'X2CovertActionRiskTemplate', Template, 'CovertActionRisk_SoldierShaken');
+	
+	Template.FindTargetFn = ChooseRandomSoldierWithExclusions;
+	Template.ApplyRiskFn = ApplySoldierShaken;
+	Template.RiskPopupFn = SoldierShakenPopup;
+
+	return Template;
+}
+
+static function ApplySoldierShaken(XComGameState NewGameState, XComGameState_CovertAction ActionState, optional StateObjectReference TargetRef)
+{
+	local XComGameState_Unit UnitState;
+	local float MinShakenWill;
+	
+	if (TargetRef.ObjectID != 0)
+	{
+		UnitState = XComGameState_Unit(NewGameState.ModifyStateObject(class'XComGameState_Unit', TargetRef.ObjectID));
+		if (UnitState == none) {
+			`RTLOG("Did not recieve or find a UnitState for ApplySoldierShaken!", true, false);
+			return;
+		}
+
+		if(!UnitState.bIsShaken && !UnitState.bIsShakenRecovered) {
+			MinShakenWill = UnitState.GetMinWillForMentalState(eMentalState_Shaken);
+
+			UnitState.SetCurrentStat(eStat_Will, MinShakenWill);
+			UnitState.UpdateMentalState();
+
+			UpdateWillRecoveryProjectForUnit(NewGameState, UnitState);
+		}
+	}
+}
+
+static function UpdateWillRecoveryProjectForUnit(XComGameState NewGameState, XComGameState_Unit NewUnitState) {
+	local XComGameState_HeadquartersXCom XComHQ;
+	local XComGameStateHistory History;
+	local XComGameState_HeadquartersProjectRecoverWill WillProject;
+	// First remove existing recover will project if there is one.
+	History = `XCOMHISTORY;
+	XComHQ = GetAndAddXComHQ(NewGameState);
+
+	foreach History.IterateByClassType(class'XComGameState_HeadquartersProjectRecoverWill', WillProject)
+	{
+		if(WillProject.ProjectFocus == NewUnitState.GetReference())
+		{
+			XComHQ.Projects.RemoveItem(WillProject.GetReference());
+			NewGameState.RemoveStateObject(WillProject.ObjectID);
+			break;
+		}
+	}
+
+	// Add new will recover project
+	WillProject = XComGameState_HeadquartersProjectRecoverWill(NewGameState.CreateNewStateObject(class'XComGameState_HeadquartersProjectRecoverWill'));
+	WillProject.SetProjectFocus(NewUnitState.GetReference(), NewGameState);
+	XComHQ.Projects.AddItem(WillProject.GetReference());
+}
+
+static function SoldierShakenPopup(XComGameState_CovertAction ActionState, StateObjectReference TargetRef)
+{
+	`HQPRES.UISoldierShaken(XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(TargetRef.ObjectID)));
+}
+
+//---------------------------------------------------------------------------------------
+static function XComGameState_HeadquartersXCom GetAndAddXComHQ(XComGameState NewGameState)
+{
+	local XComGameState_HeadquartersXCom XComHQ;
+
+	foreach NewGameState.IterateByClassType(class'XComGameState_HeadquartersXCom', XComHQ)
+	{
+		break;
+	}
+
+	if (XComHQ == none)
+	{
+		XComHQ = XComGameState_HeadquartersXCom(`XCOMHISTORY.GetSingleGameStateObjectForClass(class'XComGameState_HeadquartersXCom'));
+		XComHQ = XComGameState_HeadquartersXCom(NewGameState.ModifyStateObject(class'XComGameState_HeadquartersXCom', XComHQ.ObjectID));
+	}
+
+	return XComHQ;
 }

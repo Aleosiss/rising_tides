@@ -180,20 +180,19 @@ static function RTLog(string message, optional bool bShouldRedScreenToo = false,
 	local bool b;
 	local name mod;
 
-	mod = 'Rising Tides';
-	b = DebuggingEnabled();
+	b = `DLCINFO.DebuggingEnabled();
+	if(!b) {
+		return;
+	}
+	mod = name(`DLCINFO.GetDLCIdentifier());
 
 	`LOG(message, b, mod);
-	if(bShouldRedScreenToo && b) {
+	if(bShouldRedScreenToo) {
 		`RedScreen("RisingTides: " $ message);
 	}
-	if(bShouldOutputToConsoleToo && b) {
+	if(bShouldOutputToConsoleToo) {
 		class'Helpers'.static.OutputMsg(message);
 	}
-}
-
-static function bool DebuggingEnabled() {
-	return `DLCINFO.DebuggingEnabled();
 }
 
 static function PrintCovertActionsForFaction(XComGameState_ResistanceFaction Faction) {
@@ -317,4 +316,9 @@ static function array<Name> GetCompletedXCOMTechNames() {
 	}
 
 	return names;
+}
+
+static function CheckpointDebug(out int checkpointNum, optional bool bShouldRedScreenToo = false, optional bool bShouldOutputToConsoleToo = false) {
+	checkpointNum++;
+	`RTLOG("Checkpoint " $ checkpointNum, bShouldRedScreenToo, bShouldOutputToConsoleToo);
 }
