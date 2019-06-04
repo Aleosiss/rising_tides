@@ -1223,6 +1223,10 @@ function int getTemplarQuestlineStage() {
 	return iTemplarQuestlineStage;
 }
 
+function bool IsTemplarQuestlineComplete() {
+	return getTemplarQuestlineStage() == 4;
+}
+
 function bool IsTemplarFactionMet() {
 	local XComGameState_ResistanceFaction FactionState;
 

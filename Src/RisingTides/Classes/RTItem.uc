@@ -789,7 +789,7 @@ static function X2DataTemplate CreateRTTemplarWarpGrenades()
 	
 	Template.GameArchetype = "RT_Grenade_Warp.RT_WP_Grenade_Warp_Lv2";
 
-	Template.CanBeBuilt = false;
+	Template.Requirements.SpecialRequirementsFn = IsTemplarQuestlineComplete;
 
 	Template.SetUIStatMarkup(class'XLocalizedData'.default.RangeLabel, , default.WARPGRENADE_RANGE);
 	Template.SetUIStatMarkup(class'XLocalizedData'.default.RadiusLabel, , default.WARPGRENADE_RADIUS);
@@ -818,7 +818,7 @@ static function X2DataTemplate CreateRTTemplarWarpBombs()
 	Template.TradingPostValue = default.WARPBOMB_TRADINGPOSTVALUE;
 	Template.PointsToComplete = default.WARPBOMB_IPOINTS;
 	Template.iClipSize = default.WARPBOMB_ICLIPSIZE;
-	Template.Tier = 1;
+	Template.Tier = 3;
 	
 	Template.Abilities.AddItem('ThrowGrenade');
 	Template.Abilities.AddItem('GrenadeFuse');
@@ -832,7 +832,11 @@ static function X2DataTemplate CreateRTTemplarWarpBombs()
 	
 	Template.GameArchetype = "RT_Grenade_Warp.RT_WP_Grenade_Warp_Lv2";
 
-	Template.CanBeBuilt = false;
+	Template.CreatorTemplateName = 'AdvancedGrenades'; // The schematic which creates this item
+	Template.BaseItem = 'RTWarpGrenade'; // Which item this will be upgraded from
+
+	Template.Requirements.SpecialRequirementsFn = IsTemplarQuestlineComplete;
+	Template.Requirements.RequiredTechs.AddItem('AdvancedGrenades');
 
 	Template.SetUIStatMarkup(class'XLocalizedData'.default.RangeLabel, , default.WARPBOMB_RANGE);
 	Template.SetUIStatMarkup(class'XLocalizedData'.default.RadiusLabel, , default.WARPBOMB_RADIUS);
@@ -888,4 +892,10 @@ static function X2DataTemplate CreateRTTemplarPsiAmp(name TemplateName)
 	}	
 
 	return Template;
+}
+
+//---------------------------------------------------------------------------------------
+static function bool IsTemplarQuestlineComplete()
+{
+	return `RTS.GetProgramState().IsTemplarQuestlineComplete();
 }

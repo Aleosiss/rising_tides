@@ -870,6 +870,16 @@ ThrownAbilityHelpText="Ruptures enemies within the blast radius."
 LaunchedAbilityname="Launch Warp Grenade"
 LaunchedAbilityHelpText="Ruptures enemies within the blast radius."
 
+[RTWarpBomb X2GrenadeTemplate]
+FriendlyName="Warp Bombs"
+FriendlyNamePlural="Warp Bombs"
+BriefSummary="Warp Bombs are upscaled Warp Grenades made with the express malign intent in XCOM's Psi-Lab. Their psionic fracturing effect is both more potent and applies to a larger area."
+TacticalText="<Bullet/> Warp bombs rupture enemies caught within the blast radius."
+ThrownAbilityName="Throw Warp Bomb"
+ThrownAbilityHelpText="Ruptures enemies within the blast radius."
+LaunchedAbilityname="Launch Warp Bomb"
+LaunchedAbilityHelpText="Ruptures enemies within the blast radius."
+
 ;----------------------------------------------------------------------------------------------------------------------------
 [RTProfessionalsHaveStandards X2AbilityTemplate]
 LocFriendlyName="Old World Training"
@@ -1078,7 +1088,7 @@ ActionObjective="Call In Program Favor"
 
 [CovertActionNarrative_CallInFavor_Program X2CovertActionNarrativeTemplate]
 ActionName="Call in a Favor"
-ActionPreNarrative="Our field teams have much less to do without the Templars creating problems. If you can lend a liason for a short while, we can work out another mission assignment for this month. (This Covert Action DOES NOT STACK with the free mission of the month)"
+ActionPreNarrative="Our field teams have much less to do without the Templars creating problems. If you can lend a liason for a short while, we can work out another mission assignment for this month."
 ActionPostNarrative="I've worked out the details with your men, Commander. We'll be in touch soon. - Dr. Hadley"
 ;///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ;//---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -1140,6 +1150,14 @@ RewardDetails="Operatives undercover in the Templar High Coven can help us ident
 [RTReward_ProgramHuntTemplarsP3 X2RewardTemplate]
 DisplayName="Assault Opportunity"
 RewardDetails="A momentary window to strike at the Templar High Coven."
+
+[RTReward_ProgramGrantFavor X2RewardTemplate]
+DisplayName="Program Favor"
+RewardDetails="An I-owe-you from Dr. Hadley herself. Worth a life or two."
+
+[RTReward_ProgramCallInFavor X2RewardTemplate]
+DisplayName="Program Mission Scheduling Data"
+RewardDetails="Allow the Program to pick up a second mission this month (THIS DOES NOT STACK WITH THE RESISTANCE ORDER)"
 
 [ResistanceMode_PsiTraining X2ResistanceModeTemplate]
 DisplayName="Scanning Bonus: Psionic Expertise"
