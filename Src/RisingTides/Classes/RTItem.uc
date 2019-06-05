@@ -763,7 +763,7 @@ static function X2DataTemplate CreateRTTemplarWarpGrenades()
 
 	`CREATE_X2TEMPLATE(class'X2GrenadeTemplate', Template, 'RTWarpGrenade');
 
-	Template.strImage = "img:///UILibrary_StrategyImages.X2InventoryIcons.Inv_Emp_Grenade";
+	Template.strImage = "img:///RisingTidesContentPackage.UIImages.Inv_Warp_Grenade";
 	Template.EquipSound = "StrategyUI_Grenade_Equip";
 	Template.AddAbilityIconOverride('ThrowGrenade', "img:///UILibrary_PerkIcons.UIPerk_grenade_emp");
 	Template.AddAbilityIconOverride('LaunchGrenade', "img:///UILibrary_PerkIcons.UIPerk_grenade_emp");
@@ -814,7 +814,7 @@ static function X2DataTemplate CreateRTTemplarWarpBombs()
 
 	`CREATE_X2TEMPLATE(class'X2GrenadeTemplate', Template, 'RTWarpBomb');
 
-	Template.strImage = "img:///UILibrary_StrategyImages.X2InventoryIcons.Inv_Emp_GrenadeMK2";
+	Template.strImage = "img:///RisingTidesContentPackage.UIImages.Inv_Warp_GrenadeMK2";
 	Template.EquipSound = "StrategyUI_Grenade_Equip";
 	Template.AddAbilityIconOverride('ThrowGrenade', "img:///UILibrary_PerkIcons.UIPerk_grenade_emp");
 	Template.AddAbilityIconOverride('LaunchGrenade', "img:///UILibrary_PerkIcons.UIPerk_grenade_emp");
