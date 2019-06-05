@@ -319,6 +319,7 @@ static function X2CharacterTemplate CreateTemplate_TemplarPeon(name TemplateName
 	if(TemplateName == 'RTTemplarPeon_M3')
 	{
 		CharTemplate.DefaultLoadout = 'RTTemplarPeon_M3';
+		CharTemplate.Abilities.AddItem('RTTemplarExtraOrdnance');
 	}
 
 	CharTemplate.Abilities.AddItem('CarryUnit');

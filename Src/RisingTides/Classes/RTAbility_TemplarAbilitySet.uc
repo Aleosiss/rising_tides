@@ -1,6 +1,7 @@
 class RTAbility_TemplarAbilitySet extends RTAbility_GhostAbilitySet config (RisingTides);
 
 var config int SCHOLAR_IONIC_STORM_RANGE;
+var config int TEMPLAR_PEON_EXTRA_GRENADES;
 
 static function array<X2DataTemplate> CreateTemplates()
 {
@@ -10,6 +11,7 @@ static function array<X2DataTemplate> CreateTemplates()
 	Templates.AddItem(RTUnwaveringResolveIcon());
 	Templates.AddItem(RTScholarVolt());
 	Templates.AddItem(RTScholarIonicStorm());
+	Templates.AddItem(RTTemplarExtraOrdnance());
 
 	return Templates;
 }
@@ -449,4 +451,24 @@ function bool IonicStormDamagePreview(XComGameState_Ability AbilityState, StateO
 	}
 
 	return true;
+}
+
+static function X2AbilityTemplate RTTemplarExtraOrdnance()
+{
+	local X2AbilityTemplate         Template;
+
+	Template = PurePassive('RTTemplarExtraOrdnance', "img:///UILibrary_PerkIcons.UIPerk_aceinthehole");	
+	
+	Template.bCrossClassEligible = false;
+	Template.GetBonusWeaponAmmoFn = TemplarExtraOrdnance_BonusWeaponAmmo;
+
+	return Template;
+}
+
+function int TemplarExtraOrdnance_BonusWeaponAmmo(XComGameState_Unit UnitState, XComGameState_Item ItemState)
+{
+	if (ItemState.InventorySlot == eInvSlot_Utility)
+		return default.TEMPLAR_PEON_EXTRA_GRENADES;
+
+	return 0;
 }

@@ -1260,3 +1260,24 @@ simulated static function XComGameState_CovertAction GetCurrentCovertAction() {
 simulated static function StateObjectReference GetRandomSoldierFromXCOMBarracks() {
 	return `XCOMHQ.Crew[`SYNC_RAND_STATIC(`XCOMHQ.Crew.Length) - 1];
 }
+
+exec function RT_PrintItemsForClosestUnitToCursor() {
+	local XComGameState_Unit UnitState;
+	local EForceVisibilitySetting ForceVisibleSetting;
+	local XComTacticalCheatManager CheatsManager;
+	local XComGameState_Item ItemState;
+	local XComGameStateHistory History;
+	local StateObjectReference ItemRef;
+
+	CheatsManager = `CHEATMGR;
+	History = `XCOMHISTORY;
+
+	UnitState = CheatsManager.GetClosestUnitToCursor();
+
+	`RTLOG("Printing all items for " $ UnitState.GetFullName());
+	foreach UnitState.InventoryItems(ItemRef) {
+		ItemState = XComGameState_Item(History.GetGameStateForObjectID(ItemRef.ObjectID));
+		`RTLOG(ItemState.ToString(true));
+		`RTLOG(" ");
+	}
+}

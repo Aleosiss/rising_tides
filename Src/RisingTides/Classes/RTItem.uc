@@ -49,6 +49,7 @@ var config int WARPGRENADE_IPOINTS;
 var config int WARPGRENADE_ICLIPSIZE;
 var config int WARPGRENADE_RANGE;
 var config int WARPGRENADE_RADIUS;
+var config int WARPGRENADE_SUPPLYCOST;
 
 var config WeaponDamageValue WARPBOMB_BASEDAMAGE;
 var config int WARPBOMB_ISOUNDRANGE;
@@ -58,6 +59,7 @@ var config int WARPBOMB_IPOINTS;
 var config int WARPBOMB_ICLIPSIZE;
 var config int WARPBOMB_RANGE;
 var config int WARPBOMB_RADIUS;
+var config int WARPBOMB_SUPPLYCOST;
 
 
 static function array<name> GetProgramWeaponTemplateNames() {
@@ -122,7 +124,6 @@ static function array<X2DataTemplate> CreateTemplates()
 	
 	return Items;
 }
-
 
 static function X2DataTemplate CreateTemplate_ProgramPistol()
 {
@@ -758,13 +759,14 @@ static function X2DataTemplate CreateRTTemplarWarpGrenades()
 {
 	local X2GrenadeTemplate Template;
 	local X2Effect_ApplyWeaponDamage WeaponDamageEffect;
+	local ArtifactCost Resources;
 
 	`CREATE_X2TEMPLATE(class'X2GrenadeTemplate', Template, 'RTWarpGrenade');
 
-	Template.strImage = "img:///UILibrary_StrategyImages.X2InventoryIcons.Inv_Acid_Bomb";
+	Template.strImage = "img:///UILibrary_StrategyImages.X2InventoryIcons.Inv_Emp_Grenade";
 	Template.EquipSound = "StrategyUI_Grenade_Equip";
-	Template.AddAbilityIconOverride('ThrowGrenade', "img:///UILibrary_PerkIcons.UIPerk_grenade_acidbomb");
-	Template.AddAbilityIconOverride('LaunchGrenade', "img:///UILibrary_PerkIcons.UIPerk_grenade_acidbomb");
+	Template.AddAbilityIconOverride('ThrowGrenade', "img:///UILibrary_PerkIcons.UIPerk_grenade_emp");
+	Template.AddAbilityIconOverride('LaunchGrenade', "img:///UILibrary_PerkIcons.UIPerk_grenade_emp");
 	Template.iRange = default.WARPGRENADE_RANGE;
 	Template.iRadius = default.WARPGRENADE_RADIUS;
 	Template.fCoverage = 100;
@@ -789,7 +791,14 @@ static function X2DataTemplate CreateRTTemplarWarpGrenades()
 	
 	Template.GameArchetype = "RT_Grenade_Warp.RT_WP_Grenade_Warp_Lv2";
 
+	Resources.ItemTemplateName = 'Supplies';
+	Resources.Quantity = default.WARPGRENADE_SUPPLYCOST;
+	Template.Cost.ResourceCosts.AddItem(Resources);
+
 	Template.Requirements.SpecialRequirementsFn = IsTemplarQuestlineComplete;
+
+	Template.CanBeBuilt = true;
+	Template.HideIfResearched = 'AdvancedGrenades';
 
 	Template.SetUIStatMarkup(class'XLocalizedData'.default.RangeLabel, , default.WARPGRENADE_RANGE);
 	Template.SetUIStatMarkup(class'XLocalizedData'.default.RadiusLabel, , default.WARPGRENADE_RADIUS);
@@ -801,13 +810,14 @@ static function X2DataTemplate CreateRTTemplarWarpBombs()
 {
 	local X2GrenadeTemplate Template;
 	local X2Effect_ApplyWeaponDamage WeaponDamageEffect;
+	local ArtifactCost Resources;
 
 	`CREATE_X2TEMPLATE(class'X2GrenadeTemplate', Template, 'RTWarpBomb');
 
-	Template.strImage = "img:///UILibrary_StrategyImages.X2InventoryIcons.Inv_Acid_Bomb";
+	Template.strImage = "img:///UILibrary_StrategyImages.X2InventoryIcons.Inv_Emp_GrenadeMK2";
 	Template.EquipSound = "StrategyUI_Grenade_Equip";
-	Template.AddAbilityIconOverride('ThrowGrenade', "img:///UILibrary_PerkIcons.UIPerk_grenade_acidbomb");
-	Template.AddAbilityIconOverride('LaunchGrenade', "img:///UILibrary_PerkIcons.UIPerk_grenade_acidbomb");
+	Template.AddAbilityIconOverride('ThrowGrenade', "img:///UILibrary_PerkIcons.UIPerk_grenade_emp");
+	Template.AddAbilityIconOverride('LaunchGrenade', "img:///UILibrary_PerkIcons.UIPerk_grenade_emp");
 	Template.iRange = default.WARPBOMB_RANGE;
 	Template.iRadius = default.WARPBOMB_RADIUS;
 	Template.fCoverage = 100;
@@ -835,8 +845,14 @@ static function X2DataTemplate CreateRTTemplarWarpBombs()
 	Template.CreatorTemplateName = 'AdvancedGrenades'; // The schematic which creates this item
 	Template.BaseItem = 'RTWarpGrenade'; // Which item this will be upgraded from
 
+	Resources.ItemTemplateName = 'Supplies';
+	Resources.Quantity = default.WARPBOMB_SUPPLYCOST;
+	Template.Cost.ResourceCosts.AddItem(Resources);
+
 	Template.Requirements.SpecialRequirementsFn = IsTemplarQuestlineComplete;
 	Template.Requirements.RequiredTechs.AddItem('AdvancedGrenades');
+
+	Template.CanBeBuilt = true;
 
 	Template.SetUIStatMarkup(class'XLocalizedData'.default.RangeLabel, , default.WARPBOMB_RANGE);
 	Template.SetUIStatMarkup(class'XLocalizedData'.default.RadiusLabel, , default.WARPBOMB_RADIUS);

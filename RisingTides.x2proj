@@ -637,7 +637,6 @@
     <Content Include="Config\XComParcels.ini" />
     <Content Include="Src\RisingTides\Classes\RTGameState_DestroyedHaven.uc" />
     <Content Include="Src\RisingTides\Classes\RTGameState_DestroyedFaction.uc" />
-    <Content Include="Src\RisingTides\Classes\RTStrategyElement_Techs.uc" />
   </ItemGroup>
   <Import Project="$(MSBuildLocalExtensionPath)\XCOM2.targets" />
 </Project>
