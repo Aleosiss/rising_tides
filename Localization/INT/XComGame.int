@@ -871,7 +871,7 @@ LaunchedAbilityname="Launch Warp Grenade"
 LaunchedAbilityHelpText="Ruptures enemies within the blast radius."
 
 [RTWarpBomb X2GrenadeTemplate]
-FriendlyName="Warp Bombs"
+FriendlyName="Warp Bomb"
 FriendlyNamePlural="Warp Bombs"
 BriefSummary="Warp Bombs are upscaled Warp Grenades made with the express malign intent in XCOM's Psi-Lab. Their psionic fracturing effect is both more potent and applies to a larger area."
 TacticalText="<Bullet/> Warp bombs rupture enemies caught within the blast radius."
