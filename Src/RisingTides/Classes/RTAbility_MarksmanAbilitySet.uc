@@ -8,8 +8,11 @@
 //	Whisper's perks.
 //---------------------------------------------------------------------------------------
 
-class RTAbility_MarksmanAbilitySet extends RTAbility_GhostAbilitySet
+class RTAbility_MarksmanAbilitySet extends RTAbility
 	config(RisingTides);
+
+	var localized string SOC_TITLE;
+	var localized string SOC_DESC;
 
 	var config int SLOWISSMOOTH_AIM_BONUS, SLOWISSMOOTH_CRIT_BONUS;
 	var config float HEADSHOT_CRITDMG_BONUS;
@@ -23,6 +26,8 @@ class RTAbility_MarksmanAbilitySet extends RTAbility_GhostAbilitySet
 	var config float SIXOCLOCK_PSI_BONUS;
 	var config float SIXOCLOCK_DEFENSE_BONUS;
 	var config int TIMESTANDSSTILL_COOLDOWN;
+	var config int TIMESTANDSSTILL_NUMTURNS;
+	var config int TIMESTANDSSTILL_ACTIONPOINTSPERTURN;
 	var config int BARRIER_STRENGTH, BARRIER_COOLDOWN;
 	var config int VITAL_POINT_TARGETING_DAMAGE;
 	var config int SURGE_COOLDOWN;
@@ -40,6 +45,10 @@ class RTAbility_MarksmanAbilitySet extends RTAbility_GhostAbilitySet
 	var config int SND_DEFENSE_BONUS;
 	var config float EMM_DAMAGE_PERCENT;
 	var config int SIS_CONCEALMENT_TURNS;
+	var config int REPOSITIONING_TILES_MOVED_REQUIREMENT;
+	var config int REPOSITIONING_MAX_POSITIONS_SAVED;
+	var config int AGGRESSION_CRIT_PER_UNIT;
+	var config int AGGRESSION_UNITS_FOR_MAX_BONUS;
 
 	var config int HARBINGER_SHIELD_AMOUNT, HARBINGER_COOLDOWN, HARBINGER_DAMAGE_BONUS, HARBINGER_WILL_BONUS, HARBINGER_AIM_BONUS, HARBINGER_ARMOR_BONUS;
 	var config WeaponDamageValue HARBINGER_DMG;
@@ -54,6 +63,7 @@ class RTAbility_MarksmanAbilitySet extends RTAbility_GhostAbilitySet
 
 	var name KillZoneReserveType;
 	var name TimeStopEffectName;
+	var name TimeStopMasterEffectName;
 
 	var config array<name> AbilityPerksToLoad;
 
@@ -108,6 +118,7 @@ static function array<X2DataTemplate> CreateTemplates()
 	Templates.AddItem(RTOverflowBarrierEvent());
 	Templates.AddItem(RTKubikuri());
 	Templates.AddItem(RTKubikuriDamage());
+	Templates.AddItem(RTRepositioning());
 
 	return Templates;
 }
@@ -154,6 +165,9 @@ static function X2AbilityTemplate ScopedAndDropped()
 	Template.AdditionalAbilities.AddItem('RTFeedback');
 	Template.AdditionalAbilities.AddItem('RTMindControl');
 	Template.AdditionalAbilities.AddItem('RTEnterStealth');
+	Template.AdditionalAbilities.AddItem('RTProgramEvacuation');
+	Template.AdditionalAbilities.AddItem('RTProgramEvacuationPartOne');
+	Template.AdditionalAbilities.AddItem('RTProgramEvacuationPartTwo');
 
 	// unique abilities for Scoped and Dropped
 	Template.AdditionalAbilities.AddItem('RTStandardSniperShot');
@@ -579,6 +593,8 @@ static function X2AbilityTemplate RTAggression()
 	Template.AbilityTriggers.AddItem(default.UnitPostBeginPlayTrigger);
 
 	AgroEffect = new class'RTEffect_Aggression';
+	AgroEffect.iCritBonusPerUnit = default.AGGRESSION_CRIT_PER_UNIT;
+	AgroEffect.iUnitsForMaxBonus = default.AGGRESSION_UNITS_FOR_MAX_BONUS;
 	AgroEffect.BuildPersistentEffect(1, true, true, true);
 	AgroEffect.SetDisplayInfo(ePerkBuff_Passive, Template.LocFriendlyName, Template.LocLongDescription, Template.IconImage, true,,Template.AbilitySourceName);
 	Template.AddTargetEffect(AgroEffect);
@@ -1338,7 +1354,7 @@ static function X2AbilityTemplate YourHandsMyEyes()
 	local X2AbilityTemplate						Template;
 	local RTEffect_YourHandsMyEyes				RTEffect;
 
-	 `CREATE_X2ABILITY_TEMPLATE(Template, 'YourHandsMyEyes');
+	`CREATE_X2ABILITY_TEMPLATE(Template, 'YourHandsMyEyes');
 	Template.IconImage = "img:///RisingTidesContentPackage.PerkIcons.UIPerk_psi_box_yhme";
 
 	Template.AbilitySourceName = 'eAbilitySource_Psionic';
@@ -1392,13 +1408,14 @@ static function X2AbilityTemplate TimeStandsStill()
 
 	SetUnitValueEffect = new class'X2Effect_SetUnitValue';
 	SetUnitValueEffect.UnitName = 'TimeStopCounter';
-	SetUnitValueEffect.NewValueToSet = 3;
+	SetUnitValueEffect.NewValueToSet = default.TIMESTANDSSTILL_NUMTURNS;
 	SetUnitValueEffect.CleanupType = eCleanup_BeginTactical;
 	Template.AddShooterEffect(SetUnitValueEffect);
 
 	TimeMasterEffect = new class'RTEffect_TimeStopMaster';
 	TimeMasterEffect.BuildPersistentEffect(1, true, true, false, eGameRule_PlayerTurnEnd);
-	TimeMasterEffect.EffectName = 'TimeStopMasterEffect';
+	TimeMasterEffect.EffectName = default.TimeStopMasterEffectName;
+	TimeMasterEffect.bNumAdditionalActionPointsPerTurn = default.TIMESTANDSSTILL_ACTIONPOINTSPERTURN;
 	Template.AddShooterEffect(TimeMasterEffect);
 
 	TagEffect = new class'RTEffect_TimeStopTag';
@@ -1579,7 +1596,7 @@ static function X2AbilityTemplate TimeStandsStillEndListener()
 
 	RemoveSelfEffect = new class'X2Effect_RemoveEffects';
 	RemoveSelfEffect.EffectNamesToRemove.AddItem('TimeStandsStillCounterEffect');
-	RemoveSelfEffect.EffectNamesToRemove.AddItem('TimeStopMasterEffect');
+	RemoveSelfEffect.EffectNamesToRemove.AddItem(default.TimeStopMasterEffectName);
 	RemoveSelfEffect.EffectNamesToRemove.AddItem('TimeStopTagEffect');
 	RemoveSelfEffect.bCheckSource = false;
 
@@ -1602,6 +1619,37 @@ static function X2AbilityTemplate TimeStandsStillEndListener()
 
 	Template.bCrossClassEligible = false;
 	return Template;
+}
+
+static function MakeAbilitiesNotTurnEndingForTimeStandsStill() {
+	local array<name> AbilityTemplateNames;
+	local name AbilityTemplateName;
+	local X2AbilityTemplate AbilityTemplate;
+	local array<X2AbilityTemplate> AbilityTemplates;
+	local X2AbilityTemplateManager AbilityTemplateMgr;
+	local X2AbilityCost Cost;
+	local X2AbilityCost_ActionPoints ActionPointCost;
+
+	`RTLOG("Patching All Abilities for TimeStandsStill");
+	AbilityTemplateMgr = class'X2AbilityTemplateManager'.static.GetAbilityTemplateManager();
+	AbilityTemplateMgr.GetTemplateNames(AbilityTemplateNames);
+	foreach AbilityTemplateNames(AbilityTemplateName) {
+		AbilityTemplates.Length = 0;
+		AbilityTemplateMgr.FindAbilityTemplateAllDifficulties(AbilityTemplateName, AbilityTemplates);
+
+		foreach AbilityTemplates(AbilityTemplate) {
+
+			if(AbilityTemplate.DataName == 'PistolOverwatch')
+				continue;
+
+			foreach AbilityTemplate.AbilityCosts(Cost) {
+				ActionPointCost = X2AbilityCost_ActionPoints(Cost);
+				if (ActionPointCost != None) {
+					ActionPointCost.DoNotConsumeAllEffects.AddItem(default.TimeStopMasterEffectName);
+				}
+			}
+		}
+	}
 }
 
 //---------------------------------------------------------------------------------------
@@ -2285,7 +2333,6 @@ static function X2AbilityTemplate RTHarbingerPsionicLance() {
 	return Template;
 }
 
-
 //---------------------------------------------------------------------------------------
 //---Harbinger Cleanse Listener----------------------------------------------------------
 //---------------------------------------------------------------------------------------
@@ -2334,7 +2381,6 @@ static function X2AbilityTemplate HarbingerCleanseListener()
 	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
 	Template.bSkipFireAction = true;
 
-
 	Template.bCrossClassEligible = false;
 	return Template;
 }
@@ -2354,7 +2400,6 @@ static function X2AbilityTemplate RTKillZone()
 	local X2Effect_MarkValidActivationTiles		MarkTilesEffect;
 	local X2Condition_UnitEffects				SuppressedCondition;
 	local X2Effect_Persistent					Effect, Effect2;
-
 
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'RTKillZone');
 
@@ -2697,7 +2742,7 @@ static function X2AbilityTemplate RTKubikuriDamage()
 	Template.AbilityToHitCalc = default.DeadEye;
 	Template.AbilityTargetStyle = default.SelfTarget;
 	Template.AbilityTriggers.AddItem(default.UnitPostBeginPlayTrigger);
-	DamageEffect=new class'X2Effect_Kubikuri';
+	DamageEffect = new class'X2Effect_Kubikuri';
 	DamageEffect.BuildPersistentEffect(1, true, false, false);
 	DamageEffect.SetDisplayInfo(0, Template.LocFriendlyName, Template.GetMyLongDescription(), Template.IconImage, false,, Template.AbilitySourceName);
 	Template.AddTargetEffect(DamageEffect);
@@ -2705,10 +2750,74 @@ static function X2AbilityTemplate RTKubikuriDamage()
 	return Template;
 }
 
+//---------------------------------------------------------------------------------------
+//---Repositioning-----------------------------------------------------------------------
+//---------------------------------------------------------------------------------------
+static function X2AbilityTemplate RTRepositioning() {
+	local X2AbilityTemplate Template;
+	local RTEffect_Repositioning RTEffect;
 
+	`CREATE_X2ABILITY_TEMPLATE(Template, 'RTRepositioning');
+
+	Template.IconImage = "img:///RisingTidesContentPackage.PerkIcons.rt_repositioning";
+	Template.AbilitySourceName = 'eAbilitySource_Perk';
+	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_NeverShow;
+	Template.Hostility = eHostility_Neutral;
+	Template.bCrossClassEligible = false;
+
+	Template.AbilityTriggers.AddItem(default.UnitPostBeginPlayTrigger);
+	Template.AbilityToHitCalc = default.DeadEye;
+	Template.AbilityTargetStyle = default.SelfTarget;
+
+	RTEffect = new class 'RTEffect_Repositioning';
+	RTEffect.BuildPersistentEffect(1, true, false, false, eGameRule_PlayerTurnEnd);
+	RTEffect.TilesMovedRequired = default.REPOSITIONING_TILES_MOVED_REQUIREMENT;
+	RTEffect.MaxPositionsSaved = default.REPOSITIONING_MAX_POSITIONS_SAVED;
+	RTEffect.SetDisplayInfo(ePerkBuff_Passive, Template.LocFriendlyName, Template.LocLongDescription, Template.IconImage, true,, Template.AbilitySourceName);
+	Template.AddTargetEffect(RTEffect);
+
+	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
+
+	return Template;
+}
 
 defaultproperties
 {
 	KillZoneReserveType = "KillZone"
 	TimeStopEffectName = "TimeStopEffect"
+	TimeStopMasterEffectName = "TimeStopMasterEffect"
+}
+
+static function bool AbilityTagExpandHandler(string InString, out string OutString)
+{
+	local name Tag;
+
+	Tag = name(InString);
+
+	switch(Tag)
+	{
+		case 'RTREPOSITIONING_MAX_POSITIONS_SAVED':
+			OutString = string(default.REPOSITIONING_MAX_POSITIONS_SAVED);
+			return true;
+		case 'RTREPOSITIONING_TILE_DISTANCE':
+			OutString = string(default.REPOSITIONING_TILES_MOVED_REQUIREMENT);
+			return true;
+		case 'RTPRECISION_SHOT_CRIT_CHANCE':
+			OutString = string(default.HEADSHOT_CRIT_BONUS);
+			return true;
+		case 'RTPRECISION_SHOT_CRIT_DAMAGE':
+			OutString = string(default.HEADSHOT_CRITDMG_BONUS);
+			return true;
+		case 'RTPRECISION_SHOT_AIM_PENALITY':
+			OutString = string(default.HEADSHOT_AIM_MULTIPLIER);
+			return true;
+		case 'AGGRESSION_CRIT_PER_UNIT':
+			OutString = string(default.AGGRESSION_CRIT_PER_UNIT);
+			return true;
+		case 'AGGRESSION_MAX_CRIT':
+			OutString = string(default.AGGRESSION_UNITS_FOR_MAX_BONUS * default.AGGRESSION_CRIT_PER_UNIT);
+			return true;
+	}
+
+	return false;
 }

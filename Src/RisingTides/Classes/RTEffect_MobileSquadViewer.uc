@@ -106,7 +106,7 @@ simulated function bool OnEffectTicked(const out EffectAppliedData ApplyEffectPa
 		ViewerState.SyncVisualizer(NewGameState);
 		//kNewEffectState.CreatedObjectReference = ViewerState.GetReference();
 	} else {
-		class'RTHelpers'.static.RTLog("kNewEffectState.CreatedObjectReference.ObjectID couldn't be found @ RTEffect_MobileSquadViewer::OnEffectTicked!");
+		`RTLOG("kNewEffectState.CreatedObjectReference.ObjectID couldn't be found @ RTEffect_MobileSquadViewer::OnEffectTicked!");
 	}
 
 
@@ -126,7 +126,7 @@ simulated function OnEffectRemoved(const out EffectAppliedData ApplyEffectParame
 		`Redscreen("RTEffect_MobileSquadViewer::OnEffectRemoved: Could not find associated viewer object to remove!");
 		return;
 	} else {
-		class'RTHelpers'.static.RTLog("Removing ObjectID: " $ Viewer.GetReference().ObjectID);
+		`RTLOG("Removing RTGameState_SquadViewer ObjectID: " $ Viewer.GetReference().ObjectID);
 		NewGameState.RemoveStateObject(RemovedEffectState.CreatedObjectReference.ObjectID);
 	}
 

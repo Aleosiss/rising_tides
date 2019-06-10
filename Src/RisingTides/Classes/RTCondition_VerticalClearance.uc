@@ -8,7 +8,7 @@ event name CallMeetsCondition(XComGameState_BaseObject kTarget) {
 		return 'AA_Success';
 	}
 
-	`LOG("Rising Tides: Target invalid height clearance!");
+	`RTLOG("Target invalid height clearance!");
 	return 'AA_TileIsBlocked';
 }
 
@@ -23,7 +23,7 @@ private function bool CheckTarget(XComGameState_BaseObject kTarget) {
 
 	TargetUnitState = XComGameState_Unit(kTarget);
 	if(TargetUnitState == none) {
-		`LOG("Rising Tides: invalid unit state!");
+		`RTLOG("invalid unit state!");
 		return false;
 	}
 

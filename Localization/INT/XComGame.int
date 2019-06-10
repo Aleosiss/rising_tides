@@ -30,12 +30,21 @@ LocHelpText="Killing a flanked or uncovered target with a sniper rifle does not 
 LocFlyOverText="Scoped And Dropped"
 LocPromotionPopupText="<Bullet/> This unit does not suffer from squadsight penalties.<br/><Bullet/> Additional shots taken via this ability will suffer reduced chance to critically hit.<br/>"
 
+[RTRepositioning X2AbilityTemplate]
+LocFriendlyName="Repositioning"
+LocLongDescription="If your last <Ability:RTREPOSITIONING_MAX_POSITIONS_SAVED> firing positions are <Ability:RTREPOSITIONING_TILE_DISTANCE> tiles away, your next shot retains concealment."
+LocHelpText="If your last <Ability:RTREPOSITIONING_MAX_POSITIONS_SAVED> shots taken were <Ability:RTREPOSITIONING_TILE_DISTANCE> tiles away, your next shot retains concealment."
+LocFlyOverText="Repositioning - Concealment retained!"
+LocPromotionPopupText="<Bullet/> <br/><Bullet/> <br/><Bullet/> <br/><Bullet/> <br/>"
+LocHitMessage="Repositioning - Activated"
+LocMissMessage="Repositioning - Deactivated"
+
 [RTOverflowBarrier X2AbilityTemplate]
 LocFriendlyName="Overflow Barrier"
 LocLongDescription="When this unit deals overkill damage, it converts that damage into shielding for itself and its melded allies."
 LocHelpText="When this unit deals overkill damage, it converts that damage into shielding for itself and its melded allies."
 LocFlyOverText="Overflow Barrier"
-LocPromotionPopupText="<Bullet/> Try to use in combination with powerful damage abilities such as Precision Shot or Time Stands Still.<br/><Bullet/> Minimum of 1 Shield HP if overkill damage is dealt.<br/><Bullet/> The unit with Overflow Barrier must be melded to generate any shielding.<br/><Bullet/> Shields persist even if the meld is lost.<br/>"
+LocPromotionPopupText="<Bullet/> Minimum of 1 Shield HP if overkill damage is dealt.<br/><Bullet/> Try to use in combination with powerful damage abilities such as Precision Shot or Time Stands Still.<br/><Bullet/> Minimum of 1 Shield HP if overkill damage is dealt.<br/><Bullet/> The unit with Overflow Barrier must be melded to generate any shielding.<br/><Bullet/> Shields persist even if the meld is lost.<br/>"
 
 [RTOverflowBarrierEvent X2AbilityTemplate]
 LocFriendlyName="Overflow Barrier"
@@ -46,17 +55,17 @@ LocPromotionPopupText="<Bullet/> Minimum of 1 Shield HP if overkill damage is de
 
 [RTPrecisionShot X2AbilityTemplate]
 LocFriendlyName="Precision Shot"
-LocLongDescription="A carefully aimed shot, suffering decreased chance to hit, but increased critical chance and critical damage."
+LocLongDescription="A carefully aimed shot, suffering <Ability:RTPRECISION_SHOT_AIM_PENALITY> chance to hit, but <Ability:RTPRECISION_SHOT_CRIT_CHANCE>% increased critical chance and <Ability:RTPRECISION_SHOT_CRIT_DAMAGE>% critical damage."
 LocHelpText="Shoot with decreased chance to hit, but increased critical chance and critical damage."
 LocFlyOverText="Precision Shot"
-LocPromotionPopupText="<Bullet> <Ability:SelfCooldown/> turn cooldown.<br/><Bullet/> Shoot a precision shot, suffering from decreased chance to hit, but increased critical chance and critical damage.<br/>"
+LocPromotionPopupText="<Bullet> <Ability:SelfCooldown/> turn cooldown.<br/>"
 
 [RTAggression X2AbilityTemplate]
 LocFriendlyName="Aggression"
-LocLongDescription="Gain 10% critical chance per visible enemy unit, up to 30%. (Squadsight included)"
-LocHelpText="Gain 10% critical chance per enemy spotted."
+LocLongDescription="Gain <Ability:AGGRESSION_CRIT_PER_UNIT>% critical chance per visible enemy unit, up to <Ability:AGGRESSION_MAX_CRIT>%. (Squadsight included)"
+LocHelpText="Gain <Ability:AGGRESSION_CRIT_PER_UNIT>% critical chance per enemy spotted."
 LocFlyOverText="Aggression"
-LocPromotionPopupText="<Bullet/> Gain 10% critical chance per visible enemy unit, up to 30%. (Squadsight included).<br/>"
+LocPromotionPopupText=""
 
 [KnockThemDown X2AbilityTemplate]
 LocFriendlyName="Knock Them Down"
@@ -196,6 +205,27 @@ LocLongDescription="Overload an organic unit's brain with pure psionic energy, k
 LocHelpText="Overload an organic unit's brain with pure psionic energy, killing it immediately. Suffer feedback."
 LocFlyOverText="Mind Wrack"
 LocPromotionPopupText="<Bullet> <Ability:SelfCooldown/> turn cooldown.<br/><Bullet/> Overload an organic unit's brain with pure psionic energy, killing it immediately. The feedback from the ability will cause a significant moment of panic.<br/>"
+
+[RTProgramEvacuation X2AbilityTemplate]
+LocFriendlyName="Program Evacuation"
+LocLongDescription="You should not be able to see this."
+LocHelpText="You should not be able to see this."
+LocFlyOverText="Program Evacuation"
+LocPromotionPopupText="<Bullet/> <br/><Bullet/> <br/><Bullet/> <br/><Bullet/> <br/>"
+
+[RTProgramEvacuationPartOne X2AbilityTemplate]
+LocFriendlyName="Program Evacuation"
+LocLongDescription="You should not be able to see this."
+LocHelpText="You should not be able to see this."
+LocFlyOverText="Program Evacuation"
+LocPromotionPopupText="<Bullet/> <br/><Bullet/> <br/><Bullet/> <br/><Bullet/> <br/>"
+
+[RTProgramEvacuationPartTwo X2AbilityTemplate]
+LocFriendlyName="Program Evacuation"
+LocLongDescription="You should not be able to see this."
+LocHelpText="You should not be able to see this."
+LocFlyOverText="Program Evacuation"
+LocPromotionPopupText="<Bullet/> <br/><Bullet/> <br/><Bullet/> <br/><Bullet/> <br/>"
 
 [RTMindControl X2AbilityTemplate]
 LocFriendlyName="Mind Control"
@@ -558,6 +588,13 @@ LocHelpText="Peer over the shoulder of enemy units, seeing what they see. "
 LocFlyOverText="Over The Shoulder"
 LocPromotionPopupText="<Bullet/> Peer over the shoulder of enemy units, seeing what they see.<br/>"
 
+[RTUnfurlTheVeil X2AbilityTemplate]
+LocFriendlyName="Unfurl The Veil"
+LocLongDescription="If all active enemy units are affected by Over the Shoulder, gain concealment."
+LocHelpText="If all active enemy units are affected by Over the Shoulder, gain concealment."
+LocFlyOverText="Unfurl The Veil"
+LocPromotionPopupText="<Bullet> <Ability:SelfCooldown/> turn cooldown.<br/>"
+
 [RTTheSixPathsOfPain X2AbilityTemplate]
 LocFriendlyName="The Six Paths of Pain"
 LocLongDescription="Automatically cast Over the Shoulder for free at the start of each turn."
@@ -797,9 +834,56 @@ AbilityAvailabilityStrings[95]="There are too many stacks for the ability to fun
 AbilityAvailabilityStrings[96]="The effect was not found."
 
 ;----------------------------------------------------------------------------------------------------------------------------
+[RTUnwaveringResolve X2AbilityTemplate]
+LocFriendlyName="Unwavering Resolve"
+LocLongDescription="When this unit's focus reaches 0, gain another point of focus."
+LocHelpText="When this unit's focus reaches 0, gain another point of focus."
+LocFlyOverText="Unwavering Resolve"
+LocPromotionPopupText=""
+
+[RTUnwaveringResolveIcon X2AbilityTemplate]
+LocFriendlyName="Unwavering Resolve"
+LocLongDescription="When this unit's focus reaches 0, gain another point of focus."
+LocHelpText="When this unit's focus reaches 0, gain another point of focus."
+LocFlyOverText="Unwavering Resolve"
+LocPromotionPopupText=""
+
+[RTScholarVolt X2AbilityTemplate]
+LocFriendlyName="Volt"
+LocLongDescription="Psionic attack that deals low damage, but jumps to nearby units at higher Focus levels. Costs 1 Focus."
+LocHelpText="Psionic attack that can jump to nearby units. Costs 1 Focus."
+LocPromotionPopupText="<Bullet/> Volt has no cooldown, but costs 1 Focus.<br/><Bullet/> Volt deals double damage to Psionic units.<br/><Bullet/> Volt can jump to a number of enemies equal to the current Focus level.<br/>"
+
+[RTScholarIonicStorm X2AbilityTemplate]
+LocFriendlyName="Ionic Storm"
+LocLongDescription="Summon lightning to strike all nearby enemies. Damage increases with Focus level. Costs all Focus, but generates Focus on kills."
+LocHelpText="Summon lightning to strike all nearby enemies. Costs all Focus, but generates Focus on kills."
+LocPromotionPopupText="<Bullet/> Ionic Storm's radius increases at higher Focus levels.<br/><Bullet/> Ionic Storm deals double damage to Psionic units.<br/><Bullet/> Use Ionic Storm at a high Focus level when it will kill many targets to immediately refund the Focus cost.<br/><Bullet/> Ionic Storm has a <Ability:SelfCooldown/> turn cooldown.<br/>"
+
+[RTWarpGrenade X2GrenadeTemplate]
+FriendlyName="Warp Grenade"
+FriendlyNamePlural="Warp Grenades"
+BriefSummary="Warp grenades, the result of a basic Templar training method, are just one example of the many brutish ways the Templars work psionic energy with technology. Upon detonation, they release a burst of energy that distorts reality around the point of impact, weakening anything caught against further trauma."
+TacticalText="<Bullet/> Warp grenades rupture enemies caught within the blast radius."
+ThrownAbilityName="Throw Warp Grenade"
+ThrownAbilityHelpText="Ruptures enemies within the blast radius."
+LaunchedAbilityname="Launch Warp Grenade"
+LaunchedAbilityHelpText="Ruptures enemies within the blast radius."
+
+[RTWarpBomb X2GrenadeTemplate]
+FriendlyName="Warp Bomb"
+FriendlyNamePlural="Warp Bombs"
+BriefSummary="Warp Bombs are upscaled Warp Grenades made with the express malign intent in XCOM's Psi-Lab. Their psionic fracturing effect is both more potent and applies to a larger area."
+TacticalText="<Bullet/> Warp bombs rupture enemies caught within the blast radius."
+ThrownAbilityName="Throw Warp Bomb"
+ThrownAbilityHelpText="Ruptures enemies within the blast radius."
+LaunchedAbilityname="Launch Warp Bomb"
+LaunchedAbilityHelpText="Ruptures enemies within the blast radius."
+
+;----------------------------------------------------------------------------------------------------------------------------
 [RTProfessionalsHaveStandards X2AbilityTemplate]
 LocFriendlyName="Old World Training"
-LocLongDescription="Old World training techniques improve the soldier's ability to remain concealed at a distance."
+LocLongDescription="Old World-era training techniques improve the soldier's ability to remain concealed at a distance."
 LocHelpText="Decrease range at which enemy units will can reveal this unit."
 LocFlyOverText="Old World Training"
 LocPromotionPopupText="<Bullet/> Decrease range at which enemy units will can reveal this unit.<br/>"
@@ -971,8 +1055,8 @@ ActionPostNarrative="We have determined the best plan of entry to <XGParam:StrVa
 ActionObjective="Hunt the Templars"
 
 [CovertActionNarrative_HuntTemplarsP1_Program X2CovertActionNarrativeTemplate]
-ActionName="Find Them"
-ActionPreNarrative="As you might recall, Commander, six days after the Temple Ship crash-landed, I initiated Operation: New World. Unfortunately, there was a lone survivor. Staff Sergeant Lanner was left a mangled wreck, his mind in shambles from my operative's psionic assault, but he managed to limp away during the chaos of the beginning of Operation: Ashes and Temples, Act Three. Only recently have we managed to pinpoint his general location, but we need your manpower to figure out where he's hiding. - Dr. Hadley"
+ActionName="Find Their Home"
+ActionPreNarrative="As you might recall, Commander, six days after the Temple Ship crash-landed, I initiated Operation: New World. Unfortunately, there was a lone survivor. Staff Sergeant Lanner was left a mangled wreck, his mind in shambles from my operative's psionic assault, but he managed to limp away during the chaos of the beginning of Operation: Ashes and Temples, Act III. Only recently have we managed to pinpoint his general location, but we need your manpower to figure out where he's hiding. - Dr. Hadley"
 ActionPostNarrative="Excellent. You should be proud of your soldiers, Commander. Keeping up with my operatives is not an easy task. - Dr. Hadley"
 
 [CovertAction_HuntTemplarsP2Template X2CovertActionTemplate]
@@ -988,8 +1072,60 @@ ActionObjective="Hunt the Templars"
 
 [CovertActionNarrative_HuntTemplarsP3_Program X2CovertActionNarrativeTemplate]
 ActionName="Lure Them Out"
-ActionPreNarrative="Lanner--Geist, is extremely paranoid, and revealing a vulnerablity remains a challenge. If you have some soldiers to spare, we can use them to conduct a false-flag operation and draw him out. - Dr. Hadley"
-ActionPostNarrative="The trap is set. The bait is primed. All that remains is spring it. I will send my best, and if you do the same, victory is assured. - Dr. Hadley"
+ActionPreNarrative="Lanner, or Geist, as he is now known, is extremely paranoid, and revealing a vulnerablity remains a challenge. Instead of attacking the compound directly, MILADVISE is giving 98.2 percent odds that leaking the location of the First Contact site will prompt Geist to send his best to investigate. In order to make it convincing, I'll need some of your soldiers to join mine for one final operation. - Dr. Hadley"
+ActionPostNarrative="The Honor Guard is out and away, leaving the compound exposed for only a brief window. Get in, kill the High Council, and destroy the High Coven Archives. Only then is our society safe. - Dr. Hadley"
+
+[CovertAction_GrantFavorTemplate X2CovertActionTemplate]
+ActionObjective="Gain a Program Favor"
+
+[CovertActionNarrative_GrantFavor_Program X2CovertActionNarrativeTemplate]
+ActionName="Do a Small Favor for the Program"
+ActionPreNarrative="Even the Program has oversight, and sometimes, we cannot be seen doing... our duties. Send me a few soldiers, and when they return, do not ask too many questions. - Dr. Hadley"
+ActionPostNarrative="Thanks, Commander. Hopefully your soldiers can say the same. - Dr. Hadley"
+
+[CovertAction_CallInFavorTemplate X2CovertActionTemplate]
+ActionObjective="Call In Program Favor"
+
+[CovertActionNarrative_CallInFavor_Program X2CovertActionNarrativeTemplate]
+ActionName="Call in a Favor"
+ActionPreNarrative="Our field teams have much less to do without the Templars creating problems. If you can lend a liason for a short while, we can work out another mission assignment for this month."
+ActionPostNarrative="I've worked out the details with your men, Commander. We'll be in touch soon. - Dr. Hadley"
+;///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+;//---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+;//---Missions-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+;//---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+;///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+[RT_TemplarAmbush X2MissionTemplate]
+DisplayName="Templar Ambush"
+Briefing="Eliminate Templar Coven Investigators"
+PostMissionType="Kill all hostiles"
+BriefingImage="img:///UILibrary_StrategyImages.X2StrategyMap.Alert_Advent_Facility"
+ObjectiveTextPools[0]="Neutralize all enemy targets"
+
+[RTNarrative_TemplarAmbush X2MissionNarrativeTemplate]
+ObjectiveTextPools[0]="Locate the Templar Coven Leader"
+ObjectiveTextPools[1]="Kill the Templar Coven Leader"
+ObjectiveTextPools[2]="Neutralize all enemy targets"
+ObjectiveTextPools[3]="Extract all XCOM operatives"
+
+[RT_TemplarHighCovenAssault X2MissionTemplate]
+DisplayName="Destroy the Templar High Coven"
+Briefing="Eliminate Geist. Destroy the Archives. End this conflict, once and for all."
+PostMissionType="Kill all hostiles"
+BriefingImage="img:///UILibrary_StrategyImages.X2StrategyMap.Alert_Advent_Facility"
+ObjectiveTextPools[0]="Destroy the Templar High Coven Compound"
+
+[RTNarrative_TemplarCovenAssault X2MissionNarrativeTemplate]
+ObjectiveTextPools[0]="Destroy Templar Archives"
+ObjectiveTextPools[1]="Kill Geist"
+ObjectiveTextPools[1]="Eliminate High Coven members"
+ObjectiveTextPools[2]="Neutralize all Templars in the AO"
+
+[RTMissionSource_TemplarHighCovenAssault X2MissionSourceTemplate]
+MissionPinLabel="Templar High Coven Compound"
+MissionFlavorText="With the High Coven exposed and only a fraction of the Honor Guard remaining, now is the time to end this terrible game once and for all. This strike, on our own kind, for the first time since the fall, does not increase our chances at victory over the Alien threat. Rather, it is our only hope that our society might survive it."
+BattleOpName="Operation: New World - Act II"
+
 ;///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ;//---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 ;//---Misc-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -1002,6 +1138,26 @@ RewardDetails="Uncover signal source."
 [Reward_RTProgram_FindFarthestFaction X2RewardTemplate]
 DisplayName="Unknown"
 RewardDetails="Uncover signal source."
+
+[RTReward_ProgramHuntTemplarsP1 X2RewardTemplate]
+DisplayName="Templar High Coven Coordinates"
+RewardDetails="The location of the High Coven... and Geist."
+
+[RTReward_ProgramHuntTemplarsP2 X2RewardTemplate]
+DisplayName="Insider Intel"
+RewardDetails="Operatives undercover in the Templar High Coven can help us identify a weakness."
+
+[RTReward_ProgramHuntTemplarsP3 X2RewardTemplate]
+DisplayName="Assault Opportunity"
+RewardDetails="A momentary window to strike at the Templar High Coven."
+
+[RTReward_ProgramGrantFavor X2RewardTemplate]
+DisplayName="Program Favor"
+RewardDetails="An I-owe-you from Dr. Hadley herself. Worth a life or two."
+
+[RTReward_ProgramCallInFavor X2RewardTemplate]
+DisplayName="Program Mission Scheduling Data"
+RewardDetails="Allow the Program to pick up a second mission this month (THIS DOES NOT STACK WITH THE RESISTANCE ORDER)"
 
 [ResistanceMode_PsiTraining X2ResistanceModeTemplate]
 DisplayName="Scanning Bonus: Psionic Expertise"
@@ -1017,11 +1173,17 @@ Description="The Program has lent one of their squads to handle this operation."
 EmptyText="NON-TEMPLAR SOLDIER"
 BonusText="ON COVERT ACTION"
 
-[RTCovertActionRisk_TemplarAmbush X2CovertActionRiskTemplate]
+[CovertActionRisk_TemplarAmbush X2CovertActionRiskTemplate]
 RiskName="Templar Ambush"
 
-[RTCovertActionRisk_TemplarDiscovery X2CovertActionRiskTemplate]
+[CovertActionRisk_TemplarDiscovery X2CovertActionRiskTemplate]
 RiskName="Templar Discovery"
+
+[CovertActionRisk_SoldierShaken X2CovertActionRiskTemplate]
+RiskName="Soldier Shaken"
+
+[RTUIStrategyMapItem_ProgramHQ]
+m_strProgramFactionButton="Program Status Briefing"
 
 
 ;///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1029,32 +1191,51 @@ RiskName="Templar Discovery"
 ;//---Weapons-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 ;//---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 ;///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+;//<font color='#'><b></b></font>
+;//
+;//PROGRAM_RED_COLOR = a51515
+;//PROGRAM_WHITE_COLOR = e8e8e8
+
 [ProgramPistol X2WeaponTemplate]
-FriendlyName="Program XSK33"
-FriendlyNamePlural="Program XSK33s"
+FriendlyName="<font color='#a51515'><b>Program XSK33</b></font>"
+FriendlyNamePlural="<font color='#a51515'><b>Program XSK33s</b></font>"
 BriefSummary="The Program XSK33, or Shadowkeeper, is most popular sidearm of choice for Program operatives." 
 TacticalText="<Bullet/> The Program XSK33, or Shadowkeeper, is most popular sidearm of choice for Program operatives.\n<Bullet/> The Program XSK33 has improved aim and chance to critical hit.\n<Bullet/> Pistols can be fired with a single action."
+AbilityDescName="pistol"
 
 [ProgramSniperRifle X2WeaponTemplate]
-FriendlyName="Program XSR37"
-FriendlyNamePlural="Program XSR37s"
+FriendlyName="<font color='#a51515'><b>Program XSR37</b></font>"
+FriendlyNamePlural="<font color='#a51515'><b>Program XSR37s</b></font>"
 BriefSummary="The Program XSR37 is the latest and greatest in long-range-projection-of-directed-energy weaponry, based off of fusion lances deployed by Elder Battleships." 
 TacticalText="<Bullet/> The Program XSR37 is the latest and greatest in long-range-projection-of-directed-energy weaponry, based off of fusion lances deployed by Elder Battleships.\n<Bullet/> Sniper rifles always require both actions to fire.\n<Bullet/> They are less accurate at close range, but deadly at a distance."
 AbilityDescName="sniper rifle"
 
 [ProgramShotgun X2WeaponTemplate]
-FriendlyName="Program XSG31"
-FriendlyNamePlural="Program XSG31s"
+FriendlyName="<font color='#a51515'><b>Program XSG31</b></font>"
+FriendlyNamePlural="<font color='#a51515'><b>Program XSG31s</b></font>"
 BriefSummary="The Program XSG31 is a devastating evolution of decades of research in both conventional and extraterrestrial weapon systems." 
 TacticalText="<Bullet/> The Program XSG31 is a devastating evolution of decades of research in both conventional and extraterrestrial weapon systems.\n<Bullet/> Shotgun-style weapons are extremely effective at close range, but their accuracy drops off quickly at longer range."
 AbilityDescName="shotgun"
 
 [ProgramAssaultRifle X2WeaponTemplate]
-FriendlyName="Program XCR29"
-FriendlyNamePlural="Program XCR29s"
+FriendlyName="<font color='#a51515'><b>Program XCR29</b></font>"
+FriendlyNamePlural="<font color='#a51515'><b>Program XCR29s</b></font>"
 BriefSummary="The Program XCR29 is previous-generation Program combat rifle technology." 
 TacticalText="<Bullet/> The Program XCR29 is previous-generation Program combat rifle technology.\n<Bullet/> Firing the primary weapon always ends the soldier's turn."
 AbilityDescName="assault rifle"
+
+[ProgramBlade X2WeaponTemplate]
+FriendlyName="<font color='#a51515'><b>Program CEFC2</b></font>"
+FriendlyNamePlural="<font color='#a51515'><b>Program CEFC2s</b></font>"
+BriefSummary="Queen's blade is a custom-made addition to her arsenal, a greatly lengthened version of a cutting tool used to shape armor alloys in production."
+TacticalText="<Bullet/> Queen's custom blade. Deals massive damage and is upgraded by her perks."
+AbilityDescName="sword"
+
+[ProgramArmor X2ArmorTemplate]
+FriendlyName="<font color='#a51515'><b>Program XPHS41</b></font>"
+FriendlyNamePlural="<font color='#a51515'><b>Program XPHS41s</b></font>"
+BriefSummary="The Program's Experimental Psionic Hardsuit is the newest variant of psiweave-embedded, AI-integrated powersuit. It enhances the user's physical attributes using their psionic capabilities and allows them to enter Stealth."
+TacticalText="<Bullet/> Compared to XCOM's Warden Armor, the XPHS sacrifices soldier endurance for additional armor plating.\n<Bullet/> The Hardsuit has 2 inventory item slots."
 
 [RTCosmetic_Suppressor X2WeaponUpgradeTemplate]
 FriendlyName="Cosmetic Silencer"
@@ -1062,3 +1243,58 @@ FriendlyNamePlural="Cosmetic Silencers"
 BriefSummary="Does nothing, but looks cool."
 TinySummary="Cosmetic Only"
 LootTooltip="This weapon upgrade, when installed, does nothing except look cool."
+
+;///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+;//---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+;//---Enemies-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+;//---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+;///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+[RTTemplarWarrior_M1 X2CharacterTemplate]
+strCharacterName="Templar Warrior"
+
+[RTTemplarWarrior_M2 X2CharacterTemplate]
+strCharacterName="Templar Knight"
+
+[RTTemplarWarrior_M3 X2CharacterTemplate]
+strCharacterName="Templar Prior"
+
+[RTTemplarScholar_M1 X2CharacterTemplate]
+strCharacterName="Templar Disciple"
+
+[RTTemplarScholar_M2 X2CharacterTemplate]
+strCharacterName="Templar Acolyte"
+
+[RTTemplarScholar_M3 X2CharacterTemplate]
+strCharacterName="Templar Advisor"
+
+[RTTemplarPeon_M1 X2CharacterTemplate]
+strCharacterName="Templar Intiate"
+
+[RTTemplarPeon_M2 X2CharacterTemplate]
+strCharacterName="Templar Follower"
+
+[RTTemplarPeon_M3 X2CharacterTemplate]
+strCharacterName="Templar Idealist"
+
+[RTTemplarPriest_M1 X2CharacterTemplate]
+strCharacterName="Templar Reverend"
+
+[RTTemplarPriest_M2 X2CharacterTemplate]
+strCharacterName="Templar Vicar"
+
+[RTTemplarPriest_M3 X2CharacterTemplate]
+strCharacterName="Templar Bishop"
+
+[RTTemplar_HighCovenWarrior X2CharacterTemplate]
+strCharacterName="High Coven Seneschal"
+
+[RTTemplar_HighCovenScholar X2CharacterTemplate]
+strCharacterName="High Coven Inquisitor"
+
+[RTTemplar_HighCovenPriest X2CharacterTemplate]
+strCharacterName="High Coven Archbishop"
+
+[RTTemplar_Geist X2CharacterTemplate]
+strCharacterName="Geist"
+

@@ -1,6 +1,7 @@
 class RTEffect_TimeStopMaster extends X2Effect_PersistentStatChange;
 
 var bool bShouldPauseTimer;
+var int bNumAdditionalActionPointsPerTurn;
 
 function RegisterForEvents(XComGameState_Effect EffectGameState)
 {
@@ -17,6 +18,15 @@ function RegisterForEvents(XComGameState_Effect EffectGameState)
 	// Check when anything spawns.
 	EventMgr.RegisterForEvent(EffectObj, 'OnUnitBeginPlay', RTEffectState.RTApplyTimeStop, ELD_OnStateSubmitted, 80);
 }
+
+function ModifyTurnStartActionPoints(XComGameState_Unit UnitState, out array<name> ActionPoints, XComGameState_Effect EffectState) {
+	local int index;
+
+	for(index = 0; index < bNumAdditionalActionPointsPerTurn; index++) {
+		ActionPoints.AddItem(class'X2CharacterTemplateManager'.default.StandardActionPoint);
+	}
+}
+
 
 simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffectParameters, XComGameState_BaseObject kNewTargetState, XComGameState NewGameState, XComGameState_Effect NewEffectState)
 {

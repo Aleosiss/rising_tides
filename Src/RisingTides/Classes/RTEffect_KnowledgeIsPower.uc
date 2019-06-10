@@ -38,11 +38,11 @@ function int GetDefendingDamageModifier(XComGameState_Effect EffectState, XComGa
 	}
 
 	bShouldApply = false;
-	if(class'RTHelpers'.static.CheckAbilityActivated(AbilityState.GetMyTemplateName(), eCheckList_SniperShots))
+	if(`RTS.CheckAbilityActivated(AbilityState.GetMyTemplateName(), eCheckList_SniperShots))
 		bShouldApply = true;
-	if(class'RTHelpers'.static.CheckAbilityActivated(AbilityState.GetMyTemplateName(), eCheckList_StandardShots))
+	if(`RTS.CheckAbilityActivated(AbilityState.GetMyTemplateName(), eCheckList_StandardShots))
 		bShouldApply = true;
-	if(class'RTHelpers'.static.CheckAbilityActivated(AbilityState.GetMyTemplateName(), eCheckList_MeleeAbilities))
+	if(`RTS.CheckAbilityActivated(AbilityState.GetMyTemplateName(), eCheckList_MeleeAbilities))
 		bShouldApply = true;
 
 	if(!bShouldApply) {

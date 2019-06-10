@@ -17,10 +17,7 @@ This would be a bare-bones content mod. I also have the following content in min
 
 ## Current To Test
 
-	- Direct Neural Manipulation
-
 ## Current Bugs (High Priority)
-
 
 ## Current Issues 
 
@@ -41,8 +38,9 @@ This would be a bare-bones content mod. I also have the following content in min
 		- Add Over the Shoulder exception for civilians that are actually faceless
 		- Extinction Event needs to somehow stop revive units from reviving
 		- Come up with a better solution for Over The Shoulder vs. concealed units
+		- New Perk Idea: Restrained Mindset: Mind Wrack now stuns instead of kills. Reduce Feedback duration to 1 turn.
 	- General:
-		- none
+		- Add Priorites for Abilities
 	- The Program (New Faction):
 		- get new icon and faceplate
 		- create customizations for all ghosts

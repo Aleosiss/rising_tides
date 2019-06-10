@@ -1,12 +1,15 @@
 // This is an Unreal Script
 class RTCondition_UnfurlTheVeil extends X2Condition;
 
+// This is for a self-targeted effect, so the target is also the source.
+
 event name CallMeetsCondition(XComGameState_BaseObject kTarget) {
 	if(CheckTarget(kTarget))
 		return 'AA_Success';
 	return 'AA_AbilityUnavailable';
 
 }
+
 event name CallMeetsConditionWithSource(XComGameState_BaseObject kTarget, XComGameState_BaseObject kSource) {
 	if(CheckTarget(kTarget, kSource))
 		return 'AA_Success';
@@ -17,11 +20,31 @@ private function bool CheckTarget(XComGameState_BaseObject kTarget, optional XCo
 	local XComGamestateHistory History;
 	local XComGameState_Unit IteratorState;
 	local array<XComGameState_Unit> ActivatedUnits;
+	local XComGameState_Unit TargetUnitState;
+
+	if(kTarget == none) {
+		`RTLOG("RTC_UTV: kTarget == none, returning false.");
+		return false;
+	}
+
+	TargetUnitState = XComGameState_Unit(kTarget);
+	if(TargetUnitState == none) {
+		`RTLOG("What the fuck is going on here? (RTC_UnfurlTheVeil)", true, false);
+		return false;
+	}
+
+	if(kSource != none) {
+		// CallMeetsConditionWithSource
+		if(kSource.ObjectID != kTarget.ObjectID) {
+			`RTLOG("RTC_UTV is not self targeted?", true, false);
+			return false;
+		}
+	}
 
 	History = `XCOMHISTORY;
 	// only available if all activated enemies are affected by OTS
 	foreach History.IterateByClassType(class'XComGameState_Unit', IteratorState) {
-		if(IteratorState.GetTeam() == XComGameState_Unit(kSource).GetTeam()) {
+		if(!IteratorState.IsEnemyUnit(TargetUnitState)) {
 			continue;
 		}
 

@@ -1,4 +1,4 @@
-FROM ubuntu:18.04
+FROM aleosiss/xcom2sdk:latest
 
 LABEL "com.github.actions.name"         = "XCOM 2 WOTC SDK"
 LABEL "com.github.actions.description"  = "Build an XCOM 2 WOTC mod project using the SDK."
@@ -12,5 +12,7 @@ LABEL "maintainer" = "Christian Abate-Wong <abatewong@gmail.com>"
 ADD entrypoint.ps1 /entrypoint.ps1
 
 COPY LICENSE Readme.md /
+
+RUN chmod +x /entrypoint.ps1
 
 ENTRYPOINT [ "pwsh", "/entrypoint.ps1" ]
