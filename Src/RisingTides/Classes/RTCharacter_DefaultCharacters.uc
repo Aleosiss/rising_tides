@@ -383,7 +383,7 @@ static function RTCharacterTemplate CreateProgramDroneTemplate(name TemplateName
 	CharTemplate.BehaviorClass=class'XGAIBehavior';
 
 	CharTemplate.DefaultLoadout='ProgramDrone_Loadout';
-	CharTemplate.strPawnArchetypes.AddItem("LWDrone.Archetypes.ARC_GameUnit_DroneM3"); 
+	CharTemplate.strPawnArchetypes.AddItem("ProgramDrone.Archetypes.ARC_GameUnit_DroneM1"); 
 
 	//NEW CINEMATIC?
 
@@ -425,14 +425,14 @@ static function RTCharacterTemplate CreateProgramDroneTemplate(name TemplateName
 	CharTemplate.Abilities.AddItem('RobotImmunities');
 	//CharTemplate.Abilities.AddItem('FireOnDeath');
 
-	CharTemplate.strBehaviorTree = "LWDroneRoot"; // new config behavior tree parsing means we could use the group instead
 	CharTemplate.strScamperBT = "ScamperRoot_NoCover";
 
 	//TODO: (ID 507) investigate possibilities for adding first-sighting narrative moment for new unit
 	//CharTemplate.SightedNarrativeMoments.AddItem(XComNarrativeMoment'X2NarrativeMoments.TACTICAL.AlienSitings.T_Central_AlienSightings_Muton');
 
 	CharTemplate.strHackIconImage = "UILibrary_Common.TargetIcons.Hack_robot_icon";
-	CharTemplate.strTargetIconImage = class'UIUtilities_Image'.const.TargetIcon_Advent;  
+	CharTemplate.strTargetIconImage = class'UIUtilities_Image'.const.TargetIcon_XCom;  
 
 	return CharTemplate;
 }
+
