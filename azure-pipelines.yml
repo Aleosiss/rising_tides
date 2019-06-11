@@ -10,7 +10,7 @@ pool:
   vmImage: 'win1803'
 
 container: 
-  image: mcr.microsoft.com/windows/servercore:1803
+  image: aleosiss/xcom2sdk:1.0.1
   endpoint: aleosiss/xcom2sdk
 
 steps:
