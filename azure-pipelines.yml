@@ -7,13 +7,18 @@ trigger:
 - master
 
 pool:
-  vmImage: 'ubuntu-latest'
+  vmImage: 'win1803'
+
+container: 
+  image: aleosiss/xcom2sdk:latest
+  endpoint: aleosiss/xcom2sdk
 
 steps:
-- script: echo Hello, world!
-  displayName: 'Run a one-line script'
-
-- script: |
-    echo Add other tasks to build, test, and deploy your project.
-    echo See https://aka.ms/yaml
-  displayName: 'Run a multi-line script'
+- powershell: |
+    Write-Host printenv
+    Get-ChildItem Env:
+    Write-Host pwd
+    Get-Location
+    Write-Host ll
+    Get-ChildItem | Sort-Object
+  displayName: 'Get Environment Variables'
