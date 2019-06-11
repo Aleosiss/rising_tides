@@ -444,10 +444,6 @@ else {
     Write-Host "Cleaned."
 }
 
-
-
-return 0
-
 # build the base game scripts
 Write-Host "Compiling base game scripts..."
 # This could be replaced with a Invoke-Make call as well for highlanders.
@@ -462,33 +458,34 @@ CheckErrorCode "Failed to compile mod scripts."
 Write-Host "Compiled."
 
 # build the mod's shader cache
-if ($canSkipShaderPrecompliation) {
-    Write-Host "There were no changes to content. Reloading previous ModShaderCache and skipping shader precompliation."
-    Copy-Item -Path $tempCachePath -Destination $shaderCachePath
-    Remove-Item -Path $tempCachePath
-    Remove-Item -path $modSrcRoot/tmp
-    Write-Host "Reloaded."
-} 
-elseif (Test-Path -Path "$stagingPath/Content/*" -Include *.upk, *.umap) {
-    Write-Host "Precompiling mod shaders..."
-    &"$sdkPath/binaries/Win64/XComGame.com" precompileshaders -nopause platform=pc_sm4 DLC=$modNameCanonical
-    CheckErrorCode "Failed to precompile mod shaders."
-    Write-Host "Precompiled."
-}
-else {
-    Write-Host "Mod doesn't have any shader content. Skipping shader precompilation."
-}
+#if ($canSkipShaderPrecompliation) {
+#    Write-Host "There were no changes to content. Reloading previous ModShaderCache and skipping shader precompliation."
+#    Copy-Item -Path $tempCachePath -Destination $shaderCachePath
+#    Remove-Item -Path $tempCachePath
+#    Remove-Item -path $modSrcRoot/tmp
+#    Write-Host "Reloaded."
+#} 
+#elseif (Test-Path -Path "$stagingPath/Content/*" -Include *.upk, *.umap) {
+#    Write-Host "Precompiling mod shaders..."
+#    &"$sdkPath/binaries/Win64/XComGame.com" precompileshaders -nopause platform=pc_sm4 DLC=$modNameCanonical
+#    CheckErrorCode "Failed to precompile mod shaders."
+#    Write-Host "Precompiled."
+#}
+#else {
+    # Skipping Shader Precompilation for Docker builds for now.
+    Write-Host "Build is done via Docker, not compiling shaders."
+    #Write-Host "Mod doesn't have any shader content. Skipping shader precompilation."
+#}
 
 # copy compiled mod scripts to the staging area
 Write-Host "Copying the compiled mod scripts to staging..."
 Copy-Item "$sdkPath/XComGame/Script/$modNameCanonical.u" "$stagingPath/Script" -Force -WarningAction SilentlyContinue
 Write-Host "Copied."
 
-# copy all staged files to the actual game's mods folder
-Write-Host "Copying all staging files to production..."
-
-Write-Host "Copied mod to game directory."
-
+# make an artifact
+Write-Host "Creating an archive artifact..."
+Compress-Archive -Path "$stagingPath" -CompressionLevel Optimal -DestinationPath "$env:BUILD_ARTIFACTSTAGINGDIRECTORY/$modNameCanonical.zip"
+Write-Host "Artifact created."
 
 # we made it!
 SuccessMessage("*** SUCCESS! ***")

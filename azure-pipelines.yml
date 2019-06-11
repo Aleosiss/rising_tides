@@ -25,3 +25,8 @@ steps:
 - powershell: |
     Write-Host "Building mod..."
     .\scripts\build_docker.ps1 -mod 'RisingTides' -srcDirectory $Env:BUILD_SOURCESDIRECTORY
+  displaytName: 'Build Mod Project'
+- task: PublishPipelineArtifact@0
+  inputs:
+    pathtoPublish: '$(Build.ArtifactStagingDirectory)'
+    artifactName: RisingTides.zip
