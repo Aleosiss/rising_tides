@@ -146,6 +146,13 @@ function Invoke-Make([string] $makeCmd, [string] $makeFlags, [string] $sdkPath, 
     # the powershell thread so we get no output from make echoed to the screen until the process finishes.
     # By polling we get regular output as it goes.
     while (!$exitData.exited) {
+        $ts = $stopwatch.Elapsed.TotalSeconds;
+        if($ts -gt '300') { # 5 * 60 seconds
+            # you have failed. we will find another way.
+            exit 1
+        }
+        
+        Write-Host "Polling make..."
         Start-Sleep -m 50
     }
 
@@ -447,13 +454,13 @@ else {
 # build the base game scripts
 Write-Host "Compiling base game scripts..."
 # This could be replaced with a Invoke-Make call as well for highlanders.
-& "$sdkPath/Binaries/Win64/XComGame.com" make -nopause -unattended -debug
+Invoke-Make "$sdkPath/Binaries/Win64/XComGame.com" "make -nopause -unattended" $sdkPath $modSrcRoot
 Write-Host "Compiled."
 CheckErrorCode "Failed to compile the base game scripts. This probably isn't a problem with your mod. Have you been monkeying around with SrcOrig, perchance?"
 
 # build the mod's scripts
 Write-Host "Compiling mod scripts..."
-Invoke-Make "$sdkPath/Binaries/Win64/XComGame.com" "make -nopause -debug -mods $modNameCanonical $stagingPath" $sdkPath $modSrcRoot
+Invoke-Make "$sdkPath/Binaries/Win64/XComGame.com" "make -nopause -mods $modNameCanonical $stagingPath" $sdkPath $modSrcRoot
 CheckErrorCode "Failed to compile mod scripts."
 Write-Host "Compiled."
 
