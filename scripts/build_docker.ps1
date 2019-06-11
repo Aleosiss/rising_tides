@@ -167,6 +167,7 @@ function ValidateProjectFile([string] $modProjectRoot, [string] $modName)
     $projFilepath = "$modProjectRoot\$modName.x2proj"
     if(Test-Path $projFilepath)
     {
+        # Check and clean
         CheckX2ProjIncludes $modProjectRoot $modName $projFilepath
         CleanX2ProjIncludes $modProjectRoot $modName $projFilepath
     }
@@ -320,6 +321,9 @@ $modNameCanonical = $mod
 # we're going to ask that people specify the folder that has their .XCOM_sln in it as the -srcDirectory argument, but a lot of the time all we care about is
 # the folder below that that contains Config, Localization, Src, etc...
 $modSrcRoot = "$srcDirectory"
+
+Write-Host "modNameCanonical:   $modNameCanonical"
+Write-Host "modSrcRoot:         $modSrcRoot"
 
 # check that all files in the mod folder are present in the .x2proj file
 ValidateProjectFile $modSrcRoot $modNameCanonical

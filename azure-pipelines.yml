@@ -24,4 +24,4 @@ steps:
   displayName: 'Get Environment Variables'
 - powershell: |
     Write-Host "Building mod..."
-    .\scripts\build_docker.ps1 -mod 'RisingTides' -srcDirectory ${BUILD_SOURCESDIRECTORY}
+    .\scripts\build_docker.ps1 -mod 'RisingTides' -srcDirectory $Env:BUILD_SOURCESDIRECTORY
