@@ -106,7 +106,7 @@ exec function RT_PrintAppearence(optional int ObjectID = -1) {
 		ObjectID = UIArmory(`SCREENSTACK.GetFirstInstanceOf(class'UIArmory')).UnitReference.ObjectID;
 	}
 
-	UnitState = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(ObjectID));
+	UnitState = GetSelectedUnitInArmory();
 	if(UnitState == none) {
 		`RTLOG("UnitState was null for PrintAppearance!", false, true);
 		return;
@@ -1280,4 +1280,32 @@ exec function RT_PrintItemsForClosestUnitToCursor() {
 		`RTLOG(ItemState.ToString(true));
 		`RTLOG(" ");
 	}
+}
+
+// shamelessly copied from RPGO by Musashi
+private function XComGameState_Unit GetSelectedUnitInArmory()
+{
+	local XComGameStateHistory				History;
+	local UIArmory							Armory;
+	local XComGameState_Unit				UnitState;
+	local StateObjectReference				UnitRef;
+
+	History = `XCOMHISTORY;
+
+	Armory = UIArmory(`SCREENSTACK.GetFirstInstanceOf(class'UIArmory'));
+	if (Armory == none)
+	{
+		`RTLOG("Could not find a UIArmory to select a unit from!", false, true);
+		return none;
+	}
+
+	UnitRef = Armory.GetUnitRef();
+	UnitState = XComGameState_Unit(History.GetGameStateForObjectID(UnitRef.ObjectID));
+
+	if (UnitState == none)
+	{
+		`RTLOG("Current Unit in the armory is not an XComGameState_Unit or is null!", false, true);
+	}
+
+	return UnitState;
 }

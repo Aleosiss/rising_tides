@@ -640,23 +640,22 @@ function EventListenerReturn ExtendEffectDuration(Object EventData, Object Event
 	//`RTLOG("Attempting to extend " @ EffectTemplate.AbilityToExtendName);
 	NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("Rising Tides: Extending " @ EffectTemplate.EffectToExtendName);
 	foreach GameState.IterateByClassType(class'XComGameState_Effect', IteratorEffectState) {
-	if(IteratorEffectState == none) {
-		//`RedScreen("Rising Tides: What the heck, iterating through gamestate_effects returned a non-gamestate_effect object?");
-		continue;
-	}
+		if(IteratorEffectState == none) {
+			//`RedScreen("Rising Tides: What the heck, iterating through gamestate_effects returned a non-gamestate_effect object?");
+			continue;
+		}
 
-	if(IteratorEffectState.bRemoved) {
-		continue;
-	}
+		if(IteratorEffectState.bRemoved) {
+			continue;
+		}
 
-	if(IteratorEffectState.GetX2Effect().EffectName == EffectTemplate.EffectToExtendName) {
-		//`RTLOG("EED proced on " @ EffectTemplate.AbilityToExtendName @ " for effect " @	EffectTemplate.EffectToExtendName);
-		bDebug = true;
-		ExtendedEffectState = XComGameState_Effect(NewGameState.CreateStateObject(class'XComGameState_Effect', IteratorEffectState.ObjectID));
-		ExtendedEffectState.iTurnsRemaining += EffectTemplate.iDurationExtension;
-		NewGameState.AddStateObject(ExtendedEffectState);
-		continue;
-	}
+		if(IteratorEffectState.GetX2Effect().EffectName == EffectTemplate.EffectToExtendName) {
+			//`RTLOG("EED proced on " @ EffectTemplate.AbilityToExtendName @ " for effect " @	EffectTemplate.EffectToExtendName);
+			bDebug = true;
+			ExtendedEffectState = XComGameState_Effect(NewGameState.CreateStateObject(class'XComGameState_Effect', IteratorEffectState.ObjectID));
+			ExtendedEffectState.iTurnsRemaining += EffectTemplate.iDurationExtension;
+			NewGameState.AddStateObject(ExtendedEffectState);
+		}
 	}
 
 	History = `XCOMHISTORY;
@@ -666,8 +665,6 @@ function EventListenerReturn ExtendEffectDuration(Object EventData, Object Event
 	} else {
 		History.CleanupPendingGameState(NewGameState);
 	}
-
-
 
 	if(!bDebug) {
 	//`RTLOG("ExtendEffectDuration fired on the right ability / event, but there was no effects on the gamestate?");

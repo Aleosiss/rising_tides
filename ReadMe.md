@@ -41,6 +41,10 @@ This would be a bare-bones content mod. I also have the following content in min
 		- New Perk Idea: Restrained Mindset: Mind Wrack now stuns instead of kills. Reduce Feedback duration to 1 turn.
 	- General:
 		- Add Priorites for Abilities
+		- New Perk: Mind Call
+			- Although the Lost do not have much of a mind to control, they are still vulnerable to psionic suggestion. 
+			  Program Operatives can influence the lost to attack an area or position en masse.
+			- Only available on missions where the Lost are present.
 	- The Program (New Faction):
 		- get new icon and faceplate
 		- create customizations for all ghosts

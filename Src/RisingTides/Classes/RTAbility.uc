@@ -44,6 +44,83 @@ static function X2Condition_UnitValue CreateOverTheShoulderProperty() {
 
 }
 
+static function X2AbilityTemplate AddStandardMovementCost(X2AbilityTemplate Template) {
+	local X2AbilityCost_ActionPoints ActionPointCost;
+
+	ActionPointCost = new class'X2AbilityCost_ActionPoints';
+	ActionPointCost.bMoveCost = true;
+	ActionPointCost.AllowedTypes.AddItem(class'X2CharacterTemplateManager'.default.MoveActionPoint);
+	ActionPointCost.AllowedTypes.RemoveItem(class'X2CharacterTemplateManager'.default.RunAndGunActionPoint);
+	ActionPointCost.AllowedTypes.AddItem(class'X2CharacterTemplateManager'.default.MomentumActionPoint);
+	Template.AbilityCosts.AddItem(ActionPointCost);
+
+	return Template;
+}
+
+static function array<X2Condition> CreateStandardMovementConditions() {
+	local X2Condition_UnitProperty UnitPropertyCondition;
+	local X2Condition_UnitValue IsNotImmobilized;
+	local X2Condition_UnitStatCheck UnitStatCheckCondition;
+	local array<X2Condition> Conditions;
+
+	UnitPropertyCondition = new class'X2Condition_UnitProperty';
+	UnitPropertyCondition.ExcludeDead = true;
+	UnitPropertyCondition.ExcludeCosmetic = false; //Cosmetic units are allowed movement
+	Conditions.AddItem.AddItem(UnitPropertyCondition);
+
+	IsNotImmobilized = new class'X2Condition_UnitValue';
+	IsNotImmobilized.AddCheckValue(default.ImmobilizedValueName, 0);
+	Conditions.AddItem.AddItem(IsNotImmobilized);
+
+	// Unit might not be mobilized but have zero mobility
+	UnitStatCheckCondition = new class'X2Condition_UnitStatCheck';
+	UnitStatCheckCondition.AddCheckStat(eStat_Mobility, 0, eCheck_GreaterThan);
+	Conditions.AddItem.AddItem(UnitStatCheckCondition);
+
+	return Conditions;
+}
+
+static function X2AbiliyTemplate AddDefaultWOTCFields(X2AbilityTemplate Template) {
+	Template.SuperConcealmentLoss = class'X2AbilityTemplateManager'.default.SuperConcealmentMoveLoss;
+	Template.ChosenActivationIncreasePerUse = class'X2AbilityTemplateManager'.default.MoveChosenActivationIncreasePerUse;
+	Template.LostSpawnIncreasePerUse = class'X2AbilityTemplateManager'.default.MoveLostSpawnIncreasePerUse;
+
+	return Template;
+}
+
+// This method does not include the required multitarget style or the targeting method
+static function RTAbilityTemplate BeginGroupMoveCreation(name TemplateName) {
+	local RTAbilityTemplate Template;
+
+	`CREATE_X2TEMPLATE(class'RTAbilityTemplate', Template, TemplateName);
+
+	Template.bDisplayInUITooltip = false;
+	Template.bDontDisplayInAbilitySummary = true;
+	Template.eAbilityIconBehaviorHUD = EAbilityIconBehavior_NeverShow;
+	Template.AbilitySourceName = 'eAbilitySource_Standard';
+	Template.Hostility = eHostility_Movement;
+	Template.FrameAbilityCameraType = eCameraFraming_Never;
+	Template.AssociatedPlayTiming = SPT_AfterSequential;
+	Template.CinescriptCameraType = "StandardMovement"; 
+	AddDefaultWOTCFields(Template);
+	
+	AddStandardMovementCost(Template);
+	
+	Template.AbilityShooterConditions = CreateStandardMovementConditions();
+
+	PathTarget = new class'X2AbilityTarget_Path';
+	Template.AbilityTargetStyle = PathTarget;
+
+	InputTrigger = new class'X2AbilityTrigger_PlayerInput';
+	Template.AbilityTriggers.AddItem(InputTrigger);
+
+	Template.BuildNewGameStateFn = MoveAbility_BuildGameState;
+	Template.BuildVisualizationFn = MoveAbility_BuildVisualization;
+	Template.BuildInterruptGameStateFn = MoveAbility_BuildInterruptGameState;
+
+	return Template;
+}
+
 static function X2AbilityTemplate CreateRTCooldownCleanse(name TemplateName, name EffectNameToRemove, name EventIDToListenFor) {
 	local X2AbilityTemplate Template;
 	local X2Effect_RemoveEffects RemoveEffectEffect;
