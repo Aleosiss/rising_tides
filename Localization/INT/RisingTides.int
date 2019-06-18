@@ -126,6 +126,10 @@ SOC_DESC="I've got your six."
 BLOODLUST_TITLE="Bloodlust"
 BLOODLUST_DESC="This unit is experiencing the thrill of combat! Their melee critical strike chance and damage is increased, but their mobility is decreased."
 
+[RTAbility_Program]
+CloakingProtocolTitle = "Cloaking Field"
+CloakingProtocolSelfDescription = "The Cloaking Field projected by the Program Drone prevents units from losing concealment even in close proximity to ADVENT forces."
+
 [RTEffect_Bloodlust]
 BloodlustEffectTitle="Bloodlust"
 

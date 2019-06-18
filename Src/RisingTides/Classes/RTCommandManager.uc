@@ -669,10 +669,10 @@ exec function RT_DebugClosestUnitToCursorAvailableAbilties(bool bPrintFullInfo =
 		}
 
 		AbilityState.UpdateAbilityAvailability(Action);
-		if(!Action.bInputTriggered) {
+		/*if(!Action.bInputTriggered) {
 			`RTLOG(AbilityState.GetMyTemplateName() $ " isn't input-triggered, continuing!", false, true);
 			continue;
-		}
+		}*/
 		
 		if(Action.AvailableCode == 'AA_Success') {
 			`RTLOG("" $ AbilityState.GetMyTemplateName() $ " is available.", false, true);

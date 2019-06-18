@@ -637,6 +637,10 @@
     <Content Include="Config\XComParcels.ini" />
     <Content Include="Src\RisingTides\Classes\RTGameState_DestroyedHaven.uc" />
     <Content Include="Src\RisingTides\Classes\RTGameState_DestroyedFaction.uc" />
+    <Content Include="Content\ProgramDrone.upk" />
+    <Content Include="Content\RTDroneWeapon.upk" />
+    <Content Include="Content\RT_Perk_DroneSelfDestruction.upk" />
+    <Content Include="Content\RT_Perk_Drone_CloakingProtocol.upk" />
   </ItemGroup>
   <Import Project="$(MSBuildLocalExtensionPath)\XCOM2.targets" />
 </Project>

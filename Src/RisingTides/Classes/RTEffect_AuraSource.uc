@@ -3,6 +3,8 @@ class RTEffect_AuraSource extends X2Effect_AuraSource;
 var float fScale;
 var float fRadius;
 
+var bool bReapplyOnTick;
+
 function RegisterForEvents(XComGameState_Effect EffectGameState)
 {
 	local X2EventManager EventMgr;
@@ -21,6 +23,16 @@ function RegisterForEvents(XComGameState_Effect EffectGameState)
 	// Check when anything spawns.
 	EventMgr.RegisterForEvent(EffectObj, 'OnUnitBeginPlay', RTEffectState.OnUpdateAuraCheck, ELD_OnStateSubmitted, 40);
 }
+
+simulated function bool OnEffectTicked(const out EffectAppliedData ApplyEffectParameters, XComGameState_Effect kNewEffectState, XComGameState NewGameState, bool FirstApplication, XComGameState_Player Player)
+{
+	if(bReapplyOnTick) {
+		RTGameState_Effect(kNewEffectState).OnTickAuraCheck(none, none, NewGameState, 'OnTickAuraCheck', none);
+	}
+
+	return super.OnEffectTicked(ApplyEffectParameters, kNewEffectState, NewGameState, FirstApplication, Player);
+}
+
 
 protected function bool CheckAuraConditions(XComGameState_Unit SourceUnitState, XComGameState_Unit TargetUnitState, XComGameState_Effect SourceAuraEffectGameState, X2AbilityTemplate AuraEffectTemplate) {
 	if(class'Helpers'.static.IsTileInRange(SourceUnitState.TileLocation, TargetUnitState.TileLocation, Square(fRadius))) {
@@ -61,11 +73,11 @@ function UpdateBasedOnAuraTarget(XComGameState_Unit SourceUnitState, XComGameSta
 		`RedScreenOnce("The source aura isn't of type RTGameState_Effect! The Visualization may fail!");
 	}
 
-	if(CheckAuraConditions(SourceUnitState, TargetUnitState, SourceAuraEffectGameState, AbilityTemplate)) {
-		NewTargetState = XComGameState_Unit(NewGameState.CreateStateObject(TargetUnitState.Class, TargetUnitState.ObjectID));
-		NewTargetState.bRequiresVisibilityUpdate = true;
-		NewGameState.AddStateObject(NewTargetState);
+	NewTargetState = XComGameState_Unit(NewGameState.CreateStateObject(TargetUnitState.Class, TargetUnitState.ObjectID));
+	NewGameState.AddStateObject(NewTargetState);
+	NewTargetState.bRequiresVisibilityUpdate = true;
 
+	if(CheckAuraConditions(SourceUnitState, NewTargetState, SourceAuraEffectGameState, AbilityTemplate)) {
 		for (i = 0; i < AbilityTemplate.AbilityMultiTargetEffects.Length; ++i)
 		{
 			// Apply each of the aura's effects to the target
@@ -116,11 +128,9 @@ protected function RemoveAuraTargetEffects(XComGameState_Unit SourceUnitState, X
 	{
 		// Loop over all of the aura ability's multi effects and if they are persistent, save it off
 		PersistentAuraEffect = X2Effect_Persistent(AuraAbilityTemplate.AbilityMultiTargetEffects[i]);
-
 		if (PersistentAuraEffect != none && TargetUnitState.IsUnitAffectedByEffectName(PersistentAuraEffect.EffectName))
 		{
 			TargetUnitAuraEffect = TargetUnitState.GetUnitAffectedByEffectState(PersistentAuraEffect.EffectName);
-
 			if (TargetUnitAuraEffect != none && (TargetUnitAuraEffect.ApplyEffectParameters.SourceStateObjectRef.ObjectID == SourceUnitState.ObjectID) && TargetUnitAuraEffect.iTurnsRemaining < 2)	// only remove effects that drop immediately
 			{
 				// This effect should be removed if it is affecting this Target Unit and the Source Unit of the
@@ -217,4 +227,5 @@ defaultproperties
 	EffectName = "OverTheShoulder"
 	DuplicateResponse = eDupe_Ignore
 	GameStateEffectClass = class'RTGameState_Effect'
+	bReapplyOnTick = false
 }

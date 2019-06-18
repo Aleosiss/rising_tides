@@ -80,7 +80,7 @@ private static function bool CheckSuccessfulUnitEffectApplication(XComGameState 
 
 
 static function RTEffect_Stealth CreateStealthEffect(int iDuration = 1, optional bool bInfinite = false, optional float fModifier = 1.0f,
-				optional GameRuleStateChange WatchRule = eGameRule_PlayerTurnEnd, optional name AbilitySourceName = 'eAbilitySource_Psionic') {
+				optional GameRuleStateChange WatchRule = eGameRule_PlayerTurnBegin, optional name AbilitySourceName = 'eAbilitySource_Psionic') {
 	local RTEffect_Stealth Effect;
 
 	Effect = new class'RTEffect_Stealth';

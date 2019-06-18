@@ -12,6 +12,10 @@ static function array<X2DataTemplate> CreateTemplates()
 	// HIGHLANDER
 	Templates.AddItem(CreateKagaTemplate());
 
+
+	// Drone
+	Templates.AddItem(CreateProgramDroneTemplate('ProgramDrone'));
+
 	return Templates;
 }
 
@@ -383,7 +387,7 @@ static function RTCharacterTemplate CreateProgramDroneTemplate(name TemplateName
 	CharTemplate.BehaviorClass=class'XGAIBehavior';
 
 	CharTemplate.DefaultLoadout='ProgramDrone_Loadout';
-	CharTemplate.strPawnArchetypes.AddItem("ProgramDrone.Archetypes.ARC_GameUnit_DroneM1"); 
+	CharTemplate.strPawnArchetypes.AddItem("ProgramDrone.Archetypes.DroneArchetype"); 
 
 	//NEW CINEMATIC?
 
@@ -421,7 +425,7 @@ static function RTCharacterTemplate CreateProgramDroneTemplate(name TemplateName
 	CharTemplate.bAllowSpawnFromATT = false;  // If true, this unit can be spawned from an Advent Troop Transport
 	CharTemplate.bWeakAgainstTechLikeRobot = true;
 
-	CharTemplate.Abilities.AddItem('RTProgramDroneCloakingField');
+	CharTemplate.Abilities.AddItem('RTProgramDroneCloakingProtocol');
 	CharTemplate.Abilities.AddItem('RobotImmunities');
 	//CharTemplate.Abilities.AddItem('FireOnDeath');
 

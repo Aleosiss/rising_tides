@@ -66,21 +66,21 @@ static function array<X2Condition> CreateStandardMovementConditions() {
 	UnitPropertyCondition = new class'X2Condition_UnitProperty';
 	UnitPropertyCondition.ExcludeDead = true;
 	UnitPropertyCondition.ExcludeCosmetic = false; //Cosmetic units are allowed movement
-	Conditions.AddItem.AddItem(UnitPropertyCondition);
+	Conditions.AddItem(UnitPropertyCondition);
 
 	IsNotImmobilized = new class'X2Condition_UnitValue';
-	IsNotImmobilized.AddCheckValue(default.ImmobilizedValueName, 0);
-	Conditions.AddItem.AddItem(IsNotImmobilized);
+	IsNotImmobilized.AddCheckValue(class'X2Ability_DefaultAbilitySet'.default.ImmobilizedValueName, 0);
+	Conditions.AddItem(IsNotImmobilized);
 
 	// Unit might not be mobilized but have zero mobility
 	UnitStatCheckCondition = new class'X2Condition_UnitStatCheck';
 	UnitStatCheckCondition.AddCheckStat(eStat_Mobility, 0, eCheck_GreaterThan);
-	Conditions.AddItem.AddItem(UnitStatCheckCondition);
+	Conditions.AddItem(UnitStatCheckCondition);
 
 	return Conditions;
 }
 
-static function X2AbiliyTemplate AddDefaultWOTCFields(X2AbilityTemplate Template) {
+static function X2AbilityTemplate AddDefaultWOTCFields(X2AbilityTemplate Template) {
 	Template.SuperConcealmentLoss = class'X2AbilityTemplateManager'.default.SuperConcealmentMoveLoss;
 	Template.ChosenActivationIncreasePerUse = class'X2AbilityTemplateManager'.default.MoveChosenActivationIncreasePerUse;
 	Template.LostSpawnIncreasePerUse = class'X2AbilityTemplateManager'.default.MoveLostSpawnIncreasePerUse;
@@ -91,6 +91,8 @@ static function X2AbiliyTemplate AddDefaultWOTCFields(X2AbilityTemplate Template
 // This method does not include the required multitarget style or the targeting method
 static function RTAbilityTemplate BeginGroupMoveCreation(name TemplateName) {
 	local RTAbilityTemplate Template;
+	local X2AbilityTarget_Path PathTarget;
+	local X2AbilityTrigger_PlayerInput InputTrigger;
 
 	`CREATE_X2TEMPLATE(class'RTAbilityTemplate', Template, TemplateName);
 
@@ -114,9 +116,9 @@ static function RTAbilityTemplate BeginGroupMoveCreation(name TemplateName) {
 	InputTrigger = new class'X2AbilityTrigger_PlayerInput';
 	Template.AbilityTriggers.AddItem(InputTrigger);
 
-	Template.BuildNewGameStateFn = MoveAbility_BuildGameState;
-	Template.BuildVisualizationFn = MoveAbility_BuildVisualization;
-	Template.BuildInterruptGameStateFn = MoveAbility_BuildInterruptGameState;
+	Template.BuildNewGameStateFn = class'X2Ability_DefaultAbilitySet'.static.MoveAbility_BuildGameState;
+	Template.BuildVisualizationFn = class'X2Ability_DefaultAbilitySet'.static.MoveAbility_BuildVisualization;
+	Template.BuildInterruptGameStateFn = class'X2Ability_DefaultAbilitySet'.static.MoveAbility_BuildInterruptGameState;
 
 	return Template;
 }
@@ -192,7 +194,7 @@ static function X2AbilityTemplate CreateRTPassiveAbilityCooldown(name TemplateNa
 
 	Template.bCrossClassEligible = false;
 
-		return Template;
+	return Template;
 }
 
 static function Passive(X2AbilityTemplate Template) {
