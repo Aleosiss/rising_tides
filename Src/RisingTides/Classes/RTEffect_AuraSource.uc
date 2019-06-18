@@ -1,6 +1,6 @@
 class RTEffect_AuraSource extends X2Effect_AuraSource;
 
-var float fScale;
+var float fVFXScale;
 var float fRadius;
 
 var bool bReapplyOnTick;
@@ -76,34 +76,34 @@ function UpdateBasedOnAuraTarget(XComGameState_Unit SourceUnitState, XComGameSta
 	NewTargetState = XComGameState_Unit(NewGameState.CreateStateObject(TargetUnitState.Class, TargetUnitState.ObjectID));
 	NewGameState.AddStateObject(NewTargetState);
 	NewTargetState.bRequiresVisibilityUpdate = true;
+	XComGameStateContext_ChangeContainer(NewGameState.GetContext()).BuildVisualizationFn = RTSourceAuraEffectGameState.EffectsModifiedBuildVisualizationFn;
 
 	if(CheckAuraConditions(SourceUnitState, NewTargetState, SourceAuraEffectGameState, AbilityTemplate)) {
-		for (i = 0; i < AbilityTemplate.AbilityMultiTargetEffects.Length; ++i)
-		{
-			// Apply each of the aura's effects to the target
-			AuraTargetApplyData.EffectRef.TemplateEffectLookupArrayIndex = i;
-			EffectAttachmentResult = AbilityTemplate.AbilityMultiTargetEffects[i].ApplyEffect(AuraTargetApplyData, NewTargetState, NewGameState);
-
-			// If it attached, add it to the list of effects to visualize
-			if(EffectAttachmentResult == 'AA_Success') {
-				PersistentAuraEffect = X2Effect_Persistent(AbilityTemplate.AbilityMultiTargetEffects[i]);
-				if(PersistentAuraEffect != none) {
-					NewAuraEffectState = NewTargetState.GetUnitAffectedByEffectState(PersistentAuraEffect.EffectName);
-					RTSourceAuraEffectGameState.EffectsAddedList.AddItem(NewAuraEffectState.GetReference());
-				}
-			}
-
-		}
-
-		// Need a custom 'effects modified' buildvisualizationfn to handle both removing and adding effects in a single context
-		XComGameStateContext_ChangeContainer(NewGameState.GetContext()).BuildVisualizationFn = RTSourceAuraEffectGameState.EffectsModifiedBuildVisualizationFn;
+		AddAuraTargetEffects(ourceUnitState, NewTargetState, RTSourceAuraEffectGameState, NewGameState)
 	}
 	else {
-		RemoveAuraTargetEffects(SourceUnitState, NewTargetState, SourceAuraEffectGameState, NewGameState);
+		RemoveAuraTargetEffects(SourceUnitState, NewTargetState, RTSourceAuraEffectGameState, NewGameState);
 	}
 }
 
-protected function RemoveAuraTargetEffects(XComGameState_Unit SourceUnitState, XComGameState_Unit TargetUnitState, XComGameState_Effect SourceAuraEffectGameState, XComGameState NewGameState)
+protected function AddAuraTargetEffects(XComGameState_Unit SourceUnitState, XComGameState_Unit TargetUnitState, XComGameState_Effect SourceAuraEffectGameState, XComGameState NewGameState) {
+	for (i = 0; i < AbilityTemplate.AbilityMultiTargetEffects.Length; ++i) {
+		// Apply each of the aura's effects to the target
+		AuraTargetApplyData.EffectRef.TemplateEffectLookupArrayIndex = i;
+		EffectAttachmentResult = AbilityTemplate.AbilityMultiTargetEffects[i].ApplyEffect(AuraTargetApplyData, NewTargetState, NewGameState);
+
+		// If it attached, add it to the list of effects to visualize
+		if(EffectAttachmentResult == 'AA_Success') {
+			PersistentAuraEffect = X2Effect_Persistent(AbilityTemplate.AbilityMultiTargetEffects[i]);
+			if(PersistentAuraEffect != none) {
+				NewAuraEffectState = NewTargetState.GetUnitAffectedByEffectState(PersistentAuraEffect.EffectName);
+				RTSourceAuraEffectGameState.EffectsAddedList.AddItem(NewAuraEffectState.GetReference());
+			}
+		}
+	}
+}
+
+protected function RemoveAuraTargetEffects(XComGameState_Unit SourceUnitState, XComGameState_Unit TargetUnitState, RTGameState_Effect SourceAuraEffectGameState, XComGameState NewGameState)
 {
 	local XComGameState_Effect TargetUnitAuraEffect;
 	local XComGameState_Ability AuraAbilityStateObject;
@@ -116,11 +116,7 @@ protected function RemoveAuraTargetEffects(XComGameState_Unit SourceUnitState, X
 
 	History = `XCOMHISTORY;
 
-	RTSourceAuraEffectGameState = RTGameState_Effect(SourceAuraEffectGameState);
-	if(RTSourceAuraEffectGameState == none) {
-		`RedScreenOnce("The source aura isn't of type RTGameState_Effect! The Visualization may fail!");
-	}
-
+	RTSourceAuraEffectGameState = SourceAuraEffectGameState;
 	AuraAbilityStateObject = XComGameState_Ability(History.GetGameStateForObjectID(SourceAuraEffectGameState.ApplyEffectParameters.AbilityStateObjectRef.ObjectID));
 	AuraAbilityTemplate = AuraAbilityStateObject.GetMyTemplate();
 
@@ -175,7 +171,7 @@ simulated function AddX2ActionsForVisualization(XComGameState VisualizeGameState
 			PlayEffectAction.EffectName = VFXTemplateName;
 			PlayEffectAction.AttachToSocketName = VFXSocket;
 			PlayEffectAction.AttachToSocketsArrayName = VFXSocketsArrayName;
-			PlayEffectAction.Scale = fScale;
+			PlayEffectAction.Scale = fVFXScale;
 		}
 
 		//  anything inside of ApplyOnTick needs handling here because when bTickWhenApplied is true, there is no separate context (which normally handles the visualization)
@@ -215,12 +211,9 @@ simulated function AddX2ActionsForVisualization_Sync( XComGameState VisualizeGam
 		PlayEffectAction.EffectName = VFXTemplateName;
 		PlayEffectAction.AttachToSocketName = VFXSocket;
 		PlayEffectAction.AttachToSocketsArrayName = VFXSocketsArrayName;
-		PlayEffectAction.Scale = fScale;
+		PlayEffectAction.Scale = fVFXScale;
 	}
 }
-
-
-
 
 defaultproperties
 {

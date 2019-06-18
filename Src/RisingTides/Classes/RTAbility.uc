@@ -89,23 +89,20 @@ static function X2AbilityTemplate AddDefaultWOTCFields(X2AbilityTemplate Templat
 }
 
 // This method does not include the required multitarget style or the targeting method
-static function RTAbilityTemplate BeginGroupMoveCreation(name TemplateName) {
-	local RTAbilityTemplate Template;
+static function RTAbilityTemplate BeginGroupMoveCreation(RTAbilityTemplate Template, name TemplateName) {
 	local X2AbilityTarget_Path PathTarget;
 	local X2AbilityTrigger_PlayerInput InputTrigger;
 
-	`CREATE_X2TEMPLATE(class'RTAbilityTemplate', Template, TemplateName);
-
 	Template.bDisplayInUITooltip = false;
 	Template.bDontDisplayInAbilitySummary = true;
-	Template.eAbilityIconBehaviorHUD = EAbilityIconBehavior_NeverShow;
+	Template.eAbilityIconBehaviorHUD = EAbilityIconBehavior_AlwaysShow;
 	Template.AbilitySourceName = 'eAbilitySource_Standard';
 	Template.Hostility = eHostility_Movement;
 	Template.FrameAbilityCameraType = eCameraFraming_Never;
 	Template.AssociatedPlayTiming = SPT_AfterSequential;
 	Template.CinescriptCameraType = "StandardMovement"; 
-	AddDefaultWOTCFields(Template);
 	
+	AddDefaultWOTCFields(Template);
 	AddStandardMovementCost(Template);
 	
 	Template.AbilityShooterConditions = CreateStandardMovementConditions();

@@ -157,8 +157,9 @@ static function X2AbilityTemplate RTProgramDroneCloakingProtocolOn() {
 //	AuraEffect.VFXTemplateName = "RisingTidesContentPackage.fX.P_Drone_CloakingProtocolAura";
 //	AuraEffect.VFXSocket = 'FX_Base';
 //	AuraEffect.VFXSocketsArrayName = 'None';
-//	AuraEffect.fScale = 0.5;
+//	AuraEffect.fVFXScale = 0.5;
 	AuraEffect.fRadius = default.CLOAKING_PROTOCOL_RADIUS_METERS;
+	AuraEffect.bReapplyOnTick = true;
 	Template.AddTargetEffect(AuraEffect);
 
 	MobilityDebuffEffect = new class'X2Effect_PersistentStatChange';

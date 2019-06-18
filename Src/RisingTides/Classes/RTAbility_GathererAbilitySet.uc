@@ -323,7 +323,7 @@ static function X2AbilityTemplate CreateOverTheShoulderAbility(X2AbilityTemplate
 	OTSEffect.VFXTemplateName = "RisingTidesContentPackage.fX.P_Nova_Psi_OTS";
 	OTSEffect.VFXSocket = 'CIN_Root';
 	OTSEffect.VFXSocketsArrayName = 'None';
-	OTSEffect.fScale = 2.5;
+	OTSEffect.fVFXScale = 2.5;
 	OTSEffect.fRadius = default.OTS_RADIUS;
 	Template.AddTargetEffect(OTSEffect);
 

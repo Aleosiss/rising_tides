@@ -262,6 +262,12 @@ strForcedFirstName="[REDACTED]"
 strForcedLastName="[REDACTED]"
 strForcedNickName="Kaga"
 
+[ProgramDrone RTCharacterTemplate]
+strCharacterName="Program Drone"
+strCharacterHealingPaused="Repairs Required"
+strAcquiredText="Drones do not heal like other soldiers. Staff the Drone in Engineering to perform repairs."
+
+
 #[ResCard_RT RTProgramStrategyCardTemplate]
 #DisplayName=""
 #SummaryText=""
