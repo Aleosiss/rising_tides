@@ -641,6 +641,7 @@
     <Content Include="Content\RTDroneWeapon.upk" />
     <Content Include="Content\RT_Perk_DroneSelfDestruction.upk" />
     <Content Include="Content\RT_Perk_Drone_CloakingProtocol.upk" />
+    <Content Include="Src\RisingTides\Classes\RTAbility_ProgramDroneAbilitySet.uc" />
   </ItemGroup>
   <Import Project="$(MSBuildLocalExtensionPath)\XCOM2.targets" />
 </Project>

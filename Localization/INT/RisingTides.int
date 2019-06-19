@@ -126,7 +126,7 @@ SOC_DESC="I've got your six."
 BLOODLUST_TITLE="Bloodlust"
 BLOODLUST_DESC="This unit is experiencing the thrill of combat! Their melee critical strike chance and damage is increased, but their mobility is decreased."
 
-[RTAbility_Program]
+[RTAbility_ProgramDroneAbilitySet]
 CloakingProtocolTitle = "Cloaking Field"
 CloakingProtocolSelfDescription = "The Cloaking Field projected by the Program Drone prevents units from losing concealment even in close proximity to ADVENT forces."
 
@@ -266,7 +266,8 @@ strForcedNickName="Kaga"
 strCharacterName="Program Drone"
 strCharacterHealingPaused="Repairs Required"
 strAcquiredText="Drones do not heal like other soldiers. Staff the Drone in Engineering to perform repairs."
-
+; These retrofitted ADVENT drones have had their armor and weaponry removed in exchange for additional agility in the air and a cloaking field generator. 
+; Because of its standard-issue chassis, ADVENT will have a difficult time detecting whether or not the drone is friendly.
 
 #[ResCard_RT RTProgramStrategyCardTemplate]
 #DisplayName=""

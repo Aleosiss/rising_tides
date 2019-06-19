@@ -415,6 +415,27 @@ function EventListenerReturn RTAbilityTriggerEventListener_ValidAbilityLocations
 	return ELR_NoInterrupt;
 }
 
+function EventListenerReturn AbilityTriggerEventListener_Self_CloakingProtocolConcealmentHandler(Object EventData, Object EventSource, XComGameState GameState, Name EventID, Object CallbackData) {
+	local XComWorldData World;
+	local XComGameStateHistory History;
+	local XComGameState_Unit AbilityOwnerUnit, TargetUnit;
+	local int RangeDiff;
+
+	History = `XCOMHISTORY;
+
+	`RTLOG("Hello from AbilityTriggerEventListener_Self_CloakingProtocolConcealmentHandler!");
+
+	AbilityOwnerUnit = XComGameState_Unit(History.GetGameStateForObjectID(OwnerStateObject.ObjectID));
+	TargetUnit = XComGameState_Unit(EventData);
+
+	RangeDiff = `TILESTOMETERS(AbilityOwnerUnit.TileDistanceBetween(TargetUnit));
+
+	if(RangeDiff <= class'RTAbility_ProgramDroneAbilitySet'.default.CLOAKING_PROTOCOL_RADIUS_METERS) {
+		AbilityTriggerAgainstSingleTarget(OwnerStateObject, false);
+	}
+	return ELR_NoInterrupt;
+}
+
 // mostly used for debugging
 function EventListenerReturn RTAbilityTriggerEventListener_Self(Object EventData, Object EventSource, XComGameState GameState, Name EventID, Object CallbackData)
 {

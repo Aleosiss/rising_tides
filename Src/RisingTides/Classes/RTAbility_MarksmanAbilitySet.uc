@@ -1044,7 +1044,7 @@ static function X2AbilityTemplate Sovereign()
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'Sovereign');
 	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_voidadept";
 
-	Template.AbilitySourceName = 'eAbilitySource_Perk';
+	Template.AbilitySourceName = 'eAbilitySource_Psionic';
 	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_NeverShow;
 	Template.Hostility = eHostility_Neutral;
 
@@ -1081,7 +1081,7 @@ static function X2AbilityTemplate SovereignEffect()
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'SovereignEffect');
 	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_voidadept";
 
-	Template.AbilitySourceName = 'eAbilitySource_Perk';
+	Template.AbilitySourceName = 'eAbilitySource_Psionic';
 	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_NeverShow;
 	Template.Hostility = eHostility_Neutral;
 
@@ -1569,7 +1569,7 @@ static function X2AbilityTemplate TimeStandsStillEndListener()
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'TimeStandsStillEndListener');
 	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_voidadept";
 
-	Template.AbilitySourceName = 'eAbilitySource_Perk';
+	Template.AbilitySourceName = 'eAbilitySource_Psionic';
 	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_NeverShow;
 	Template.Hostility = eHostility_Neutral;
 	Template.ConcealmentRule = eConceal_Always;
@@ -2071,7 +2071,7 @@ static function X2AbilityTemplate ShockAndAwe()
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'ShockAndAwe');
 	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_overwatch";
 
-	Template.AbilitySourceName = 'eAbilitySource_Perk';
+	Template.AbilitySourceName = 'eAbilitySource_Psionic';
 	Template.eAbilityIconBehaviorHUD = EAbilityIconBehavior_NeverShow;
 	Template.Hostility = eHostility_Neutral;
 
@@ -2109,7 +2109,7 @@ static function X2AbilityTemplate ShockAndAweListener()
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'ShockAndAweListener');
 	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_overwatch";
 
-	Template.AbilitySourceName = 'eAbilitySource_Perk';
+	Template.AbilitySourceName = 'eAbilitySource_Psionic';
 	Template.eAbilityIconBehaviorHUD = EAbilityIconBehavior_NeverShow;
 	Template.Hostility = eHostility_Offensive;
 
@@ -2347,7 +2347,7 @@ static function X2AbilityTemplate HarbingerCleanseListener()
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'HarbingerCleanseListener');
 	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_voidadept";
 
-	Template.AbilitySourceName = 'eAbilitySource_Perk';
+	Template.AbilitySourceName = 'eAbilitySource_Psionic';
 	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_NeverShow;
 	Template.Hostility = eHostility_Neutral;
 
@@ -2590,7 +2590,7 @@ static function X2AbilityTemplate RTOverflowBarrierEvent() {
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'RTOverflowBarrierEvent');
 	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_insanity";
 
-	Template.AbilitySourceName = 'eAbilitySource_Perk';
+	Template.AbilitySourceName = 'eAbilitySource_Psionic';
 	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_NeverShow;
 	Template.Hostility = eHostility_Neutral;
 

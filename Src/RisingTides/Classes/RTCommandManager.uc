@@ -1263,7 +1263,6 @@ simulated static function StateObjectReference GetRandomSoldierFromXCOMBarracks(
 
 exec function RT_PrintItemsForClosestUnitToCursor() {
 	local XComGameState_Unit UnitState;
-	local EForceVisibilitySetting ForceVisibleSetting;
 	local XComTacticalCheatManager CheatsManager;
 	local XComGameState_Item ItemState;
 	local XComGameStateHistory History;

@@ -56,41 +56,50 @@ function UpdateBasedOnAuraTarget(XComGameState_Unit SourceUnitState, XComGameSta
 	local XComGameState_Unit NewTargetState;
 	local EffectAppliedData AuraTargetApplyData;
 	local X2AbilityTemplate AbilityTemplate;
-	local int i;
-	local name EffectAttachmentResult;
-	local X2Effect_Persistent PersistentAuraEffect;
-	local XComGameState_Effect NewAuraEffectState;
 	local RTGameState_Effect RTSourceAuraEffectGameState;
 
 	AuraTargetApplyData = SourceAuraEffectGameState.ApplyEffectParameters;
 	AuraTargetApplyData.EffectRef.LookupType = TELT_AbilityMultiTargetEffects;
 	AuraTargetApplyData.TargetStateObjectRef = TargetUnitState.GetReference();
 
-	AbilityTemplate = GetAuraTemplate(SourceUnitState, TargetUnitState, SourceAuraEffectGameState, NewGameState);
-
 	RTSourceAuraEffectGameState = RTGameState_Effect(SourceAuraEffectGameState);
 	if(RTSourceAuraEffectGameState == none) {
 		`RedScreenOnce("The source aura isn't of type RTGameState_Effect! The Visualization may fail!");
 	}
+	AbilityTemplate = GetAuraTemplate(SourceUnitState, TargetUnitState, RTSourceAuraEffectGameState, NewGameState);
 
 	NewTargetState = XComGameState_Unit(NewGameState.CreateStateObject(TargetUnitState.Class, TargetUnitState.ObjectID));
 	NewGameState.AddStateObject(NewTargetState);
 	NewTargetState.bRequiresVisibilityUpdate = true;
 	XComGameStateContext_ChangeContainer(NewGameState.GetContext()).BuildVisualizationFn = RTSourceAuraEffectGameState.EffectsModifiedBuildVisualizationFn;
 
-	if(CheckAuraConditions(SourceUnitState, NewTargetState, SourceAuraEffectGameState, AbilityTemplate)) {
-		AddAuraTargetEffects(ourceUnitState, NewTargetState, RTSourceAuraEffectGameState, NewGameState)
-	}
-	else {
+	if(CheckAuraConditions(SourceUnitState, NewTargetState, RTSourceAuraEffectGameState, AbilityTemplate)) {
+		AddAuraTargetEffects(SourceUnitState, NewTargetState, RTSourceAuraEffectGameState, NewGameState, AbilityTemplate, AuraTargetApplyData);
+	} else {
 		RemoveAuraTargetEffects(SourceUnitState, NewTargetState, RTSourceAuraEffectGameState, NewGameState);
 	}
 }
 
-protected function AddAuraTargetEffects(XComGameState_Unit SourceUnitState, XComGameState_Unit TargetUnitState, XComGameState_Effect SourceAuraEffectGameState, XComGameState NewGameState) {
+protected function AddAuraTargetEffects(XComGameState_Unit SourceUnitState,
+										XComGameState_Unit NewTargetState,
+										RTGameState_Effect RTSourceAuraEffectGameState,
+										XComGameState NewGameState,
+										X2AbilityTemplate AbilityTemplate,
+										EffectAppliedData AuraTargetApplyData
+) {
+	local int i;
+	local name EffectAttachmentResult;
+	local X2Effect_Persistent PersistentAuraEffect;
+	local XComGameState_Effect NewAuraEffectState;
+
 	for (i = 0; i < AbilityTemplate.AbilityMultiTargetEffects.Length; ++i) {
 		// Apply each of the aura's effects to the target
 		AuraTargetApplyData.EffectRef.TemplateEffectLookupArrayIndex = i;
 		EffectAttachmentResult = AbilityTemplate.AbilityMultiTargetEffects[i].ApplyEffect(AuraTargetApplyData, NewTargetState, NewGameState);
+
+		if(X2Effect_Persistent(AbilityTemplate.AbilityMultiTargetEffects[i]).EffectName == `RTD.DebugEffectName) {
+			`RTLOG("Debugging Effect Attachment: EffectAttachmentResult was " $ EffectAttachmentResult);
+		}
 
 		// If it attached, add it to the list of effects to visualize
 		if(EffectAttachmentResult == 'AA_Success') {

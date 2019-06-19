@@ -557,11 +557,9 @@ static function RTGameState_MissionSiteTemplarHighCoven CreateTemplarHighCovenAs
 	local X2RewardTemplate RewardTemplate;
 	local X2MissionSourceTemplate MissionSource;
 	local array<XComGameState_Reward> MissionRewards;
-	local XComGameState_Haven TemplarHavenState;
 	local XComGameState_WorldRegion RegionState;
 
 	StratMgr = class'X2StrategyElementTemplateManager'.static.GetStrategyElementTemplateManager();
-	TemplarHavenState = XComGameState_Haven(`XCOMHISTORY.GetGameStateForObjectID(`RTS.GetTemplarFactionState().FactionHQ.ObjectID));
 
 	MissionRewards.Length = 0;
 	RewardTemplate = X2RewardTemplate(StratMgr.FindStrategyElementTemplate('RTReward_TemplarHighCovenAssault')); // rewards are given by the X2MissionSourceTemplate

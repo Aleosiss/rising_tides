@@ -213,6 +213,16 @@ static function TestAbilitySetValues() {
 	
 }
 
+function DebugEffectAdded(X2Effect_Persistent PersistentEffect, const out EffectAppliedData ApplyEffectParameters, XComGameState_BaseObject kNewTargetState, XComGameState NewGameState) {
+	`RTLOG("DebugEffectAdded! to " $ kNewTargetState.GetMyTemplateName(), false, true);
+}
+
+function name DebugApplyChanceCheck(const out EffectAppliedData ApplyEffectParameters, XComGameState_BaseObject kNewTargetState, XComGameState NewGameState)
+{
+	`RTLOG("DebugApplyChanceCheck for " $ kNewTargetState.GetMyTemplateName(), false, true);
+	return 'AA_Success';
+}
+
 defaultproperties
 {
 	DefaultPsionicAnimDelay = 4.0

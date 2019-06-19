@@ -894,6 +894,27 @@ LocLongDescription="Psionic jamming reduces the will of ADVENT units."
 LocHelpText="Psionic jamming reduces the will of ADVENT units."
 LocFlyOverText="Psionic Jamming"
 LocPromotionPopupText="<Bullet/> Psionic jamming reduces the will of ADVENT units.<br/>"
+
+[RTProgramDroneCloakingProtocol X2AbilityTemplate]
+LocFriendlyName="Cloaking Protocol"
+LocLongDescription="Activate the drone's cloaking generator, creating a field with a <Ability:CLOAKING_GENERATOR_RADIUS> radius that continously cloaks allied units.<br/><Bullet/> Cloaking Protocol heavily taps the drone's power supply, reducing the mobility of the drone significantly.<br/><Bullet/> Cloaking Protocol gives a once-per-mission concealment effect.<br/><Bullet/> Cloaking protocol will not prevent concealment-breaking actions from decloaking units, but will refresh the cloaking effect on the next turn.<br/><Bullet/>Concealment-breaking actions made by units in Cloaking Protocol's radius will remove the drone's concealment as well.<br/>"
+LocHelpText="Activate cloaking generator."
+LocFlyOverText="Cloaking Protocol"
+LocPromotionPopupText="<Bullet/> Cloaking Protocol heavily taps the drone's power supply, reducing the mobility of the drone significantly.<br/><Bullet/> Cloaking Protocol gives a once-per-mission concealment effect.<br/><Bullet/> Cloaking protocol will not prevent concealment-breaking actions from decloaking units, but will refresh the cloaking effect on the next turn.<br/><Bullet/>Concealment-breaking actions made by units in Cloaking Protocol's radius will remove the drone's concealment as well.<br/>"
+
+[RTProgramDroneCloakingProtocolOn X2AbilityTemplate]
+LocFriendlyName="Cloaking Protocol"
+LocLongDescription="Activate the drone's cloaking generator, creating a field with a <Ability:CLOAKING_GENERATOR_RADIUS> radius that continously cloaks allied units."
+LocHelpText="Activate cloaking generator."
+LocFlyOverText="Cloaking Protocol"
+LocPromotionPopupText="<Bullet/> Cloaking Protocol heavily taps the drone's power supply, reducing the mobility of the drone significantly.<br/><Bullet/> Cloaking Protocol gives a once-per-mission concealment effect.<br/><Bullet/> Cloaking protocol will not prevent concealment-breaking actions from decloaking units, but will refresh the cloaking effect on the next turn.<br/><Bullet/>Concealment-breaking actions made by units in Cloaking Protocol's radius will remove the drone's concealment as well.<br/>"
+
+[RTProgramDroneCloakingProtocolOff X2AbilityTemplate]
+LocFriendlyName="Disable Cloaking Protocol"
+LocLongDescription="Disable the cloaking generator."
+LocHelpText="Disable the cloaking generator."
+LocFlyOverText="Cloaking Protocol Disabled"
+LocPromotionPopupText="<Bullet/> You should never see this.<br/>"
 ;----------------------------------------------------------------------------------------------------------------------------
 
 [TestAbility X2AbilityTemplate]

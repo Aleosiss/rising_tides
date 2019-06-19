@@ -178,7 +178,6 @@ static function X2AbilityTemplate CreateOverTheShoulderAbility(X2AbilityTemplate
 	local X2AbilityCost_ActionPoints			ActionPoint;
 	local X2AbilityCooldown						Cooldown;
 	local X2AbilityMultiTarget_Radius			Radius;
-	local X2Condition_UnitProperty				AllyCondition, LivingNonAllyUnitOnlyProperty;
 	local array<name>							SkipExclusions;
 
 	local RTEffect_AuraSource				OTSEffect;		// I'm unsure of how this works... but it appears that
@@ -216,25 +215,8 @@ static function X2AbilityTemplate CreateOverTheShoulderAbility(X2AbilityTemplate
 	Cooldown.iNumTurns = 1;
 	Template.AbilityCooldown = Cooldown;
 
-	AllyCondition = new class 'X2Condition_UnitProperty';
-	AllyCondition.ExcludeDead = true;
-	AllyCondition.ExcludeCivilian = true;
-	AllyCondition.ExcludeRobotic = true;
-	AllyCondition.ExcludeHostileToSource = true;
-	AllyCondition.ExcludeFriendlyToSource = false;
-	AllyCondition.FailOnNonUnits = true;
-
 	SkipExclusions.AddItem(class'X2AbilityTemplateManager'.default.DisorientedName);
 	Template.AddShooterEffectExclusions(SkipExclusions);
-
-	LivingNonAllyUnitOnlyProperty = new class 'X2Condition_UnitProperty';
-	LivingNonAllyUnitOnlyProperty.ExcludeAlive = false;
-	LivingNonAllyUnitOnlyProperty.ExcludeDead = true;
-	LivingNonAllyUnitOnlyProperty.ExcludeFriendlyToSource = true;
-	LivingNonAllyUnitOnlyProperty.ExcludeHostileToSource = false;
-	LivingNonAllyUnitOnlyProperty.TreatMindControlledSquadmateAsHostile = true;
-	LivingNonAllyUnitOnlyProperty.FailOnNonUnits = true;
-	LivingNonAllyUnitOnlyProperty.ExcludeCivilian = false;
 
 	Radius = new class'X2AbilityMultiTarget_Radius';
 	Radius.bUseWeaponRadius = false;
@@ -253,7 +235,7 @@ static function X2AbilityTemplate CreateOverTheShoulderAbility(X2AbilityTemplate
 	VisionEffect.BuildPersistentEffect(1, false, true, false, eGameRule_PlayerTurnEnd);
 	VisionEffect.SetDisplayInfo(ePerkBuff_Penalty, default.OTS_TITLE, default.OTS_DESC_ENEMY, Template.IconImage, true,,Template.AbilitySourceName);
 	VisionEffect.TargetConditions.AddItem(default.PsionicTargetingProperty);
-	VisionEffect.DuplicateResponse = eDupe_Ignore;
+	VisionEffect.DuplicateResponse = eDupe_Refresh;
 	VisionEffect.bUseTargetSightRadius = false;
 	VisionEffect.bUseTargetSizeRadius = false;
 	VisionEffect.iCustomTileRadius = 3;
@@ -268,7 +250,7 @@ static function X2AbilityTemplate CreateOverTheShoulderAbility(X2AbilityTemplate
 	VoiceEffect.BuildPersistentEffect(1, false, true, false, eGameRule_PlayerTurnEnd);
 	VoiceEffect.TargetConditions.AddItem(default.PsionicTargetingProperty);
 	VoiceEffect.SetDisplayInfo(ePerkBuff_Penalty,default.UV_TITLE, default.UV_DESC, "img:///RisingTidesContentPackage.PerkIcons.UIPerk_mind_overwatch_psi_us", true,,Template.AbilitySourceName);
-	VoiceEffect.DuplicateResponse = eDupe_Ignore;
+	VoiceEffect.DuplicateResponse = eDupe_Refresh;
 	VoiceEffect.bRemoveWhenTargetDies = true;
 	VoiceEffect.bRemoveWhenSourceDies = true;
 	VoiceEffect.UV_AIM_PENALTY = default.UV_AIM_PENALTY;
@@ -300,7 +282,7 @@ static function X2AbilityTemplate CreateOverTheShoulderAbility(X2AbilityTemplate
 	AllyEffect.BuildPersistentEffect(1, false, true, false, eGameRule_PlayerTurnEnd);
 	AllyEffect.SetDisplayInfo(ePerkBuff_Bonus,default.OTS_TITLE, default.OTS_DESC_ALLY, Template.IconImage, true,,Template.AbilitySourceName);
 	AllyEffect.TargetConditions.AddItem(default.LivingFriendlyUnitOnlyProperty);
-	AllyEffect.DuplicateResponse = eDupe_Ignore;
+	AllyEffect.DuplicateResponse = eDupe_Refresh;
 	AllyEffect.EffectName = default.OverTheShoulderEffectName;
 	AllyEffect.IconImage = Template.IconImage;
 	Template.AddMultiTargetEffect(AllyEffect);
@@ -837,7 +819,7 @@ static function X2AbilityTemplate RTGuardianAngel() {
 static function CreateGuardianAngel(out X2AbilityTemplate Template) {
 	Template.AddTargetEffect(CreateGuardianAngelHealEffect());
 	Template.AddTargetEffect(CreateGuardianAngelCleanseEffect());
-	Template.AddTargetEffect(CreateGuardianAngelImmunitiesEffect());
+	Template.AddTargetEffect(CreateGuardianAngelImmunitiesEffect(true));
 	Template.AddTargetEffect(CreateGuardianAngelMentalRecoveryEffect());
 
 	Template.AddMultiTargetEffect(CreateGuardianAngelHealEffect());
@@ -866,13 +848,11 @@ static function X2Effect CreateGuardianAngelMentalRecoveryEffect() {
 
 	return Effect;
 }
-
 function GuardianAngelMentalRecoveryAdded(X2Effect_Persistent PersistentEffect, const out EffectAppliedData ApplyEffectParameters, XComGameState_BaseObject kNewTargetState, XComGameState NewGameState) {
 	if(XComGameState_Unit(kNewTargetState).GetCurrentStat(eStat_Will) / XComGameState_Unit(kNewTargetState).GetBaseStat(eStat_Will) <= default.GUARDIAN_ANGEL_WILL_THRESHOLD) { // if we have lost half of will (default threshold)
 		XComGameState_Unit(kNewTargetState).ModifyCurrentStat(eStat_Will, (default.GUARDIAN_ANGEL_WILL_RECOVERY_AMOUNT / 5)); // for some reason, its getting multiplied by 5?
 	}
 }
-
 static function RTEffect_SimpleHeal CreateGuardianAngelHealEffect() {
 		local RTEffect_SimpleHeal Effect;
 		local X2Condition_AbilityProperty AbilityProperty;
@@ -883,7 +863,8 @@ static function RTEffect_SimpleHeal CreateGuardianAngelHealEffect() {
 		Effect.HEAL_AMOUNT = default.GUARDIAN_ANGEL_HEAL_VALUE;
 		Effect.bUseWeaponDamage = false;
 		Effect.nAbilitySourceName = default.GuardianAngelHealText;
-		Effect.DuplicateResponse = eDupe_Ignore;
+		Effect.DuplicateResponse = eDupe_Allow;
+		Effect.EffectName = 'RTGuardianAngelSimpleHeal';
 
 		AbilityProperty = new class'X2Condition_AbilityProperty';
 		AbilityProperty.OwnerHasSoldierAbilities.AddItem('RTGuardianAngel');
@@ -916,6 +897,7 @@ static function X2Effect_RemoveEffects CreateGuardianAngelCleanseEffect() {
 		Effect.TargetConditions.AddItem(AbilityProperty);
 
 		Effect.TargetConditions.AddItem(default.LivingFriendlyUnitOnlyProperty);
+		Effect.TargetConditions.AddItem(CreateOverTheShoulderProperty());
 
 		return Effect;
 }
@@ -934,8 +916,8 @@ static function X2Effect_Persistent CreateGuardianAngelStabilizeEffectPartOne() 
 		EffectCheckCondition.AddRequireEffect(class'X2StatusEffects'.default.BleedingOutName, 'AA_BleedingOut');
 
 		Effect.TargetConditions.AddItem(EffectCheckCondition);
-
 		Effect.TargetConditions.AddItem(default.LivingFriendlyUnitOnlyProperty);
+		Effect.TargetConditions.AddItem(CreateOverTheShoulderProperty());
 
 		return Effect;
 }
@@ -957,31 +939,40 @@ static function X2Effect_RemoveEffects CreateGuardianAngelStabilizeEffectPartTwo
 		UnitStatCheckCondition.AddCheckStat(eStat_HP, 0, eCheck_GreaterThan);
 
 		Effect.TargetConditions.AddItem(UnitStatCheckCondition);
-
 		Effect.TargetConditions.AddItem(default.LivingFriendlyUnitOnlyProperty);
+		Effect.TargetConditions.AddItem(CreateOverTheShoulderProperty());
 
 		return Effect;
 }
-static function X2Effect_DamageImmunity CreateGuardianAngelImmunitiesEffect() {
+static function X2Effect_DamageImmunity CreateGuardianAngelImmunitiesEffect(bool bSelfTarget = false) {
 		local X2Effect_DamageImmunity Effect;
 		local X2Condition_AbilityProperty AbilityProperty;
 
 		Effect = new class'X2Effect_DamageImmunity';
-		Effect.BuildPersistentEffect(1, false, true, false, eGameRule_PlayerTurnEnd);
-		Effect.SetDisplayInfo(ePerkBuff_Bonus, default.GuardianAngelHealText, default.GuardianAngelEffectDesc, "img:///RisingTidesContentPackage.PerkIcons.UIPerk_revive_overwatch_ga", true,, 'eAbilitySource_Psionic');
+		Effect.SetDisplayInfo(ePerkBuff_Bonus, default.GuardianAngelHealText, default.GuardianAngelEffectDesc, "img:///RisingTidesContentPackage.PerkIcons.UIPerk_revive_overwatch_ga", true, "", 'eAbilitySource_Psionic');
 		// Guardian Angel will not stop hard CC, but cleanse it next turn.
 		Effect.ImmuneTypes.AddItem(class'X2AbilityTemplateManager'.default.DisorientedName);
 		Effect.ImmuneTypes.AddItem(class'X2AbilityTemplateManager'.default.ConfusedName);
 		Effect.ImmuneTypes.AddItem(class'X2AbilityTemplateManager'.default.PanickedName);
-		Effect.DuplicateResponse = eDupe_Ignore;
+		Effect.EffectName = 'RTGuardianAngelMentalImmunity';
 
+		if(bSelfTarget) {
+			Effect.BuildPersistentEffect(1, false, true, false, eGameRule_PlayerTurnEnd);
+			Effect.DuplicateResponse = eDupe_Refresh;
+		} else {
+			Effect.BuildPersistentEffect(1, false, true, false, eGameRule_PlayerTurnEnd);
+			Effect.DuplicateResponse = eDupe_Refresh;
+		}
 
 		AbilityProperty = new class'X2Condition_AbilityProperty';
 		AbilityProperty.OwnerHasSoldierAbilities.AddItem('RTGuardianAngel');
 
 		Effect.TargetConditions.AddItem(AbilityProperty);
-
 		Effect.TargetConditions.AddItem(default.LivingFriendlyUnitOnlyProperty);
+		Effect.TargetConditions.AddItem(CreateOverTheShoulderProperty());
+
+		//Effect.EffectAddedFn = DebugEffectAdded;
+		//Effect.ApplyChanceFn = DebugApplyChanceCheck;
 
 		return Effect;
 }

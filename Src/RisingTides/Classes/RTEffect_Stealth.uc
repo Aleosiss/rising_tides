@@ -72,8 +72,13 @@ simulated function AddX2ActionsForVisualization(XComGameState VisualizeGameState
 
 	super.AddX2ActionsForVisualization(VisualizeGameState, ActionMetadata, EffectApplyResult);
 
+	// clear that shit out first
+	class'RTAction_RemoveMITV'.static.AddToVisualizationTree(ActionMetadata, VisualizeGameState.GetContext(), false, ActionMetadata.LastActionAdded);
+
 	MITVAction = RTAction_ApplyMITV(class'RTAction_ApplyMITV'.static.AddToVisualizationTree(ActionMetadata, VisualizeGameState.GetContext(), false, ActionMetadata.LastActionAdded));
 	MITVAction.MITVPath = "FX_Wraith_Armor.M_Wraith_Armor_Overlay_On_MITV";
+
+	`RTS.SyncVisualsForUnits(VisualizeGameState);
 }
 
 simulated function AddX2ActionsForVisualization_Sync(XComGameState VisualizeGameState, out VisualizationActionMetadata ActionMetadata)
@@ -86,14 +91,15 @@ simulated function AddX2ActionsForVisualization_Removed(XComGameState VisualizeG
 {
 	local X2Action_Delay			DelayAction;
 
-	class'RTAction_RemoveMITV'.static.AddToVisualizationTree(ActionMetadata, VisualizeGameState.GetContext(), false, ActionMetadata.LastActionAdded);
-	
 	super.AddX2ActionsForVisualization_Removed(VisualizeGameState, ActionMetadata, EffectApplyResult, RemovedEffect);
+
+	class'RTAction_RemoveMITV'.static.AddToVisualizationTree(ActionMetadata, VisualizeGameState.GetContext(), false, ActionMetadata.LastActionAdded);
 
 	DelayAction = X2Action_Delay(class'X2Action_Delay'.static.AddToVisualizationTree(ActionMetadata, VisualizeGameState.GetContext(), false, ActionMetadata.LastActionAdded));
 	DelayAction.Duration = 0.33f;
 	DelayAction.bIgnoreZipMode = true;
 
+	`RTS.SyncVisualsForUnits(VisualizeGameState);
 }
 
 DefaultProperties
