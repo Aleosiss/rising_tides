@@ -314,14 +314,16 @@ function EffectsModifiedBuildVisualizationFn(XComGameState VisualizeGameState) {
 			}
 		}
 	}	
-	// end add effects
-	ClearEffectLists();
 }
 
 // ClearEffectLists
-function ClearEffectLists() {
-	EffectsAddedList.Length = 0;
-	EffectsRemovedList.Length = 0;
+function ClearEffectLists(XComGameState NewGameState) {
+	local RTGameState_Effect SelfState;
+
+	SelfState = RTGameState_Effect(NewGameState.ModifyStateObject(none, ObjectID));
+
+	SelfState.EffectsAddedList.Length = 0;
+	SelfState.EffectsRemovedList.Length = 0;
 }
 
 // CleanupMobileSquadViewers
@@ -360,7 +362,7 @@ function EventListenerReturn OnUpdateAuraCheck(Object EventData, Object EventSou
 	if (ApplyEffectParameters.TargetStateObjectRef.ObjectID == UpdatedUnitState.ObjectID)
 	{
 		// If the Target Unit (Owning Unit of the aura) is the same as the Updated unit, then a comprehensive check must be done
-		OnTotalAuraCheck(EventData, EventSource, GameState, EventID, CallbackData);
+		return OnTotalAuraCheck(EventData, EventSource, GameState, EventID, CallbackData);
 	}
 	else
 	{
@@ -389,9 +391,12 @@ function EventListenerReturn OnUpdateAuraCheck(Object EventData, Object EventSou
 		// Submit the new gamestate
 		SubmitNewGameState(NewGameState);
 
+		`RTLOG("OnUpdateAuraCheck cleaning up Effect lists...");
+		NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("RTEffect_AuraSource: Cleaning Effect changes record!");
+		ClearEffectLists(NewGameState);
+		SubmitNewGameState(NewGameState);
+		`RTLOG("OnUpdateAuraCheck cleaned.");
 	}
-
-
 
 	return ELR_NoInterrupt;
 }
@@ -449,6 +454,12 @@ function EventListenerReturn OnTotalAuraCheck(Object EventData, Object EventSour
 
 	// Submit the new gamestate
 	SubmitNewGameState(NewGameState);
+
+	`RTLOG("OnTotalAuraCheck cleaning up Effect lists...");
+	NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("RTEffect_AuraSource: Cleaning Effect changes record!");
+	ClearEffectLists(NewGameState);
+	SubmitNewGameState(NewGameState);
+	`RTLOG("OnTotalAuraCheck cleaned.");
 
 	return ELR_NoInterrupt;
 }
