@@ -114,18 +114,11 @@ static function StealthVisualization(XComGameState VisualizeGameState, out Visua
 	if(!CheckSuccessfulUnitEffectApplication(VisualizeGameState, ActionMetadata, EffectApplyResult))
 		return;
 
-	// clear that shit out first
-	class'RTAction_RemoveMITV'.static.AddToVisualizationTree(ActionMetadata, VisualizeGameState.GetContext(), false, ActionMetadata.LastActionAdded);
-
 	//StartActionP1 = 
 	BuildEffectParticle(VisualizeGameState, ActionMetadata, default.StealthStartParticleName, default.StealthSocketName, default.StealthSocketsArrayName, true, false);
-
-	MITVAction = RTAction_ApplyMITV(class'RTAction_ApplyMITV'.static.AddToVisualizationTree(ActionMetadata, VisualizeGameState.GetContext(), false, ActionMetadata.LastActionAdded));
-	MITVAction.MITVPath = "FX_Wraith_Armor.M_Wraith_Armor_Overlay_On_MITV";
 	
-	//PersistentAc tion = 
+	//PersistentAction = 
 	BuildEffectParticle(VisualizeGameState, ActionMetadata, default.StealthPersistentParticleName, default.StealthSocketName, default.StealthSocketsArrayName, true, false);
-
 }
 
 static function StealthSyncVisualization(XComGameState VisualizeGameState, out VisualizationActionMetadata ActionMetadata, const name EffectApplyResult) {
@@ -143,20 +136,8 @@ static function StealthRemovedVisualization(XComGameState VisualizeGameState, ou
 	//PersistentAction = 
 	BuildEffectParticle(VisualizeGameState, ActionMetadata, default.StealthPersistentParticleName, default.StealthSocketName, default.StealthSocketsArrayName, true, true);
 
-	//StartActionP1 = 
-	BuildEffectParticle(VisualizeGameState, ActionMetadata, default.StealthStartParticleName, default.StealthSocketName, default.StealthSocketsArrayName, true, true);
-
-	class'RTAction_RemoveMITV'.static.AddToVisualizationTree(ActionMetadata, VisualizeGameState.GetContext(), false, ActionMetadata.LastActionAdded);
-
 	//StopActionP1 = 
 	BuildEffectParticle(VisualizeGameState, ActionMetadata, default.StealthStopParticleName, default.StealthSocketName, default.StealthSocketsArrayName, true, false);
-
-	//StopActionP1 = 
-	BuildEffectParticle(VisualizeGameState, ActionMetadata, default.StealthStopParticleName, default.StealthSocketName, default.StealthSocketsArrayName, true, true);
-
-	DelayAction = X2Action_Delay(class'X2Action_Delay'.static.AddToVisualizationTree(ActionMetadata, VisualizeGameState.GetContext(), false, ActionMetadata.LastActionAdded));
-	DelayAction.Duration = 0.33f;
-	DelayAction.bIgnoreZipMode = true;
 }
 
 static function RTEffect_Meld CreateMeldEffect(int iDuration = 1, optional bool bInfinite = true) {

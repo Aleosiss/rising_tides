@@ -65,7 +65,7 @@ simulated function OnEffectRemoved(const out EffectAppliedData ApplyEffectParame
 		`XEVENTMGR.TriggerEvent('EffectBreakUnitConcealment', NewUnitState, NewUnitState, NewGameState);
 	}
 }
-/*
+
 simulated function AddX2ActionsForVisualization(XComGameState VisualizeGameState, out VisualizationActionMetadata ActionMetadata, name EffectApplyResult)
 {
 	local RTAction_ApplyMITV	MITVAction;
@@ -97,7 +97,7 @@ simulated function AddX2ActionsForVisualization_Removed(XComGameState VisualizeG
 	DelayAction.Duration = 0.33f;
 	DelayAction.bIgnoreZipMode = true;
 }
-*/
+
 
 DefaultProperties
 {

@@ -464,37 +464,6 @@ function EventListenerReturn OnTotalAuraCheck(Object EventData, Object EventSour
 	return ELR_NoInterrupt;
 }
 
-// OnTickAuraCheck
-function EventListenerReturn OnTickAuraCheck(Object EventData, Object EventSource, XComGameState NewGameState, Name EventID, Object CallbackData) {
-	local X2Effect_AuraSource AuraTemplate;
-	local XComGameState_Unit TargetUnitState, AuraSourceUnitState;
-	local XComGameStateHistory History;
-	local XComGameState_Effect ThisEffect;
-
-	History = `XCOMHISTORY;
-
-	`RTLOG("Ticking Aura...");
-
-	AuraSourceUnitState = XComGameState_Unit(History.GetGameStateForObjectID(ApplyEffectParameters.TargetStateObjectRef.ObjectID));
-	`assert(AuraSourceUnitState != none);
-
-	AuraTemplate = X2Effect_AuraSource(GetX2Effect());
-	`assert(AuraTemplate != none);
-
-	ThisEffect = self;
-
-	/// All Units must be checked and possibly have the aura effects added or removed
-	foreach History.IterateByClassType(class'XComGameState_Unit', TargetUnitState)
-	{
-		if ((TargetUnitState.ObjectID != AuraSourceUnitState.ObjectID))
-		{
-			AuraTemplate.UpdateBasedOnAuraTarget(AuraSourceUnitState, TargetUnitState, ThisEffect, NewGameState);
-		}
-	}
-
-	return ELR_NoInterrupt;
-}
-
 
 // Overkill Damage Recorder (KillMail);
 function EventListenerReturn RTOverkillDamageRecorder(Object EventData, Object EventSource, XComGameState GameState, Name EventID, Object CallbackData) {
