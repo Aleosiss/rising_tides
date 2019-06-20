@@ -286,6 +286,7 @@ Begin:
 
 	if( EffectName != "" )
 	{
+		`RTLOG("RTAction Playing Effect: " $ EffectName, false, true);
 		// play or stop this effect
 		if( !bStopEffect )
 		{

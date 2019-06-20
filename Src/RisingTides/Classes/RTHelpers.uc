@@ -329,3 +329,69 @@ static function CheckpointDebug(out int checkpointNum, optional bool bShouldRedS
 	checkpointNum++;
 	`RTLOG("Checkpoint " $ checkpointNum, bShouldRedScreenToo, bShouldOutputToConsoleToo);
 }
+
+static function PrintEffectsAndMITVsForUnitState(XComGameState_Unit UnitState, bool bShouldRemove) {
+	local XGUnit UnitVisualizer;
+	local XComUnitPawn UnitPawn;
+
+	UnitVisualizer = XGUnit(UnitState.GetVisualizer());
+	UnitPawn = UnitVisualizer.GetPawn();
+
+	PrintEffectsAndMITVsForUnitPawn(UnitPawn, bShouldRemove);
+}
+
+static function PrintEffectsAndMITVsForUnitPawn(XComUnitPawn UnitPawn, bool bShouldRemove) {
+	local ParticleSystemComponent PSComponent, TestPSComponent;
+	local MeshComponent MeshComp;
+	local MaterialInstanceTimeVarying MITV;
+	local int i;
+
+	foreach UnitPawn.Mesh.AttachedComponents( class'ParticleSystemComponent', TestPSComponent )
+	{
+		`RTLOG("Found Attached PSComponent: " $ PathName( TestPSComponent.Template ), false, true);
+		if(bShouldRemove) {
+			PSComponent = TestPSComponent;
+			UnitPawn.Mesh.DetachComponent( PSComponent );
+			PSComponent.DeactivateSystem();
+		}
+	}
+
+	foreach UnitPawn.ComponentList( class'ParticleSystemComponent', TestPSComponent )
+	{
+		`RTLOG("Found Floating PSComponent: " $ PathName( TestPSComponent.Template ), false, true);
+		if(bShouldRemove) {
+			PSComponent = TestPSComponent;
+			UnitPawn.Mesh.DetachComponent( PSComponent );
+			PSComponent.DeactivateSystem();
+		}
+	}
+
+	foreach UnitPawn.AllOwnedComponents(class'MeshComponent', MeshComp)
+	{
+		`RTLOG("--------------------------------------------------------------------", false, true);
+		`RTLOG("Found MeshComponent: " $ PathName(MeshComp), false, true);
+		for (i = 0; i < MeshComp.Materials.Length; i++)
+		{
+			if (MeshComp.GetMaterial(i).IsA('MaterialInstanceTimeVarying'))
+			{
+				MITV = MaterialInstanceTimeVarying(MeshComp.GetMaterial(i));
+				`RTLOG("Found PrimaryMaterial: " $ PathName(MITV), false, true);
+				if(bShouldRemove) 
+					MeshComp.PopMaterial(i, eMatPriority_AnimNotify);
+			}
+		}
+
+		for (i = 0; i < MeshComp.AuxMaterials.Length; i++)
+		{
+			if (MeshComp.GetMaterial(i).IsA('MaterialInstanceTimeVarying'))
+			{
+				MITV = MaterialInstanceTimeVarying(MeshComp.GetMaterial(i));
+				`RTLOG("Found AuxMaterial: " $ PathName(MITV), false, true);
+				if(bShouldRemove)
+					MeshComp.PopMaterial(i, eMatPriority_AnimNotify);
+			}
+		}
+	}
+
+	UnitPawn.UpdateAllMeshMaterials();
+}

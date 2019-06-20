@@ -416,7 +416,6 @@ function EventListenerReturn RTAbilityTriggerEventListener_ValidAbilityLocations
 }
 
 function EventListenerReturn AbilityTriggerEventListener_Self_CloakingProtocolConcealmentHandler(Object EventData, Object EventSource, XComGameState GameState, Name EventID, Object CallbackData) {
-	local XComWorldData World;
 	local XComGameStateHistory History;
 	local XComGameState_Unit AbilityOwnerUnit, TargetUnit;
 	local int RangeDiff;

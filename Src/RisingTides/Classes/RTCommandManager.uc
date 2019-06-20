@@ -1309,79 +1309,14 @@ private function XComGameState_Unit GetSelectedUnitInArmory()
 	return UnitState;
 }
 
-exec function RT_PrintEffectsAndMITVSForClosestUnitToCursor(bool bShouldRemove = false) {
+exec function RT_PrintEffectsAndMITVsForClosestUnitToCursor(bool bShouldRemove = false) {
 	local XComGameState_Unit UnitState;
 	local XComTacticalCheatManager CheatsManager;
-	local XComGameState_Item ItemState;
-	local XComGameStateHistory History;
-	local StateObjectReference ItemRef;
-
-	local ParticleSystemComponent PSComponent, TestPSComponent;
-
-	local XGUnit UnitVisualizer;
-	local XComUnitPawn UnitPawn;
-
-	local MeshComponent MeshComp;
-	local MaterialInstanceTimeVarying MITV;
-	local int i;
 
 	CheatsManager = `CHEATMGR;
-	History = `XCOMHISTORY;
 
 	UnitState = CheatsManager.GetClosestUnitToCursor();
 
 	`RTLOG("Printing all particle effects and MITVs for " $ UnitState.GetFullName(), false, true);
-
-	UnitVisualizer = XGUnit(UnitState.GetVisualizer());
-	UnitPawn = UnitVisualizer.GetPawn();
-
-	foreach UnitPawn.Mesh.AttachedComponents( class'ParticleSystemComponent', TestPSComponent )
-	{
-		`RTLOG("Found Attached PSComponent: " $ PathName( TestPSComponent.Template ), false, true);
-		if(bShouldRemove) {
-			PSComponent = TestPSComponent;
-			UnitPawn.Mesh.DetachComponent( PSComponent );
-			PSComponent.DeactivateSystem();
-		}
-	}
-
-	foreach UnitPawn.ComponentList( class'ParticleSystemComponent', TestPSComponent )
-	{
-		`RTLOG("Found Floating PSComponent: " $ PathName( TestPSComponent.Template ), false, true);
-		if(bShouldRemove) {
-			PSComponent = TestPSComponent;
-			UnitPawn.Mesh.DetachComponent( PSComponent );
-			PSComponent.DeactivateSystem();
-		}
-	}
-
-	foreach UnitPawn.AllOwnedComponents(class'MeshComponent', MeshComp)
-	{
-		`RTLOG("--------------------------------------------------------------------", false, true);
-		`RTLOG("Found MeshComponent: " $ PathName(MeshComp), false, true);
-		for (i = 0; i < MeshComp.Materials.Length; i++)
-		{
-			if (MeshComp.GetMaterial(i).IsA('MaterialInstanceTimeVarying'))
-			{
-				MITV = MaterialInstanceTimeVarying(MeshComp.GetMaterial(i));
-				`RTLOG("Found PrimaryMaterial: " $ PathName(MITV), false, true);
-				if(bShouldRemove) 
-					MeshComp.PopMaterial(i, eMatPriority_AnimNotify);
-			}
-		}
-
-		for (i = 0; i < MeshComp.AuxMaterials.Length; i++)
-		{
-			if (MeshComp.GetMaterial(i).IsA('MaterialInstanceTimeVarying'))
-			{
-				MITV = MaterialInstanceTimeVarying(MeshComp.GetMaterial(i));
-				`RTLOG("Found AuxMaterial: " $ PathName(MITV), false, true);
-				if(bShouldRemove)
-					MeshComp.PopMaterial(i, eMatPriority_AnimNotify);
-			}
-		}
-	}
-
-	UnitPawn.UpdateAllMeshMaterials();
-	
+	`RTS.PrintEffectsAndMITVsForUnitState(UnitState, bShouldRemove);
 }
