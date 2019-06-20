@@ -11,7 +11,7 @@ function Init()
 	//`RTLOG("-----------------------------RTAction_RemoveMITV BEFORE--------------------------------", false, true);
 	//`RTS.PrintEffectsAndMITVsForUnitPawn(UnitPawn, false);
 	//`RTLOG("-----------------------------RTAction_RemoveMITV BEFORE--------------------------------", false, true);
-	`RTLOG("Cleaning up MITVs!", false, true);
+	//`RTLOG("Cleaning up MITVs!", false, true);
 	UnitPawn.CleanUpMITV();
 	//`RTLOG("-----------------------------RTAction_RemoveMITV AFTER--------------------------------", false, true);
 	//`RTS.PrintEffectsAndMITVsForUnitPawn(UnitPawn, false);

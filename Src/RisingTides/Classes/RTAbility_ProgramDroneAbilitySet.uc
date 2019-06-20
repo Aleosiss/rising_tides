@@ -27,7 +27,7 @@ static function X2AbilityTemplate RTProgramDroneCloakingProtocol() {
 
 	Template.AdditionalAbilities.AddItem('RTProgramDroneCloakingProtocolOn');
 	Template.AdditionalAbilities.AddItem('RTProgramDroneCloakingProtocolOff');
-	Template.AdditionalAbilities.AddItem('RTProgramDroneConcealmentHandler');
+	//Template.AdditionalAbilities.AddItem('RTProgramDroneConcealmentHandler');
 
 	return Template;
 }
@@ -87,7 +87,7 @@ static function X2AbilityTemplate RTProgramDroneCloakingProtocolOn() {
 //	AuraEffect.VFXSocket = 'FX_Base';
 //	AuraEffect.VFXSocketsArrayName = 'None';
 //	AuraEffect.fVFXScale = 0.5;
-	AuraEffect.fRadius = default.CLOAKING_PROTOCOL_RADIUS_METERS;
+	AuraEffect.fRadiusMeters = default.CLOAKING_PROTOCOL_RADIUS_METERS;
 	AuraEffect.bReapplyOnTick = true;
 	Template.AddTargetEffect(AuraEffect);
 

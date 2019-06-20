@@ -306,7 +306,7 @@ static function X2AbilityTemplate CreateOverTheShoulderAbility(X2AbilityTemplate
 	OTSEffect.VFXSocket = 'CIN_Root';
 	OTSEffect.VFXSocketsArrayName = 'None';
 	OTSEffect.fVFXScale = 2.5;
-	OTSEffect.fRadius = default.OTS_RADIUS;
+	OTSEffect.fRadiusMeters = default.OTS_RADIUS;
 	Template.AddTargetEffect(OTSEffect);
 
 	// tag effect. add this last

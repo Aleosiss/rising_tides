@@ -347,11 +347,12 @@ function EventListenerReturn CleanupMobileSquadViewers(Object EventData, Object 
 
 // OnUpdateAuraCheck
 function EventListenerReturn OnUpdateAuraCheck(Object EventData, Object EventSource, XComGameState GameState, Name EventID, Object CallbackData) {
-	local X2Effect_AuraSource AuraTemplate;
+	local RTEffect_AuraSource AuraTemplate;
 	local XComGameState_Unit UpdatedUnitState, AuraSourceUnitState;
 	local XComGameStateHistory History;
-	local XComGameState_Effect ThisEffect;
+	local RTGameState_Effect ThisEffect;
 	local XComGameState NewGameState;
+	local StateObjectReference EffectRef;
 
 	UpdatedUnitState = XComGameState_Unit(EventData);
 	`assert(UpdatedUnitState != none);
@@ -369,15 +370,21 @@ function EventListenerReturn OnUpdateAuraCheck(Object EventData, Object EventSou
 		AuraSourceUnitState = XComGameState_Unit(History.GetGameStateForObjectID(ApplyEffectParameters.TargetStateObjectRef.ObjectID));
 		`assert(AuraSourceUnitState != none);
 
-		AuraTemplate = X2Effect_AuraSource(GetX2Effect());
+		AuraTemplate = RTEffect_AuraSource(GetX2Effect());
 
 		`assert(AuraTemplate != none);
 
 		// Create a new gamestate
-		NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("X2Effect_AuraSource: Affecting Target");
+		NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("RTEffect_AuraSource: Affecting Target");
 
+		`RTLOG("OnUpdateAuraCheck UpdateBasedOnAuraTarget about to run for eventID " $ EventID, false, true);
+		PrintEffectModifications();
 		// The Target Unit different than the Owning Unit of the aura, so only it needs to be checked
 		AuraTemplate.UpdateBasedOnAuraTarget(AuraSourceUnitState, UpdatedUnitState, ThisEffect, NewGameState);
+
+		`RTLOG("OnUpdateAuraCheck UpdateBasedOnAuraTarget ran! Effect lists below...", false, true);
+		PrintEffectModifications();
+		`RTLOG("Finished printing, submitting gamestate.", false, true);
 
 		// Submit the new gamestate
 		SubmitNewGameState(NewGameState);
@@ -389,20 +396,35 @@ function EventListenerReturn OnUpdateAuraCheck(Object EventData, Object EventSou
 	return ELR_NoInterrupt;
 }
 
+protected function PrintEffectModifications() {
+	local StateObjectReference EffectRef;
+	local XComGameStateHistory History;
+
+	History = `XCOMHISTORY;
+
+	foreach EffectsAddedList(EffectRef) {
+		`RTLOG("Added: " $ RTGameState_Effect(History.GetGameStateForObjectID(EffectRef.ObjectID)).GetX2Effect().EffectName, false, true);
+	}
+	foreach EffectsRemovedList(EffectRef) {
+		`RTLOG("Removed: " $ RTGameState_Effect(History.GetGameStateForObjectID(EffectRef.ObjectID)).GetX2Effect().EffectName, false, true);
+	}
+}
+
 // OnTotalAuraCheck
 function EventListenerReturn OnTotalAuraCheck(Object EventData, Object EventSource, XComGameState GameState, Name EventID, Object CallbackData) {
-	local X2Effect_AuraSource AuraTemplate;
+	local RTEffect_AuraSource AuraTemplate;
 	local XComGameState_Unit TargetUnitState, AuraSourceUnitState;
 	local XComGameStateHistory History;
-	local XComGameState_Effect ThisEffect;
+	local RTGameState_Effect ThisEffect;
 	local XComGameState NewGameState;
+	local StateObjectReference EffectRef;
 
 	History = `XCOMHISTORY;
 
 	AuraSourceUnitState = XComGameState_Unit(History.GetGameStateForObjectID(ApplyEffectParameters.TargetStateObjectRef.ObjectID));
 	`assert(AuraSourceUnitState != none);
 
-	AuraTemplate = X2Effect_AuraSource(GetX2Effect());
+	AuraTemplate = RTEffect_AuraSource(GetX2Effect());
 	`assert(AuraTemplate != none);
 
 	ThisEffect = self;
@@ -410,6 +432,8 @@ function EventListenerReturn OnTotalAuraCheck(Object EventData, Object EventSour
 	// Create a new gamestate
 	NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("RTEffect_AuraSource: Affecting Target");
 
+	`RTLOG("OnTotalAuraCheck UpdateBasedOnAuraTarget about to run for eventID " $ EventID, false, true);
+	PrintEffectModifications();
 	/// All Units must be checked and possibly have the aura effects added or removed
 	foreach History.IterateByClassType(class'XComGameState_Unit', TargetUnitState)
 	{
@@ -418,6 +442,10 @@ function EventListenerReturn OnTotalAuraCheck(Object EventData, Object EventSour
 			AuraTemplate.UpdateBasedOnAuraTarget(AuraSourceUnitState, TargetUnitState, ThisEffect, NewGameState);
 		}
 	}
+
+	`RTLOG("OnTotalAuraCheck UpdateBasedOnAuraTarget ran! Effect lists below...", false, true);
+	PrintEffectModifications();
+	`RTLOG("Finished printing, submitting gamestate.", false, true);
 
 	// Submit the new gamestate
 	SubmitNewGameState(NewGameState);

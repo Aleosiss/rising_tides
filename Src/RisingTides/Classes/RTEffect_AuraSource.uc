@@ -1,7 +1,7 @@
 class RTEffect_AuraSource extends X2Effect_AuraSource;
 
 var float fVFXScale;
-var float fRadius;
+var float fRadiusMeters;
 
 var bool bReapplyOnTick;
 
@@ -47,7 +47,7 @@ function RegisterForEvents(XComGameState_Effect EffectGameState)
 }
 
 protected function bool CheckAuraConditions(XComGameState_Unit SourceUnitState, XComGameState_Unit TargetUnitState, XComGameState_Effect SourceAuraEffectGameState, X2AbilityTemplate AuraEffectTemplate) {
-	if(class'Helpers'.static.IsTileInRange(SourceUnitState.TileLocation, TargetUnitState.TileLocation, Square(fRadius))) {
+	if(class'Helpers'.static.IsTileInRange(SourceUnitState.TileLocation, TargetUnitState.TileLocation, Square(`METERSTOTILES(fRadiusMeters)))) {
 		return true;
 	}
 	return false;

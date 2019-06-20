@@ -110,14 +110,9 @@ static function RTEffect_Stealth CreateStealthEffect(	int iDuration = 1,
 static function StealthVisualization(XComGameState VisualizeGameState, out VisualizationActionMetadata ActionMetadata, const name EffectApplyResult) {
 	local RTAction_ApplyMITV	MITVAction;
 
-	`RTLOG("StealthVisualization called!", false, true);
-	`RTLOG("Getting Script Trace...", false, true);
-	ScriptTrace();
 	//local X2Action_PlayEffect StartActionP1, PersistentAction;
 	if(!CheckSuccessfulUnitEffectApplication(VisualizeGameState, ActionMetadata, EffectApplyResult))
 		return;
-		
-	`RTLOG("StealthVisualization passed CheckSuccessfulUnitEffectApplication!", false, true);
 
 	// clear that shit out first
 	class'RTAction_RemoveMITV'.static.AddToVisualizationTree(ActionMetadata, VisualizeGameState.GetContext(), false, ActionMetadata.LastActionAdded);
@@ -128,26 +123,22 @@ static function StealthVisualization(XComGameState VisualizeGameState, out Visua
 	MITVAction = RTAction_ApplyMITV(class'RTAction_ApplyMITV'.static.AddToVisualizationTree(ActionMetadata, VisualizeGameState.GetContext(), false, ActionMetadata.LastActionAdded));
 	MITVAction.MITVPath = "FX_Wraith_Armor.M_Wraith_Armor_Overlay_On_MITV";
 	
-	//PersistentAction = 
+	//PersistentAc tion = 
 	BuildEffectParticle(VisualizeGameState, ActionMetadata, default.StealthPersistentParticleName, default.StealthSocketName, default.StealthSocketsArrayName, true, false);
 
 }
 
 static function StealthSyncVisualization(XComGameState VisualizeGameState, out VisualizationActionMetadata ActionMetadata, const name EffectApplyResult) {
-	`RTLOG("StealthSyncVisualization called!", false, true);
 	StealthVisualization(VisualizeGameState, ActionMetadata, 'AA_Success');
 }
 
 static function StealthRemovedVisualization(XComGameState VisualizeGameState, out VisualizationActionMetadata ActionMetadata, const name EffectApplyResult) {
 	local X2Action_Delay			DelayAction;
 
-	`RTLOG("StealthRemovedVisualization called!", false, true);
 
 	//local X2Action_PlayEffect StopActionP1, PersistentAction;
 	if(!CheckSuccessfulUnitEffectApplication(VisualizeGameState, ActionMetadata, EffectApplyResult))
 		return;
-	
-	`RTLOG("StealthRemovedVisualization passed CheckSuccessfulUnitEffectApplication!", false, true);
 
 	//PersistentAction = 
 	BuildEffectParticle(VisualizeGameState, ActionMetadata, default.StealthPersistentParticleName, default.StealthSocketName, default.StealthSocketsArrayName, true, true);
