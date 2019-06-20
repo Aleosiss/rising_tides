@@ -329,21 +329,3 @@ static function CheckpointDebug(out int checkpointNum, optional bool bShouldRedS
 	checkpointNum++;
 	`RTLOG("Checkpoint " $ checkpointNum, bShouldRedScreenToo, bShouldOutputToConsoleToo);
 }
-
-static function SyncVisualsForUnits(XComGameState GameState) {
-	local VisualizationActionMetadata ActionMetadata, EmptyData;
-	local XComGameState_Unit UnitState;
-	local XComGameStateHistory History;
-
-	History = `XCOMHISTORY;
-
-	foreach GameState.IterateByClassType( class'XComGameState_Unit', UnitState )
-	{
-		ActionMetadata = EmptyData;
-		`RTLOG("Syncing Visuals For Unit " $ UnitState.GetFullName(), false, false);
-		ActionMetadata.StateObject_NewState = UnitState;
-		ActionMetadata.StateObject_OldState = UnitState.GetPreviousVersion( );
-		ActionMetadata.VisualizeActor = History.GetVisualizer(UnitState.ObjectID);
-		class'X2Action_SyncVisualizer'.static.AddToVisualizationTree(ActionMetadata, GameState.GetContext() );
-	}
-}

@@ -74,7 +74,7 @@ static function X2AbilityTemplate RTProgramDroneCloakingProtocolOn() {
 	Radius.fTargetRadius =	default.CLOAKING_PROTOCOL_RADIUS_METERS * class'XComWorldData'.const.WORLD_StepSize * class'XComWorldData'.const.WORLD_UNITS_TO_METERS_MULTIPLIER;
 	Template.AbilityMultiTargetStyle = Radius;
 
-	Template.AddMultiTargetEffect(`RTEB.CreateStealthEffect(2, false));
+	Template.AddMultiTargetEffect(`RTEB.CreateStealthEffect(1, true));
 	Template.AddMultiTargetEffect(class'X2Effect_Spotted'.static.CreateUnspottedEffect());
 
 	// aura controller effect	------------------------------------------
@@ -166,7 +166,6 @@ static function X2AbilityTemplate RTProgramDroneConcealmentHandler() {
 
 	Template.AbilityToHitCalc = default.DeadEye;
 	Template.AbilityTargetStyle = default.SelfTarget;
-	Template.AbilityCosts.AddItem(default.FreeActionCost);
 
 	UnitEffectCondition = new class'X2Condition_UnitEffects';
 	UnitEffectCondition.AddRequireEffect(default.CloakingProtocolEffectName, 'AA_UnitIsFlanked');

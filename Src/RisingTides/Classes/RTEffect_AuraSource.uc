@@ -8,8 +8,9 @@ var bool bReapplyOnTick;
 function RegisterForEvents(XComGameState_Effect EffectGameState)
 {
 	local X2EventManager EventMgr;
-	local Object EffectObj;
+	local Object EffectObj, FilterObj;
 	local RTGameState_Effect RTEffectState;
+	local XComGameState_Player PlayerState;
 
 	EventMgr = `XEVENTMGR;
 	RTEffectState = RTGameState_Effect(EffectGameState);
@@ -22,17 +23,28 @@ function RegisterForEvents(XComGameState_Effect EffectGameState)
 
 	// Check when anything spawns.
 	EventMgr.RegisterForEvent(EffectObj, 'OnUnitBeginPlay', RTEffectState.OnUpdateAuraCheck, ELD_OnStateSubmitted, 40);
-}
 
-simulated function bool OnEffectTicked(const out EffectAppliedData ApplyEffectParameters, XComGameState_Effect kNewEffectState, XComGameState NewGameState, bool FirstApplication, XComGameState_Player Player)
-{
 	if(bReapplyOnTick) {
-		RTGameState_Effect(kNewEffectState).OnTickAuraCheck(none, none, NewGameState, 'OnTickAuraCheck', none);
+		PlayerState = XComGameState_Player(`XCOMHISTORY.GetGameStateForObjectID(RTeffectState.ApplyEffectParameters.PlayerStateObjectRef.ObjectID));
+		if(PlayerState == none) {
+			`RTLOG("Could not find PlayerState for RTEffect_AuraSource " $ EffectName $ ", will NOT reapply on tick!", true, false);
+			return;
+		}
+
+		// reapply to all targets on tick
+		FilterObj = PlayerState;
+		switch(WatchRule) {
+			case eGameRule_PlayerTurnBegin:
+				EventMgr.RegisterForEvent(EffectObj, 'PlayerTurnBegun', RTEffectState.OnTotalAuraCheck, ELD_OnStateSubmitted, 60, FilterObj);
+				break;
+			case eGameRule_PlayerTurnEnd:
+				EventMgr.RegisterForEvent(EffectObj, 'PlayerTurnEnded', RTEffectState.OnTotalAuraCheck, ELD_OnStateSubmitted, 60, FilterObj);
+				break;
+			default:
+				`RTLOG("Invalid WatchRule specified for RTEffect_AuraSource " $ EffectName $ ", will NOT reapply on tick!", true, false);
+		}
 	}
-
-	return super.OnEffectTicked(ApplyEffectParameters, kNewEffectState, NewGameState, FirstApplication, Player);
 }
-
 
 protected function bool CheckAuraConditions(XComGameState_Unit SourceUnitState, XComGameState_Unit TargetUnitState, XComGameState_Effect SourceAuraEffectGameState, X2AbilityTemplate AuraEffectTemplate) {
 	if(class'Helpers'.static.IsTileInRange(SourceUnitState.TileLocation, TargetUnitState.TileLocation, Square(fRadius))) {
@@ -151,9 +163,6 @@ protected function RemoveAuraTargetEffects(XComGameState_Unit SourceUnitState, X
 	{
 		EffectsToRemove[i].RemoveEffect(NewGameState, NewGameState);
 	}
-	// Visualization
-	XComGameStateContext_ChangeContainer(NewGameState.GetContext()).BuildVisualizationFn = RTSourceAuraEffectGameState.EffectsModifiedBuildVisualizationFn;
-
 }
 
 simulated function AddX2ActionsForVisualization(XComGameState VisualizeGameState, out VisualizationActionMetadata ActionMetadata, name EffectApplyResult)
@@ -230,4 +239,5 @@ defaultproperties
 	DuplicateResponse = eDupe_Ignore
 	GameStateEffectClass = class'RTGameState_Effect'
 	bReapplyOnTick = false
+	bUseSourcePlayerState = true
 }

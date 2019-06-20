@@ -71,6 +71,7 @@ private static function bool CheckSuccessfulUnitEffectApplication(XComGameState 
 	if(EffectApplyResult != 'AA_Success') {
 		return false;
 	}
+	
 	UnitState = XComGameState_Unit(ActionMetadata.StateObject_NewState);
 	if(UnitState == none) {
 		return false;
@@ -94,6 +95,7 @@ static function RTEffect_Stealth CreateStealthEffect(	int iDuration = 1,
 	Effect.BuildPersistentEffect(iDuration, bInfinite, true, false, WatchRule);
 	Effect.SetDisplayInfo(ePerkBuff_Bonus, default.StealthFriendlyName, default.StealthFriendlyDesc, default.StealthIconPath, true,, AbilitySourceName);
 	Effect.VisualizationFn = StealthVisualization;
+	Effect.EffectSyncVisualizationFn = StealthSyncVisualization;
 	Effect.EffectRemovedVisualizationFn = StealthRemovedVisualization;
 
 	if (default.StealthStartParticleName != "" && !default.bUseEffectVisualizationOverride) {
@@ -106,28 +108,55 @@ static function RTEffect_Stealth CreateStealthEffect(	int iDuration = 1,
 }
 
 static function StealthVisualization(XComGameState VisualizeGameState, out VisualizationActionMetadata ActionMetadata, const name EffectApplyResult) {
+	local RTAction_ApplyMITV	MITVAction;
+
 	//local X2Action_PlayEffect StartActionP1, PersistentAction;
 	if(!CheckSuccessfulUnitEffectApplication(VisualizeGameState, ActionMetadata, EffectApplyResult))
 		return;
 
+	// clear that shit out first
+	class'RTAction_RemoveMITV'.static.AddToVisualizationTree(ActionMetadata, VisualizeGameState.GetContext(), false, ActionMetadata.LastActionAdded);
+
 	//StartActionP1 = 
 	BuildEffectParticle(VisualizeGameState, ActionMetadata, default.StealthStartParticleName, default.StealthSocketName, default.StealthSocketsArrayName, true, false);
+
+	MITVAction = RTAction_ApplyMITV(class'RTAction_ApplyMITV'.static.AddToVisualizationTree(ActionMetadata, VisualizeGameState.GetContext(), false, ActionMetadata.LastActionAdded));
+	MITVAction.MITVPath = "FX_Wraith_Armor.M_Wraith_Armor_Overlay_On_MITV";
 	
 	//PersistentAction = 
 	BuildEffectParticle(VisualizeGameState, ActionMetadata, default.StealthPersistentParticleName, default.StealthSocketName, default.StealthSocketsArrayName, true, false);
 
 }
 
+static function StealthSyncVisualization(XComGameState VisualizeGameState, out VisualizationActionMetadata ActionMetadata, const name EffectApplyResult) {
+	StealthVisualization(VisualizeGameState, ActionMetadata, 'AA_Success');
+}
+
 static function StealthRemovedVisualization(XComGameState VisualizeGameState, out VisualizationActionMetadata ActionMetadata, const name EffectApplyResult) {
+	local X2Action_Delay			DelayAction;
+
+	`RTLOG("StealthRemovedVisualization called!");
+
 	//local X2Action_PlayEffect StopActionP1, PersistentAction;
 	if(!CheckSuccessfulUnitEffectApplication(VisualizeGameState, ActionMetadata, EffectApplyResult))
 		return;
+	
+	`RTLOG("StealthRemovedVisualization passed CheckSuccessfulUnitEffectApplication!");
 
 	//PersistentAction = 
 	BuildEffectParticle(VisualizeGameState, ActionMetadata, default.StealthPersistentParticleName, default.StealthSocketName, default.StealthSocketsArrayName, true, true);
 
+	//StartActionP1 = 
+	BuildEffectParticle(VisualizeGameState, ActionMetadata, default.StealthStartParticleName, default.StealthSocketName, default.StealthSocketsArrayName, true, true);
+
+	class'RTAction_RemoveMITV'.static.AddToVisualizationTree(ActionMetadata, VisualizeGameState.GetContext(), false, ActionMetadata.LastActionAdded);
+
 	//StopActionP1 = 
 	BuildEffectParticle(VisualizeGameState, ActionMetadata, default.StealthStopParticleName, default.StealthSocketName, default.StealthSocketsArrayName, true, false);
+
+	DelayAction = X2Action_Delay(class'X2Action_Delay'.static.AddToVisualizationTree(ActionMetadata, VisualizeGameState.GetContext(), false, ActionMetadata.LastActionAdded));
+	DelayAction.Duration = 0.33f;
+	DelayAction.bIgnoreZipMode = true;
 }
 
 static function RTEffect_Meld CreateMeldEffect(int iDuration = 1, optional bool bInfinite = true) {

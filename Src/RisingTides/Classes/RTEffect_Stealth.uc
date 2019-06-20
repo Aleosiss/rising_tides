@@ -65,7 +65,7 @@ simulated function OnEffectRemoved(const out EffectAppliedData ApplyEffectParame
 		`XEVENTMGR.TriggerEvent('EffectBreakUnitConcealment', NewUnitState, NewUnitState, NewGameState);
 	}
 }
-
+/*
 simulated function AddX2ActionsForVisualization(XComGameState VisualizeGameState, out VisualizationActionMetadata ActionMetadata, name EffectApplyResult)
 {
 	local RTAction_ApplyMITV	MITVAction;
@@ -77,8 +77,6 @@ simulated function AddX2ActionsForVisualization(XComGameState VisualizeGameState
 
 	MITVAction = RTAction_ApplyMITV(class'RTAction_ApplyMITV'.static.AddToVisualizationTree(ActionMetadata, VisualizeGameState.GetContext(), false, ActionMetadata.LastActionAdded));
 	MITVAction.MITVPath = "FX_Wraith_Armor.M_Wraith_Armor_Overlay_On_MITV";
-
-	`RTS.SyncVisualsForUnits(VisualizeGameState);
 }
 
 simulated function AddX2ActionsForVisualization_Sync(XComGameState VisualizeGameState, out VisualizationActionMetadata ActionMetadata)
@@ -98,9 +96,8 @@ simulated function AddX2ActionsForVisualization_Removed(XComGameState VisualizeG
 	DelayAction = X2Action_Delay(class'X2Action_Delay'.static.AddToVisualizationTree(ActionMetadata, VisualizeGameState.GetContext(), false, ActionMetadata.LastActionAdded));
 	DelayAction.Duration = 0.33f;
 	DelayAction.bIgnoreZipMode = true;
-
-	`RTS.SyncVisualsForUnits(VisualizeGameState);
 }
+*/
 
 DefaultProperties
 {

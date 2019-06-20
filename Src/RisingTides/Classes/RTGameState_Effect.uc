@@ -1685,7 +1685,7 @@ function EventListenerReturn HandleRepositioning(Object EventData, Object EventS
 
 	if(!`RTS.MultiCatCheckAbilityActivated(AbilityState.GetMyTemplateName(), Checklists))
 	{
-		`RTLOG("HandlingRepositioning triggered by an invalid ability: " $ AbilityState.GetMyTemplateName());
+		//`RTLOG("HandlingRepositioning triggered by an invalid ability: " $ AbilityState.GetMyTemplateName());
 		return ELR_NoInterrupt;
 	}
 
