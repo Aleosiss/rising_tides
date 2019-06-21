@@ -151,8 +151,6 @@ function Invoke-Make([string] $makeCmd, [string] $makeFlags, [string] $sdkPath, 
             # you have failed. we will find another way.
             exit 1
         }
-        
-        Write-Host "Polling make..."
         Start-Sleep -m 50
     }
 
