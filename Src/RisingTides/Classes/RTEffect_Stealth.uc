@@ -60,6 +60,8 @@ simulated function OnEffectRemoved(const out EffectAppliedData ApplyEffectParame
 
 	NewUnitState = XComGameState_Unit(NewGameState.ModifyStateObject(class'XComGameState_Unit', OldUnitState.ObjectID));
 
+	`XEVENTMGR.TriggerEvent('UnitBreakRTSTealth', NewUnitState, NewUnitState, NewGameState);
+
 	// Stealth can wear off naturally and not break concealment
 	if (NewUnitState != none && !StealthEffectState.bWasPreviouslyConcealed && OldUnitState.IsConcealed()) {
 		`XEVENTMGR.TriggerEvent('EffectBreakUnitConcealment', NewUnitState, NewUnitState, NewGameState);

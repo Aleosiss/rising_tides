@@ -422,16 +422,29 @@ function EventListenerReturn AbilityTriggerEventListener_Self_CloakingProtocolCo
 
 	History = `XCOMHISTORY;
 
-	`RTLOG("Hello from AbilityTriggerEventListener_Self_CloakingProtocolConcealmentHandler!");
-
 	AbilityOwnerUnit = XComGameState_Unit(History.GetGameStateForObjectID(OwnerStateObject.ObjectID));
 	TargetUnit = XComGameState_Unit(EventData);
 
+	if(AbilityOwnerUnit.ObjectID == TargetUnit.ObjectID) {
+		return ELR_NoInterrupt;
+	}
+
+	if(!AbilityOwnerUnit.IsConcealed()) {
+		return ELR_NoInterrupt;
+	}
+
+	if(!AbilityOwnerUnit.IsUnitAffectedByEffectName(class'RTAbility_ProgramDroneAbilitySet'.default.CloakingProtocolEffectName)) {
+		return ELR_NoInterrupt;
+	}
+
 	RangeDiff = `TILESTOMETERS(AbilityOwnerUnit.TileDistanceBetween(TargetUnit));
 
-	if(RangeDiff <= class'RTAbility_ProgramDroneAbilitySet'.default.CLOAKING_PROTOCOL_RADIUS_METERS) {
-		AbilityTriggerAgainstSingleTarget(OwnerStateObject, false);
+	if(RangeDiff > class'RTAbility_ProgramDroneAbilitySet'.default.CLOAKING_PROTOCOL_RADIUS_METERS) {
+		return ELR_NoInterrupt;
 	}
+
+	ActivateAbility(OwnerStateObject);
+
 	return ELR_NoInterrupt;
 }
 

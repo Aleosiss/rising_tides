@@ -5,6 +5,8 @@ class RTAbility_ProgramDroneAbilitySet extends RTAbility
 	var config float		CLOAKING_PROTOCOL_RADIUS_METERS;
 	var localized string	CloakingProtocolTitle;
 	var localized string	CloakingProtocolSelfDescription;
+	var localized string	CloakingProtocolMobilityMalusTitle;
+	var localized string	CloakingProtocolMobilityMalusDescription;
 
 static function array<X2DataTemplate> CreateTemplates()
 {
@@ -27,7 +29,7 @@ static function X2AbilityTemplate RTProgramDroneCloakingProtocol() {
 
 	Template.AdditionalAbilities.AddItem('RTProgramDroneCloakingProtocolOn');
 	Template.AdditionalAbilities.AddItem('RTProgramDroneCloakingProtocolOff');
-	//Template.AdditionalAbilities.AddItem('RTProgramDroneConcealmentHandler');
+	Template.AdditionalAbilities.AddItem('RTProgramDroneConcealmentHandler');
 
 	return Template;
 }
@@ -93,6 +95,7 @@ static function X2AbilityTemplate RTProgramDroneCloakingProtocolOn() {
 
 	MobilityDebuffEffect = new class'X2Effect_PersistentStatChange';
 	MobilityDebuffEffect.BuildPersistentEffect(1, true, true, false);
+	MobilityDebuffEffect.SetDisplayInfo(ePerkBuff_Penalty, default.CloakingProtocolMobilityMalusTitle, default.CloakingProtocolMobilityMalusDescription, Template.IconImage, true,,Template.AbilitySourceName);
 	MobilityDebuffEffect.AddPersistentStatChange(eStat_Mobility, 0.7, MODOP_PostMultiplication);
 	MobilityDebuffEffect.EffectName = 'CloakingProtocolMobilityMalus';
 
@@ -147,7 +150,7 @@ static function X2AbilityTemplate RTProgramDroneCloakingProtocolOff() {
 	RemoveEffect.EffectNamesToRemove.AddItem(class'RTEffectBuilder'.default.StealthEffectName);
 	Template.AddMultiTargetEffect(RemoveEffect);
 
-	//Template.CustomFireAnim = 'NO_CloakingProtocolOff';
+	Template.bSkipFireAction = true;
 
 	return Template;
 }
@@ -163,6 +166,7 @@ static function X2AbilityTemplate RTProgramDroneConcealmentHandler() {
 	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_NeverShow;
 	Template.Hostility = eHostility_Neutral;
 	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_defend_panic";
+	Template.ConcealmentRule = eConceal_Never;
 
 	Template.AbilityToHitCalc = default.DeadEye;
 	Template.AbilityTargetStyle = default.SelfTarget;
@@ -177,10 +181,10 @@ static function X2AbilityTemplate RTProgramDroneConcealmentHandler() {
 	Trigger = new class'X2AbilityTrigger_EventListener';
 	Trigger.ListenerData.Deferral = ELD_OnStateSubmitted;
 	Trigger.ListenerData.EventFn = class'RTGameState_Ability'.static.AbilityTriggerEventListener_Self_CloakingProtocolConcealmentHandler;
-	Trigger.ListenerData.EventID = 'EffectBreakUnitConcealment';
+	Trigger.ListenerData.EventID = 'UnitBreakRTSTealth';
 	Template.AbilityTriggers.AddItem(Trigger);
 
-	Template.AddTargetEffect(new class'X2Effect_BreakUnitConcealment');
+	Template.AddShooterEffect(new class'X2Effect_BreakUnitConcealment');
 
 	return Template;
 }

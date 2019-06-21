@@ -129,6 +129,8 @@ BLOODLUST_DESC="This unit is experiencing the thrill of combat! Their melee crit
 [RTAbility_ProgramDroneAbilitySet]
 CloakingProtocolTitle = "Cloaking Field"
 CloakingProtocolSelfDescription = "The Cloaking Field projected by the Program Drone prevents units from losing concealment even in close proximity to ADVENT forces."
+CloakingProtocolMobilityMalusTitle = "Reduced Thruster Capacity"
+CloakingProtocolMobilityMalusDescription = "The Cloaking Field Generator is sapping the drone's power supply, reducing available power for the drone's thrusters."
 
 [RTEffect_Bloodlust]
 BloodlustEffectTitle="Bloodlust"

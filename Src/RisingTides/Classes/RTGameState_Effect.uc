@@ -326,6 +326,14 @@ function ClearEffectLists(XComGameState NewGameState) {
 	SelfState.EffectsRemovedList.Length = 0;
 }
 
+// EffectsWereModified
+function bool WereEffectsModified() {
+	if(EffectsAddedList.Length > 0) { return true; }
+	if(EffectsRemovedList.Length > 0) { return true; }
+
+	return false;
+}
+
 // CleanupMobileSquadViewers
 function EventListenerReturn CleanupMobileSquadViewers(Object EventData, Object EventSource, XComGameState GameState, Name EventID, Object CallbackData) {
 	local XComGameStateHistory History;
@@ -379,23 +387,19 @@ function EventListenerReturn OnUpdateAuraCheck(Object EventData, Object EventSou
 		// Create a new gamestate
 		NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("RTEffect_AuraSource: Affecting Target");
 
-		`RTLOG("OnUpdateAuraCheck UpdateBasedOnAuraTarget about to run for eventID " $ EventID, false, true);
-		PrintEffectModifications();
 		// The Target Unit different than the Owning Unit of the aura, so only it needs to be checked
 		AuraTemplate.UpdateBasedOnAuraTarget(AuraSourceUnitState, UpdatedUnitState, ThisEffect, NewGameState);
 
-		`RTLOG("OnUpdateAuraCheck UpdateBasedOnAuraTarget ran! Effect lists below...", false, true);
-		PrintEffectModifications();
-		`RTLOG("Finished printing, submitting gamestate.", false, true);
-
 		// Submit the new gamestate
-		SubmitNewGameState(NewGameState);
+		if(WereEffectsModified()) {
+			SubmitNewGameState(NewGameState);
 
-		`RTLOG("OnUpdateAuraCheck cleaning up Effect lists...");
-		NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("RTEffect_AuraSource: Cleaning Effect changes record!");
-		ClearEffectLists(NewGameState);
-		SubmitNewGameState(NewGameState);
-		`RTLOG("OnUpdateAuraCheck cleaned.");
+			NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("RTEffect_AuraSource: Cleaning Effect changes record!");
+			ClearEffectLists(NewGameState);
+			SubmitNewGameState(NewGameState);
+		} else {
+			History.CleanupPendingGameState(NewGameState);
+		}
 	}
 
 	return ELR_NoInterrupt;
@@ -422,7 +426,6 @@ function EventListenerReturn OnTotalAuraCheck(Object EventData, Object EventSour
 	local XComGameStateHistory History;
 	local RTGameState_Effect ThisEffect;
 	local XComGameState NewGameState;
-	local StateObjectReference EffectRef;
 
 	History = `XCOMHISTORY;
 
@@ -437,8 +440,6 @@ function EventListenerReturn OnTotalAuraCheck(Object EventData, Object EventSour
 	// Create a new gamestate
 	NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("RTEffect_AuraSource: Affecting Target");
 
-	`RTLOG("OnTotalAuraCheck UpdateBasedOnAuraTarget about to run for eventID " $ EventID, false, true);
-	PrintEffectModifications();
 	/// All Units must be checked and possibly have the aura effects added or removed
 	foreach History.IterateByClassType(class'XComGameState_Unit', TargetUnitState)
 	{
@@ -448,18 +449,15 @@ function EventListenerReturn OnTotalAuraCheck(Object EventData, Object EventSour
 		}
 	}
 
-	`RTLOG("OnTotalAuraCheck UpdateBasedOnAuraTarget ran! Effect lists below...", false, true);
-	PrintEffectModifications();
-	`RTLOG("Finished printing, submitting gamestate.", false, true);
+	if(WereEffectsModified()) {
+		SubmitNewGameState(NewGameState);
 
-	// Submit the new gamestate
-	SubmitNewGameState(NewGameState);
-
-	`RTLOG("OnTotalAuraCheck cleaning up Effect lists...");
-	NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("RTEffect_AuraSource: Cleaning Effect changes record!");
-	ClearEffectLists(NewGameState);
-	SubmitNewGameState(NewGameState);
-	`RTLOG("OnTotalAuraCheck cleaned.");
+		NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("RTEffect_AuraSource: Cleaning Effect changes record!");
+		ClearEffectLists(NewGameState);
+		SubmitNewGameState(NewGameState);
+	} else {
+		History.CleanupPendingGameState(NewGameState);
+	}
 
 	return ELR_NoInterrupt;
 }

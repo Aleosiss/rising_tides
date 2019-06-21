@@ -47,7 +47,7 @@ function RegisterForEvents(XComGameState_Effect EffectGameState)
 }
 
 protected function bool CheckAuraConditions(XComGameState_Unit SourceUnitState, XComGameState_Unit TargetUnitState, XComGameState_Effect SourceAuraEffectGameState, X2AbilityTemplate AuraEffectTemplate) {
-	if(class'Helpers'.static.IsTileInRange(SourceUnitState.TileLocation, TargetUnitState.TileLocation, Square(`METERSTOTILES(fRadiusMeters)))) {
+	if(class'Helpers'.static.IsTileInRange(SourceUnitState.TileLocation, TargetUnitState.TileLocation, Square(`METERSTOTILES(fRadiusMeters + 0.5f)))) {
 		return true;
 	}
 	return false;
