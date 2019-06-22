@@ -416,7 +416,8 @@ static function RTCharacterTemplate CreateProgramDroneTemplate(name TemplateName
 	CharTemplate.bIsCivilian = false;
 	CharTemplate.bIsPsionic = false;
 	CharTemplate.bIsRobotic = true;
-	CharTemplate.bIsSoldier = false;
+	CharTemplate.bIsSoldier = true;
+	CharTemplate.bAppearInBase = false;
 
 	CharTemplate.bCanBeTerrorist = false;
 	CharTemplate.bCanBeCriticallyWounded = false;
@@ -425,11 +426,18 @@ static function RTCharacterTemplate CreateProgramDroneTemplate(name TemplateName
 	CharTemplate.bAllowSpawnFromATT = false;  // If true, this unit can be spawned from an Advent Troop Transport
 	CharTemplate.bWeakAgainstTechLikeRobot = true;
 
-	CharTemplate.Abilities.AddItem('RTProgramDroneCloakingProtocol');
-	CharTemplate.Abilities.AddItem('RobotImmunities');
+	CharTemplate.DefaultSoldierClass = 'ProgramDrone';
+	CharTemplate.Abilities.AddItem('Loot');
+	CharTemplate.Abilities.AddItem('Evac');
+	CharTemplate.Abilities.AddItem('PlaceEvacZone');
+	CharTemplate.Abilities.AddItem('LiftOffAvenger');
+
+	//CharTemplate.Abilities.AddItem('RTProgramDroneCloakingProtocol');
+	//CharTemplate.Abilities.AddItem('RobotImmunities');
 	//CharTemplate.Abilities.AddItem('FireOnDeath');
 
 	CharTemplate.strScamperBT = "ScamperRoot_NoCover";
+	CharTemplate.ImmuneTypes.AddItem(class'X2Item_DefaultDamageTypes'.default.KnockbackDamageType);
 
 	//TODO: (ID 507) investigate possibilities for adding first-sighting narrative moment for new unit
 	//CharTemplate.SightedNarrativeMoments.AddItem(XComNarrativeMoment'X2NarrativeMoments.TACTICAL.AlienSitings.T_Central_AlienSightings_Muton');

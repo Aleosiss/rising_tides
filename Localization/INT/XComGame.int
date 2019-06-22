@@ -21,6 +21,9 @@ DisplayName="Program Infiltrator"
 ClassSummary="Whisper is the unit's designated marksman and tech expert."
 LeftAbilityTreeTitle="Fire Support"
 RightAbilityTreeTitle="Watcher"
+AbilityTreeTitles[0]="Fire Support"
+AbilityTreeTitles[1]="Psionics"
+AbilityTreeTitles[2]="Watcher"
 RandomNickNames[0]="Whisper"
 
 [ScopedAndDropped X2AbilityTemplate]
@@ -347,6 +350,9 @@ DisplayName="Program Berserker"
 ClassSummary="Queen is the unit's leader and close-combat specialist."
 LeftAbilityTreeTitle="Rampager"
 RightAbilityTreeTitle="Operator"
+AbilityTreeTitles[0]="Rampager"
+AbilityTreeTitles[1]="Psionics"
+AbilityTreeTitles[2]="Operator"
 RandomNickNames[0]="Queen"
 
 [BumpInTheNight X2AbilityTemplate]
@@ -577,8 +583,9 @@ LocPromotionPopupText="<Bullet/> Will not trigger if soldier is concealed.<br/><
 [RT_Gatherer X2SoldierClassTemplate]
 DisplayName="Program Gatherer"
 ClassSummary="Nova is the team's HUMINT expert and primary psionic support."
-LeftAbilityTreeTitle="Clairvoyant"
-RightAbilityTreeTitle="Telepath"
+AbilityTreeTitles[0]="Clairvoyant"
+AbilityTreeTitles[1]="Telepath"
+AbilityTreeTitles[2]="Psionics"
 RandomNickNames[0]="Nova"
 
 [OverTheShoulder X2AbilityTemplate]
@@ -809,6 +816,17 @@ LocPromotionPopupText="<Bullet/> Unit will be revealed when the effect ends.<br/
 
 ;----------------------------------------------------------------------------------------------------------------------------
 
+[ProgramDrone X2SoldierClassTemplate]
+DisplayName="N/A"
+ClassSummary="A Program Drone. No growth potential."
+LeftAbilityTreeTitle=""
+RightAbilityTreeTitle=""
+RandomNickNames[0]=""
+RankNames[0]=""
+ShortNames=[0]=""
+
+;----------------------------------------------------------------------------------------------------------------------------
+
 ; +AbilityAvailabilityCodes="AA_UnitNotMelded"
 AbilityAvailabilityStrings[89]="The Unit is not in the meld."
 
@@ -900,14 +918,14 @@ LocFriendlyName="Cloaking Protocol"
 LocLongDescription="Activate the drone's cloaking generator, creating a field with a <Ability:CLOAKING_GENERATOR_RADIUS> radius that continously cloaks allied units.<br/><Bullet/> Cloaking Protocol heavily taps the drone's power supply, reducing the mobility of the drone significantly.<br/><Bullet/> Cloaking Protocol gives a once-per-mission concealment effect.<br/><Bullet/> Cloaking protocol will not prevent concealment-breaking actions from decloaking units, but will refresh the cloaking effect on the next turn.<br/><Bullet/> Concealment-breaking actions made by units in Cloaking Protocol's radius will remove the drone's concealment as well.<br/><br/>"
 LocHelpText="Activate cloaking generator."
 LocFlyOverText="Cloaking Protocol"
-LocPromotionPopupText="<Bullet/> Cloaking Protocol heavily taps the drone's power supply, reducing the mobility of the drone significantly.<br/><Bullet/> Cloaking Protocol gives a once-per-mission concealment effect.<br/><Bullet/> Cloaking protocol will not prevent concealment-breaking actions from decloaking units, but will refresh the cloaking effect on the next turn.<br/><Bullet/>Concealment-breaking actions made by units in Cloaking Protocol's radius will remove the drone's concealment as well.<br/>"
+LocPromotionPopupText="<Bullet/> Cloaking Protocol heavily taps the drone's power supply, reducing the mobility of the drone significantly.<br/><Bullet/> Cloaking Protocol gives a once-per-mission concealment effect.<br/><Bullet/> Cloaking protocol will not prevent concealment-breaking actions from decloaking units, but will refresh the cloaking effect on the next turn.<br/><Bullet/> Concealment-breaking actions made by units in Cloaking Protocol's radius will remove the drone's concealment as well.<br/>"
 
 [RTProgramDroneCloakingProtocolOn X2AbilityTemplate]
 LocFriendlyName="Cloaking Protocol"
 LocLongDescription="Activate the drone's cloaking generator, creating a field with a <Ability:CLOAKING_GENERATOR_RADIUS> radius that continously cloaks allied units."
 LocHelpText="Activate cloaking generator."
 LocFlyOverText="Cloaking Protocol"
-LocPromotionPopupText="<Bullet/> Cloaking Protocol heavily taps the drone's power supply, reducing the mobility of the drone significantly.<br/><Bullet/> Cloaking Protocol gives a once-per-mission concealment effect.<br/><Bullet/> Cloaking protocol will not prevent concealment-breaking actions from decloaking units, but will refresh the cloaking effect on the next turn.<br/><Bullet/>Concealment-breaking actions made by units in Cloaking Protocol's radius will remove the drone's concealment as well.<br/>"
+LocPromotionPopupText="<Bullet/> Cloaking Protocol heavily taps the drone's power supply, reducing the mobility of the drone significantly.<br/><Bullet/> Cloaking Protocol gives a once-per-mission concealment effect.<br/><Bullet/> Cloaking protocol will not prevent concealment-breaking actions from decloaking units, but will refresh the cloaking effect on the next turn.<br/><Bullet/> Concealment-breaking actions made by units in Cloaking Protocol's radius will remove the drone's concealment as well.<br/>"
 
 [RTProgramDroneCloakingProtocolOff X2AbilityTemplate]
 LocFriendlyName="Disable Cloaking Protocol"
@@ -915,6 +933,14 @@ LocLongDescription="Disable the cloaking generator."
 LocHelpText="Disable the cloaking generator."
 LocFlyOverText="Cloaking Protocol Disabled"
 LocPromotionPopupText="<Bullet/> You should never see this.<br/>"
+
+[RTProgramDroneAppearance X2AbilityTemplate]
+LocFriendlyName="Refurbished Chassis"
+LocLongDescription="The IFF and chassis of this drone make it more difficult for ADVENT to distuinguish as an enemy."
+LocHelpText="The IFF and chassis of this drone make it more difficult for ADVENT to distuinguish as an enemy."
+LocFlyOverText="Refurbished Chassis"
+
+
 ;----------------------------------------------------------------------------------------------------------------------------
 
 [TestAbility X2AbilityTemplate]
@@ -1205,6 +1231,20 @@ RiskName="Soldier Shaken"
 
 [RTUIStrategyMapItem_ProgramHQ]
 m_strProgramFactionButton="Program Status Briefing"
+
+[RTBuildProgramDrone X2TechTemplate]
+DisplayName="Program XRC33 Drone"
+Summary="These refurbished ADVENT drones have had their armor and weaponry stripped out and replaced by a sophisticated cloaking field generator. We're unsure of how it functions, but if the Program is to be believed, this unit should be able to sneak a squad past any detection known."
+
+;-----------------------
+; STAFF SLOTS
+;-----------------------
+[ProgramDroneStaffSlot X2StaffSlotTemplate]
+EmptyText="OPEN: DRONE REQUIRED"
+BonusEmptyText="Begin drone repairs."
+BonusText="REPAIRING DRONE"
+FilledText="A drone is receiving repairs!"
+LockedText="LOCKED: BUILD DRONE"
 
 
 ;///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

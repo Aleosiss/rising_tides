@@ -362,7 +362,6 @@ function EventListenerReturn OnUpdateAuraCheck(Object EventData, Object EventSou
 	local XComGameStateHistory History;
 	local RTGameState_Effect ThisEffect;
 	local XComGameState NewGameState;
-	local StateObjectReference EffectRef;
 
 	UpdatedUnitState = XComGameState_Unit(EventData);
 	`assert(UpdatedUnitState != none);

@@ -108,9 +108,6 @@ static function RTEffect_Stealth CreateStealthEffect(	int iDuration = 1,
 }
 
 static function StealthVisualization(XComGameState VisualizeGameState, out VisualizationActionMetadata ActionMetadata, const name EffectApplyResult) {
-	local RTAction_ApplyMITV	MITVAction;
-
-	//local X2Action_PlayEffect StartActionP1, PersistentAction;
 	if(!CheckSuccessfulUnitEffectApplication(VisualizeGameState, ActionMetadata, EffectApplyResult))
 		return;
 
@@ -126,10 +123,6 @@ static function StealthSyncVisualization(XComGameState VisualizeGameState, out V
 }
 
 static function StealthRemovedVisualization(XComGameState VisualizeGameState, out VisualizationActionMetadata ActionMetadata, const name EffectApplyResult) {
-	local X2Action_Delay			DelayAction;
-
-
-	//local X2Action_PlayEffect StopActionP1, PersistentAction;
 	if(!CheckSuccessfulUnitEffectApplication(VisualizeGameState, ActionMetadata, EffectApplyResult))
 		return;
 

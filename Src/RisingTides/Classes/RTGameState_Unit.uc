@@ -10,6 +10,15 @@ function MakeItemsAvailable(XComGameState NewGameState, optional bool bStoreOldI
 	// don't do anything, we don't equip XCom gear
 }
 
+simulated function bool CanAddItemToInventory(const X2ItemTemplate ItemTemplate, const EInventorySlot Slot, optional XComGameState CheckGameState, optional int Quantity=1, optional XComGameState_Item Item)
+{
+	if(GetMyTemplateName() == 'ProgramDrone') {
+		return false;
+	}
+
+	return super.CanAddItemToInventory(ItemTemplate, Slot, CheckGameState, Quantity, Item);
+}
+
 function AddAbilitySetupData(X2AbilityTemplateManager AbilityTemplateManager, name AbilityName, out array<AbilitySetupData> arrData, out array<Name> ExcludedAbilityNames, AbilitySetupData InitialAbilitySetupData) {
 	local X2AbilityTemplate AbilityTemplate;
 	local AbilitySetupData Data, EmptyData;

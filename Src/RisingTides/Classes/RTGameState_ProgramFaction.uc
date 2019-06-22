@@ -1140,7 +1140,7 @@ function bool didTemplarMissionSucceed() {
 }
 
 function bool TemplarQuestlineSucceeded() {
-	return iTemplarQuestlineStage == 4;
+	return iTemplarQuestlineStage == 4 && !hasFailedTemplarQuestline();
 }
 
 function HandleTemplarQuestActions(XComGameState NewGameState) {

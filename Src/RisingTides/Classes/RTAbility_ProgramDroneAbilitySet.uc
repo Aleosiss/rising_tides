@@ -16,6 +16,7 @@ static function array<X2DataTemplate> CreateTemplates()
 	Templates.AddItem(RTProgramDroneCloakingProtocolOn());
 	Templates.AddItem(RTProgramDroneCloakingProtocolOff());
 	Templates.AddItem(RTProgramDroneConcealmentHandler());
+	Templates.AddItem(RTProgramDroneAppearance());
 
 	return Templates;
 }
@@ -41,6 +42,7 @@ static function X2AbilityTemplate RTProgramDroneCloakingProtocolOn() {
 	local RTEffect_AuraSource AuraEffect;
 	local X2Condition_UnitEffects UnitEffectCondition;
 	local X2Effect_PersistentStatChange MobilityDebuffEffect;
+	local RTEffect_Stealth CloakingEffect;
 
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'RTProgramDroneCloakingProtocolOn');
 
@@ -76,7 +78,10 @@ static function X2AbilityTemplate RTProgramDroneCloakingProtocolOn() {
 	Radius.fTargetRadius =	default.CLOAKING_PROTOCOL_RADIUS_METERS * class'XComWorldData'.const.WORLD_StepSize * class'XComWorldData'.const.WORLD_UNITS_TO_METERS_MULTIPLIER;
 	Template.AbilityMultiTargetStyle = Radius;
 
-	Template.AddMultiTargetEffect(`RTEB.CreateStealthEffect(1, true));
+	CloakingEffect = `RTEB.CreateStealthEffect(1, true);
+	CloakingEffect.TargetConditions.AddItem(default.LivingFriendlyUnitOnlyProperty);
+
+	Template.AddMultiTargetEffect(CloakingEffect);
 	Template.AddMultiTargetEffect(class'X2Effect_Spotted'.static.CreateUnspottedEffect());
 
 	// aura controller effect	------------------------------------------
@@ -85,10 +90,6 @@ static function X2AbilityTemplate RTProgramDroneCloakingProtocolOn() {
 	AuraEffect.SetDisplayInfo(ePerkBuff_Bonus, default.CloakingProtocolTitle, default.CloakingProtocolSelfDescription, Template.IconImage, true,,Template.AbilitySourceName);
 	AuraEffect.DuplicateResponse = eDupe_Refresh;
 	AuraEffect.EffectName = default.CloakingProtocolEffectName;
-//	AuraEffect.VFXTemplateName = "RisingTidesContentPackage.fX.P_Drone_CloakingProtocolAura";
-//	AuraEffect.VFXSocket = 'FX_Base';
-//	AuraEffect.VFXSocketsArrayName = 'None';
-//	AuraEffect.fVFXScale = 0.5;
 	AuraEffect.fRadiusMeters = default.CLOAKING_PROTOCOL_RADIUS_METERS;
 	AuraEffect.bReapplyOnTick = true;
 	Template.AddTargetEffect(AuraEffect);
@@ -96,7 +97,7 @@ static function X2AbilityTemplate RTProgramDroneCloakingProtocolOn() {
 	MobilityDebuffEffect = new class'X2Effect_PersistentStatChange';
 	MobilityDebuffEffect.BuildPersistentEffect(1, true, true, false);
 	MobilityDebuffEffect.SetDisplayInfo(ePerkBuff_Penalty, default.CloakingProtocolMobilityMalusTitle, default.CloakingProtocolMobilityMalusDescription, Template.IconImage, true,,Template.AbilitySourceName);
-	MobilityDebuffEffect.AddPersistentStatChange(eStat_Mobility, 0.7, MODOP_PostMultiplication);
+	MobilityDebuffEffect.AddPersistentStatChange(eStat_Mobility, 0.5, MODOP_PostMultiplication);
 	MobilityDebuffEffect.EffectName = 'CloakingProtocolMobilityMalus';
 
 	Template.AddTargetEffect(MobilityDebuffEffect);
@@ -185,6 +186,35 @@ static function X2AbilityTemplate RTProgramDroneConcealmentHandler() {
 	Template.AbilityTriggers.AddItem(Trigger);
 
 	Template.AddShooterEffect(new class'X2Effect_BreakUnitConcealment');
+
+	return Template;
+}
+
+static function X2AbilityTemplate RTProgramDroneAppearance() {
+	local X2AbilityTemplate						Template;
+	local X2Effect_PersistentStatChange			Effect;
+
+	//Icon Properties
+	`CREATE_X2ABILITY_TEMPLATE(Template, 'RTProgramDroneAppearance');
+	Template.IconImage = "img:///RisingTidesContentPackage.PerkIcons.rt_aggression";
+
+	Template.AbilitySourceName = 'eAbilitySource_Perk';
+	Template.eAbilityIconBehaviorHUD = EAbilityIconBehavior_NeverShow;
+	Template.Hostility = eHostility_Neutral;
+
+	//Apply perk at the start of the mission.
+	Template.AbilityToHitCalc = default.DeadEye;
+	Template.AbilityTargetStyle = default.SelfTarget;
+	Template.AbilityTriggers.AddItem(default.UnitPostBeginPlayTrigger);
+
+	Effect = new class'X2Effect_PersistentStatChange';
+	Effect.BuildPersistentEffect(1, true, true, false);
+	Effect.SetDisplayInfo(ePerkBuff_Passive, Template.LocFriendlyName, Template.LocLongDescription, Template.IconImage, true,,Template.AbilitySourceName);
+	Effect.AddPersistentStatChange(eStat_Mobility, 0.5, MODOP_Addition);
+	Template.AddTargetEffect(Effect);
+
+	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
+	//  NOTE: No visualization on purpose!
 
 	return Template;
 }
