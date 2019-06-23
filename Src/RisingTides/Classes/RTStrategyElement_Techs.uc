@@ -43,7 +43,7 @@ static function X2DataTemplate CreateBuildDroneTemplate()
 	`CREATE_X2TEMPLATE(class'X2TechTemplate', Template, 'RTBuildProgramDrone');
 	Template.PointsToComplete = StafferXDays(1, default.DRONE_DAYS_TO_BUILD);
 	Template.SortingTier = 1;
-	Template.strImage = "img:///UILibrary_DLC3Images.TECH_Spark";
+	Template.strImage = "img:///RisingTidesContentPackage.UIImages.AutopsyDrone";
 
 	Template.bProvingGround = true;
 	Template.bRepeatable = true;
@@ -75,7 +75,6 @@ static function X2DataTemplate CreateBuildDroneTemplate()
 static function CreateProgramDrone(XComGameState NewGameState, XComGameState_Tech TechState)
 {
 	local XComGameState_HeadquartersXCom XComHQ;
-	local XComGameState_FacilityXCom FacilityState;
 	local XComGameState_Unit DroneState;
 	local X2CharacterTemplateManager CharTemplateMgr;
 	local X2CharacterTemplate CharacterTemplate;
@@ -95,12 +94,5 @@ static function CreateProgramDrone(XComGameState NewGameState, XComGameState_Tec
 	if (TechState != none)
 	{
 		TechState.UnitRewardRef = DroneState.GetReference();
-	}
-
-	FacilityState = XComHQ.GetFacilityByName('Storage');
-	if (FacilityState != none && FacilityState.GetNumLockedStaffSlots() > 0)
-	{
-		// Unlock the Repair SPARK staff slot in Engineering
-		FacilityState.UnlockStaffSlot(NewGameState);
 	}
 }
