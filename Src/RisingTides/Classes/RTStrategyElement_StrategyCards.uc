@@ -67,6 +67,7 @@ static function JustPassingThroughModifyTacStartState(XComGameState StartState) 
 	local name CharTemplateName;
 	//local X2CharacterTemplate Template;
 	local XComGameState_Player PlayerState;
+	local int RandRoll, Chance;
 
 	if (IsSplitMission( StartState ))
 		return;
@@ -74,9 +75,13 @@ static function JustPassingThroughModifyTacStartState(XComGameState StartState) 
 	Program = class'RTHelpers'.static.GetNewProgramState(StartState);
 	Program.bShouldPerformPostMissionCleanup = true;
 	SoldierObjRef = Program.Master[`SYNC_RAND_STATIC(Program.Master.Length)];
-	
-	if(default.JustPassingThroughChance * (int(Program.Influence) + 1) < `SYNC_RAND_STATIC(100) /*|| true*/ ) //TODO: Refactor to include an Operative-based modifer (location + personality)
+
+	Chance = default.JustPassingThroughChance * (int(Program.Influence) + 1);
+	RandRoll = `SYNC_RAND_STATIC(100);
+	`RTLOG("Chance was " $ Chance $ ", RandRoll was " $ RandRoll);
+	if(Chance < RandRoll /*|| true*/ ) { //TODO: Refactor to include an Operative-based modifer (location + personality)
 		return;
+	}
 
 	foreach StartState.IterateByClassType( class'XComGameState_HeadquartersXCom', XComHQ )
 		break;
