@@ -670,6 +670,10 @@ static function GiveTemplarQuestlineCompleteReward(XComGameState NewGameState, X
 	local XComGameState_ResistanceFaction TemplarState;
 	local RTGameState_ProgramFaction ProgramState;
 	local DynamicPropertySet PropertySet;
+	local DynamicPropertySet EmptySet;
+	local XComGameState_Tech TechState;
+	local StateObjectReference TechRef;
+	local XComGameStateHistory History;
 
 	ProgramState = `RTS.GetNewProgramState(NewGameState);
 	ProgramState.IncrementNumFavorsAvailable(30);
@@ -678,9 +682,31 @@ static function GiveTemplarQuestlineCompleteReward(XComGameState NewGameState, X
 	TemplarState = `RTS.GetTemplarFactionState();
 	EliminateFaction(NewGameState, TemplarState);
 	
+	// You won
 	class'X2StrategyGameRulesetDataStructures'.static.BuildDynamicPropertySet(PropertySet, 'RTUIAlert', 'RTAlert_TemplarQuestlineComplete', none, true, true, true, false);
 	class'XComPresentationLayerBase'.static.QueueDynamicPopup(PropertySet, NewGameState);
+	PropertySet = EmptySet;
 
+	History = `XCOMHISTORY;
+	foreach History.IterateByClassType(class'XComGameState_Tech', TechState) {
+		if(TechState.GetMyTemplateName() == 'RTBuildProgramDrone') {
+			break;
+		}
+	}
+	
+	// Program Drone Blueprints | eAlert_ProvingGroundProjectAvailable
+	class'X2StrategyGameRulesetDataStructures'.static.BuildDynamicPropertySet(PropertySet, 'UIAlert', 'eAlert_ProvingGroundProjectAvailable', none, true, true, true, false);
+	class'X2StrategyGameRulesetDataStructures'.static.AddDynamicStringProperty(PropertySet, 'SoundToPlay', "Geoscape_CrewMemberLevelledUp");
+	class'X2StrategyGameRulesetDataStructures'.static.AddDynamicIntProperty(PropertySet, 'TechRef', TechState.ObjectID);
+	class'XComPresentationLayerBase'.static.QueueDynamicPopup(PropertySet, NewGameState);
+	PropertySet = EmptySet;
+
+	// Warp Grenade Blueprints |  eAlert_ItemAvailable
+	class'X2StrategyGameRulesetDataStructures'.static.BuildDynamicPropertySet(PropertySet, 'UIAlert', 'eAlert_ItemAvailable', none, true, true, true, false);
+	class'X2StrategyGameRulesetDataStructures'.static.AddDynamicStringProperty(PropertySet, 'SoundToPlay', "Geoscape_CrewMemberLevelledUp");
+	class'X2StrategyGameRulesetDataStructures'.static.AddDynamicNameProperty(PropertySet, 'ItemTemplate', 'RTWarpGrenade');
+	class'XComPresentationLayerBase'.static.QueueDynamicPopup(PropertySet, NewGameState);
+	PropertySet = EmptySet;
 }
 
 static function GiveHuntTemplarAmbushReward(XComGameState NewGameState, XComGameState_Reward RewardState, optional StateObjectReference AuxRef, optional bool bOrder = false, optional int OrderHours = -1)

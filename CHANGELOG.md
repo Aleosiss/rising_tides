@@ -21,7 +21,8 @@
   - Time Stands Still now takes place over a single turn. Instead of three turns with 2 AP each, the unit now receives 6 AP immediately and no action is turn-ending.
   - Program operatives now evacuate the combat zone when greviously wounded.
 
-
+2.0.12:
+- Made JPT actually use the value set in config
 
 2.0.11:
 - (hopefully) Fixed issue with duplicate strategy cards being generated through resistance ops, will not fix in-progress campaigns affected
