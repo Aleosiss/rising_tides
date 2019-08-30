@@ -413,8 +413,7 @@ Write-Host "Written."
 
 # mirror the SDK's SrcOrig to its Src
 Write-Host "Mirroring SrcOrig to Src..."
-Write-Host "Debug: removing $sdkPath/Development/Src"
-Remove-Item "$sdkPath\Development\Src" -Recurse
+if(Test-Path "$sdkPath\Development\Src") { Remove-Item "$sdkPath\Development\Src" -Recurse }
 Copy-Item "$sdkPath\Development\SrcOrig" "$sdkPath\Development\Src" -Force -Recurse -WarningAction SilentlyContinue
 Write-Host "Mirrored."
 
