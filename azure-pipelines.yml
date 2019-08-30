@@ -4,14 +4,10 @@
 # https://aka.ms/yaml
 
 trigger:
-- master
+  - master
+  - trial-azure-pipelines
 
-pool:
-  vmImage: 'win1803'
-
-container: 
-  image: aleosiss/xcom2sdk:1.0.1
-  endpoint: aleosiss/xcom2sdk
+pool: Default
 
 steps:
 - powershell: |
@@ -24,7 +20,7 @@ steps:
   displayName: 'Get Environment Variables'
 - powershell: |
     Write-Host "Building mod..."
-    .\scripts\build_docker.ps1 -mod 'RisingTides' -srcDirectory $Env:BUILD_SOURCESDIRECTORY
+    .\scripts\build_azure.ps1 -mod 'RisingTides' -srcDirectory $Env:BUILD_SOURCESDIRECTORY
   displayName: 'Build Mod Project'
 - task: PublishPipelineArtifact@0
   inputs:
