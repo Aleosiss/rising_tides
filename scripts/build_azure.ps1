@@ -4,7 +4,7 @@ Param(
     [bool]$forceFullBuild = $false # force the script to rebuild the base game's scripts, even if they're already built
 )
 
-$sdkPath = "C:/SteamLibrary/steamapps/common/XCOM 2 War of the Chosen SDK"
+$sdkPath = "C:/Program Files (x86)/Steam/steamapps/common/XCOM 2 War of the Chosen SDK"
 
 function WriteModMetadata([string]$mod, [string]$sdkPath, [int]$publishedId, [string]$title, [string]$description) {
     Set-Content "$sdkPath/XComGame/Mods/$mod/$mod.XComMod" "[mod]`npublishedFileId=$publishedId`nTitle=$title`nDescription=$description`nRequiresXPACK=true"
