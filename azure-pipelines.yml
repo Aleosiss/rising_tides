@@ -18,7 +18,7 @@ steps:
   displayName: 'Create Github Release (Master)'
   condition: startsWith(variables['Build.SourceBranch'], 'master')
   inputs:
-    gitHubConnection: abatewongc
+    gitHubConnection: rising_tides_publish
     repositoryName: '$(Build.Repository.Name)' 
     action: 'create' # Options: create, edit, delete
     target: '$(Build.SourceVersion)' # Required when action == Create || Action == Edit
@@ -40,7 +40,7 @@ steps:
   displayName: 'Create Github Release (develop)'
   condition: startsWith(variables['Build.SourceBranch'], 'trial')
   inputs:
-    gitHubConnection: abatewongc
+    gitHubConnection: rising_tides_publish
     repositoryName: '$(Build.Repository.Name)' 
     action: 'create' # Options: create, edit, delete
     target: '$(Build.SourceVersion)' # Required when action == Create || Action == Edit
