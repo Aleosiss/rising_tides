@@ -16,7 +16,7 @@ steps:
   displayName: 'Build Mod Project'
 - task: GitHubRelease@0
   displayName: 'Create Github Release (Master)'
-  condition: startsWith(variables['Build.SourceBranch'], 'master')
+  condition: startsWith(variables['Build.SourceBranch'], 'refs/heads/master')
   inputs:
     gitHubConnection: rising_tides_publish
     repositoryName: '$(Build.Repository.Name)' 
@@ -38,7 +38,7 @@ steps:
     #releaseTag: # Required when compareWith == LastReleaseByTag
 - task: GitHubRelease@0
   displayName: 'Create Github Release (develop)'
-  condition: startsWith(variables['Build.SourceBranch'], 'trial')
+  condition: startsWith(variables['Build.SourceBranch'], 'refs/heads/trial')
   inputs:
     gitHubConnection: rising_tides_publish
     repositoryName: '$(Build.Repository.Name)' 
