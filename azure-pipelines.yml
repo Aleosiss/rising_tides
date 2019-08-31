@@ -4,11 +4,11 @@
 # https://aka.ms/yaml
 
 trigger:
-  - master
-  - trial-azure-pipelines
-
+  batch: true
+  branches:
+    include:
+    - '*'
 pool: Default
-
 steps:
 - powershell: |
     Write-Host "Building mod..."
@@ -16,7 +16,7 @@ steps:
   displayName: 'Build Mod Project'
 - task: GitHubRelease@0
   displayName: 'Create Github Release (Master)'
-  condition: startsWith(variables['Build.SourceBranch'], 'refs/heads/trial')
+  condition: startsWith(variables['Build.SourceBranch'], 'refs/heads/master')
   inputs:
     gitHubConnection: rising_tides_publish
     repositoryName: '$(Build.Repository.Name)' 
