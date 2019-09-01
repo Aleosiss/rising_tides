@@ -4,7 +4,7 @@ Param(
     [bool]$forceFullBuild = $false # force the script to rebuild the base game's scripts, even if they're already built
 )
 
-$sdkPath = "C:/SteamLibrary/steamapps/common/XCOM 2 War of the Chosen SDK"
+$sdkPath = "C:/Program Files (x86)/Steam/steamapps/common/XCOM 2 War of the Chosen SDK"
 
 function WriteModMetadata([string]$mod, [string]$sdkPath, [int]$publishedId, [string]$title, [string]$description) {
     Set-Content "$sdkPath/XComGame/Mods/$mod/$mod.XComMod" "[mod]`npublishedFileId=$publishedId`nTitle=$title`nDescription=$description`nRequiresXPACK=true"
@@ -146,6 +146,11 @@ function Invoke-Make([string] $makeCmd, [string] $makeFlags, [string] $sdkPath, 
     # the powershell thread so we get no output from make echoed to the screen until the process finishes.
     # By polling we get regular output as it goes.
     while (!$exitData.exited) {
+        $ts = $stopwatch.Elapsed.TotalSeconds;
+        if($ts -gt '300') { # 5 * 60 seconds
+            # you have failed. we will find another way.
+            exit 1
+        }
         Start-Sleep -m 50
     }
 
@@ -167,6 +172,7 @@ function ValidateProjectFile([string] $modProjectRoot, [string] $modName)
     $projFilepath = "$modProjectRoot\$modName.x2proj"
     if(Test-Path $projFilepath)
     {
+        # Check and clean
         CheckX2ProjIncludes $modProjectRoot $modName $projFilepath
         CleanX2ProjIncludes $modProjectRoot $modName $projFilepath
     }
@@ -321,6 +327,9 @@ $modNameCanonical = $mod
 # the folder below that that contains Config, Localization, Src, etc...
 $modSrcRoot = "$srcDirectory"
 
+Write-Host "modNameCanonical:   $modNameCanonical"
+Write-Host "modSrcRoot:         $modSrcRoot"
+
 # check that all files in the mod folder are present in the .x2proj file
 ValidateProjectFile $modSrcRoot $modNameCanonical
 
@@ -404,8 +413,7 @@ Write-Host "Written."
 
 # mirror the SDK's SrcOrig to its Src
 Write-Host "Mirroring SrcOrig to Src..."
-Write-Host "Debug: removing $sdkPath/Development/Src"
-Remove-Item "$sdkPath\Development\Src" -Recurse
+if(Test-Path "$sdkPath\Development\Src") { Remove-Item "$sdkPath\Development\Src" -Recurse }
 Copy-Item "$sdkPath\Development\SrcOrig" "$sdkPath\Development\Src" -Force -Recurse -WarningAction SilentlyContinue
 Write-Host "Mirrored."
 
@@ -440,20 +448,16 @@ else {
     Write-Host "Cleaned."
 }
 
-
-
-return 0
-
 # build the base game scripts
 Write-Host "Compiling base game scripts..."
 # This could be replaced with a Invoke-Make call as well for highlanders.
-& "$sdkPath/Binaries/Win64/XComGame.com" make -nopause -unattended -debug
+Invoke-Make "$sdkPath/Binaries/Win64/XComGame.com" "make -nopause -unattended" $sdkPath $modSrcRoot
 Write-Host "Compiled."
 CheckErrorCode "Failed to compile the base game scripts. This probably isn't a problem with your mod. Have you been monkeying around with SrcOrig, perchance?"
 
 # build the mod's scripts
 Write-Host "Compiling mod scripts..."
-Invoke-Make "$sdkPath/Binaries/Win64/XComGame.com" "make -nopause -debug -mods $modNameCanonical $stagingPath" $sdkPath $modSrcRoot
+Invoke-Make "$sdkPath/Binaries/Win64/XComGame.com" "make -nopause -mods $modNameCanonical $stagingPath" $sdkPath $modSrcRoot
 CheckErrorCode "Failed to compile mod scripts."
 Write-Host "Compiled."
 
@@ -480,11 +484,10 @@ Write-Host "Copying the compiled mod scripts to staging..."
 Copy-Item "$sdkPath/XComGame/Script/$modNameCanonical.u" "$stagingPath/Script" -Force -WarningAction SilentlyContinue
 Write-Host "Copied."
 
-# copy all staged files to the actual game's mods folder
-Write-Host "Copying all staging files to production..."
-
-Write-Host "Copied mod to game directory."
-
+# make an artifact
+Write-Host "Creating an archive artifact..."
+Compress-Archive -Path "$stagingPath" -CompressionLevel Optimal -DestinationPath "$env:BUILD_ARTIFACTSTAGINGDIRECTORY/$modNameCanonical.zip"
+Write-Host "Artifact created."
 
 # we made it!
 SuccessMessage("*** SUCCESS! ***")
