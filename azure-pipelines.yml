@@ -24,7 +24,7 @@ steps:
     target: '$(Build.SourceVersion)' # Required when action == Create || Action == Edit
     tagSource: 'manual' # Required when action == Create# Options: auto, manual
     #tagPattern: # Optional
-    tag: test-v$(Build.BuildNumber)
+    tag: $(Build.BuildNumber)
     #title: # Optional
     #releaseNotesSource: 'file' # Optional. Options: file, input
     #releaseNotesFile: # Optional
