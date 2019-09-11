@@ -205,7 +205,7 @@ function EffectRemovedBuildVisualizationFn(XComGameState VisualizeGameState) {
 	}
 }
 
-// EffectsModifiedBuildVisualizationFn
+// EffectsModifiedBuildVisualizationFn - MUST CALL ClearEffectLists in the next XComGameState!
 function EffectsModifiedBuildVisualizationFn(XComGameState VisualizeGameState) {
 	local VisualizationActionMetadata SourceMetadata;
 	local VisualizationActionMetadata TargetMetadata;

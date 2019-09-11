@@ -13,10 +13,18 @@
     - Unfurl The Veil: Replaces Meld Induction on the Gatherer's perk tree.
         - If all active enemies are affected by Over the Shoulder, gain concealment. (6) turn cooldown.
 - Balance Changes
-  - Daybreak Flame no longer auto procs Scoped and Dropped.
-  - Program operative HP nerfed by 5.
-  - Program operative aim decreased by 10.
-  - Program operative weaponry now scales with XCOM's.
+  - General
+    - Program operative HP nerfed by 5.
+    - Program operative aim decreased by 10.
+    - Program operative weaponry now scales with XCOM's (still 1 tier above at all times).
+    - Program Berserker:
+        - Queen of Blades: Negates mobility penalty instead of reversing it.
+    - Program Infiltrator:
+        - Daybreak Flame: AoE reduced. Now only affects X tiles before the target and X tiles behind the target.
+        - Daybreak Flame: Now is a toggled ability. Activate the toggle to begin using Daybreak Flame.
+        - Daybreak Flame no longer auto procs Scoped and Dropped.
+        Explanation:
+            Daybreak Flame was probably too strong and had multiple pain points: too much cover destruction, and the risk of shooting out your own floor. These changes hit both.
 - Changes
   - Time Stands Still now takes place over a single turn. Instead of three turns with 2 AP each, the unit now receives 6 AP immediately and no action is turn-ending.
   - Program operatives now evacuate the combat zone when greviously wounded.

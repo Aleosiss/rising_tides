@@ -32,7 +32,7 @@ class RTAbility_MarksmanAbilitySet extends RTAbility
 	var config int VITAL_POINT_TARGETING_DAMAGE;
 	var config int SURGE_COOLDOWN;
 	var config int HEATCHANNEL_COOLDOWN;
-	var config int RTShockAndAwe_DAMAGE_TO_ACTIVATE;
+	var config int SHOCKANDAWE_DAMAGE_TO_ACTIVATE;
 	var config int SOVEREIGN_PANIC_CHANCE;
 	var config int PSIONICKILLZONE_COOLDOWN;
 	var config float DISABLING_SHOT_REDUCTION;
@@ -85,7 +85,7 @@ static function array<X2DataTemplate> CreateTemplates()
 	Templates.AddItem(RTDisablingShot());
 	Templates.AddItem(RTDisablingShotDamage());
 	Templates.AddItem(RTSnapshot());
-	Templates.AddItem(SixOClock());									// icon
+	Templates.AddItem(SixOClock());
 	Templates.AddItem(SixOClockEffect());
 	//Templates.AddItem(VitalPointTargeting());
 	Templates.AddItem(RTDamnGoodGround());
@@ -149,7 +149,7 @@ static function X2AbilityTemplate ScopedAndDropped()
 	ScopedEffect.BuildPersistentEffect(1, true, true, true);
 	ScopedEffect.SetDisplayInfo(ePerkBuff_Passive, Template.LocFriendlyName, Template.LocLongDescription, Template.IconImage, true,,Template.AbilitySourceName);
 	ScopedEffect.iPanicChance = default.SOVEREIGN_PANIC_CHANCE;
-	ScopedEffect.iDamageRequiredToActivate = default.RTShockAndAwe_DAMAGE_TO_ACTIVATE;
+	ScopedEffect.iDamageRequiredToActivate = default.SHOCKANDAWE_DAMAGE_TO_ACTIVATE;
 	ScopedEffect.DEFENSE_BONUS = default.SND_DEFENSE_BONUS;
 	Template.AddTargetEffect(ScopedEffect);
 
@@ -158,27 +158,15 @@ static function X2AbilityTemplate ScopedAndDropped()
 	Template.AddTargetEffect(SSEffect);
 
 	// standard ghost abilities
-	Template.AdditionalAbilities.AddItem('GhostPsiSuite');
-	Template.AdditionalAbilities.AddItem('JoinMeld');
-	Template.AdditionalAbilities.AddItem('LeaveMeld');
-	Template.AdditionalAbilities.AddItem('PsiOverload');
-	Template.AdditionalAbilities.AddItem('RTFeedback');
-	Template.AdditionalAbilities.AddItem('RTMindControl');
-	Template.AdditionalAbilities.AddItem('RTEnterStealth');
-	Template.AdditionalAbilities.AddItem('RTProgramEvacuation');
-	Template.AdditionalAbilities.AddItem('RTProgramEvacuationPartOne');
-	Template.AdditionalAbilities.AddItem('RTProgramEvacuationPartTwo');
+	AddSpectrePsionicSuite(Template);
+
+	// special meld abilities
+	AddMeldedAbilityHelpers(Template);
 
 	// unique abilities for Scoped and Dropped
 	Template.AdditionalAbilities.AddItem('RTStandardSniperShot');
 	Template.AdditionalAbilities.AddItem('RTOverwatch');
 	Template.AdditionalAbilities.AddItem('RTOverwatchShot');
-
-	// special meld abilities
-	Template.AdditionalAbilities.AddItem('LIOverwatchShot');
-	Template.AdditionalAbilities.AddItem('RTUnstableConduitBurst');
-	Template.AdditionalAbilities.AddItem('PsionicActivate');
-	Template.AdditionalAbilities.AddItem('RTHarbingerPsionicLance');
 
 	// Probably required
 	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
@@ -295,16 +283,16 @@ static function X2AbilityTemplate ScopedAndDropped()
 //---------------------------------------------------------------------------------------
 static function X2AbilityTemplate RTOverwatch()
 {
-	local X2AbilityTemplate                 Template;
-	local X2AbilityCost_Ammo                AmmoCost;
-	local X2AbilityCost_ActionPoints        ActionPointCost;
-	local X2Effect_ReserveActionPoints      ReserveActionPointsEffect;
-	local array<name>                       SkipExclusions;
-	local X2Effect_CoveringFire             CoveringFireEffect;
-	local X2Condition_AbilityProperty       CoveringFireCondition;
-	local X2Condition_UnitProperty          ConcealedCondition;
-	local X2Effect_SetUnitValue             UnitValueEffect;
-	local X2Condition_UnitEffects           SuppressedCondition;
+	local X2AbilityTemplate					Template;
+	local X2AbilityCost_Ammo				AmmoCost;
+	local X2AbilityCost_ActionPoints		ActionPointCost;
+	local X2Effect_ReserveActionPoints		ReserveActionPointsEffect;
+	local array<name>						SkipExclusions;
+	local X2Effect_CoveringFire				CoveringFireEffect;
+	local X2Condition_AbilityProperty		CoveringFireCondition;
+	local X2Condition_UnitProperty			ConcealedCondition;
+	local X2Effect_SetUnitValue				UnitValueEffect;
+	local X2Condition_UnitEffects			SuppressedCondition;
 
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'RTOverwatch');
 
@@ -1319,7 +1307,7 @@ static function X2AbilityTemplate SovereignEffect()
 static function X2AbilityTemplate DaybreakFlameIcon()
 {
 	local X2AbilityTemplate						Template;
-	local X2Effect_Persistent					SOVEffect;
+	local X2Effect_Persistent					IconEffect;
 
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'DaybreakFlameIcon');
 	Template.IconImage = "img:///RisingTidesContentPackage.PerkIcons.rt_daybreaker";
@@ -1332,12 +1320,13 @@ static function X2AbilityTemplate DaybreakFlameIcon()
 	Template.AbilityTargetStyle = default.SelfTarget;
 	Template.AbilityTriggers.AddItem(default.UnitPostBeginPlayTrigger);
 
-	SOVEffect = new class 'X2Effect_Persistent';
-	SOVEffect.BuildPersistentEffect(1, true, true, true);
-	SOVEffect.SetDisplayInfo(ePerkBuff_Passive, Template.LocFriendlyName, Template.LocLongDescription, Template.IconImage, true,, Template.AbilitySourceName);
-	Template.AddTargetEffect(SOVEffect);
+	IconEffect = new class 'X2Effect_Persistent';
+	IconEffect.BuildPersistentEffect(1, true, true, true);
+	IconEffect.SetDisplayInfo(ePerkBuff_Passive, Template.LocFriendlyName, Template.LocLongDescription, Template.IconImage, true,, Template.AbilitySourceName);
+	Template.AddTargetEffect(IconEffect);
 
 	Template.AdditionalAbilities.AddItem('DaybreakFlame');
+	Template.AdditionalAbilities.AddItem('DaybreakFlameToggle')
 	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
 	// Note: no visualization on purpose!
 
@@ -1345,6 +1334,65 @@ static function X2AbilityTemplate DaybreakFlameIcon()
 
 	return Template;
 }
+
+//---------------------------------------------------------------------------------------
+//---Daybreak Flame Icon-----------------------------------------------------------------
+//---------------------------------------------------------------------------------------
+static function X2AbilityTemplate DaybreakFlameToggle(name ToggleName)
+{
+	local X2AbilityTemplate						Template;
+	local X2Effect_Persistent					TagEffect;
+	local X2Effect_RemoveEffects				RemoveTagEffect;
+	local X2Condition_UnitEffects				ToggleCondition;
+	local name									InvertedToggleName;
+
+	`CREATE_X2ABILITY_TEMPLATE(Template, 'DaybreakFlameToggle');
+	Template.IconImage = "img:///RisingTidesContentPackage.PerkIcons.rt_daybreaker";
+
+	Template.AbilitySourceName = 'eAbilitySource_Psionic';
+	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_AlwaysShow;
+	Template.Hostility = eHostility_Neutral;
+
+	Template.AbilityToHitCalc = default.DeadEye;
+	Template.AbilityTargetStyle = default.SelfTarget;
+	Template.AbilityTriggers.AddItem(default.UnitPostBeginPlayTrigger);
+	Template.AbilityTriggers.AddItem(default.PlayerInputTrigger);
+
+	InvertedToggleName = 'NOT' + ToggleName;
+
+	// Remove if present
+	ToggleCondition = new class'X2Condition_UnitEffects';
+	ToggleCondition.AddRequireEffect(ToggleName, 'AA_AbilityUnavailable');
+
+	RemoveTagEffect = new class'X2Effect_RemoveEffects';
+	RemoveTagEffect.EffectNamesToRemove.AddItem(ToggleName);
+	RemoveTagEffect.TargetConditions.AddItem(ToggleCondition);
+	Template.AddTargetEffect(RemoveTagEffect);
+
+	// Add if not present
+	ToggleCondition = new class 'X2Condition_UnitEffects';
+	ToggleCondition.AddRequireEffect(ToggleName, 'AA_AbilityUnavailable');
+
+	RemoveTagEffect = new class'X2Effect_RemoveEffects';
+	RemoveTagEffect.EffectNamesToRemove.AddItem(ToggleName);
+	RemoveTagEffect.TargetConditions.AddItem(ToggleCondition);
+	Template.AddTargetEffect(RemoveTagEffect);
+
+	TagEffect = new class'X2Effect_Persistent';
+	TagEffect.EffectName = ToggleName;
+	Template.AddTargetEffect(TagEffect);
+
+	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
+	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
+	Template.bSkipFireAction = true;
+	// Note: no visualization on purpose!
+
+	Template.bCrossClassEligible = false;
+
+
+	return Template;
+}
+
 
 //---------------------------------------------------------------------------------------
 //---Your Hands, My Eyes-----------------------------------------------------------------
@@ -2082,7 +2130,7 @@ static function X2AbilityTemplate RTShockAndAwe()
 
 	ShockEffect = new class'RTEffect_ShockAndAwe';
 	ShockEffect.BuildPersistentEffect(1, true, true, false);
-	ShockEffect.iDamageRequiredToActivate = default.RTShockAndAwe_DAMAGE_TO_ACTIVATE;
+	ShockEffect.iDamageRequiredToActivate = default.SHOCKANDAWE_DAMAGE_TO_ACTIVATE;
 	ShockEffect.SetDisplayInfo(ePerkBuff_Passive, Template.LocFriendlyName, Template.LocLongDescription, Template.IconImage, true,,Template.AbilitySourceName);
 	Template.AddTargetEffect(ShockEffect);
 

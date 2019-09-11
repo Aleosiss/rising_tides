@@ -152,22 +152,10 @@ static function X2AbilityTemplate OverTheShoulder()
 	Template.AdditionalAbilities.AddItem('OverTheShoulderPassives');
 
 	// standard ghost abilities
-	Template.AdditionalAbilities.AddItem('GhostPsiSuite');
-	Template.AdditionalAbilities.AddItem('JoinMeld');
-	Template.AdditionalAbilities.AddItem('LeaveMeld');
-	Template.AdditionalAbilities.AddItem('PsiOverload');
-	Template.AdditionalAbilities.AddItem('RTFeedback');
-	Template.AdditionalAbilities.AddItem('RTMindControl');
-	Template.AdditionalAbilities.AddItem('RTEnterStealth');
-	Template.AdditionalAbilities.AddItem('RTProgramEvacuation');
-	Template.AdditionalAbilities.AddItem('RTProgramEvacuationPartOne');
-	Template.AdditionalAbilities.AddItem('RTProgramEvacuationPartTwo');
+	AddSpectrePsionicSuite(Template);
 
 	// special meld abilities
-	Template.AdditionalAbilities.AddItem('LIOverwatchShot');
-	Template.AdditionalAbilities.AddItem('RTUnstableConduitBurst');
-	Template.AdditionalAbilities.AddItem('PsionicActivate');
-	Template.AdditionalAbilities.AddItem('RTHarbingerPsionicLance');
+	AddMeldedAbilityHelpers(Template);
 
 	Template.PostActivationEvents.AddItem(default.PostOverTheShoulderEventName);
 
@@ -180,7 +168,7 @@ static function X2AbilityTemplate CreateOverTheShoulderAbility(X2AbilityTemplate
 	local X2AbilityMultiTarget_Radius			Radius;
 	local array<name>							SkipExclusions;
 
-	local RTEffect_AuraSource				OTSEffect;		// I'm unsure of how this works... but it appears that
+	local RTEffect_AuraSource				OTSEffect;			// I'm unsure of how this works... but it appears that
 																// this will control the application and removal of aura effects within its range
 
 	// Over The Shoulder
@@ -190,9 +178,7 @@ static function X2AbilityTemplate CreateOverTheShoulderAbility(X2AbilityTemplate
 	// Unsettling Voices
 	local RTEffect_UnsettlingVoices				VoiceEffect;
 	local X2Condition_AbilityProperty			VoicesCondition;
-
-	// Guardian Angel
-
+	
 	// Guilty Conscience
 	local RTEffect_GuiltyConscience				GuiltyEffect;
 

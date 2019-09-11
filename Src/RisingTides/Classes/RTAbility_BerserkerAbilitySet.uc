@@ -129,28 +129,16 @@ static function X2AbilityTemplate BumpInTheNight()
 	Template.AddShooterEffect(AnimSets);
 
 	// standard ghost abilities
-	Template.AdditionalAbilities.AddItem('GhostPsiSuite');
-	Template.AdditionalAbilities.AddItem('JoinMeld');
-	Template.AdditionalAbilities.AddItem('LeaveMeld');
-	Template.AdditionalAbilities.AddItem('PsiOverload');
-	Template.AdditionalAbilities.AddItem('RTFeedback');
-	Template.AdditionalAbilities.AddItem('RTMindControl');
-	Template.AdditionalAbilities.AddItem('RTEnterStealth');
-	Template.AdditionalAbilities.AddItem('RTProgramEvacuation');
-	Template.AdditionalAbilities.AddItem('RTProgramEvacuationPartOne');
-	Template.AdditionalAbilities.AddItem('RTProgramEvacuationPartTwo');
+	AddSpectrePsionicSuite(Template);
+
+	// special meld abilities
+	AddMeldedAbilityHelpers(Template);
 
 	// unique abilities for Bump In The Night
 	Template.AdditionalAbilities.AddItem('BumpInTheNightBloodlustListener');
 	Template.AdditionalAbilities.AddItem('BumpInTheNightStealthListener');
 	Template.AdditionalAbilities.AddItem('StandardGhostShot');
-
-	// special meld abilities
-	Template.AdditionalAbilities.AddItem('LIOverwatchShot');
-	Template.AdditionalAbilities.AddItem('RTUnstableConduitBurst');
-	Template.AdditionalAbilities.AddItem('PsionicActivate');
-	Template.AdditionalAbilities.AddItem('RTHarbingerPsionicLance');
-
+	
 	// Probably required
 	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
 	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;

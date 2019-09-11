@@ -970,21 +970,60 @@ TacticalText="<Bullet/> A placeholder that allows Rising Tides classes to use ba
 ListTitle="Personnel Dossier: Dr. Elizabeth Hadley"
 DescriptionTitle="Dr. Elizabeth Hadley - STATUS: ACTIVE"
 DescriptionEntry="Dr. Elizabeth Hadley, born on October 3rd, 1968, is a certified genius. Earning her Ph.D at the age of 19, it was assumed by academia at large that she had a bright future ahead of her. However, she fell off the face of the planet shortly afterwards, leaving many to speculate that she had been snatched up by the R&D branch of the government. Although that seems obvious now, remember that whatever she has been working on for the past thirty-five years is still unknown, and that she has been transferred to XCOM only now, with Aliens on our proverbial doorstep, speaks for its importance. \n\nC.O. Bradford Note: Yes, this is the exact file I gave you last time. Hopefully it's still good."
+; "Dr. Elizabeth Hadley, born on October 3rd, 1968, is a certified genius. Earning her Ph.D at the age of 19, it was
+; assumed by academia at large that she had a bright future ahead of her. However, she fell off the face of the planet
+; shortly afterwards, leaving many to speculate that she had been snatched up by the R&D branch of the government.
+; Although that seems obvious now, remember that whatever she has been working on for the past thirty-five years is still
+; unknown, and that she has been transferred to XCOM only now, with Aliens on our proverbial doorstep, speaks for its
+; importance. \n\nC.O. Bradford Note: Yes, this is the exact file I gave you last time. Hopefully it's still good."
 
 [FactionProgram X2EncyclopediaTemplate]
 ListTitle="The Program"
 DescriptionTitle="The Program"
 DescriptionEntry="The Program, seemingly led by the illusive Dr. Hadley, are an offshoot of XCOM, branching off in the 1970's. In the original invasion, they sent a single operative and Dr. Hadley to assist, which proved instrumental to the war effort, but when the base was lost, those personnel went MIA. In the time since, little has escaped; even now, the Program goes unnamed, and details related to the organization remain frighteningly obscure. What is evident is that their primary focus is ensuring that when ADVENT falls, they- at the expense of any other, even XCOM- stand on top of the pile of rubble. In other words, be careful when dealing with them. Their technology is advanced, and their operatives elite, but they are not on your side, Commander, and your goals may not always align."
+; "The Program, seemingly led by the illusive Dr. Hadley, are an offshoot of XCOM, branching off in the 1970's. In the
+; original invasion, they sent a single operative and Dr. Hadley to assist, which proved instrumental to the war effort,
+; but when the base was lost, those personnel went MIA. In the time since, little has escaped; even now, the Program
+; goes unnamed, and details related to the organization remain frighteningly obscure. What is evident is that their
+; primary focus is ensuring that when ADVENT falls, they- at the expense of any other, even XCOM- stand on top of the
+; pile of rubble. In other words, be careful when dealing with them. Their technology is advanced, and their operatives
+; elite, but they are not on your side, Commander, and your goals may not always align."
 
 [FactionProgramOperatives X2EncyclopediaTemplate]
 ListTitle="Program Operatives"
 DescriptionTitle="Program Soldier Classes"
 DescriptionEntry="The Program fields a small number of psionic operatives. Augmented cybernetically and genetically through a substance known as \"MELD\", they are truly elite, each a veteran of twenty, thirty, or even forty years of combat against both human and alien threats. Each has a unique skillset, but they share a common base of psionic abilities, such as Mind Control, Mind Wrack, and Mind Meld."
+; "The Program fields a small number of psionic operatives. Augmented cybernetically and genetically through a substance
+; known as \"MELD\", they are truly elite, each a veteran of twenty, thirty, or even forty years of combat against both
+; human and alien threats. Each has a unique skillset, but they share a common base of psionic abilities, such as
+; Mind Control, Mind Wrack, and Mind Meld."
 
 [FactionProgramFavors X2EncyclopediaTemplate]
 ListTitle="Program Support"
 DescriptionTitle="One Small Favor"
 DescriptionEntry="The Program can spare enough time to send one of their squads in the place of XCOM's once per month. Doing so will help build your relationship with them, eventually increasing your influence with them and unlocking new Resistance Orders. If a favor is a available, a white checkbox will be present above the mission launch button. Checking it will call in the favor. Note that favors cannot be called in on narrative missions."
+; "The Program can spare enough time to send one of their squads in the place of XCOM's once per month. Doing so will
+; help build your relationship with them, eventually increasing your influence with them and unlocking new Resistance Orders.
+; If a favor is a available, a white checkbox will be present above the mission launch button. Checking it will call in
+; the favor. Note that favors cannot be called in on narrative missions."
+
+[ProgramTimeline X2EncyclopediaTemplate]
+ListTitle="Program Archives: The Fall"
+DescriptionTitle="Program Archives: The Fall"
+DescriptionEntry="Although the world at large was made aware of the Alien threat in early Feburary 2015, the Program was aware that a possible Alien invasion event was likely to occur due to a botched operation two months prior. Operation: Reclaimer was successful in its mission to contain the Ethereal known as Alaru, but was unable to prevent it from releasing a massive burst of psionic energy. Dr. Fitzgerald speculated that it was a cry for aid, and so the Program began preparations to operate at increased capacity, both domestically via standard operations and internationally by planting members at key positions within XCOM proper, as well as support groups such as NATO and arms manufacturers. Within two months, the Alien threat emerged, although such a gap between incidents left many within the Program wondering if the two were truly related. In any case, domestic operations were successful at minimizing panic for some time, although civil unrest due to damaged global infrastructure eventually made any progress on this front from insignificant. Similarly, XCOM was successful at fighting the Alien threat. With the Temple Ship exposed and the Skyranger on the way in December of 2017, the Aliens launched battleships towards every major population center. Although the XCOM forces were successful in their mission, with the Temple Ship crash-landing somewhere in the Pacific (coordinates attached), humanity fell. Two days later, the embedded Program operative executed Operation: New World Order, corresponding with a third and final Alien attack on XCOM headquarters."`
+; "Although the world at large was made aware of the Alien threat in early Feburary 2015, the Program was aware that a
+; possible Alien invasion event was likely to occur due to a botched operation two months prior. Operation: Reclaimer
+; was successful in its mission to contain the Ethereal known as Alaru, but was unable to prevent it from releasing a
+; massive burst of psionic energy. Dr. Fitzgerald speculated that it was a cry for aid, and so the Program began preparations to 
+; operate at increased capacity, both domestically via standard operations and internationally by planting members at key
+; positions within XCOM proper, as well as support groups such as NATO and arms manufacturers. Within two months, the Alien threat emerged,
+; although such a gap between incidents left many within the Program wondering if the two were truly related.
+; In any case, domestic operations were successful at minimizing panic for some time, although civil unrest due to damaged
+; global infrastructure eventually made any progress on this front insignificant. Similarly, XCOM was successful at fighting the Alien threat.
+; With the Temple Ship exposed and the Skyranger on the way in December of 2017, the Aliens launched battleships towards every major
+; population center. Although the XCOM forces were successful in their mission, with the Temple Ship crash-landing somewhere in the Pacific
+; (coordinates attached), humanity fell. Two days later, the embedded Program operative executed Operation: New World Order, corresponding with
+; a third and final Alien attack on XCOM headquarters.
 
 ;///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ;//---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------

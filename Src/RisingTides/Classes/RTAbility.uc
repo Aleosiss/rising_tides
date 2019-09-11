@@ -213,6 +213,26 @@ static function TestAbilitySetValues() {
 	
 }
 
+static function AddSpectrePsionicSuite(X2AbilityTemplate Template) {
+	Template.AdditionalAbilities.AddItem('GhostPsiSuite');
+	Template.AdditionalAbilities.AddItem('JoinMeld');
+	Template.AdditionalAbilities.AddItem('LeaveMeld');
+	Template.AdditionalAbilities.AddItem('PsiOverload');
+	Template.AdditionalAbilities.AddItem('RTFeedback');
+	Template.AdditionalAbilities.AddItem('RTMindControl');
+	Template.AdditionalAbilities.AddItem('RTEnterStealth');
+	Template.AdditionalAbilities.AddItem('RTProgramEvacuation');
+	Template.AdditionalAbilities.AddItem('RTProgramEvacuationPartOne');
+	Template.AdditionalAbilities.AddItem('RTProgramEvacuationPartTwo');
+}
+
+static function AddMeldedAbilityHelpers(X2AbilityTemplate Template) {
+	Template.AdditionalAbilities.AddItem('LIOverwatchShot');
+	Template.AdditionalAbilities.AddItem('RTUnstableConduitBurst');
+	Template.AdditionalAbilities.AddItem('PsionicActivate');
+	Template.AdditionalAbilities.AddItem('RTHarbingerPsionicLance');
+}
+
 function DebugEffectAdded(X2Effect_Persistent PersistentEffect, const out EffectAppliedData ApplyEffectParameters, XComGameState_BaseObject kNewTargetState, XComGameState NewGameState) {
 	`RTLOG("DebugEffectAdded! to " $ kNewTargetState.GetMyTemplateName(), false, true);
 }

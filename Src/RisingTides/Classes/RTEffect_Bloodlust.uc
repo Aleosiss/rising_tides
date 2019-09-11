@@ -33,17 +33,15 @@ simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffe
 	UnitState = XComGameState_Unit(kNewTargetState);
 
 	if(UnitState.IsUnitAffectedByEffectName('RTEffect_QueenOfBlades'))
-		AddPersistentStatChange(eStat_Mobility, iMobilityMod);
+		// AddPersistentStatChange(eStat_Mobility, iMobilityMod); // QoB no longer increases mobility, just prevents decrease
 	else
 		AddPersistentStatChange(eStat_Mobility, -iMobilityMod);
-
 
 	super.OnEffectAdded(ApplyEffectParameters, UnitState, NewGameState, NewEffectState);
 }
 
 
 function GetToHitModifiers(XComGameState_Effect EffectState, XComGameState_Unit Attacker, XComGameState_Unit Target, XComGameState_Ability AbilityState, class<X2AbilityToHitCalc> ToHitType, bool bMelee, bool bFlanking, bool bIndirectFire, out array<ShotModifierInfo> ShotModifiers) {
-
 	local ShotModifierInfo HitMod;
 	local RTGameState_Effect BumpEffect;
 	local bool bValid;
