@@ -198,6 +198,8 @@ static function X2DataTemplate CreateTemplarHighCovenAssaultTemplate()
 	return Template;
 }
 
+
+
 static function TemplarHighCovenAssaultOnSuccess(XComGameState NewGameState, XComGameState_MissionSite MissionState)
 {
 	local XComGameState_HeadquartersResistance ResHQ;
@@ -241,6 +243,7 @@ static function TemplarHighCovenAssaultPopup(optional XComGameState_MissionSite 
 	if (!Pres.ScreenStack.GetCurrentScreen().IsA('RTUIMission_TemplarHighCovenAssault'))
 	{
 		kScreen = Pres.Spawn(class'RTUIMission_TemplarHighCovenAssault');
+		kScreen.MissionRef = MissionState.GetReference();
 		Pres.ScreenStack.Push(kScreen);
 	}
 }

@@ -321,7 +321,7 @@ LocHelpText="Empower a friendly melded unit, healing it fully and granting it si
 LocFlyOverText="Assuming Direct Control"
 LocPromotionPopupText="<Bullet/> Empower a friendly melded unit, healing it fully and granting it significant combat bonuses.<br/><Bullet/> <Ability:SelfCooldown/> turn cooldown.<br/><Bullet/> +4 armor, +5 shield hp, + 10 aim, + 10 will.<br/><Bullet/> Effect is broken on meld loss.<br/>"
 
-[ShockAndAwe X2AbilityTemplate]
+[RTShockAndAwe X2AbilityTemplate]
 LocFriendlyName="Shock And Awe"
 LocLongDescription="When this unit deals more than 25 damage in a single turn, it disorients all nearby enemies."
 LocHelpText="When this unit deals more than 25 damage in a single turn, it disorients all nearby enemies"
@@ -1165,8 +1165,9 @@ ObjectiveTextPools[0]="Destroy the Templar High Coven Compound"
 [RTNarrative_TemplarCovenAssault X2MissionNarrativeTemplate]
 ObjectiveTextPools[0]="Destroy Templar Archives"
 ObjectiveTextPools[1]="Kill Geist"
-ObjectiveTextPools[1]="Eliminate High Coven members"
-ObjectiveTextPools[2]="Neutralize all Templars in the AO"
+ObjectiveTextPools[2]="Eliminate High Coven members"
+ObjectiveTextPools[3]="Neutralize all Templars in the AO"
+ObjectiveTextPools[4]="Optional: Hack Psionic Network Link"
 
 [RTMissionSource_TemplarHighCovenAssault X2MissionSourceTemplate]
 MissionPinLabel="Templar High Coven Compound"

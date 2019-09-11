@@ -41,6 +41,7 @@ function TSoldier CreateTSoldier( optional name CharacterTemplateName, optional 
 		case 'RTTemplarWarrior_M1':
 		case 'RTTemplarWarrior_M2':
 		case 'RTTemplarWarrior_M3':
+		case 'RTTemplar_HighCovenWarrior':
 			return CreateTemplar(CharacterTemplateName, eForceGender, nmCountry, iRace, ArmorName, false);
 		case 'RTTemplarPeon_M1':
 		case 'RTTemplarPeon_M2':
@@ -49,10 +50,11 @@ function TSoldier CreateTSoldier( optional name CharacterTemplateName, optional 
 		case 'RTTemplarScholar_M1':
 		case 'RTTemplarScholar_M2':
 		case 'RTTemplarScholar_M3':
-			return CreateTemplar(CharacterTemplateName, eForceGender, nmCountry, iRace, ArmorName, true);
+		case 'RTTemplar_HighCovenScholar':
 		case 'RTTemplarPriest_M1':
 		case 'RTTemplarPriest_M2':
 		case 'RTTemplarPriest_M3':
+		case 'RTTemplar_HighCovenPriest':
 			return CreateTemplar(CharacterTemplateName, eForceGender, nmCountry, iRace, ArmorName, true);
 		default:
 			`RTLOG("RTCharacterGenerator_Templar Got an invalid CharacterTemplateName, returning a TemplarWarrior!", true, false);

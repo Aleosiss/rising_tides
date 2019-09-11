@@ -823,7 +823,7 @@ function XComGameState_MissionSite CreateFakeTemplarAssault(XComGameState NewGam
 
 	StratMgr = class'X2StrategyElementTemplateManager'.static.GetStrategyElementTemplateManager();
 	RegionStates = `RTS.GetTemplarFactionState().GetTerritoryRegions();
-	RegionState = RegionStates[`SYNC_RAND(RegionStates.Length - 1)];
+	RegionState = `XCOMHQ.GetContinent().GetRandomRegionInContinent();
 
 	MissionRewards.Length = 0;
 	RewardTemplate = X2RewardTemplate(StratMgr.FindStrategyElementTemplate('RTReward_TemplarHighCovenAssault')); // rewards are given by the X2MissionSourceTemplate

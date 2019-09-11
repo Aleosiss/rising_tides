@@ -129,7 +129,6 @@ static function JustPassingThroughModifyTacStartState(XComGameState StartState) 
 	CopyUnitState.SetSoldierProgression(OriginalUnitState.m_SoldierProgressionAbilties);
 	//`RTLOG("Successfully built a copy of an operative!");
 
-
 	XComHQ.Squad.AddItem(CopyUnitState.GetReference());
 	XComHQ.AllSquads[0].SquadMembers.AddItem(CopyUnitState.GetReference());
 }
@@ -245,7 +244,6 @@ static function ActivateDirectNeuralManipulation(XComGameState NewGameState, Sta
 	Program = `RTS.GetNewProgramState(NewGameState);
 	`RTLOG("Activating Direct Neural Manipulation!");
 	Program.bDirectNeuralManipulation = true;
-
 }
 
 static function DeactivateDirectNeuralManipulation(XComGameState NewGameState, StateObjectReference InRef) {
@@ -254,7 +252,6 @@ static function DeactivateDirectNeuralManipulation(XComGameState NewGameState, S
 	Program = `RTS.GetNewProgramState(NewGameState);
 	`RTLOG("Deactivating Direct Neural Manipulation!");
 	Program.bDirectNeuralManipulation = false;
-
 }
 
 static function X2DataTemplate RTCreateResistanceSabotage()
@@ -335,6 +332,5 @@ static function DeactivateResistanceSabotage(XComGameState NewGameState, StateOb
 			NewFactionState.PlayableCards.AddItem(CardRef);
 			NewFactionState.CardSlots.RemoveItem(CardRef);
 		}
-		
 	}
 }

@@ -12,6 +12,10 @@ static function array<X2DataTemplate> CreateTemplates()
 	Templates.AddItem(CreateTemplate_TemplarScholar('RTTemplarScholar_M2'));
 	Templates.AddItem(CreateTemplate_TemplarScholar('RTTemplarScholar_M3'));
 
+	Templates.AddItem(CreateTemplate_TemplarPriest('RTTemplarPriest_M1'));
+	Templates.AddItem(CreateTemplate_TemplarPriest('RTTemplarPriest_M2'));
+	Templates.AddItem(CreateTemplate_TemplarPriest('RTTemplarPriest_M3'));
+
 	Templates.AddItem(CreateTemplate_TemplarPeon('RTTemplarPeon_M1'));
 	Templates.AddItem(CreateTemplate_TemplarPeon('RTTemplarPeon_M2'));
 	Templates.AddItem(CreateTemplate_TemplarPeon('RTTemplarPeon_M3'));
@@ -181,6 +185,7 @@ static function X2CharacterTemplate CreateTemplate_TemplarScholar(name TemplateN
 	CharTemplate.bCanTakeCover = true;
 	CharTemplate.bCanBeCarried = false;
 	CharTemplate.bCanBeRevived = true;
+	CharTemplate.bSetGenderAlways = true;
 	//CharTemplate.AcquiredPhobiaTemplate = 'FearOfMOCX';
 
 	//CharTemplate.bUsePoolSoldiers = true;
@@ -290,6 +295,7 @@ static function X2CharacterTemplate CreateTemplate_TemplarPeon(name TemplateName
 	CharTemplate.bCanTakeCover = true;
 	CharTemplate.bCanBeCarried = false;
 	CharTemplate.bCanBeRevived = true;
+	CharTemplate.bSetGenderAlways = true;
 	//CharTemplate.AcquiredPhobiaTemplate = 'FearOfMOCX';
 
 	//CharTemplate.bUsePoolSoldiers = true;
@@ -392,6 +398,7 @@ static function X2CharacterTemplate CreateTemplate_TemplarPriest(name TemplateNa
 	CharTemplate.bCanTakeCover = true;
 	CharTemplate.bCanBeCarried = false;
 	CharTemplate.bCanBeRevived = true;
+	CharTemplate.bSetGenderAlways = true;
 	//CharTemplate.AcquiredPhobiaTemplate = 'FearOfMOCX';
 
 	//CharTemplate.bUsePoolSoldiers = true;

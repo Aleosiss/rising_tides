@@ -32,7 +32,7 @@ class RTAbility_MarksmanAbilitySet extends RTAbility
 	var config int VITAL_POINT_TARGETING_DAMAGE;
 	var config int SURGE_COOLDOWN;
 	var config int HEATCHANNEL_COOLDOWN;
-	var config int SHOCKANDAWE_DAMAGE_TO_ACTIVATE;
+	var config int RTShockAndAwe_DAMAGE_TO_ACTIVATE;
 	var config int SOVEREIGN_PANIC_CHANCE;
 	var config int PSIONICKILLZONE_COOLDOWN;
 	var config float DISABLING_SHOT_REDUCTION;
@@ -110,8 +110,8 @@ static function array<X2DataTemplate> CreateTemplates()
 	Templates.AddItem(Harbinger());
 	Templates.AddItem(RTHarbingerPsionicLance());
 	Templates.AddItem(HarbingerCleanseListener());
-	Templates.AddItem(ShockAndAwe());
-	Templates.AddItem(ShockAndAweListener());
+	Templates.AddItem(RTShockAndAwe());
+	Templates.AddItem(RTShockAndAweListener());
 	Templates.AddItem(RTKillzone());								// icon
 	Templates.AddItem(RTEveryMomentMatters());
 	Templates.AddItem(RTOverflowBarrier());
@@ -149,7 +149,7 @@ static function X2AbilityTemplate ScopedAndDropped()
 	ScopedEffect.BuildPersistentEffect(1, true, true, true);
 	ScopedEffect.SetDisplayInfo(ePerkBuff_Passive, Template.LocFriendlyName, Template.LocLongDescription, Template.IconImage, true,,Template.AbilitySourceName);
 	ScopedEffect.iPanicChance = default.SOVEREIGN_PANIC_CHANCE;
-	ScopedEffect.iDamageRequiredToActivate = default.SHOCKANDAWE_DAMAGE_TO_ACTIVATE;
+	ScopedEffect.iDamageRequiredToActivate = default.RTShockAndAwe_DAMAGE_TO_ACTIVATE;
 	ScopedEffect.DEFENSE_BONUS = default.SND_DEFENSE_BONUS;
 	Template.AddTargetEffect(ScopedEffect);
 
@@ -2062,13 +2062,13 @@ static function X2AbilityTemplate EyeInTheSky()
 //---------------------------------------------------------------------------------------
 //---Shock And Awe----------------------------------------------------------------------
 //---------------------------------------------------------------------------------------
-static function X2AbilityTemplate ShockAndAwe()
+static function X2AbilityTemplate RTShockAndAwe()
 {
 	local X2AbilityTemplate					Template;
 	local RTEffect_ShockAndAwe				ShockEffect;
 
 	//Icon Properties
-	`CREATE_X2ABILITY_TEMPLATE(Template, 'ShockAndAwe');
+	`CREATE_X2ABILITY_TEMPLATE(Template, 'RTShockAndAwe');
 	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_overwatch";
 
 	Template.AbilitySourceName = 'eAbilitySource_Psionic';
@@ -2082,11 +2082,11 @@ static function X2AbilityTemplate ShockAndAwe()
 
 	ShockEffect = new class'RTEffect_ShockAndAwe';
 	ShockEffect.BuildPersistentEffect(1, true, true, false);
-	ShockEffect.iDamageRequiredToActivate = default.SHOCKANDAWE_DAMAGE_TO_ACTIVATE;
+	ShockEffect.iDamageRequiredToActivate = default.RTShockAndAwe_DAMAGE_TO_ACTIVATE;
 	ShockEffect.SetDisplayInfo(ePerkBuff_Passive, Template.LocFriendlyName, Template.LocLongDescription, Template.IconImage, true,,Template.AbilitySourceName);
 	Template.AddTargetEffect(ShockEffect);
 
-	Template.AdditionalAbilities.AddItem('ShockAndAweListener');
+	Template.AdditionalAbilities.AddItem('RTShockAndAweListener');
 
 	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
 	//  NOTE: No visualization on purpose!
@@ -2097,7 +2097,7 @@ static function X2AbilityTemplate ShockAndAwe()
 //---------------------------------------------------------------------------------------
 //---Shock And Awe Listener--------------------------------------------------------------
 //---------------------------------------------------------------------------------------
-static function X2AbilityTemplate ShockAndAweListener()
+static function X2AbilityTemplate RTShockAndAweListener()
 {
 	local X2AbilityTemplate					Template;
 	local X2AbilityTrigger_EventListener	EventListener;
@@ -2106,7 +2106,7 @@ static function X2AbilityTemplate ShockAndAweListener()
 	local X2AbilityCost_ActionPoints		ActionPoint;
 
 	//Icon Properties
-	`CREATE_X2ABILITY_TEMPLATE(Template, 'ShockAndAweListener');
+	`CREATE_X2ABILITY_TEMPLATE(Template, 'RTShockAndAweListener');
 	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_overwatch";
 
 	Template.AbilitySourceName = 'eAbilitySource_Psionic';
@@ -2137,7 +2137,7 @@ static function X2AbilityTemplate ShockAndAweListener()
 	Template.AbilityMultiTargetStyle = MultiTarget;
 
 	EventListener = new class'X2AbilityTrigger_EventListener';
-	EventListener.ListenerData.EventID = 'ShockAndAweTrigger';
+	EventListener.ListenerData.EventID = 'RTShockAndAweTrigger';
 	EventListener.ListenerData.Deferral = ELD_OnStateSubmitted;
 	EventListener.ListenerData.Filter = eFilter_Unit;
 	EventListener.ListenerData.EventFn = class'XComGameState_Ability'.static.VoidRiftInsanityListener;

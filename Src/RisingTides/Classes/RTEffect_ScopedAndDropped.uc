@@ -95,19 +95,19 @@ function bool PostAbilityCostPaid(XComGameState_Effect EffectState, XComGameStat
 				// this should be the attack that proced this PostAbilityCostPaid
 				TargetUnit.GetUnitValue('LastEffectDamage', DamageDealt);
 				// Running total of damage dealt this turn
-				Attacker.GetUnitValue('ShockAndAweCounter', ShockCounter);
+				Attacker.GetUnitValue('RTShockAndAweCounter', ShockCounter);
 
 				iTotalDamageDealt = int(DamageDealt.fValue) + int(ShockCounter.fValue);
 
 				if(iTotalDamageDealt < iDamageRequiredToActivate) {
-					Attacker.SetUnitFloatValue('ShockAndAweCounter', iTotalDamageDealt, eCleanup_BeginTurn);
+					Attacker.SetUnitFloatValue('RTShockAndAweCounter', iTotalDamageDealt, eCleanup_BeginTurn);
 				} else {
 					// t-t-t-t-triggered
-					EventMgr.TriggerEvent('ShockAndAweTrigger', TargetUnit, Attacker, NewGameState);
+					EventMgr.TriggerEvent('RTShockAndAweTrigger', TargetUnit, Attacker, NewGameState);
 					while(iTotalDamageDealt > iDamageRequiredToActivate) {
 						iTotalDamageDealt -= iDamageRequiredToActivate;
 					}
-					Attacker.SetUnitFloatValue('ShockAndAweCounter', iTotalDamageDealt, eCleanup_BeginTurn);
+					Attacker.SetUnitFloatValue('RTShockAndAweCounter', iTotalDamageDealt, eCleanup_BeginTurn);
 				}
 			}
 			// Here. We. Go.

@@ -191,14 +191,14 @@ static function RTLog(string message, optional bool bShouldRedScreenToo = false,
 	if(!b) {
 		return;
 	}
-	mod = name(`DLCINFO.GetDLCIdentifier());
+	mod = 'RisingTides';
 
 	`LOG(message, b, mod);
 	if(bShouldRedScreenToo) {
-		`RedScreen("RisingTides: " $ message);
+		`RedScreen(mod $ ": " $ message);
 	}
 	if(bShouldOutputToConsoleToo) {
-		class'Helpers'.static.OutputMsg(message);
+		class'Helpers'.static.OutputMsg(mod $ ": " $ message);
 	}
 }
 

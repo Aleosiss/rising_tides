@@ -123,6 +123,7 @@ simulated function String GetMissionDescString()
 	local string MissionDesc;
 
 	MissionDesc = super.GetMissionDescString();
+	
 	return MissionDesc;
 }
 

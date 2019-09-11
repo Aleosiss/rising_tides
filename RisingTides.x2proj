@@ -643,6 +643,13 @@
     <Content Include="Content\RT_Perk_Drone_CloakingProtocol.upk" />
     <Content Include="Src\RisingTides\Classes\RTAbility_ProgramDroneAbilitySet.uc" />
     <Content Include="Src\RisingTides\Classes\RTStrategyElement_Techs.uc" />
+    <Content Include="Src\RisingTides\Classes\RTTargetingMethod_PathFormation.uc" />
+    <Content Include="Content\RT_Obj_EliminateTemplarHighCoven.umap" />
+    <Content Include="Src\RisingTides\Classes\SeqAct_ProgramReinforcement.uc" />
+    <Content Include="Content\RT_Plot_TemplarHighCoven.umap" />
+    <Content Include="Content\sm_HighCovenPark_NetworkLink_01.umap" />
+    <Content Include="Content\md_HighCovenServerWarehouse_01.umap" />
+    <Content Include="Src\RisingTides\Classes\SeqAct_RTGetObjectiveInfo.uc" />
   </ItemGroup>
   <Import Project="$(MSBuildLocalExtensionPath)\XCOM2.targets" />
 </Project>

@@ -30,18 +30,18 @@ function bool PostAbilityCostPaid(XComGameState_Effect EffectState, XComGameStat
 		{
 			// math
 			EffectTargetUnit.GetUnitValue('LastEffectDamage', DamageDealt);
-			Attacker.GetUnitValue('ShockAndAweCounter', ShockCounter);
+			Attacker.GetUnitValue('RTShockAndAweCounter', ShockCounter);
 
 			iTotalDamageDealt = int(DamageDealt.fValue) + int(ShockCounter.fValue);
 			if(iTotalDamageDealt < iDamageRequiredToActivate) {
-				Attacker.SetUnitFloatValue('ShockAndAweCounter', iTotalDamageDealt, eCleanup_BeginTurn);
+				Attacker.SetUnitFloatValue('RTShockAndAweCounter', iTotalDamageDealt, eCleanup_BeginTurn);
 			} else {
 				// t-t-t-t-triggered
-				`XEVENTMGR.TriggerEvent('ShockAndAweTrigger', EffectTargetUnit, Attacker, NewGameState);	
+				`XEVENTMGR.TriggerEvent('RTShockAndAweTrigger', EffectTargetUnit, Attacker, NewGameState);	
 				while(iTotalDamageDealt > iDamageRequiredToActivate) {
 					iTotalDamageDealt -= iDamageRequiredToActivate;
 				}
-				Attacker.SetUnitFloatValue('ShockAndAweCounter', iTotalDamageDealt, eCleanup_BeginTurn);
+				Attacker.SetUnitFloatValue('RTShockAndAweCounter', iTotalDamageDealt, eCleanup_BeginTurn);
 			}												 
 		}
 	} 																		

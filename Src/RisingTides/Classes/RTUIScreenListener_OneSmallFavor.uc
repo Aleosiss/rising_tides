@@ -241,7 +241,6 @@ simulated function bool AddOneSmallFavorSitrep(XComGameState_MissionSite Mission
 	XComHQ = XComGameState_HeadquartersXCom(NewGameState.ModifyStateObject(XComHQ.class, XComHQ.ObjectID));
 	MissionState = XComGameState_MissionSite(NewGameState.ModifyStateObject(class'XComGameState_MissionSite', MissionState.ObjectID));
 
-	
 	MissionState.TacticalGameplayTags.AddItem('RTOneSmallFavor');
 	Program.CashOneSmallFavor(NewGameState, MissionState); // we're doing it boys
 	ModifyOneSmallFavorSitrepForGeneratedMission(Program, MissionState, true);

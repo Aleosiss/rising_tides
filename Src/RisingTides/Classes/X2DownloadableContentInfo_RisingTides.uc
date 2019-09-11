@@ -68,7 +68,7 @@ static event OnPostTemplatesCreated()
 		`RTLOG("This is not a final release!");
 	`endif
 
-	`RTLOG("Script package loaded.");
+	`RTLOG("Script package loaded. Version: " $ GetVersionString());
 
 	MakePsiAbilitiesInterruptable();
 	MakeAbilitiesNotTurnEndingForTimeStandsStill();
@@ -258,7 +258,7 @@ static function bool DebuggingEnabled() {
 	return default.bDebuggingEnabled;
 }
 
-static function string GetDLCIdentifier() {
+static function String GetDLCIdentifier() {
 	return default.DLCIdentifier;
 }
 

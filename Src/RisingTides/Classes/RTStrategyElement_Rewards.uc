@@ -104,7 +104,7 @@ static function X2DataTemplate CreateProgramHuntTemplarsP1Reward() {
 	Template.GetBlackMarketStringFn = none;
 	Template.GetRewardIconFn = none;
 	Template.CleanUpRewardFn = none;
-	Template.RewardPopupFn = none;
+	Template.RewardPopupFn = TemplarAmbushPopup;
 
 	return Template;
 }
@@ -523,6 +523,7 @@ static function GiveHighCovenAssaultMission(XComGameState NewGameState, XComGame
 {
 	local RTGameState_ProgramFaction ProgramState;
 	local RTGameState_MissionSiteTemplarHighCoven MissionState;
+	local DynamicPropertySet PropertySet;
 
 	ProgramState = `RTS.GetNewProgramState(NewGameState);
 	ProgramState.IncrementTemplarQuestlineStage();
@@ -537,9 +538,18 @@ static function HuntTemplarsP3RewardPopup(XComGameState_Reward RewardState)
 {
 	local XComGameState_MissionSite MissionSite;
 	local StateObjectReference EmptyRef;
+	local RTGameState_ProgramFaction ProgramFaction;
+	
+	ProgramFaction = `RTS.GetProgramState();
+	if(ProgramFaction.getTemplarQuestlineStage() >= 2) {
+		`RTLOG("HuntTemplarsP3RewardPopup: correct stage, continuing...");
+	} else {
+		`RTLOG("HuntTemplarsP3RewardPopup: wrong stage, failing!");
+		return;
+	}
 
 	if(RewardState.RewardObjectReference == EmptyRef) {
-		`RTLOG("We have failed the HuntTemplarsP3 mission, not sending the mission popup!");
+		`RTLOG("HuntTemplarsP3RewardPopup: Failed the mission, not sending the mission popup!");
 		return;
 	}
 
@@ -548,6 +558,10 @@ static function HuntTemplarsP3RewardPopup(XComGameState_Reward RewardState)
 	{
 		MissionSite.GetMissionSource().MissionPopupFn(MissionSite);
 	}
+}
+
+static function TemplarAmbushPopup(XComGameState_Reward RewardState) {
+	HuntTemplarsP3RewardPopup(RewardState);
 }
 
 static function RTGameState_MissionSiteTemplarHighCoven CreateTemplarHighCovenAssaultMission(XComGameState NewGameState) {
@@ -793,7 +807,6 @@ static function EliminateFaction(XComGameState NewGameState, XComGameState_Resis
 	FactionHavenState = XComGameState_Haven(NewGameState.ModifyStateObject(class'XComGameState_Haven', FactionState.FactionHQ.ObjectID));
 	
 	// Required to fill the Faction wheel in UIStrategyMap
-	
 	if(FactionTemplateName == 'Faction_Templars' ||
 		FactionTemplateName == 'Faction_Reapers' ||
 		FactionTemplateName == 'Faction_Skirmishers'

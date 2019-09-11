@@ -284,7 +284,7 @@ LocHelpText="Potenciar una unidad fusionada y amistosa, sanando completamente y 
 LocFlyOverText="Asumiendo el control directo"
 LocPromotionPopupText="<Bullet/> Empoderar a una unidad amigable fusionada, curacion completa y otorgandole importantes bonificaciones de combate. <br/> <Bullet/> <Ability:SelfCooldown/> cooldown. <br/> <Bullet/> +4 armadura, +5 escudo hp, + 10 apunta, + 10 voluntad. <br/> <Bullet/> Efecto se rompe en la perdida de fusion. <br/> "
 
-[ShockAndAwe X2AbilityTemplate]
+[RTShockAndAwe X2AbilityTemplate]
 LocFriendlyName="Shock And Awe"
 LocLongDescription="Cuando esta unidad causa mas de 25 daños en un solo turno, desorienta a todos los enemigos cercanos."
 LocHelpText="Cuando esta unidad causa mas de 25 daños en un solo turno, desorienta a todos los enemigos cercanos"
