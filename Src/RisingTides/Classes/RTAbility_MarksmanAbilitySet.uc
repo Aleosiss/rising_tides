@@ -1326,7 +1326,7 @@ static function X2AbilityTemplate DaybreakFlameIcon()
 	Template.AddTargetEffect(IconEffect);
 
 	Template.AdditionalAbilities.AddItem('DaybreakFlame');
-	Template.AdditionalAbilities.AddItem('DaybreakFlameToggle')
+	Template.AdditionalAbilities.AddItem('DaybreakFlameToggle');
 	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
 	// Note: no visualization on purpose!
 
@@ -1358,7 +1358,7 @@ static function X2AbilityTemplate DaybreakFlameToggle(name ToggleName)
 	Template.AbilityTriggers.AddItem(default.UnitPostBeginPlayTrigger);
 	Template.AbilityTriggers.AddItem(default.PlayerInputTrigger);
 
-	InvertedToggleName = 'NOT' + ToggleName;
+	InvertedToggleName = ToggleName;
 
 	// Remove if present
 	ToggleCondition = new class'X2Condition_UnitEffects';

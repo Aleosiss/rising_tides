@@ -32,10 +32,11 @@ simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffe
 
 	UnitState = XComGameState_Unit(kNewTargetState);
 
-	if(UnitState.IsUnitAffectedByEffectName('RTEffect_QueenOfBlades'))
+	if(UnitState.IsUnitAffectedByEffectName('RTEffect_QueenOfBlades')) {
 		// AddPersistentStatChange(eStat_Mobility, iMobilityMod); // QoB no longer increases mobility, just prevents decrease
-	else
+	} else {
 		AddPersistentStatChange(eStat_Mobility, -iMobilityMod);
+	}
 
 	super.OnEffectAdded(ApplyEffectParameters, UnitState, NewGameState, NewEffectState);
 }
