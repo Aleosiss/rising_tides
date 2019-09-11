@@ -10,12 +10,16 @@
 
 class RTTargetingMethod_AimedLineSkillshot extends X2TargetingMethod;
 
+var int LineLengthMeters; // if greater than 0, the line with have this length instead of the default
+var bool bOriginateAtTargetLocation; // if set, the line will originate from the target instead of the shooter
+
 var protected vector NewTargetLocation, FiringLocation;
 var protected TTile FiringTile;
 var protected XComWorldData WorldData;
 var private int LastTarget;
 var protected bool bGoodTarget;
 var protected X2Actor_LineTarget LineActor;
+var protected X2Actor_LineTarget LineActorReversed;
 
 function Init(AvailableAction InAction, int NewTargetIndex)
 {
@@ -34,24 +38,65 @@ function Init(AvailableAction InAction, int NewTargetIndex)
 	WorldData = `XWORLD;
 	FiringTile = UnitState.TileLocation;
 	FiringLocation = WorldData.GetPositionFromTileCoordinates(UnitState.TileLocation);
-	FiringLocation.Z += class'XComWorldData'.const.WORLD_HalfFloorHeight;
 
-	// select the target before setting up the midpoint cam so we know where we are midpointing to
-	DirectSetTarget(0);
+	// shoot at their midpoint for now...
+	FiringLocation.Z += class'XComWorldData'.const.WORLD_HalfFloorHeight;
 
 	// set up the GUI line
 	if (!AbilityTemplate.SkipRenderOfTargetingTemplate)
 	{
-		// setup the targeting mesh
-		LineActor = `BATTLE.Spawn( class'X2Actor_LineTarget' );
-		TileLength = 200 * class'XComWorldData'.const.WORLD_METERS_TO_UNITS_MULTIPLIER / class'XComWorldData'.const.WORLD_StepSize;
-		LineActor.MeshLocation = "UI_3D.Targeting.ConeRange";
-		LineActor.InitLineMesh( TileLength  );
-		LineActor.SetLocation( FiringLocation );
+		if(bOriginateAtTargetLocation) {
+			SetupLineTargetOrigin();
+		} else {
+			SetupLineShooterOrigin();
+		}
 	}
 
-
 	UpdatePostProcessEffects(true);
+}
+
+private function SetupLineTargetOrigin() {
+	// setup the targeting mesh
+	LineActor = `BATTLE.Spawn( class'X2Actor_LineTarget' );
+	LineActorReversed = `BATTLE.Spawn( class'X2Actor_LineTarget' );
+
+	if(LineLengthMeters > 0) {
+		FinalLineLength = LineLengthMeters;
+	} else {
+		FinalLineLength = 200;
+	}
+
+	FinalLineLength = FinalLineLength / 2;
+	TileLength = FinalLineLength * class'XComWorldData'.const.WORLD_METERS_TO_UNITS_MULTIPLIER / class'XComWorldData'.const.WORLD_StepSize;
+	
+	LineActor.MeshLocation = "UI_3D.Targeting.ConeRange";
+	LineActor.InitLineMesh( TileLength );
+	LineActor.SetLocation( FiringLocation );
+	AimLineAtTargetLocation(FiringLocation, GetTargetedActor.Location);
+
+	LineActorReversed.MeshLocation = "UI_3D.Targeting.ConeRange";
+	LineActorReversed.InitLineMesh( TileLength );
+	LineActorReversed.SetLocation( FiringLocation );
+	AimLineAtTargetLocation(FiringLocation, GetTargetedActor.Location, true);
+}
+
+private function SetupLineShooterOrigin() {
+	// setup the targeting mesh
+	LineActor = `BATTLE.Spawn( class'X2Actor_LineTarget' );
+	LineActorReversed = `BATTLE.Spawn( class'X2Actor_LineTarget' );
+
+	if(LineLengthMeters > 0) {
+		FinalLineLength = LineLengthMeters;
+	} else {
+		FinalLineLength = 200;
+	}
+
+	TileLength = FinalLineLength * class'XComWorldData'.const.WORLD_METERS_TO_UNITS_MULTIPLIER / class'XComWorldData'.const.WORLD_StepSize;
+	LineActor.MeshLocation = "UI_3D.Targeting.ConeRange";
+	LineActor.InitLineMesh( TileLength );
+
+	LineActor.SetLocation( FiringLocation );
+	AimLineAtTargetLocation(FiringLocation, GetTargetedActor.Location);
 }
 
 private function AddTargetingCamera(Actor NewTargetActor, bool ShouldUseMidpointCamera)
@@ -204,8 +249,6 @@ function DirectSetTarget(int TargetIndex)
 	local TTile CurrentTile;
 	local XComWorldData World;
 	local array<Actor> CurrentlyMarkedTargets;
-	local vector ShooterToTarget;
-	local Rotator LineRotator;
 
 	Pres = `PRES;
 	World = `XWORLD;
@@ -269,14 +312,33 @@ function DirectSetTarget(int TargetIndex)
 			
 	}
 
+	if(bOriginateAtTargetLocation) {
+		LineActor.SetLocation( GetTargetedActor().Location );
+		LineActorReversed.SetLocation( GetTargetedActor().Location );
+		AimLineAtTargetLocation(FiringLocation, NewTargetLocation, true);
+	} else {
+		AimLineAtTargetLocation(FiringLocation, NewTargetLocation)
+	}
+	
 	GetTargetedActorsInTiles(Tiles, CurrentlyMarkedTargets, false);
 	CheckForFriendlyUnit(CurrentlyMarkedTargets);
 	MarkTargetedActors(CurrentlyMarkedTargets, (!AbilityIsOffensive) ? FiringUnit.GetTeam() : eTeam_None);
 	DrawAOETiles(Tiles);
 	AOEMeshActor.SetHidden(false);
-	if (LineActor != none)
-	{
-		ShooterToTarget = NewTargetLocation - FiringLocation;
+}
+
+private function AimLineAtTargetLocation(vector FiringLocation, vector TargetLocation, optional bReverse = false) {
+	local vector ShooterToTarget;
+	local Rotator LineRotator;
+
+	if (LineActor != none) {
+		ShooterToTarget = TargetLocation - FiringLocation;
+		LineRotator = rotator( ShooterToTarget );
+		LineActor.SetRotation( LineRotator );
+	}
+
+	if(LineActorReversed != none && bReverse) {
+		ShooterToTarget = FiringLocation - TargetLocation;
 		LineRotator = rotator( ShooterToTarget );
 		LineActor.SetRotation( LineRotator );
 	}
