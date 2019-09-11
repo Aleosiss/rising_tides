@@ -95,6 +95,7 @@ static function array<X2DataTemplate> CreateTemplates()
 	Templates.AddItem(SovereignEffect());
 	Templates.AddItem(DaybreakFlame());										// animation
 	Templates.AddItem(DaybreakFlameIcon());
+	Templates.Add(CreateUnitValueToggle('DaybreakFlameToggle', 'DaybreakFlame'));
 	Templates.AddItem(YourHandsMyEyes());
 	Templates.AddItem(TimeStandsStill());									// animation
 	Templates.AddItem(TimeStandsStillInterruptListener());
@@ -183,11 +184,13 @@ static function X2AbilityTemplate ScopedAndDropped()
 	local X2AbilityTemplate					Template;
 	local X2AbilityCost_ActionPoints		ActionPointCost;
 	local X2AbilityCost_Ammo				AmmoCost;
-	local X2AbilityToHitCalc_StandardAim    ToHitCalc;
-	//local X2Condition_Visibility            TargetVisibilityCondition;
-	local RTCondition_VisibleToPlayer	VisibleToPlayerCondition;
-	local array<name>                       SkipExclusions;
+	local X2AbilityToHitCalc_StandardAim	ToHitCalc;
+	local X2Condition_Visibility			TargetVisibilityCondition;
+	local RTCondition_VisibleToPlayer		VisibleToPlayerCondition;
+	local array<name>						SkipExclusions;
 	local X2Effect_Knockback				KnockbackEffect;
+
+	local X2Condition_UnitEffects			DaybreakFlameActiveCondition;
 
 	//Macro to do localisation and stuffs
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'RTStandardSniperShot');
@@ -220,6 +223,12 @@ static function X2AbilityTemplate ScopedAndDropped()
 	Template.AbilityTargetConditions.AddItem(default.LivingHostileTargetProperty);
 	// Can't shoot while dead
 	Template.AbilityShooterConditions.AddItem(default.LivingShooterProperty);
+
+	// Toggle
+	DaybreakFlameActiveCondition = new class'X2Condition_UnitEffects';
+	DaybreakFlameActiveCondition.AddExcludeEffect('DaybreakFlameActive', 'AA_AbilityUnavailable');
+	Template.AbilityShooterConditions.AddItem(DaybreakFlameActiveCondition);
+
 	// Only at single targets that are in range.
 	Template.AbilityTargetStyle = default.SimpleSingleTarget;
 
@@ -1144,6 +1153,7 @@ static function X2AbilityTemplate SovereignEffect()
 	local X2AbilityTarget_Single				SingleTarget;
 
 	local RTCondition_VisibleToPlayer			PlayerVisibilityCondition;
+	local X2Condition_UnitEffects				DaybreakFlameActiveCondition;
 
 
 	//Macro to do localisation and stuffs
@@ -1183,6 +1193,11 @@ static function X2AbilityTemplate SovereignEffect()
 	Template.AbilityTargetConditions.AddItem(default.LivingHostileTargetProperty);
 	// Can't shoot while dead
 	Template.AbilityShooterConditions.AddItem(default.LivingShooterProperty);
+
+	// Toggle
+	DaybreakFlameActiveCondition = new class'X2Condition_UnitEffects';
+	DaybreakFlameActiveCondition.AddRequireEffect('DaybreakFlameActive', 'AA_AbilityUnavailable');
+	Template.AbilityShooterConditions.AddItem(DaybreakFlameActiveCondition);
 
 	// Single targets that are in range.
 	SingleTarget = new class'X2AbilityTarget_Single';
@@ -1273,13 +1288,8 @@ static function X2AbilityTemplate SovereignEffect()
 	Template.AddTargetEffect(FireToWorldEffect);
 	Template.AddMultiTargetEffect(FireToWorldEffect);			//this is required to add the fire effect
 
-	Template.OverrideAbilities.AddItem('SniperStandardFire');
-	Template.OverrideAbilities.AddItem('RTStandardSniperShot');
-
 	// MAKE IT LIVE!
 	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
-
-	// TODO: VISUALIZATION
 	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
 	Template.BuildInterruptGameStateFn = TypicalAbility_BuildInterruptGameState;
 

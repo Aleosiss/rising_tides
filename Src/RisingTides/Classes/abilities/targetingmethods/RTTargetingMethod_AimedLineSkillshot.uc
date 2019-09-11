@@ -72,12 +72,12 @@ private function SetupLineTargetOrigin() {
 	LineActor.MeshLocation = "UI_3D.Targeting.ConeRange";
 	LineActor.InitLineMesh( TileLength );
 	LineActor.SetLocation( FiringLocation );
-	AimLineAtTargetLocation(FiringLocation, GetTargetedActor.Location);
+	AimLineAtTargetLocation(GetTargetedActor.Location);
 
 	LineActorReversed.MeshLocation = "UI_3D.Targeting.ConeRange";
 	LineActorReversed.InitLineMesh( TileLength );
 	LineActorReversed.SetLocation( FiringLocation );
-	AimLineAtTargetLocation(FiringLocation, GetTargetedActor.Location, true);
+	AimLineAtTargetLocation(GetTargetedActor.Location, true);
 }
 
 private function SetupLineShooterOrigin() {
@@ -96,7 +96,7 @@ private function SetupLineShooterOrigin() {
 	LineActor.InitLineMesh( TileLength );
 
 	LineActor.SetLocation( FiringLocation );
-	AimLineAtTargetLocation(FiringLocation, GetTargetedActor.Location);
+	AimLineAtTargetLocation(GetTargetedActor.Location);
 }
 
 private function AddTargetingCamera(Actor NewTargetActor, bool ShouldUseMidpointCamera)
@@ -315,9 +315,9 @@ function DirectSetTarget(int TargetIndex)
 	if(bOriginateAtTargetLocation) {
 		LineActor.SetLocation( GetTargetedActor().Location );
 		LineActorReversed.SetLocation( GetTargetedActor().Location );
-		AimLineAtTargetLocation(FiringLocation, NewTargetLocation, true);
+		AimLineAtTargetLocation(NewTargetLocation, true);
 	} else {
-		AimLineAtTargetLocation(FiringLocation, NewTargetLocation)
+		AimLineAtTargetLocation(NewTargetLocation)
 	}
 	
 	GetTargetedActorsInTiles(Tiles, CurrentlyMarkedTargets, false);
@@ -327,7 +327,7 @@ function DirectSetTarget(int TargetIndex)
 	AOEMeshActor.SetHidden(false);
 }
 
-private function AimLineAtTargetLocation(vector FiringLocation, vector TargetLocation, optional bReverse = false) {
+private function AimLineAtTargetLocation(vector TargetLocation, optional bool bReverse = false) {
 	local vector ShooterToTarget;
 	local Rotator LineRotator;
 

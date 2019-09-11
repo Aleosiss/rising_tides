@@ -200,6 +200,82 @@ static function Passive(X2AbilityTemplate Template) {
 	Template.AbilityTriggers.AddItem(default.UnitPostBeginPlayTrigger);
 }
 
+static function array<X2AbilityTemplate> CreateUnitValueToggle(name TemplateName, name UnitValName) {
+	local array<X2AbilityTemplate> Templates;
+	local name TemplateNameMaster, TemplateNameOn, TemplateNameOff;
+	
+	TemplateNameMaster = TemplateName + '_master';
+	TemplateNameOn = TemplateName + '_on';
+	TemplateNameOff = TemplateName + '_off';
+
+	Templates.AddItem(CreateUnitValueToggleMaster(TemplateNameMaster, UnitValName, TemplateNameOn, TemplateNameOff));
+	Templates.AddItem(CreateUnitValueToggleOn(TemplateNameOn, UnitValName));
+	Templates.AddItem(CreateUnitValueToggleOff(TemplateNameOff, UnitValName));
+
+	return Templates;
+}
+
+private static function X2AbilityTemplate CreateUnitValueToggleMaster(name TemplateName, name UnitValName, name TemplateNameOn, name TemplateNameOff) {
+	local X2AbilityTemplate Template;
+
+	`CREATE_X2ABILITY_TEMPLATE(TemplateName, TemplateName);
+	Template.AbilitySourceName = 'eAbilitySource_Perk';
+	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_NeverShow;
+	Template.Hostility = eHostility_Neutral;
+	Template.ConcealmentRule = eConceal_Always;
+	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
+
+	Template.AdditionalAbilities.AddItem(TemplateNameOn);
+	Template.AdditionalAbilities.AddItem(TemplateNameOff);
+
+	return Template;
+}
+
+private static function X2AbilityTemplate CreateUnitValueToggleInternal(name TemplateName, name UnitValName, int ConditionValue, int EffectValue) {
+	local X2AbilityTemplate Template;
+	local X2Condition_UnitValue UnitValueCondition;
+	local X2Effect_SetUnitValue UnitValueEffect;
+
+	`CREATE_X2ABILITY_TEMPLATE(TemplateName, TemplateName);
+	Template.AbilitySourceName = 'eAbilitySource_Perk';
+	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_ShowIfAvailable;
+	Template.Hostility = eHostility_Neutral;
+	Template.ConcealmentRule = eConceal_Always;
+
+	Template.AbilityToHitCalc = default.DeadEye;
+	Template.AbilityTargetStyle = default.SelfTarget;
+	Template.AbilityCosts.AddItem(default.FreeActionCost);
+
+	InputTrigger = new class'X2AbilityTrigger_PlayerInput';
+	Template.AbilityTriggers.AddItem(InputTrigger);
+
+	Template.AddShooterEffectExclusions(SkipExclusions);
+
+	UnitValueCondition = new class'X2Condition_UnitValue';
+	UnitValueCondition.AddCheckValue(UnitValName, ConditionValue);
+	Template.AbilityTargetConditions.AddItem(UnitValueCondition);
+
+	UnitValueEffect = new class'X2Effect_SetUnitValue';
+	UnitValueEffect.UnitName = UnitValName;
+	UnitValueEffect.NewValueToSet = EffectValue;
+	UnitValueEffect.CleanupType = eCleanup_BeginTactical;
+	Template.AddTargetEffect(UnitValueEffect);
+
+	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
+	Template.BuildVisualizationFn = ReloadAbility_BuildVisualization;
+	Template.ActivationSpeech = 'Reloading';
+
+	return Template;
+}
+
+private static function X2AbilityTemplate CreateUnitValueToggleOn(name TemplateName, name UnitValName) {
+	return CreateUnitValueToggleInternal(TemplateName, UnitValName, 0, 1);
+}
+
+private static function X2AbilityTemplate CreateUnitValueToggleOff(name TemplateName, name UnitValName) {
+	return CreateUnitValueToggleInternal(TemplateName, UnitValName, 1, 0);
+}
+
 static function bool AbilityTagExpandHandler(string InString, out string OutString)
 {
 //	local name Tag;
