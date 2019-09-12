@@ -67,7 +67,7 @@ function AddAbilitySetupData(	X2AbilityTemplateManager AbilityTemplateManager,
 		arrData.AddItem(Data);
 		ExcludedAbilityNames.AddItem(AbilityName);
 
-		if(InitialAbilitySetupData == none) {
+		if(InitialAbilitySetupData == EmptyData) {
 			InitialAbilitySetupData = Data;
 		}
 
@@ -301,6 +301,8 @@ function array<AbilitySetupData> GatherUnitAbilitiesForInit(optional XComGameSta
 	local XComGameState_Ability AbilityState;
 	local int ScanEffect;
 	local X2Effect_SpawnUnit SpawnUnitEffect;
+	
+	local array<name> ExcludedAbilityNames;
 
 	History = `XCOMHISTORY;
 	XComHQ = XComGameState_HeadquartersXCom(History.GetSingleGameStateObjectForClass(class'XComGameState_HeadquartersXCom', true));

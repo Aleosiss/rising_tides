@@ -204,9 +204,9 @@ static function array<X2AbilityTemplate> CreateUnitValueToggle(name TemplateName
 	local array<X2AbilityTemplate> Templates;
 	local name TemplateNameMaster, TemplateNameOn, TemplateNameOff;
 	
-	TemplateNameMaster = TemplateName $ '_master';
-	TemplateNameOn = TemplateName $ '_on';
-	TemplateNameOff = TemplateName $ '_off';
+	TemplateNameMaster = `RTS.ConcatName(TemplateName, '_master');
+	TemplateNameOn = `RTS.ConcatName(TemplateName, '_on')
+	TemplateNameOff = `RTS.ConcatName(TemplateName, '_off')
 
 	Templates.AddItem(CreateUnitValueToggleMaster(TemplateNameMaster, UnitValName, TemplateNameOn, TemplateNameOff));
 	Templates.AddItem(CreateUnitValueToggleOn(TemplateNameOn, UnitValName));
@@ -235,6 +235,7 @@ private static function X2AbilityTemplate CreateUnitValueToggleInternal(name Tem
 	local X2AbilityTemplate Template;
 	local X2Condition_UnitValue UnitValueCondition;
 	local X2Effect_SetUnitValue UnitValueEffect;
+	local X2AbilityTrigger_PlayerInput InputTrigger;
 
 	`CREATE_X2ABILITY_TEMPLATE(Template, TemplateName);
 	Template.AbilitySourceName = 'eAbilitySource_Perk';
