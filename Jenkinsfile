@@ -1,4 +1,7 @@
 pipeline {
+  environment {
+      modName = "RisingTides"
+  }
 
   options {
         timeout(time: 15, unit: 'MINUTES')
@@ -27,7 +30,15 @@ pipeline {
           echo ""
           echo ""
           powershell set-executionpolicy remotesigned
-          powershell "./scripts/build_jenkins.ps1" -mod "RisingTides" -srcDirectory "'%WORKSPACE%'"
+          powershell "./scripts/build_jenkins.ps1" -mod %modName% -srcDirectory "'%WORKSPACE%'"
+        '''
+      }
+    }
+
+    stage('Upload Release') {
+      steps {
+        bat '''
+          echo "Doing nothing for now!"
         '''
       }
     }
