@@ -56,6 +56,7 @@ function Init(AvailableAction InAction, int NewTargetIndex)
 }
 
 private function SetupLineTargetOrigin() {
+	local int FinalLineLength;
 	// setup the targeting mesh
 	LineActor = `BATTLE.Spawn( class'X2Actor_LineTarget' );
 	LineActorReversed = `BATTLE.Spawn( class'X2Actor_LineTarget' );
@@ -81,6 +82,7 @@ private function SetupLineTargetOrigin() {
 }
 
 private function SetupLineShooterOrigin() {
+	local int FinalLineLength;
 	// setup the targeting mesh
 	LineActor = `BATTLE.Spawn( class'X2Actor_LineTarget' );
 	LineActorReversed = `BATTLE.Spawn( class'X2Actor_LineTarget' );
@@ -317,7 +319,7 @@ function DirectSetTarget(int TargetIndex)
 		LineActorReversed.SetLocation( GetTargetedActor().Location );
 		AimLineAtTargetLocation(NewTargetLocation, true);
 	} else {
-		AimLineAtTargetLocation(NewTargetLocation)
+		AimLineAtTargetLocation(NewTargetLocation);
 	}
 	
 	GetTargetedActorsInTiles(Tiles, CurrentlyMarkedTargets, false);
