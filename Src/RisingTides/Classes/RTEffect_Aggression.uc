@@ -9,14 +9,15 @@
 
 class RTEffect_Aggression extends X2Effect_Persistent config(RTMarksman);
 
-var localized string RTFriendlyName;
+var int iCritBonusPerUnit;
+var int iUnitsForMaxBonus;
 
 function GetToHitModifiers(XComGameState_Effect EffectState, XComGameState_Unit Attacker, XComGameState_Unit Target, XComGameState_Ability AbilityState, class<X2AbilityToHitCalc> ToHitType, bool bMelee, bool bFlanking, bool bIndirectFire, out array<ShotModifierInfo> ShotModifiers)
 {
 	local ShotModifierInfo ModInfo;
 	local XComGameState_Item SourceWeapon;
 	local array<StateObjectReference> VisibleUnits, SSVisibleUnits;
-	local int crit_bonus, numUnits;
+	local int crit_bonus, numUnits, max_bonus;
 
 	//Get total number of enemy units visible to the UI
 	class'X2TacticalVisibilityHelpers'.static.GetAllVisibleEnemyUnitsForUnit(Attacker.ObjectID, VisibleUnits);
@@ -28,16 +29,17 @@ function GetToHitModifiers(XComGameState_Effect EffectState, XComGameState_Unit 
 	if (SourceWeapon != none)
 	{
 		ModInfo.ModType = eHit_Crit;
-		ModInfo.Reason = RTFriendlyName;
+		ModInfo.Reason = AbilityState.GetMyTemplate().LocFriendlyName;
 
-		crit_bonus = 10 * numUnits;
-		if(crit_bonus < 30)
+		crit_bonus = iCritBonusPerUnit * numUnits;
+		max_bonus = iCritBonusPerUnit * iUnitsForMaxBonus;
+		if(crit_bonus < max_bonus)
 		{
 			ModInfo.Value = crit_bonus;
 		}
 		else
 		{
-			ModInfo.Value = 30;
+			ModInfo.Value = max_bonus;
 		}
 
 		ShotModifiers.AddItem(ModInfo);

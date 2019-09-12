@@ -4,7 +4,12 @@
         {
             "label": "build",
             "type": "shell",
-            "command": "powershell.exe -file '${workspaceRoot}/scripts/build_noshaderprecompliation.ps1' -mod 'RisingTides' -srcDirectory '${workspaceRoot}' -sdkPath 'W:/SteamLibrary/steamapps/common/XCOM 2 War of the Chosen SDK' -gamePath 'W:/SteamLibrary/steamapps/common/XCOM 2'",
+            "command": "-file \"${workspaceRoot}/scripts/build_noshaderprecompliation.ps1\" -mod \"RisingTides\" -srcDirectory \"${workspaceRoot}\" -sdkPath \"${config:mod.sdkpath}\" -gamePath \"${config:mod.gamepath}\"",
+            "options": {
+                "shell": {
+                    "executable": "powershell.exe",
+                },
+            },
             "group": {
                 "kind": "build",
                 "isDefault": true
@@ -13,7 +18,7 @@
                 "owner": "unrealscript",
                 "fileLocation": ["absolute"],
                 "pattern": {
-                    "regexp": "^(.*)\(([0-9]*)\) : (Warning|Error), ([^\n]*)$",
+                    "regexp": "^(.*):([0-9]*) : (Warning|Error), ([^\n]*)",
                     "file": 1,
                     "line": 2,
                     "severity": 3,
@@ -24,19 +29,45 @@
         {
             "label": "build_laptop",
             "type": "shell",
-            "command": "powershell.exe -file '${workspaceRoot}/scripts/build_noshaderprecompliation.ps1' -mod 'RisingTides' -srcDirectory '${workspaceRoot}' -sdkPath 'C:/Program Files (x86)/Steam/steamapps/common/XCOM 2 War of the Chosen SDK' -gamePath 'C:/Program Files (x86)/Steam/steamapps/common/XCOM 2'",
+            "command": "-file \"${workspaceRoot}/scripts/build_noshaderprecompliation.ps1\" -mod \"RisingTides\" -srcDirectory \"${workspaceRoot}\" -sdkPath \"C:/Program Files (x86)/Steam/steamapps/common/XCOM 2 War of the Chosen SDK\" -gamePath \"C:/Program Files (x86)/Steam/steamapps/common/XCOM 2\"",
+            "options": {
+                "shell": {
+                    "executable": "powershell.exe",
+                },
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "publish",
+            "type": "shell",
+            "command": "-file \"${workspaceRoot}/scripts/publish.ps1\" -amlPath \"${config:mod.amlpath}\"",
+            "options": {
+                "shell": {
+                    "executable": "powershell.exe",
+                },
+            },
             "problemMatcher": []
         },
         {
             "label": "debug",
             "type": "shell",
-            "command": "powershell.exe -file '${workspaceRoot}/scripts/run.ps1' -gamePath 'W:/SteamLibrary/steamapps/common/XCOM 2'",
+            "command": "-file \"${workspaceRoot}/scripts/run.ps1\" -gamePath \"${config:mod.gamepath}\"",
+            "options": {
+                "shell": {
+                    "executable": "powershell.exe",
+                },
+            },
             "problemMatcher": []
         },
         {
             "label": "runUnrealEditor",
             "type": "shell",
-            "command": "powershell.exe -file '${workspaceRoot}/scripts/runUnrealEditor.ps1' -sdkPath 'W:/SteamLibrary/steamapps/common/XCOM 2 War of the Chosen SDK'",
+            "command": "-file \"${workspaceRoot}/scripts/runUnrealEditor.ps1\" -sdkPath \"${config:mod.sdkpath}\"",
+            "options": {
+                "shell": {
+                    "executable": "powershell.exe",
+                },
+            },
             "problemMatcher": []
         }
     ]

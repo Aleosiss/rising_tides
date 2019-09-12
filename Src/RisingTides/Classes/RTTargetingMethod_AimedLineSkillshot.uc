@@ -274,7 +274,7 @@ function DirectSetTarget(int TargetIndex)
 	MarkTargetedActors(CurrentlyMarkedTargets, (!AbilityIsOffensive) ? FiringUnit.GetTeam() : eTeam_None);
 	DrawAOETiles(Tiles);
 	AOEMeshActor.SetHidden(false);
-		if (LineActor != none)
+	if (LineActor != none)
 	{
 		ShooterToTarget = NewTargetLocation - FiringLocation;
 		LineRotator = rotator( ShooterToTarget );

@@ -7,9 +7,6 @@ RTNotFriendlyName="Pressure"
 [RTEffect_PrecisionShotDamage]
 RTFriendlyName="Precision Shot"
 
-[RTEffect_Aggression]
-RTFriendlyName="Aggression"
-
 [RTEffect_SnapshotEffect]
 RTFriendlyName="Snapshot"
 
@@ -25,12 +22,15 @@ RTFriendlyName="Slow is Smooth"
 [RTEffect_TimeStop]
 TimeStopName="Greyscaled"
 TimeStopDesc="This unit is frozen in time, unable to percieve changes to its environment."
-RulerTimeStopTickFlyover="Timelocked!"
+RulerTimeStopTickFlyover="Greyscaled!"
 TimeStopEffectAddedString=""
-TimeStopEffectPersistsString="Timelocked!"
+TimeStopEffectPersistsString="Greyscaled!"
 TimeStopEffectRemovedString="Time Stop Ended!"
 TimeStopLostFlyover="Time Stop Ended!"
 LargeUnitTimeStopLostFlyover="Time Stop Ended!"
+
+[RTEffect_GhostPerkBase]
+GhostPerkBaseName="Combat Veteran"
 
 [RTGameState_MeldEffect]
 MeldLeftText="Left the meld!"
@@ -71,15 +71,15 @@ LocPromotionPopupText="<Bullet/> Over the Shoulder grants vision of enemy units,
 
 [RTUnwillingConduits RTAbilityTemplate]
 LocFriendlyName="Unwilling Conduits"
-LocLongDescription="Whenever this unit casts a psionic ability, it drains energy from units affected by Over the Shoulder to fuel the action,  reducing the cooldown for each unit affected."
+LocLongDescription="Whenever this unit casts a psionic ability, it drains energy from units affected by Over the Shoulder to fuel the action, reducing the cooldown for each unit affected."
 LocHelpText="Whenever this unit casts a psionic ability, it drains energy from units affected by Over the Shoulder to fuel the action, reducing the cooldown for each unit affected."
 LocFlyOverText="Unwilling Conduits"
 LocPromotionPopupText="<Bullet/> Deals a small amount of damage to enemy and ally alike.<br/><Bullet/> Cooldown will be reduced to a minimum of 1; usable next turn.<br/>"
 
 [RTEchoedAgony RTAbilityTemplate]
 LocFriendlyName="Echoed Agony"
-LocLongDescription="This unit will echo panic attempts that affect to nearby enemies affected by Over the Shoulder."
-LocHelpText="This unit will echo panic attempts that affect to nearby enemies affected by Over the Shoulder."
+LocLongDescription="This unit will echo panic attempts that affect it to nearby enemies affected by Over the Shoulder."
+LocHelpText="This unit will echo panic attempts that affect it to nearby enemies affected by Over the Shoulder."
 LocFlyOverText="Echoed Agony"
 LocPromotionPopupText="<Bullet/> Only affects enemy units.<br/><Bullet/> Feedback counts as a panic source and is much stronger than other sources of panic.<br/>"
 
@@ -91,31 +91,15 @@ LocFlyOverText="Triangulation"
 LocPromotionPopupText="<Bullet/> The effect lasts an entire turn, even if the meld is broken.<br/>"
 
 [RTAbility_GhostAbilitySet]
+FEEDBACK_TITLE=""
 FEEDBACK_NAME="AGugHGGHGH"
 FEEDBACK_DESC="This unit is suffering from psionic feedback! Protect them while they recover."
-OTS_TITLE="Over the Shoulder"
-OTS_DESC_SELF="I peer back."
-OTS_DESC_ALLY="I'll keep an eye out for you!"
-OTS_DESC_ENEMY="I see you... see me."
-BLOODLUST_TITLE="Bloodlust"
-BLOODLUST_DESC="This unit is experiencing the thrill of combat! Their melee critical strike chance and damage is increased."
 STEALTH_TITLE="Stealth"
 STEALTH_DESC="This unit is invisible, and cannot be seen by most units."
 MELD_TITLE="Mind Meld"
 MELD_DESC="This unit has joined the Meld, receiving and delivering psionic support."
 FADE_COOLDOWN_TITLE="Fade"
 FADE_COOLDOWN_DESC="Fade is on cooldown."
-UV_TITLE="Unsettling Voices"
-UV_DESC="Don't look behind you..."
-SOC_TITLE="Six O'Clock"
-SOC_DESC="I've got your six."
-GREYSCALED_TITLE="Greyscale"
-GREYSCALED_DESC="Frozen in time..."
-HARBINGER_BROKEN_ALERT="Shield lost!"
-OVERFLOW_READOUT="Overflow"
-
-[RTEffect_Bloodlust]
-BloodlustEffectTitle="Bloodlust"
 
 [RTAbility_GathererAbilitySet]
 GuardianAngelHealText="Guardian Angel"
@@ -124,11 +108,32 @@ KIPFriendlyName="Knowledge Is Power"
 KIPFriendlyDesc="I'm onto you..."
 LocPsionicallyInterruptedName="Interrupted!"
 HarbingerShieldLostStr="Shield Lost!"
+OTS_TITLE="Over the Shoulder"
+OTS_DESC_SELF="I peer back."
+OTS_DESC_ALLY="I'll keep an eye out for you!"
+OTS_DESC_ENEMY="I see you... see me."
+UV_TITLE="Unsettling Voices"
+UV_DESC="Don't look behind you..."
 
 [RTAbility_MarksmanAbilitySet]
 TimeStopEffectTitle="Greyscaled"
 TimeStopEffectDescription="This unit has been frozen in time. It cannot take actions and is much easier to hit."
 EveryMomentMattersTitle="Every Moment Matters"
+SOC_TITLE="Six O'Clock"
+SOC_DESC="I've got your six."
+
+[RTAbility_BerserkerAbilitySet]
+BLOODLUST_TITLE="Bloodlust"
+BLOODLUST_DESC="This unit is experiencing the thrill of combat! Their melee critical strike chance and damage is increased, but their mobility is decreased."
+
+[RTAbility_ProgramDroneAbilitySet]
+CloakingProtocolTitle = "Cloaking Field"
+CloakingProtocolSelfDescription = "The Cloaking Field projected by the Program Drone prevents units from losing concealment even in close proximity to ADVENT forces."
+CloakingProtocolMobilityMalusTitle = "Reduced Thruster Capacity"
+CloakingProtocolMobilityMalusDescription = "The Cloaking Field Generator is sapping the drone's power supply, reducing available power for the drone's thrusters."
+
+[RTEffect_Bloodlust]
+BloodlustEffectTitle="Bloodlust"
 
 [RTEffectBuilder]
 StealthFriendlyName="Stealth"
@@ -145,8 +150,46 @@ OSFCheckboxAvailable="Call in one small favor from the Program."
 OSFCheckboxUnavailable="The Program is not available to assist."
 OSFFirstTime_Title = "One Small Favor"
 OSFFirstTime_Text = "The Program fields small squads of elite operatives. As a result of their alliance with XCOM, you may ask them to run a mission for you.\n\nCall in One Small Favor by toggling the white checkbox now shown on Mission Launch screens.\n\nNOTE: this favor can only be called in once per month, and is refreshed after the supply drop."
-OSFFirstTime_ImagePath = "img:///RisingTidesContentPackage.UIImages.osf_tutorial"
-WhisperWepName = 'Heartspan'
+PISFirstTime_Title = "Program Briefing Screen"
+PISFirstTime_Text = "The Program makes a special briefing available at their outpost.\n\n Here, you can view the number of favors available to call in, check the status of the Eliminate Templars questline, and view your earned rewards."
+;# ...by sacrificing the rook, I can attack the king...
+WhisperWepName = "'<font color='#a51515'><b>Heartspan</b></font>'"
+
+SquadTwoName="HIGHLANDER"
+SquadTwoBackground="HIGHLANDER works the people."
+
+[RTUIAlert]
+strTemplarAmbushDescription="While working with the Program during the recent Covert Action, the local Templar forces in the area of operations caught wind of our plans. We must move quickly and eliminate the cell before it can report back to Geist. If we fail here, the Templars will almost certainly pull out of the alliance and go into hiding."
+strTemplarAmbushStr1="Handler: 6"
+strTemplarAmbushStr2="Field Team: HIGHLANDER"
+strTemplarAmbushStr3="Operator: 'Kaga'"
+strTemplarAmbushHeader="TEMPLAR DISCOVERY"
+strTemplarAmbushBegin="Begin Operation"
+m_strTemplarQuestlineFailedTitle="TEMPLAR BETRAYAL EXPOSED"
+m_strTemplarQuestlineFailedHeader="The Templars have withdrawn from the alliance."
+m_strTemplarQuestlineFailedDescription="With our plans exposed, the Templars have withdrawn from their alliance with XCOM and have gone into hiding. Your Templar operatives have deserted, taking with them their equipment and knowledge of our tactics..."
+m_strTemplarQuestlineAdvancedHeader="TEMPLAR HUNT SUCCESSFUL"
+m_strTemplarQuestlineAdvancedTitle="One step closer."
+m_strTemplarQuestlineAdvancedBody="Commander, with this covert action completed, we are one step closer towards our goal of eliminating the Templar threat. Continue raising your influence with the Program and completing covert actions to unlock the next step towards our shared objective."
+m_strTemplarQuestlineCompleteHeader="TEMPLARS ELIMINATED"
+m_strTemplarQuestlineCompleteTitle="The Templars are no more."
+m_strTemplarQuestlineCompleteBody="Without Geist to guide them nor their Archives to recover their secrets, the Templars remnants will scatter and fade out. In return for our efforts, the Program has pledged their full support in eliminating the Alien threat. New Covert Actions are available in the Resistance Ring and new blueprints have been made available for construction in Engineering."
+m_strHighCovenAssaultAvailableBody="This is it."
+m_strHighCovenAssaultAvailableImage=""
+
+
+[RTUIMission_TemplarAmbush]
+m_strTitle="COUNTERINTELLIGENCE"
+m_strBody="Prevent the local Templar coven from reporting back to leadership, and Geist."
+m_strConfirmMission="LAUNCH MISSION"
+m_strObjective="OBJECTIVE:"
+m_strObjectiveDesc="Eliminate all hostile forces."
+m_strChosenTypeData="Handler: 9"
+m_strChosenNameData="Field Team: HIGHLANDER"
+m_strChosenNickData="Operator: 'Kaga'"
+
+[RTUIMission_TemplarHighCovenAssault]
+m_strFlavorText="With the High Coven exposed and only a fraction of the Honor Guard remaining, now is the time to end this terrible game once and for all. This strike, on our own kind, for the first time since the fall, does not increase our chances at victory over the Alien threat. Rather, it is our only hope that our society might survive it."
 
 [Faction_Program RTProgramFactionTemplate]
 FactionTitle="The Program"
@@ -162,11 +205,15 @@ GroupNames[3]="SHADE"
 GroupNames[4]="REAPER"
 GroupNames[5]="MIRAGE"
 GroupNames[6]="FORECASTER"
+GroupNames[7]="REVENANT"
+GroupNames[8]="WISP"
+GroupNames[9]="YOUKAI"
 Descriptors_Prefix[0]="CSC -"
 Descriptors_Prefix[1]="RTT -"
 Descriptors_Prefix[2]="NEI -"
 Descriptors_Prefix[3]="TDK -"
 Descriptors_Prefix[4]="SRX -"
+Descriptors_Prefix[4]="YVK -"
 Descriptors_Suffix[0]="- 001"
 Descriptors_Suffix[1]="- 002"
 Descriptors_Suffix[2]="- 003"
@@ -176,6 +223,8 @@ Descriptors_Suffix[5]="- 006"
 Descriptors_Suffix[6]="- 007"
 Descriptors_Suffix[7]="- 008"
 Descriptors_Suffix[8]="- 009"
+Descriptors_Suffix[9]="- 010"
+Descriptors_Suffix[10]="- 011"
 
 [RTGhostBerserker RTCharacterTemplate]
 strCharacterName="Program Operative"
@@ -196,16 +245,31 @@ strForcedNickName="Whisper"
 [RTGhostGatherer RTCharacterTemplate]
 strCharacterName="Program Operative"
 strCharacterBackgroundMale[0]="[REDACTED] \nC.O. Bradford Note: This one seems... too familiar. Don't pry. I'll look into it."
-strCharacterBackgroundMale[1]="Although her real name is a true unknown, 'Nova' is a familiar name and a familiar voice on the comms. Under the guise of a hotshot rookie SAS recruit, she joined the XCOM project in 2015, along with a Dr. Elizabeth Hadley, with dual intent. First, to lend aid as a psionic supercommando, and second, to prevent the spread of the knowledge of psionics. Under Dr. Hadley's order, she quickly rose through the ranks of XCOM with her impeccable aim and uncanny ability to read the battlefield-- but when XCOM fell, she made her way, first to the Psi-lab, and then to barracks, with deadly purpose. The only survivor was Staff Sergeant Matthew Lanner, who, mind left in badly fragmented pieces from Nova’s overwhelming psionic assault, crawled from the ruins of the XCOM base with a singular word remaining—Geist."
+strCharacterBackgroundMale[1]="Although her real name is a true unknown, 'Nova' is a familiar name and a familiar voice on the comms. Under the guise of a hotshot rookie SAS recruit, she joined the XCOM project in 2015, along with a Dr. Elizabeth Hadley, with dual intent. First, to lend aid as a psionic supercommando, and second, to prevent the spread of the knowledge of psionics. Under Dr. Hadley's order, she quickly rose through the ranks of XCOM with her impeccable aim and uncanny ability to read the battlefield-- but as XCOM fell, she made her way, first to the Psi-lab, and then to barracks, with deadly purpose. The only survivor was Staff Sergeant Matthew Lanner, who, mind left in badly fragmented pieces from Nova’s overwhelming psionic assault, crawled from the ruins of the XCOM base with a singular word remaining—Geist."
 strForcedFirstName="[REDACTED]"
 strForcedLastName="[REDACTED]"
 strForcedNickName="Nova"
 ; Although her real name is a true unknown, 'Nova' is a familiar name and a familiar voice on the comms. Under the guise of a hotshot rookie SAS recruit, she
 ; joined the XCOM project in 2015, along with a Dr. Elizabeth Hadley, with dual intent. First, to lend aid as a psionic supercommando, and second, to prevent
 ; the spread of the knowledge of psionics. Under Dr. Hadley's order, she quickly rose through the ranks of XCOM with her impeccable aim and uncanny ability to
-; read the battlefield—but when XCOM fell, she made her way, first to the Psi-lab, and then to barracks, with deadly purpose. The only survivor was Staff
+; read the battlefield—but as XCOM fell, she made her way, first to the Psi-lab, and then to barracks, with deadly purpose. The only survivor was Staff
 ; Sergeant Matthew Lanner, who, mind left in badly fragmented pieces from Nova’s overwhelming psionic assault, crawled from the ruins of the XCOM base with a
 ; singular word remaining—Geist.
+
+[RTGhostOperator RTCharacterTemplate]
+strCharacterName="Program Operative"
+strCharacterBackgroundMale[0]="[REDACTED] \nC.O. Bradford Note: Don't pry."
+strCharacterBackgroundMale[1]="\<not writen\>"
+strForcedFirstName="[REDACTED]"
+strForcedLastName="[REDACTED]"
+strForcedNickName="Kaga"
+
+[ProgramDrone RTCharacterTemplate]
+strCharacterName="Program Drone"
+strCharacterHealingPaused="Repairs Required"
+;strAcquiredText="Drones do not heal like other soldiers. Staff the Drone in Engineering to perform repairs."
+; These retrofitted ADVENT drones have had their armor and weaponry removed in exchange for additional agility in the air and a cloaking field generator. 
+; Because of its standard-issue chassis, ADVENT will have a difficult time detecting whether or not the drone is friendly.
 
 #[ResCard_RT RTProgramStrategyCardTemplate]
 #DisplayName=""
@@ -284,3 +348,40 @@ Description="The Program will send one of its squads in the place of XCOM for th
 [RTOneSmallFavor_Size6 RTSitRepEffect_OneSmallFavor]
 FriendlyName="One Small Favor"
 Description="The Program will send one of its squads in the place of XCOM for this mission."
+
+[RTUIScreen_ProgramFactionInfo]
+m_strProgramFactionInfoHeaderText="Program Briefing"
+m_strProgramFactionInfoDescriptionText="Latest intelligence enclosed within. - @phoenix"
+m_strProgramFactionInfoCounterTitle="Favors Owed"
+m_strProgramFactionInfoCounterDescriptionText="In exchange for a favor, the Program will send in one of their squads in the place of XCOM's for a mission."
+
+m_strStageOneTitle="Find Them"
+m_strStageOneDescription="In order to eliminate the threat the Templars represent, we first need to locate their stronghold, the High Coven."
+m_strStageOneRewardTitle="Rewards"
+m_strStageOneRewardDescription="+3 Program Favors. New Covert Action now available."
+
+m_strStageTwoTitle="Gain Their Trust"
+m_strStageTwoDescription="The Templars keep their leadership well protected-- the Honor Guard numbers well in the hundreds. Help the Program plant agents inside the compound."
+m_strStageTwoRewardTitle="Rewards"
+m_strStageTwoRewardDescription="+3 Program Favors. New Covert Action now available."
+
+m_strStageThreeTitle="Lure Them Out"
+m_strStageThreeDescription="Draw out the Honor Guard and ensure that the High Coven is vulnerable."
+m_strStageThreeRewardTitle="Rewards"
+m_strStageThreeRewardDescription="+3 Program Favors. 'Templar High Coven Assault' mission now available."
+
+m_strStageFourTitle="End It"
+m_strStageFourDescription="Assault the Templar High Coven."
+m_strStageFourRewardTitle="Rewards"
+m_strStageFourRewardDescription="+30 Program Favors. Program Stealth Drone blueprint."
+
+[RTUIInfoBox]
+m_strLockedTitle="LOCKED"
+m_strLockedDescription="Locked"
+m_strSwapToRewards="Show Rewards"
+m_strSwapFromRewards="Hide Rewards"
+m_strFailedTitle="FAILED"
+m_strFailedDescription="With our plans exposed, the Templars have withdrawn from our alliance and have gone into hiding."
+
+[RTUIStrategyMapItem_ProgramHQ]
+m_strProgramFactionButton="Program Status Briefing"

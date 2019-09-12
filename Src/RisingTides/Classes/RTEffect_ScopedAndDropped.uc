@@ -95,19 +95,19 @@ function bool PostAbilityCostPaid(XComGameState_Effect EffectState, XComGameStat
 				// this should be the attack that proced this PostAbilityCostPaid
 				TargetUnit.GetUnitValue('LastEffectDamage', DamageDealt);
 				// Running total of damage dealt this turn
-				Attacker.GetUnitValue('ShockAndAweCounter', ShockCounter);
+				Attacker.GetUnitValue('RTShockAndAweCounter', ShockCounter);
 
 				iTotalDamageDealt = int(DamageDealt.fValue) + int(ShockCounter.fValue);
 
 				if(iTotalDamageDealt < iDamageRequiredToActivate) {
-					Attacker.SetUnitFloatValue('ShockAndAweCounter', iTotalDamageDealt, eCleanup_BeginTurn);
+					Attacker.SetUnitFloatValue('RTShockAndAweCounter', iTotalDamageDealt, eCleanup_BeginTurn);
 				} else {
 					// t-t-t-t-triggered
-					EventMgr.TriggerEvent('ShockAndAweTrigger', TargetUnit, Attacker, NewGameState);
+					EventMgr.TriggerEvent('RTShockAndAweTrigger', TargetUnit, Attacker, NewGameState);
 					while(iTotalDamageDealt > iDamageRequiredToActivate) {
 						iTotalDamageDealt -= iDamageRequiredToActivate;
 					}
-					Attacker.SetUnitFloatValue('ShockAndAweCounter', iTotalDamageDealt, eCleanup_BeginTurn);
+					Attacker.SetUnitFloatValue('RTShockAndAweCounter', iTotalDamageDealt, eCleanup_BeginTurn);
 				}
 			}
 			// Here. We. Go.
@@ -129,7 +129,7 @@ function bool PostAbilityCostPaid(XComGameState_Effect EffectState, XComGameStat
 				if (`TACTICALRULES.VisibilityMgr.GetVisibilityInfo(Attacker.ObjectID, TargetUnit.ObjectID, VisInfo))
 					{
 						// Only care if there is no cover between this unit and the target unless they were concealed or have Daybreak Flame
-						if (VisInfo.TargetCover == CT_None || Attacker.HasSoldierAbility('DaybreakFlameIcon') || Attacker.WasConcealed(History.GetEventChainStartIndex()) || Attacker.IsConcealed() || TargetUnit.GetCurrentStat(eStat_AlertLevel) == 0)
+						if (VisInfo.TargetCover == CT_None)
 						{
 							// Negate changes to the number of action points
 							if (Attacker.ActionPoints.Length != PreCostActionPoints.Length)

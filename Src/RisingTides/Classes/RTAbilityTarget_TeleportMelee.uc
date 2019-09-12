@@ -48,7 +48,7 @@ simulated static function bool SelectAttackTile(XComGameState_Unit UnitState,
 		Tile = XComGameState_Destructible(TargetState).TileLocation;
 	} else return super.SelectAttackTile(UnitState, TargetState, MeleeAbilityTemplate, SortedPossibleTiles, IdealTile, Unsorted);
 
-	class'RTHelpers'.static.GetAdjacentTiles(Tile, Tiles);
+	`RTS.GetAdjacentTiles(Tile, Tiles);
 	foreach Tiles(IteratorTile) {
 		if(IsValidAttackTile(UnitState, IteratorTile, Tile, none))
 			SortedPossibleTiles.AddItem(IteratorTile);

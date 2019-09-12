@@ -18,8 +18,6 @@ function RegisterForEvents(XComGameState_Effect EffectGameState)
 	FilterObj = UnitState;
 
 	EventMgr.RegisterForEvent(EffectObj, 'AbilityActivated', BITNEffectState.RTBumpInTheNight, ELD_OnStateSubmitted, 40, FilterObj);
-
-
 }
 
 defaultproperties

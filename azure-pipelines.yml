@@ -1,0 +1,38 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+trigger:
+  batch: true
+  branches:
+    include:
+    - '*'
+pool: Default
+steps:
+- powershell: |
+    Write-Host "Building mod..."
+    .\scripts\build_azure.ps1 -mod 'RisingTides' -srcDirectory $Env:BUILD_SOURCESDIRECTORY
+  displayName: 'Build Mod Project'
+- task: GitHubRelease@0
+  displayName: 'Create Github Release (Master)'
+  condition: startsWith(variables['Build.SourceBranch'], 'refs/heads/master')
+  inputs:
+    gitHubConnection: rising_tides_publish
+    repositoryName: '$(Build.Repository.Name)' 
+    action: 'create' # Options: create, edit, delete
+    target: '$(Build.SourceVersion)' # Required when action == Create || Action == Edit
+    tagSource: 'manual' # Required when action == Create# Options: auto, manual
+    #tagPattern: # Optional
+    tag: $(Build.BuildNumber)
+    #title: # Optional
+    #releaseNotesSource: 'file' # Optional. Options: file, input
+    #releaseNotesFile: # Optional
+    #releaseNotes: # Optional
+    assets: '$(Build.ArtifactStagingDirectory)/RisingTides.zip' # Optional
+    #assetUploadMode: 'delete' # Optional. Options: delete, replace
+    #isDraft: false # Optional
+    #isPreRelease: false # Optional
+    addChangeLog: true # Optional
+    compareWith: 'lastFullRelease' # Required when addChangeLog == True. Options: lastFullRelease, lastRelease, lastReleaseByTag
+    #releaseTag: # Required when compareWith == LastReleaseByTag

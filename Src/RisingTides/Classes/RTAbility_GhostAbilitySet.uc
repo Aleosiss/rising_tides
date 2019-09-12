@@ -8,38 +8,17 @@
 //	General Perks
 //---------------------------------------------------------------------------------------
 
-class RTAbility_GhostAbilitySet extends X2Ability
+class RTAbility_GhostAbilitySet extends RTAbility
 	config(RisingTides);
-
-	var protected X2Condition_UnitProperty						LivingFriendlyUnitOnlyProperty;
-	var protected X2Condition_UnitEffectsWithAbilitySource		OverTheShoulderProperty;
-	var protected X2Condition_UnitProperty						LivingHostileUnitOnlyNonRoboticProperty;
-	var protected RTCondition_PsionicTarget						PsionicTargetingProperty;
-	var protected RTCondition_UnitSize							StandardSizeProperty;
-	var protected EffectReason									TagReason;
 
 	var localized string FEEDBACK_TITLE;
 	var localized string FEEDBACK_DESC;
-	var localized string OTS_TITLE;
-	var localized string OTS_DESC_SELF;
-	var localized string OTS_DESC_ALLY;
-	var localized string OTS_DESC_ENEMY;
-	var localized string BLOODLUST_TITLE;
-	var localized string BLOODLUST_DESC;
 	var localized string STEALTH_TITLE;
 	var localized string STEALTH_DESC;
 	var localized string MELD_TITLE;
 	var localized string MELD_DESC;
 	var localized string FADE_COOLDOWN_TITLE;
 	var localized string FADE_COOLDOWN_DESC;
-	var localized string UV_TITLE;
-	var localized string UV_DESC;
-	var localized string SOC_TITLE;
-	var localized string SOC_DESC;
-	var localized string GREYSCALED_TITLE;
-	var localized string GREYSCALED_DESC;
-	var localized string HARBINGER_BROKEN_ALERT;
-	var localized string OVERFLOW_READOUT;
 
 	var config int BASE_REFLECTION_CHANCE;
 	var config int BASE_DEFENSE_INCREASE;
@@ -52,30 +31,9 @@ class RTAbility_GhostAbilitySet extends X2Ability
 	var config float OVERLOAD_MAX_RANGE;
 	var config int FADE_DURATION;
 	var config int FADE_COOLDOWN;
-	var config int MAX_BLOODLUST_MELDJOIN;
-	var config int FEEDBACK_DURATION;
 	var config int MIND_CONTROL_AI_TURNS_DURATION;
 	var config int MIND_CONTROL_COOLDOWN;
 	var config int GHOST_CHARGES;
-
-
-	var name RTFeedbackEffectName;
-	var name RTFeedbackWillDebuffName;
-	var name RTMindControlEffectName;
-	var name RTGhostTagEffectName;
-
-	var name RTMindControlTemplateName;
-	var name RTTechnopathyTemplateName;
-
-	var name UnitUsedPsionicAbilityEvent;
-	var name ForcePsionicAbilityEvent;
-
-	var config string BurstParticleString;
-	var config name BurstSocketName;
-	var config name BurstArrayName;
-	var config name BurstAnimName;
-
-	var float DefaultPsionicAnimDelay;
 
 //---------------------------------------------------------------------------------------
 //---CreateTemplates---------------------------------------------------------------------
@@ -98,15 +56,15 @@ static function array<X2DataTemplate> CreateTemplates()
 	Templates.AddItem(Fade());
 	Templates.AddItem(RTMindControl());
 	Templates.AddItem(RTEnterStealth());
-
+	Templates.AddItem(RTProgramEvacuation());
+	Templates.AddItem(RTProgramEvacuationPartOne());
+	Templates.AddItem(RTProgramEvacuationPartTwo());
 
 	Templates.AddItem(LIOverwatchShot());
 	Templates.AddItem(PsionicActivate());
 	Templates.AddItem(RTRemoveAdditionalAnimSets());
 
 	Templates.AddItem(TestAbility());
-
-
 
 	return Templates;
 }
@@ -163,8 +121,6 @@ static function X2AbilityTemplate StandardGhostShot()
 	local array<name>                       SkipExclusions;
 	local X2Effect_Knockback				KnockbackEffect;
 	local X2Condition_Visibility            VisibilityCondition;
-	local X2Condition_AbilityProperty		SiphonCondition;
-	local X2Condition_UnitProperty			TargetUnitPropertyCondition;
 	local RTEffect_Siphon					SiphonEffect;
 
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'StandardGhostShot');
@@ -220,26 +176,7 @@ static function X2AbilityTemplate StandardGhostShot()
 	Template.AddTargetEffect(default.WeaponUpgradeMissDamage);
 
 	// Siphon Effect
-	SiphonEffect = new class'RTEffect_Siphon';
-	SiphonEffect.SiphonAmountMultiplier = class'RTAbility_BerserkerAbilitySet'.default.SIPHON_AMOUNT_MULTIPLIER;
-	SiphonEffect.SiphonMinVal = class'RTAbility_BerserkerAbilitySet'.default.SIPHON_MIN_VAL;
-	SiphonEffect.SiphonMaxVal = class'RTAbility_BerserkerAbilitySet'.default.SIPHON_MAX_VAL;
-	SiphonEffect.DamageTypes.AddItem('Psi');
-
-	TargetUnitPropertyCondition = new class'X2Condition_UnitProperty';
-	TargetUnitPropertyCondition.ExcludeDead = false;
-	TargetUnitPropertyCondition.ExcludeRobotic = true;
-	TargetUnitPropertyCondition.ExcludeFriendlyToSource = false;
-	TargetUnitPropertyCondition.ExcludeHostileToSource = false;
-	TargetUnitPropertyCondition.FailOnNonUnits = true;
-	TargetUnitPropertyCondition.RequireWithinRange = true;
-	TargetUnitPropertyCondition.WithinRange = class'RTAbility_BerserkerAbilitySet'.default.SIPHON_RANGE;
-
-	SiphonCondition = new class'X2Condition_AbilityProperty';
-	SiphonCondition.OwnerHasSoldierAbilities.AddItem('RTSiphon');
-
-	SiphonEffect.TargetConditions.AddItem(SiphonCondition);
-	SiphonEffect.TargetConditions.AddItem(TargetUnitPropertyCondition);
+	SiphonEffect = `RTEB.CreateSiphonEffect(class'RTAbility_BerserkerAbilitySet'.default.SIPHON_AMOUNT_MULTIPLIER, class'RTAbility_BerserkerAbilitySet'.default.SIPHON_MIN_VAL, class'RTAbility_BerserkerAbilitySet'.default.SIPHON_MAX_VAL);
 	Template.AddTargetEffect(SiphonEffect);
 	Template.AssociatedPassives.AddItem('RTSiphon');
 
@@ -334,7 +271,7 @@ static function X2AbilityTemplate JoinMeld()
 	Template.AbilityToHitCalc = default.DeadEye;
 	Template.AbilityTargetStyle = default.SelfTarget;
 
-	MeldEffect = class'RTEffectBuilder'.static.RTCreateMeldEffect(1, true);
+	MeldEffect = `RTEB.CreateMeldEffect(1, true);
 	Template.AddTargetEffect(MeldEffect);
 
 	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
@@ -485,7 +422,7 @@ static function X2AbilityTemplate RTFeedback()
 	Template.AbilityTriggers.AddItem(Trigger);
 
 	// Build the effect
-	PanicEffect = class'RTEffectBuilder'.static.RTCreateFeedbackEffect(default.FEEDBACK_DURATION, default.RTFeedbackEffectName, default.FEEDBACK_TITLE, default.FEEDBACK_DESC, Template.IconImage);
+	PanicEffect = `RTEB.CreateFeedbackEffect(default.FEEDBACK_DURATION, default.RTFeedbackEffectName, default.FEEDBACK_TITLE, default.FEEDBACK_DESC, Template.IconImage);
 	Template.AddTargetEffect(PanicEffect);
 
 	// Add dead eye to guarantee
@@ -540,7 +477,7 @@ static function X2AbilityTemplate Fade()
 	Trigger.ListenerData.EventFn = class'XComGameState_Ability'.static.AbilityTriggerEventListener_Self;
 	Template.AbilityTriggers.AddItem(Trigger);
 
-	StealthEffect = class'RTEffectBuilder'.static.RTCreateStealthEffect(default.FADE_DURATION, , , eGameRule_PlayerTurnBegin, Template.AbilitySourceName);
+	StealthEffect = `RTEB.CreateStealthEffect(default.FADE_DURATION, , , eGameRule_PlayerTurnBegin, Template.AbilitySourceName);
 	Template.AddTargetEffect(StealthEffect);
 
 	Template.AddTargetEffect(class'X2Effect_Spotted'.static.CreateUnspottedEffect());
@@ -805,96 +742,6 @@ static function X2AbilityTemplate RTRemoveAdditionalAnimSets()
 	return Template;
 }
 
-
-
-
-
-// helpers
-
-static function X2Condition_UnitValue CreateOverTheShoulderProperty() {
-	local X2Condition_UnitValue Condition;
-
-	Condition = new class'X2Condition_UnitValue';
-	Condition.AddCheckValue(class'RTAbility_GathererAbilitySet'.default.OverTheShoulderTagName, 1, eCheck_LessThan);
-
-	return Condition;
-
-}
-
-static function X2AbilityTemplate CreateRTCooldownCleanse (name TemplateName, name EffectNameToRemove, name EventIDToListenFor) {
-	local X2AbilityTemplate Template;
-	local X2Effect_RemoveEffects RemoveEffectEffect;
-	local X2AbilityTrigger_EventListener Trigger;
-
-	`CREATE_X2ABILITY_TEMPLATE(Template, TemplateName);
-	Template.AbilitySourceName = 'eAbilitySource_Perk';
-	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_NeverShow;
-	Template.Hostility = eHostility_Neutral;
-	Template.ConcealmentRule = eConceal_Always;
-
-	Trigger = new class'X2AbilityTrigger_EventListener';
-	Trigger.ListenerData.Deferral = ELD_OnStateSubmitted;
-	Trigger.ListenerData.EventID = EventIDToListenFor;
-	Trigger.ListenerData.Filter = eFilter_Unit;
-	Trigger.ListenerData.EventFn = class'XComGameState_Ability'.static.AbilityTriggerEventListener_Self;
-	Template.AbilityTriggers.AddItem(Trigger);
-
-	RemoveEffectEffect = new class'X2Effect_RemoveEffects';
-	RemoveEffectEffect.EffectNamesToRemove.AddItem(EffectNameToRemove);
-
-	Template.AbilityTargetStyle = default.SelfTarget;
-	Template.AddTargetEffect(RemoveEffectEffect);
-
-	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
-	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
-	Template.bSkipFireAction = true;
-
-	Template.bCrossClassEligible = false;
-	return Template;
-}
-
-static function X2AbilityTemplate CreateRTPassiveAbilityCooldown(name TemplateName, name CooldownTrackerEffectName, optional bool bTriggerCooldownViaEvent = false, optional name EventIDToListenFor) {
-		local X2AbilityTemplate Template;
-		local X2Effect_Persistent Effect;
-		local X2AbilityTrigger_EventListener Trigger;
-
-	`CREATE_X2ABILITY_TEMPLATE(Template, TemplateName);
-	Template.AbilitySourceName = 'eAbilitySource_Perk';
-	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_NeverShow;
-	Template.Hostility = eHostility_Neutral;
-	Template.ConcealmentRule = eConceal_Always;
-
-	Trigger = new class'X2AbilityTrigger_EventListener';
-	Trigger.ListenerData.Deferral = ELD_OnStateSubmitted;
-	Trigger.ListenerData.EventID = EventIDToListenFor;
-	Trigger.ListenerData.Filter = eFilter_Unit;
-	Trigger.ListenerData.EventFn = class'XComGameState_Ability'.static.AbilityTriggerEventListener_Self;
-	if(bTriggerCooldownViaEvent) {
-		Template.AbilityTriggers.AddItem(Trigger);
-	} else {
-		Template.AbilityTriggers.AddItem(new class'X2AbilityTrigger_Placeholder');
-	}
-
-	// Add dead eye to guarantee
-	Template.AbilityToHitCalc = default.DeadEye;
-	Template.AbilityTargetStyle = default.SelfTarget;
-
-	Effect = new class'X2Effect_Persistent';
-	Effect.BuildPersistentEffect(1, true, true, true, eGameRule_PlayerTurnEnd);
-	Effect.SetDisplayInfo(ePerkBuff_Penalty, Template.LocFriendlyName, Template.LocLongDescription, Template.IconImage, true,,Template.AbilitySourceName);
-	Effect.EffectName = CooldownTrackerEffectName;
-	Template.AddTargetEffect(Effect);
-
-	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
-	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;	//TODO: VISUALIZATION
-
-	Template.bSkipFireAction = true;
-
-	Template.bCrossClassEligible = false;
-
-		return Template;
-}
-
 //---------------------------------------------------------------------------------------
 //---Test Ability=-----------------------------------------------------------------------
 //---------------------------------------------------------------------------------------
@@ -1041,7 +888,7 @@ static function X2AbilityTemplate RTEnterStealth() {
 	Template.AbilityShooterConditions.AddItem(EffectCondition);
 	Template.AbilityShooterConditions.AddItem(default.LivingShooterProperty);
 
-	StealthEffect = class'RTEffectBuilder'.static.RTCreateStealthEffect(2, false);
+	StealthEffect = `RTEB.CreateStealthEffect(2, false);
 	Template.AddTargetEffect(StealthEffect);
 
 	Template.AddTargetEffect(class'X2Effect_Spotted'.static.CreateUnspottedEffect());
@@ -1056,59 +903,227 @@ static function X2AbilityTemplate RTEnterStealth() {
 
 }
 
+//---------------------------------------------------------------------------------------
+//---ProgramEvacuation-------------------------------------------------------------------
+//---------------------------------------------------------------------------------------
+static function X2AbilityTemplate RTProgramEvacuation() {
+	local X2AbilityTemplate Template;
+	local RTEffect_Sustain SustainEffect;
 
+	`CREATE_X2ABILITY_TEMPLATE(Template, 'RTProgramEvacuation');
 
+	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_sustain";
+	Template.AbilitySourceName = 'eAbilitySource_Psionic';
+	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_NeverShow;
+	Template.Hostility = eHostility_Neutral;
+	Template.bIsPassive = true;
 
-defaultproperties
+	Template.AbilityToHitCalc = default.DeadEye;
+	Template.AbilityTargetStyle = default.SelfTarget;
+	Template.AbilityTriggers.AddItem(default.UnitPostBeginPlayTrigger);
+
+	SustainEffect = new class'RTEffect_Sustain';
+	SustainEffect.BuildPersistentEffect(1, true, true);
+	//SustainEffect.SetDisplayInfo(ePerkBuff_Passive, Template.LocFriendlyName, Template.GetMyLongDescription(), Template.IconImage, true,, Template.AbilitySourceName);
+	Template.AddTargetEffect(SustainEffect);
+
+	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
+	// Note: no visualization on purpose!
+
+	//Template.AdditionalAbilities.AddItem('RTProgramEvacuationPartOne');
+	//Template.AdditionalAbilities.AddItem('RTProgramEvacuationPartTwo');
+
+	return Template;
+}
+
+static function X2AbilityTemplate RTProgramEvacuationPartOne() {
+	local X2AbilityTemplate Template;
+	local RTEffect_Stasis StasisEffect;
+	local X2AbilityTrigger_EventListener EventTrigger;
+	local X2Effect_ImmediateAbilityActivation ActivationEffect;
+
+	`CREATE_X2ABILITY_TEMPLATE(Template, 'RTProgramEvacuationPartOne');
+
+	Template.Hostility = eHostility_Neutral;
+	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_sustain";
+	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_NeverShow;
+	Template.AbilitySourceName = 'eAbilitySource_Psionic';
+
+	Template.AbilityToHitCalc = default.DeadEye;
+	Template.AbilityTargetStyle = default.SelfTarget;
+	//	check that the unit is still alive.
+	//	it's possible that multiple event listeners responded to the same event, and some of those other listeners
+	//	went ahead and killed the unit before we got to trigger sustain.
+	//	it would look weird to do the sustain visualization and then have the unit die, so just don't trigger sustain.
+	//	e.g. a unit with a homing mine on it that takes a kill shot wants to have the death stopped, but the
+	//	homing mine explosion can trigger before the sustain trigger goes off, killing the unit before it would be sustained
+	//	and making things look really weird. now the unit will just die without "sustaining" the corpse.
+	//	-jbouscher
+	
+	// It's more important that we evac than any other consideration
+	//Template.AbilityShooterConditions.AddItem(default.LivingShooterProperty);
+
+	StasisEffect = new class'RTEffect_Stasis';
+	StasisEffect.BuildPersistentEffect(1, false, false, false, eGameRule_PlayerTurnBegin);
+	StasisEffect.bUseSourcePlayerState = true;
+	StasisEffect.bRemoveWhenTargetDies = true;          //  probably shouldn't be possible for them to die while in stasis, but just in case
+	StasisEffect.StunStartAnim = 'HL_PsiSustainStart';
+	StasisEffect.bSkipFlyover = true;
+	Template.AddTargetEffect(StasisEffect);
+
+	ActivationEffect = new class'X2Effect_ImmediateAbilityActivation';
+	ActivationEffect.AbilityName = 'RTProgramEvacuationPartTwo';
+	ActivationEffect.EffectName = 'RTProgramEvacuationPartTwoActivationEffect';
+	Template.AddTargetEffect(ActivationEffect);
+
+	EventTrigger = new class'X2AbilityTrigger_EventListener';
+	EventTrigger.ListenerData.Deferral = ELD_OnStateSubmitted;
+	EventTrigger.ListenerData.EventID = class'RTEffect_Sustain'.default.SustainEvent;
+	EventTrigger.ListenerData.Filter = eFilter_Unit;
+	EventTrigger.ListenerData.EventFn = class'XComGameState_Ability'.static.AbilityTriggerEventListener_Self;
+	EventTrigger.ListenerData.Priority = 20;	// Lower than Sustaining Sphere
+	Template.AbilityTriggers.AddItem(EventTrigger);
+
+	Template.bSkipFireAction = true;
+	Template.FrameAbilityCameraType = eCameraFraming_Never;
+	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
+	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
+
+	return Template;
+}
+
+static function X2AbilityTemplate RTProgramEvacuationPartTwo()
 {
-	Begin Object Class=X2Condition_UnitProperty Name=DefaultLivingFriendlyUnitOnlyProperty
-		ExcludeAlive=false
-		ExcludeDead=true
-		ExcludeFriendlyToSource=false
-		ExcludeHostileToSource=true
-		TreatMindControlledSquadmateAsHostile=false
-		FailOnNonUnits=true
-		ExcludeCivilian=true
-	End Object
-	LivingFriendlyUnitOnlyProperty = DefaultLivingFriendlyUnitOnlyProperty
+	local X2AbilityTemplate Template;
 
-	Begin Object Class=X2Condition_UnitProperty Name=DefaultLivingHostileUnitOnlyNonRoboticProperty
-		ExcludeAlive=false
-		ExcludeDead=true
-		ExcludeFriendlyToSource=true
-		ExcludeHostileToSource=false
-		TreatMindControlledSquadmateAsHostile=true
-		ExcludeRobotic=true
-		FailOnNonUnits=true
-	End Object
-	LivingHostileUnitOnlyNonRoboticProperty = DefaultLivingHostileUnitOnlyNonRoboticProperty
+	`CREATE_X2ABILITY_TEMPLATE(Template, 'RTProgramEvacuationPartTwo');
+	Template.bDontDisplayInAbilitySummary = true;
+	Template.AbilitySourceName = 'eAbilitySource_Standard';
+	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_NeverShow;
 
-	Begin Object Class=RTCondition_PsionicTarget Name=DefaultPsionicTargetingProperty
-		bIgnoreRobotic=false
-		bIgnorePsionic=false
-		bIgnoreGHOSTs=false
-		bIgnoreDead=true
-		bIgnoreEnemies=false
-		bTargetAllies=false
-		bTargetCivilians=false
-	End Object
-	PsionicTargetingProperty = DefaultPsionicTargetingProperty
+	Template.AbilityToHitCalc = default.DeadEye;
+	Template.AbilityTargetStyle = default.SelfTarget;
 
-	Begin Object Class=RTCondition_UnitSize Name=DefaultStandardSizeProperty
-	End Object
-	StandardSizeProperty = DefaultStandardSizeProperty
+	Template.AbilityTriggers.AddItem(new class'X2AbilityTrigger_Placeholder');
 
-	RTFeedbackEffectName = "RTFeedback"
-	RTFeedbackWillDebuffName = "RTFeedbackWillDebuff"
-	UnitUsedPsionicAbilityEvent = "UnitUsedPsionicAbility"
-	ForcePsionicAbilityEvent = "ForcePsionicAbilityEvent"
+	Template.bSkipFireAction = true;
+	Template.FrameAbilityCameraType = eCameraFraming_Never;
+	Template.BuildNewGameStateFn = ProgramOperativeDefeatedEscape_BuildGameState;
+	Template.BuildVisualizationFn = ProgramOperativeDefeatedEscape_BuildVisualization;
+	Template.AssociatedPlayTiming = SPT_AfterSequential;  // play after the chosen death that initiated this ability
+//BEGIN AUTOGENERATED CODE: Template Overrides 'ChosenDefeatedEscape'
+	Template.CinescriptCameraType = "Chosen_Escape";
+//END AUTOGENERATED CODE: Template Overrides 'ChosenDefeatedEscape'
 
-	RTMindControlEffectName = "MindControl"
-	RTGhostTagEffectName = "RTGhostOperative"
+	return Template;
+}
 
-	RTMindControlTemplateName = "RTMindControl"
-	RTTechnopathyTemplateName = "RTTechnopathy"
-	DefaultPsionicAnimDelay = 4.0
+static function XComGameState ProgramOperativeDefeatedEscape_BuildGameState(XComGameStateContext Context)
+{
+	local XComGameState NewGameState;
+	local XComGameStateHistory History;
+	local XComGameState_Unit UnitState;
+	local X2EventManager EventManager;
+
+	EventManager = `XEVENTMGR;
+	History = `XCOMHISTORY;
+
+	NewGameState = History.CreateNewGameState(true, Context);
+
+	TypicalAbility_FillOutGameState(NewGameState);
+
+	UnitState = XComGameState_Unit(History.GetGameStateForObjectID(XComGameStateContext_Ability(Context).InputContext.SourceObject.ObjectID));
+
+	EventManager.TriggerEvent('UnitRemovedFromPlay', UnitState, UnitState, NewGameState);
+
+	return NewGameState;
+}
+
+simulated function ProgramOperativeDefeatedEscape_BuildVisualization(XComGameState VisualizeGameState)
+{
+	local XComGameStateHistory History;
+	local XComGameStateContext_Ability Context;
+	local VisualizationActionMetadata EmptyTrack;
+	local VisualizationActionMetadata ActionMetadata;
+	local XComGameState_Ability Ability;
+	local X2AbilityTemplate AbilityTemplate;
+	local X2Action_PlaySoundAndFlyOver SoundAndFlyover;
+	local X2Action_PlayAnimation PlayAnimation;
+	local XGUnit Unit;
+	local XComUnitPawn UnitPawn;
+	local X2Action_PlayEffect EffectAction;
+	local X2Action_Delay DelayAction;
+	local X2Action_CameraLookAt LookAtAction;
+	local int i, j;
+	local StateObjectReference InteractingUnitRef;
+	
+	History = `XCOMHISTORY;
+
+	Context = XComGameStateContext_Ability(VisualizeGameState.GetContext());
+
+	//Configure the visualization track for the shooter
+	//****************************************************************************************
+	ActionMetadata = EmptyTrack;
+	ActionMetadata.StateObject_OldState = History.GetGameStateForObjectID(Context.InputContext.SourceObject.ObjectID, eReturnType_Reference, VisualizeGameState.HistoryIndex - 1);
+	ActionMetadata.StateObject_NewState = VisualizeGameState.GetGameStateForObjectID(Context.InputContext.SourceObject.ObjectID);
+	ActionMetadata.VisualizeActor = History.GetVisualizer(Context.InputContext.SourceObject.ObjectID);
+
+	Ability = XComGameState_Ability(History.GetGameStateForObjectID(Context.InputContext.AbilityRef.ObjectID));
+	AbilityTemplate = Ability.GetMyTemplate();
+
+	LookAtAction = X2Action_CameraLookAt(class'X2Action_CameraLookAt'.static.AddToVisualizationTree(ActionMetadata, Context, false, ActionMetadata.LastActionAdded));
+	LookAtAction.UseTether = false;
+	LookAtAction.LookAtObject = ActionMetadata.StateObject_NewState;
+	LookAtAction.LookAtDuration = 10.0;
+	LookAtAction.CameraTag = 'ChosenDefeatedEscape';
+
+	SoundAndFlyOver = X2Action_PlaySoundAndFlyOver(class'X2Action_PlaySoundAndFlyOver'.static.AddToVisualizationTree(ActionMetadata, Context, false, ActionMetadata.LastActionAdded));
+	SoundAndFlyOver.SetSoundAndFlyOverParameters(None, AbilityTemplate.LocFlyOverText, '', eColor_Good);
+	
+	if( ActionMetadata.VisualizeActor != None )
+	{
+		Unit = XGUnit(ActionMetadata.VisualizeActor);
+		if( Unit != None )
+		{
+			UnitPawn = Unit.GetPawn();
+			if( UnitPawn != None )
+			{
+				PlayAnimation = X2Action_PlayAnimation(class'X2Action_PlayAnimation'.static.AddToVisualizationTree(ActionMetadata, Context, false, ActionMetadata.LastActionAdded));
+				PlayAnimation.Params.AnimName = Ability.GetFireAnimationName(UnitPawn, false, false, vector(UnitPawn.Rotation), vector(UnitPawn.Rotation), true, 0);
+			}
+		}
+	}
+
+	EffectAction = X2Action_PlayEffect(class'X2Action_PlayEffect'.static.AddToVisualizationTree(ActionMetadata, Context, false, PlayAnimation));
+	EffectAction.EffectName = "FX_Chosen_Teleport.P_Chosen_Teleport_Out_w_Sound";
+	EffectAction.EffectLocation = ActionMetadata.VisualizeActor.Location;
+	EffectAction.bWaitForCompletion = false;
+
+	DelayAction = X2Action_Delay(class'X2Action_Delay'.static.AddToVisualizationTree(ActionMetadata, Context, false, PlayAnimation));
+	DelayAction.Duration = 0.25;
+
+	class'X2Action_RemoveUnit'.static.AddToVisualizationTree(ActionMetadata, VisualizeGameState.GetContext(), false, DelayAction);
+
+	LookAtAction = X2Action_CameraLookAt(class'X2Action_CameraLookAt'.static.AddToVisualizationTree(ActionMetadata, Context, false, EffectAction));
+	LookAtAction.bRemoveTaggedCamera = true;
+	LookAtAction.CameraTag = 'ChosenDefeatedEscape';
+	//****************************************************************************************
+
+	// Multitargets
+	for( i = 0; i < Context.InputContext.MultiTargets.Length; ++i )
+	{
+		InteractingUnitRef = Context.InputContext.MultiTargets[i];
+		ActionMetadata = EmptyTrack;
+		ActionMetadata.StateObject_OldState = History.GetGameStateForObjectID(InteractingUnitRef.ObjectID, eReturnType_Reference, VisualizeGameState.HistoryIndex - 1);
+		ActionMetadata.StateObject_NewState = VisualizeGameState.GetGameStateForObjectID(InteractingUnitRef.ObjectID);
+		ActionMetadata.VisualizeActor = History.GetVisualizer(InteractingUnitRef.ObjectID);
+		ActionMetadata.LastActionAdded = EffectAction;
+
+		for( j = 0; j < Context.ResultContext.MultiTargetEffectResults[i].Effects.Length; ++j )
+		{
+			Context.ResultContext.MultiTargetEffectResults[i].Effects[j].AddX2ActionsForVisualization(VisualizeGameState, ActionMetadata, Context.ResultContext.MultiTargetEffectResults[i].ApplyResults[j]);
+		}
+	}
 }
 
 static function bool AbilityTagExpandHandler(string InString, out string OutString)

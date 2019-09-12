@@ -33,31 +33,40 @@ private function bool CheckTarget(XComGameState_BaseObject kTarget, optional XCo
 	if(TargetUnitState.GetMyTemplate().bIsCosmetic) {
 		return false;
 	}
+
 	if(bIgnorePsionic && TargetUnitState.IsPsionic()) {
 		return false;
 	}
+
 	if(bIgnoreRobotic && TargetUnitState.IsRobotic()) {
 		return false;
 	}
+
 	if(bIgnoreDead && TargetUnitState.IsDead())	{
 		return false;
 	}
-	if(bIgnoreGHOSTs && TargetUnitState.AffectedByEffectNames.Find(class'RTAbility_GhostAbilitySet'.default.RTGhostTagEffectName) != INDEX_NONE) {
+
+	if(bIgnoreGHOSTs && TargetUnitState.AffectedByEffectNames.Find(class'RTAbility'.default.RTGhostTagEffectName) != INDEX_NONE) {
 		return false;
 	}
+
 	if(!bTargetCivilians && TargetUnitState.GetMyTemplate().bIsCivilian) {
 		return false;
 	}
+
 	if(kSource == none) { // MeetsCondition ends here
 		return true;
 	}
+
 	if(!bTargetAllies && TargetUnitState.IsFriendlyUnit(SourceUnitState)) {
 		return false;
 	}
+
 	if(bIgnoreEnemies && TargetUnitState.IsEnemyUnit(SourceUnitState)) {
 		return false;
 	}
-	if(!SourceUnitState.HasSoldierAbility(class'RTAbility_GhostAbilitySet'.default.RTTechnopathyTemplateName) && TargetUnitState.IsRobotic()) { // Technopathy check
+
+	if(!SourceUnitState.HasSoldierAbility(class'RTAbility'.default.RTTechnopathyTemplateName) && TargetUnitState.IsRobotic()) { // Technopathy check
 		return false;
 	}
 

@@ -1,10 +1,6 @@
 pipeline {
   environment {
-      modName = credentials('RisingTidesModName')
-      srcDir = credentials('RisingTidesSrcDir')
-      sdkPath = credentials('SDKPath')
-      gamePath = credentials('GamePath')
-      PSPath = credentials('PSPath')
+      modName = "RisingTides"
   }
 
   options {
@@ -31,15 +27,18 @@ pipeline {
         bat '''
           echo "Building Mod Project!"
           echo %WORKSPACE%
-          echo %modName%
-          echo %srcDir%
-          echo %sdkPath%'
-          echo %gamePath%
-          echo %PSPath%
           echo ""
           echo ""
-          %PSPath% set-executionpolicy remotesigned
-          %PSPath% "./scripts/build_jenkins.ps1" -mod %modName% -srcDirectory "'%WORKSPACE%'" -sdkPath %sdkPath% -gamePath %gamePath%
+          powershell set-executionpolicy remotesigned
+          powershell "./scripts/build_jenkins.ps1" -mod %modName% -srcDirectory "'%WORKSPACE%'"
+        '''
+      }
+    }
+
+    stage('Upload Release') {
+      steps {
+        bat '''
+          echo "Doing nothing for now!"
         '''
       }
     }

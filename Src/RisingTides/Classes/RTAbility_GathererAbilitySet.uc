@@ -7,8 +7,15 @@
 //---------------------------------------------------------------------------------------
 //	Nova's perks.
 //---------------------------------------------------------------------------------------
-class RTAbility_GathererAbilitySet extends RTAbility_GhostAbilitySet config(RisingTides);
+class RTAbility_GathererAbilitySet extends RTAbility config(RisingTides);
 
+	var localized string OTS_TITLE;
+	var localized string OTS_DESC_SELF;
+	var localized string OTS_DESC_ALLY;
+	var localized string OTS_DESC_ENEMY;
+	var localized string UV_TITLE;
+	var localized string UV_DESC;
+	
 	var config float OTS_RADIUS;
 	var config float OTS_RADIUS_SQ;
 	var config int OTS_ACTION_POINT_COST;
@@ -145,19 +152,10 @@ static function X2AbilityTemplate OverTheShoulder()
 	Template.AdditionalAbilities.AddItem('OverTheShoulderPassives');
 
 	// standard ghost abilities
-	Template.AdditionalAbilities.AddItem('GhostPsiSuite');
-	Template.AdditionalAbilities.AddItem('JoinMeld');
-	Template.AdditionalAbilities.AddItem('LeaveMeld');
-	Template.AdditionalAbilities.AddItem('PsiOverload');
-	Template.AdditionalAbilities.AddItem('RTFeedback');
-	Template.AdditionalAbilities.AddItem('RTMindControl');
-	Template.AdditionalAbilities.AddItem('RTEnterStealth');
+	AddSpectrePsionicSuite(Template);
 
 	// special meld abilities
-	Template.AdditionalAbilities.AddItem('LIOverwatchShot');
-	Template.AdditionalAbilities.AddItem('RTUnstableConduitBurst');
-	Template.AdditionalAbilities.AddItem('PsionicActivate');
-	Template.AdditionalAbilities.AddItem('RTHarbingerPsionicLance');
+	AddMeldedAbilityHelpers(Template);
 
 	Template.PostActivationEvents.AddItem(default.PostOverTheShoulderEventName);
 
@@ -168,10 +166,9 @@ static function X2AbilityTemplate CreateOverTheShoulderAbility(X2AbilityTemplate
 	local X2AbilityCost_ActionPoints			ActionPoint;
 	local X2AbilityCooldown						Cooldown;
 	local X2AbilityMultiTarget_Radius			Radius;
-	local X2Condition_UnitProperty				AllyCondition, LivingNonAllyUnitOnlyProperty;
 	local array<name>							SkipExclusions;
 
-	local RTEffect_OverTheShoulder				OTSEffect;		// I'm unsure of how this works... but it appears that
+	local RTEffect_AuraSource				OTSEffect;			// I'm unsure of how this works... but it appears that
 																// this will control the application and removal of aura effects within its range
 
 	// Over The Shoulder
@@ -181,9 +178,7 @@ static function X2AbilityTemplate CreateOverTheShoulderAbility(X2AbilityTemplate
 	// Unsettling Voices
 	local RTEffect_UnsettlingVoices				VoiceEffect;
 	local X2Condition_AbilityProperty			VoicesCondition;
-
-	// Guardian Angel
-
+	
 	// Guilty Conscience
 	local RTEffect_GuiltyConscience				GuiltyEffect;
 
@@ -206,25 +201,8 @@ static function X2AbilityTemplate CreateOverTheShoulderAbility(X2AbilityTemplate
 	Cooldown.iNumTurns = 1;
 	Template.AbilityCooldown = Cooldown;
 
-	AllyCondition = new class 'X2Condition_UnitProperty';
-	AllyCondition.ExcludeDead = true;
-	AllyCondition.ExcludeCivilian = true;
-	AllyCondition.ExcludeRobotic = true;
-	AllyCondition.ExcludeHostileToSource = true;
-	AllyCondition.ExcludeFriendlyToSource = false;
-	AllyCondition.FailOnNonUnits = true;
-
 	SkipExclusions.AddItem(class'X2AbilityTemplateManager'.default.DisorientedName);
 	Template.AddShooterEffectExclusions(SkipExclusions);
-
-	LivingNonAllyUnitOnlyProperty = new class 'X2Condition_UnitProperty';
-	LivingNonAllyUnitOnlyProperty.ExcludeAlive = false;
-	LivingNonAllyUnitOnlyProperty.ExcludeDead = true;
-	LivingNonAllyUnitOnlyProperty.ExcludeFriendlyToSource = true;
-	LivingNonAllyUnitOnlyProperty.ExcludeHostileToSource = false;
-	LivingNonAllyUnitOnlyProperty.TreatMindControlledSquadmateAsHostile = true;
-	LivingNonAllyUnitOnlyProperty.FailOnNonUnits = true;
-	LivingNonAllyUnitOnlyProperty.ExcludeCivilian = false;
 
 	Radius = new class'X2AbilityMultiTarget_Radius';
 	Radius.bUseWeaponRadius = false;
@@ -243,7 +221,7 @@ static function X2AbilityTemplate CreateOverTheShoulderAbility(X2AbilityTemplate
 	VisionEffect.BuildPersistentEffect(1, false, true, false, eGameRule_PlayerTurnEnd);
 	VisionEffect.SetDisplayInfo(ePerkBuff_Penalty, default.OTS_TITLE, default.OTS_DESC_ENEMY, Template.IconImage, true,,Template.AbilitySourceName);
 	VisionEffect.TargetConditions.AddItem(default.PsionicTargetingProperty);
-	VisionEffect.DuplicateResponse = eDupe_Ignore;
+	VisionEffect.DuplicateResponse = eDupe_Refresh;
 	VisionEffect.bUseTargetSightRadius = false;
 	VisionEffect.bUseTargetSizeRadius = false;
 	VisionEffect.iCustomTileRadius = 3;
@@ -258,7 +236,7 @@ static function X2AbilityTemplate CreateOverTheShoulderAbility(X2AbilityTemplate
 	VoiceEffect.BuildPersistentEffect(1, false, true, false, eGameRule_PlayerTurnEnd);
 	VoiceEffect.TargetConditions.AddItem(default.PsionicTargetingProperty);
 	VoiceEffect.SetDisplayInfo(ePerkBuff_Penalty,default.UV_TITLE, default.UV_DESC, "img:///RisingTidesContentPackage.PerkIcons.UIPerk_mind_overwatch_psi_us", true,,Template.AbilitySourceName);
-	VoiceEffect.DuplicateResponse = eDupe_Ignore;
+	VoiceEffect.DuplicateResponse = eDupe_Refresh;
 	VoiceEffect.bRemoveWhenTargetDies = true;
 	VoiceEffect.bRemoveWhenSourceDies = true;
 	VoiceEffect.UV_AIM_PENALTY = default.UV_AIM_PENALTY;
@@ -290,7 +268,7 @@ static function X2AbilityTemplate CreateOverTheShoulderAbility(X2AbilityTemplate
 	AllyEffect.BuildPersistentEffect(1, false, true, false, eGameRule_PlayerTurnEnd);
 	AllyEffect.SetDisplayInfo(ePerkBuff_Bonus,default.OTS_TITLE, default.OTS_DESC_ALLY, Template.IconImage, true,,Template.AbilitySourceName);
 	AllyEffect.TargetConditions.AddItem(default.LivingFriendlyUnitOnlyProperty);
-	AllyEffect.DuplicateResponse = eDupe_Ignore;
+	AllyEffect.DuplicateResponse = eDupe_Refresh;
 	AllyEffect.EffectName = default.OverTheShoulderEffectName;
 	AllyEffect.IconImage = Template.IconImage;
 	Template.AddMultiTargetEffect(AllyEffect);
@@ -305,7 +283,7 @@ static function X2AbilityTemplate CreateOverTheShoulderAbility(X2AbilityTemplate
 
 
 	// aura controller effect	------------------------------------------
-	OTSEffect = new class'RTEffect_OverTheShoulder';
+	OTSEffect = new class'RTEffect_AuraSource';
 	OTSEffect.BuildPersistentEffect(AuraEffectDuration,,,, eGameRule_PlayerTurnBegin);
 	OTSEffect.SetDisplayInfo(ePerkBuff_Bonus, default.OTS_TITLE, default.OTS_DESC_SELF, Template.IconImage, true,,Template.AbilitySourceName);
 	OTSEffect.DuplicateResponse = eDupe_Refresh;
@@ -313,7 +291,8 @@ static function X2AbilityTemplate CreateOverTheShoulderAbility(X2AbilityTemplate
 	OTSEffect.VFXTemplateName = "RisingTidesContentPackage.fX.P_Nova_Psi_OTS";
 	OTSEffect.VFXSocket = 'CIN_Root';
 	OTSEffect.VFXSocketsArrayName = 'None';
-	OTSEffect.Scale = 2.5;
+	OTSEffect.fVFXScale = 2.5;
+	OTSEffect.fRadiusMeters = default.OTS_RADIUS;
 	Template.AddTargetEffect(OTSEffect);
 
 	// tag effect. add this last
@@ -429,7 +408,7 @@ static function X2AbilityTemplate RTForcedIntroversion() {
 	Trigger.ListenerData.Priority = 50;
 	Template.AbilityTriggers.AddItem(Trigger);
 
-	StealthEffect = class'RTEffectBuilder'.static.RTCreateStealthEffect(default.FEEDBACK_DURATION, false, 1.0f, eGameRule_PlayerTurnBegin, Template.AbilitySourceName);
+	StealthEffect = `RTEB.CreateStealthEffect(default.FEEDBACK_DURATION, false, 1.0f, eGameRule_PlayerTurnBegin, Template.AbilitySourceName);
 	Template.AddTargetEffect(StealthEffect);
 
 	Template.AddTargetEffect(class'X2Effect_Spotted'.static.CreateUnspottedEffect());
@@ -510,9 +489,9 @@ static function X2AbilityTemplate RTExtinctionEventPartTwo() {
 	Template.AbilitySourceName = 'eAbilitySource_Psionic';
 
 	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
-		Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
-		Template.bSkipFireAction = true;
-		Template.bCrossClassEligible = false;
+	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
+	Template.bSkipFireAction = true;
+	Template.bCrossClassEligible = false;
 
 	Trigger = new class'X2AbilityTrigger_EventListener';
 	Trigger.ListenerData.EventID = 'RTExtinctionEventPartTwo';
@@ -525,14 +504,14 @@ static function X2AbilityTemplate RTExtinctionEventPartTwo() {
 	Template.AbilityTargetStyle = default.SelfTarget;
 	Template.AbilityToHitCalc = default.Deadeye;
 
-	StealthEffect = class'RTEffectBuilder'.static.RTCreateStealthEffect(1, false, 1.0f, eGameRule_PlayerTurnBegin, Template.AbilitySourceName);
+	StealthEffect = `RTEB.CreateStealthEffect(1, false, 1.0f, eGameRule_PlayerTurnBegin, Template.AbilitySourceName);
 	Template.AddTargetEffect(StealthEffect);
 
 	VFXEffect = new class'X2Effect_Persistent';
 	VFXEffect.BuildPersistentEffect(1, false, false, , eGameRule_PlayerTurnBegin);
 	VFXEffect.VFXTemplateName = default.ExtinctionEventChargingParticleString;
-	VFXEffect.EffectAddedFn = class'RTHelpers'.static.PanicLoopBeginFn;
-	VFXEffect.EffectRemovedFn = class'RTHelpers'.static.PanicLoopEndFn;
+	VFXEffect.EffectAddedFn = PanicLoopBeginFn;
+	VFXEffect.EffectRemovedFn = PanicLoopEndFn;
 	Template.AddTargetEffect(VFXEffect);
 
 	ActivationEffect = new class'X2Effect_DelayedAbilityActivation';
@@ -543,7 +522,27 @@ static function X2AbilityTemplate RTExtinctionEventPartTwo() {
 	Template.AbilityShooterConditions.AddItem(default.LivingShooterProperty);
 
 	return Template;
-  }
+}
+
+static function PanicLoopBeginFn( X2Effect_Persistent PersistentEffect, const out EffectAppliedData ApplyEffectParameters, XComGameState_BaseObject kNewTargetState, XComGameState NewGameState )
+{
+	local XComGameState_Unit UnitState;
+
+	UnitState = XComGameState_Unit( NewGameState.CreateStateObject( class'XComGameState_Unit', ApplyEffectParameters.TargetStateObjectRef.ObjectID ) );
+	UnitState.bPanicked = true;
+
+	NewGameState.AddStateObject( UnitState );
+}
+
+static function PanicLoopEndFn( X2Effect_Persistent PersistentEffect, const out EffectAppliedData ApplyEffectParameters, XComGameState NewGameState, bool bCleansed )
+{
+	local XComGameState_Unit UnitState;
+
+	UnitState = XComGameState_Unit( NewGameState.CreateStateObject( class'XComGameState_Unit', ApplyEffectParameters.TargetStateObjectRef.ObjectID ) );
+	UnitState.bPanicked = false;
+
+	NewGameState.AddStateObject( UnitState );
+}
 
 static function X2AbilityTemplate RTExtinctionEventPartThree() {
 	local X2AbilityTemplate Template;
@@ -707,6 +706,7 @@ static function X2AbilityTemplate RTTheSixPathsOfPainIcon() {
 
 static function X2AbilityTemplate RTTheSixPathsOfPainOverride() {
 	local X2AbilityTemplate Template;
+
 	`CREATE_X2TEMPLATE(class'RTAbilityTemplate', Template, 'RTTheSixPathsOfPainOverride');
 
 	Template = CreateOverTheShoulderAbility(Template, 2);
@@ -778,7 +778,7 @@ static function X2AbilityTemplate RTMeldInduction() {
 
 	Template.AbilityTargetConditions.AddItem(default.GameplayVisibilityCondition);
 
-	MeldEffect = class'RTEffectBuilder'.static.RTCreateMeldEffect(default.MELD_INDUCTION_DURATION, default.MELD_INDUCTION_INFINITE);
+	MeldEffect = `RTEB.CreateMeldEffect(default.MELD_INDUCTION_DURATION, default.MELD_INDUCTION_INFINITE);
 	MeldEffect.bRemoveWhenSourceDies = true;
 	MeldEffect.bRemoveWhenTargetDies = true;
 	Template.AddTargetEffect(MeldEffect);
@@ -805,7 +805,7 @@ static function X2AbilityTemplate RTGuardianAngel() {
 static function CreateGuardianAngel(out X2AbilityTemplate Template) {
 	Template.AddTargetEffect(CreateGuardianAngelHealEffect());
 	Template.AddTargetEffect(CreateGuardianAngelCleanseEffect());
-	Template.AddTargetEffect(CreateGuardianAngelImmunitiesEffect());
+	Template.AddTargetEffect(CreateGuardianAngelImmunitiesEffect(true));
 	Template.AddTargetEffect(CreateGuardianAngelMentalRecoveryEffect());
 
 	Template.AddMultiTargetEffect(CreateGuardianAngelHealEffect());
@@ -834,13 +834,11 @@ static function X2Effect CreateGuardianAngelMentalRecoveryEffect() {
 
 	return Effect;
 }
-
 function GuardianAngelMentalRecoveryAdded(X2Effect_Persistent PersistentEffect, const out EffectAppliedData ApplyEffectParameters, XComGameState_BaseObject kNewTargetState, XComGameState NewGameState) {
 	if(XComGameState_Unit(kNewTargetState).GetCurrentStat(eStat_Will) / XComGameState_Unit(kNewTargetState).GetBaseStat(eStat_Will) <= default.GUARDIAN_ANGEL_WILL_THRESHOLD) { // if we have lost half of will (default threshold)
 		XComGameState_Unit(kNewTargetState).ModifyCurrentStat(eStat_Will, (default.GUARDIAN_ANGEL_WILL_RECOVERY_AMOUNT / 5)); // for some reason, its getting multiplied by 5?
 	}
 }
-
 static function RTEffect_SimpleHeal CreateGuardianAngelHealEffect() {
 		local RTEffect_SimpleHeal Effect;
 		local X2Condition_AbilityProperty AbilityProperty;
@@ -851,7 +849,8 @@ static function RTEffect_SimpleHeal CreateGuardianAngelHealEffect() {
 		Effect.HEAL_AMOUNT = default.GUARDIAN_ANGEL_HEAL_VALUE;
 		Effect.bUseWeaponDamage = false;
 		Effect.nAbilitySourceName = default.GuardianAngelHealText;
-		Effect.DuplicateResponse = eDupe_Ignore;
+		Effect.DuplicateResponse = eDupe_Allow;
+		Effect.EffectName = 'RTGuardianAngelSimpleHeal';
 
 		AbilityProperty = new class'X2Condition_AbilityProperty';
 		AbilityProperty.OwnerHasSoldierAbilities.AddItem('RTGuardianAngel');
@@ -884,6 +883,7 @@ static function X2Effect_RemoveEffects CreateGuardianAngelCleanseEffect() {
 		Effect.TargetConditions.AddItem(AbilityProperty);
 
 		Effect.TargetConditions.AddItem(default.LivingFriendlyUnitOnlyProperty);
+		Effect.TargetConditions.AddItem(CreateOverTheShoulderProperty());
 
 		return Effect;
 }
@@ -902,8 +902,8 @@ static function X2Effect_Persistent CreateGuardianAngelStabilizeEffectPartOne() 
 		EffectCheckCondition.AddRequireEffect(class'X2StatusEffects'.default.BleedingOutName, 'AA_BleedingOut');
 
 		Effect.TargetConditions.AddItem(EffectCheckCondition);
-
 		Effect.TargetConditions.AddItem(default.LivingFriendlyUnitOnlyProperty);
+		Effect.TargetConditions.AddItem(CreateOverTheShoulderProperty());
 
 		return Effect;
 }
@@ -925,31 +925,40 @@ static function X2Effect_RemoveEffects CreateGuardianAngelStabilizeEffectPartTwo
 		UnitStatCheckCondition.AddCheckStat(eStat_HP, 0, eCheck_GreaterThan);
 
 		Effect.TargetConditions.AddItem(UnitStatCheckCondition);
-
 		Effect.TargetConditions.AddItem(default.LivingFriendlyUnitOnlyProperty);
+		Effect.TargetConditions.AddItem(CreateOverTheShoulderProperty());
 
 		return Effect;
 }
-static function X2Effect_DamageImmunity CreateGuardianAngelImmunitiesEffect() {
+static function X2Effect_DamageImmunity CreateGuardianAngelImmunitiesEffect(bool bSelfTarget = false) {
 		local X2Effect_DamageImmunity Effect;
 		local X2Condition_AbilityProperty AbilityProperty;
 
 		Effect = new class'X2Effect_DamageImmunity';
-		Effect.BuildPersistentEffect(1, false, true, false, eGameRule_PlayerTurnEnd);
-		Effect.SetDisplayInfo(ePerkBuff_Bonus, default.GuardianAngelHealText, default.GuardianAngelEffectDesc, "img:///RisingTidesContentPackage.PerkIcons.UIPerk_revive_overwatch_ga", true,, 'eAbilitySource_Psionic');
+		Effect.SetDisplayInfo(ePerkBuff_Bonus, default.GuardianAngelHealText, default.GuardianAngelEffectDesc, "img:///RisingTidesContentPackage.PerkIcons.UIPerk_revive_overwatch_ga", true, "", 'eAbilitySource_Psionic');
 		// Guardian Angel will not stop hard CC, but cleanse it next turn.
 		Effect.ImmuneTypes.AddItem(class'X2AbilityTemplateManager'.default.DisorientedName);
 		Effect.ImmuneTypes.AddItem(class'X2AbilityTemplateManager'.default.ConfusedName);
 		Effect.ImmuneTypes.AddItem(class'X2AbilityTemplateManager'.default.PanickedName);
-		Effect.DuplicateResponse = eDupe_Ignore;
+		Effect.EffectName = 'RTGuardianAngelMentalImmunity';
 
+		if(bSelfTarget) {
+			Effect.BuildPersistentEffect(1, false, true, false, eGameRule_PlayerTurnEnd);
+			Effect.DuplicateResponse = eDupe_Refresh;
+		} else {
+			Effect.BuildPersistentEffect(1, false, true, false, eGameRule_PlayerTurnEnd);
+			Effect.DuplicateResponse = eDupe_Refresh;
+		}
 
 		AbilityProperty = new class'X2Condition_AbilityProperty';
 		AbilityProperty.OwnerHasSoldierAbilities.AddItem('RTGuardianAngel');
 
 		Effect.TargetConditions.AddItem(AbilityProperty);
-
 		Effect.TargetConditions.AddItem(default.LivingFriendlyUnitOnlyProperty);
+		Effect.TargetConditions.AddItem(CreateOverTheShoulderProperty());
+
+		//Effect.EffectAddedFn = DebugEffectAdded;
+		//Effect.ApplyChanceFn = DebugApplyChanceCheck;
 
 		return Effect;
 }
@@ -1019,6 +1028,7 @@ static function X2AbilityTemplate RTRudimentaryCreaturesEvent() {
 	DamageEffect.bIgnoreBaseDamage = true;
 	DamageEffect.EffectDamageValue = default.RUDIMENTARY_CREATURES_DMG;
 	DamageEffect.bIgnoreArmor = true;
+	DamageEffect.bBypassSustainEffects = true;
 	DamageEffect.DamageTypes.AddItem('Psi');
 	Template.AddTargetEffect(DamageEffect);
 
@@ -1049,7 +1059,7 @@ function RudimentaryCreaturesAffectTargetVisualization(XComGameState VisualizeGa
 
 	AbilityState = XComGameState_Ability(`XCOMHISTORY.GetGameStateForObjectID(ObjectID));
 	if(AbilityState == none) {
-		`LOG("Rising Tides: RudimentaryCreaturesAffectTargetVisualization failed to find an abilitystate for object ID " $ ObjectID);
+		`RTLOG("RudimentaryCreaturesAffectTargetVisualization failed to find an abilitystate for object ID " $ ObjectID);
 		return;
 	}
 
@@ -1482,7 +1492,7 @@ static function X2AbilityTemplate RTLift() {
 	TraversalEffect.AddTraversalChange(eTraversal_Flying, true);
 
 	Template.AddMultiTargetEffect(TraversalEffect);
-	Template.AddMultiTargetEffect(class'RTEffectBuilder'.static.RTCreateLiftEffect(default.LIFT_DURATION * 2));
+	Template.AddMultiTargetEffect(`RTEB.CreateLiftEffect(default.LIFT_DURATION * 2));
 
 	Template.ModifyNewContextFn = RTLift_ModifyActivatedAbilityContext;
 	Template.BuildNewGameStateFn = RTLift_BuildGameState;
@@ -1618,7 +1628,7 @@ static function RTEffect_KnowledgeIsPower CreateKnowledgeIsPowerEffect(int _Stac
 
 	Effect = new class'RTEffect_KnowledgeIsPower';
 	Effect.BuildPersistentEffect(2, false, true, false, eGameRule_PlayerTurnEnd);
-	Effect.TargetConditions.AddItem(class'RTAbility_GhostAbilitySet'.default.PsionicTargetingProperty);
+	Effect.TargetConditions.AddItem(class'RTAbility'.default.PsionicTargetingProperty);
 	Effect.DuplicateResponse = eDupe_Refresh;
 	Effect.bRemoveWhenTargetDies = true;
 	Effect.bRemoveWhenSourceDies = true;
@@ -1804,7 +1814,6 @@ static function X2AbilityTemplate RTPsionicStorm() {
 
 	ImmediateDamageEffect = new class'X2Effect_ApplyWeaponDamage';
 	ImmediateDamageEffect.bIgnoreBaseDamage = true;
-	ImmediateDamageEffect.DamageTag = 'PsionicStormImmediate';
 	ImmediateDamageEffect.bIgnoreArmor = true;
 	ImmediateDamageEffect.EffectDamageValue = default.PSISTORM_DMG;
 
@@ -1824,6 +1833,7 @@ static function X2AbilityTemplate RTPsionicStorm() {
 
 	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
 	Template.CustomFireAnim = 'HL_Psi_MindControl';
+	//Template.CustomFireAnim = 'HL_Psi_ProjectileMedium';
 
 	Template.BuildVisualizationFn = DimensionalRiftStage1_BuildVisualization;
 	Template.BuildAffectedVisualizationSyncFn = DimensionalRigt1_BuildAffectedVisualization;
@@ -1855,12 +1865,13 @@ simulated function DimensionalRiftStage1_BuildVisualization(XComGameState Visual
 	local vector TargetLocation;
 	local TTile TargetTile;
 	local X2Action_TimedWait WaitAction;
-	//local X2Action_PlaySoundAndFlyOver SoundCueAction;
+	local X2Action_PlaySoundAndFlyOver SoundCueAction;
 	local int i, j;
 	local X2VisualizerInterface TargetVisualizerInterface;
-
+	local X2Action_ExitCover ExitCoverAction;
 	local XComGameState_BaseObject Placeholder_old, Placeholder_new;
 	local XComGameState_Ability Ability;
+	local X2Action_Fire_CloseUnfinishedAnim CloseFireAction;
 
 	History = `XCOMHISTORY;
 
@@ -1886,22 +1897,31 @@ simulated function DimensionalRiftStage1_BuildVisualization(XComGameState Visual
 		World = `XWORLD;
 
 		// Exit cover
-		class'X2Action_ExitCover'.static.AddToVisualizationTree(AvatarBuildData, VisualizeGameState.GetContext(), false, AvatarBuildData.LastActionAdded);
+		ExitCoverAction = X2Action_ExitCover(class'X2Action_ExitCover'.static.AddToVisualizationTree(AvatarBuildData, VisualizeGameState.GetContext(), false, AvatarBuildData.LastActionAdded));
 
-		class'X2Action_Fire'.static.AddToVisualizationTree(AvatarBuildData, VisualizeGameState.GetContext(), false, AvatarBuildData.LastActionAdded);
+		//If we were interrupted, insert a marker node for the interrupting visualization code to use. In the move path version above, it is expected for interrupts to be 
+		//done during the move.
+		if (Context.InterruptionStatus != eInterruptionStatus_None)
+		{
+			//Insert markers for the subsequent interrupt to insert into
+			class'X2Action'.static.AddInterruptMarkerPair(AvatarBuildData, Context, ExitCoverAction);
+		}
+
+		//class'X2Action_Fire'.static.AddToVisualizationTree(AvatarBuildData, VisualizeGameState.GetContext(), false, AvatarBuildData.LastActionAdded);
+		class'X2Action_Fire_OpenUnfinishedAnim'.static.AddToVisualizationTree(AvatarBuildData, Context);
 
 		// Wait to time the start of the warning FX
 		WaitAction = X2Action_TimedWait(class'X2Action_TimedWait'.static.AddToVisualizationTree(AvatarBuildData, VisualizeGameState.GetContext(), false, AvatarBuildData.LastActionAdded));
-		WaitAction.DelayTimeSec = 4;
+		WaitAction.DelayTimeSec = 3.5;
 
-		 EffectAction = X2Action_PlayEffect(class'X2Action_PlayEffect'.static.AddToVisualizationTree(AvatarBuildData, VisualizeGameState.GetContext(), false, AvatarBuildData.LastActionAdded));
+		EffectAction = X2Action_PlayEffect(class'X2Action_PlayEffect'.static.AddToVisualizationTree(AvatarBuildData, VisualizeGameState.GetContext(), false, AvatarBuildData.LastActionAdded));
 		EffectAction.EffectName = "FX_Psi_Void_Rift.P_Psi_Void_Rift_Activation";
 		TargetLocation = Context.InputContext.TargetLocations[0];
 		TargetTile = World.GetTileCoordinatesFromPosition(TargetLocation);
 		EffectAction.EffectLocation = World.GetPositionFromTileCoordinates(TargetTile);
 
-		WaitAction = X2Action_TimedWait(class'X2Action_TimedWait'.static.AddToVisualizationTree(AvatarBuildData, VisualizeGameState.GetContext(), false, AvatarBuildData.LastActionAdded));
-		WaitAction.DelayTimeSec = 1.5;
+		//WaitAction = X2Action_TimedWait(class'X2Action_TimedWait'.static.AddToVisualizationTree(AvatarBuildData, VisualizeGameState.GetContext(), false, AvatarBuildData.LastActionAdded));
+		//WaitAction.DelayTimeSec = 1.5;
 
 		// Display the Warning FX (covert to tile and back to vector because stage 2 is at the GetPositionFromTileCoordinates coord
 		EffectAction = X2Action_PlayEffect(class'X2Action_PlayEffect'.static.AddToVisualizationTree(AvatarBuildData, VisualizeGameState.GetContext(), false, AvatarBuildData.LastActionAdded));
@@ -1918,9 +1938,13 @@ simulated function DimensionalRiftStage1_BuildVisualization(XComGameState Visual
 			SoundAction.bStartPersistentSound = true;
 			SoundAction.bIsPositional = true;
 			SoundAction.vWorldPosition = EffectAction.EffectLocation;
+
+			SoundCueAction = X2Action_PlaySoundAndFlyOver(class'X2Action_PlaySoundAndFlyOver'.static.AddToVisualizationTree(AvatarBuildData, Context));
+			SoundCueAction.SetSoundAndFlyOverParameters(SoundCue'SoundX2AvatarFX.Avatar_Ability_Dimensional_Rift_Target_Activate_Cue', "", '', eColor_Good);
 		}
 
-		// class'X2Action_Fire_CloseUnfinishedAnim'.static.AddToVisualizationTrack(AvatarBuildTrack, Context);
+		CloseFireAction = X2Action_Fire_CloseUnfinishedAnim(class'X2Action_Fire_CloseUnfinishedAnim'.static.AddToVisualizationTree(AvatarBuildData, Context));
+		CloseFireAction.bNotifyTargets = true;
 
 		Visualizer = X2VisualizerInterface(AvatarBuildData.VisualizeActor);
 		if( Visualizer != none )
@@ -1929,6 +1953,10 @@ simulated function DimensionalRiftStage1_BuildVisualization(XComGameState Visual
 		}
 
 		class'X2Action_EnterCover'.static.AddToVisualizationTree(AvatarBuildData, VisualizeGameState.GetContext(), false, AvatarBuildData.LastActionAdded);
+
+		// Wait to time the damage
+		WaitAction = X2Action_TimedWait(class'X2Action_TimedWait'.static.AddToVisualizationTree(AvatarBuildData, Context, false, WaitAction));
+		WaitAction.DelayTimeSec = 4;
 	}
 	//****************************************************************************************
 
@@ -2066,7 +2094,6 @@ static function X2AbilityTemplate RTPsionicStormSustained() {
 
 	ImmediateDamageEffect = new class'X2Effect_ApplyWeaponDamage';
 	ImmediateDamageEffect.bIgnoreBaseDamage = true;
-	ImmediateDamageEffect.DamageTag = 'PsionicStormSustained';
 	ImmediateDamageEffect.bIgnoreArmor = true;
 	ImmediateDamageEffect.EffectDamageValue = default.PSISTORM_DMG;
 
@@ -2104,7 +2131,7 @@ static function X2AbilityTemplate RTEndPsistorms() {
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'RTEndPsistorms');
 	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_defend_panic";
 	Template.AbilitySourceName = 'eAbilitySource_Psionic';
-	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_AlwaysShow;
+	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_ShowIfAvailable;
 	Template.Hostility = eHostility_Neutral;
 
 	Template.AbilityTargetStyle = default.SelfTarget;
@@ -2166,6 +2193,13 @@ static function X2AbilityTemplate RTEndPsistorms_Dead() {
 
 	Trigger = new class'X2AbilityTrigger_EventListener';
 	Trigger.ListenerData.EventID = 'UnitDied';
+	Trigger.ListenerData.EventFn = class'XComGameState_Ability'.static.AbilityTriggerEventListener_Self;
+	Trigger.ListenerData.Filter  = eFilter_Unit;
+	Trigger.ListenerData.Deferral = ELD_OnStateSubmitted;
+	Template.AbilityTriggers.AddItem(Trigger);
+
+	Trigger = new class'X2AbilityTrigger_EventListener';
+	Trigger.ListenerData.EventID = 'UnitRemovedFromPlay';
 	Trigger.ListenerData.EventFn = class'XComGameState_Ability'.static.AbilityTriggerEventListener_Self;
 	Trigger.ListenerData.Filter  = eFilter_Unit;
 	Trigger.ListenerData.Deferral = ELD_OnStateSubmitted;
@@ -2252,10 +2286,7 @@ simulated function DimensionalRiftStage2_BuildVisualization(XComGameState Visual
 		WaitAction = X2Action_TimedWait(class'X2Action_TimedWait'.static.AddToVisualizationTree(AvatarBuildData, VisualizeGameState.GetContext(), false, AvatarBuildData.LastActionAdded));
 		WaitAction.DelayTimeSec = class'X2Ability_PsiWitch'.default.DIMENSIONAL_RIFT_STAGE1_START_WARNING_FX_SEC / 10;
 
-
-
 		foreach SustainedAbility.ValidActivationTiles(Tile) {
-
 			SoundAction = X2Action_StartStopSound(class'X2Action_StartStopSound'.static.AddToVisualizationTree(AvatarBuildData, VisualizeGameState.GetContext(), false, AvatarBuildData.LastActionAdded));
 			SoundAction.Sound = new class'SoundCue';
 			SoundAction.Sound.AkEventOverride = AkEvent'SoundX2AvatarFX.Stop_AvatarDimensionalRiftLoop';
@@ -2273,8 +2304,6 @@ simulated function DimensionalRiftStage2_BuildVisualization(XComGameState Visual
 			EffectAction = X2Action_PlayEffect(class'X2Action_PlayEffect'.static.AddToVisualizationTree(AvatarBuildData, VisualizeGameState.GetContext(), false, AvatarBuildData.LastActionAdded));
 			EffectAction.EffectName = "FX_Psi_Void_Rift.P_Psi_Void_Rift_Deactivation";
 			EffectAction.EffectLocation = Location;
-
-
 		}
 
 		// Notify multi targets of explosion
@@ -2747,16 +2776,16 @@ static simulated function PsionicLash_BuildVisualization(XComGameState Visualize
 
 static function X2AbilityTemplate RTUnfurlTheVeil() {
 	local X2AbilityTemplate						Template;
-	local X2Effect_RangerStealth			StealthEffect;
-	local RTCondition_UnfurlTheVeil			VeilCondition;
-	local X2AbilityCost_ActionPoints		Cost;
+	local X2Effect_RangerStealth				StealthEffect;
+	local RTCondition_UnfurlTheVeil				VeilCondition;
+	local X2AbilityCost_ActionPoints			Cost;
 	local X2AbilityCooldown						Cooldown;
 
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'RTUnfurlTheVeil');
-	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_swordSlash";
+	Template.IconImage = "img:///RisingTidesContentPackage.PerkIcons.rt_unfurltheveil";
 
 	Template.AbilitySourceName = 'eAbilitySource_Psionic';
-	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_ShowIfAvailable;
+	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_AlwaysShow;
 	Template.Hostility = eHostility_Defensive;
 
 	Template.AbilityToHitCalc = default.DeadEye;
@@ -2783,8 +2812,8 @@ static function X2AbilityTemplate RTUnfurlTheVeil() {
 	StealthEffect.BuildPersistentEffect(1, true, true, false, eGameRule_PlayerTurnEnd);
 	StealthEffect.SetDisplayInfo(ePerkBuff_Bonus, Template.LocFriendlyName, Template.GetMyHelpText(), Template.IconImage, true);
 	StealthEffect.bRemoveWhenTargetConcealmentBroken = true;
-	Template.AddTargetEffect(StealthEffect);
 
+	Template.AddTargetEffect(StealthEffect);
 	Template.AddTargetEffect(class'X2Effect_Spotted'.static.CreateUnspottedEffect());
 
 	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
@@ -2793,9 +2822,6 @@ static function X2AbilityTemplate RTUnfurlTheVeil() {
 
 	return Template;
 }
-
-
-
 
 defaultproperties
 {
@@ -2808,10 +2834,23 @@ defaultproperties
 	GuiltyConscienceEffectName = "GuiltyConscienceEffect"
 	PostOverTheShoulderEventName = "TriangulationEvent"
 	KnowledgeIsPowerEffectName = "KnowledgeIsPowerEffectName"
-
 	PsionicStormSustainedActivationEffectName = "PsionicStormSustainedDamageEffectName"
 	PsionicStormSustainedDamageEvent = "PsionicStormSustainedDamageEventName"
 	PsistormMarkedEffectName = "PsionicStormDamageMarkName"
 
 	PSIONICSTORM_RADIUS = 7.5
+}
+
+static function bool AbilityTagExpandHandler(string InString, out string OutString)
+{
+	local name Tag;
+
+	Tag = name(InString);
+
+	switch(Tag)
+	{
+
+	}
+
+	return false;
 }

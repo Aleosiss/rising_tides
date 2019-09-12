@@ -25,9 +25,9 @@ RTFriendlyName="Lento es suave"
 [RTEffect_TimeStop]
 TimeStopName="Greyscaled"
 TimeStopDesc ​​= "Esta unidad esta congelada en el tiempo, incapaz de percibir cambios en su entorno."
-RulerTimeStopTickFlyover="Timelocked!"
+RulerTimeStopTickFlyover="Greyscaled!"
 TimeStopEffectAddedString=""
-TimeStopEffectPersistsString="Timelocked!"
+TimeStopEffectPersistsString="Greyscaled!"
 TimeStopEffectRemovedString="¡Tiempo detenido!"
 TimeStopLostFlyover="¡El tiempo se detuvo!"
 LargeUnitTimeStopLostFlyover="¡El tiempo se detuvo!"
@@ -93,40 +93,38 @@ LocPromotionPopupText="<Bullet/> El efecto dura un turno completo, incluso si la
 [RTAbility_GhostAbilitySet]
 FEEDBACK_NAME="AGugHGGHGH"
 FEEDBACK_DESC="¡Esta unidad sufre de retroalimentacion psionica! Protegelas mientras se recuperan."
-OTS_TITLE="Sobre el hombro"
-OTS_DESC_SELF="Mirar hacia atras."
-OTS_DESC_ALLY="¡Te estare atento!"
-OTS_DESC_ENEMY="Te veo ... veame."
-BLOODLUST_TITLE="Sed de sangre"
-BLOODLUST_DESC="¡Esta unidad esta experimentando la emocion del combate! Su probabilidad de golpe critico cuerpo a cuerpo y el daño aumentan."
 STEALTH_TITLE="Stealth"
 STEALTH_DESC="Esta unidad es invisible y no puede ser vista por la mayoria de las unidades."
 MELD_TITLE="Mind Meld"
 MELD_DESC="Esta unidad se ha unido a Meld, recibiendo y entregando soporte psionico."
 FADE_COOLDOWN_TITLE="Fundido"
 FADE_COOLDOWN_DESC="Fade esta en reutilizacion."
-UV_TITLE="Voces irrelevantes"
-UV_DESC="No mires detras de ti ..."
-SOC_TITLE="Six O'Clock"
-SOC_DESC="Tengo tus seis."
-GREYSCALED_TITLE="Escala de grises"
-GREYSCALED_DESC="Congelado a tiempo ..."
-HARBINGER_BROKEN_ALERT="¡Escudo perdido!"
-OVERFLOW_READOUT="Desbordamiento"
-
-[RTEffect_Bloodlust]
-BloodlustEffectTitle="Sed de sangre"
 
 [RTAbility_GathererAbilitySet]
 GuardianAngelHealText="angel de la guarda"
 KIPFriendlyName="El conocimiento es poder"
 KIPFriendlyDesc="Estoy en ti ..."
 LocPsionicallyInterruptedName="¡Interrumpido!"
+OTS_TITLE="Sobre el hombro"
+OTS_DESC_SELF="Mirar hacia atras."
+OTS_DESC_ALLY="¡Te estare atento!"
+OTS_DESC_ENEMY="Te veo ... veame."
+UV_TITLE="Voces irrelevantes"
+UV_DESC="No mires detras de ti ..."
 
 [RTAbility_MarksmanAbilitySet]
 TimeStopEffectTitle="Greyscaled"
 TimeStopEffectDescription="Esta unidad se ha congelado a tiempo. No puede realizar acciones y es mucho mas facil de alcanzar."
 EveryMomentMattersTitle=""
+SOC_TITLE="Six O'Clock"
+SOC_DESC="Tengo tus seis."
+
+[RTAbility_BerserkerAbilitySet]
+BLOODLUST_TITLE="Sed de sangre"
+BLOODLUST_DESC="¡Esta unidad esta experimentando la emocion del combate! Su probabilidad de golpe critico cuerpo a cuerpo y el daño aumentan."
+
+[RTEffect_Bloodlust]
+BloodlustEffectTitle="Sed de sangre"
 
 [RTEffectBuilder]
 StealthFriendlyName="Stealth"

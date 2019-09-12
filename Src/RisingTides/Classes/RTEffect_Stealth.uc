@@ -29,7 +29,7 @@ simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffe
 
 	StealthEffectState = RTGameState_Effect(NewEffectState);
 	if(StealthEffectState == none) {
-		class'RTHelpers'.static.RTLog("Couldn't find RTGameState_Effect for RTEffect_Stealth!", true);
+		`RTLOG("Couldn't find RTGameState_Effect for RTEffect_Stealth!", true);
 	}
 
 	StealthEffectState.bWasPreviouslyConcealed = UnitState.IsConcealed();
@@ -55,10 +55,12 @@ simulated function OnEffectRemoved(const out EffectAppliedData ApplyEffectParame
 	OldUnitState = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(ApplyEffectParameters.TargetStateObjectRef.ObjectID));
 	StealthEffectState = RTGameState_Effect(RemovedEffectState);
 	if(StealthEffectState == none) {
-		class'RTHelpers'.static.RTLog("Couldn't find RTGameState_Effect for RTEffect_Stealth!", true);
+		`RTLOG("Couldn't find RTGameState_Effect for RTEffect_Stealth!", true);
 	}
 
 	NewUnitState = XComGameState_Unit(NewGameState.ModifyStateObject(class'XComGameState_Unit', OldUnitState.ObjectID));
+
+	`XEVENTMGR.TriggerEvent('UnitBreakRTSTealth', NewUnitState, NewUnitState, NewGameState);
 
 	// Stealth can wear off naturally and not break concealment
 	if (NewUnitState != none && !StealthEffectState.bWasPreviouslyConcealed && OldUnitState.IsConcealed()) {
@@ -71,6 +73,9 @@ simulated function AddX2ActionsForVisualization(XComGameState VisualizeGameState
 	local RTAction_ApplyMITV	MITVAction;
 
 	super.AddX2ActionsForVisualization(VisualizeGameState, ActionMetadata, EffectApplyResult);
+
+	// clear that shit out first
+	class'RTAction_RemoveMITV'.static.AddToVisualizationTree(ActionMetadata, VisualizeGameState.GetContext(), false, ActionMetadata.LastActionAdded);
 
 	MITVAction = RTAction_ApplyMITV(class'RTAction_ApplyMITV'.static.AddToVisualizationTree(ActionMetadata, VisualizeGameState.GetContext(), false, ActionMetadata.LastActionAdded));
 	MITVAction.MITVPath = "FX_Wraith_Armor.M_Wraith_Armor_Overlay_On_MITV";
@@ -86,15 +91,15 @@ simulated function AddX2ActionsForVisualization_Removed(XComGameState VisualizeG
 {
 	local X2Action_Delay			DelayAction;
 
-	class'RTAction_RemoveMITV'.static.AddToVisualizationTree(ActionMetadata, VisualizeGameState.GetContext(), false, ActionMetadata.LastActionAdded);
-	
 	super.AddX2ActionsForVisualization_Removed(VisualizeGameState, ActionMetadata, EffectApplyResult, RemovedEffect);
+
+	class'RTAction_RemoveMITV'.static.AddToVisualizationTree(ActionMetadata, VisualizeGameState.GetContext(), false, ActionMetadata.LastActionAdded);
 
 	DelayAction = X2Action_Delay(class'X2Action_Delay'.static.AddToVisualizationTree(ActionMetadata, VisualizeGameState.GetContext(), false, ActionMetadata.LastActionAdded));
 	DelayAction.Duration = 0.33f;
 	DelayAction.bIgnoreZipMode = true;
-
 }
+
 
 DefaultProperties
 {

@@ -135,20 +135,16 @@ function DirectSetTarget(int TargetIndex)
 	local int NewTarget;
 	local array<TTile> Tiles;
 
-	
-	// advance the target counter
-	NewTarget = TargetIndex % Action.AvailableTargets.Length;
-	if(NewTarget < 0) NewTarget = Action.AvailableTargets.Length + NewTarget;
-	
-
 	// put the targeting reticle on the new target
 	Pres = `PRES;
 	TacticalHud = Pres.GetTacticalHUD();
-	if(NewTarget != LastTarget)
-	{
-		LastTarget = NewTarget;
-		TacticalHud.TargetEnemy(NewTarget);
-	}
+
+	// advance the target counter
+	NewTarget = TargetIndex % Action.AvailableTargets.Length;
+	if(NewTarget < 0) NewTarget = Action.AvailableTargets.Length + NewTarget;
+
+	LastTarget = NewTarget;
+	TacticalHud.TargetEnemy(Action.AvailableTargets[NewTarget].PrimaryTarget.ObjectID);
 
 	// have the idle state machine look at the new target
 	FiringUnit.IdleStateMachine.CheckForStanceUpdate();

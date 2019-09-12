@@ -17,10 +17,7 @@ This would be a bare-bones content mod. I also have the following content in min
 
 ## Current To Test
 
-	- Direct Neural Manipulation
-
 ## Current Bugs (High Priority)
-
 
 ## Current Issues 
 
@@ -31,29 +28,23 @@ This would be a bare-bones content mod. I also have the following content in min
 		- GFX for Bloodlust
 		- SFX for Burst
 		- Purge: Idea: Add a remove debuffs effect. Additionally propagate this new effect across melded allies?
-		- New Capstone Perk Idea: Orpheus Warp: "…the hero of the shattered moon. A pawn played by a negligent deity, a marionette maneuvered by a epileptic..."
+		- New Capstone Perk Idea: Orpheus Warp: "…the hero of the shattered moon. A pawn played by a negligent deity, a marionette maneuvered by an epileptic..."
 				- Gain Stealth while preparing a massive psionic rift. On the following turn, the Stealth is broken and a rift is formed. Friendly units can use the rift to evac from the mission. The rift will end after two turns, or if caster's connection is broken.
 	- Marksman:
-		- Maybe rework time stop to only take place over 1 turn
 		- rework boring perks (Knock Them Down, Your Hands, My Eyes, Eye in the Sky)
 	- Gatherer:
-		- Redo Guardian Angel (?, no one has told me if it actually works or not)
 		- Add Over the Shoulder exception for civilians that are actually faceless
 		- Extinction Event needs to somehow stop revive units from reviving
 		- Come up with a better solution for Over The Shoulder vs. concealed units
+		- New Perk Idea: Restrained Mindset: Mind Wrack now stuns instead of kills. Reduce Feedback duration to 1 turn.
 	- General:
-		- none
-	- The Program (New Faction):
-		- get new icon and faceplate
-		- create customizations for all ghosts
-		- figure out a way to either remove certain covert actions for the Program or simply template them as previously done
-		- Strategy Card: One Small Favor: once per month, send a Program squad on a mission in place of an XCOM squad. Can't send on Golden Path missions. Guarenteed to be the first card unlocked.
-		- Strategy Card: Just Passing Through: There is a small chance for a Program operative to join XCOM on a non-story mission.
-		- Strategy Card: Wideband Psionic Jamming: Reduce the will of enemy units by a flat value.
-		- Strategy Card: Old World Training: Increase the detection modifier of XCom by a flat value.
-		- Strategy Card: Forty Years of War: Instantly construct Resistance Outposts.
-		- Strategy Card: Direct Neural Manipulation: Bonded Soldiers recieve bonus experience if they survive a mission together.
-		- Strategy Card: Resistance Sabotage: Other Resistance Factions gain an additional Card Slot.
+		- Add Priorites for Abilities
+		- New Perk: Mind Call
+			- Although the Lost do not have much of a mind to control, they are still vulnerable to psionic suggestion. 
+			  Program Operatives can influence the lost to attack an area or position en masse.
+			- Only available on missions where the Lost are present.
+	- The Program:
+		- none! :)
 	- Prognosticator (New Class)
 		- this word sounded cool, so I will make it into a class
 		- wtf will it do? not sure how "seeing the future" can work in real life
@@ -66,5 +57,3 @@ This would be a bare-bones content mod. I also have the following content in min
 	- Make extend effect duration happen on ObjectMoved for Aura Effects as well, possibly by breaking its logic out into a separate method that is called in either place
 	- Psionic Storm only plays sound from one storm at a time, due to a base-game issue where a looping soundcue can only be played once per ObjectID
 	- Networked OI does not work with CloseCombatSpecialistAttack or KillzoneShot. Unsure of exact cause, appears that CCS does not tick AbilityActivated
-	- Shadow Strike does not highlight the tiles it can activate to
-	- Have to travel to a region that is building an outpost to activate Forty Years of War

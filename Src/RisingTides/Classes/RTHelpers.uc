@@ -4,6 +4,16 @@ class RTHelpers extends Object config(RisingTides);
 var config array<name> StandardShots, MeleeAbilities, SniperShots, OverwatchShots, PsionicAbilities, FreeActions;
 var config name ProgramFactionName;
 
+var config string PROGRAM_RED_COLOR;
+var config string PROGRAM_WHITE_COLOR;
+
+var name DebugEffectName;
+
+defaultproperties
+{
+	DebugEffectName = "DebugEffectName"
+}
+
 enum ERTChecklist {
 	eChecklist_StandardShots,
 	eChecklist_SniperShots,
@@ -11,6 +21,11 @@ enum ERTChecklist {
 	eChecklist_PsionicAbilities,
 	eChecklist_MeleeAbilities,
 	eChecklist_FreeActions
+};
+
+enum ERTColor {
+	eRTColor_ProgramRed,
+	eRTColor_ProgramWhite
 };
 
 // copied here from X2Helpers_DLC_Day60.uc
@@ -23,36 +38,35 @@ static function ListDefaultAbilityLists() {
 	local name n;
 
 	foreach default.StandardShots(n) {
-		`LOG("Rising Tides: Standard Shots: " @ n);
+		`RTLOG("Standard Shots: " @ n);
 	}
 
 	foreach default.MeleeAbilities(n) {
-		`LOG("Rising Tides: Melee Abilities: " @ n);
+		`RTLOG("Melee Abilities: " @ n);
 	}
 
 	foreach default.SniperShots(n) {
-		`LOG("Rising Tides: Sniper Shots: " @ n);
+		`RTLOG("Sniper Shots: " @ n);
 	}
 
 	foreach default.OverwatchShots(n) {
-		`LOG("Rising Tides: Overwatch Shots: " @ n);
+		`RTLOG("Overwatch Shots: " @ n);
 	}
 
 	foreach default.PsionicAbilities(n) {
-		`LOG("Rising Tides: Psionic Abilities: " @ n);
+		`RTLOG("Psionic Abilities: " @ n);
 	}
 
 	foreach default.FreeActions(n) {
-		`LOG("Rising Tides: Free Actions: " @ n);
+		`RTLOG("Free Actions: " @ n);
 	}
 }
 
 
-static function bool CheckAbilityActivated(name AbilityTemplateName, ERTChecklist Checklist) {
-	local bool b, d;
+static function bool CheckAbilityActivated(name AbilityTemplateName, ERTChecklist Checklist, optional bool bDebug = false) {
+	local bool b;
 	local string n;
 	b = true;
-	d = false; // debug flag
 
 	//ListDefaultAbilityLists();
 
@@ -91,20 +105,20 @@ static function bool CheckAbilityActivated(name AbilityTemplateName, ERTChecklis
 					b = false;
 	}
 
-	if(!b && d) {
-		`LOG("Rising Tides: " @ AbilityTemplateName @ " was not found in " @ n);
+	if(!b && bDebug) {
+		`RTLOG(AbilityTemplateName $ " was not found in " $ n);
 	}
 
 	return b;
 }
 
-static function bool MultiCatCheckAbilityActivated (name AbilityTemplateName, array<ERTChecklist> Checklists) {
+static function bool MultiCatCheckAbilityActivated(name AbilityTemplateName, array<ERTChecklist> Checklists, optional bool bDebug = false) {
 	local ERTChecklist Iterator;
 	local bool b;
 
 	b = false;
 	foreach Checklists(Iterator) {
-		b = CheckAbilityActivated(AbilityTemplateName, Iterator);
+		b = CheckAbilityActivated(AbilityTemplateName, Iterator, bDebug);
 		if(b) {
 			break;
 		}
@@ -130,28 +144,6 @@ static function GetAdjacentTiles(TTile TargetTile, out array<TTile> AdjacentTile
 	}
 }
 
-static function PanicLoopBeginFn( X2Effect_Persistent PersistentEffect, const out EffectAppliedData ApplyEffectParameters, XComGameState_BaseObject kNewTargetState, XComGameState NewGameState )
-{
-	local XComGameState_Unit UnitState;
-
-	// change the height
-	UnitState = XComGameState_Unit( NewGameState.CreateStateObject( class'XComGameState_Unit', ApplyEffectParameters.TargetStateObjectRef.ObjectID ) );
-	UnitState.bPanicked = true;
-
-	NewGameState.AddStateObject( UnitState );
-}
-
-static function PanicLoopEndFn( X2Effect_Persistent PersistentEffect, const out EffectAppliedData ApplyEffectParameters, XComGameState NewGameState, bool bCleansed )
-{
-	local XComGameState_Unit UnitState;
-
-	// change the height
-	UnitState = XComGameState_Unit( NewGameState.CreateStateObject( class'XComGameState_Unit', ApplyEffectParameters.TargetStateObjectRef.ObjectID ) );
-	UnitState.bPanicked = false;
-
-	NewGameState.AddStateObject( UnitState );
-}
-
 static function RTGameState_ProgramFaction GetProgramState(optional XComGameState NewGameState) {
 	local RTGameState_ProgramFaction Program;
 
@@ -171,6 +163,10 @@ static function RTGameState_ProgramFaction GetProgramState(optional XComGameStat
 		Program = RTGameState_ProgramFaction(`XCOMHISTORY.GetSingleGameStateObjectForClass(class'RTGameState_ProgramFaction'));
 	}
 
+	if(Program == none) {
+		`RTLOG("ERROR, Could not find a ProgramStateObject, returning NONE!", true, false);
+	}
+	
 	return Program;
 }
 
@@ -178,6 +174,10 @@ static function RTGameState_ProgramFaction GetNewProgramState(XComGameState NewG
 	local RTGameState_ProgramFaction Program;
 
 	Program = GetProgramState(NewGameState);
+	if(Program == none) {
+		return none;
+	}
+
 	Program = RTGameState_ProgramFaction(NewGameState.ModifyStateObject(class'RTGameState_ProgramFaction', Program.ObjectID));
 	return Program;
 }
@@ -185,19 +185,21 @@ static function RTGameState_ProgramFaction GetNewProgramState(XComGameState NewG
 
 static function RTLog(string message, optional bool bShouldRedScreenToo = false, optional bool bShouldOutputToConsoleToo = false) {
 	local bool b;
+	local name mod;
 
-	b = DebuggingEnabled();
-	`LOG(message, b, 'Rising Tides');
+	b = `DLCINFO.DebuggingEnabled();
+	if(!b) {
+		return;
+	}
+	mod = 'RisingTides';
+
+	`LOG(message, b, mod);
 	if(bShouldRedScreenToo) {
-		`RedScreen("RisingTides: " $ message);
+		`RedScreen(mod $ ": " $ message);
 	}
 	if(bShouldOutputToConsoleToo) {
-		class'Helpers'.static.OutputMsg(message);
+		class'Helpers'.static.OutputMsg(mod $ ": " $ message);
 	}
-}
-
-static function bool DebuggingEnabled() {
-	return class'X2DownloadableContentInfo_RisingTides'.static.DebuggingEnabled();
 }
 
 static function PrintCovertActionsForFaction(XComGameState_ResistanceFaction Faction) {
@@ -228,11 +230,6 @@ static function PrintGoldenPathActionsForFaction(XComGameState_ResistanceFaction
 	}
 }
 
-static function PrintMiscInfoForFaction(XComGameState_ResistanceFaction Faction) {
-	//local XComGameState_HeadquartersXCom XComHQ;
-
-}
-
 static function SubmitGameState(XComGameState NewGameState) {
 	if(NewGameState.GetNumGameStateObjects() > 0)
 	{
@@ -257,6 +254,144 @@ static function XComGameState_HeadquartersXCom GetXComHQState()
 	return NewXComHQ;
 }
 
+static function XComGameState_ResistanceFaction GetTemplarFactionState()
+{
+	local XComGameState_ResistanceFaction TemplarState;
+
+	foreach `XCOMHISTORY.IterateByClassType(class'XComGameState_ResistanceFaction', TemplarState)
+	{
+		if(TemplarState.GetMyTemplateName() == 'Faction_Templars')
+		{
+			break;
+		}
+	}
+
+	if(TemplarState == none) {
+		RTLog("Warning, could not find TemplarState, returning null!");
+		return none;
+	}
+
+	return TemplarState;
+}
+
 simulated static function bool IsInvalidMission(X2MissionSourceTemplate Template) {
 	return class'RTGameState_ProgramFaction'.default.InvalidMissionSources.Find(Template.DataName) != INDEX_NONE;
+}
+
+static function String GetProgramColor(optional ERTColor colorEnum) {
+	local ERTColor EmptyColor;
+
+	if(colorEnum == EmptyColor) {
+		return default.PROGRAM_RED_COLOR;
+	}
+
+	switch(colorEnum) {
+		case eRTColor_ProgramRed:
+			return default.PROGRAM_RED_COLOR;
+		case eRTColor_ProgramWhite:
+			return default.PROGRAM_WHITE_COLOR;
+		default:
+			return default.PROGRAM_RED_COLOR;
+	}
+}
+
+static function String AddFontColor(String inString, String HexColor) {
+	local String EmptyString;
+
+	if(inString == EmptyString) {
+		`RTLOG("AddFontColor Failed: empty, returning inString!");
+		return inString;
+	}
+
+	if(InStr(inString, "</font>") != -1) {
+		`RTLOG("AddFontColor Failed: fontdata present, returning inString!");
+		return inString;
+	}
+
+	//RTLOG("AddFontColor succeeded, final string is: \n<font color='#" $ HexColor $ "'><b>" $ inString $ "<b/></font>");
+	return "<font color='#" $ HexColor $ "'><b>" $ inString $ "<b/></font>";
+}
+
+static function array<Name> GetCompletedXCOMTechNames() {
+	local array<Name> names;
+	local array<XComGameState_Tech> CompletedTechs;
+	local XComGameState_Tech CompletedTechState;
+
+	CompletedTechs = `XCOMHQ.GetAllCompletedTechStates();
+	foreach CompletedTechs(CompletedTechState) { // Check if a tech which upgrades the base has been researched
+		names.AddItem(CompletedTechState.GetMyTemplateName());
+	}
+
+	return names;
+}
+
+static function CheckpointDebug(out int checkpointNum, optional bool bShouldRedScreenToo = false, optional bool bShouldOutputToConsoleToo = false) {
+	checkpointNum++;
+	`RTLOG("Checkpoint " $ checkpointNum, bShouldRedScreenToo, bShouldOutputToConsoleToo);
+}
+
+static function PrintEffectsAndMITVsForUnitState(XComGameState_Unit UnitState, bool bShouldRemove) {
+	local XGUnit UnitVisualizer;
+	local XComUnitPawn UnitPawn;
+
+	UnitVisualizer = XGUnit(UnitState.GetVisualizer());
+	UnitPawn = UnitVisualizer.GetPawn();
+
+	PrintEffectsAndMITVsForUnitPawn(UnitPawn, bShouldRemove);
+}
+
+static function PrintEffectsAndMITVsForUnitPawn(XComUnitPawn UnitPawn, bool bShouldRemove) {
+	local ParticleSystemComponent PSComponent, TestPSComponent;
+	local MeshComponent MeshComp;
+	local MaterialInstanceTimeVarying MITV;
+	local int i;
+
+	foreach UnitPawn.Mesh.AttachedComponents( class'ParticleSystemComponent', TestPSComponent )
+	{
+		`RTLOG("Found Attached PSComponent: " $ PathName( TestPSComponent.Template ), false, true);
+		if(bShouldRemove) {
+			PSComponent = TestPSComponent;
+			UnitPawn.Mesh.DetachComponent( PSComponent );
+			PSComponent.DeactivateSystem();
+		}
+	}
+
+	foreach UnitPawn.ComponentList( class'ParticleSystemComponent', TestPSComponent )
+	{
+		`RTLOG("Found Floating PSComponent: " $ PathName( TestPSComponent.Template ), false, true);
+		if(bShouldRemove) {
+			PSComponent = TestPSComponent;
+			UnitPawn.Mesh.DetachComponent( PSComponent );
+			PSComponent.DeactivateSystem();
+		}
+	}
+
+	foreach UnitPawn.AllOwnedComponents(class'MeshComponent', MeshComp)
+	{
+		`RTLOG("--------------------------------------------------------------------", false, true);
+		`RTLOG("Found MeshComponent: " $ PathName(MeshComp), false, true);
+		for (i = 0; i < MeshComp.Materials.Length; i++)
+		{
+			if (MeshComp.GetMaterial(i).IsA('MaterialInstanceTimeVarying'))
+			{
+				MITV = MaterialInstanceTimeVarying(MeshComp.GetMaterial(i));
+				`RTLOG("Found PrimaryMaterial: " $ PathName(MITV), false, true);
+				if(bShouldRemove) 
+					MeshComp.PopMaterial(i, eMatPriority_AnimNotify);
+			}
+		}
+
+		for (i = 0; i < MeshComp.AuxMaterials.Length; i++)
+		{
+			if (MeshComp.GetMaterial(i).IsA('MaterialInstanceTimeVarying'))
+			{
+				MITV = MaterialInstanceTimeVarying(MeshComp.GetMaterial(i));
+				`RTLOG("Found AuxMaterial: " $ PathName(MITV), false, true);
+				if(bShouldRemove)
+					MeshComp.PopMaterial(i, eMatPriority_AnimNotify);
+			}
+		}
+	}
+
+	UnitPawn.UpdateAllMeshMaterials();
 }

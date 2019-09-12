@@ -8,8 +8,11 @@
 //	Whisper's perks.
 //---------------------------------------------------------------------------------------
 
-class RTAbility_MarksmanAbilitySet extends RTAbility_GhostAbilitySet
+class RTAbility_MarksmanAbilitySet extends RTAbility
 	config(RisingTides);
+
+	var localized string SOC_TITLE;
+	var localized string SOC_DESC;
 
 	var config int SLOWISSMOOTH_AIM_BONUS, SLOWISSMOOTH_CRIT_BONUS;
 	var config float HEADSHOT_CRITDMG_BONUS;
@@ -23,6 +26,8 @@ class RTAbility_MarksmanAbilitySet extends RTAbility_GhostAbilitySet
 	var config float SIXOCLOCK_PSI_BONUS;
 	var config float SIXOCLOCK_DEFENSE_BONUS;
 	var config int TIMESTANDSSTILL_COOLDOWN;
+	var config int TIMESTANDSSTILL_NUMTURNS;
+	var config int TIMESTANDSSTILL_ACTIONPOINTSPERTURN;
 	var config int BARRIER_STRENGTH, BARRIER_COOLDOWN;
 	var config int VITAL_POINT_TARGETING_DAMAGE;
 	var config int SURGE_COOLDOWN;
@@ -40,6 +45,10 @@ class RTAbility_MarksmanAbilitySet extends RTAbility_GhostAbilitySet
 	var config int SND_DEFENSE_BONUS;
 	var config float EMM_DAMAGE_PERCENT;
 	var config int SIS_CONCEALMENT_TURNS;
+	var config int REPOSITIONING_TILES_MOVED_REQUIREMENT;
+	var config int REPOSITIONING_MAX_POSITIONS_SAVED;
+	var config int AGGRESSION_CRIT_PER_UNIT;
+	var config int AGGRESSION_UNITS_FOR_MAX_BONUS;
 
 	var config int HARBINGER_SHIELD_AMOUNT, HARBINGER_COOLDOWN, HARBINGER_DAMAGE_BONUS, HARBINGER_WILL_BONUS, HARBINGER_AIM_BONUS, HARBINGER_ARMOR_BONUS;
 	var config WeaponDamageValue HARBINGER_DMG;
@@ -54,6 +63,7 @@ class RTAbility_MarksmanAbilitySet extends RTAbility_GhostAbilitySet
 
 	var name KillZoneReserveType;
 	var name TimeStopEffectName;
+	var name TimeStopMasterEffectName;
 
 	var config array<name> AbilityPerksToLoad;
 
@@ -75,7 +85,7 @@ static function array<X2DataTemplate> CreateTemplates()
 	Templates.AddItem(RTDisablingShot());
 	Templates.AddItem(RTDisablingShotDamage());
 	Templates.AddItem(RTSnapshot());
-	Templates.AddItem(SixOClock());									// icon
+	Templates.AddItem(SixOClock());
 	Templates.AddItem(SixOClockEffect());
 	//Templates.AddItem(VitalPointTargeting());
 	Templates.AddItem(RTDamnGoodGround());
@@ -100,14 +110,15 @@ static function array<X2DataTemplate> CreateTemplates()
 	Templates.AddItem(Harbinger());
 	Templates.AddItem(RTHarbingerPsionicLance());
 	Templates.AddItem(HarbingerCleanseListener());
-	Templates.AddItem(ShockAndAwe());
-	Templates.AddItem(ShockAndAweListener());
+	Templates.AddItem(RTShockAndAwe());
+	Templates.AddItem(RTShockAndAweListener());
 	Templates.AddItem(RTKillzone());								// icon
 	Templates.AddItem(RTEveryMomentMatters());
 	Templates.AddItem(RTOverflowBarrier());
 	Templates.AddItem(RTOverflowBarrierEvent());
 	Templates.AddItem(RTKubikuri());
 	Templates.AddItem(RTKubikuriDamage());
+	Templates.AddItem(RTRepositioning());
 
 	return Templates;
 }
@@ -147,24 +158,15 @@ static function X2AbilityTemplate ScopedAndDropped()
 	Template.AddTargetEffect(SSEffect);
 
 	// standard ghost abilities
-	Template.AdditionalAbilities.AddItem('GhostPsiSuite');
-	Template.AdditionalAbilities.AddItem('JoinMeld');
-	Template.AdditionalAbilities.AddItem('LeaveMeld');
-	Template.AdditionalAbilities.AddItem('PsiOverload');
-	Template.AdditionalAbilities.AddItem('RTFeedback');
-	Template.AdditionalAbilities.AddItem('RTMindControl');
-	Template.AdditionalAbilities.AddItem('RTEnterStealth');
+	AddSpectrePsionicSuite(Template);
+
+	// special meld abilities
+	AddMeldedAbilityHelpers(Template);
 
 	// unique abilities for Scoped and Dropped
 	Template.AdditionalAbilities.AddItem('RTStandardSniperShot');
 	Template.AdditionalAbilities.AddItem('RTOverwatch');
 	Template.AdditionalAbilities.AddItem('RTOverwatchShot');
-
-	// special meld abilities
-	Template.AdditionalAbilities.AddItem('LIOverwatchShot');
-	Template.AdditionalAbilities.AddItem('RTUnstableConduitBurst');
-	Template.AdditionalAbilities.AddItem('PsionicActivate');
-	Template.AdditionalAbilities.AddItem('RTHarbingerPsionicLance');
 
 	// Probably required
 	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
@@ -281,16 +283,16 @@ static function X2AbilityTemplate ScopedAndDropped()
 //---------------------------------------------------------------------------------------
 static function X2AbilityTemplate RTOverwatch()
 {
-	local X2AbilityTemplate                 Template;
-	local X2AbilityCost_Ammo                AmmoCost;
-	local X2AbilityCost_ActionPoints        ActionPointCost;
-	local X2Effect_ReserveActionPoints      ReserveActionPointsEffect;
-	local array<name>                       SkipExclusions;
-	local X2Effect_CoveringFire             CoveringFireEffect;
-	local X2Condition_AbilityProperty       CoveringFireCondition;
-	local X2Condition_UnitProperty          ConcealedCondition;
-	local X2Effect_SetUnitValue             UnitValueEffect;
-	local X2Condition_UnitEffects           SuppressedCondition;
+	local X2AbilityTemplate					Template;
+	local X2AbilityCost_Ammo				AmmoCost;
+	local X2AbilityCost_ActionPoints		ActionPointCost;
+	local X2Effect_ReserveActionPoints		ReserveActionPointsEffect;
+	local array<name>						SkipExclusions;
+	local X2Effect_CoveringFire				CoveringFireEffect;
+	local X2Condition_AbilityProperty		CoveringFireCondition;
+	local X2Condition_UnitProperty			ConcealedCondition;
+	local X2Effect_SetUnitValue				UnitValueEffect;
+	local X2Condition_UnitEffects			SuppressedCondition;
 
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'RTOverwatch');
 
@@ -579,6 +581,8 @@ static function X2AbilityTemplate RTAggression()
 	Template.AbilityTriggers.AddItem(default.UnitPostBeginPlayTrigger);
 
 	AgroEffect = new class'RTEffect_Aggression';
+	AgroEffect.iCritBonusPerUnit = default.AGGRESSION_CRIT_PER_UNIT;
+	AgroEffect.iUnitsForMaxBonus = default.AGGRESSION_UNITS_FOR_MAX_BONUS;
 	AgroEffect.BuildPersistentEffect(1, true, true, true);
 	AgroEffect.SetDisplayInfo(ePerkBuff_Passive, Template.LocFriendlyName, Template.LocLongDescription, Template.IconImage, true,,Template.AbilitySourceName);
 	Template.AddTargetEffect(AgroEffect);
@@ -1028,7 +1032,7 @@ static function X2AbilityTemplate Sovereign()
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'Sovereign');
 	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_voidadept";
 
-	Template.AbilitySourceName = 'eAbilitySource_Perk';
+	Template.AbilitySourceName = 'eAbilitySource_Psionic';
 	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_NeverShow;
 	Template.Hostility = eHostility_Neutral;
 
@@ -1065,7 +1069,7 @@ static function X2AbilityTemplate SovereignEffect()
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'SovereignEffect');
 	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_voidadept";
 
-	Template.AbilitySourceName = 'eAbilitySource_Perk';
+	Template.AbilitySourceName = 'eAbilitySource_Psionic';
 	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_NeverShow;
 	Template.Hostility = eHostility_Neutral;
 
@@ -1303,7 +1307,7 @@ static function X2AbilityTemplate SovereignEffect()
 static function X2AbilityTemplate DaybreakFlameIcon()
 {
 	local X2AbilityTemplate						Template;
-	local X2Effect_Persistent					SOVEffect;
+	local X2Effect_Persistent					IconEffect;
 
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'DaybreakFlameIcon');
 	Template.IconImage = "img:///RisingTidesContentPackage.PerkIcons.rt_daybreaker";
@@ -1316,12 +1320,13 @@ static function X2AbilityTemplate DaybreakFlameIcon()
 	Template.AbilityTargetStyle = default.SelfTarget;
 	Template.AbilityTriggers.AddItem(default.UnitPostBeginPlayTrigger);
 
-	SOVEffect = new class 'X2Effect_Persistent';
-	SOVEffect.BuildPersistentEffect(1, true, true, true);
-	SOVEffect.SetDisplayInfo(ePerkBuff_Passive, Template.LocFriendlyName, Template.LocLongDescription, Template.IconImage, true,, Template.AbilitySourceName);
-	Template.AddTargetEffect(SOVEffect);
+	IconEffect = new class 'X2Effect_Persistent';
+	IconEffect.BuildPersistentEffect(1, true, true, true);
+	IconEffect.SetDisplayInfo(ePerkBuff_Passive, Template.LocFriendlyName, Template.LocLongDescription, Template.IconImage, true,, Template.AbilitySourceName);
+	Template.AddTargetEffect(IconEffect);
 
 	Template.AdditionalAbilities.AddItem('DaybreakFlame');
+	Template.AdditionalAbilities.AddItem('DaybreakFlameToggle');
 	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
 	// Note: no visualization on purpose!
 
@@ -1331,6 +1336,65 @@ static function X2AbilityTemplate DaybreakFlameIcon()
 }
 
 //---------------------------------------------------------------------------------------
+//---Daybreak Flame Icon-----------------------------------------------------------------
+//---------------------------------------------------------------------------------------
+static function X2AbilityTemplate DaybreakFlameToggle(name ToggleName)
+{
+	local X2AbilityTemplate						Template;
+	local X2Effect_Persistent					TagEffect;
+	local X2Effect_RemoveEffects				RemoveTagEffect;
+	local X2Condition_UnitEffects				ToggleCondition;
+	local name									InvertedToggleName;
+
+	`CREATE_X2ABILITY_TEMPLATE(Template, 'DaybreakFlameToggle');
+	Template.IconImage = "img:///RisingTidesContentPackage.PerkIcons.rt_daybreaker";
+
+	Template.AbilitySourceName = 'eAbilitySource_Psionic';
+	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_AlwaysShow;
+	Template.Hostility = eHostility_Neutral;
+
+	Template.AbilityToHitCalc = default.DeadEye;
+	Template.AbilityTargetStyle = default.SelfTarget;
+	Template.AbilityTriggers.AddItem(default.UnitPostBeginPlayTrigger);
+	Template.AbilityTriggers.AddItem(default.PlayerInputTrigger);
+
+	InvertedToggleName = ToggleName;
+
+	// Remove if present
+	ToggleCondition = new class'X2Condition_UnitEffects';
+	ToggleCondition.AddRequireEffect(ToggleName, 'AA_AbilityUnavailable');
+
+	RemoveTagEffect = new class'X2Effect_RemoveEffects';
+	RemoveTagEffect.EffectNamesToRemove.AddItem(ToggleName);
+	RemoveTagEffect.TargetConditions.AddItem(ToggleCondition);
+	Template.AddTargetEffect(RemoveTagEffect);
+
+	// Add if not present
+	ToggleCondition = new class 'X2Condition_UnitEffects';
+	ToggleCondition.AddRequireEffect(ToggleName, 'AA_AbilityUnavailable');
+
+	RemoveTagEffect = new class'X2Effect_RemoveEffects';
+	RemoveTagEffect.EffectNamesToRemove.AddItem(ToggleName);
+	RemoveTagEffect.TargetConditions.AddItem(ToggleCondition);
+	Template.AddTargetEffect(RemoveTagEffect);
+
+	TagEffect = new class'X2Effect_Persistent';
+	TagEffect.EffectName = ToggleName;
+	Template.AddTargetEffect(TagEffect);
+
+	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
+	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
+	Template.bSkipFireAction = true;
+	// Note: no visualization on purpose!
+
+	Template.bCrossClassEligible = false;
+
+
+	return Template;
+}
+
+
+//---------------------------------------------------------------------------------------
 //---Your Hands, My Eyes-----------------------------------------------------------------
 //---------------------------------------------------------------------------------------
 static function X2AbilityTemplate YourHandsMyEyes()
@@ -1338,7 +1402,7 @@ static function X2AbilityTemplate YourHandsMyEyes()
 	local X2AbilityTemplate						Template;
 	local RTEffect_YourHandsMyEyes				RTEffect;
 
-	 `CREATE_X2ABILITY_TEMPLATE(Template, 'YourHandsMyEyes');
+	`CREATE_X2ABILITY_TEMPLATE(Template, 'YourHandsMyEyes');
 	Template.IconImage = "img:///RisingTidesContentPackage.PerkIcons.UIPerk_psi_box_yhme";
 
 	Template.AbilitySourceName = 'eAbilitySource_Psionic';
@@ -1392,13 +1456,14 @@ static function X2AbilityTemplate TimeStandsStill()
 
 	SetUnitValueEffect = new class'X2Effect_SetUnitValue';
 	SetUnitValueEffect.UnitName = 'TimeStopCounter';
-	SetUnitValueEffect.NewValueToSet = 3;
+	SetUnitValueEffect.NewValueToSet = default.TIMESTANDSSTILL_NUMTURNS;
 	SetUnitValueEffect.CleanupType = eCleanup_BeginTactical;
 	Template.AddShooterEffect(SetUnitValueEffect);
 
 	TimeMasterEffect = new class'RTEffect_TimeStopMaster';
 	TimeMasterEffect.BuildPersistentEffect(1, true, true, false, eGameRule_PlayerTurnEnd);
-	TimeMasterEffect.EffectName = 'TimeStopMasterEffect';
+	TimeMasterEffect.EffectName = default.TimeStopMasterEffectName;
+	TimeMasterEffect.bNumAdditionalActionPointsPerTurn = default.TIMESTANDSSTILL_ACTIONPOINTSPERTURN;
 	Template.AddShooterEffect(TimeMasterEffect);
 
 	TagEffect = new class'RTEffect_TimeStopTag';
@@ -1552,7 +1617,7 @@ static function X2AbilityTemplate TimeStandsStillEndListener()
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'TimeStandsStillEndListener');
 	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_voidadept";
 
-	Template.AbilitySourceName = 'eAbilitySource_Perk';
+	Template.AbilitySourceName = 'eAbilitySource_Psionic';
 	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_NeverShow;
 	Template.Hostility = eHostility_Neutral;
 	Template.ConcealmentRule = eConceal_Always;
@@ -1579,7 +1644,7 @@ static function X2AbilityTemplate TimeStandsStillEndListener()
 
 	RemoveSelfEffect = new class'X2Effect_RemoveEffects';
 	RemoveSelfEffect.EffectNamesToRemove.AddItem('TimeStandsStillCounterEffect');
-	RemoveSelfEffect.EffectNamesToRemove.AddItem('TimeStopMasterEffect');
+	RemoveSelfEffect.EffectNamesToRemove.AddItem(default.TimeStopMasterEffectName);
 	RemoveSelfEffect.EffectNamesToRemove.AddItem('TimeStopTagEffect');
 	RemoveSelfEffect.bCheckSource = false;
 
@@ -1602,6 +1667,37 @@ static function X2AbilityTemplate TimeStandsStillEndListener()
 
 	Template.bCrossClassEligible = false;
 	return Template;
+}
+
+static function MakeAbilitiesNotTurnEndingForTimeStandsStill() {
+	local array<name> AbilityTemplateNames;
+	local name AbilityTemplateName;
+	local X2AbilityTemplate AbilityTemplate;
+	local array<X2AbilityTemplate> AbilityTemplates;
+	local X2AbilityTemplateManager AbilityTemplateMgr;
+	local X2AbilityCost Cost;
+	local X2AbilityCost_ActionPoints ActionPointCost;
+
+	`RTLOG("Patching All Abilities for TimeStandsStill");
+	AbilityTemplateMgr = class'X2AbilityTemplateManager'.static.GetAbilityTemplateManager();
+	AbilityTemplateMgr.GetTemplateNames(AbilityTemplateNames);
+	foreach AbilityTemplateNames(AbilityTemplateName) {
+		AbilityTemplates.Length = 0;
+		AbilityTemplateMgr.FindAbilityTemplateAllDifficulties(AbilityTemplateName, AbilityTemplates);
+
+		foreach AbilityTemplates(AbilityTemplate) {
+
+			if(AbilityTemplate.DataName == 'PistolOverwatch')
+				continue;
+
+			foreach AbilityTemplate.AbilityCosts(Cost) {
+				ActionPointCost = X2AbilityCost_ActionPoints(Cost);
+				if (ActionPointCost != None) {
+					ActionPointCost.DoNotConsumeAllEffects.AddItem(default.TimeStopMasterEffectName);
+				}
+			}
+		}
+	}
 }
 
 //---------------------------------------------------------------------------------------
@@ -2014,16 +2110,16 @@ static function X2AbilityTemplate EyeInTheSky()
 //---------------------------------------------------------------------------------------
 //---Shock And Awe----------------------------------------------------------------------
 //---------------------------------------------------------------------------------------
-static function X2AbilityTemplate ShockAndAwe()
+static function X2AbilityTemplate RTShockAndAwe()
 {
 	local X2AbilityTemplate					Template;
 	local RTEffect_ShockAndAwe				ShockEffect;
 
 	//Icon Properties
-	`CREATE_X2ABILITY_TEMPLATE(Template, 'ShockAndAwe');
+	`CREATE_X2ABILITY_TEMPLATE(Template, 'RTShockAndAwe');
 	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_overwatch";
 
-	Template.AbilitySourceName = 'eAbilitySource_Perk';
+	Template.AbilitySourceName = 'eAbilitySource_Psionic';
 	Template.eAbilityIconBehaviorHUD = EAbilityIconBehavior_NeverShow;
 	Template.Hostility = eHostility_Neutral;
 
@@ -2038,7 +2134,7 @@ static function X2AbilityTemplate ShockAndAwe()
 	ShockEffect.SetDisplayInfo(ePerkBuff_Passive, Template.LocFriendlyName, Template.LocLongDescription, Template.IconImage, true,,Template.AbilitySourceName);
 	Template.AddTargetEffect(ShockEffect);
 
-	Template.AdditionalAbilities.AddItem('ShockAndAweListener');
+	Template.AdditionalAbilities.AddItem('RTShockAndAweListener');
 
 	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
 	//  NOTE: No visualization on purpose!
@@ -2049,7 +2145,7 @@ static function X2AbilityTemplate ShockAndAwe()
 //---------------------------------------------------------------------------------------
 //---Shock And Awe Listener--------------------------------------------------------------
 //---------------------------------------------------------------------------------------
-static function X2AbilityTemplate ShockAndAweListener()
+static function X2AbilityTemplate RTShockAndAweListener()
 {
 	local X2AbilityTemplate					Template;
 	local X2AbilityTrigger_EventListener	EventListener;
@@ -2058,10 +2154,10 @@ static function X2AbilityTemplate ShockAndAweListener()
 	local X2AbilityCost_ActionPoints		ActionPoint;
 
 	//Icon Properties
-	`CREATE_X2ABILITY_TEMPLATE(Template, 'ShockAndAweListener');
+	`CREATE_X2ABILITY_TEMPLATE(Template, 'RTShockAndAweListener');
 	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_overwatch";
 
-	Template.AbilitySourceName = 'eAbilitySource_Perk';
+	Template.AbilitySourceName = 'eAbilitySource_Psionic';
 	Template.eAbilityIconBehaviorHUD = EAbilityIconBehavior_NeverShow;
 	Template.Hostility = eHostility_Offensive;
 
@@ -2089,7 +2185,7 @@ static function X2AbilityTemplate ShockAndAweListener()
 	Template.AbilityMultiTargetStyle = MultiTarget;
 
 	EventListener = new class'X2AbilityTrigger_EventListener';
-	EventListener.ListenerData.EventID = 'ShockAndAweTrigger';
+	EventListener.ListenerData.EventID = 'RTShockAndAweTrigger';
 	EventListener.ListenerData.Deferral = ELD_OnStateSubmitted;
 	EventListener.ListenerData.Filter = eFilter_Unit;
 	EventListener.ListenerData.EventFn = class'XComGameState_Ability'.static.VoidRiftInsanityListener;
@@ -2285,7 +2381,6 @@ static function X2AbilityTemplate RTHarbingerPsionicLance() {
 	return Template;
 }
 
-
 //---------------------------------------------------------------------------------------
 //---Harbinger Cleanse Listener----------------------------------------------------------
 //---------------------------------------------------------------------------------------
@@ -2300,7 +2395,7 @@ static function X2AbilityTemplate HarbingerCleanseListener()
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'HarbingerCleanseListener');
 	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_voidadept";
 
-	Template.AbilitySourceName = 'eAbilitySource_Perk';
+	Template.AbilitySourceName = 'eAbilitySource_Psionic';
 	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_NeverShow;
 	Template.Hostility = eHostility_Neutral;
 
@@ -2334,7 +2429,6 @@ static function X2AbilityTemplate HarbingerCleanseListener()
 	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
 	Template.bSkipFireAction = true;
 
-
 	Template.bCrossClassEligible = false;
 	return Template;
 }
@@ -2354,7 +2448,6 @@ static function X2AbilityTemplate RTKillZone()
 	local X2Effect_MarkValidActivationTiles		MarkTilesEffect;
 	local X2Condition_UnitEffects				SuppressedCondition;
 	local X2Effect_Persistent					Effect, Effect2;
-
 
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'RTKillZone');
 
@@ -2545,7 +2638,7 @@ static function X2AbilityTemplate RTOverflowBarrierEvent() {
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'RTOverflowBarrierEvent');
 	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_insanity";
 
-	Template.AbilitySourceName = 'eAbilitySource_Perk';
+	Template.AbilitySourceName = 'eAbilitySource_Psionic';
 	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_NeverShow;
 	Template.Hostility = eHostility_Neutral;
 
@@ -2697,7 +2790,7 @@ static function X2AbilityTemplate RTKubikuriDamage()
 	Template.AbilityToHitCalc = default.DeadEye;
 	Template.AbilityTargetStyle = default.SelfTarget;
 	Template.AbilityTriggers.AddItem(default.UnitPostBeginPlayTrigger);
-	DamageEffect=new class'X2Effect_Kubikuri';
+	DamageEffect = new class'X2Effect_Kubikuri';
 	DamageEffect.BuildPersistentEffect(1, true, false, false);
 	DamageEffect.SetDisplayInfo(0, Template.LocFriendlyName, Template.GetMyLongDescription(), Template.IconImage, false,, Template.AbilitySourceName);
 	Template.AddTargetEffect(DamageEffect);
@@ -2705,10 +2798,74 @@ static function X2AbilityTemplate RTKubikuriDamage()
 	return Template;
 }
 
+//---------------------------------------------------------------------------------------
+//---Repositioning-----------------------------------------------------------------------
+//---------------------------------------------------------------------------------------
+static function X2AbilityTemplate RTRepositioning() {
+	local X2AbilityTemplate Template;
+	local RTEffect_Repositioning RTEffect;
 
+	`CREATE_X2ABILITY_TEMPLATE(Template, 'RTRepositioning');
+
+	Template.IconImage = "img:///RisingTidesContentPackage.PerkIcons.rt_repositioning";
+	Template.AbilitySourceName = 'eAbilitySource_Perk';
+	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_NeverShow;
+	Template.Hostility = eHostility_Neutral;
+	Template.bCrossClassEligible = false;
+
+	Template.AbilityTriggers.AddItem(default.UnitPostBeginPlayTrigger);
+	Template.AbilityToHitCalc = default.DeadEye;
+	Template.AbilityTargetStyle = default.SelfTarget;
+
+	RTEffect = new class 'RTEffect_Repositioning';
+	RTEffect.BuildPersistentEffect(1, true, false, false, eGameRule_PlayerTurnEnd);
+	RTEffect.TilesMovedRequired = default.REPOSITIONING_TILES_MOVED_REQUIREMENT;
+	RTEffect.MaxPositionsSaved = default.REPOSITIONING_MAX_POSITIONS_SAVED;
+	RTEffect.SetDisplayInfo(ePerkBuff_Passive, Template.LocFriendlyName, Template.LocLongDescription, Template.IconImage, true,, Template.AbilitySourceName);
+	Template.AddTargetEffect(RTEffect);
+
+	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
+
+	return Template;
+}
 
 defaultproperties
 {
 	KillZoneReserveType = "KillZone"
 	TimeStopEffectName = "TimeStopEffect"
+	TimeStopMasterEffectName = "TimeStopMasterEffect"
+}
+
+static function bool AbilityTagExpandHandler(string InString, out string OutString)
+{
+	local name Tag;
+
+	Tag = name(InString);
+
+	switch(Tag)
+	{
+		case 'RTREPOSITIONING_MAX_POSITIONS_SAVED':
+			OutString = string(default.REPOSITIONING_MAX_POSITIONS_SAVED);
+			return true;
+		case 'RTREPOSITIONING_TILE_DISTANCE':
+			OutString = string(default.REPOSITIONING_TILES_MOVED_REQUIREMENT);
+			return true;
+		case 'RTPRECISION_SHOT_CRIT_CHANCE':
+			OutString = string(default.HEADSHOT_CRIT_BONUS);
+			return true;
+		case 'RTPRECISION_SHOT_CRIT_DAMAGE':
+			OutString = string(default.HEADSHOT_CRITDMG_BONUS);
+			return true;
+		case 'RTPRECISION_SHOT_AIM_PENALITY':
+			OutString = string(default.HEADSHOT_AIM_MULTIPLIER);
+			return true;
+		case 'AGGRESSION_CRIT_PER_UNIT':
+			OutString = string(default.AGGRESSION_CRIT_PER_UNIT);
+			return true;
+		case 'AGGRESSION_MAX_CRIT':
+			OutString = string(default.AGGRESSION_UNITS_FOR_MAX_BONUS * default.AGGRESSION_CRIT_PER_UNIT);
+			return true;
+	}
+
+	return false;
 }
