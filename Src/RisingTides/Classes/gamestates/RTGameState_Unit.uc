@@ -27,8 +27,8 @@ function AddAbilitySetupData(	X2AbilityTemplateManager AbilityTemplateManager,
 								out array<AbilitySetupData> arrData,
 								out array<Name> ExcludedAbilityNames,
 								String InitialAbilityProvider,
-								optional AbilitySetupData InitialAbilitySetupData = none,
-								optional XComGameState_Item InventoryItem = none,
+								optional AbilitySetupData InitialAbilitySetupData,
+								optional XComGameState_Item InventoryItem,
 								optional int AbilitySetupRecursionDepth = 0
 ) {
 	local X2AbilityTemplate AbilityTemplate;
@@ -36,13 +36,13 @@ function AddAbilitySetupData(	X2AbilityTemplateManager AbilityTemplateManager,
 	local name IteratorAbilityName;
 
 	if(AbilitySetupRecursionDepth > MAX_ABILITY_SETUP_RECURSION_DEPTH) {
-		`RedScreen("AbilitySetupData collection chain beginning in " InitialAbilitySetupData.TemplateName $ " exceeded max recursion depth " $ MAX_ABILITY_SETUP_RECURSION_DEPTH $ ", returning NONE!");
+		`RedScreen("AbilitySetupData collection chain beginning in " $ InitialAbilitySetupData.TemplateName $ " exceeded max recursion depth " $ MAX_ABILITY_SETUP_RECURSION_DEPTH $ ", returning NONE!");
 		return;
 	}
 
 	AbilitySetupRecursionDepth++;
 
-	if(InitialAbilitySetupData != none) {
+	if(InitialAbilitySetupData != EmptyData) {
 		if(ExcludedAbilityNames.Find(InitialAbilitySetupData.TemplateName) != INDEX_NONE) {
 			`Redscreen("AbilitySetupData collection chain beginning in " $ InitialAbilitySetupData.TemplateName $ " attempted to add a duplicate copy of $ " $ AbilityName $ ", returning NONE!");
 			return;
@@ -60,7 +60,7 @@ function AddAbilitySetupData(	X2AbilityTemplateManager AbilityTemplateManager,
 
 		if(InventoryItem != none) {
 			Data.SourceWeaponRef = InventoryItem.GetReference();
-		} else if(InitialAbilitySetupData != none) {
+		} else if(InitialAbilitySetupData != EmptyData) {
 			Data.SourceWeaponRef = InitialAbilitySetupData.SourceWeaponRef;
 		}
 
@@ -267,7 +267,7 @@ function array<AbilitySetupData> GatherUnitAbilitiesForInit(optional XComGameSta
 	local name AbilityName, UnlockName;
 	local AbilitySetupData Data, EmptyData;
 	local array<AbilitySetupData> arrData;
-	local X2AbilityTemplateManager AbilityTemplateMan;
+	local X2AbilityTemplateManager AbilityTemplateManager;
 	local X2AbilityTemplate AbilityTemplate;
 	local X2CharacterTemplate CharacterTemplate;
 	local array<XComGameState_Item> CurrentInventory;
@@ -308,7 +308,7 @@ function array<AbilitySetupData> GatherUnitAbilitiesForInit(optional XComGameSta
 	if(StartState != none)
 		MergeAmmoAsNeeded(StartState);
 
-	AbilityTemplateMan = class'X2AbilityTemplateManager'.static.GetAbilityTemplateManager();
+	AbilityTemplateManager = class'X2AbilityTemplateManager'.static.GetAbilityTemplateManager();
 	CharacterTemplate = GetMyTemplate();
 
 	//  Gather default abilities if allowed
@@ -413,7 +413,7 @@ function array<AbilitySetupData> GatherUnitAbilitiesForInit(optional XComGameSta
 	for (i = 0; i < EarnedSoldierAbilities.Length; ++i)
 	{
 		AbilityName = EarnedSoldierAbilities[i].AbilityName;
-		AbilityTemplate = AbilityTemplateMan.FindAbilityTemplate(AbilityName);
+		AbilityTemplate = AbilityTemplateManager.FindAbilityTemplate(AbilityName);
 		if( AbilityTemplate != none &&
 			(!AbilityTemplate.bUniqueSource || arrData.Find('TemplateName', AbilityTemplate.DataName) == INDEX_NONE) &&
 		   AbilityTemplate.ConditionsEverValidForUnit(self, false) )

@@ -204,9 +204,9 @@ static function array<X2AbilityTemplate> CreateUnitValueToggle(name TemplateName
 	local array<X2AbilityTemplate> Templates;
 	local name TemplateNameMaster, TemplateNameOn, TemplateNameOff;
 	
-	TemplateNameMaster = TemplateName + '_master';
-	TemplateNameOn = TemplateName + '_on';
-	TemplateNameOff = TemplateName + '_off';
+	TemplateNameMaster = TemplateName $ '_master';
+	TemplateNameOn = TemplateName $ '_on';
+	TemplateNameOff = TemplateName $ '_off';
 
 	Templates.AddItem(CreateUnitValueToggleMaster(TemplateNameMaster, UnitValName, TemplateNameOn, TemplateNameOff));
 	Templates.AddItem(CreateUnitValueToggleOn(TemplateNameOn, UnitValName));
@@ -218,7 +218,7 @@ static function array<X2AbilityTemplate> CreateUnitValueToggle(name TemplateName
 private static function X2AbilityTemplate CreateUnitValueToggleMaster(name TemplateName, name UnitValName, name TemplateNameOn, name TemplateNameOff) {
 	local X2AbilityTemplate Template;
 
-	`CREATE_X2ABILITY_TEMPLATE(TemplateName, TemplateName);
+	`CREATE_X2ABILITY_TEMPLATE(Template, TemplateName);
 	Template.AbilitySourceName = 'eAbilitySource_Perk';
 	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_NeverShow;
 	Template.Hostility = eHostility_Neutral;
@@ -236,7 +236,7 @@ private static function X2AbilityTemplate CreateUnitValueToggleInternal(name Tem
 	local X2Condition_UnitValue UnitValueCondition;
 	local X2Effect_SetUnitValue UnitValueEffect;
 
-	`CREATE_X2ABILITY_TEMPLATE(TemplateName, TemplateName);
+	`CREATE_X2ABILITY_TEMPLATE(Template, TemplateName);
 	Template.AbilitySourceName = 'eAbilitySource_Perk';
 	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_ShowIfAvailable;
 	Template.Hostility = eHostility_Neutral;
