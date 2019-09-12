@@ -634,4 +634,3 @@ function array<AbilitySetupData> GatherUnitAbilitiesForInit(optional XComGameSta
 
 	return arrData;
 }
-\
