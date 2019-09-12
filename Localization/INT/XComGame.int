@@ -650,6 +650,7 @@ LocLongDescription="When units affected by Over the Shoulder attempt to use psio
 LocHelpText="When units affected by Over the Shoulder attempt to use psionic abilities, this unit will attempt to interrupt the ability, stunning the user and dealing minor psionic damage."
 LocFlyOverText="Sovereign"
 LocPromotionPopupText="<Bullet/> Not all psionic abilities can be interrupted. Notable exceptions include Over The Shoulder and Join/Leave Meld.<br/>"
+;QuoteText="You exist because we allow it... and you will end, because we demand it."
 
 [RTRudimentaryCreaturesEvent X2AbilityTemplate]
 LocFriendlyName="Sovereign"
