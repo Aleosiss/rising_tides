@@ -47,7 +47,7 @@ function SuccessMessage($message)
 
     [System.Media.SystemSounds]::Exclamation.Play();
     Write-Host $message
-    Write-Host "$modNameCanonical ready to run in $ts seconds."
+    Write-Host "$modNameCanonical ready to runl in $ts seconds."
 }
 
 # Helper for invoking the make cmdlet. Captures stdout/stderr and rewrites error and warning lines to fix up the
