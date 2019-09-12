@@ -33,6 +33,7 @@ _ReSharper*/
 /Content/bak/*
 *.txt
 %*
+.atom-build*
 /Notes/
 settings\.json
 .AlternateModLauncher*
