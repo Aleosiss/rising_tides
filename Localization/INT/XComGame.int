@@ -166,6 +166,7 @@ LocLongDescription="Pyrokinetically-enhanced rounds punch through cover, shreddi
 LocHelpText="Pyrokinetically-enhanced rounds punch through cover, shredding armor, and ignoring line of sight."
 LocFlyOverText="Daybreak Flame"
 LocPromotionPopupText="<Bullet/>Pyrokinetically-enhanced rounds punch through cover, shredding armor, and ignoring line of sight.<br/><Bullet/>This ability only augments standard sniper shots and does not add additional effects to other shots.<br/>"
+; QuoteText=""
 
 [YourHandsMyEyes X2AbilityTemplate]
 LocFriendlyName="Your Hands, My Eyes"

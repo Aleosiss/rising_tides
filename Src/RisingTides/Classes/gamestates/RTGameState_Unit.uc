@@ -335,14 +335,14 @@ function array<AbilitySetupData> GatherUnitAbilitiesForInit(optional XComGameSta
 
 		foreach ChosenState.Strengths(AbilityName)
 		{
-			AddAbilitySetupData(AbilityTemplateManager, AbilityName, arrData, ExcludedAbilityNames, string(ChosenState.GetMyTemplate().class) @ string(ChosenState.GetMyTemplateName() @ "Strength");
+			AddAbilitySetupData(AbilityTemplateManager, AbilityName, arrData, ExcludedAbilityNames, string(ChosenState.GetMyTemplate().class) @ ChosenState.GetMyTemplateName() @ "Strength");
 		}
 
 		if(!ChosenState.bIgnoreWeaknesses)
 		{
 			foreach ChosenState.Weaknesses(AbilityName)
 			{
-				AddAbilitySetupData(AbilityTemplateManager, AbilityName, arrData, ExcludedAbilityNames, string(ChosenState.GetMyTemplate().class) @ string(ChosenState.GetMyTemplateName() @ "Weakness");
+				AddAbilitySetupData(AbilityTemplateManager, AbilityName, arrData, ExcludedAbilityNames, string(ChosenState.GetMyTemplate().class) @ ChosenState.GetMyTemplateName() @ "Weakness");
 			}
 		}
 	}
@@ -380,7 +380,7 @@ function array<AbilitySetupData> GatherUnitAbilitiesForInit(optional XComGameSta
 		{
 			foreach EquipmentTemplate.Abilities(AbilityName)
 			{
-				AddAbilitySetupData(AbilityTemplateManager, AbilityName, arrData, ExcludedAbilityNames, string(EquipmentTemplate.class) @ string(EquipmentTemplate.DataName), none, InventoryItem);
+				AddAbilitySetupData(AbilityTemplateManager, AbilityName, arrData, ExcludedAbilityNames, string(EquipmentTemplate.class) @ string(EquipmentTemplate.DataName),, InventoryItem);
 			}
 		}
 		//  Gather abilities from any weapon upgrades
@@ -389,7 +389,7 @@ function array<AbilitySetupData> GatherUnitAbilitiesForInit(optional XComGameSta
 		{
 			foreach WeaponUpgradeTemplate.BonusAbilities(AbilityName)
 			{
-				AddAbilitySetupData(AbilityTemplateManager, AbilityName, arrData, ExcludedAbilityNames, string(WeaponUpgradeTemplate.class) @ string(WeaponUpgradeTemplate.DataName), none, InventoryItem);
+				AddAbilitySetupData(AbilityTemplateManager, AbilityName, arrData, ExcludedAbilityNames, string(WeaponUpgradeTemplate.class) @ string(WeaponUpgradeTemplate.DataName),, InventoryItem);
 			}
 		}
 
@@ -404,7 +404,7 @@ function array<AbilitySetupData> GatherUnitAbilitiesForInit(optional XComGameSta
 
 				if (TechTemplate.BreakthroughCondition != none && TechTemplate.BreakthroughCondition.MeetsCondition(InventoryItem))
 				{
-					AddAbilitySetupData(AbilityTemplateManager, TechTemplate.RewardName, arrData, ExcludedAbilityNames, string(TechTemplate.class) @ string(TechTemplate.DataName), none, InventoryItem);
+					AddAbilitySetupData(AbilityTemplateManager, TechTemplate.RewardName, arrData, ExcludedAbilityNames, string(TechTemplate.class) @ string(TechTemplate.DataName),, InventoryItem);
 				}
 				
 			}

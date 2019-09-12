@@ -200,8 +200,7 @@ static function Passive(X2AbilityTemplate Template) {
 	Template.AbilityTriggers.AddItem(default.UnitPostBeginPlayTrigger);
 }
 
-static function array<X2AbilityTemplate> CreateUnitValueToggle(name TemplateName, name UnitValName) {
-	local array<X2AbilityTemplate> Templates;
+static function CreateUnitValueToggle(array<X2AbilityTemplate> Templates, name TemplateName, name UnitValName) {
 	local name TemplateNameMaster, TemplateNameOn, TemplateNameOff;
 	
 	TemplateNameMaster = `RTS.ConcatName(TemplateName, '_master');
@@ -211,8 +210,6 @@ static function array<X2AbilityTemplate> CreateUnitValueToggle(name TemplateName
 	Templates.AddItem(CreateUnitValueToggleMaster(TemplateNameMaster, UnitValName, TemplateNameOn, TemplateNameOff));
 	Templates.AddItem(CreateUnitValueToggleOn(TemplateNameOn, UnitValName));
 	Templates.AddItem(CreateUnitValueToggleOff(TemplateNameOff, UnitValName));
-
-	return Templates;
 }
 
 private static function X2AbilityTemplate CreateUnitValueToggleMaster(name TemplateName, name UnitValName, name TemplateNameOn, name TemplateNameOff) {
@@ -263,7 +260,7 @@ private static function X2AbilityTemplate CreateUnitValueToggleInternal(name Tem
 	Template.AddTargetEffect(UnitValueEffect);
 
 	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
-	Template.BuildVisualizationFn = ReloadAbility_BuildVisualization;
+	Template.BuildVisualizationFn = class'X2Ability_DefaultAbilitySet'.static.ReloadAbility_BuildVisualization;
 	Template.ActivationSpeech = 'Reloading';
 
 	return Template;

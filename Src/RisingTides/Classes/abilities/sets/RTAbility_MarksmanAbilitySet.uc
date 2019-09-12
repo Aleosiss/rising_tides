@@ -72,7 +72,7 @@ class RTAbility_MarksmanAbilitySet extends RTAbility
 //---------------------------------------------------------------------------------------
 static function array<X2DataTemplate> CreateTemplates()
 {
-	local array<X2DataTemplate> Templates;
+	local array<X2AbilityTemplate> Templates;
 
 	Templates.AddItem(ScopedAndDropped());
 	Templates.AddItem(RTStandardSniperShot());
@@ -95,7 +95,7 @@ static function array<X2DataTemplate> CreateTemplates()
 	Templates.AddItem(SovereignEffect());
 	Templates.AddItem(DaybreakFlame());										// animation
 	Templates.AddItem(DaybreakFlameIcon());
-	Templates.Add(CreateUnitValueToggle('DaybreakFlameToggle', 'DaybreakFlame'));
+	CreateUnitValueToggle(Templates, 'DaybreakFlameToggle', 'DaybreakFlame');
 	Templates.AddItem(YourHandsMyEyes());
 	Templates.AddItem(TimeStandsStill());									// animation
 	Templates.AddItem(TimeStandsStillInterruptListener());
