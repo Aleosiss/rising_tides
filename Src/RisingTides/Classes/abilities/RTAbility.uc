@@ -205,8 +205,8 @@ static function array<X2AbilityTemplate> CreateUnitValueToggle(name TemplateName
 	local name TemplateNameMaster, TemplateNameOn, TemplateNameOff;
 	
 	TemplateNameMaster = `RTS.ConcatName(TemplateName, '_master');
-	TemplateNameOn = `RTS.ConcatName(TemplateName, '_on')
-	TemplateNameOff = `RTS.ConcatName(TemplateName, '_off')
+	TemplateNameOn = `RTS.ConcatName(TemplateName, '_on');
+	TemplateNameOff = `RTS.ConcatName(TemplateName, '_off');
 
 	Templates.AddItem(CreateUnitValueToggleMaster(TemplateNameMaster, UnitValName, TemplateNameOn, TemplateNameOff));
 	Templates.AddItem(CreateUnitValueToggleOn(TemplateNameOn, UnitValName));
@@ -250,7 +250,7 @@ private static function X2AbilityTemplate CreateUnitValueToggleInternal(name Tem
 	InputTrigger = new class'X2AbilityTrigger_PlayerInput';
 	Template.AbilityTriggers.AddItem(InputTrigger);
 
-	Template.AddShooterEffectExclusions(SkipExclusions);
+	Template.AddShooterEffectExclusions();
 
 	UnitValueCondition = new class'X2Condition_UnitValue';
 	UnitValueCondition.AddCheckValue(UnitValName, ConditionValue);

@@ -75,8 +75,8 @@ function AddAbilitySetupData(	X2AbilityTemplateManager AbilityTemplateManager,
 		foreach Data.Template.AdditionalAbilities(IteratorAbilityName) {
 			AddAbilitySetupData(AbilityTemplateManager, IteratorAbilityName, arrData, ExcludedAbilityNames, InitialAbilityProvider, InitialAbilitySetupData, InventoryItem, AbilitySetupRecursionDepth);
 		}
-	} else if( AbilityTemplate == none ) {
-		if(InitialAbilityProvider == none) {
+	} else if(AbilityTemplate == none) {
+		if(InitialAbilityProvider == "") {
 			`RedScreen("Unknown ability template provider specifies unknown ability: " $ AbilityName);
 		} else {
 			`Redscreen(InitialAbilityProvider $ " specifies unknown ability: " $ AbilityName);
@@ -326,7 +326,7 @@ function array<AbilitySetupData> GatherUnitAbilitiesForInit(optional XComGameSta
 	foreach CharacterTemplate.Abilities(AbilityName)
 	{
 		// X2AbilityTemplateManager AbilityTemplateManager, name AbilityName, out array<AbilitySetupData> arrData, out array<Name> ExcludedAbilityNames, AbilitySetupData InitialAbilitySetupData, optional X2DataTemplate InitialAbilityProviderTemplate
-		AddAbilitySetupData(AbilityTemplateManager, AbilityName, arrData, ExcludedAbilityNames, str(CharacterTemplate.class) @ str(CharacterTemplate.DataName));
+		AddAbilitySetupData(AbilityTemplateManager, AbilityName, arrData, ExcludedAbilityNames, string(CharacterTemplate.class) @ string(CharacterTemplate.DataName));
 	}
 	// If a Chosen, gather abilities from strengths and weakness
 	if(IsChosen() && StartState != none)
@@ -335,14 +335,14 @@ function array<AbilitySetupData> GatherUnitAbilitiesForInit(optional XComGameSta
 
 		foreach ChosenState.Strengths(AbilityName)
 		{
-			AddAbilitySetupData(AbilityTemplateManager, AbilityName, arrData, ExcludedAbilityNames, str(ChosenState.GetMyTemplate().class) @ str(ChosenState.GetMyTemplateName() @ "Strength");
+			AddAbilitySetupData(AbilityTemplateManager, AbilityName, arrData, ExcludedAbilityNames, string(ChosenState.GetMyTemplate().class) @ string(ChosenState.GetMyTemplateName() @ "Strength");
 		}
 
 		if(!ChosenState.bIgnoreWeaknesses)
 		{
 			foreach ChosenState.Weaknesses(AbilityName)
 			{
-				AddAbilitySetupData(AbilityTemplateManager, AbilityName, arrData, ExcludedAbilityNames, str(ChosenState.GetMyTemplate().class) @ str(ChosenState.GetMyTemplateName() @ "Weakness");
+				AddAbilitySetupData(AbilityTemplateManager, AbilityName, arrData, ExcludedAbilityNames, string(ChosenState.GetMyTemplate().class) @ string(ChosenState.GetMyTemplateName() @ "Weakness");
 			}
 		}
 	}
@@ -380,7 +380,7 @@ function array<AbilitySetupData> GatherUnitAbilitiesForInit(optional XComGameSta
 		{
 			foreach EquipmentTemplate.Abilities(AbilityName)
 			{
-				AddAbilitySetupData(AbilityTemplateManager, AbilityName, arrData, ExcludedAbilityNames, str(EquipmentTemplate.class) @ str(EquipmentTemplate.DataName), none, InventoryItem);
+				AddAbilitySetupData(AbilityTemplateManager, AbilityName, arrData, ExcludedAbilityNames, string(EquipmentTemplate.class) @ string(EquipmentTemplate.DataName), none, InventoryItem);
 			}
 		}
 		//  Gather abilities from any weapon upgrades
@@ -389,7 +389,7 @@ function array<AbilitySetupData> GatherUnitAbilitiesForInit(optional XComGameSta
 		{
 			foreach WeaponUpgradeTemplate.BonusAbilities(AbilityName)
 			{
-				AddAbilitySetupData(AbilityTemplateManager, AbilityName, arrData, ExcludedAbilityNames, str(WeaponUpgradeTemplate.class) @ str(WeaponUpgradeTemplate.DataName), none, InventoryItem);
+				AddAbilitySetupData(AbilityTemplateManager, AbilityName, arrData, ExcludedAbilityNames, string(WeaponUpgradeTemplate.class) @ string(WeaponUpgradeTemplate.DataName), none, InventoryItem);
 			}
 		}
 
@@ -404,7 +404,7 @@ function array<AbilitySetupData> GatherUnitAbilitiesForInit(optional XComGameSta
 
 				if (TechTemplate.BreakthroughCondition != none && TechTemplate.BreakthroughCondition.MeetsCondition(InventoryItem))
 				{
-					AddAbilitySetupData(AbilityTemplateManager, TechTemplate.RewardName, arrData, ExcludedAbilityNames, str(TechTemplate.class) @ str(TechTemplate.DataName), none, InventoryItem);
+					AddAbilitySetupData(AbilityTemplateManager, TechTemplate.RewardName, arrData, ExcludedAbilityNames, string(TechTemplate.class) @ string(TechTemplate.DataName), none, InventoryItem);
 				}
 				
 			}
@@ -497,7 +497,7 @@ function array<AbilitySetupData> GatherUnitAbilitiesForInit(optional XComGameSta
 			if (!AbilityUnlockTemplate.UnlockAppliesToUnit(self))
 				continue;
 
-			AddAbilitySetupData(AbilityTemplateManager, AbilityUnlockTemplate.AbilityName, arrData, ExcludedAbilityNames, str(AbilityUnlockTemplate.class) @ str(AbilityUnlockTemplate.DataName));
+			AddAbilitySetupData(AbilityTemplateManager, AbilityUnlockTemplate.AbilityName, arrData, ExcludedAbilityNames, string(AbilityUnlockTemplate.class) @ string(AbilityUnlockTemplate.DataName));
 		}
 	}
 
@@ -511,7 +511,7 @@ function array<AbilitySetupData> GatherUnitAbilitiesForInit(optional XComGameSta
 		{
 			for( j = 0; j < TraitTemplate.Abilities.Length; ++j )
 			{
-				AddAbilitySetupData(AbilityTemplateManager, TraitTemplate.Abilities[j], arrData, ExcludedAbilityNames, str(TraitTemplate.class) @ str(TraitTemplate.DataName));
+				AddAbilitySetupData(AbilityTemplateManager, TraitTemplate.Abilities[j], arrData, ExcludedAbilityNames, string(TraitTemplate.class) @ string(TraitTemplate.DataName));
 			}
 		}
 	}
@@ -525,7 +525,7 @@ function array<AbilitySetupData> GatherUnitAbilitiesForInit(optional XComGameSta
 			SitRepEffect.GetAbilitiesToGrant(self, GrantedAbilityNames);
 			for (i = 0; i < GrantedAbilityNames.Length; ++i)
 			{
-				AddAbilitySetupData(AbilityTemplateManager, GrantedAbilityNames[i], arrData, ExcludedAbilityNames, str(SitRepEffect.class) @ str(SitRepEffect.DataName));
+				AddAbilitySetupData(AbilityTemplateManager, GrantedAbilityNames[i], arrData, ExcludedAbilityNames, string(SitRepEffect.class) @ string(SitRepEffect.DataName));
 			}
 		}
 	}
@@ -552,7 +552,7 @@ function array<AbilitySetupData> GatherUnitAbilitiesForInit(optional XComGameSta
 				PolicyTemplate.GetAbilitiesToGrantFn( self, GrantedAbilityNames );
 				for (i = 0; i < GrantedAbilityNames.Length; ++i)
 				{
-					AddAbilitySetupData(AbilityTemplateManager, GrantedAbilityNames[i], arrData, ExcludedAbilityNames, str(PolicyTemplate.class) @ str(PolicyTemplate.DataName));
+					AddAbilitySetupData(AbilityTemplateManager, GrantedAbilityNames[i], arrData, ExcludedAbilityNames, string(PolicyTemplate.class) @ string(PolicyTemplate.DataName));
 				}
 			}
 		}
