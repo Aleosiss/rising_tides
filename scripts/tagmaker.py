@@ -82,7 +82,7 @@ if message == '':
     message = "tag " + str(new_version) + " proudly created by tidecaller"
 
 # artifact we're uploading (modNameCanonical.zip)
-artifact = open(workspace_directory + "/" + artifact_name)
+artifact = open(workspace_directory + os.path.sep + artifact_name)
 artifact_path = os.path.realpath(artifact.name)
 
 #repo.create_git_tag(tag=new_version, message=tag_message, object=current_commit_hash, type="commit", tagger=user)
