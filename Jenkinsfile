@@ -20,10 +20,6 @@ pipeline {
           userRemoteConfigs: [[credentialsId: 'github-abatewongc-via-access-token',
           url: 'https://github.com/abatewongc/rising_tides/']]]
         )
-        bat '''
-          set
-        '''
-        
       }
     }
 
@@ -39,14 +35,20 @@ pipeline {
     }
 
     stage('Upload Release') {
-      when { branch 'master' }
+      when { branch 'feature/tagmaker' }
       steps {
         withCredentials([usernamePassword(credentialsId: 'github-abatewongc-via-access-token', passwordVariable: 'personal_access_token', usernameVariable: 'username')]) {
           bat '''
-            python3 scripts/tagmaker.py %personal_access_token% --repo rising_tides --current_commit_hash %COMMIT_HASH% --workspace_directory '%WORKSPACE%' --artifact_name %modName%.zip --should_increment 0
+            python3 scripts/tagmaker.py %personal_access_token% --repo rising_tides --current_commit_hash %GIT_COMMIT% --workspace_directory '%WORKSPACE%' --artifact_name %modName%.zip --should_increment 0
             '''
         }
       }
     }
   }
+  
+  post { 
+        always { 
+            deleteDir()
+        }
+    }
 }
