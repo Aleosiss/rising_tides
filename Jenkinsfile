@@ -12,7 +12,7 @@ pipeline {
   stages {
     stage('Code Checkout'){
       steps {
-        def scmVars = checkout([$class: 'GitSCM',
+        checkout([$class: 'GitSCM',
           branches: [[name: '*/${BRANCH_NAME}']],
           doGenerateSubmoduleConfigurations: false,
           extensions: [], gitTool: 'Default',
@@ -20,11 +20,10 @@ pipeline {
           userRemoteConfigs: [[credentialsId: 'github-abatewongc-via-access-token',
           url: 'https://github.com/abatewongc/rising_tides/']]]
         )
-
-        def commit_hash = scmVars.GIT_COMMIT
-        environment {
-          COMMIT_HASH = commit_hash.trim()
-        }
+        bat '''
+          set
+        '''
+        
       }
     }
 
