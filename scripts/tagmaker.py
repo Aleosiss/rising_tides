@@ -74,7 +74,7 @@ previous_tag = repo.get_tags()[0]
 previous_version = StrictVersion(previous_tag.name)
 
 # new version
-new_version = StrictVersion(increment_version(previous_tag.name, should_increment))
+new_version = increment_version(previous_tag.name, should_increment)
 new_version_string = str(new_version)
 
 # message
