@@ -40,8 +40,8 @@ pipeline {
         withCredentials([usernamePassword(credentialsId: 'github-abatewongc-via-access-token', passwordVariable: 'personal_access_token', usernameVariable: 'username')]) {
           powershell label: '',
                     script: '''
-                      python3 scripts/tagmaker.py %passwordVariable% --repo 'rising_tides' --current_commit_hash %COMMIT% --workspace_directory \%WORKSPACE\% --artifact
-                      _name '\%modName\%.zip' --should_increment 0
+                      python3 scripts/tagmaker.py %passwordVariable% --repo rising_tides --current_commit_hash %COMMIT% --workspace_directory %\'WORKSPACE\'% --artifact
+                      _name %modName%.zip --should_increment 0
                   '''
         }
       }
