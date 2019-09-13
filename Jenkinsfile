@@ -40,8 +40,7 @@ pipeline {
     }
 
     stage('Upload Release') {
-      when()
-
+      when { branch 'master' }
       steps {
         withCredentials([usernamePassword(credentialsId: 'github-abatewongc-via-access-token', passwordVariable: 'personal_access_token', usernameVariable: 'username')]) {
           bat '''
