@@ -24,22 +24,26 @@ pipeline {
 
     stage('Build Mod Project') {
       steps {
-        bat '''
+        powershell label: '',
+        script: '''
           echo "Building Mod Project!"
           echo %WORKSPACE%
-          echo ""
-          echo ""
-          powershell set-executionpolicy remotesigned
-          powershell "./scripts/build_jenkins.ps1" -mod %modName% -srcDirectory "'%WORKSPACE%'"
-        '''
+          set-executionpolicy remotesigned
+          "./scripts/build_jenkins.ps1" -mod %modName% -srcDirectory "\'%WORKSPACE%\'"
+          '''
       }
     }
 
     stage('Upload Release') {
+      when { branch 'feature/tagmaker' }
       steps {
-        bat '''
-          echo "Doing nothing for now!"
-        '''
+        withCredentials([usernamePassword(credentialsId: 'github-abatewongc-via-access-token', passwordVariable: 'personal_access_token', usernameVariable: 'username')]) {
+          powershell label: '',
+                    script: '''
+                      python3 scripts/tagmaker.py %passwordVariable% --repo 'rising_tides' --current_commit_hash %COMMIT% --workspace_directory \%WORKSPACE\% --artifact
+                      _name '\%modName\%.zip' --should_increment 0
+                  '''
+        }
       }
     }
   }
