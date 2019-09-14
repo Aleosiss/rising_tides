@@ -11,17 +11,18 @@ pipeline {
   agent { 
     node { 
       label 'master'
-      checkout([
+    } 
+  }
+
+  stages {
+    checkout([
          $class: 'GitSCM',
          branches: scm.branches,
          doGenerateSubmoduleConfigurations: scm.doGenerateSubmoduleConfigurations,
          extensions: scm.extensions + [[$class: 'GitLFSPull']],
          userRemoteConfigs: scm.userRemoteConfigs
-      ])
-    } 
-  }
+    ])
 
-  stages {
     stage('Build Mod Project') {
       steps {
         bat '''
