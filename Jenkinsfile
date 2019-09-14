@@ -14,15 +14,15 @@ pipeline {
     } 
   }
 
-  stages {
-    checkout([
+  checkout([
          $class: 'GitSCM',
          branches: scm.branches,
          doGenerateSubmoduleConfigurations: scm.doGenerateSubmoduleConfigurations,
          extensions: scm.extensions + [[$class: 'GitLFSPull']],
          userRemoteConfigs: scm.userRemoteConfigs
-    ])
+  ])
 
+  stages {
     stage('Build Mod Project') {
       steps {
         bat '''
