@@ -13,7 +13,7 @@ pipeline {
     stage('Code Checkout'){
       steps {
         checkout([$class: 'GitSCM',
-          branches: [[name: '*/${BRANCH_NAME}']],
+          branches: [[name: '**']],
           doGenerateSubmoduleConfigurations: false,
           extensions: [
             [$class: 'GitLFSPull']
