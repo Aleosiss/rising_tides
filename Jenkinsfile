@@ -15,7 +15,10 @@ pipeline {
         checkout([$class: 'GitSCM',
           branches: [[name: '*/${BRANCH_NAME}']],
           doGenerateSubmoduleConfigurations: false,
-          extensions: [], gitTool: 'Default',
+          extensions: [
+            [$class: 'GitLFSPull']
+          ], 
+          gitTool: 'Default',
           submoduleCfg: [],
           userRemoteConfigs: [[credentialsId: 'github-abatewongc-via-access-token',
           url: 'https://github.com/abatewongc/rising_tides/']]]
