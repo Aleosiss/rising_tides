@@ -15,6 +15,7 @@ pipeline {
   }
 
   stages {
+    // couldn't figure out how to modify the built-in checkout, so just do it again
     stage('Checkout') {
       steps {
         checkout([
@@ -39,7 +40,7 @@ pipeline {
     }
 
     stage('Upload Release') {
-      when { branch 'feature/tagmaker' }
+      when { branch 'master' }
       steps {
         withCredentials([usernamePassword(credentialsId: 'github-abatewongc-via-access-token', passwordVariable: 'personal_access_token', usernameVariable: 'username')]) {
           bat '''
