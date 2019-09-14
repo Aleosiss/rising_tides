@@ -8,24 +8,20 @@ pipeline {
         disableConcurrentBuilds()
   }
 
-  agent { node { label 'master' } }
-  stages {
-    stage('Code Checkout'){
-      steps {
-        checkout([$class: 'GitSCM',
-          branches: [[name: '**']],
-          doGenerateSubmoduleConfigurations: false,
-          extensions: [
-            [$class: 'GitLFSPull']
-          ], 
-          gitTool: 'Default',
-          submoduleCfg: [],
-          userRemoteConfigs: [[credentialsId: 'github-abatewongc-via-access-token',
-          url: 'https://github.com/abatewongc/rising_tides/']]]
-        )
-      }
-    }
+  agent { 
+    node { 
+      label 'master'
+      checkout([
+         $class: 'GitSCM',
+         branches: scm.branches,
+         doGenerateSubmoduleConfigurations: scm.doGenerateSubmoduleConfigurations,
+         extensions: scm.extensions + [[$class: 'GitLFSPull']],
+         userRemoteConfigs: scm.userRemoteConfigs
+      ])
+    } 
+  }
 
+  stages {
     stage('Build Mod Project') {
       steps {
         bat '''
@@ -38,7 +34,7 @@ pipeline {
     }
 
     stage('Upload Release') {
-      when { branch 'master' }
+      when { branch 'feature/tagmaker' }
       steps {
         withCredentials([usernamePassword(credentialsId: 'github-abatewongc-via-access-token', passwordVariable: 'personal_access_token', usernameVariable: 'username')]) {
           bat '''
