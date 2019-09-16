@@ -1,5 +1,96 @@
 class SeqAct_RTGetObjectiveInfo extends SeqAct_GetObjectiveInfo;
 
+event Activated()
+{
+	local XComGameStateHistory History;
+	local XComTacticalMissionManager MissionManager;
+	local string MissionType;
+	local XComGameState_ObjectiveInfo ObjectiveInfo;
+	local array<XComGameState_ObjectiveInfo> ObjectiveInfos;
+	local TTile Tile;
+
+	History = `XCOMHISTORY;
+	MissionManager = `TACTICALMISSIONMGR;
+
+	MissionType = MissionManager.ActiveMission.sType;
+
+    // get all objectives that are valid for this kismet map
+    `LOG("Looking for ObjectiveInfos matching " $ MissionType);
+	foreach History.IterateByClassType(class'XComGameState_ObjectiveInfo', ObjectiveInfo)
+	{
+        `LOG(ObjectiveInfo.MissionType);
+		if(MissionType == ObjectiveInfo.MissionType)
+		{
+			ObjectiveInfos.AddItem(ObjectiveInfo);
+		}
+	}
+
+	NumObjectives = ObjectiveInfos.Length;
+
+	// if a tag was specified, find it
+	if(ObjectiveSpawnTag != "")
+	{
+		`RTLOG("RTGetObjectiveInfo: looking for OSP with OSPTag " $ ObjectiveSpawnTag);
+		foreach ObjectiveInfos(ObjectiveInfo)
+		{
+			if(ObjectiveInfo.OSPSpawnTag != ObjectiveSpawnTag)
+			{
+				ObjectiveInfo = none;
+			}
+			else
+			{
+				`RTLOG("Found it.");
+				break;
+			}
+		}
+	
+		if(ObjectiveInfo == none)
+		{
+			`redscreen("SeqAct_GetObjectiveInfo::Activated()\n Assert FAILED: ObjectiveSpawnTag was specified, but no object has that tag!\n"
+				$ "ObjectiveSpawnTag: " $ ObjectiveSpawnTag $ "\n");
+		}
+	}
+	else if(ObjectiveIndex < ObjectiveInfos.Length)
+	{
+		// sort them by objectid. This guarantees that the indices are always the same, regardless of what order
+		// the objectives were loaded
+		ObjectiveInfos.Sort(SortInfos);
+		ObjectiveInfo = ObjectiveInfos[ObjectiveIndex];
+	}
+	else
+	{
+		`redscreen("SeqAct_GetObjectiveInfo::Activated()\n Assert FAILED: ObjectiveIndex is greater than ObjectiveInfos.Length!\n"
+			$ "ObjectiveIndex: " $ ObjectiveIndex $ "\n"
+			$ "ObjectiveInfos.Length" $ ObjectiveInfos.Length);
+		return;
+	}
+
+	// now fill out the kismet vars		
+	ObjectiveUnit = XComGameState_Unit(ObjectiveInfo.FindComponentObject(class'XComGameState_Unit', true));
+	ObjectiveObject = XComGameState_InteractiveObject(ObjectiveInfo.FindComponentObject(class'XComGameState_InteractiveObject', true));
+	ObjectiveActor = History.GetVisualizer(ObjectiveInfo.ObjectID);
+
+	// get the location
+	if(ObjectiveUnit != none)
+	{
+		// special case units. They are special
+		ObjectiveUnit.GetKeystoneVisibilityLocation(Tile);
+		ObjectiveLocation = class'XComWorldData'.static.GetWorldData().GetPositionFromTileCoordinates(Tile);
+	}
+	else if(ObjectiveObject != None)
+	{
+		// special case interactive objects. They are special-ish
+		`RTLOG("Setting location for object.");
+		Tile = ObjectiveObject.TileLocation;
+		ObjectiveLocation = class'XComWorldData'.static.GetWorldData().GetPositionFromTileCoordinates(Tile);
+	}
+	else
+	{
+		// not a special object, just look at the actor
+		ObjectiveLocation = ObjectiveActor.Location;
+	}
+}
+
 defaultproperties
 {
 	ObjName="Get Objective Info"

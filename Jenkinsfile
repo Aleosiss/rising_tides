@@ -1,6 +1,7 @@
 pipeline {
   environment {
       modName = "RisingTides"
+      repoName = "abatewongc/rising_tides"
   }
 
   options {
@@ -44,7 +45,7 @@ pipeline {
       steps {
         withCredentials([usernamePassword(credentialsId: 'github-abatewongc-via-access-token', passwordVariable: 'personal_access_token', usernameVariable: 'username')]) {
           bat '''
-            C:\\Python37\\python.exe scripts/tagmaker.py %personal_access_token% --repo rising_tides --current_commit_hash %GIT_COMMIT% --workspace_directory "%WORKSPACE%" --artifact_name %modName%.zip --should_increment 2
+            C:\\Python37\\python.exe scripts/tagmaker.py %personal_access_token% --repo %repoName% --current_commit_hash %GIT_COMMIT% --workspace_directory "%WORKSPACE%" --artifact_name %modName%.zip --should_increment 2
             '''
         }
       }

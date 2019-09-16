@@ -1202,7 +1202,7 @@ PostMissionType="Kill all hostiles"
 BriefingImage="img:///UILibrary_StrategyImages.X2StrategyMap.Alert_Advent_Facility"
 ObjectiveTextPools[0]="Destroy the Templar High Coven Compound"
 
-[RTNarrative_TemplarCovenAssault X2MissionNarrativeTemplate]
+[RTNarrative_TemplarHighCovenAssault X2MissionNarrativeTemplate]
 ObjectiveTextPools[0]="Destroy Templar Archives"
 ObjectiveTextPools[1]="Kill Geist"
 ObjectiveTextPools[2]="Eliminate High Coven members"
@@ -1336,7 +1336,7 @@ AbilityDescName="sword"
 [ProgramArmor X2ArmorTemplate]
 FriendlyName="<font color='#a51515'><b>Program XPHS41</b></font>"
 FriendlyNamePlural="<font color='#a51515'><b>Program XPHS41s</b></font>"
-BriefSummary="The Program's Experimental Psionic Hardsuit is the newest variant of psiweave-embedded, AI-integrated powersuit. It enhances the user's physical attributes using their psionic capabilities and allows them to enter Stealth."
+BriefSummary="The Program's Experimental Psionic Hardsuit is the newest variant of it's classic psiweave-embedded, AI-integrated powersuit. It enhances the user's physical attributes using their psionic capabilities and allows them to enter Stealth."
 TacticalText="<Bullet/> Compared to XCOM's Warden Armor, the XPHS sacrifices soldier endurance for additional armor plating.\n<Bullet/> The Hardsuit has 2 inventory item slots."
 
 [RTCosmetic_Suppressor X2WeaponUpgradeTemplate]

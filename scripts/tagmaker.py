@@ -47,7 +47,7 @@ parser.add_argument("--is_prerelease", action="store_true", default=False,
 
 args = parser.parse_args()
 paToken = args.access_token
-repo = args.repo
+repo_path = args.repo
 message = args.message
 current_commit_hash = args.current_commit_hash
 workspace_directory = args.workspace_directory
@@ -63,23 +63,28 @@ if should_increment > 2 or should_increment < 0:
 
 # get repo
 github = Github(paToken)
-user = github.get_user()
-repos = user.get_repos()
-for _repo in repos:
-    if _repo.name == repo:
-        repo = _repo
-
+repo = github.get_repo(repo_path)
 # previous version
 previous_tag = repo.get_tags()[0]
-previous_version = StrictVersion(previous_tag.name)
+previous_version_string = str(previous_tag.name)
+
+# strip invalid characters
+if previous_version_string.startswith('v'):
+    previous_version_string = previous_version_string[1:]
+if previous_version_string.endswith('rc'):
+    previous_version_string = previous_version_string[:-2]
+previous_version = StrictVersion(previous_version_string)
 
 # new version
-new_version = increment_version(previous_tag.name, should_increment)
+new_version = increment_version(previous_version_string, should_increment)
 new_version_string = str(new_version)
+new_version_string = "v" + new_version_string
+if is_prerelease:
+    new_version_string = new_version_string + 'rc'
 
 # message
 if message == '':
-    message = "tag " + str(new_version) + " proudly created by tidecaller"
+    message = "tag " + str(new_version) + " created by tidecaller"
 
 # artifact we're uploading (modNameCanonical.zip)
 artifact = open(workspace_directory + os.path.sep + artifact_name)

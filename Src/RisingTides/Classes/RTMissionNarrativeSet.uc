@@ -3,10 +3,9 @@ class RTMissionNarrativeSet extends X2MissionNarrative;
 static function array<X2DataTemplate> CreateTemplates()
 {
 	local array<X2MissionNarrativeTemplate> Templates;
-	`RTLOG("Building mission narratives!");
-	//recreation of base-game mission narratives for LW-specific variations
+
 	Templates.AddItem(CreateTemplarAmbushNarrative()); // sweep
-	Templates.AddItem(CreateTemplarCovenAssaultNarrative()); // kill geist + sweep
+	Templates.AddItem(CreateTemplarHighCovenAssaultNarrative()); // kill geist + sweep
 
 	return Templates;
 }
@@ -62,29 +61,48 @@ static function X2MissionNarrativeTemplate CreateTemplarAmbushNarrative() {
 	return Template;
 }
 
-static function X2MissionNarrativeTemplate CreateTemplarCovenAssaultNarrative() {
+static function X2MissionNarrativeTemplate CreateTemplarHighCovenAssaultNarrative() {
 	local X2MissionNarrativeTemplate Template;
 
-	`CREATE_X2MISSIONNARRATIVE_TEMPLATE(Template, 'RTNarrative_TemplarCovenAssault');
+	`CREATE_X2MISSIONNARRATIVE_TEMPLATE(Template, 'RTNarrative_TemplarHighCovenAssault');
 
 	Template.MissionType = "RT_TemplarHighCovenAssault";
 
+	// endmission.failedbysquadwipe
+	Template.NarrativeMoments[0]="X2NarrativeMoments.TACTICAL.General.GenTactical_SquadWipe";
+	// heavy losses
+	Template.NarrativeMoments[1]="XPACK_NarrativeMoments.X2_XP_CEN_T_Neutralize_Comm_Squad_Heavy_Losses";
 	// intro narrative	
 	// menance 1-5, target location confirmed, kill any hostile units in the AO
-	Template.NarrativeMoments[0]="X2NarrativeMoments.TACTICAL.Neutralize.Neutralize_TacIntro";
-	// geist spotted
-	Template.NarrativeMoments[1]="X2NarrativeMoments.TACTICAL.Neutralize.Neutralize_VIPSpotted";
-	// victory narrative(s)
+	Template.NarrativeMoments[2]="X2NarrativeMoments.TACTICAL.Forge.Forge_TacIntro";
+	// failed primary objective
+	Template.NarrativeMoments[3]="X2NarrativeMoments.TACTICAL.General.GenTactical_SquadWipe";
+	// winner
+	Template.NarrativeMoments[4]="X2NarrativeMoments.TACTICAL.Terror.CEN_Terr_STWin";
+	// abort
+	Template.NarrativeMoments[5]="X2NarrativeMoments.TACTICAL.Neutralize.CEN_Neut_FailureAbort";
+	// los to geist
+	Template.NarrativeMoments[6]="RisingTidesContentPackage.Maps.GenericTargetSpotted_Moment";
+	// continue -> kill geist
+	Template.NarrativeMoments[7]="X2NarrativeMoments.TACTICAL.ProtectDevice.T_Protect_Device_PrDv_ProceedToSweep";
 	// geist killed
-	Template.NarrativeMoments[2]="X2NarrativeMoments.TACTICAL.Neutralize.Neutralize_VIPExecuted";
-	// sweep completed
-	Template.NarrativeMoments[17]="X2NarrativeMoments.TACTICAL.General.CEN_Gen_BurnoutSecured_01";
-	Template.NarrativeMoments[17]="X2NarrativeMoments.TACTICAL.General.CEN_Gen_BurnoutSecured_02";
-	Template.NarrativeMoments[17]="X2NarrativeMoments.TACTICAL.General.CEN_Gen_BurnoutSecured_03";
-	// general failure narratives
-	Template.NarrativeMoments[12]="X2NarrativeMoments.TACTICAL.General.GenTactical_SquadWipe";
-	Template.NarrativeMoments[13]="X2NarrativeMoments.TACTICAL.General.GenTactical_FullEVAC";
-	Template.NarrativeMoments[14]="X2NarrativeMoments.TACTICAL.General.GenTactical_PartialEVAC";
+	Template.NarrativeMoments[8]="XPACK_NarrativeMoments.X2_XP_CEN_T_Neutralize_Comm_General_Killed";
+	// geist escaped (unused)
+	Template.NarrativeMoments[9]="XPACK_NarrativeMoments.X2_XP_CEN_T_Neutralize_Comm_General_Escaped";
+	// continue -> sweep
+	Template.NarrativeMoments[10]="X2NarrativeMoments.TACTICAL.Recover.CEN_Reco_ProceedToSweep";
+	// high coven leaders killed (unused)
+	Template.NarrativeMoments[11]="X2NarrativeMoments.TACTICAL.Recover.CEN_Reco_ProceedToSweep";
+	// los to network link
+	Template.NarrativeMoments[12]="X2NarrativeMoments.TACTICAL.Broadcast.Broadcast_ObjSpotted";
+	// los to archives
+	Template.NarrativeMoments[13]="X2NarrativeMoments.TACTICAL.Sabotage.CEN_Sabotage_BombSpotted_02";
+	// continue -> hack archives
+	Template.NarrativeMoments[14]="X2NarrativeMoments.TACTICAL.Hack.Central_Hack_AllEnemiesDefeatedContinue";
+	// archives hacked
+	Template.NarrativeMoments[15]="X2NarrativeMoments.TACTICAL.General.CEN_ExtrGEN_STObjDestroyed";
+	// psionic network link hacked (program line)
+	Template.NarrativeMoments[16]="RisingTidesContentPackage.Maps.ProgramReinforcementsIncoming_Moment";
 
 	return Template;
 }

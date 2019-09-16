@@ -42,7 +42,7 @@ static function X2AbilityTemplate RTUnwaveringResolve()
 	Template.AbilityTriggers.AddItem(default.UnitPostBeginPlayTrigger);
 	
 	Effect = new class'RTEffect_ModifyTemplarFocus';
-	Effect.bSkipFocusVisualization = true;
+	Effect.bSkipFocusVisualizationInFOW = true;
 	Effect.TargetConditions.AddItem(new class'X2Condition_GhostShooter');
 	Template.AddTargetEffect(Effect);
 
@@ -71,7 +71,13 @@ simulated function UnwaveringResolve_BuildVisualization(XComGameState VisualizeG
 	InteractingUnitRef = Context.InputContext.SourceObject;
 	UnitState = XComGameState_Unit(History.GetGameStateForObjectID(InteractingUnitRef.ObjectID, eReturnType_Reference, VisualizeGameState.HistoryIndex - 1));
 
-	if(class'RTCondition_VisibleToPlayer'.static.IsTargetVisibleToLocalPlayer(UnitState.GetReference(), , true)) {
+	if(UnitState.GetTeam() == eTeam_Alien) {
+		if(class'RTCondition_VisibleToPlayer'.static.IsTargetVisibleToLocalPlayer(UnitState.GetReference())) {
+			TypicalAbility_BuildVisualization(VisualizeGameState);
+		} else {
+			`RTLOG("Unwavering Resolve: Not visualizing, unit is not visible!");
+		}
+	} else {
 		TypicalAbility_BuildVisualization(VisualizeGameState);
 	}
 }
