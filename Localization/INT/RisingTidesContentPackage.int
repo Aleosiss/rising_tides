@@ -1,8 +1,0 @@
-[Maps.GenericTargetSpotted_SoundNodeWave SoundNodeWave]
-SpokenText="Target identity confirmed. Take 'em out before they can escape, we won't get another shot at this."
-
-[RisingTidesContentPackage.Maps.Acknowledged_SoundNodeWave SoundNodeWave]
-SpokenText="Acknowledged."
-
-[RisingTidesContentPackage.Maps.HereComesTheLightShow_SoundNodeWave SoundNodeWave]
-SpokenText="Here comes the light show!"

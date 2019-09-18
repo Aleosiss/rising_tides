@@ -1320,3 +1320,21 @@ exec function RT_PrintEffectsAndMITVsForClosestUnitToCursor(bool bShouldRemove =
 	`RTLOG("Printing all particle effects and MITVs for " $ UnitState.GetFullName(), false, true);
 	`RTS.PrintEffectsAndMITVsForUnitState(UnitState, bShouldRemove);
 }
+
+exec function RT_DebugSpeakerTemplate(name CharTemplateName)
+{
+	local X2CharacterTemplateManager CharMgr;
+	local X2CharacterTemplate CharTemplate;
+
+	CharMgr = class'X2CharacterTemplateManager'.static.GetCharacterTemplateManager();
+	CharTemplate = CharMgr.FindCharacterTemplate(CharTemplateName);
+
+	if( CharTemplate != none )
+	{
+		`RTLOG("Found it!", false, true);
+		`RTLOG("strCharacterName: " $ CharTemplate.strCharacterName, false, true);
+		`RTLOG("SpeakerPortrait: "  $ CharTemplate.SpeakerPortrait, false, true);
+	} else {
+		`RTLOG("Couldn't find character template " $ CharTemplateName $ "!", false, true);
+	}
+}

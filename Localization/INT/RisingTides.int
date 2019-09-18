@@ -271,6 +271,12 @@ strCharacterHealingPaused="Repairs Required"
 ; These retrofitted ADVENT drones have had their armor and weaponry removed in exchange for additional agility in the air and a cloaking field generator. 
 ; Because of its standard-issue chassis, ADVENT will have a difficult time detecting whether or not the drone is friendly.
 
+[ProgramNovaStrategy X2CharacterTemplate]
+strCharacterName="'Nova'"
+
+[ProgramHadleyStrategy X2CharacterTemplate]
+strCharacterName="Dr. Hadley"
+
 #[ResCard_RT RTProgramStrategyCardTemplate]
 #DisplayName=""
 #SummaryText=""

@@ -1277,6 +1277,12 @@ m_strProgramFactionButton="Program Status Briefing"
 DisplayName="Program XRC33 Drone"
 Summary="These refurbished ADVENT drones have had their armor and weaponry stripped out and replaced by a sophisticated cloaking field generator. We're unsure of how it functions, but if the Program is to be believed, this unit should be able to sneak a squad past any detection known."
 
+[ProgramNovaStrategy X2CharacterTemplate]
+strCharacterName="'Nova'"
+
+[ProgramHadleyStrategy X2CharacterTemplate]
+strCharacterName="Dr. Hadley"
+
 ;-----------------------
 ; STAFF SLOTS
 ;-----------------------
