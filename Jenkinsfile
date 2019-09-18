@@ -35,7 +35,7 @@ pipeline {
           @echo "Building Mod Project!"
           @echo %WORKSPACE%
           @powershell set-executionpolicy remotesigned
-          powershell "./scripts/build_jenkins.ps1" -mod %modName% -srcDirectory "'%WORKSPACE%'" -forceFullBuild true
+          powershell "./scripts/build_jenkins.ps1" -mod %modName% -srcDirectory "'%WORKSPACE%'" -forceFullBuild $True
         '''
       }
     }
