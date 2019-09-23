@@ -171,7 +171,7 @@ function EventListenerReturn OnTacticalGameEnd(Object EventData, Object EventSou
 	EventManager.UnRegisterFromEvent(ListenerObj, 'UnitPanicked');
 	EventManager.UnRegisterFromEvent(ListenerObj, 'TacticalGameEnd');
 
-    NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("Meld states cleanup");
+    NewGameState = `CreateChangeState("Meld states cleanup");
 	NewGameState.RemoveStateObject(ObjectID);
 	`GAMERULES.SubmitGameState(NewGameState);
 
@@ -203,7 +203,7 @@ simulated function EventListenerReturn AddUnitToMeld(Object EventData, Object Ev
 	if(GameStateHostUnit == none)
 		return ELR_NoInterrupt;
 
-	NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState(string(GetFuncName()));
+	NewGameState = `CreateChangeState(string(GetFuncName()));
 	UpdatedMeldEffect = RTGameState_MeldEffect(NewGameState.CreateStateObject(class'RTGameState_MeldEffect', ObjectID));
 
 	`LOG("" @ GameStateHostUnit.GetName(eNameType_Full) @ " is attempting to add " @ EnteringMeldUnit.GetName(eNameType_Full) @ " to its MeldEffect.");
@@ -290,7 +290,7 @@ simulated function EventListenerReturn RemoveUnitFromMeld(Object EventData, Obje
 	if(GameStateHostUnit == none)
 		return ELR_NoInterrupt;
 
-	NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState(string(GetFuncName()));
+	NewGameState = `CreateChangeState(string(GetFuncName()));
 	UpdatedMeldEffect = RTGameState_MeldEffect(NewGameState.CreateStateObject(class'RTGameState_MeldEffect', ObjectID));
 	MeldEffect.UnApplyEffectFromStats(self, GameStateHostUnit, NewGameState);
 

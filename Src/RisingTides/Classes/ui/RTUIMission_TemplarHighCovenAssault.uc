@@ -10,7 +10,7 @@ simulated function InitScreen(XComPlayerController InitController, UIMovie InitM
 
 	if (CanTakeMission())
 	{
-		NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("Trigger Central Templar High Coven Dialogue");
+		NewGameState = `CreateChangeState("Trigger Central Templar High Coven Dialogue");
 		`XEVENTMGR.TriggerEvent('OnViewTemplarHighCovenAssaultMission', , , NewGameState);
 		`XCOMGAME.GameRuleset.SubmitGameState(NewGameState);
 	}

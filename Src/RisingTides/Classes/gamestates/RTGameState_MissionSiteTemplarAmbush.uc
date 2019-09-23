@@ -35,7 +35,7 @@ function SelectSquad()
 
 	NumSoldiers = class'X2StrategyGameRulesetDataStructures'.static.GetMaxSoldiersAllowedOnMission(self);
 
-	NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("Set up Ambush Squad");
+	NewGameState = `CreateChangeState("Set up Ambush Squad");
 	XComHQ = XComGameState_HeadquartersXCom(NewGameState.ModifyStateObject(class'XComGameState_HeadquartersXCom', XComHQ.ObjectID));
 	
 	for (idx = 0; idx < NumSoldiers; idx++)

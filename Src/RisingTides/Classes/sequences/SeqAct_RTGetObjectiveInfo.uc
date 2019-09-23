@@ -1,5 +1,11 @@
 class SeqAct_RTGetObjectiveInfo extends SeqAct_GetObjectiveInfo;
 
+/*
+*
+* This class can handle an ObjectiveSpawnTag, which the base one could not.
+* 
+ */
+
 event Activated()
 {
 	local XComGameStateHistory History;
@@ -14,11 +20,10 @@ event Activated()
 
 	MissionType = MissionManager.ActiveMission.sType;
 
-    // get all objectives that are valid for this kismet map
-    `LOG("Looking for ObjectiveInfos matching " $ MissionType);
+	// get all objectives that are valid for this kismet map
+	`RTLOG("Looking for ObjectiveInfos matching " $ MissionType);
 	foreach History.IterateByClassType(class'XComGameState_ObjectiveInfo', ObjectiveInfo)
 	{
-        `LOG(ObjectiveInfo.MissionType);
 		if(MissionType == ObjectiveInfo.MissionType)
 		{
 			ObjectiveInfos.AddItem(ObjectiveInfo);
@@ -46,8 +51,8 @@ event Activated()
 	
 		if(ObjectiveInfo == none)
 		{
-			`redscreen("SeqAct_GetObjectiveInfo::Activated()\n Assert FAILED: ObjectiveSpawnTag was specified, but no object has that tag!\n"
-				$ "ObjectiveSpawnTag: " $ ObjectiveSpawnTag $ "\n");
+			`RTLOG("SeqAct_GetObjectiveInfo::Activated()\n Assert FAILED: ObjectiveSpawnTag was specified, but no object has that tag!\n"
+				$ "ObjectiveSpawnTag: " $ ObjectiveSpawnTag $ "\n", true);
 		}
 	}
 	else if(ObjectiveIndex < ObjectiveInfos.Length)
@@ -59,9 +64,9 @@ event Activated()
 	}
 	else
 	{
-		`redscreen("SeqAct_GetObjectiveInfo::Activated()\n Assert FAILED: ObjectiveIndex is greater than ObjectiveInfos.Length!\n"
+		`RTLOG("SeqAct_GetObjectiveInfo::Activated()\n Assert FAILED: ObjectiveIndex is greater than ObjectiveInfos.Length!\n"
 			$ "ObjectiveIndex: " $ ObjectiveIndex $ "\n"
-			$ "ObjectiveInfos.Length" $ ObjectiveInfos.Length);
+			$ "ObjectiveInfos.Length" $ ObjectiveInfos.Length, true);
 		return;
 	}
 

@@ -31,7 +31,7 @@ function EventListenerReturn OnTacticalGameEnd(Object EventData, Object EventSou
 
 	EventManager.UnRegisterFromAllEvents(ListenerObj);
 
-	NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("RTGameState_Effect states cleanup");
+	NewGameState = `CreateChangeState("RTGameState_Effect states cleanup");
 	NewGameState.RemoveStateObject(ObjectID);
 	`GAMERULES.SubmitGameState(NewGameState);
 
@@ -48,7 +48,7 @@ protected function ActivateAbility(XComGameState_Ability AbilityState, StateObje
 	if(AbilityState.CanActivateAbilityForObserverEvent(XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(TargetRef.ObjectID))) != 'AA_Success') {
 		`RTLOG("Couldn't Activate "@ AbilityState.GetMyTemplateName() @ " for observer event.");
 	} else {
-		NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("Activating Ability " $ AbilityState.GetMyTemplateName());
+		NewGameState = `CreateChangeState("Activating Ability " $ AbilityState.GetMyTemplateName());
 		AbilityState = XComGameState_Ability(NewGameState.CreateStateObject(AbilityState.Class, AbilityState.ObjectID));
 		NewGameState.AddStateObject(AbilityState);
 		`TACTICALRULES.SubmitGameState(NewGameState);
@@ -342,7 +342,7 @@ function EventListenerReturn CleanupMobileSquadViewers(Object EventData, Object 
 
 	History = `XCOMHISTORY;
 
-	NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("RTGameState_Effect cleaning up OTS SquadViewers!");
+	NewGameState = `CreateChangeState("RTGameState_Effect cleaning up OTS SquadViewers!");
 
 	foreach History.IterateByClassType(class'RTGameState_SquadViewer', ViewerState) {
 		if(XComGameState_Unit(History.GetGameStateForObjectID(ViewerState.AssociatedUnit.ObjectID)).AffectedByEffectNames.Find(class'RTEffect_TimeStop'.default.EffectName) != INDEX_NONE) {
@@ -384,7 +384,7 @@ function EventListenerReturn OnUpdateAuraCheck(Object EventData, Object EventSou
 		`assert(AuraTemplate != none);
 
 		// Create a new gamestate
-		NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("RTEffect_AuraSource: Affecting Target");
+		NewGameState = `CreateChangeState("RTEffect_AuraSource: Affecting Target");
 
 		// The Target Unit different than the Owning Unit of the aura, so only it needs to be checked
 		AuraTemplate.UpdateBasedOnAuraTarget(AuraSourceUnitState, UpdatedUnitState, ThisEffect, NewGameState);
@@ -393,7 +393,7 @@ function EventListenerReturn OnUpdateAuraCheck(Object EventData, Object EventSou
 		if(WereEffectsModified()) {
 			SubmitNewGameState(NewGameState);
 
-			NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("RTEffect_AuraSource: Cleaning Effect changes record!");
+			NewGameState = `CreateChangeState("RTEffect_AuraSource: Cleaning Effect changes record!");
 			ClearEffectLists(NewGameState);
 			SubmitNewGameState(NewGameState);
 		} else {
@@ -437,7 +437,7 @@ function EventListenerReturn OnTotalAuraCheck(Object EventData, Object EventSour
 	ThisEffect = self;
 
 	// Create a new gamestate
-	NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("RTEffect_AuraSource: Affecting Target");
+	NewGameState = `CreateChangeState("RTEffect_AuraSource: Affecting Target");
 
 	/// All Units must be checked and possibly have the aura effects added or removed
 	foreach History.IterateByClassType(class'XComGameState_Unit', TargetUnitState)
@@ -451,7 +451,7 @@ function EventListenerReturn OnTotalAuraCheck(Object EventData, Object EventSour
 	if(WereEffectsModified()) {
 		SubmitNewGameState(NewGameState);
 
-		NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("RTEffect_AuraSource: Cleaning Effect changes record!");
+		NewGameState = `CreateChangeState("RTEffect_AuraSource: Cleaning Effect changes record!");
 		ClearEffectLists(NewGameState);
 		SubmitNewGameState(NewGameState);
 	} else {
@@ -498,7 +498,7 @@ function EventListenerReturn RTOverkillDamageRecorder(Object EventData, Object E
 
 	iOverKillDamage = abs(PreviousDeadUnitState.GetCurrentStat( eStat_HP ) - LastEffectDamageValue.fValue);
 
-	NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("Rising Tides: Recording Overkill Damage!");
+	NewGameState = `CreateChangeState("Rising Tides: Recording Overkill Damage!");
 	NewKillerUnitState = XComGameState_Unit(NewGameState.CreateStateObject(KillerUnitState.class, KillerUnitState.ObjectID));
 	NewKillerUnitState.SetUnitFloatValue('RTLastOverkillDamage', iOverKillDamage, eCleanup_BeginTactical);
 	// `RTLOG("Logging overkill damage =" @iOverkillDamage);
@@ -555,7 +555,7 @@ function EventListenerReturn RTPsionicInterrupt(Object EventData, Object EventSo
 	}
 
 	if(`RTS.CheckAbilityActivated(AbilityState.GetMyTemplateName(), eChecklist_PsionicAbilities)) {
-		NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("Rising Tides: recording interrupted AbilityStateObjectRef: " $ AbilityState.ObjectID);
+		NewGameState = `CreateChangeState("Rising Tides: recording interrupted AbilityStateObjectRef: " $ AbilityState.ObjectID);
 		TargetUnitState = XComGameState_Unit(NewGameState.ModifyStateObject(TargetUnitState.class, TargetUnitState.ObjectID));
 
 		// set a flag here so we can look it up in the visualization
@@ -675,7 +675,7 @@ function EventListenerReturn ExtendEffectDuration(Object EventData, Object Event
 	}
 	bDebug = false;
 	//`RTLOG("Attempting to extend " @ EffectTemplate.AbilityToExtendName);
-	NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("Rising Tides: Extending " @ EffectTemplate.EffectToExtendName);
+	NewGameState = `CreateChangeState("Rising Tides: Extending " @ EffectTemplate.EffectToExtendName);
 	foreach GameState.IterateByClassType(class'XComGameState_Effect', IteratorEffectState) {
 		if(IteratorEffectState == none) {
 			//`RedScreen("Rising Tides: What the heck, iterating through gamestate_effects returned a non-gamestate_effect object?");
@@ -724,7 +724,7 @@ function EventListenerReturn BumpInTheNightStatCheck(Object EventData, Object Ev
 		UnitState = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(ApplyEffectParameters.SourceStateObjectRef.ObjectID));
 	`assert(UnitState != None);
 
-	NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState(string(GetFuncName()));
+	NewGameState = `CreateChangeState(string(GetFuncName()));
 	NewUnitState = XComGameState_Unit(NewGameState.CreateStateObject(UnitState.Class, UnitState.ObjectID));
 
 	TempEffect = self;
@@ -785,7 +785,7 @@ function EventListenerReturn EveryMomentMattersCheck(Object EventData, Object Ev
 				}
 
 				if(SourceUnit.GetItemInSlot(eInvSlot_PrimaryWeapon).Ammo == 0) {
-					NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState(string(GetFuncName()));
+					NewGameState = `CreateChangeState(string(GetFuncName()));
 					XComGameStateContext_ChangeContainer(NewGameState.GetContext()).BuildVisualizationFn = EveryMomentMattersVisualizationFn;
 					SourceUnit = XComGameState_Unit(NewGameState.CreateStateObject(SourceUnit.Class, SourceUnit.ObjectID));
 					SourceUnit.ActionPoints.AddItem(class'X2CharacterTemplateManager'.default.MoveActionPoint);
@@ -863,7 +863,7 @@ function EventListenerReturn GhostInTheShellCheck(Object EventData, Object Event
 	Attacker = XComGameState_Unit(EventSource);
 
 	if (Attacker != none) {
-		NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState(string(GetFuncName()));
+		NewGameState = `CreateChangeState(string(GetFuncName()));
 		NewAttacker = XComGameState_Unit(NewGameState.CreateStateObject(Attacker.Class, Attacker.ObjectID));
 		//XComGameStateContext_ChangeContainer(NewGameState.GetContext()).BuildVisualizationFn = TriggerBumpInTheNightFlyoverVisualizationFn;
 		NewGameState.AddStateObject(NewAttacker);
@@ -1011,7 +1011,7 @@ function EventListenerReturn HeatChannelCheck(Object EventData, Object EventSour
 	return ELR_NoInterrupt;
   }
 
-  NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState(string(GetFuncName()));
+  NewGameState = `CreateChangeState(string(GetFuncName()));
   NewWeaponState = XComGameState_Item(NewGameState.CreateStateObject(class'XComGameState_Item', OldWeaponState.ObjectID));
   NewSourceUnit = XComGameState_Unit(NewGameState.CreateStateObject(class'XComGameState_Unit', OldSourceUnit.ObjectID));
   NewAbilityState = XComGameState_Ability(NewGameState.CreateStateObject(class'XComGameState_Ability', OldAbilityState.ObjectID));
@@ -1186,7 +1186,7 @@ function EventListenerReturn LinkedFireCheck (Object EventData, Object EventSour
 				// Linked Fire is free; this should always be valid
 				if (LinkedEffect.GrantActionPoint != '') {
 					// create an new gamestate and increment the number of grants
-					NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState(string(GetFuncName()));
+					NewGameState = `CreateChangeState(string(GetFuncName()));
 					NewLinkedEffectState = RTGameState_Effect(NewGameState.CreateStateObject(Class, ObjectID));
 					//NewLinkedEffectState.GrantsThisTurn++;
 					NewGameState.AddStateObject(NewLinkedEffectState);
@@ -1388,7 +1388,7 @@ function EventListenerReturn TwitchFireCheck (Object EventData, Object EventSour
 				if (TwitchEffect.GrantActionPoint != '') {
 					`RTLOG("Twitch Fire Check Stage 7");
 					// create an new gamestate and increment the number of grants
-					NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState(string(GetFuncName()));
+					NewGameState = `CreateChangeState(string(GetFuncName()));
 					NewTwitchEffectState = RTGameState_Effect(NewGameState.CreateStateObject(Class, ObjectID));
 					//NewTwitchEffectState.GrantsThisTurn++;
 					NewGameState.AddStateObject(NewTwitchEffectState);
@@ -1549,7 +1549,7 @@ function EventListenerReturn RTBumpInTheNight(Object EventData, Object EventSour
 		iNumPreviousActionPoints = AttackerStatePrevious.ActionPoints.Length;
 		if (Attacker != none)
 		{
-			NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState(string(GetFuncName()));
+			NewGameState = `CreateChangeState(string(GetFuncName()));
 			//TODO: Visualization
 			NewAttacker = XComGameState_Unit(NewGameState.CreateStateObject(Attacker.Class, Attacker.ObjectID));
 			//XComGameStateContext_ChangeContainer(NewGameState.GetContext()).BuildVisualizationFn = TriggerBumpInTheNightFlyoverVisualizationFn;
@@ -1768,7 +1768,7 @@ function EventListenerReturn HandleRetainConcealmentRepositioning(Object EventDa
 	}	
 
 	if(bRepositioningActive) {
-		NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState(string(GetFuncName()));
+		NewGameState = `CreateChangeState(string(GetFuncName()));
 		XComGameStateContext_ChangeContainer(NewGameState.GetContext()).BuildVisualizationFn = RepositoningVisualizationFn;
 		EffectState = RTGameState_Effect(NewGameState.ModifyStateObject(Class, ObjectID));
 		EffectState.bRepositioningActive = false;
@@ -1842,7 +1842,7 @@ function EventListenerReturn HandleRepositioningAvaliable(Object EventData, Obje
 	// otherwise do nothing.
 	if(bTooClose == bRepositioningActive)
 	{
-		NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState(string(GetFuncName()));
+		NewGameState = `CreateChangeState(string(GetFuncName()));
 		EffectState = RTGameState_Effect(NewGameState.ModifyStateObject(Class, ObjectID));
 		EffectState.bRepositioningActive = !bRepositioningActive;
 		XComGameStateContext_ChangeContainer(NewGameState.GetContext()).BuildVisualizationFn = RepositoningCheckVisualizationFn;

@@ -4,3 +4,4 @@
 `define RTLOG(msg, showredscreen, showconsole) `RTS.RTLog(`msg, `showredscreen, `showconsole)
 `define DLCINFO class'X2DownloadableContentInfo_RisingTides'.static
 `define RTEB class'RTEffectBuilder'.static
+`define CreateChangeState class'XComGameStateContext_ChangeContainer'.static.CreateChangeState

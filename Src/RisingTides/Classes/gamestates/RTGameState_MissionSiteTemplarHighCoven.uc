@@ -26,8 +26,14 @@ function MissionSelected()
 function SelectSquad()
 {
 	local XComGameState NewGameState;
+	local RTGameState_ProgramFaction ProgramState;
 
-	NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("Trigger Event: Templar High Coven Assault Squad Select");
+	NewGameState = `CreateChangeState("Trigger Event: Templar High Coven Assault Squad Select");
+
+	// Adjust gear
+	ProgramState = `RTS.GetNewProgramState(NewGameState);
+	ProgramState.AdjustProgramGearLevel(NewGameState);
+
 	`XEVENTMGR.TriggerEvent('RT_TemplarHighAssaultMissionSquadSelect', self, self, NewGameState);
 	`XCOMGAME.GameRuleset.SubmitGameState(NewGameState);
 

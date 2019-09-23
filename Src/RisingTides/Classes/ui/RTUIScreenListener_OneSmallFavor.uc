@@ -236,7 +236,7 @@ simulated function bool AddOneSmallFavorSitrep(XComGameState_MissionSite Mission
 		return false;
 	}
 
-	NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("Rising Tides: Cashing in One Small Favor");
+	NewGameState = `CreateChangeState("Rising Tides: Cashing in One Small Favor");
 	Program = RTGameState_ProgramFaction(NewGameState.ModifyStateObject(Program.class, Program.ObjectID));
 	XComHQ = XComGameState_HeadquartersXCom(NewGameState.ModifyStateObject(XComHQ.class, XComHQ.ObjectID));
 	MissionState = XComGameState_MissionSite(NewGameState.ModifyStateObject(class'XComGameState_MissionSite', MissionState.ObjectID));
@@ -279,7 +279,7 @@ simulated function bool RemoveOneSmallFavorSitrep(XComGameState_MissionSite Miss
 		MissionState.TacticalGameplayTags.RemoveItem('RTOneSmallFavor');
 	}
 
-	NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("Rising Tides: Uncashing in One Small Favor");
+	NewGameState = `CreateChangeState("Rising Tides: Uncashing in One Small Favor");
 	Program = RTGameState_ProgramFaction(NewGameState.ModifyStateObject(Program.class, Program.ObjectID));
 	XComHQ = XComGameState_HeadquartersXCom(NewGameState.ModifyStateObject(XComHQ.class, XComHQ.ObjectID));
 	MissionState = XComGameState_MissionSite(NewGameState.ModifyStateObject(class'XComGameState_MissionSite', MissionState.ObjectID));

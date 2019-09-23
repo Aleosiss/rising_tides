@@ -82,7 +82,7 @@ protected function AddOperativesToTactical(array<RTGameState_Unit> UnitStates) {
 	}
 
 	// create the history frame with the new tactical unit states
-	NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState(string(GetFuncName()));
+	NewGameState = `CreateChangeState(string(GetFuncName()));
 	foreach UnitStates(UnitState) {
 		if(UnitState == none) {
 			`RTLOG("Recieved a null UnitState in AddOperativeToTactical!", true, true);
@@ -129,7 +129,7 @@ protected function AddOperativesToTactical(array<RTGameState_Unit> UnitStates) {
 
 	// add abilities
 	// Must happen after unit is submitted, or it gets confused about when the unit is in play or not 
-	NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("Adding Operative Abilities");
+	NewGameState = `CreateChangeState("Adding Operative Abilities");
 	foreach UnitStates(UnitState) {
 		`RTLOG("Initializing Unit Abilities for " $ UnitState.GetName(eNameType_Nick));
 		UnitState = RTGameState_Unit(NewGameState.ModifyStateObject(class'RTGameState_Unit', UnitState.ObjectID));
@@ -137,7 +137,6 @@ protected function AddOperativesToTactical(array<RTGameState_Unit> UnitStates) {
 	}
 	Rules.SubmitGameState(NewGameState);
 }
-
 
 protected static function array<RTGameState_Unit> GetOperatives(name SquadName) {
 	local RTGameState_PersistentGhostSquad SquadState;
@@ -202,8 +201,7 @@ protected static function array<RTGameState_Unit> GetOperatives(name SquadName) 
 }
 
 // chooses a location for the unit to spawn in the spawn zone
-protected function bool ChooseSpawnLocation(out Vector ChosenSpawnLocation)
-{
+protected function bool ChooseSpawnLocation(out Vector ChosenSpawnLocation) {
 	local XComParcelManager ParcelManager;
 	local XComGroupSpawn SoldierSpawn, IteratorSoldierSpawn, EmptySpawn;
 	local array<Vector> FloorPoints;
@@ -255,8 +253,7 @@ protected function bool ChooseSpawnLocation(out Vector ChosenSpawnLocation)
 	}
 }
 
-simulated function ProgramReinforcements_BuildVisualization(XComGameState VisualizeGameState)
-{
+simulated function ProgramReinforcements_BuildVisualization(XComGameState VisualizeGameState) {
 	local XComGameStateHistory History;
 	local VisualizationActionMetadata EmptyTrack, ActionMetadata, NewUnitActionMetadata;
 	local StateObjectReference InteractingUnitRef;
@@ -375,7 +372,7 @@ protected function AddOperativesToXComGroup(array<RTGameState_Unit> OperativeSta
 
 	`RTLOG("AddOperativesToXComGroup");
 
-	NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("Assign Program Reinforcements to Group");
+	NewGameState = `CreateChangeState("Assign Program Reinforcements to Group");
 	foreach OperativeStates(UnitState) {
 		if(UnitState == none) {
 			continue;

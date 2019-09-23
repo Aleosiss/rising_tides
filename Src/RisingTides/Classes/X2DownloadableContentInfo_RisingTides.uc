@@ -47,7 +47,7 @@ private static function HandleModUpdate() {
 	}
 
 	`RTLOG("New version of the mod found: \nOld Version: " $ ProgramState.GetCurrentVersion() $ "\nNew Version: " $ GetVersionInt());
-	NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("Mod version updated, sending popup!");
+	NewGameState = `CreateChangeState("Mod version updated, sending popup!");
 	ProgramState = `RTS.GetNewProgramState(NewGameState);
 	ProgramState.CompareVersion(GetVersionInt());
 
@@ -113,7 +113,7 @@ static event OnExitPostMissionSequence()
 	ProgramState = `RTS.GetProgramState();
 	bShouldTryToIncreaseInfluence = ProgramState.isOneSmallFavorActivated();
 	if(ProgramState.bShouldPerformPostMissionCleanup) {
-		NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("Cleanup Program Operatives from XCOMHQ!");
+		NewGameState = `CreateChangeState("Cleanup Program Operatives from XCOMHQ!");
 		NewProgramState = `RTS.GetNewProgramState(NewGameState);
 		NewProgramState.PerformPostMissionCleanup(NewGameState);
 

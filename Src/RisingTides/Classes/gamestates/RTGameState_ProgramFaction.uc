@@ -411,7 +411,7 @@ function EventListenerReturn OnKillMail(Object EventData, Object EventSource, XC
 	if (DeadUnitState == none)
 		return ELR_NoInterrupt;
 
-	NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("Rising Tides: UpdateDeathRecordData");
+	NewGameState = `CreateChangeState("Rising Tides: UpdateDeathRecordData");
 	Program = RTGameState_ProgramFaction(NewGameState.CreateStateObject(class'RTGameState_ProgramFaction', self.ObjectID));
 	NewGameState.AddStateObject(Program);
 	Program.UpdateNumDeaths(DeadUnitState.GetMyTemplate().CharacterGroupName, KillerUnitState.GetReference());
@@ -543,7 +543,7 @@ function HandleOSFTutorial(optional bool bOverrideFirstTime = false) {
 
 	if(!bOSF_FirstTimeDisplayed || bOverrideFirstTime) {
 		// Update the bool, this requires a newgamestate
-		NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("RisingTides: setting One Small Favor tutorial flag...");
+		NewGameState = `CreateChangeState("RisingTides: setting One Small Favor tutorial flag...");
 		ProgramState = RTGameState_ProgramFaction(NewGameState.ModifyStateObject(class'RTGameState_ProgramFaction', self.ObjectID));
 		ProgramState.bOSF_FirstTimeDisplayed = true;
 		`XCOMGAME.GameRuleset.SubmitGameState(NewGameState);
@@ -561,7 +561,7 @@ function HandleProgramScreenTutorial(optional bool bOverrideFirstTime = false) {
 
 	if(!bPIS_FirstTimeDisplayed || bOverrideFirstTime) {
 		// Update the bool, this requires a newgamestate
-		NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("RisingTides: setting One Small Favor tutorial flag...");
+		NewGameState = `CreateChangeState("RisingTides: setting One Small Favor tutorial flag...");
 		ProgramState = RTGameState_ProgramFaction(NewGameState.ModifyStateObject(class'RTGameState_ProgramFaction', self.ObjectID));
 		ProgramState.bPIS_FirstTimeDisplayed = true;
 		`XCOMGAME.GameRuleset.SubmitGameState(NewGameState);
@@ -1587,7 +1587,7 @@ function TryIncreaseInfluence() {
 	if(iNumberOfFavorsCalledIn >= default.iNumberOfFavorsRequiredToIncreaseInfluence) {
 		// Award influence increase
 		`RTLOG("Enough Favors have been called in. Increasing influence.", false, true);
-		NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("RisingTides: Increasing Influence");
+		NewGameState = `CreateChangeState("RisingTides: Increasing Influence");
 		Program = RTGameState_ProgramFaction(NewGameState.ModifyStateObject(class'RTGameState_ProgramFaction', self.ObjectID));
 		StratMgr = class'X2StrategyElementTemplateManager'.static.GetStrategyElementTemplateManager();
 		
@@ -1605,7 +1605,7 @@ function TryIncreaseInfluence() {
 		RewardState.DisplayRewardPopup();
 	} else {
 		`RTLOG("Not enough Favors have been called in. Not increasing influence.", false, true);
-		NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("RisingTides: Increasing Influence");
+		NewGameState = `CreateChangeState("RisingTides: Increasing Influence");
 		Program = RTGameState_ProgramFaction(NewGameState.ModifyStateObject(class'RTGameState_ProgramFaction', self.ObjectID));
 		Program.iNumberOfFavorsCalledIn = iGuarenteedCorrectValue;
 		`XCOMGAME.GameRuleset.SubmitGameState(NewGameState);
@@ -1679,7 +1679,7 @@ static function InitFaction(optional XComGameState StartState) {
 	ResHQ = XComGameState_HeadquartersResistance(History.GetSingleGameStateObjectForClass(class'XComGameState_HeadquartersResistance'));
 	StratMgr = class'X2StrategyElementTemplateManager'.static.GetStrategyElementTemplateManager();
 	if(StartState == none) {
-		NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("Adding the Program Faction Object...");
+		NewGameState = `CreateChangeState("Adding the Program Faction Object...");
 	} else {
 		NewGameState = StartState;
 	}

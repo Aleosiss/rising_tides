@@ -330,8 +330,6 @@ static function RTCharacterTemplate CreateProgramSoldierTemplate(optional name T
 	CharTemplate.strLoadingMatineeSlotPrefix = "Soldier";
 	CharTemplate.bUsesWillSystem = true;
 
-	CharTemplate.DefaultSoldierClass = 'Rookie';
-	CharTemplate.DefaultLoadout = 'RookieSoldier';
 	CharTemplate.RequiredLoadout = 'RequiredSoldier';
 	CharTemplate.Abilities.AddItem('Loot');
 	CharTemplate.Abilities.AddItem('Interact_PlantBomb');

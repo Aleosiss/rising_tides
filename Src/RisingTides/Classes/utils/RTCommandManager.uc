@@ -53,7 +53,7 @@ exec function RT_PrintProgramFactionInformation(optional bool bShouldPrintFullIn
 exec function RT_TriggerEvent(name EventID) {
 	local XComGameState NewGameState;
 
-	NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("Rising Tides: RT_TriggerEvent" $ EventID);
+	NewGameState = `CreateChangeState("Rising Tides: RT_TriggerEvent" $ EventID);
 
 	`XEVENTMGR.TriggerEvent(EventID, none, none, NewGameState);
 
@@ -166,7 +166,7 @@ exec function RT_ActivateOneSmallFavor() {
 	local RTGameState_ProgramFaction	ProgramState;
 	local XComGameState					NewGameState;
 
-	NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("CHEAT: Force One Small Favor!");
+	NewGameState = `CreateChangeState("CHEAT: Force One Small Favor!");
 	ProgramState = `RTS.GetNewProgramState(NewGameState);
 
 	ProgramState.MakeOneSmallFavorAvailable();
@@ -179,7 +179,7 @@ exec function RT_GenerateProgramCards() {
 	local XComGameState					NewGameState;
 	local int							idx;
 
-	NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("CHEAT: Add Program Faction Cards!");
+	NewGameState = `CreateChangeState("CHEAT: Add Program Faction Cards!");
 	ProgramState = `RTS.GetNewProgramState(NewGameState);
 	ProgramState.IncreaseInfluenceLevel(NewGameState);
 	ProgramState.IncreaseInfluenceLevel(NewGameState);
@@ -187,7 +187,7 @@ exec function RT_GenerateProgramCards() {
 	ProgramState.IncreaseInfluenceLevel(NewGameState);
 	`GAMERULES.SubmitGameState(NewGameState);
 
-	NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("CHEAT: Add Program Faction Cards!");
+	NewGameState = `CreateChangeState("CHEAT: Add Program Faction Cards!");
 	ProgramState = `RTS.GetNewProgramState(NewGameState);
 	`RTLOG("Generating cards...", false, true);
 	for(idx = 0; idx < 20; idx++)
@@ -236,7 +236,7 @@ exec function RT_AddProgramOperativeToXCOMCrew() {
 			)
 		{
 			`RTLOG("Found a " $ UnitState.GetMyTemplateName() $ ", adding them to XCOM!");
-			NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("Rising Tides: CHEAT: AddSPECTREToCrew");
+			NewGameState = `CreateChangeState("Rising Tides: CHEAT: AddSPECTREToCrew");
 			UnitState = XComGameState_Unit(NewGameState.ModifyStateObject(class'XComGameState_Unit', UnitState.ObjectID));
 			XComHQ = XComGameState_HeadquartersXCom(History.GetSingleGameStateObjectForClass(class'XComGameState_HeadquartersXCom'));
 			XComHQ = XComGameState_HeadquartersXCom(NewGameState.ModifyStateObject(class'XComGameState_HeadquartersXCom', XComHQ.ObjectID));
@@ -260,7 +260,7 @@ exec function RT_RegenerateProgramOperatives() {
 	local int i;
 
 	History = `XCOMHISTORY;
-	NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("Rising Tides: CHEAT: Regenerate Program Operatives, Part 1");
+	NewGameState = `CreateChangeState("Rising Tides: CHEAT: Regenerate Program Operatives, Part 1");
 	ProgramState = `RTS.GetNewProgramState(NewGameState);
 	`RTLOG("CHEAT: Regenerate Program Operatives ####################", false, true);
 
@@ -287,7 +287,7 @@ exec function RT_RegenerateProgramOperatives() {
 	`XCOMGAME.GameRuleset.SubmitGameState(NewGameState);
 
 	`RTLOG("Recreating Operatives...", false, true);
-	NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("Rising Tides: CHEAT: Regenerate Program Operatives, Part 2");
+	NewGameState = `CreateChangeState("Rising Tides: CHEAT: Regenerate Program Operatives, Part 2");
 	ProgramState = `RTS.GetNewProgramState(NewGameState);
 
 	ProgramState.CreateRTOperatives(NewGameState);
@@ -295,7 +295,7 @@ exec function RT_RegenerateProgramOperatives() {
 
 	`XCOMGAME.GameRuleset.SubmitGameState(NewGameState);
 
-	NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("Rising Tides: CHEAT: Regenerate Program Operatives, Part 3");
+	NewGameState = `CreateChangeState("Rising Tides: CHEAT: Regenerate Program Operatives, Part 3");
 	ProgramState = `RTS.GetNewProgramState(NewGameState);
 
 	for(i = 0; i < ProgramState.iOperativeLevel; i++) {
@@ -450,7 +450,7 @@ exec function RT_ForceVisibilityUpdatesAll() {
 	local XComGameState_Unit ItUnit;
 	local XComGameState NewGameState;
 
-	NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState( "Cheat: Refresh Unit visualizers" );
+	NewGameState = `CreateChangeState( "Cheat: Refresh Unit visualizers" );
 	XComGameStateContext_ChangeContainer( NewGameState.GetContext() ).BuildVisualizationFn = ForceVisibilityUpdatesAll_BuildVisualization;
 
 	foreach `XCOMHISTORY.IterateByClassType(class'XComGameState_Unit', ItUnit)
@@ -502,7 +502,7 @@ exec function RT_ReduceSoldierCurrentWill(int MinusWill) {
 
 	if (TacticalController != none) {
 		ActiveUnitRef = TacticalController.GetActiveUnitStateRef();
-		NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState( "Cheat: Reduce Unit Will" );
+		NewGameState = `CreateChangeState( "Cheat: Reduce Unit Will" );
 		ActiveUnitState = XComGameState_Unit(NewGameState.ModifyStateObject(class'XComGameState_Unit', ActiveUnitRef.ObjectID));
 		ActiveUnitState.ModifyCurrentStat(eStat_Will, float(MinusWill));
 		`TACTICALRULES.SubmitGameState(NewGameState);
@@ -726,7 +726,7 @@ exec function RT_CheatEliminateTemplarFaction() {
 	local XComGameState NewGameState;
 	local XComGameState_ResistanceFaction TemplarState;
 
-	NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("CHEAT - ELIMINATE TEMPLAR FACTION");
+	NewGameState = `CreateChangeState("CHEAT - ELIMINATE TEMPLAR FACTION");
 	TemplarState = `RTS.GetTemplarFactionState();
 
 	class'RTStrategyElement_Rewards'.static.EliminateFaction(NewGameState, TemplarState);
@@ -738,7 +738,7 @@ exec function RT_GenerateTemplarAmbush() {
 	local XComGameState NewGameState;
 	local XComGameState_MissionSite MissionState;
 
-	NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("CHEAT - ELIMINATE TEMPLAR FACTION");
+	NewGameState = `CreateChangeState("CHEAT - ELIMINATE TEMPLAR FACTION");
 	MissionState = CreateFakeTemplarAmbush(NewGameState);
 	`XCOMGAME.GameRuleset.SubmitGameState(NewGameState);
 	
@@ -754,7 +754,7 @@ exec function RT_GenerateTemplarHighCovenAssault() {
 	local XComGameState NewGameState;
 	local XComGameState_MissionSite MissionState;
 
-	NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("CHEAT - ELIMINATE TEMPLAR FACTION");
+	NewGameState = `CreateChangeState("CHEAT - ELIMINATE TEMPLAR FACTION");
 	MissionState = CreateFakeTemplarAssault(NewGameState);
 	`XCOMGAME.GameRuleset.SubmitGameState(NewGameState);
 	
@@ -848,7 +848,7 @@ exec function RT_RecreateOneSmallFavor() {
 	local StateObjectReference IteratorRef;
 
 	History = `XCOMHISTORY;
-	NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("Rising Tides: CHEAT: Regenerate One Small Favor");
+	NewGameState = `CreateChangeState("Rising Tides: CHEAT: Regenerate One Small Favor");
 	ProgramState = `RTS.GetNewProgramState(NewGameState);
 
 	// try to find One Small Favor
@@ -966,7 +966,7 @@ exec function RT_SetTacticalForceLevel(int iNewForceLevel) {
 		return;
 	}
 
-	NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("CHEAT: Setting Tactical Force Level to " $ iNewForceLevel);
+	NewGameState = `CreateChangeState("CHEAT: Setting Tactical Force Level to " $ iNewForceLevel);
 	BattleData = XComGameState_BattleData(NewGameState.ModifyStateObject(class'XComGameState_BattleData', BattleData.ObjectID));
 	BattleData.SetForceLevel(iNewForceLevel);
 
@@ -1051,14 +1051,14 @@ exec function RT_CheatProgramQuestline(optional bool bSucceed = true) {
 		return;
 	}
 
-	NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("CHEAT: Force Templar Questline Part One!");
+	NewGameState = `CreateChangeState("CHEAT: Force Templar Questline Part One!");
 	ProgramState = `RTS.GetNewProgramState(NewGameState);
 	ProgramState.ForceIncreaseInfluence();
 	ProgramState.SetTemplarMissionSucceededFlag(bSucceed);
 	
 	`XCOMGAME.GameRuleset.SubmitGameState(NewGameState);
 
-	NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("CHEAT: Force Templar Questline Part Two!");
+	NewGameState = `CreateChangeState("CHEAT: Force Templar Questline Part Two!");
 
 	if(ProgramState.getTemplarQuestlineStage() == 3) {
 		CleanupHighCovenMission(NewGameState);
@@ -1149,7 +1149,7 @@ exec function RT_CheatToggleTemplarMissionFlag() {
 	local RTGameState_ProgramFaction ProgramState;
 	local string status;
 
-	NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("Rising Tides: CHEAT: RT_CheatToggleTemplarMissionFlag");
+	NewGameState = `CreateChangeState("Rising Tides: CHEAT: RT_CheatToggleTemplarMissionFlag");
 	ProgramState = `RTS.GetNewProgramState(NewGameState);
 	
 	ProgramState.SetTemplarMissionSucceededFlag(!ProgramState.didTemplarMissionSucceed());
@@ -1170,7 +1170,7 @@ exec function RT_CheatGiveReward(name RewardTemplateName) {
 	local XComGameState NewGameState;
 	local X2StrategyElementTemplateManager StratMgr;
 
-	NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("Rising Tides: CHEAT: Giving Reward template " $ RewardTemplateName);
+	NewGameState = `CreateChangeState("Rising Tides: CHEAT: Giving Reward template " $ RewardTemplateName);
 	StratMgr = class'X2StrategyElementTemplateManager'.static.GetStrategyElementTemplateManager();
 	
 	RewardTemplate = X2RewardTemplate(StratMgr.FindStrategyElementTemplate(RewardTemplateName));
@@ -1214,7 +1214,7 @@ exec function RT_TestRisk(name RiskTemplateName) {
 		return;
 	}
 
-	NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("Rising Tides: RT_TestRisk: " $ RiskTemplateName);
+	NewGameState = `CreateChangeState("Rising Tides: RT_TestRisk: " $ RiskTemplateName);
 
 	ActionState = GetCurrentCovertAction();
 	if(ActionState == none) {

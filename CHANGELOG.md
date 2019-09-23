@@ -10,13 +10,16 @@
 - New perks. If you want them in an ongoing campaign, regenerate your Program operatives with the command 'RT_RegenerateProgramOperatives'.
     - Repositioning: Replaces Damn Good Ground on the Infiltrator's perk tree.
         - If your last (3) shots were taken from (9) tiles away, retain concealment on your next shot.
+    Explanation: I felt that the DGG was a boring perk on a list of boring perks.
     - Unfurl The Veil: Replaces Meld Induction on the Gatherer's perk tree.
         - If all active enemies are affected by Over the Shoulder, gain concealment. (6) turn cooldown.
+    Explanation: Meld Induction was probably overpowered, probably buggy, and definitely a little confusing. Unfurl the Veil allows the Gatherer to regain concealment, similar to the others.
 - Balance Changes
   - General
     - Program operative HP nerfed by 5.
     - Program operative aim decreased by 10.
     - Program operative weaponry now scales with XCOM's (still 1 tier above at all times).
+    - Program operative armor now scales with XCOM's.
     - Program Berserker:
         - Queen of Blades: Negates mobility penalty instead of reversing it.
     - Program Infiltrator:

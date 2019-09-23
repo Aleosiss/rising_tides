@@ -211,7 +211,7 @@ function EventListenerReturn UnwillingConduitEvent(Object EventData, Object Even
 		}
 	}
 
-	NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState(string(GetFuncName()));
+	NewGameState = `CreateChangeState(string(GetFuncName()));
 	NewSourceUnitState = XComGameState_Unit(NewGameState.CreateStateObject(class'XComGameState_Unit', PreviousSourceUnitState.ObjectID));
 	NewAbilityState = XComGameState_Ability(NewGameState.CreateStateObject(class'XComGameState_Ability', PreviousAbilityState.ObjectID));
 
@@ -308,7 +308,7 @@ function EventListenerReturn EchoedAgonyListener(Object EventData, Object EventS
 	}
 
 	// this meaty block updates the panic event value and submits the change state
-	NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState(string(GetFuncName()));
+	NewGameState = `CreateChangeState(string(GetFuncName()));
 	// oh boy
 	AbilityState = XComGameState_Ability(History.GetGameStateForObjectID(SourceUnitState.FindAbility(class'RTAbility_GathererAbilitySet'.default.EchoedAgonyEffectAbilityTemplateName).ObjectID));
 	AbilityState = XComGameState_Ability(NewGameState.CreateStateObject(class'XComGameState_Ability', AbilityState.ObjectID));
@@ -470,7 +470,7 @@ protected function bool ActivateAbility(StateObjectReference TargetRef) {
 		`RTLOG("Couldn't Activate "@ self.GetMyTemplateName() @ " for observer event, Code = "$ AvailableCode);
 		return false;
 	} else {
-		NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("Activating Ability " $ GetMyTemplateName());
+		NewGameState = `CreateChangeState("Activating Ability " $ GetMyTemplateName());
 		NewGameState.ModifyStateObject(self.Class, ObjectID);
 		`TACTICALRULES.SubmitGameState(NewGameState);
 	}

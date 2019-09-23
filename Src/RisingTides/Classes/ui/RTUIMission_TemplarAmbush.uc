@@ -25,7 +25,7 @@ simulated function InitScreen(XComPlayerController InitController, UIMovie InitM
 
 	BuildScreen();
 
-	NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("Trigger Event: On Templar Ambush Init");
+	NewGameState = `CreateChangeState("Trigger Event: On Templar Ambush Init");
 	`XEVENTMGR.TriggerEvent('OnTemplarAmbushInit', , , NewGameState);
 	`XCOMGAME.GameRuleset.SubmitGameState(NewGameState);
 }
@@ -247,7 +247,7 @@ simulated function OnReceiveFocus()
 
 	super.OnReceiveFocus();
 
-	NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("Trigger Event: On Templar Ambush");
+	NewGameState = `CreateChangeState("Trigger Event: On Templar Ambush");
 	`XEVENTMGR.TriggerEvent('OnTemplarAmbushNarrative', , , NewGameState);
 	`XCOMGAME.GameRuleset.SubmitGameState(NewGameState);
 
