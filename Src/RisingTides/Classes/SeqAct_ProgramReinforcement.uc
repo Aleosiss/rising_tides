@@ -2,6 +2,10 @@ class SeqAct_ProgramReinforcement extends SequenceAction;
 
 var() name SquadName;
 var() vector SpawnPosition;
+var XComGameState_AIGroup Group;
+var protected SeqVar_GameStateList List; 
+
+var() array<XComGameState_Unit> SpawnedUnits;
 
 var private array<int> chosenSpawnPositionIndexes;
 var private int chosenSpawnPositionIndex;
@@ -17,15 +21,11 @@ defaultproperties
 	bCanBeUsedForGameplaySequence=true
 	bAutoActivateOutputLinks=true
 
-	MinimumTilesFromLocation=-1
-	MaximumTilesFromLocation=-1
-
-	bConvertedForReplaySystem=true
-	bCanBeUsedForGameplaySequence=true
-
 	VariableLinks.Empty
 	VariableLinks(0)=(ExpectedType=class'SeqVar_Vector',LinkDesc="Input Location",PropertyName=SpawnLocation)
 	VariableLinks(1)=(ExpectedType=class'SeqVar_Vector',LinkDesc="Actual Location",PropertyName=ActualSpawnLocation,bWriteable=true)
+	VariableLinks(2)=(ExpectedType=class'SeqVar_GameGroup',LinkDesc="Group",PropertyName=Group)
+	VariableLinks(3)=(ExpectedType=class'SeqVar_GameStateList',LinkDesc="Game State List",bWriteable=true,MinVars=1,MaxVars=1)
 }
 
 event Activated()
@@ -44,33 +44,41 @@ event Activated()
 
 function CallInProgramOperativeReinforcements(name LocalSquadName) {
 	local array<RTGameState_Unit> OperativeStates;
-	local XComGameStateHistory History;
 	local RTGameState_Unit IteratorUnitState;
-	
-	History = `XCOMHISTORY;
 
-	OperativeStates = GetOperatives(LocalSquadName, History);
+	OperativeStates = GetOperatives(LocalSquadName);
 	if(OperativeStates.Length == 0) {
 		return;
 	}
 
-	AddOperativesToTactical(OperativeStates, History);
+	AddOperativesToTactical(OperativeStates);
+	AddOperativesToXComGroup(OperativeStates);
+	AddOperativesToXComSquad(OperativeStates);
 }
 
-protected function AddOperativesToTactical(array<XComGameState_Unit> UnitStates, XComGameStateHistory History) {
+protected function AddOperativesToTactical(array<RTGameState_Unit> UnitStates) {
 	local X2TacticalGameRuleset Rules;
 	local Vector SpawnLocation;
 	local XComGameStateContext_TacticalGameRule NewGameStateContext;
 	local XComGameState NewGameState;
-	local XComGameState_Player PlayerState;
+	local XComGameState_Player PlayerState, IteratorPlayerState;
 	local StateObjectReference ItemReference;
 	local XComGameState_Item ItemState;
-	local XComGameState_Unit UnitState;
+	local RTGameState_Unit UnitState;
+	local XComGameStateHistory History;
 
-	foreach History.IterateByClassType(class'XComGameState_Player', PlayerState) {
-		if(PlayerState.GetTeam() == eTeam_XCom) {
-			break;
+	History = `XCOMHISTORY;
+
+	`RTLOG("AddOperativesToTactical");
+
+	foreach History.IterateByClassType(class'XComGameState_Player', IteratorPlayerState) {
+		if(IteratorPlayerState.GetTeam() == eTeam_XCom) {
+			PlayerState = IteratorPlayerState;
 		}
+	}
+
+	if(PlayerState == none) {
+		`RTLOG("Could not find player state to assign operatives to, SeqAct_ProgramReinforcement may bug out.", true, false);
 	}
 
 	// create the history frame with the new tactical unit states
@@ -87,13 +95,13 @@ protected function AddOperativesToTactical(array<XComGameState_Unit> UnitStates,
 			continue;
 		}
 
-		UnitState = XComGameState_Unit(NewGameState.ModifyStateObject(class'XComGameState_Unit', UnitState.ObjectID));
+		UnitState = RTGameState_Unit(NewGameState.ModifyStateObject(class'RTGameState_Unit', UnitState.ObjectID));
 		`RTLOG("Adding " $ UnitState.GetName(eNameType_Nick) $ " to tactical!");
 
 		UnitState.BeginTacticalPlay(NewGameState);   // this needs to be called explicitly since we're adding an existing state directly into tactical
 		UnitState.SetVisibilityLocationFromVector(SpawnLocation);
 
-		// assign the new unit to the human team
+		// assign the new unit to the player team
 		UnitState.SetControllingPlayer(PlayerState.GetReference());
 
 		// add item states. This needs to be done so that the visualizer sync picks up the IDs and creates their visualizers
@@ -113,17 +121,25 @@ protected function AddOperativesToTactical(array<XComGameState_Unit> UnitStates,
 	Rules = `TACTICALRULES;
 	XComGameStateContext_ChangeContainer(NewGameState.GetContext()).BuildVisualizationFn = ProgramReinforcements_BuildVisualization;
 	Rules.SubmitGameState(NewGameState);
+
+	// make sure the visualizer has been created so self-applied abilities have a target in the world
+	foreach UnitStates(UnitState) {
+		//UnitState.FindOrCreateVisualizer(NewGameState);
+	}
+
 	// add abilities
 	// Must happen after unit is submitted, or it gets confused about when the unit is in play or not 
 	NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("Adding Operative Abilities");
 	foreach UnitStates(UnitState) {
+		`RTLOG("Initializing Unit Abilities for " $ UnitState.GetName(eNameType_Nick));
+		UnitState = RTGameState_Unit(NewGameState.ModifyStateObject(class'RTGameState_Unit', UnitState.ObjectID));
 		Rules.InitializeUnitAbilities(NewGameState, UnitState);
 	}
 	Rules.SubmitGameState(NewGameState);
 }
 
 
-protected static function array<RTGameState_Unit> GetOperatives(name SquadName, XComGameStateHistory History) {
+protected static function array<RTGameState_Unit> GetOperatives(name SquadName) {
 	local RTGameState_PersistentGhostSquad SquadState;
 	local array<RTGameState_Unit> OperativeStates, EmptyList;
 	local StateObjectReference UnitRef;
@@ -132,6 +148,9 @@ protected static function array<RTGameState_Unit> GetOperatives(name SquadName, 
 	local array<XComGameState_Unit> UnitsInPlay;
 	local XComGameState_Unit UnitInPlay;
 	local XComGameState StrategyState;
+	local XComGameStateHistory History;
+
+	History = `XCOMHISTORY;
 
 	LastStrategyStateIndex = History.FindStartStateIndex() - 1;
 	if(LastStrategyStateIndex < 1) {
@@ -347,4 +366,49 @@ simulated function ProgramReinforcements_BuildVisualization(XComGameState Visual
 		`RTLOG("Couldn't spawn in any units!");
 	}
 	`RTLOG("Ending Program Reinforcements visualization!");
+}
+
+protected function AddOperativesToXComGroup(array<RTGameState_Unit> OperativeStates) {
+	local XComGameState NewGameState;
+	local XComGameState_AIGroup PreviousGroupState;
+	local RTGameState_Unit UnitState;
+
+	`RTLOG("AddOperativesToXComGroup");
+
+	NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("Assign Program Reinforcements to Group");
+	foreach OperativeStates(UnitState) {
+		if(UnitState == none) {
+			continue;
+		}
+		UnitState = RTGameState_Unit(NewGameState.ModifyStateObject(class'RTGameState_Unit', UnitState.ObjectID));
+
+		PreviousGroupState = UnitState.GetGroupMembership();
+		
+		if( PreviousGroupState != none )
+			PreviousGroupState.RemoveUnitFromGroup(UnitState.ObjectID, NewGameState);
+		
+		Group.AddUnitToGroup(UnitState.ObjectID, NewGameState);
+	}
+
+	`GAMERULES.SubmitGameState(NewGameState);
+}
+
+protected function AddOperativesToXComSquad(array<RTGameState_Unit> OperativeStates) {
+	local RTGameState_Unit UnitState;
+
+	`RTLOG("AddOperativesToXComSquad");
+
+	List = none;
+	foreach LinkedVariables(class'SeqVar_GameStateList', List, "Game State List") {
+		break;
+	}
+
+	if(List == none) {
+		`RTLOG("No SeqVar_GameStateList attached to " $ string(name), true, false);
+		return;
+	}
+
+	foreach OperativeStates(UnitState) {
+		List.GameStates.AddItem(UnitState.GetReference());
+	}
 }

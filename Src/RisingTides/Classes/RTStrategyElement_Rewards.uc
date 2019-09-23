@@ -683,11 +683,6 @@ static function GiveTemplarQuestlineFailedReward(XComGameState NewGameState, XCo
 static function GiveTemplarQuestlineCompleteReward(XComGameState NewGameState, XComGameState_Reward RewardState, optional StateObjectReference AuxRef, optional bool bOrder = false, optional int OrderHours = -1) {
 	local XComGameState_ResistanceFaction TemplarState;
 	local RTGameState_ProgramFaction ProgramState;
-	local DynamicPropertySet PropertySet;
-	local DynamicPropertySet EmptySet;
-	local XComGameState_Tech TechState;
-	local StateObjectReference TechRef;
-	local XComGameStateHistory History;
 
 	ProgramState = `RTS.GetNewProgramState(NewGameState);
 	ProgramState.IncrementNumFavorsAvailable(30);
@@ -695,9 +690,31 @@ static function GiveTemplarQuestlineCompleteReward(XComGameState NewGameState, X
 	
 	TemplarState = `RTS.GetTemplarFactionState();
 	EliminateFaction(NewGameState, TemplarState);
-	
+
+	CreateTemplarQuestlineCompletePopups(NewGameState);
+}
+
+static function CreateTemplarQuestlineCompletePopups(XComGameState NewGameState) {
+	local DynamicPropertySet PropertySet;
+	local DynamicPropertySet EmptySet;
+	local XComGameState_Tech TechState;
+	local StateObjectReference TechRef;
+	local XComGameStateHistory History;
+
+	/*
+	static function BuildDynamicPropertySet(
+	out DynamicPropertySet PropertySet, 
+	Name PrimaryKey, 
+	Name SecondaryKey, 
+	delegate<AlertCallback> CallbackFunction, 
+	bool bDisplayImmediate,
+	bool bDisplayOnAvengerSideViewIdle,
+	bool bDisplayOnGeoscapeIdle,
+	bool bDisplayInTacticalIdle )
+	*/
+
 	// You won
-	class'X2StrategyGameRulesetDataStructures'.static.BuildDynamicPropertySet(PropertySet, 'RTUIAlert', 'RTAlert_TemplarQuestlineComplete', none, true, true, true, false);
+	class'X2StrategyGameRulesetDataStructures'.static.BuildDynamicPropertySet(PropertySet,'RTUIAlert','RTAlert_TemplarQuestlineComplete', none, false, true, false, false);
 	class'XComPresentationLayerBase'.static.QueueDynamicPopup(PropertySet, NewGameState);
 	PropertySet = EmptySet;
 
@@ -707,16 +724,16 @@ static function GiveTemplarQuestlineCompleteReward(XComGameState NewGameState, X
 			break;
 		}
 	}
-	
+
 	// Program Drone Blueprints | eAlert_ProvingGroundProjectAvailable
-	class'X2StrategyGameRulesetDataStructures'.static.BuildDynamicPropertySet(PropertySet, 'UIAlert', 'eAlert_ProvingGroundProjectAvailable', none, true, true, true, false);
+	class'X2StrategyGameRulesetDataStructures'.static.BuildDynamicPropertySet(PropertySet, 'UIAlert', 'eAlert_ProvingGroundProjectAvailable', none, false, true, false, false);
 	class'X2StrategyGameRulesetDataStructures'.static.AddDynamicStringProperty(PropertySet, 'SoundToPlay', "Geoscape_CrewMemberLevelledUp");
 	class'X2StrategyGameRulesetDataStructures'.static.AddDynamicIntProperty(PropertySet, 'TechRef', TechState.ObjectID);
 	class'XComPresentationLayerBase'.static.QueueDynamicPopup(PropertySet, NewGameState);
 	PropertySet = EmptySet;
 
 	// Warp Grenade Blueprints |  eAlert_ItemAvailable
-	class'X2StrategyGameRulesetDataStructures'.static.BuildDynamicPropertySet(PropertySet, 'UIAlert', 'eAlert_ItemAvailable', none, true, true, true, false);
+	class'X2StrategyGameRulesetDataStructures'.static.BuildDynamicPropertySet(PropertySet, 'UIAlert', 'eAlert_ItemAvailable', none, false, true, false, false);
 	class'X2StrategyGameRulesetDataStructures'.static.AddDynamicStringProperty(PropertySet, 'SoundToPlay', "Geoscape_CrewMemberLevelledUp");
 	class'X2StrategyGameRulesetDataStructures'.static.AddDynamicNameProperty(PropertySet, 'ItemTemplate', 'RTWarpGrenade');
 	class'XComPresentationLayerBase'.static.QueueDynamicPopup(PropertySet, NewGameState);
