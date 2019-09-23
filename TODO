@@ -37,13 +37,20 @@
   ☐ Add Hunt_Templars images
   ✔ Add Hunt_Templars rewards @done(19-05-26 14:01)
   ✔ Add system to manage Hunt_Templars covert actions @done(18-12-09 16:55)
-  ☐ Add Assault Templar Leadership mission
+  ✔ Add Assault Templar Leadership mission @done(19-09-22 21:39)
+    ✔ Add Server Warehouse Parcel @done(19-09-22 10:59)
+    ✔ Add Psionic Network Uplink Parcel @done(19-09-22 10:59)
+    ✔ Add Coven Plot @done(19-09-22 10:59)
+    ✔ Add High Coven Kismet @done(19-09-22 21:39)
+    ✔ Add Geist @done(19-09-22 10:16)
+    ✔ Add High Coven @done(19-09-22 10:16)
+    ✔ Add Psionic Reinforcements SeqAct @done(19-09-22 10:16)
   ✔ Add Enemy Templar Faction @done(19-05-26 14:01)
     ✔ Templar Abiity Set @done(19-03-10 17:32)
     ✔ Templar Character Generator @done(19-03-10 17:32)
     ✔ Templar AI.ini @done(19-03-10 17:32)
     ✔ Templar Encounter configuration @done(19-03-23 09:58)
-  ☐ Add Program Favors System
+  ✔ Add Program Favors System @done(19-09-22 10:16)
     ✔ Implement @done(19-03-10 17:33)
     ✔ Fixes to current systems @done(19-03-10 17:33)
     ✔ Influence Change: Should always try to increase influence even if Player did not win @done(19-03-23 10:01)
@@ -52,9 +59,9 @@
       ✔ Create Localization @done(19-04-09 23:28)
       ✔ Create Tutorial @done(19-04-09 23:28)
       ✔ Create UIScreenListener @done(19-03-10 17:33)
-    ☐ Stretch: Add Program Requests System
   ☐ Remove -debug flag from build script before releasing
   ☐ Fix Psionic Storm visualizaton (its broken)
-  ☐ Add Call in One Small Favor covert action (hard) -> available if program questline completed
-  ☐ Add +1 Program Favors covert action (medium) -> available if program favors < 1
+  ✔ Add Call in One Small Favor covert action (hard) -> available if program questline completed @done(19-09-21 09:09)
+  ✔ Add +1 Program Favors covert action (medium) -> available if program favors < 1 @done(19-09-21 09:09)
   ☐ Stretch: Add Templar High Coven Special Abilities
+  ☐ Stretch: Add Program Requests System

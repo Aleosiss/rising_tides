@@ -1338,3 +1338,13 @@ exec function RT_DebugSpeakerTemplate(name CharTemplateName)
 		`RTLOG("Couldn't find character template " $ CharTemplateName $ "!", false, true);
 	}
 }
+
+exec function RT_DebugUnitByObjectID(int ObjectID) {
+	local XComGameState_Unit UnitState;
+	local XComGameStateHistory History;
+
+	History = `XCOMHISTORY;
+
+	UnitState = XComGameState_Unit(History.GetGameStateForObjectID(ObjectID));
+	`RTLOG(UnitState.ToString(true), false, true);
+}

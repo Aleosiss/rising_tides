@@ -1,59 +1,32 @@
-# Rising Tides
+# risingtides
 
-Rising Tides is an XCOM 2 content addition mod that aims to provide a DLC-like experience. Currently I looking to provide the following:
+[![Build Status](http://96.252.78.169:8088/job/Rising%20Tides/job/develop/badge/icon)](http://96.252.78.169:8088/job/Rising%20Tides/job/develop/)
 
->- Three "hero"-type units, each with unique three-branch skill trees
->- A single Ghost "superclass" extension (as Soldier is to the Vanilla classes) which provides the following:
->- Additional default abilities ("Mind Control", "Mind Wrack", "Mind Meld")
->- Shared abilities across child classes ("Teek", "Fade")
->- Special narrative missions to use these units in a controlled environment to ease balancing in a mod-rich environment
+> Rising Tides is an XCOM 2 WOTC Faction mod. It adds the Program, an illusive organization that has aided XCOM in the past, to the game.
 
-This would be a bare-bones content mod. I also have the following content in mind, but would be out of my current capability to do alone (IE I would either need to develop the skills and/or obtain additional contributors, either volunteers or contractors):
+The Program is an organization with a long history dating back deep into the old world. Unlike other factions available in the vanilla experience, the Program will not work as closely with XCOM, and will not commit their own to work with XCOM directly. Instead, once a month, you can call in a favor, and have the Program run a mission for you. If you gain enough influence via these favors, the Program will entrust upon you a task of monumental importance to society at large and rewards in kind.
 
->- Voicework for each individual hero unit, as well as other characters
->- New models/animations for armor, weapons, and map assets (and possibly faces)
->- High-quality 2D artwork (Producing icons is possible ATM, but not much more)
->- New enemy units, possible returns from EW
+## Table of Contents
 
-## Current To Test
+- [Install](#install)
+- [Maintainers](#maintainers)
+- [Contributing](#contributing)
+- [License](#license)
 
-## Current Bugs (High Priority)
+## Install
 
-## Current Issues 
+Unzip the .zip in your mods directory.
 
-## Current Table
+## Maintainers
 
-	- Berserker: 
-		- Shadow Strike: Idea: Target allies (no damage), implement by having a helper ability which activates subabilities based on selection
-		- GFX for Bloodlust
-		- SFX for Burst
-		- Purge: Idea: Add a remove debuffs effect. Additionally propagate this new effect across melded allies?
-		- New Capstone Perk Idea: Orpheus Warp: "…the hero of the shattered moon. A pawn played by a negligent deity, a marionette maneuvered by an epileptic..."
-				- Gain Stealth while preparing a massive psionic rift. On the following turn, the Stealth is broken and a rift is formed. Friendly units can use the rift to evac from the mission. The rift will end after two turns, or if caster's connection is broken.
-	- Marksman:
-		- rework boring perks (Knock Them Down, Your Hands, My Eyes, Eye in the Sky)
-	- Gatherer:
-		- Add Over the Shoulder exception for civilians that are actually faceless
-		- Extinction Event needs to somehow stop revive units from reviving
-		- Come up with a better solution for Over The Shoulder vs. concealed units
-		- New Perk Idea: Restrained Mindset: Mind Wrack now stuns instead of kills. Reduce Feedback duration to 1 turn.
-	- General:
-		- Add Priorites for Abilities
-		- New Perk: Mind Call
-			- Although the Lost do not have much of a mind to control, they are still vulnerable to psionic suggestion. 
-			  Program Operatives can influence the lost to attack an area or position en masse.
-			- Only available on missions where the Lost are present.
-	- The Program:
-		- none! :)
-	- Prognosticator (New Class)
-		- this word sounded cool, so I will make it into a class
-		- wtf will it do? not sure how "seeing the future" can work in real life
-			- is it possible to force the AI to use a behavior tree?
+[@abatewongc](https://github.com/abatewongc)
 
-## Current Bugs (low priority)
+## Contributing
 
-	- Time Stop damage calculation isn't visualized properly
-	- Time Stop damage calculation is fucked, use code from X2Effect_DLC_3AbsorptionField.uc to rewrite
-	- Make extend effect duration happen on ObjectMoved for Aura Effects as well, possibly by breaking its logic out into a separate method that is called in either place
-	- Psionic Storm only plays sound from one storm at a time, due to a base-game issue where a looping soundcue can only be played once per ObjectID
-	- Networked OI does not work with CloseCombatSpecialistAttack or KillzoneShot. Unsure of exact cause, appears that CCS does not tick AbilityActivated
+This project is set up to use VSCode. Clone the repo and add a settings.json with the paths required - sdk, game, aml paths.
+
+PRs accepted.
+
+## License
+
+MIT © 2019 abatewongc
