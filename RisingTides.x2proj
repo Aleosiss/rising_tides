@@ -20,6 +20,22 @@
     <Folder Include="Src\RisingTides\Classes\" />
     <Folder Include="Localization\JPN\" />
     <Folder Include="Content\Sounds\" />
+    <Folder Include="Src\RisingTides\Classes\abilities\" />
+    <Folder Include="Src\RisingTides\Classes\conditions\" />
+    <Folder Include="Src\RisingTides\Classes\gamestates\" />
+    <Folder Include="Src\RisingTides\Classes\items\" />
+    <Folder Include="Src\RisingTides\Classes\sequences\" />
+    <Folder Include="Src\RisingTides\Classes\strategyelements\" />
+    <Folder Include="Src\RisingTides\Classes\utils\" />
+    <Folder Include="Src\RisingTides\Classes\abilities\costs\" />
+    <Folder Include="Src\RisingTides\Classes\abilities\sets\" />
+    <Folder Include="Src\RisingTides\Classes\abilities\targetingmethods\" />
+    <Folder Include="Src\RisingTides\Classes\abilities\targetingstyles\" />
+    <Folder Include="Src\RisingTides\Classes\abilities\targetingmethods\pawns\" />
+    <Folder Include="Src\RisingTides\Classes\actions\" />
+    <Folder Include="Src\RisingTides\Classes\effects\" />
+    <Folder Include="Src\RisingTides\Classes\templates\" />
+    <Folder Include="Src\RisingTides\Classes\abilities\tohitcalc\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Config\XComClassData.ini">
@@ -217,442 +233,196 @@
     <Content Include="Src\RisingTides\Classes\extra_globals.uci">
       <SubType>Content</SubType>
     </Content>
-    <Content Include="Src\RisingTides\Classes\RTAbilityCooldown.uc">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Src\RisingTides\Classes\RTAbilityCost_SnapshotActionPoints.uc">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Src\RisingTides\Classes\RTAbilityMultiTarget_TargetedLine.uc">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Src\RisingTides\Classes\RTAbilityTarget_TeleportMelee.uc">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Src\RisingTides\Classes\RTAbilityTemplate.uc">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Src\RisingTides\Classes\RTAbilityToHitCalc_PanicCheck.uc">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Src\RisingTides\Classes\RTAbilityToHitCalc_StatCheck_UnitVsUnit.uc">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Src\RisingTides\Classes\RTEventListener.uc">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Src\RisingTides\Classes\RTAbility_BerserkerAbilitySet.uc">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Src\RisingTides\Classes\RTAbility_GathererAbilitySet.uc">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Src\RisingTides\Classes\RTAbility_GhostAbilitySet.uc">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Src\RisingTides\Classes\RTAbility_MarksmanAbilitySet.uc">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Src\RisingTides\Classes\RTAbility_Program.uc">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Src\RisingTides\Classes\RTAction_ApplyMITV.uc">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Src\RisingTides\Classes\RTAction_ForceVisibility.uc">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Src\RisingTides\Classes\RTAction_Greyscaled.uc">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Src\RisingTides\Classes\RTAction_GreyscaledEnd.uc">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Src\RisingTides\Classes\RTAction_PlayEffect.uc">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Src\RisingTides\Classes\RTAction_PsionicGetOverHere.uc">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Src\RisingTides\Classes\RTAction_PsionicGetOverHereTarget.uc">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Src\RisingTides\Classes\RTAction_RemoveMITV.uc">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Src\RisingTides\Classes\RTCharacter_DefaultCharacters.uc">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Src\RisingTides\Classes\RTCharacterTemplate.uc">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Src\RisingTides\Classes\RTConditionBuilder.uc">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Src\RisingTides\Classes\RTCondition_Conditional.uc">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Src\RisingTides\Classes\RTCondition_UnfurlTheVeil.uc">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Src\RisingTides\Classes\RTCondition_EffectStackCount.uc">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Src\RisingTides\Classes\RTCondition_HackingTarget.uc">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Src\RisingTides\Classes\RTCondition_PsionicTarget.uc">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Src\RisingTides\Classes\RTCondition_UnitSize.uc">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Src\RisingTides\Classes\RTCondition_VerticalClearance.uc">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Src\RisingTides\Classes\RTCondition_VisibleToPlayer.uc">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Src\RisingTides\Classes\RTEffectBuilder.uc">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Src\RisingTides\Classes\RTEffect_Acid.uc">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Src\RisingTides\Classes\RTEffect_Aggression.uc">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Src\RisingTides\Classes\RTEffect_BerserkerMeleeDamage.uc">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Src\RisingTides\Classes\RTEffect_Bloodlust.uc">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Src\RisingTides\Classes\RTEffect_BumpInTheNight.uc">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Src\RisingTides\Classes\RTEffect_Counter.uc">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Src\RisingTides\Classes\RTEffect_DamnGoodGround.uc">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Src\RisingTides\Classes\RTEffect_DisablingShotDamage.uc">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Src\RisingTides\Classes\RTEffect_EveryMomentMatters.uc">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Src\RisingTides\Classes\RTEffect_ExtendEffectDuration.uc">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Src\RisingTides\Classes\RTEffect_GenerateAfterimage.uc">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Src\RisingTides\Classes\RTEffect_GhostInTheShell.uc">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Src\RisingTides\Classes\RTEffect_GhostPerkBase.uc">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Src\RisingTides\Classes\RTEffect_GuiltyConscience.uc">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Src\RisingTides\Classes\RTEffect_Harbinger.uc">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Src\RisingTides\Classes\RTEffect_HeatChannel.uc">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Src\RisingTides\Classes\RTEffect_KnockThemDown.uc">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Src\RisingTides\Classes\RTEffect_KnowledgeIsPower.uc">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Src\RisingTides\Classes\RTEffect_Lift.uc">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Src\RisingTides\Classes\RTEffect_LinkedIntelligence.uc">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Src\RisingTides\Classes\RTEffect_MarkValidActivationTiles.uc">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Src\RisingTides\Classes\RTEffect_Meld.uc">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Src\RisingTides\Classes\RTEffect_MobileSquadViewer.uc">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Src\RisingTides\Classes\RTEffect_OverflowBarrier.uc">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Src\RisingTides\Classes\RTEffect_AuraSource.uc">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Src\RisingTides\Classes\RTEffect_Panicked.uc">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Src\RisingTides\Classes\RTEffect_PrecisionShotDamage.uc">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Src\RisingTides\Classes\RTEffect_PsionicLash.uc">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Src\RisingTides\Classes\RTEffect_PsionicSurge.uc">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Src\RisingTides\Classes\RTEffect_OverflowEvent.uc">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Src\RisingTides\Classes\RTEffect_RemoveStacks.uc">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Src\RisingTides\Classes\RTEffect_RemoveValidActivationTiles.uc">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Src\RisingTides\Classes\RTEffect_ReprobateWaltz.uc">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Src\RisingTides\Classes\RTEffect_ReserveOverwatchPoints.uc">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Src\RisingTides\Classes\RTEffect_ResetCharges.uc">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Src\RisingTides\Classes\RTEffect_Rudimentary.uc">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Src\RisingTides\Classes\RTEffect_ScopedAndDropped.uc">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Src\RisingTides\Classes\RTEffect_ShockAndAwe.uc">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Src\RisingTides\Classes\RTEffect_SimpleHeal.uc">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Src\RisingTides\Classes\RTEffect_Siphon.uc">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Src\RisingTides\Classes\RTEffect_SixOClock.uc">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Src\RisingTides\Classes\RTEffect_SlowIsSmooth.uc">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Src\RisingTides\Classes\RTEffect_Snapshot.uc">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Src\RisingTides\Classes\RTEffect_Sovereign.uc">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Src\RisingTides\Classes\RTEffect_Squadsight.uc">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Src\RisingTides\Classes\RTEffect_Stealth.uc">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Src\RisingTides\Classes\RTEffect_TimeStop.uc">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Src\RisingTides\Classes\RTEffect_TimeStopDamage.uc">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Src\RisingTides\Classes\RTEffect_TimeStopMaster.uc">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Src\RisingTides\Classes\RTEffect_TimeStopTag.uc">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Src\RisingTides\Classes\RTEffect_TwitchReaction.uc">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Src\RisingTides\Classes\RTEffect_UnsettlingVoices.uc">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Src\RisingTides\Classes\RTEffect_VPTargeting.uc">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Src\RisingTides\Classes\RTEffect_YourHandsMyEyes.uc">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Src\RisingTides\Classes\RTGameState_Ability.uc">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Src\RisingTides\Classes\RTGameState_Effect.uc">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Src\RisingTides\Classes\RTGameState_MeldEffect.uc">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Src\RisingTides\Classes\RTGameState_PersistentGhostSquad.uc">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Src\RisingTides\Classes\RTGameState_ProgramFaction.uc">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Src\RisingTides\Classes\RTGameState_StrategyCard.uc">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Src\RisingTides\Classes\RTProgramFactionTemplate.uc">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Src\RisingTides\Classes\RTProgramStrategyCardTemplate.uc">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Src\RisingTides\Classes\RTStrategyElement_ProgramFaction.uc">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Src\RisingTides\Classes\RTStrategyElement_ProgramStaffSlots.uc">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Src\RisingTides\Classes\RTGameState_SquadViewer.uc">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Src\RisingTides\Classes\RTGameState_TimeStopEffect.uc">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Src\RisingTides\Classes\RTGameState_Unit.uc">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Src\RisingTides\Classes\RTHelpers.uc">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Src\RisingTides\Classes\RTItem.uc">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Src\RisingTides\Classes\RTMeleePathingPawn.uc">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Src\RisingTides\Classes\RTSitRepEffects.uc">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Src\RisingTides\Classes\RTSitrepEffect_OneSmallFavor.uc">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Src\RisingTides\Classes\RTStrategyElement_CovertActions.uc">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Src\RisingTides\Classes\RTStrategyElement_SitReps.uc">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Src\RisingTides\Classes\RTStrategyElement_StrategyCards.uc">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Src\RisingTides\Classes\RTStrategyElement_ResistanceModes.uc">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Src\RisingTides\Classes\RTStrategyElement_Rewards.uc">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Src\RisingTides\Classes\RTTacticalVisibilityHelpers.uc">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Src\RisingTides\Classes\RTTargetingMethod_AdjustibleLine.uc">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Src\RisingTides\Classes\RTTargetingMethod_AimedLineSkillshot.uc">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Src\RisingTides\Classes\RTTargetingMethod_Cone.uc">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Src\RisingTides\Classes\RTTargetingMethod_TargetedMeleeTeleport.uc">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Src\RisingTides\Classes\RTUIScreenListener_OneSmallFavor.uc">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Src\RisingTides\Classes\UIDebugStateMachines.uc">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Src\RisingTides\Classes\X2AbilityTarget_Single_CCS.uc">
-      <SubType>Content</SubType>
-    </Content>
     <Content Include="Src\RisingTides\Classes\X2DownloadableContentInfo_RisingTides.uc">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Src\RisingTides\Classes\X2Effect_AuraSource.uc">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Src\RisingTides\Classes\X2Effect_ImmediateMultiTargetAbilityActivation.uc">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Src\RisingTides\Classes\X2Effect_Kubikuri.uc">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Src\RisingTides\Classes\X2MeleePathingPawn_RT.uc">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Src\RisingTides\Classes\XComGameState_Effect_ImmediateMultiTarget.uc">
       <SubType>Content</SubType>
     </Content>
     <Content Include="Localization\JPN\RisingTides.jpn" />
     <Content Include="Localization\JPN\XComGame.jpn" />
-    <Content Include="Src\RisingTides\Classes\RTUIScreen_AdvanceTemplarQuestlineStage.uc" />
-    <Content Include="Src\RisingTides\Classes\RTEffect_Repositioning.uc" />
     <Content Include="Content\RT_Perk_Psi_UnfurlTheVeil.upk" />
-    <Content Include="Src\RisingTides\Classes\RTCommandManager.uc" />
     <Content Include="Content\RT_Obj_EliminateTemplarResponders.umap" />
-    <Content Include="Src\RisingTides\Classes\RTGameState_MissionSiteTemplarAmbush.uc" />
-    <Content Include="Src\RisingTides\Classes\RTMissionNarrativeSet.uc" />
-    <Content Include="Src\RisingTides\Classes\RTMissionSet.uc" />
-    <Content Include="Src\RisingTides\Classes\RTStrategyElement_MissionSources.uc" />
-    <Content Include="Src\RisingTides\Classes\RTStrategyElement_Risks.uc" />
-    <Content Include="Src\RisingTides\Classes\RTUIMission_TemplarAmbush.uc" />
     <Content Include="Config\XComMissionSources.ini" />
-    <Content Include="Src\RisingTides\Classes\RTUIAlert.uc" />
     <Content Include="Config\XComEncounterLists.ini" />
     <Content Include="Config\XComEncounters.ini" />
-    <Content Include="Src\RisingTides\Classes\RTCharacter_DefaultTemplars.uc" />
-    <Content Include="Src\RisingTides\Classes\RTCharacterGenerator_Templar.uc" />
     <Content Include="Config\XComContent.ini" />
     <Content Include="Content\GameUnit_GenericHumanHostile.upk" />
     <Content Include="Config\XComGameCore.ini" />
-    <Content Include="Src\RisingTides\Classes\RTAbility_TemplarAbilitySet.uc" />
     <Content Include="Content\RT_Perk_Psi_Burst.upk" />
     <Content Include="Content\RT_Perk_Scholar_Ionic_Storm.upk" />
     <Content Include="Content\RT_Scholar_Perk_Volt.upk" />
     <Content Include="Content\RT_Grenade_Warp.upk" />
     <Content Include="Config\XComAI.ini" />
-    <Content Include="Src\RisingTides\Classes\RTUIScreen_ProgramFactionInfo.uc" />
-    <Content Include="Src\RisingTides\Classes\UIVerticalProgressBar.uc" />
-    <Content Include="Src\RisingTides\Classes\RTHelpers_ItemTemplates.uc" />
-    <Content Include="Src\RisingTides\Classes\RTUICounter.uc" />
-    <Content Include="Src\RisingTides\Classes\RTUIInfoBox.uc" />
     <Content Include="Config\XComSchedules.ini" />
     <Content Include="Config\XComMissionDefs.ini" />
-    <Content Include="Src\RisingTides\Classes\RTGameState_Haven.uc" />
-    <Content Include="Src\RisingTides\Classes\RTUIStrategyMapItem_ProgramHQ.uc" />
     <Content Include="Config\XComPCPs.ini" />
     <Content Include="Config\XComPlots.ini" />
-    <Content Include="Src\RisingTides\Classes\RTEffect_ModifyTemplarFocus.uc" />
-    <Content Include="Src\RisingTides\Classes\RTEffect_Sustain.uc" />
-    <Content Include="Src\RisingTides\Classes\RTEffect_Stasis.uc" />
-    <Content Include="Src\RisingTides\Classes\RTGameState_MissionSiteTemplarHighCoven.uc" />
-    <Content Include="Src\RisingTides\Classes\RTUIMission_TemplarHighCovenAssault.uc" />
-    <Content Include="Src\RisingTides\Classes\RTAbility.uc" />
     <Content Include="Config\XComParcels.ini" />
-    <Content Include="Src\RisingTides\Classes\RTGameState_DestroyedHaven.uc" />
-    <Content Include="Src\RisingTides\Classes\RTGameState_DestroyedFaction.uc" />
     <Content Include="Content\ProgramDrone.upk" />
     <Content Include="Content\RTDroneWeapon.upk" />
     <Content Include="Content\RT_Perk_DroneSelfDestruction.upk" />
     <Content Include="Content\RT_Perk_Drone_CloakingProtocol.upk" />
-    <Content Include="Src\RisingTides\Classes\RTAbility_ProgramDroneAbilitySet.uc" />
-    <Content Include="Src\RisingTides\Classes\RTStrategyElement_Techs.uc" />
-    <Content Include="Src\RisingTides\Classes\RTTargetingMethod_PathFormation.uc" />
     <Content Include="Content\RT_Obj_EliminateTemplarHighCoven.umap" />
-    <Content Include="Src\RisingTides\Classes\SeqAct_ProgramReinforcement.uc" />
     <Content Include="Content\RT_Plot_TemplarHighCoven.umap" />
     <Content Include="Content\sm_HighCovenPark_NetworkLink_01.umap" />
     <Content Include="Content\md_HighCovenServerWarehouse_01.umap" />
-    <Content Include="Src\RisingTides\Classes\SeqAct_RTGetObjectiveInfo.uc" />
     <Content Include="Content\Sounds\RisingTidesSoundCuePackage.upk" />
     <Content Include="Content\Sounds\INT\RisingTidesSoundWavePackage.upk" />
     <Content Include="Localization\INT\RisingTidesSoundWavePackage.int" />
+    <Content Include="Src\RisingTides\Classes\abilities\RTAbility.uc" />
+    <Content Include="Src\RisingTides\Classes\abilities\costs\RTAbilityCooldown.uc" />
+    <Content Include="Src\RisingTides\Classes\abilities\costs\RTAbilityCost_SnapshotActionPoints.uc" />
+    <Content Include="Src\RisingTides\Classes\abilities\sets\RTAbility_BerserkerAbilitySet.uc" />
+    <Content Include="Src\RisingTides\Classes\abilities\sets\RTAbility_GathererAbilitySet.uc" />
+    <Content Include="Src\RisingTides\Classes\abilities\sets\RTAbility_GhostAbilitySet.uc" />
+    <Content Include="Src\RisingTides\Classes\abilities\sets\RTAbility_MarksmanAbilitySet.uc" />
+    <Content Include="Src\RisingTides\Classes\abilities\sets\RTAbility_Program.uc" />
+    <Content Include="Src\RisingTides\Classes\abilities\sets\RTAbility_ProgramDroneAbilitySet.uc" />
+    <Content Include="Src\RisingTides\Classes\abilities\sets\RTAbility_TemplarAbilitySet.uc" />
+    <Content Include="Src\RisingTides\Classes\abilities\targetingmethods\RTTargetingMethod_AdjustibleLine.uc" />
+    <Content Include="Src\RisingTides\Classes\abilities\targetingmethods\RTTargetingMethod_AimedLineSkillshot.uc" />
+    <Content Include="Src\RisingTides\Classes\abilities\targetingmethods\RTTargetingMethod_Cone.uc" />
+    <Content Include="Src\RisingTides\Classes\abilities\targetingmethods\RTTargetingMethod_PathFormation.uc" />
+    <Content Include="Src\RisingTides\Classes\abilities\targetingmethods\RTTargetingMethod_TargetedMeleeTeleport.uc" />
+    <Content Include="Src\RisingTides\Classes\abilities\targetingmethods\pawns\RTMeleePathingPawn.uc" />
+    <Content Include="Src\RisingTides\Classes\abilities\targetingmethods\pawns\X2MeleePathingPawn_RT.uc" />
+    <Content Include="Src\RisingTides\Classes\abilities\targetingstyles\RTAbilityMultiTarget_TargetedLine.uc" />
+    <Content Include="Src\RisingTides\Classes\abilities\targetingstyles\RTAbilityTarget_TeleportMelee.uc" />
+    <Content Include="Src\RisingTides\Classes\abilities\targetingstyles\X2AbilityTarget_Single_CCS.uc" />
+    <Content Include="Src\RisingTides\Classes\abilities\tohitcalc\RTAbilityToHitCalc_PanicCheck.uc" />
+    <Content Include="Src\RisingTides\Classes\abilities\tohitcalc\RTAbilityToHitCalc_StatCheck_UnitVsUnit.uc" />
+    <Content Include="Src\RisingTides\Classes\actions\RTAction_ApplyMITV.uc" />
+    <Content Include="Src\RisingTides\Classes\actions\RTAction_ForceVisibility.uc" />
+    <Content Include="Src\RisingTides\Classes\actions\RTAction_Greyscaled.uc" />
+    <Content Include="Src\RisingTides\Classes\actions\RTAction_GreyscaledEnd.uc" />
+    <Content Include="Src\RisingTides\Classes\actions\RTAction_PlayEffect.uc" />
+    <Content Include="Src\RisingTides\Classes\actions\RTAction_PsionicGetOverHere.uc" />
+    <Content Include="Src\RisingTides\Classes\actions\RTAction_PsionicGetOverHereTarget.uc" />
+    <Content Include="Src\RisingTides\Classes\actions\RTAction_RemoveMITV.uc" />
+    <Content Include="Src\RisingTides\Classes\characters\RTCharacterGenerator_Templar.uc" />
+    <Content Include="Src\RisingTides\Classes\characters\RTCharacterTemplate.uc" />
+    <Content Include="Src\RisingTides\Classes\characters\RTCharacter_DefaultCharacters.uc" />
+    <Content Include="Src\RisingTides\Classes\characters\RTCharacter_DefaultTemplars.uc" />
+    <Content Include="Src\RisingTides\Classes\conditions\RTCondition_Conditional.uc" />
+    <Content Include="Src\RisingTides\Classes\conditions\RTCondition_EffectStackCount.uc" />
+    <Content Include="Src\RisingTides\Classes\conditions\RTCondition_HackingTarget.uc" />
+    <Content Include="Src\RisingTides\Classes\conditions\RTCondition_PsionicTarget.uc" />
+    <Content Include="Src\RisingTides\Classes\conditions\RTCondition_UnfurlTheVeil.uc" />
+    <Content Include="Src\RisingTides\Classes\conditions\RTCondition_UnitSize.uc" />
+    <Content Include="Src\RisingTides\Classes\conditions\RTCondition_VerticalClearance.uc" />
+    <Content Include="Src\RisingTides\Classes\conditions\RTCondition_VisibleToPlayer.uc" />
+    <Content Include="Src\RisingTides\Classes\effects\RTEffect_Acid.uc" />
+    <Content Include="Src\RisingTides\Classes\effects\RTEffect_Aggression.uc" />
+    <Content Include="Src\RisingTides\Classes\effects\RTEffect_AuraSource.uc" />
+    <Content Include="Src\RisingTides\Classes\effects\RTEffect_BerserkerMeleeDamage.uc" />
+    <Content Include="Src\RisingTides\Classes\effects\RTEffect_Bloodlust.uc" />
+    <Content Include="Src\RisingTides\Classes\effects\RTEffect_BumpInTheNight.uc" />
+    <Content Include="Src\RisingTides\Classes\effects\RTEffect_Counter.uc" />
+    <Content Include="Src\RisingTides\Classes\effects\RTEffect_DamnGoodGround.uc" />
+    <Content Include="Src\RisingTides\Classes\effects\RTEffect_DisablingShotDamage.uc" />
+    <Content Include="Src\RisingTides\Classes\effects\RTEffect_EveryMomentMatters.uc" />
+    <Content Include="Src\RisingTides\Classes\effects\RTEffect_ExtendEffectDuration.uc" />
+    <Content Include="Src\RisingTides\Classes\effects\RTEffect_GenerateAfterimage.uc" />
+    <Content Include="Src\RisingTides\Classes\effects\RTEffect_GhostInTheShell.uc" />
+    <Content Include="Src\RisingTides\Classes\effects\RTEffect_GhostPerkBase.uc" />
+    <Content Include="Src\RisingTides\Classes\effects\RTEffect_GuiltyConscience.uc" />
+    <Content Include="Src\RisingTides\Classes\effects\RTEffect_Harbinger.uc" />
+    <Content Include="Src\RisingTides\Classes\effects\RTEffect_HeatChannel.uc" />
+    <Content Include="Src\RisingTides\Classes\effects\RTEffect_KnockThemDown.uc" />
+    <Content Include="Src\RisingTides\Classes\effects\RTEffect_KnowledgeIsPower.uc" />
+    <Content Include="Src\RisingTides\Classes\effects\RTEffect_Lift.uc" />
+    <Content Include="Src\RisingTides\Classes\effects\RTEffect_LinkedIntelligence.uc" />
+    <Content Include="Src\RisingTides\Classes\effects\RTEffect_MarkValidActivationTiles.uc" />
+    <Content Include="Src\RisingTides\Classes\effects\RTEffect_Meld.uc" />
+    <Content Include="Src\RisingTides\Classes\effects\RTEffect_MobileSquadViewer.uc" />
+    <Content Include="Src\RisingTides\Classes\effects\RTEffect_ModifyTemplarFocus.uc" />
+    <Content Include="Src\RisingTides\Classes\effects\RTEffect_OverflowBarrier.uc" />
+    <Content Include="Src\RisingTides\Classes\effects\RTEffect_OverflowEvent.uc" />
+    <Content Include="Src\RisingTides\Classes\effects\RTEffect_Panicked.uc" />
+    <Content Include="Src\RisingTides\Classes\effects\RTEffect_PrecisionShotDamage.uc" />
+    <Content Include="Src\RisingTides\Classes\effects\RTEffect_PsionicLash.uc" />
+    <Content Include="Src\RisingTides\Classes\effects\RTEffect_PsionicSurge.uc" />
+    <Content Include="Src\RisingTides\Classes\effects\RTEffect_RemoveStacks.uc" />
+    <Content Include="Src\RisingTides\Classes\effects\RTEffect_RemoveValidActivationTiles.uc" />
+    <Content Include="Src\RisingTides\Classes\effects\RTEffect_Repositioning.uc" />
+    <Content Include="Src\RisingTides\Classes\effects\RTEffect_ReprobateWaltz.uc" />
+    <Content Include="Src\RisingTides\Classes\effects\RTEffect_ReserveOverwatchPoints.uc" />
+    <Content Include="Src\RisingTides\Classes\effects\RTEffect_ResetCharges.uc" />
+    <Content Include="Src\RisingTides\Classes\effects\RTEffect_Rudimentary.uc" />
+    <Content Include="Src\RisingTides\Classes\effects\RTEffect_ScopedAndDropped.uc" />
+    <Content Include="Src\RisingTides\Classes\effects\RTEffect_ShockAndAwe.uc" />
+    <Content Include="Src\RisingTides\Classes\effects\RTEffect_SimpleHeal.uc" />
+    <Content Include="Src\RisingTides\Classes\effects\RTEffect_Siphon.uc" />
+    <Content Include="Src\RisingTides\Classes\effects\RTEffect_SixOClock.uc" />
+    <Content Include="Src\RisingTides\Classes\effects\RTEffect_SlowIsSmooth.uc" />
+    <Content Include="Src\RisingTides\Classes\effects\RTEffect_Snapshot.uc" />
+    <Content Include="Src\RisingTides\Classes\effects\RTEffect_Sovereign.uc" />
+    <Content Include="Src\RisingTides\Classes\effects\RTEffect_Squadsight.uc" />
+    <Content Include="Src\RisingTides\Classes\effects\RTEffect_Stasis.uc" />
+    <Content Include="Src\RisingTides\Classes\effects\RTEffect_Stealth.uc" />
+    <Content Include="Src\RisingTides\Classes\effects\RTEffect_Sustain.uc" />
+    <Content Include="Src\RisingTides\Classes\effects\RTEffect_TimeStop.uc" />
+    <Content Include="Src\RisingTides\Classes\effects\RTEffect_TimeStopDamage.uc" />
+    <Content Include="Src\RisingTides\Classes\effects\RTEffect_TimeStopMaster.uc" />
+    <Content Include="Src\RisingTides\Classes\effects\RTEffect_TimeStopTag.uc" />
+    <Content Include="Src\RisingTides\Classes\effects\RTEffect_TwitchReaction.uc" />
+    <Content Include="Src\RisingTides\Classes\effects\RTEffect_UnsettlingVoices.uc" />
+    <Content Include="Src\RisingTides\Classes\effects\RTEffect_VPTargeting.uc" />
+    <Content Include="Src\RisingTides\Classes\effects\RTEffect_YourHandsMyEyes.uc" />
+    <Content Include="Src\RisingTides\Classes\effects\X2Effect_AuraSource.uc" />
+    <Content Include="Src\RisingTides\Classes\effects\X2Effect_ImmediateMultiTargetAbilityActivation.uc" />
+    <Content Include="Src\RisingTides\Classes\effects\X2Effect_Kubikuri.uc" />
+    <Content Include="Src\RisingTides\Classes\gamestates\RTGameState_Ability.uc" />
+    <Content Include="Src\RisingTides\Classes\gamestates\RTGameState_DestroyedFaction.uc" />
+    <Content Include="Src\RisingTides\Classes\gamestates\RTGameState_DestroyedHaven.uc" />
+    <Content Include="Src\RisingTides\Classes\gamestates\RTGameState_Effect.uc" />
+    <Content Include="Src\RisingTides\Classes\gamestates\RTGameState_Haven.uc" />
+    <Content Include="Src\RisingTides\Classes\gamestates\RTGameState_MeldEffect.uc" />
+    <Content Include="Src\RisingTides\Classes\gamestates\RTGameState_MissionSiteTemplarAmbush.uc" />
+    <Content Include="Src\RisingTides\Classes\gamestates\RTGameState_MissionSiteTemplarHighCoven.uc" />
+    <Content Include="Src\RisingTides\Classes\gamestates\RTGameState_PersistentGhostSquad.uc" />
+    <Content Include="Src\RisingTides\Classes\gamestates\RTGameState_ProgramFaction.uc" />
+    <Content Include="Src\RisingTides\Classes\gamestates\RTGameState_SquadViewer.uc" />
+    <Content Include="Src\RisingTides\Classes\gamestates\RTGameState_StrategyCard.uc" />
+    <Content Include="Src\RisingTides\Classes\gamestates\RTGameState_TimeStopEffect.uc" />
+    <Content Include="Src\RisingTides\Classes\gamestates\RTGameState_Unit.uc" />
+    <Content Include="Src\RisingTides\Classes\gamestates\XComGameState_Effect_ImmediateMultiTarget.uc" />
+    <Content Include="Src\RisingTides\Classes\items\RTItem.uc" />
+    <Content Include="Src\RisingTides\Classes\missions\RTMissionNarrativeSet.uc" />
+    <Content Include="Src\RisingTides\Classes\missions\RTMissionSet.uc" />
+    <Content Include="Src\RisingTides\Classes\sequences\SeqAct_ProgramReinforcement.uc" />
+    <Content Include="Src\RisingTides\Classes\sequences\SeqAct_RTGetObjectiveInfo.uc" />
+    <Content Include="Src\RisingTides\Classes\strategy\RTEventListener.uc" />
+    <Content Include="Src\RisingTides\Classes\strategy\RTSitRepEffects.uc" />
+    <Content Include="Src\RisingTides\Classes\strategy\RTSitrepEffect_OneSmallFavor.uc" />
+    <Content Include="Src\RisingTides\Classes\strategyelements\RTStrategyElement_CovertActions.uc" />
+    <Content Include="Src\RisingTides\Classes\strategyelements\RTStrategyElement_MissionSources.uc" />
+    <Content Include="Src\RisingTides\Classes\strategyelements\RTStrategyElement_ProgramFaction.uc" />
+    <Content Include="Src\RisingTides\Classes\strategyelements\RTStrategyElement_ProgramStaffSlots.uc" />
+    <Content Include="Src\RisingTides\Classes\strategyelements\RTStrategyElement_ResistanceModes.uc" />
+    <Content Include="Src\RisingTides\Classes\strategyelements\RTStrategyElement_Rewards.uc" />
+    <Content Include="Src\RisingTides\Classes\strategyelements\RTStrategyElement_Risks.uc" />
+    <Content Include="Src\RisingTides\Classes\strategyelements\RTStrategyElement_SitReps.uc" />
+    <Content Include="Src\RisingTides\Classes\strategyelements\RTStrategyElement_StrategyCards.uc" />
+    <Content Include="Src\RisingTides\Classes\strategyelements\RTStrategyElement_Techs.uc" />
+    <Content Include="Src\RisingTides\Classes\templates\RTAbilityTemplate.uc" />
+    <Content Include="Src\RisingTides\Classes\templates\RTProgramFactionTemplate.uc" />
+    <Content Include="Src\RisingTides\Classes\templates\RTProgramStrategyCardTemplate.uc" />
+    <Content Include="Src\RisingTides\Classes\UI\RTUIAlert.uc" />
+    <Content Include="Src\RisingTides\Classes\UI\RTUICounter.uc" />
+    <Content Include="Src\RisingTides\Classes\UI\RTUIInfoBox.uc" />
+    <Content Include="Src\RisingTides\Classes\UI\RTUIMission_TemplarAmbush.uc" />
+    <Content Include="Src\RisingTides\Classes\UI\RTUIMission_TemplarHighCovenAssault.uc" />
+    <Content Include="Src\RisingTides\Classes\UI\RTUIScreenListener_OneSmallFavor.uc" />
+    <Content Include="Src\RisingTides\Classes\UI\RTUIScreen_AdvanceTemplarQuestlineStage.uc" />
+    <Content Include="Src\RisingTides\Classes\UI\RTUIScreen_ProgramFactionInfo.uc" />
+    <Content Include="Src\RisingTides\Classes\UI\RTUIStrategyMapItem_ProgramHQ.uc" />
+    <Content Include="Src\RisingTides\Classes\UI\UIVerticalProgressBar.uc" />
+    <Content Include="Src\RisingTides\Classes\utils\RTCommandManager.uc" />
+    <Content Include="Src\RisingTides\Classes\utils\RTConditionBuilder.uc" />
+    <Content Include="Src\RisingTides\Classes\utils\RTEffectBuilder.uc" />
+    <Content Include="Src\RisingTides\Classes\utils\RTHelpers.uc" />
+    <Content Include="Src\RisingTides\Classes\utils\RTHelpers_ItemTemplates.uc" />
+    <Content Include="Src\RisingTides\Classes\utils\RTTacticalVisibilityHelpers.uc" />
+    <Content Include="Src\RisingTides\Classes\utils\UIDebugStateMachines.uc" />
   </ItemGroup>
   <Import Project="$(MSBuildLocalExtensionPath)\XCOM2.targets" />
 </Project>

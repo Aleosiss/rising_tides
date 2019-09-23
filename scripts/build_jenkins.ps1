@@ -22,6 +22,12 @@ function StageDirectory ([string]$directoryName, [string]$srcDirectory, [string]
     }
 }
 
+function HandleSrcSubdirectories([string] $srcDir) {
+    $files = Get-ChildItem -Path $srcDir -Filter "*.uc"
+    Get-ChildItem -Path $srcDir -Recurse -Filter "*.uc" | Get-ChildItem | Copy-Item -Destination {$srcDir}
+    return $files
+}
+
 function CheckErrorCode([string] $message) {
     if ($LASTEXITCODE -ne 0) {
         $stopwatch.stop();
@@ -393,6 +399,10 @@ StageDirectory "Config" $modSrcRoot $stagingPath
 StageDirectory "Content" $modSrcRoot $stagingPath
 StageDirectory "Localization" $modSrcRoot $stagingPath
 StageDirectory "Src" $modSrcRoot $stagingPath
+
+$stagingClassPath = "$stagingPath/Src/$modNameCanonical/Classes"
+Write-Host $stagingClassPath
+$rootLevelFiles = HandleSrcSubdirectories $stagingClassPath
 New-Item "$stagingPath/Script" -ItemType Directory
 
 # read mod metadata from the x2proj file
@@ -483,6 +493,8 @@ else {
 Write-Host "Copying the compiled mod scripts to staging..."
 Copy-Item "$sdkPath/XComGame/Script/$modNameCanonical.u" "$stagingPath/Script" -Force -WarningAction SilentlyContinue
 Write-Host "Copied."
+
+Remove-Item -Path $stagingClassPath -Exclude $rootLevelFiles -Filter "*.uc" -Recurse $false
 
 # make an artifact
 Write-Host "Creating an archive artifact..."
