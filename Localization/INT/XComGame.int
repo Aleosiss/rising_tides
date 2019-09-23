@@ -1304,42 +1304,112 @@ LockedText="LOCKED: BUILD DRONE"
 ;//PROGRAM_RED_COLOR = a51515
 ;//PROGRAM_WHITE_COLOR = e8e8e8
 
-[ProgramPistol X2WeaponTemplate]
+[ProgramPistol_M1 X2WeaponTemplate]
+FriendlyName="<font color='#a51515'><b>Program XSK33</b></font>"
+FriendlyNamePlural="<font color='#a51515'><b>Program XSK33s</b></font>"
+BriefSummary="The Program XSK33, or Shadowkeeper, is most popular sidearm of choice for Program operatives." 
+TacticalText="<Bullet/> The Program XSK33, or Shadowkeeper, is most popular sidearm of choice for Program operatives.\n<Bullet/> The Program XSK33 has improved aim and chance to critical hit.\n<Bullet/> Pistols can be fired with a single action."
+AbilityDescName="pistol"
+[ProgramPistol_M2 X2WeaponTemplate]
+FriendlyName="<font color='#a51515'><b>Program XSK33</b></font>"
+FriendlyNamePlural="<font color='#a51515'><b>Program XSK33s</b></font>"
+BriefSummary="The Program XSK33, or Shadowkeeper, is most popular sidearm of choice for Program operatives." 
+TacticalText="<Bullet/> The Program XSK33, or Shadowkeeper, is most popular sidearm of choice for Program operatives.\n<Bullet/> The Program XSK33 has improved aim and chance to critical hit.\n<Bullet/> Pistols can be fired with a single action."
+AbilityDescName="pistol"
+[ProgramPistol_M3 X2WeaponTemplate]
 FriendlyName="<font color='#a51515'><b>Program XSK33</b></font>"
 FriendlyNamePlural="<font color='#a51515'><b>Program XSK33s</b></font>"
 BriefSummary="The Program XSK33, or Shadowkeeper, is most popular sidearm of choice for Program operatives." 
 TacticalText="<Bullet/> The Program XSK33, or Shadowkeeper, is most popular sidearm of choice for Program operatives.\n<Bullet/> The Program XSK33 has improved aim and chance to critical hit.\n<Bullet/> Pistols can be fired with a single action."
 AbilityDescName="pistol"
 
-[ProgramSniperRifle X2WeaponTemplate]
+[ProgramSniperRifle_M1 X2WeaponTemplate]
+FriendlyName="<font color='#a51515'><b>Program XSR37</b></font>"
+FriendlyNamePlural="<font color='#a51515'><b>Program XSR37s</b></font>"
+BriefSummary="The Program XSR37 is the latest and greatest in long-range-projection-of-directed-energy weaponry, based off of fusion lances deployed by Elder Battleships." 
+TacticalText="<Bullet/> The Program XSR37 is the latest and greatest in long-range-projection-of-directed-energy weaponry, based off of fusion lances deployed by Elder Battleships.\n<Bullet/> Sniper rifles always require both actions to fire.\n<Bullet/> They are less accurate at close range, but deadly at a distance."
+AbilityDescName="sniper rifle"
+[ProgramSniperRifle_M2 X2WeaponTemplate]
+FriendlyName="<font color='#a51515'><b>Program XSR37</b></font>"
+FriendlyNamePlural="<font color='#a51515'><b>Program XSR37s</b></font>"
+BriefSummary="The Program XSR37 is the latest and greatest in long-range-projection-of-directed-energy weaponry, based off of fusion lances deployed by Elder Battleships." 
+TacticalText="<Bullet/> The Program XSR37 is the latest and greatest in long-range-projection-of-directed-energy weaponry, based off of fusion lances deployed by Elder Battleships.\n<Bullet/> Sniper rifles always require both actions to fire.\n<Bullet/> They are less accurate at close range, but deadly at a distance."
+AbilityDescName="sniper rifle"
+[ProgramSniperRifle_M3 X2WeaponTemplate]
 FriendlyName="<font color='#a51515'><b>Program XSR37</b></font>"
 FriendlyNamePlural="<font color='#a51515'><b>Program XSR37s</b></font>"
 BriefSummary="The Program XSR37 is the latest and greatest in long-range-projection-of-directed-energy weaponry, based off of fusion lances deployed by Elder Battleships." 
 TacticalText="<Bullet/> The Program XSR37 is the latest and greatest in long-range-projection-of-directed-energy weaponry, based off of fusion lances deployed by Elder Battleships.\n<Bullet/> Sniper rifles always require both actions to fire.\n<Bullet/> They are less accurate at close range, but deadly at a distance."
 AbilityDescName="sniper rifle"
 
-[ProgramShotgun X2WeaponTemplate]
+[ProgramShotgun_M1 X2WeaponTemplate]
+FriendlyName="<font color='#a51515'><b>Program XSG31</b></font>"
+FriendlyNamePlural="<font color='#a51515'><b>Program XSG31s</b></font>"
+BriefSummary="The Program XSG31 is a devastating evolution of decades of research in both conventional and extraterrestrial weapon systems." 
+TacticalText="<Bullet/> The Program XSG31 is a devastating evolution of decades of research in both conventional and extraterrestrial weapon systems.\n<Bullet/> Shotgun-style weapons are extremely effective at close range, but their accuracy drops off quickly at longer range."
+AbilityDescName="shotgun"
+[ProgramShotgun_M2 X2WeaponTemplate]
+FriendlyName="<font color='#a51515'><b>Program XSG31</b></font>"
+FriendlyNamePlural="<font color='#a51515'><b>Program XSG31s</b></font>"
+BriefSummary="The Program XSG31 is a devastating evolution of decades of research in both conventional and extraterrestrial weapon systems." 
+TacticalText="<Bullet/> The Program XSG31 is a devastating evolution of decades of research in both conventional and extraterrestrial weapon systems.\n<Bullet/> Shotgun-style weapons are extremely effective at close range, but their accuracy drops off quickly at longer range."
+AbilityDescName="shotgun"
+[ProgramShotgun_M3 X2WeaponTemplate]
 FriendlyName="<font color='#a51515'><b>Program XSG31</b></font>"
 FriendlyNamePlural="<font color='#a51515'><b>Program XSG31s</b></font>"
 BriefSummary="The Program XSG31 is a devastating evolution of decades of research in both conventional and extraterrestrial weapon systems." 
 TacticalText="<Bullet/> The Program XSG31 is a devastating evolution of decades of research in both conventional and extraterrestrial weapon systems.\n<Bullet/> Shotgun-style weapons are extremely effective at close range, but their accuracy drops off quickly at longer range."
 AbilityDescName="shotgun"
 
-[ProgramAssaultRifle X2WeaponTemplate]
+[ProgramAssaultRifle_M1 X2WeaponTemplate]
+FriendlyName="<font color='#a51515'><b>Program XCR29</b></font>"
+FriendlyNamePlural="<font color='#a51515'><b>Program XCR29s</b></font>"
+BriefSummary="The Program XCR29 is previous-generation Program combat rifle technology." 
+TacticalText="<Bullet/> The Program XCR29 is previous-generation Program combat rifle technology.\n<Bullet/> Firing the primary weapon always ends the soldier's turn."
+AbilityDescName="assault rifle"
+[ProgramAssaultRifle_M2 X2WeaponTemplate]
+FriendlyName="<font color='#a51515'><b>Program XCR29</b></font>"
+FriendlyNamePlural="<font color='#a51515'><b>Program XCR29s</b></font>"
+BriefSummary="The Program XCR29 is previous-generation Program combat rifle technology." 
+TacticalText="<Bullet/> The Program XCR29 is previous-generation Program combat rifle technology.\n<Bullet/> Firing the primary weapon always ends the soldier's turn."
+AbilityDescName="assault rifle"
+[ProgramAssaultRifle_M3 X2WeaponTemplate]
 FriendlyName="<font color='#a51515'><b>Program XCR29</b></font>"
 FriendlyNamePlural="<font color='#a51515'><b>Program XCR29s</b></font>"
 BriefSummary="The Program XCR29 is previous-generation Program combat rifle technology." 
 TacticalText="<Bullet/> The Program XCR29 is previous-generation Program combat rifle technology.\n<Bullet/> Firing the primary weapon always ends the soldier's turn."
 AbilityDescName="assault rifle"
 
-[ProgramBlade X2WeaponTemplate]
+[ProgramBlade_M1 X2WeaponTemplate]
+FriendlyName="<font color='#a51515'><b>Program CEFC2</b></font>"
+FriendlyNamePlural="<font color='#a51515'><b>Program CEFC2s</b></font>"
+BriefSummary="Queen's blade is a custom-made addition to her arsenal, a greatly lengthened version of a cutting tool used to shape armor alloys in production."
+TacticalText="<Bullet/> Queen's custom blade. Deals massive damage and is upgraded by her perks."
+AbilityDescName="sword"
+[ProgramBlade_M2 X2WeaponTemplate]
+FriendlyName="<font color='#a51515'><b>Program CEFC2</b></font>"
+FriendlyNamePlural="<font color='#a51515'><b>Program CEFC2s</b></font>"
+BriefSummary="Queen's blade is a custom-made addition to her arsenal, a greatly lengthened version of a cutting tool used to shape armor alloys in production."
+TacticalText="<Bullet/> Queen's custom blade. Deals massive damage and is upgraded by her perks."
+AbilityDescName="sword"
+[ProgramBlade_M3 X2WeaponTemplate]
 FriendlyName="<font color='#a51515'><b>Program CEFC2</b></font>"
 FriendlyNamePlural="<font color='#a51515'><b>Program CEFC2s</b></font>"
 BriefSummary="Queen's blade is a custom-made addition to her arsenal, a greatly lengthened version of a cutting tool used to shape armor alloys in production."
 TacticalText="<Bullet/> Queen's custom blade. Deals massive damage and is upgraded by her perks."
 AbilityDescName="sword"
 
-[ProgramArmor X2ArmorTemplate]
+[ProgramArmor_M1 X2ArmorTemplate]
+FriendlyName="<font color='#a51515'><b>Program XPHS41</b></font>"
+FriendlyNamePlural="<font color='#a51515'><b>Program XPHS41s</b></font>"
+BriefSummary="The Program's Experimental Psionic Hardsuit is the newest variant of it's classic psiweave-embedded, AI-integrated powersuit. It enhances the user's physical attributes using their psionic capabilities and allows them to enter Stealth."
+TacticalText="<Bullet/> Compared to XCOM's Warden Armor, the XPHS sacrifices soldier endurance for additional armor plating.\n<Bullet/> The Hardsuit has 2 inventory item slots."
+[ProgramArmor_M2 X2ArmorTemplate]
+FriendlyName="<font color='#a51515'><b>Program XPHS41</b></font>"
+FriendlyNamePlural="<font color='#a51515'><b>Program XPHS41s</b></font>"
+BriefSummary="The Program's Experimental Psionic Hardsuit is the newest variant of it's classic psiweave-embedded, AI-integrated powersuit. It enhances the user's physical attributes using their psionic capabilities and allows them to enter Stealth."
+TacticalText="<Bullet/> Compared to XCOM's Warden Armor, the XPHS sacrifices soldier endurance for additional armor plating.\n<Bullet/> The Hardsuit has 2 inventory item slots."
+[ProgramArmor_M3 X2ArmorTemplate]
 FriendlyName="<font color='#a51515'><b>Program XPHS41</b></font>"
 FriendlyNamePlural="<font color='#a51515'><b>Program XPHS41s</b></font>"
 BriefSummary="The Program's Experimental Psionic Hardsuit is the newest variant of it's classic psiweave-embedded, AI-integrated powersuit. It enhances the user's physical attributes using their psionic capabilities and allows them to enter Stealth."
