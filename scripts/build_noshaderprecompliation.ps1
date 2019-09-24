@@ -383,7 +383,7 @@ if($canSkipShaderPrecompliation) {
 # clean
 Write-Host "Cleaning mod project at $stagingPath...";
 if (Test-Path $stagingPath) {
-    Remove-Item $stagingPath -Recurse -Force -WarningAction SilentlyContinue;
+    Get-ChildItem $stagingPath -Recurse | Remove-Item -Recurse -Force -WarningAction SilentlyContinue;
 }
 Write-Host "Cleaned."
 
@@ -394,7 +394,6 @@ StageDirectory "Localization" $modSrcRoot $stagingPath
 StageDirectory "Src" $modSrcRoot $stagingPath
 
 $stagingClassPath = "{0}/Src/{1}/Classes" -f $stagingPath, $modNameCanonical
-Write-Host $stagingClassPath
 $rootLevelFiles = HandleSrcSubdirectories $stagingClassPath
 New-Item "$stagingPath/Script" -ItemType Directory
 
@@ -481,14 +480,12 @@ else {
     Write-Host "Mod doesn't have any shader content. Skipping shader precompilation."
 }
 
-
-Remove-Item -Path $stagingClassPath -Include "*.uc" -Exclude $rootLevelFiles 
+Remove-Item -Path $stagingClassPath/* -Include *.uc -Exclude $rootLevelFiles
 
 # copy compiled mod scripts to the staging area
 Write-Host "Copying the compiled mod scripts to staging..."
-Copy-Item "$sdkPath/XComGame/Script/$modNameCanonical.u" "$stagingPath/Script" -Force -WarningAction SilentlyContinue
+Robocopy.exe "$sdkPath/XComGame/Script/" "$stagingPath/Script" *$modNameCanonical.u* /S /E /DCOPY:DA /COPY:DAT /PURGE /MIR /NP /R:1000000 /W:30
 Write-Host "Copied."
-
 
 # copy all staged files to the actual game's mods folder
 Write-Host "Copying all staging files to production..."
