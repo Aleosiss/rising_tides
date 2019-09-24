@@ -1,6 +1,7 @@
 class SeqAct_TemplarBetrayalReaction extends SequenceAction;
 
 var() ETeam DestinationTeam;
+var protected SeqVar_GameStateList List; 
 
 event Activated()
 {
@@ -11,6 +12,7 @@ event Activated()
 
 	History = `XCOMHISTORY;
 
+	UnitRefs = GetXComSquad();
 	foreach UnitRefs(UnitRef) {
 		UnitState = XComGameState_Unit(History.GetGameStateForObjectID(UnitRef.ObjectID));
 		if(UnitState != none) {
@@ -34,7 +36,6 @@ protected function array<StateObjectReference> GetXComSquad() {
 
 	if(List == none) {
 		`RTLOG("No SeqVar_GameStateList attached to " $ string(name), true, false);
-		return;
 	}
 
 	return List.GameStates;
@@ -57,4 +58,6 @@ defaultproperties
 
 	bAutoActivateOutputLinks = true
 	OutputLinks(0)=(LinkDesc="Out")
+
+	VariableLinks(0)=(ExpectedType=class'SeqVar_GameStateList',LinkDesc="Game State List",bWriteable=true,MinVars=1,MaxVars=1)
 }
