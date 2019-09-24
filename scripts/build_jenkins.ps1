@@ -24,7 +24,7 @@ function StageDirectory ([string]$directoryName, [string]$srcDirectory, [string]
 
 function HandleSrcSubdirectories([string] $srcDir) {
     $files = Get-ChildItem -Path $srcDir -Filter "*.uc"
-    Get-ChildItem -Path $srcDir -Recurse -Filter "*.uc" | Get-ChildItem | Copy-Item -Destination {$srcDir}
+    Get-ChildItem -Path $srcDir -Recurse -Filter "*.uc" | Get-ChildItem | Copy-Item -Destination {$srcDir} -WarningAction SilentlyContinue
     return $files
 }
 
@@ -340,7 +340,7 @@ Write-Host "modSrcRoot:         $modSrcRoot"
 ValidateProjectFile $modSrcRoot $modNameCanonical
 
 # build the staging path
-$stagingPath = "{0}/XComGame/Mods/{1}/" -f $sdkPath, $modNameCanonical
+$stagingPath = "{0}/XComGame/Mods/{1}" -f $sdkPath, $modNameCanonical
 
 # determine whether or not there are changes to the Content directory before we clean
 # used later to determine if we can skip shader precompilation
@@ -400,7 +400,7 @@ StageDirectory "Content" $modSrcRoot $stagingPath
 StageDirectory "Localization" $modSrcRoot $stagingPath
 StageDirectory "Src" $modSrcRoot $stagingPath
 
-$stagingClassPath = "$stagingPath/Src/$modNameCanonical/Classes"
+$stagingClassPath = "{0}/Src/{1}/Classes" -f $stagingPath, $modNameCanonical
 Write-Host $stagingClassPath
 $rootLevelFiles = HandleSrcSubdirectories $stagingClassPath
 New-Item "$stagingPath/Script" -ItemType Directory
@@ -489,12 +489,12 @@ else {
     Write-Host "Mod doesn't have any shader content. Skipping shader precompilation."
 }
 
+Remove-Item -Path $stagingClassPath -Exclude $rootLevelFiles -Filter "*.uc"
+
 # copy compiled mod scripts to the staging area
 Write-Host "Copying the compiled mod scripts to staging..."
 Copy-Item "$sdkPath/XComGame/Script/$modNameCanonical.u" "$stagingPath/Script" -Force -WarningAction SilentlyContinue
 Write-Host "Copied."
-
-Remove-Item -Path $stagingClassPath -Exclude $rootLevelFiles -Filter "*.uc" -Recurse $false
 
 # make an artifact
 Write-Host "Creating an archive artifact..."

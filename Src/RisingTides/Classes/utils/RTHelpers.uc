@@ -409,3 +409,7 @@ static function name getSuffixForTier(int iTier) {
 			return '_M3';
 	}
 }
+
+static function name concatName(name a, name b) {
+	return name(string(a) $ string(b));
+}

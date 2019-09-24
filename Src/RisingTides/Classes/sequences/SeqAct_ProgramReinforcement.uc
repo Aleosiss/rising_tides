@@ -44,7 +44,6 @@ event Activated()
 
 function CallInProgramOperativeReinforcements(name LocalSquadName) {
 	local array<RTGameState_Unit> OperativeStates;
-	local RTGameState_Unit IteratorUnitState;
 
 	OperativeStates = GetOperatives(LocalSquadName);
 	if(OperativeStates.Length == 0) {
@@ -59,7 +58,6 @@ function CallInProgramOperativeReinforcements(name LocalSquadName) {
 protected function AddOperativesToTactical(array<RTGameState_Unit> UnitStates) {
 	local X2TacticalGameRuleset Rules;
 	local Vector SpawnLocation;
-	local XComGameStateContext_TacticalGameRule NewGameStateContext;
 	local XComGameState NewGameState;
 	local XComGameState_Player PlayerState, IteratorPlayerState;
 	local StateObjectReference ItemReference;
@@ -138,7 +136,7 @@ protected function AddOperativesToTactical(array<RTGameState_Unit> UnitStates) {
 	Rules.SubmitGameState(NewGameState);
 }
 
-protected static function array<RTGameState_Unit> GetOperatives(name SquadName) {
+protected static function array<RTGameState_Unit> GetOperatives(name LocalSquadName) {
 	local RTGameState_PersistentGhostSquad SquadState;
 	local array<RTGameState_Unit> OperativeStates, EmptyList;
 	local StateObjectReference UnitRef;
@@ -167,13 +165,13 @@ protected static function array<RTGameState_Unit> GetOperatives(name SquadName) 
 	StrategyState = History.GetGameStateFromHistory(LastStrategyStateIndex, eReturnType_Copy, false);
 
 	foreach StrategyState.IterateByClassType(class'RTGameState_PersistentGhostSquad', SquadState) {
-		if(name(SquadState.GetName()) == SquadName) {
+		if(name(SquadState.GetName()) == LocalSquadName) {
 			break;
 		}
 	}
 
-	if(name(SquadState.GetName()) != SquadName) {
-		`RTLOG("SeqAct_ProgramReinforcement: Couldn't find " $ SquadName);
+	if(name(SquadState.GetName()) != LocalSquadName) {
+		`RTLOG("SeqAct_ProgramReinforcement: Couldn't find " $ LocalSquadName);
 		return EmptyList;
 	}
 
@@ -193,7 +191,7 @@ protected static function array<RTGameState_Unit> GetOperatives(name SquadName) 
 	}
 
 	if(OperativeStates.Length < 1) {
-		`RTLOG("Couldn't find any Operatives for squad " $ SquadName);
+		`RTLOG("Couldn't find any Operatives for squad " $ LocalSquadName);
 		return EmptyList;
 	}
 
@@ -202,16 +200,12 @@ protected static function array<RTGameState_Unit> GetOperatives(name SquadName) 
 
 // chooses a location for the unit to spawn in the spawn zone
 protected function bool ChooseSpawnLocation(out Vector ChosenSpawnLocation) {
-	local XComParcelManager ParcelManager;
 	local XComGroupSpawn SoldierSpawn, IteratorSoldierSpawn, EmptySpawn;
 	local array<Vector> FloorPoints;
 	local Vector EmptyVector;
 	local float ClosestDistanceSquared, DistanceSquared;
-	local int PositionIndex, count;
-	local bool bFoundNewPos;
+	local int PositionIndex;
 
-	// attempt to find a place in the spawn zone for this unit to spawn in
-	ParcelManager = `PARCELMGR;
 	if(SoldierSpawn == none) // check for test maps, just grab any spawn
 	{
 		foreach `XComGRI.AllActors(class'XComGroupSpawn', IteratorSoldierSpawn)
@@ -259,14 +253,10 @@ simulated function ProgramReinforcements_BuildVisualization(XComGameState Visual
 	local StateObjectReference InteractingUnitRef;
 	local X2Action_CameraLookAt LookAtAction;
 	local XComGameState_Unit UnitState;
-	local XComGameState_AdventChosen ChosenState;
 	local array<XComGameState_Unit> FreshlySpawnedUnitStates;
 	local TTile SpawnedUnitTile;
 	local X2Action_RevealArea RevealAreaAction;
-	local X2Action_PlayAnimation PlayAnimAction;
 	local XComWorldData WorldData;
-	local X2AbilityTemplate ReinforcementStrengthTemplate;
-	local X2Action_PlaySoundAndFlyOver SoundAndFlyover;
 	local X2Action_PlayEffect SpawnEffectAction;
 	local X2Action_Delay RandomDelay;
 	local float OffsetVisDuration;

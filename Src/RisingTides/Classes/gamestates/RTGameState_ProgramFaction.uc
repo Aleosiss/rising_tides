@@ -171,7 +171,7 @@ function RTGameState_Unit CreateRTOperative(name GhostTemplateName, XComGameStat
 
 	UnitState.SetCountry(CharTemplate.DefaultAppearance.nmFlag);
 	UnitState.RankUpSoldier(StartState, CharTemplate.DefaultSoldierClass);
-	UnitState.ApplyInventoryLoadout(StartState, CharTemplate.DefaultLoadout $ `RTS.getSuffixForTier(iCurrentProgramGearTier));
+	UnitState.ApplyInventoryLoadout(StartState, `RTS.concatName(CharTemplate.DefaultLoadout, `RTS.getSuffixForTier(iCurrentProgramGearTier)));
 	UnitState.StartingRank = 1;
 	UnitState.SetUnitName(CharTemplate.strForcedFirstName, CharTemplate.strForcedLastName, CharTemplate.strForcedNickName);
 	UnitState.SetBackground(UnitState.GetMyTemplate().strCharacterBackgroundMale[0]); // the first background is the classified one, the second one is the unclassified one
@@ -800,7 +800,7 @@ simulated function ReloadOperativeArmaments(XComGameState NewGameState) {
 
 		NewUnitState = XComGameState_Unit(NewGameState.ModifyStateObject(class'XComGameState_Unit', UnitState.ObjectID));
 		NewUnitState.BlastLoadout(NewGameState);
-		NewUnitState.ApplyInventoryLoadout(NewGameState, UnitState.GetMyTemplate().DefaultLoadout $ `RTS.getSuffixForTier(iCurrentProgramGearTier));
+		NewUnitState.ApplyInventoryLoadout(NewGameState, `RTS.concatName(UnitState.GetMyTemplate().DefaultLoadout, `RTS.getSuffixForTier(iCurrentProgramGearTier)));
 		
 		WeaponState = NewUnitState.GetPrimaryWeapon();
 		WeaponState = XComGameState_Item(NewGameState.ModifyStateObject(class'XComGameState_Item', WeaponState.ObjectID));

@@ -52,7 +52,7 @@ static function X2AbilityTemplate RTProgramArmorStats(int iTier)
 
 	tierSuffix = `RTS.getSuffixForTier(iTier);
 
-	`CREATE_X2ABILITY_TEMPLATE(Template, class'RTItem'.default.ARMOR_PROGRAM_STATS_NAME $ tierSuffix);
+	`CREATE_X2ABILITY_TEMPLATE(Template, `RTS.concatName(class'RTItem'.default.ARMOR_PROGRAM_STATS_NAME, tierSuffix));
 	// Template.IconImage  -- no icon needed for armor stats
 
 	Template.AbilitySourceName = 'eAbilitySource_Item';

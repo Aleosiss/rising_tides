@@ -72,6 +72,7 @@ var config int WARPBOMB_RADIUS;
 var config int WARPBOMB_SUPPLYCOST;
 
 var config name ARMOR_PROGRAM_TEMPLATENAME;
+var config name ARMOR_PROGRAM_STATS_NAME;
 
 
 static function array<name> GetProgramWeaponTemplateNames() {
@@ -160,7 +161,7 @@ static function X2DataTemplate CreateTemplate_ProgramPistol(int iTier)
 
 	tierSuffix = `RTS.getSuffixForTier(iTier);
 
-	`CREATE_X2TEMPLATE(class'X2WeaponTemplate', Template, default.PISTOL_PROGRAM_TEMPLATENAME $ tierSuffix);
+	`CREATE_X2TEMPLATE(class'X2WeaponTemplate', Template, `RTS.concatName(default.PISTOL_PROGRAM_TEMPLATENAME, tierSuffix));
 	Template.WeaponPanelImage = "_Pistol";                       // used by the UI. Probably determines iconview of the weapon.
 
 	Template.ItemCat = 'weapon';
@@ -232,7 +233,7 @@ static function X2DataTemplate CreateTemplate_ProgramSniperRifle(int iTier)
 
 	tierSuffix = `RTS.getSuffixForTier(iTier);
 
-	`CREATE_X2TEMPLATE(class'X2WeaponTemplate', Template, default.SNIPERRIFLE_PROGRAM_TEMPLATENAME $ tierSuffix);
+	`CREATE_X2TEMPLATE(class'X2WeaponTemplate', Template, `RTS.concatName(default.SNIPERRIFLE_PROGRAM_TEMPLATENAME, tierSuffix));
 	Template.WeaponPanelImage = "_BeamSniperRifle";
 
 	Template.ItemCat = 'weapon';
@@ -304,7 +305,7 @@ static function X2DataTemplate CreateTemplate_ProgramShotgun(int iTier)
 
 	tierSuffix = `RTS.getSuffixForTier(iTier);
 
-	`CREATE_X2TEMPLATE(class'X2WeaponTemplate', Template, default.SHOTGUN_PROGRAM_TEMPLATENAME $ tierSuffix);
+	`CREATE_X2TEMPLATE(class'X2WeaponTemplate', Template, `RTS.concatName(default.SHOTGUN_PROGRAM_TEMPLATENAME, tierSuffix));
 	Template.WeaponPanelImage = "_BeamShotgun";
 
 	Template.ItemCat = 'weapon';
@@ -379,7 +380,7 @@ static function X2DataTemplate CreateTemplate_ProgramAssaultRifle(int iTier)
 
 	tierSuffix = `RTS.getSuffixForTier(iTier);
 
-	`CREATE_X2TEMPLATE(class'X2WeaponTemplate', Template, default.ASSAULTRIFLE_PROGRAM_TEMPLATENAME $ tierSuffix);
+	`CREATE_X2TEMPLATE(class'X2WeaponTemplate', Template, `RTS.concatName(default.ASSAULTRIFLE_PROGRAM_TEMPLATENAME, tierSuffix));
 	Template.WeaponPanelImage = "_BeamRifle";                       // used by the UI. Probably determines iconview of the weapon.
 
 	Template.WeaponCat = 'rifle';
@@ -449,7 +450,7 @@ static function X2DataTemplate CreateTemplate_ProgramBlade(int iTier)
 
 	tierSuffix = `RTS.getSuffixForTier(iTier);
 
-	`CREATE_X2TEMPLATE(class'X2WeaponTemplate', Template, default.SWORD_PROGRAM_TEMPLATENAME $ tierSuffix);
+	`CREATE_X2TEMPLATE(class'X2WeaponTemplate', Template, `RTS.concatName(default.SWORD_PROGRAM_TEMPLATENAME, tierSuffix));
 	Template.WeaponPanelImage = "_Sword";                       // used by the UI. Probably determines iconview of the weapon.
 
 	Template.ItemCat = 'weapon';
@@ -509,20 +510,37 @@ static function X2DataTemplate CreateTemplate_ProgramArmor(int iTier)
 
 	tierSuffix = `RTS.getSuffixForTier(iTier);
 
-	`CREATE_X2TEMPLATE(class'X2ArmorTemplate', Template, default.ARMOR_PROGRAM_TEMPLATENAME $ tierSuffix);
+	`CREATE_X2TEMPLATE(class'X2ArmorTemplate', Template, `RTS.concatName(default.ARMOR_PROGRAM_TEMPLATENAME, tierSuffix));
 	Template.strImage = "img:///UILibrary_StrategyImages.X2InventoryIcons.Inv_Warden_Armor";
 	Template.ItemCat = 'armor';
 	Template.bAddsUtilitySlot = true;
 	Template.StartingItem = false;
 	Template.CanBeBuilt = false;
 	Template.bInfiniteItem = false;
-	Template.Abilities.AddItem(default.PROGRAM_ARMOR_STATS_NAME $ tierSuffix);
+	Template.Abilities.AddItem(`RTS.concatName(default.ARMOR_PROGRAM_STATS_NAME, tierSuffix));
 	Template.ArmorTechCat = 'powered';
 	Template.ArmorClass = 'medium';
 	Template.Tier = iTier + 1;
+
+	switch(iTier) {
+		case 1:
+			Template.SetUIStatMarkup(class'XLocalizedData'.default.HealthLabel, eStat_HP, class'RTAbility_Program'.default.PROGRAM_ARMOR_HEALTH_BONUS_M1, true);
+			Template.SetUIStatMarkup(class'XLocalizedData'.default.ArmorLabel, eStat_ArmorMitigation, class'RTAbility_Program'.default.PROGRAM_ARMOR_MITIGATION_AMOUNT_M1);
+			break;
+		case 2:
+			Template.SetUIStatMarkup(class'XLocalizedData'.default.HealthLabel, eStat_HP, class'RTAbility_Program'.default.PROGRAM_ARMOR_HEALTH_BONUS_M2, true);
+			Template.SetUIStatMarkup(class'XLocalizedData'.default.ArmorLabel, eStat_ArmorMitigation, class'RTAbility_Program'.default.PROGRAM_ARMOR_MITIGATION_AMOUNT_M2);
+			break;
+		case 3:
+			Template.SetUIStatMarkup(class'XLocalizedData'.default.HealthLabel, eStat_HP, class'RTAbility_Program'.default.PROGRAM_ARMOR_HEALTH_BONUS_M3, true);
+			Template.SetUIStatMarkup(class'XLocalizedData'.default.ArmorLabel, eStat_ArmorMitigation, class'RTAbility_Program'.default.PROGRAM_ARMOR_MITIGATION_AMOUNT_M3);
+			break;
+		default:
+			`RTLOG("Warning, " $ GetFuncName() $ " was provided invalid tier, returning tier 3!", true, false);
+			Template.SetUIStatMarkup(class'XLocalizedData'.default.HealthLabel, eStat_HP, class'RTAbility_Program'.default.PROGRAM_ARMOR_HEALTH_BONUS_M3, true);
+			Template.SetUIStatMarkup(class'XLocalizedData'.default.ArmorLabel, eStat_ArmorMitigation, class'RTAbility_Program'.default.PROGRAM_ARMOR_MITIGATION_AMOUNT_M3);
+	}
 	
-	Template.SetUIStatMarkup(class'XLocalizedData'.default.HealthLabel, eStat_HP, class'RTAbility_Program'.default.PROGRAM_ARMOR_HEALTH_BONUS $ tierSuffix, true);
-	Template.SetUIStatMarkup(class'XLocalizedData'.default.ArmorLabel, eStat_ArmorMitigation, class'RTAbility_Program'.default.PROGRAM_ARMOR_MITIGATION_AMOUNT $ tierSuffix);
 
 	//class'RTHelpers_ItemTemplates'.static.AddFontColor(Template, `RTS.GetProgramColor());
 	

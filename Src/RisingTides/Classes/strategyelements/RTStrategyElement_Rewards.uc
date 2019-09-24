@@ -523,7 +523,6 @@ static function GiveHighCovenAssaultMission(XComGameState NewGameState, XComGame
 {
 	local RTGameState_ProgramFaction ProgramState;
 	local RTGameState_MissionSiteTemplarHighCoven MissionState;
-	local DynamicPropertySet PropertySet;
 
 	ProgramState = `RTS.GetNewProgramState(NewGameState);
 	ProgramState.IncrementTemplarQuestlineStage();
@@ -698,7 +697,6 @@ static function CreateTemplarQuestlineCompletePopups(XComGameState NewGameState)
 	local DynamicPropertySet PropertySet;
 	local DynamicPropertySet EmptySet;
 	local XComGameState_Tech TechState;
-	local StateObjectReference TechRef;
 	local XComGameStateHistory History;
 
 	/*
