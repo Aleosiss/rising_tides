@@ -4,11 +4,13 @@ class RTAbility_Program extends X2Ability_HackRewards
 	var config float		PROFESSIONALS_HAVE_STANDARDS_DETECTION_MODIFIER_INCREASE;
 	var config int			PSIONIC_JAMMING_WILL_PENALTY;
 
-	var config int			PROGRAM_ARMOR_HEALTH_BONUS_T1;
-	var config int			PROGRAM_ARMOR_HEALTH_BONUS_T2;
-	var config int			PROGRAM_ARMOR_HEALTH_BONUS_T3;
+	var config int			PROGRAM_ARMOR_HEALTH_BONUS_M1;
+	var config int			PROGRAM_ARMOR_HEALTH_BONUS_M2;
+	var config int			PROGRAM_ARMOR_HEALTH_BONUS_M3;
 	var config int			PROGRAM_ARMOR_MITIGATION_CHANCE;
-	var config int			PROGRAM_ARMOR_MITIGATION_AMOUNT;
+	var config int			PROGRAM_ARMOR_MITIGATION_AMOUNT_M1;
+	var config int			PROGRAM_ARMOR_MITIGATION_AMOUNT_M2;
+	var config int			PROGRAM_ARMOR_MITIGATION_AMOUNT_M3;
 
 static function array<X2DataTemplate> CreateTemplates()
 {
@@ -16,7 +18,10 @@ static function array<X2DataTemplate> CreateTemplates()
 
 	Templates.AddItem(RTProfessionalsHaveStandards());
 	Templates.AddItem(RTPsionicJamming());
-	Templates.AddItem(RTProgramArmorStats());
+
+	Templates.AddItem(RTProgramArmorStats(1));
+	Templates.AddItem(RTProgramArmorStats(2));
+	Templates.AddItem(RTProgramArmorStats(3));
 
 	return Templates;
 }
@@ -37,14 +42,17 @@ static function X2AbilityTemplate RTPsionicJamming() {
 	return Template;
 }
 
-static function X2AbilityTemplate RTProgramArmorStats()
+static function X2AbilityTemplate RTProgramArmorStats(int iTier)
 {
 	local X2AbilityTemplate					Template;
 	local X2AbilityTrigger					Trigger;
 	local X2AbilityTarget_Self				TargetStyle;
 	local X2Effect_PersistentStatChange		PersistentStatChangeEffect;
+	local name								tierSuffix;
 
-	`CREATE_X2ABILITY_TEMPLATE(Template, 'RTProgramArmorStats');
+	tierSuffix = `RTS.getSuffixForTier(iTier);
+
+	`CREATE_X2ABILITY_TEMPLATE(Template, `RTS.concatName(class'RTItem'.default.ARMOR_PROGRAM_STATS_NAME, tierSuffix));
 	// Template.IconImage  -- no icon needed for armor stats
 
 	Template.AbilitySourceName = 'eAbilitySource_Item';
@@ -64,9 +72,26 @@ static function X2AbilityTemplate RTProgramArmorStats()
 	PersistentStatChangeEffect = new class'X2Effect_PersistentStatChange';
 	PersistentStatChangeEffect.BuildPersistentEffect(1, true, false, false);
 	// PersistentStatChangeEffect.SetDisplayInfo(ePerkBuff_Passive, default.MediumPlatedHealthBonusName, default.MediumPlatedHealthBonusDesc, Template.IconImage);
-	PersistentStatChangeEffect.AddPersistentStatChange(eStat_HP, default.PROGRAM_ARMOR_HEALTH_BONUS_T3);
+	switch(iTier) {
+		case 1:
+			PersistentStatChangeEffect.AddPersistentStatChange(eStat_HP, default.PROGRAM_ARMOR_HEALTH_BONUS_M1);
+			PersistentStatChangeEffect.AddPersistentStatChange(eStat_ArmorMitigation, default.PROGRAM_ARMOR_MITIGATION_AMOUNT_M1);
+			break;
+		case 2:
+			PersistentStatChangeEffect.AddPersistentStatChange(eStat_HP, default.PROGRAM_ARMOR_HEALTH_BONUS_M2);
+			PersistentStatChangeEffect.AddPersistentStatChange(eStat_ArmorMitigation, default.PROGRAM_ARMOR_MITIGATION_AMOUNT_M2);
+			break;
+		case 3:
+			PersistentStatChangeEffect.AddPersistentStatChange(eStat_HP, default.PROGRAM_ARMOR_HEALTH_BONUS_M3);
+			PersistentStatChangeEffect.AddPersistentStatChange(eStat_ArmorMitigation, default.PROGRAM_ARMOR_MITIGATION_AMOUNT_M3);
+			break;
+		default:
+			`RTLOG("Warning, " $ GetFuncName() $ " was provided invalid tier, returning tier 3!", true, false);
+			PersistentStatChangeEffect.AddPersistentStatChange(eStat_HP, default.PROGRAM_ARMOR_HEALTH_BONUS_M3);
+			PersistentStatChangeEffect.AddPersistentStatChange(eStat_ArmorMitigation, default.PROGRAM_ARMOR_MITIGATION_AMOUNT_M3);
+	}
+	
 	PersistentStatChangeEffect.AddPersistentStatChange(eStat_ArmorChance, default.PROGRAM_ARMOR_MITIGATION_CHANCE);
-	PersistentStatChangeEffect.AddPersistentStatChange(eStat_ArmorMitigation, default.PROGRAM_ARMOR_MITIGATION_AMOUNT);
 	Template.AddTargetEffect(PersistentStatChangeEffect);
 
 	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;

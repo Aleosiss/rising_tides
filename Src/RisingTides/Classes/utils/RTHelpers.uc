@@ -395,3 +395,21 @@ static function PrintEffectsAndMITVsForUnitPawn(XComUnitPawn UnitPawn, bool bSho
 
 	UnitPawn.UpdateAllMeshMaterials();
 }
+
+static function name getSuffixForTier(int iTier) {
+	switch(iTier) {
+		case 1:
+			return '_M1';
+		case 2:
+			return '_M2';
+		case 3:
+			return '_M3';
+		default:
+			`RTLOG("Warning, getSuffixForTier failed validation! Returning tier 3!", true, false);
+			return '_M3';
+	}
+}
+
+static function name concatName(name a, name b) {
+	return name(string(a) $ string(b));
+}

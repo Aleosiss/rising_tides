@@ -814,7 +814,6 @@ function XComGameState_MissionSite CreateFakeTemplarAmbush(XComGameState NewGame
 function XComGameState_MissionSite CreateFakeTemplarAssault(XComGameState NewGameState) {
 	local RTGameState_MissionSiteTemplarHighCoven MissionState;
 	local XComGameState_WorldRegion RegionState;
-	local array<XComGameState_WorldRegion> RegionStates;
 	local XComGameState_Reward RewardState;
 	local X2StrategyElementTemplateManager StratMgr;
 	local X2RewardTemplate RewardTemplate;
@@ -822,7 +821,6 @@ function XComGameState_MissionSite CreateFakeTemplarAssault(XComGameState NewGam
 	local array<XComGameState_Reward> MissionRewards;
 
 	StratMgr = class'X2StrategyElementTemplateManager'.static.GetStrategyElementTemplateManager();
-	RegionStates = `RTS.GetTemplarFactionState().GetTerritoryRegions();
 	RegionState = `XCOMHQ.GetContinent().GetRandomRegionInContinent();
 
 	MissionRewards.Length = 0;
@@ -971,6 +969,31 @@ exec function RT_SetTacticalForceLevel(int iNewForceLevel) {
 	BattleData.SetForceLevel(iNewForceLevel);
 
 	`TACTICALRULES.SubmitGameState(NewGameState);
+}
+
+exec function RT_ShowStrategyForceLevel() {
+	local XComGameState_HeadquartersAlien AlienHQ;
+	local int iAlienForceLevel;
+
+	AlienHQ = XComGameState_HeadquartersAlien(`XCOMHISTORY.GetSingleGameStateObjectForClass(class'XComGameState_HeadquartersAlien'));
+	iAlienForceLevel = AlienHQ.GetForceLevel();
+
+	`RTLOG("Alien Force Level: " $ iAlienForceLevel, false, true);
+}
+
+// for consistancy's sake
+exec function RT_SetStrategyForceLevel(int iNewForceLevel) {
+	local XComGameState_HeadquartersAlien AlienHQ;
+	local XComGameState	NewGameState;
+
+	AlienHQ = XComGameState_HeadquartersAlien(`XCOMHISTORY.GetSingleGameStateObjectForClass(class'XComGameState_HeadquartersAlien'));
+
+	NewGameState = `CreateChangeState("CHEAT: Setting Strategy Force Level to " $ iNewForceLevel);
+	AlienHQ = XComGameState_HeadquartersAlien(NewGameState.ModifyStateObject(class'XComGameState_HeadquartersAlien', AlienHQ.ObjectID));
+
+	AlienHQ.ForceLevel = iNewForceLevel;
+
+	`XCOMGAME.GameRuleset.SubmitGameState(NewGameState);
 }
 
 exec function RT_DebugAIBehavior() {

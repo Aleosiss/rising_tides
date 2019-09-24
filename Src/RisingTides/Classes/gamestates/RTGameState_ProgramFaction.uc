@@ -171,7 +171,7 @@ function RTGameState_Unit CreateRTOperative(name GhostTemplateName, XComGameStat
 
 	UnitState.SetCountry(CharTemplate.DefaultAppearance.nmFlag);
 	UnitState.RankUpSoldier(StartState, CharTemplate.DefaultSoldierClass);
-	UnitState.ApplyInventoryLoadout(StartState, CharTemplate.DefaultLoadout);
+	UnitState.ApplyInventoryLoadout(StartState, `RTS.concatName(CharTemplate.DefaultLoadout, `RTS.getSuffixForTier(iCurrentProgramGearTier)));
 	UnitState.StartingRank = 1;
 	UnitState.SetUnitName(CharTemplate.strForcedFirstName, CharTemplate.strForcedLastName, CharTemplate.strForcedNickName);
 	UnitState.SetBackground(UnitState.GetMyTemplate().strCharacterBackgroundMale[0]); // the first background is the classified one, the second one is the unclassified one
@@ -790,14 +790,7 @@ simulated function ReloadOperativeArmaments(XComGameState NewGameState) {
 	local XComGameStateHistory History;
 	local StateObjectReference UnitIteratorObjRef;
 	local XComGameState_Unit UnitState, NewUnitState;
-	//local XComGameState_Item ItemState, RemoveItemState;
-	//local X2ItemTemplateManager	ItemTemplateManager;
-	//local InventoryLoadout Loadout, EmptyLoadout;
-	//local InventoryLoadoutItem LoadoutItem;
-	//local X2EquipmentTemplate EquipmentTemplate;
-	//local int idx;
 	local XComGameState_Item WeaponState;
-	
 
 	History = `XCOMHISTORY;
 	//ItemTemplateManager = class'X2ItemTemplateManager'.static.GetItemTemplateManager();
@@ -807,7 +800,7 @@ simulated function ReloadOperativeArmaments(XComGameState NewGameState) {
 
 		NewUnitState = XComGameState_Unit(NewGameState.ModifyStateObject(class'XComGameState_Unit', UnitState.ObjectID));
 		NewUnitState.BlastLoadout(NewGameState);
-		NewUnitState.ApplyInventoryLoadout(NewGameState, UnitState.GetMyTemplate().DefaultLoadout);
+		NewUnitState.ApplyInventoryLoadout(NewGameState, `RTS.concatName(UnitState.GetMyTemplate().DefaultLoadout, `RTS.getSuffixForTier(iCurrentProgramGearTier)));
 		
 		WeaponState = NewUnitState.GetPrimaryWeapon();
 		WeaponState = XComGameState_Item(NewGameState.ModifyStateObject(class'XComGameState_Item', WeaponState.ObjectID));
@@ -1293,6 +1286,7 @@ function MeetXCom(XComGameState NewGameState)
 	InitTemplarQuestActions(NewGameState);
 	HandleTemplarQuestActions(NewGameState);
 	
+	iCurrentProgramGearTier = 1;
 	CreateRTOperatives(NewGameState);
 	CreateRTSquads(NewGameState);
 	//CreateRTDeathRecord(StartState);
@@ -1415,8 +1409,6 @@ protected function ModifyProgramGearTier(XComGameState NewGameState, int newGear
 		newGearTier = 3;
 	}
 	iCurrentProgramGearTier = newGearTier;
-	ModifyArmorStats(newGearTier);
-	ModifyWeaponStats(newGearTier);
 	ReloadOperativeArmaments(NewGameState);
 }
 
@@ -1426,124 +1418,6 @@ function bool hasFailedTemplarQuestline() {
 
 function FailTemplarQuestline() {
 	bTemplarQuestFailed = true;
-}
-
-protected function ModifyArmorStats(int newGearTier) {
-	local array<name> AbilityTemplateNames;
-	local name AbilityTemplateName;
-	local X2AbilityTemplate AbilityTemplate;
-	local array<X2AbilityTemplate> AbilityTemplates;
-	local X2AbilityTemplateManager AbilityTemplateMgr;
-
-	local X2Effect IteratorEffect;
-	local X2Effect_PersistentStatChange ArmorEffect;
-	local StatChange IteratorStatChange;
-	local X2ItemTemplateManager ItemTemplateMgr;
-	local X2ArmorTemplate ArmorTemplate;
-
-	// BEGIN ABILITY TEMPLATE MODIFICATION ****************************************************************************************************
-	AbilityTemplateMgr = class'X2AbilityTemplateManager'.static.GetAbilityTemplateManager();
-	AbilityTemplateMgr.GetTemplateNames(AbilityTemplateNames);
-	foreach AbilityTemplateNames(AbilityTemplateName) {
-		AbilityTemplates.Length = 0;
-		AbilityTemplateMgr.FindAbilityTemplateAllDifficulties(AbilityTemplateName, AbilityTemplates);
-
-		foreach AbilityTemplates(AbilityTemplate) {
-
-			if(AbilityTemplate.DataName != 'RTProgramArmorStats')
-				continue;
-
-			foreach AbilityTemplate.AbilityTargetEffects(IteratorEffect) {
-				ArmorEffect = X2Effect_PersistentStatChange(IteratorEffect);
-				if (ArmorEffect == None) {
-					continue;
-				}
-				
-				foreach ArmorEffect.m_aStatChanges(IteratorStatChange) {
-					if(IteratorStatChange.StatType == eStat_HP) {
-						switch(newGearTier) {
-							case 1:
-								IteratorStatChange.StatAmount = class'RTAbility_Program'.default.PROGRAM_ARMOR_HEALTH_BONUS_T1;
-								break;
-							case 2:
-								IteratorStatChange.StatAmount = class'RTAbility_Program'.default.PROGRAM_ARMOR_HEALTH_BONUS_T2;
-								break;
-							case 3:
-								IteratorStatChange.StatAmount = class'RTAbility_Program'.default.PROGRAM_ARMOR_HEALTH_BONUS_T3;
-								break;
-							default:
-								`RTLOG("Invalid Gear Tier, defaulting to T3.");
-								IteratorStatChange.StatAmount = class'RTAbility_Program'.default.PROGRAM_ARMOR_HEALTH_BONUS_T3;
-						}
-					}
-				}
-			}
-		}
-	}
-	// END ABILITY TEMPLATE MODIFICATION ******************************************************************************************************
-
-	ItemTemplateMgr = class'X2ItemTemplateManager'.static.GetItemTemplateManager();
-	ArmorTemplate = X2ArmorTemplate(ItemTemplateMgr.FindItemTemplate('ProgramArmor'));
-	switch(newGearTier) {
-		case 1:
-			ArmorTemplate.SetUIStatMarkup(class'XLocalizedData'.default.HealthLabel, eStat_HP, class'RTAbility_Program'.default.PROGRAM_ARMOR_HEALTH_BONUS_T1, true);
-			break;
-		case 2:
-			ArmorTemplate.SetUIStatMarkup(class'XLocalizedData'.default.HealthLabel, eStat_HP, class'RTAbility_Program'.default.PROGRAM_ARMOR_HEALTH_BONUS_T2, true);
-			break;
-		case 3:
-			ArmorTemplate.SetUIStatMarkup(class'XLocalizedData'.default.HealthLabel, eStat_HP, class'RTAbility_Program'.default.PROGRAM_ARMOR_HEALTH_BONUS_T3, true);
-			break;
-		default:
-			ArmorTemplate.SetUIStatMarkup(class'XLocalizedData'.default.HealthLabel, eStat_HP, class'RTAbility_Program'.default.PROGRAM_ARMOR_HEALTH_BONUS_T3, true);
-	} 
-}
-
-protected function ModifyWeaponStats(int newGearTier) {
-	local X2ItemTemplateManager ItemTemplateManager;
-	local array<Name> ProgramWeaponTemplateNames;
-	local name IteratorName;
-	local X2WeaponTemplate WeaponTemplate;
-	local WeaponDamageValue ModifiedDamageValue;
-	local int iDamageMalus;
-	
-	ItemTemplateManager = class'X2ItemTemplateManager'.static.GetItemTemplateManager();
-	ProgramWeaponTemplateNames = class'RTItem'.static.GetProgramWeaponTemplateNames();
-	foreach ProgramWeaponTemplateNames(IteratorName) {
-		WeaponTemplate = X2WeaponTemplate(ItemTemplateManager.FindItemTemplate(IteratorName));
-		iDamageMalus = (3 - newGearTier) * 2;	// -> tier 1 = 2 tiers of reduction, tier 2 = 1 tier of reduction, tier 3 = 0 tiers of reduction
-												// -> 2 damage per tier
-		switch(WeaponTemplate.WeaponCat) {
-			case 'pistol':
-				iDamageMalus = iDamageMalus / 2;
-				ModifiedDamageValue = class'RTItem'.default.PISTOL_PROGRAM_BASEDAMAGE;
-				ModifiedDamageValue.Damage -= iDamageMalus;
-				WeaponTemplate.BaseDamage = ModifiedDamageValue;
-				break;
-			case 'sniper_rifle':
-				ModifiedDamageValue = class'RTItem'.default.SNIPERRIFLE_PROGRAM_BASEDAMAGE;
-				ModifiedDamageValue.Damage -= iDamageMalus;
-				WeaponTemplate.BaseDamage = ModifiedDamageValue;
-				break;
-			case 'shotgun':
-				ModifiedDamageValue = class'RTItem'.default.SHOTGUN_PROGRAM_BASEDAMAGE;
-				ModifiedDamageValue.Damage -= iDamageMalus;
-				WeaponTemplate.BaseDamage = ModifiedDamageValue;
-				break;
-			case 'rifle':
-				ModifiedDamageValue = class'RTItem'.default.ASSAULTRIFLE_PROGRAM_BASEDAMAGE;
-				ModifiedDamageValue.Damage -= iDamageMalus;
-				WeaponTemplate.BaseDamage = ModifiedDamageValue;
-				break;
-			case 'sword':
-				ModifiedDamageValue = class'RTItem'.default.SWORD_PROGRAM_BASEDAMAGE;
-				ModifiedDamageValue.Damage -= iDamageMalus;
-				WeaponTemplate.BaseDamage = ModifiedDamageValue;
-				break;
-			default:
-				//continue;
-		}
-	}
 }
 
 public function AdjustProgramGearLevel(XComGameState NewGameState) {

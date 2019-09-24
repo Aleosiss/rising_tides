@@ -298,7 +298,6 @@
     <Content Include="Src\RisingTides\Classes\actions\RTAction_PsionicGetOverHereTarget.uc" />
     <Content Include="Src\RisingTides\Classes\actions\RTAction_RemoveMITV.uc" />
     <Content Include="Src\RisingTides\Classes\characters\RTCharacterGenerator_Templar.uc" />
-    <Content Include="Src\RisingTides\Classes\characters\RTCharacterTemplate.uc" />
     <Content Include="Src\RisingTides\Classes\characters\RTCharacter_DefaultCharacters.uc" />
     <Content Include="Src\RisingTides\Classes\characters\RTCharacter_DefaultTemplars.uc" />
     <Content Include="Src\RisingTides\Classes\conditions\RTCondition_Conditional.uc" />
@@ -423,6 +422,7 @@
     <Content Include="Src\RisingTides\Classes\utils\RTHelpers_ItemTemplates.uc" />
     <Content Include="Src\RisingTides\Classes\utils\RTTacticalVisibilityHelpers.uc" />
     <Content Include="Src\RisingTides\Classes\utils\UIDebugStateMachines.uc" />
+    <Content Include="Src\RisingTides\Classes\templates\RTCharacterTemplate.uc" />
   </ItemGroup>
   <Import Project="$(MSBuildLocalExtensionPath)\XCOM2.targets" />
 </Project>

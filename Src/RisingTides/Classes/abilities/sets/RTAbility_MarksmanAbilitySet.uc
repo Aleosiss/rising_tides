@@ -1344,7 +1344,6 @@ static function X2AbilityTemplate DaybreakFlameToggle(name ToggleName)
 	local X2Effect_Persistent					TagEffect;
 	local X2Effect_RemoveEffects				RemoveTagEffect;
 	local X2Condition_UnitEffects				ToggleCondition;
-	local name									InvertedToggleName;
 
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'DaybreakFlameToggle');
 	Template.IconImage = "img:///RisingTidesContentPackage.PerkIcons.rt_daybreaker";
@@ -1357,8 +1356,6 @@ static function X2AbilityTemplate DaybreakFlameToggle(name ToggleName)
 	Template.AbilityTargetStyle = default.SelfTarget;
 	Template.AbilityTriggers.AddItem(default.UnitPostBeginPlayTrigger);
 	Template.AbilityTriggers.AddItem(default.PlayerInputTrigger);
-
-	InvertedToggleName = ToggleName;
 
 	// Remove if present
 	ToggleCondition = new class'X2Condition_UnitEffects';

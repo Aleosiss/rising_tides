@@ -1,6 +1,8 @@
 class RTItem extends X2Item_DefaultUpgrades config(RisingTides);
 
-var config WeaponDamageValue PISTOL_PROGRAM_BASEDAMAGE;
+var config WeaponDamageValue PISTOL_PROGRAM_BASEDAMAGE_M1;
+var config WeaponDamageValue PISTOL_PROGRAM_BASEDAMAGE_M2;
+var config WeaponDamageValue PISTOL_PROGRAM_BASEDAMAGE_M3;
 var config int PISTOL_PROGRAM_AIM;
 var config int PISTOL_PROGRAM_CRITCHANCE;
 var config int PISTOL_PROGRAM_ICLIPSIZE;
@@ -9,7 +11,9 @@ var config int PISTOL_PROGRAM_IENVIRONMENTDAMAGE;
 var config int PISTOL_PROGRAM_IPOINTS;
 var config name PISTOL_PROGRAM_TEMPLATENAME;
 
-var config WeaponDamageValue SNIPERRIFLE_PROGRAM_BASEDAMAGE;
+var config WeaponDamageValue SNIPERRIFLE_PROGRAM_BASEDAMAGE_M1;
+var config WeaponDamageValue SNIPERRIFLE_PROGRAM_BASEDAMAGE_M2;
+var config WeaponDamageValue SNIPERRIFLE_PROGRAM_BASEDAMAGE_M3;
 var config int SNIPERRIFLE_PROGRAM_AIM;
 var config int SNIPERRIFLE_PROGRAM_CRITCHANCE;
 var config int SNIPERRIFLE_PROGRAM_ICLIPSIZE;
@@ -17,7 +21,9 @@ var config int SNIPERRIFLE_PROGRAM_ISOUNDRANGE;
 var config int SNIPERRIFLE_PROGRAM_IENVIRONMENTDAMAGE;
 var config name SNIPERRIFLE_PROGRAM_TEMPLATENAME;
 
-var config WeaponDamageValue SHOTGUN_PROGRAM_BASEDAMAGE;
+var config WeaponDamageValue SHOTGUN_PROGRAM_BASEDAMAGE_M1;
+var config WeaponDamageValue SHOTGUN_PROGRAM_BASEDAMAGE_M2;
+var config WeaponDamageValue SHOTGUN_PROGRAM_BASEDAMAGE_M3;
 var config int SHOTGUN_PROGRAM_AIM;
 var config int SHOTGUN_PROGRAM_CRITCHANCE;
 var config int SHOTGUN_PROGRAM_ICLIPSIZE;
@@ -25,7 +31,9 @@ var config int SHOTGUN_PROGRAM_ISOUNDRANGE;
 var config int SHOTGUN_PROGRAM_IENVIRONMENTDAMAGE;
 var config name SHOTGUN_PROGRAM_TEMPLATENAME;
 
-var config WeaponDamageValue ASSAULTRIFLE_PROGRAM_BASEDAMAGE;
+var config WeaponDamageValue ASSAULTRIFLE_PROGRAM_BASEDAMAGE_M1;
+var config WeaponDamageValue ASSAULTRIFLE_PROGRAM_BASEDAMAGE_M2;
+var config WeaponDamageValue ASSAULTRIFLE_PROGRAM_BASEDAMAGE_M3;
 var config int ASSAULTRIFLE_PROGRAM_AIM;
 var config int ASSAULTRIFLE_PROGRAM_CRITCHANCE;
 var config int ASSAULTRIFLE_PROGRAM_ICLIPSIZE;
@@ -33,7 +41,9 @@ var config int ASSAULTRIFLE_PROGRAM_ISOUNDRANGE;
 var config int ASSAULTRIFLE_PROGRAM_IENVIRONMENTDAMAGE;
 var config name ASSAULTRIFLE_PROGRAM_TEMPLATENAME;
 
-var config WeaponDamageValue SWORD_PROGRAM_BASEDAMAGE;
+var config WeaponDamageValue SWORD_PROGRAM_BASEDAMAGE_M1;
+var config WeaponDamageValue SWORD_PROGRAM_BASEDAMAGE_M2;
+var config WeaponDamageValue SWORD_PROGRAM_BASEDAMAGE_M3;
 var config int SWORD_PROGRAM_AIM;
 var config int SWORD_PROGRAM_CRITCHANCE;
 var config int SWORD_PROGRAM_ISOUNDRANGE;
@@ -61,6 +71,9 @@ var config int WARPBOMB_RANGE;
 var config int WARPBOMB_RADIUS;
 var config int WARPBOMB_SUPPLYCOST;
 
+var config name ARMOR_PROGRAM_TEMPLATENAME;
+var config name ARMOR_PROGRAM_STATS_NAME;
+
 
 static function array<name> GetProgramWeaponTemplateNames() {
 	local array<name> names;
@@ -68,8 +81,8 @@ static function array<name> GetProgramWeaponTemplateNames() {
 	names.AddItem(default.PISTOL_PROGRAM_TEMPLATENAME);
 	names.AddItem(default.SNIPERRIFLE_PROGRAM_TEMPLATENAME);
 	names.AddItem(default.SHOTGUN_PROGRAM_TEMPLATENAME);
-	names.AddItem(default.ASSAULTRIFLE_PROGRAM_TEMPLATENAME);
 	names.AddItem(default.SWORD_PROGRAM_TEMPLATENAME);
+	names.AddItem(default.ASSAULTRIFLE_PROGRAM_TEMPLATENAME);
 
 	return names;
 };
@@ -79,17 +92,33 @@ static function array<X2DataTemplate> CreateTemplates()
 	local array<X2DataTemplate> Items;
 
 	// Weapons
-	Items.AddItem(CreateTemplate_ProgramPistol());
-	Items.AddItem(CreateTemplate_ProgramSniperRifle());
-	Items.AddItem(CreateTemplate_ProgramShotgun());
-	Items.AddItem(CreateTemplate_ProgramBlade());
-	Items.AddItem(CreateTemplate_ProgramAssaultRifle());
+	Items.AddItem(CreateTemplate_ProgramPistol(1));
+	Items.AddItem(CreateTemplate_ProgramPistol(2));
+	Items.AddItem(CreateTemplate_ProgramPistol(3));
+
+	Items.AddItem(CreateTemplate_ProgramSniperRifle(1));
+	Items.AddItem(CreateTemplate_ProgramSniperRifle(2));
+	Items.AddItem(CreateTemplate_ProgramSniperRifle(3));
+
+	Items.AddItem(CreateTemplate_ProgramShotgun(1));
+	Items.AddItem(CreateTemplate_ProgramShotgun(2));
+	Items.AddItem(CreateTemplate_ProgramShotgun(3));
+
+	Items.AddItem(CreateTemplate_ProgramBlade(1));
+	Items.AddItem(CreateTemplate_ProgramBlade(2));
+	Items.AddItem(CreateTemplate_ProgramBlade(3));
+
+	Items.AddItem(CreateTemplate_ProgramAssaultRifle(1));
+	Items.AddItem(CreateTemplate_ProgramAssaultRifle(2));
+	Items.AddItem(CreateTemplate_ProgramAssaultRifle(3));
 
 	// Weapon Upgrades
 	Items.AddItem(CreateTemplate_CosmeticSilencer());
 
 	// Armor
-	Items.AddItem(CreateTemplate_ProgramArmor());
+	Items.AddItem(CreateTemplate_ProgramArmor(1));
+	Items.AddItem(CreateTemplate_ProgramArmor(2));
+	Items.AddItem(CreateTemplate_ProgramArmor(3));
 
 	// Gear
 
@@ -125,11 +154,14 @@ static function array<X2DataTemplate> CreateTemplates()
 	return Items;
 }
 
-static function X2DataTemplate CreateTemplate_ProgramPistol()
+static function X2DataTemplate CreateTemplate_ProgramPistol(int iTier)
 {
 	local X2WeaponTemplate Template;
+	local name tierSuffix;
 
-	`CREATE_X2TEMPLATE(class'X2WeaponTemplate', Template, default.PISTOL_PROGRAM_TEMPLATENAME);
+	tierSuffix = `RTS.getSuffixForTier(iTier);
+
+	`CREATE_X2TEMPLATE(class'X2WeaponTemplate', Template, `RTS.concatName(default.PISTOL_PROGRAM_TEMPLATENAME, tierSuffix));
 	Template.WeaponPanelImage = "_Pistol";                       // used by the UI. Probably determines iconview of the weapon.
 
 	Template.ItemCat = 'weapon';
@@ -137,10 +169,26 @@ static function X2DataTemplate CreateTemplate_ProgramPistol()
 	Template.WeaponTech = 'beam';
 	Template.strImage = "img:///UILibrary_DLC2Images.BeamShadowKeeper";
 	Template.EquipSound = "Secondary_Weapon_Equip_Beam";
-	Template.Tier = 5;
+	Template.Tier = iTier + 1;
 
 	Template.RangeAccuracy = class'X2Item_DefaultWeapons'.default.SHORT_BEAM_RANGE;
-	Template.BaseDamage = default.PISTOL_PROGRAM_BASEDAMAGE;
+
+	switch(iTier) {
+		case 1:
+			Template.BaseDamage = default.PISTOL_PROGRAM_BASEDAMAGE_M1;
+			break;
+		case 2:
+			Template.BaseDamage = default.PISTOL_PROGRAM_BASEDAMAGE_M2;
+			break;
+		case 3:
+			Template.BaseDamage = default.PISTOL_PROGRAM_BASEDAMAGE_M3;
+			break;
+		default:
+			`RTLOG("Warning, " $ GetFuncName() $ " was provided invalid tier, returning tier 3!", true, false);
+			Template.BaseDamage = default.PISTOL_PROGRAM_BASEDAMAGE_M3;
+			break;
+	}	
+
 	Template.Aim = default.PISTOL_PROGRAM_AIM;
 	Template.CritChance = default.PISTOL_PROGRAM_CRITCHANCE;
 	Template.iClipSize = default.PISTOL_PROGRAM_ICLIPSIZE;
@@ -178,11 +226,14 @@ static function X2DataTemplate CreateTemplate_ProgramPistol()
 	return Template;
 }
 
-static function X2DataTemplate CreateTemplate_ProgramSniperRifle()
+static function X2DataTemplate CreateTemplate_ProgramSniperRifle(int iTier)
 {
 	local X2WeaponTemplate Template;
+	local name tierSuffix;
 
-	`CREATE_X2TEMPLATE(class'X2WeaponTemplate', Template, default.SNIPERRIFLE_PROGRAM_TEMPLATENAME);
+	tierSuffix = `RTS.getSuffixForTier(iTier);
+
+	`CREATE_X2TEMPLATE(class'X2WeaponTemplate', Template, `RTS.concatName(default.SNIPERRIFLE_PROGRAM_TEMPLATENAME, tierSuffix));
 	Template.WeaponPanelImage = "_BeamSniperRifle";
 
 	Template.ItemCat = 'weapon';
@@ -190,10 +241,26 @@ static function X2DataTemplate CreateTemplate_ProgramSniperRifle()
 	Template.WeaponTech = 'beam';
 	Template.strImage = "img:///UILibrary_Common.UI_BeamSniper.BeamSniper_Base";
 	Template.EquipSound = "Beam_Weapon_Equip";
-	Template.Tier = 5;
+	Template.Tier = iTier + 1;
 
 	Template.RangeAccuracy = class'X2Item_DefaultWeapons'.default.LONG_BEAM_RANGE;
-	Template.BaseDamage = default.SNIPERRIFLE_PROGRAM_BASEDAMAGE;
+
+	switch(iTier) {
+		case 1:
+			Template.BaseDamage = default.SNIPERRIFLE_PROGRAM_BASEDAMAGE_M1;
+			break;
+		case 2:
+			Template.BaseDamage = default.SNIPERRIFLE_PROGRAM_BASEDAMAGE_M2;
+			break;
+		case 3:
+			Template.BaseDamage = default.SNIPERRIFLE_PROGRAM_BASEDAMAGE_M3;
+			break;
+		default:
+			`RTLOG("Warning, " $ GetFuncName() $ " was provided invalid tier, returning tier 3!", true, false);
+			Template.BaseDamage = default.SNIPERRIFLE_PROGRAM_BASEDAMAGE_M3;
+			break;
+	}	
+
 	Template.Aim = default.SNIPERRIFLE_PROGRAM_AIM;
 	Template.CritChance = default.SNIPERRIFLE_PROGRAM_CRITCHANCE;
 	Template.iClipSize = default.SNIPERRIFLE_PROGRAM_ICLIPSIZE;
@@ -231,11 +298,14 @@ static function X2DataTemplate CreateTemplate_ProgramSniperRifle()
 	return Template;
 }
 
-static function X2DataTemplate CreateTemplate_ProgramShotgun()
+static function X2DataTemplate CreateTemplate_ProgramShotgun(int iTier)
 {
 	local X2WeaponTemplate Template;
+	local name tierSuffix;
 
-	`CREATE_X2TEMPLATE(class'X2WeaponTemplate', Template, default.SHOTGUN_PROGRAM_TEMPLATENAME);
+	tierSuffix = `RTS.getSuffixForTier(iTier);
+
+	`CREATE_X2TEMPLATE(class'X2WeaponTemplate', Template, `RTS.concatName(default.SHOTGUN_PROGRAM_TEMPLATENAME, tierSuffix));
 	Template.WeaponPanelImage = "_BeamShotgun";
 
 	Template.ItemCat = 'weapon';
@@ -243,10 +313,26 @@ static function X2DataTemplate CreateTemplate_ProgramShotgun()
 	Template.WeaponTech = 'beam';
 	Template.strImage = "img:///UILibrary_Common.UI_BeamShotgun.BeamShotgun_Base";
 	Template.EquipSound = "Beam_Weapon_Equip";
-	Template.Tier = 5;
+	Template.Tier = iTier + 1;
 
 	Template.RangeAccuracy = class'X2Item_DefaultWeapons'.default.SHORT_BEAM_RANGE;
-	Template.BaseDamage = default.SHOTGUN_PROGRAM_BASEDAMAGE;
+
+	switch(iTier) {
+		case 1:
+			Template.BaseDamage = default.SHOTGUN_PROGRAM_BASEDAMAGE_M1;
+			break;
+		case 2:
+			Template.BaseDamage = default.SHOTGUN_PROGRAM_BASEDAMAGE_M2;
+			break;
+		case 3:
+			Template.BaseDamage = default.SHOTGUN_PROGRAM_BASEDAMAGE_M3;
+			break;
+		default:
+			`RTLOG("Warning, " $ GetFuncName() $ " was provided invalid tier, returning tier 3!", true, false);
+			Template.BaseDamage = default.SHOTGUN_PROGRAM_BASEDAMAGE_M3;
+			break;
+	}	
+
 	Template.Aim = default.SHOTGUN_PROGRAM_AIM;
 	Template.CritChance = default.SHOTGUN_PROGRAM_CRITCHANCE;
 	Template.iClipSize = default.SHOTGUN_PROGRAM_ICLIPSIZE;
@@ -287,11 +373,14 @@ static function X2DataTemplate CreateTemplate_ProgramShotgun()
 	return Template;
 }
 
-static function X2DataTemplate CreateTemplate_ProgramAssaultRifle()
+static function X2DataTemplate CreateTemplate_ProgramAssaultRifle(int iTier)
 {
 	local X2WeaponTemplate Template;
+	local name tierSuffix;
 
-	`CREATE_X2TEMPLATE(class'X2WeaponTemplate', Template, default.ASSAULTRIFLE_PROGRAM_TEMPLATENAME);
+	tierSuffix = `RTS.getSuffixForTier(iTier);
+
+	`CREATE_X2TEMPLATE(class'X2WeaponTemplate', Template, `RTS.concatName(default.ASSAULTRIFLE_PROGRAM_TEMPLATENAME, tierSuffix));
 	Template.WeaponPanelImage = "_BeamRifle";                       // used by the UI. Probably determines iconview of the weapon.
 
 	Template.WeaponCat = 'rifle';
@@ -299,10 +388,26 @@ static function X2DataTemplate CreateTemplate_ProgramAssaultRifle()
 	Template.ItemCat = 'weapon';
 	Template.strImage = "img:///UILibrary_Common.UI_BeamAssaultRifle.BeamAssaultRifle_Base";
 	Template.EquipSound = "Beam_Weapon_Equip";
-	Template.Tier = 4;
+	Template.Tier = iTier + 1;
 
 	Template.RangeAccuracy = class'X2Item_DefaultWeapons'.default.MEDIUM_BEAM_RANGE;
-	Template.BaseDamage = default.ASSAULTRIFLE_PROGRAM_BASEDAMAGE;
+
+	switch(iTier) {
+		case 1:
+			Template.BaseDamage = default.ASSAULTRIFLE_PROGRAM_BASEDAMAGE_M1;
+			break;
+		case 2:
+			Template.BaseDamage = default.ASSAULTRIFLE_PROGRAM_BASEDAMAGE_M2;
+			break;
+		case 3:
+			Template.BaseDamage = default.ASSAULTRIFLE_PROGRAM_BASEDAMAGE_M3;
+			break;
+		default:
+			`RTLOG("Warning, " $ GetFuncName() $ " was provided invalid tier, returning tier 3!", true, false);
+			Template.BaseDamage = default.ASSAULTRIFLE_PROGRAM_BASEDAMAGE_M3;
+			break;
+	}
+
 	Template.Aim = default.ASSAULTRIFLE_PROGRAM_AIM;
 	Template.CritChance = default.ASSAULTRIFLE_PROGRAM_CRITCHANCE;
 	Template.iClipSize = default.ASSAULTRIFLE_PROGRAM_ICLIPSIZE;
@@ -338,11 +443,14 @@ static function X2DataTemplate CreateTemplate_ProgramAssaultRifle()
 	return Template;
 }
 
-static function X2DataTemplate CreateTemplate_ProgramBlade()
+static function X2DataTemplate CreateTemplate_ProgramBlade(int iTier)
 {
 	local X2WeaponTemplate Template;
+	local name tierSuffix;
 
-	`CREATE_X2TEMPLATE(class'X2WeaponTemplate', Template, default.SWORD_PROGRAM_TEMPLATENAME);
+	tierSuffix = `RTS.getSuffixForTier(iTier);
+
+	`CREATE_X2TEMPLATE(class'X2WeaponTemplate', Template, `RTS.concatName(default.SWORD_PROGRAM_TEMPLATENAME, tierSuffix));
 	Template.WeaponPanelImage = "_Sword";                       // used by the UI. Probably determines iconview of the weapon.
 
 	Template.ItemCat = 'weapon';
@@ -355,7 +463,7 @@ static function X2DataTemplate CreateTemplate_ProgramBlade()
 	// This all the resources; sounds, animations, models, physics, the works.
 	Template.GameArchetype = "FX_Beam_Sword_RT.WP_Sword_RT";
 	Template.AddDefaultAttachment('R_Back', "BeamSword.Meshes.SM_BeamSword_Sheath", false);
-	Template.Tier = 4;
+	Template.Tier = iTier + 1;
 
 	Template.iRadius = 1;
 	Template.NumUpgradeSlots = 2;
@@ -363,12 +471,27 @@ static function X2DataTemplate CreateTemplate_ProgramBlade()
 	Template.iPhysicsImpulse = 5;
 
 	Template.iRange = 0;
-	Template.BaseDamage = default.SWORD_PROGRAM_BASEDAMAGE;
+
+	switch(iTier) {
+		case 1:
+			Template.BaseDamage = default.SWORD_PROGRAM_BASEDAMAGE_M1;
+			break;
+		case 2:
+			Template.BaseDamage = default.SWORD_PROGRAM_BASEDAMAGE_M2;
+			break;
+		case 3:
+			Template.BaseDamage = default.SWORD_PROGRAM_BASEDAMAGE_M3;
+			break;
+		default:
+			`RTLOG("Warning, " $ GetFuncName() $ " was provided invalid tier, returning tier 3!", true, false);
+			Template.BaseDamage = default.SWORD_PROGRAM_BASEDAMAGE_M3;
+	}
+
 	Template.Aim = default.SWORD_PROGRAM_AIM;
 	Template.CritChance = default.SWORD_PROGRAM_CRITCHANCE;
+	Template.BaseDamage.DamageType='Melee';
 	Template.iSoundRange = default.SWORD_PROGRAM_ISOUNDRANGE;
 	Template.iEnvironmentDamage = default.SWORD_PROGRAM_IENVIRONMENTDAMAGE;
-	Template.BaseDamage.DamageType='Melee';
 
 	Template.CanBeBuilt = false;
 	Template.bInfiniteItem = false;
@@ -380,24 +503,44 @@ static function X2DataTemplate CreateTemplate_ProgramBlade()
 	return Template;
 }
 
-static function X2DataTemplate CreateTemplate_ProgramArmor()
+static function X2DataTemplate CreateTemplate_ProgramArmor(int iTier)
 {
 	local X2ArmorTemplate Template;
+	local name tierSuffix;
 
-	`CREATE_X2TEMPLATE(class'X2ArmorTemplate', Template, 'ProgramArmor');
+	tierSuffix = `RTS.getSuffixForTier(iTier);
+
+	`CREATE_X2TEMPLATE(class'X2ArmorTemplate', Template, `RTS.concatName(default.ARMOR_PROGRAM_TEMPLATENAME, tierSuffix));
 	Template.strImage = "img:///UILibrary_StrategyImages.X2InventoryIcons.Inv_Warden_Armor";
 	Template.ItemCat = 'armor';
 	Template.bAddsUtilitySlot = true;
 	Template.StartingItem = false;
 	Template.CanBeBuilt = false;
 	Template.bInfiniteItem = false;
-	Template.Abilities.AddItem('RTProgramArmorStats');
+	Template.Abilities.AddItem(`RTS.concatName(default.ARMOR_PROGRAM_STATS_NAME, tierSuffix));
 	Template.ArmorTechCat = 'powered';
 	Template.ArmorClass = 'medium';
-	Template.Tier = 3;
+	Template.Tier = iTier + 1;
+
+	switch(iTier) {
+		case 1:
+			Template.SetUIStatMarkup(class'XLocalizedData'.default.HealthLabel, eStat_HP, class'RTAbility_Program'.default.PROGRAM_ARMOR_HEALTH_BONUS_M1, true);
+			Template.SetUIStatMarkup(class'XLocalizedData'.default.ArmorLabel, eStat_ArmorMitigation, class'RTAbility_Program'.default.PROGRAM_ARMOR_MITIGATION_AMOUNT_M1);
+			break;
+		case 2:
+			Template.SetUIStatMarkup(class'XLocalizedData'.default.HealthLabel, eStat_HP, class'RTAbility_Program'.default.PROGRAM_ARMOR_HEALTH_BONUS_M2, true);
+			Template.SetUIStatMarkup(class'XLocalizedData'.default.ArmorLabel, eStat_ArmorMitigation, class'RTAbility_Program'.default.PROGRAM_ARMOR_MITIGATION_AMOUNT_M2);
+			break;
+		case 3:
+			Template.SetUIStatMarkup(class'XLocalizedData'.default.HealthLabel, eStat_HP, class'RTAbility_Program'.default.PROGRAM_ARMOR_HEALTH_BONUS_M3, true);
+			Template.SetUIStatMarkup(class'XLocalizedData'.default.ArmorLabel, eStat_ArmorMitigation, class'RTAbility_Program'.default.PROGRAM_ARMOR_MITIGATION_AMOUNT_M3);
+			break;
+		default:
+			`RTLOG("Warning, " $ GetFuncName() $ " was provided invalid tier, returning tier 3!", true, false);
+			Template.SetUIStatMarkup(class'XLocalizedData'.default.HealthLabel, eStat_HP, class'RTAbility_Program'.default.PROGRAM_ARMOR_HEALTH_BONUS_M3, true);
+			Template.SetUIStatMarkup(class'XLocalizedData'.default.ArmorLabel, eStat_ArmorMitigation, class'RTAbility_Program'.default.PROGRAM_ARMOR_MITIGATION_AMOUNT_M3);
+	}
 	
-	Template.SetUIStatMarkup(class'XLocalizedData'.default.HealthLabel, eStat_HP, class'RTAbility_Program'.default.PROGRAM_ARMOR_HEALTH_BONUS_T3, true);
-	Template.SetUIStatMarkup(class'XLocalizedData'.default.ArmorLabel, eStat_ArmorMitigation, class'RTAbility_Program'.default.PROGRAM_ARMOR_MITIGATION_AMOUNT);
 
 	//class'RTHelpers_ItemTemplates'.static.AddFontColor(Template, `RTS.GetProgramColor());
 	
