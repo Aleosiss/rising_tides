@@ -12,13 +12,23 @@ var string PrimaryColor;
 var string TextColor;
 var string HeaderColor;
 var string SecondaryColor;
+var string CompletedColor;
+var string FailedColor;
+var string LockedColor;
 
 var int CountSize;
+
+var UIText AvailabilityText;
+var string m_strProgramFavorAvailable;
+var string m_strProgramFavorUnavailable;
 
 // --------------------------------------
 defaultproperties
 {
 	CountSize = 84
+	CompletedColor = "5CD16C"
+	LockedColor = "828282"
+	FailedColor = "bf1e2e"
 }
 
 simulated function InitColors(String newPrimaryColor, String newTextColor, String newHeaderColor, String newSecondaryColor) {
@@ -26,6 +36,11 @@ simulated function InitColors(String newPrimaryColor, String newTextColor, Strin
 	TextColor = newTextColor;
 	HeaderColor = newHeaderColor;
 	SecondaryColor = newSecondaryColor;
+}
+
+simulated function InitStrings(string availableStr, string unavailableStr) {
+	m_strProgramFavorAvailable = availableStr;
+	m_strProgramFavorUnavailable = unavailableStr;
 }
 
 simulated function RTUICounter InitCounter(name PanelName, String TitleText, String TitleDescription, float newWidth, float newHeight)
@@ -78,6 +93,18 @@ simulated function RTUICounter InitCounter(name PanelName, String TitleText, Str
 	strTextTemp = ColorText(strTextTemp, PrimaryColor);
 	CountTitleDescription.SetHtmlText(strTextTemp);
 
+	AvailabilityText  = Spawn(class'UIText', self);
+	AvailabilityText.InitText('RT_AvailabilityText');
+	AvailabilityText.OriginCenter();
+	//AvailabilityText.AnchorCenter();
+	AvailabilityText.SetSize(400, 100);
+	AvailabilityText.SetPosition(50, 375);
+
+	strTextTemp = class'UIUtilities_Text'.static.AddFontInfo(m_strProgramFavorUnavailable, false);
+	strTextTemp = class'UIUtilities_Text'.static.AlignCenter(strTextTemp);
+	strTextTemp = ColorText(strTextTemp, FailedColor);
+	AvailabilityText.SetHtmlText(strTextTemp);
+
 	return self;
 }
 
@@ -85,6 +112,28 @@ simulated function RTUICounter InitCounter(name PanelName, String TitleText, Str
 static function string ColorText(string strValue, string strColour)
 {
 	return "<font color='#" $ strColour $ "'>" $ strValue $ "</font>";
+}
+
+simulated function SetAvailable() {
+	local String strTextTemp;
+
+	OutlinePanel.SetOutline(true, "0x" $ CompletedColor);
+
+	strTextTemp = class'UIUtilities_Text'.static.AddFontInfo(m_strProgramFavorAvailable, false);
+	strTextTemp = class'UIUtilities_Text'.static.AlignCenter(strTextTemp);
+	strTextTemp = ColorText(strTextTemp, CompletedColor);
+	AvailabilityText.SetHtmlText(strTextTemp);
+}
+
+simulated function SetUnavailable() {
+	local String strTextTemp;
+
+	OutlinePanel.SetOutline(true, "0x" $ FailedColor);
+
+	strTextTemp = class'UIUtilities_Text'.static.AddFontInfo(m_strProgramFavorUnavailable, false);
+	strTextTemp = class'UIUtilities_Text'.static.AlignCenter(strTextTemp);
+	strTextTemp = ColorText(strTextTemp, FailedColor);
+	AvailabilityText.SetHtmlText(strTextTemp);
 }
 
 
