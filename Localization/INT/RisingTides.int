@@ -391,3 +391,6 @@ m_strFailedDescription="With our plans exposed, the Templars have withdrawn from
 
 [RTUIStrategyMapItem_ProgramHQ]
 m_strProgramFactionButton="Program Status Briefing"
+
+[SeqAct_TemplarBetrayalReaction]
+m_strTemplarBetraylReactionBanner="Templar Betrayal"

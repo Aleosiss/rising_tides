@@ -74,11 +74,39 @@ static event OnPostTemplatesCreated()
 	MakeAbilitiesNotTurnEndingForTimeStandsStill();
 	AddProgramFactionCovertActions();
 	AddProgramAttachmentTemplates();
+	PatchTemplarCharacterTemplatesForAI();
 	
 }
 
 static function MakeAbilitiesNotTurnEndingForTimeStandsStill() {
 	class'RTAbility_MarksmanAbilitySet'.static.MakeAbilitiesNotTurnEndingForTimeStandsStill();
+}
+
+static function PatchTemplarCharacterTemplatesForAI() {
+	local X2CharacterTemplateManager	CharMgr;
+	local X2CharacterTemplate			CharTemplate;
+	local name							CharacterTemplateName;
+
+	CharacterTemplateName = 'TemplarSoldier';
+
+	// Get the Character Template Modify
+	CharMgr = class'X2CharacterTemplateManager'.static.GetCharacterTemplateManager();
+
+	// Access a specific Character Template.
+	CharTemplate = CharMgr.FindCharacterTemplate(CharacterTemplateName);
+
+	// If template was found
+	if (CharTemplate != none) {
+		if(CharTemplate.CharacterGroupName != '') {
+			`RTLOG("Warning, CharacterGroupName for " $ CharacterTemplateName $ " was not empty, was " $ CharTemplate.CharacterGroupName, true, false);
+		}
+		CharTemplate.CharacterGroupName = 'RT_TemplarWarrior';
+
+		if(CharTemplate.strBehaviorTree != "") {
+			`RTLOG("Warning, strBehaviorTree for " $ CharacterTemplateName $ " was not empty, was " $ CharTemplate.strBehaviorTree, true, false);
+		}
+		CharTemplate.strBehaviorTree = "RTTemplarWarriorRoot";
+	}
 }
 
 /// <summary>

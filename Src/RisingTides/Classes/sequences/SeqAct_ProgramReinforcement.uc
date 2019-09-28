@@ -305,7 +305,7 @@ simulated function ProgramReinforcements_BuildVisualization(XComGameState Visual
 
 		SyncAction = X2Action_MarkerNamed(class'X2Action_MarkerNamed'.static.AddToVisualizationTree(ActionMetadata, Context, false, ActionMetadata.LastActionAdded));
 		SyncAction.SetName("SpawningStart");
-		SyncAction.AddInputEvent('Visualizer_AbilityHit');
+		//SyncAction.AddInputEvent('Visualizer_AbilityHit');
 
 		foreach FreshlySpawnedUnitStates(UnitState)
 		{
@@ -326,8 +326,8 @@ simulated function ProgramReinforcements_BuildVisualization(XComGameState Visual
 			// if multiple units are spawning, apply small random delays between each
 			if( UnitState != FreshlySpawnedUnitStates[0] )
 			{
-				RandomDelay = X2Action_Delay(class'X2Action_Delay'.static.AddToVisualizationTree(NewUnitActionMetadata, Context, false, ActionMetadata.LastActionAdded));
-				OffsetVisDuration += 0.5f + `SYNC_FRAND() * 0.5f;
+				RandomDelay = X2Action_Delay(class'X2Action_Delay'.static.AddToVisualizationTree(NewUnitActionMetadata, Context, false, SyncAction));
+				OffsetVisDuration += 0.5f + `SYNC_FRAND(1) * 0.5f;
 				RandomDelay.Duration = OffsetVisDuration;
 			}
 			

@@ -14,7 +14,7 @@ function StageDirectory ([string]$directoryName, [string]$srcDirectory, [string]
     Write-Host "Staging mod $directoryName from source ($srcDirectory/$directoryName) to staging ($targetDirectory/$directoryName)..."
 
     if (Test-Path "$srcDirectory/$directoryName") {
-        Copy-Item "$srcDirectory/$directoryName" "$targetDirectory/$directoryName" -Recurse -WarningAction SilentlyContinue
+        Copy-Item "$srcDirectory/$directoryName" "$targetDirectory/$directoryName" -Recurse -WarningAction SilentlyContinue -ErrorAction Ignore
         Write-Host "Staged."
     }
     else {

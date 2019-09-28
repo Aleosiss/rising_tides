@@ -423,6 +423,7 @@
     <Content Include="Src\RisingTides\Classes\utils\RTTacticalVisibilityHelpers.uc" />
     <Content Include="Src\RisingTides\Classes\utils\UIDebugStateMachines.uc" />
     <Content Include="Src\RisingTides\Classes\templates\RTCharacterTemplate.uc" />
+    <Content Include="Src\RisingTides\Classes\sequences\SeqAct_TemplarBetrayalReaction.uc" />
   </ItemGroup>
   <Import Project="$(MSBuildLocalExtensionPath)\XCOM2.targets" />
 </Project>
