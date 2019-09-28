@@ -54,6 +54,8 @@ var localized string m_strProgramFactionInfoDescriptionText;
 
 var localized string m_strProgramFactionInfoCounterTitle;
 var localized string m_strProgramFactionInfoCounterDescriptionText;
+var localized string m_strProgramFavorAvailable;
+var localized string m_strProgramFavorUnavailable;
 
 defaultproperties
 {
@@ -164,6 +166,7 @@ simulated function InitScreen(XComPlayerController InitController, UIMovie InitM
 
 	FavorCounter = Spawn(class'RTUICounter', Container);
 	FavorCounter.InitColors(PrimaryColor, TextColor, HeaderColor, SecondaryColor);
+	FavorCounter.InitStrings(m_strProgramFavorAvailable, m_strProgramFavorUnavailable);
 	FavorCounter.InitCounter('RT_OSFCounter', m_strProgramFactionInfoCounterTitle, m_strProgramFactionInfoCounterDescriptionText, 516, 410);
 	FavorCounter.SetPosition(10, topRunningY);
 
@@ -224,6 +227,9 @@ simulated function PopulateData()
 	iTotalFavors = ProgramState.GetNumFavorsAvailable();
 	if(ProgramState.IsOneSmallFavorAvailable()) {
 		iTotalFavors++; // this checks for the active favor waiting to be called in, which can only be set once per month via the card.
+		FavorCounter.SetAvailable();
+	} else {
+		FavorCounter.SetUnavailable();
 	}
 
 	FavorCounter.SetCounter(iTotalFavors);

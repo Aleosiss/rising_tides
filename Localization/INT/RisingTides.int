@@ -360,6 +360,8 @@ m_strProgramFactionInfoHeaderText="Program Briefing"
 m_strProgramFactionInfoDescriptionText="Latest intelligence enclosed within. - @phoenix"
 m_strProgramFactionInfoCounterTitle="Favors Owed"
 m_strProgramFactionInfoCounterDescriptionText="In exchange for a favor, the Program will send in one of their squads in the place of XCOM's for a mission."
+m_strProgramFavorAvailable="AVAILABLE"
+m_strProgramFavorUnavailable="UNAVAILABLE"
 
 m_strStageOneTitle="Find Them"
 m_strStageOneDescription="In order to eliminate the threat the Templars represent, we first need to locate their stronghold, the High Coven."
