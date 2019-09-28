@@ -24,7 +24,7 @@ function StageDirectory ([string]$directoryName, [string]$srcDirectory, [string]
 
 function HandleSrcSubdirectories([string] $srcDir) {
     $files = Get-ChildItem -Path $srcDir -Filter "*.uc"
-    Get-ChildItem -Path $srcDir -Recurse -Filter "*.uc" | Get-ChildItem | Copy-Item -Destination {$srcDir} -WarningAction SilentlyContinue -ErrorAction Continue
+    Get-ChildItem -Path $srcDir -Recurse -Filter "*.uc" | Get-ChildItem | Copy-Item -Destination {$srcDir} -WarningAction SilentlyContinue -ErrorAction Ignore
     return $files
 }
 
