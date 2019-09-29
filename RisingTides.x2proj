@@ -36,6 +36,7 @@
     <Folder Include="Src\RisingTides\Classes\effects\" />
     <Folder Include="Src\RisingTides\Classes\templates\" />
     <Folder Include="Src\RisingTides\Classes\abilities\tohitcalc\" />
+    <Folder Include="Config\Armor\DLC_2\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Config\XComClassData.ini">
@@ -424,6 +425,9 @@
     <Content Include="Src\RisingTides\Classes\utils\UIDebugStateMachines.uc" />
     <Content Include="Src\RisingTides\Classes\templates\RTCharacterTemplate.uc" />
     <Content Include="Src\RisingTides\Classes\sequences\SeqAct_TemplarBetrayalReaction.uc" />
+    <Content Include="Content\RisingTidesArmorPackage.upk" />
+    <Content Include="Content\Armor\01_MEA_Armors_Shared.upk" />
+    <Content Include="Content\Armor\MEA_Remnant_Armor_Assets.upk" />
   </ItemGroup>
   <Import Project="$(MSBuildLocalExtensionPath)\XCOM2.targets" />
 </Project>
