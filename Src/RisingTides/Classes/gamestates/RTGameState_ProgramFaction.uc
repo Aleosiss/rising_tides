@@ -875,13 +875,14 @@ simulated function bool CashOneSmallFavor(XComGameState NewGameState, XComGameSt
 	}
 
 	MissionSite = XComGameState_MissionSite(NewGameState.ModifyStateObject(MissionSite.class, MissionSite.ObjectID));
+	
 	foreach Deployed.Operatives(GhostRef) {
 		GhostTemplateName = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(GhostRef.ObjectID)).GetMyTemplateName();
-		HandleOperativeHelmets(NewGameState);
 		`RTLOG("Adding a " $ GhostTemplateName $ " to the SpecialSoldiers for Mission " $ MissionSite.GeneratedMission.Mission.MissionName);
 		MissionSite.GeneratedMission.Mission.SpecialSoldiers.AddItem(GhostTemplateName);
 	}
 
+	HandleOperativeHelmets(NewGameState);
 	AdjustProgramGearLevel(NewGameState);
 	
 	iPreviousMaxSoldiersForMission = MissionSite.GeneratedMission.Mission.MaxSoldiers;
@@ -949,8 +950,16 @@ function HandleOperativeHelmets(XComGameState NewGameState) {
 	local XComGameState_Unit OperativeState;
 	local StateObjectReference IteratorRef;
 	local XComGameStateHistory History;
+	local string msg;
 
 	History = `XCOMHISTORY;
+	msg = "Handling Helmets, will ";
+	if(class'X2DownloadableContentInfo_RisingTides'.default.bShouldRemoveHelmets) {
+		msg $= "be removing helmets!";
+	} else {
+		msg $= "not be removing helmets";
+	}
+	`RTLOG(msg);
 
 	foreach Master(IteratorRef) {
 		OperativeState = XComGameState_Unit(History.GetGameStateForObjectID(IteratorRef.ObjectID));
@@ -958,11 +967,7 @@ function HandleOperativeHelmets(XComGameState NewGameState) {
 		if(class'X2DownloadableContentInfo_RisingTides'.default.bShouldRemoveHelmets) {
 			OperativeState.kAppearance.nmHelmet = '';
 		} else {
-			if(OperativeState.kAppearance.iGender == eGender_Female) {
-				OperativeState.kAppearance.nmHelmet = 'ALL_WotC_MamaMEA_Remnant_Heavy_Helmet_F';
-			} else {
-				OperativeState.kAppearance.nmHelmet = 'ALL_WotC_MamaMEA_Remnant_Heavy_Helmet_M';
-			}
+			OperativeState.kAppearance.nmHelmet = OperativeState.GetMyTemplate().DefaultAppearance.nmHelmet;
 		}
 	}
 }

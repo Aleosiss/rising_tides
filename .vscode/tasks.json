@@ -27,17 +27,6 @@
             }]
         },
         {
-            "label": "build_laptop",
-            "type": "shell",
-            "command": "-file \"${workspaceRoot}/scripts/build_noshaderprecompliation.ps1\" -mod \"RisingTides\" -srcDirectory \"${workspaceRoot}\" -sdkPath \"C:/Program Files (x86)/Steam/steamapps/common/XCOM 2 War of the Chosen SDK\" -gamePath \"C:/Program Files (x86)/Steam/steamapps/common/XCOM 2\"",
-            "options": {
-                "shell": {
-                    "executable": "powershell.exe",
-                },
-            },
-            "problemMatcher": []
-        },
-        {
             "label": "publish",
             "type": "shell",
             "command": "-file \"${workspaceRoot}/scripts/publish.ps1\" -amlPath \"${config:mod.amlpath}\"",
