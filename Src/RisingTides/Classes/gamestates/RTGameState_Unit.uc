@@ -20,7 +20,7 @@ simulated function bool CanAddItemToInventory(const X2ItemTemplate ItemTemplate,
 
 	return super.CanAddItemToInventory(ItemTemplate, Slot, CheckGameState, Quantity, Item);
 }
-
+/*
 // X2AbilityTemplateManager AbilityTemplateManager, name AbilityName, out array<AbilitySetupData> arrData, out array<Name> ExcludedAbilityNames, AbilitySetupData InitialAbilitySetupData, optional X2DataTemplate InitialAbilityProviderTemplate
 function AddAbilitySetupData(	X2AbilityTemplateManager AbilityTemplateManager,
 								name AbilityName,
@@ -83,6 +83,7 @@ function AddAbilitySetupData(	X2AbilityTemplateManager AbilityTemplateManager,
 		}
 	}
 }
+*/
 /*
 function RankUpSoldier(XComGameState NewGameState, optional name SoldierClass, optional bool bRecoveredFromBadClassData)
 {
@@ -261,7 +262,7 @@ function RankUpSoldier(XComGameState NewGameState, optional name SoldierClass, o
 	}
 }
 */
-
+/*
 function array<AbilitySetupData> GatherUnitAbilitiesForInit(optional XComGameState StartState, optional XComGameState_Player PlayerState, optional bool bMultiplayerDisplay)
 {
 	local name AbilityName, UnlockName;
@@ -635,4 +636,38 @@ function array<AbilitySetupData> GatherUnitAbilitiesForInit(optional XComGameSta
 	}
 
 	return arrData;
+}
+*/
+simulated function XComUnitPawn GetPawnArchetype( string strArchetype="", optional const XComGameState_Unit ReanimatedFromUnit = None )
+{
+	local Object kPawn;
+	
+	`RTLOG("GetPawnArchetype for " $ self.GetName(eNameType_Nick) $ " ");
+
+	if(strArchetype == "")
+	{
+		strArchetype = GetMyTemplate().GetPawnArchetypeString(self, ReanimatedFromUnit);
+	}
+
+	`RTLOG("CP1: " $ strArchetype);
+
+	// backup plan
+	if(strArchetype == "") {
+		switch(EGender(kAppearance.iGender)) {
+			case eGender_Male:
+				strArchetype = "GameUnit_Reaper.ARC_Reaper_M"; // yeah idk
+				break;
+			case eGender_Female:
+				strArchetype = "GameUnit_Reaper.ARC_Reaper_F";
+				break;
+			default:
+				`RTLOG("Gender was not male or female, something is seriously wrong!", true);
+		}
+	}
+	`RTLOG("CP2: " $ strArchetype);
+
+	kPawn = `CONTENT.RequestGameArchetype(strArchetype);
+	if (kPawn != none && kPawn.IsA('XComUnitPawn'))
+		return XComUnitPawn(kPawn);
+	return none;
 }

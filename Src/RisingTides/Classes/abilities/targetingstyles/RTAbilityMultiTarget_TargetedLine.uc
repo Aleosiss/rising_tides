@@ -8,6 +8,10 @@
 //
 //---------------------------------------------------------------------------------------
 class RTAbilityMultiTarget_TargetedLine extends X2AbilityMultiTarget_Line;
+/*
+var int LineLengthTiles;					// if greater than 0, the line with have this length instead of the default
+var bool bOriginateAtTargetLocation;		// if set, the line will originate from the target instead of the shooter
+*/
 
 // ----------- Have to override this native function in X2AbilityMultiTargetStyle, as all others are native-to-native calls and cannot be intercepted -----------------
 /**
@@ -19,10 +23,11 @@ simulated function GetMultiTargetOptions(const XComGameState_Ability Ability, ou
 {
 	local int								i;
 	local vector							TargetUnitLocation;
-	local XComGameState_Unit				TargetUnit;
+	local XComGameState_Unit				TargetUnit, IteratorTargetUnit;
 	local AvailableTarget					Target;
 	local XComWorldData						World;
 	local XComGameStateHistory				History;
+	local StateObjectReference				IteratorTargetRef;
 
 	World = `XWORLD;
 	History = `XCOMHISTORY;
@@ -41,15 +46,18 @@ simulated function GetMultiTargetOptions(const XComGameState_Ability Ability, ou
 
 		Target.PrimaryTarget = Targets[i].PrimaryTarget;
 		GetMultiTargetsForLocation(Ability, TargetUnitLocation, Target);
-
+/*
+		if(bOriginateAtTargetLocation && LineLengthTiles > 0) {
+			foreach Target.AdditionalTargets(IteratorTargetRef) {
+				IteratorTargetUnit = XComGameState_Unit(History.GetGameStateForObjectID(IteratorTargetRef.ObjectID));
+				if(TargetUnit.TileDistanceBetween(IteratorTargetUnit) > (LineLengthTiles / 2)) {
+					Target.AdditionalTargets.RemoveItem(IteratorTargetRef);
+				}
+			}
+		}
+*/
 		Targets[i] = Target;
 	}
-}
-
-function AddAbilityBonusWidth(name AbilityName, int BonusWidth)
-{
-	super.AddAbilityBonusWidth(AbilityName, BonusWidth);
-	return;
 }
 
 simulated function GetMultiTargetsForLocation(const XComGameState_Ability Ability, const vector Location, out AvailableTarget Target)
@@ -58,11 +66,37 @@ simulated function GetMultiTargetsForLocation(const XComGameState_Ability Abilit
 	return;
 }
 
-simulated function GetValidTilesForLocation(const XComGameState_Ability Ability, const vector Location, out array<TTile> ValidTiles)
+function AddAbilityBonusWidth(name AbilityName, int BonusWidth)
 {
-	super.GetValidTilesForLocation(Ability, Location, ValidTiles);
+	super.AddAbilityBonusWidth(AbilityName, BonusWidth);
 	return;
 }
+
+simulated function GetValidTilesForLocation(const XComGameState_Ability Ability, const vector Location, out array<TTile> ValidTiles)
+{
+	local TTile IteratorTile;
+	local TTile TargetTile;
+	local Vector IteratorTileLocation;
+	local XComWorldData WorldData;
+	local float Dist;
+	local int Tiles;
+
+	super.GetValidTilesForLocation(Ability, Location, ValidTiles);
+/*
+	WorldData = `XWORLD;
+	`RTLOG("ValidTiles.Length " $ ValidTiles.Length);
+	foreach ValidTiles(IteratorTile) {
+		Dist = VSize(Location - WorldData.GetPositionFromTileCoordinates(IteratorTile));
+		Tiles = Dist / WorldData.WORLD_StepSize;
+		if(Tiles > (LineLengthTiles / 2)) {
+			ValidTiles.RemoveItem(IteratorTile);
+		}
+	}
+	`RTLOG("Pruned ValidTiles.Length " $ ValidTiles.Length);
+*/
+	return;
+}
+
 
 /**
 * CheckFilteredMultiTargets
