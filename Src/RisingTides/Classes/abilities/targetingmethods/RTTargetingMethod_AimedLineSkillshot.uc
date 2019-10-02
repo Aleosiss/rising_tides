@@ -10,12 +10,16 @@
 
 class RTTargetingMethod_AimedLineSkillshot extends X2TargetingMethod;
 
+var int LineLengthTiles;					// if greater than 0, the line with have this length instead of the default
+var bool bOriginateAtTargetLocation;		// if set, the line will originate from the target instead of the shooter
+
 var protected vector NewTargetLocation, FiringLocation;
 var protected TTile FiringTile;
 var protected XComWorldData WorldData;
 var private int LastTarget;
 var protected bool bGoodTarget;
 var protected X2Actor_LineTarget LineActor;
+var protected X2Actor_LineTarget LineActorReversed;
 
 function Init(AvailableAction InAction, int NewTargetIndex)
 {
@@ -27,31 +31,98 @@ function Init(AvailableAction InAction, int NewTargetIndex)
 	// Make sure we have targets of some kind.
 	`assert(Action.AvailableTargets.Length > 0);
 
-	// select the target before setting up the midpoint cam so we know where we are midpointing to
-	DirectSetTarget(NewTargetIndex);
+
+	LastTarget = NewTargetIndex;
+	LastTarget = LastTarget % Action.AvailableTargets.Length;
+	if (LastTarget < 0) {
+		LastTarget = Action.AvailableTargets.Length + LastTarget;
+	}
 
 	AbilityTemplate = Ability.GetMyTemplate( );
+	if(AbilityTemplate.IsA('RTAbilityTemplate')) {
+		LineLengthTiles = RTAbilityTemplate(AbilityTemplate).LineLengthTiles;
+		bOriginateAtTargetLocation = RTAbilityTemplate(AbilityTemplate).bOriginateAtTargetLocation;
+	} else {
+		LineLengthTiles = 0;
+		bOriginateAtTargetLocation = false;
+	}
+
+	`RTLOG("bOriginateAtTargetLocation " $ bOriginateAtTargetLocation);
+	`RTLOG("LineLengthTiles " $ LineLengthTiles);
+
+
 	WorldData = `XWORLD;
 	FiringTile = UnitState.TileLocation;
 	FiringLocation = WorldData.GetPositionFromTileCoordinates(UnitState.TileLocation);
-	FiringLocation.Z += class'XComWorldData'.const.WORLD_HalfFloorHeight;
 
-	// select the target before setting up the midpoint cam so we know where we are midpointing to
-	DirectSetTarget(0);
+	// shoot at their midpoint for now...
+	FiringLocation.Z += class'XComWorldData'.const.WORLD_HalfFloorHeight;
 
 	// set up the GUI line
 	if (!AbilityTemplate.SkipRenderOfTargetingTemplate)
 	{
-		// setup the targeting mesh
-		LineActor = `BATTLE.Spawn( class'X2Actor_LineTarget' );
-		TileLength = 200 * class'XComWorldData'.const.WORLD_METERS_TO_UNITS_MULTIPLIER / class'XComWorldData'.const.WORLD_StepSize;
-		LineActor.MeshLocation = "UI_3D.Targeting.ConeRange";
-		LineActor.InitLineMesh( TileLength  );
-		LineActor.SetLocation( FiringLocation );
+		if(bOriginateAtTargetLocation) {
+			SetupLineTargetOrigin();
+		} else {
+			SetupLineShooterOrigin();
+		}
 	}
 
-
 	UpdatePostProcessEffects(true);
+	// select the target before setting up the midpoint cam so we know where we are midpointing to
+	DirectSetTarget(0);
+}
+
+private function SetupLineTargetOrigin() {
+	local float FinalLineLength;
+	local float TileLength;
+	// setup the targeting mesh
+	LineActor = `BATTLE.Spawn( class'X2Actor_LineTarget' );
+	LineActorReversed = `BATTLE.Spawn( class'X2Actor_LineTarget' );
+
+	if(LineLengthTiles > 0) {
+		FinalLineLength = LineLengthTiles;
+	} else {
+		FinalLineLength = 200;
+	}
+
+	FinalLineLength = FinalLineLength / 2;
+	//TileLength = FinalLineLength * class'XComWorldData'.const.WORLD_METERS_TO_UNITS_MULTIPLIER / class'XComWorldData'.const.WORLD_StepSize;
+	TileLength = FinalLineLength;
+	
+	LineActor.MeshLocation = "UI_3D.Targeting.ConeRange";
+	LineActor.InitLineMesh( TileLength );
+	LineActor.SetLocation( FiringLocation );
+	AimLineAtTargetLocation(GetTargetedActor().Location);
+
+	LineActorReversed.MeshLocation = "UI_3D.Targeting.ConeRange";
+	LineActorReversed.InitLineMesh( TileLength );
+	LineActorReversed.SetLocation( FiringLocation );
+	AimLineAtTargetLocation(GetTargetedActor().Location, true);
+}
+
+private function SetupLineShooterOrigin() {
+	local float FinalLineLength;
+	local float TileLength;
+
+	// setup the targeting mesh
+	LineActor = `BATTLE.Spawn( class'X2Actor_LineTarget' );
+	LineActorReversed = `BATTLE.Spawn( class'X2Actor_LineTarget' );
+
+	if(LineLengthTiles > 0) {
+		FinalLineLength = LineLengthTiles;
+	} else {
+		FinalLineLength = 200;
+	}
+
+	//TileLength = FinalLineLength * class'XComWorldData'.const.WORLD_METERS_TO_UNITS_MULTIPLIER / class'XComWorldData'.const.WORLD_StepSize;
+	TileLength = FinalLineLength;
+
+	LineActor.MeshLocation = "UI_3D.Targeting.ConeRange";
+	LineActor.InitLineMesh( TileLength );
+
+	LineActor.SetLocation( FiringLocation );
+	AimLineAtTargetLocation(GetTargetedActor().Location);
 }
 
 private function AddTargetingCamera(Actor NewTargetActor, bool ShouldUseMidpointCamera)
@@ -92,10 +163,9 @@ private function AddTargetingCamera(Actor NewTargetActor, bool ShouldUseMidpoint
 		//	MidpointCamera.AddFocusActor(TacticalHud.m_kAbilityHUD.LastTargetActor);
 		//}
 
-		if( bShouldAddNewTargetingCameraToStack )
-		{
-		`CAMERASTACK.AddCamera(FiringUnit.TargetingCamera);
-	}
+		if( bShouldAddNewTargetingCameraToStack ) {
+			`CAMERASTACK.AddCamera(FiringUnit.TargetingCamera);
+		}
 
 		MidpointCamera.RecomputeLookatPointAndZoom(false);
 	}
@@ -119,11 +189,10 @@ private function AddTargetingCamera(Actor NewTargetActor, bool ShouldUseMidpoint
 		}
 
 		// add swoopy midpoint
-		if( !OTSCamera.ShouldBlend )
-	{
-		LookAtMidpointCamera = new class'X2Camera_MidpointTimed';
-		LookAtMidpointCamera.AddFocusActor(FiringUnit);
-		LookAtMidpointCamera.LookAtDuration = 0.0f;
+		if( !OTSCamera.ShouldBlend ) {
+			LookAtMidpointCamera = new class'X2Camera_MidpointTimed';
+			LookAtMidpointCamera.AddFocusActor(FiringUnit);
+			LookAtMidpointCamera.LookAtDuration = 0.0f;
 			LookAtMidpointCamera.AddFocusPoint(OTSCamera.GetTargetLocation());
 			OTSCamera.PushCamera(LookAtMidpointCamera);
 		}
@@ -156,6 +225,7 @@ function Canceled()
 	AOEMeshActor.Destroy();
 	ClearTargetedActors();
 	LineActor.Destroy();
+	LineActorReversed.Destroy();
 
 
 	UpdatePostProcessEffects(false);
@@ -166,6 +236,7 @@ function Committed()
 	AOEMeshActor.Destroy();
 	ClearTargetedActors();
 	LineActor.Destroy();
+	LineActorReversed.Destroy();
 
 	if(!Ability.GetMyTemplate().bUsesFiringCamera)
 	{
@@ -204,8 +275,6 @@ function DirectSetTarget(int TargetIndex)
 	local TTile CurrentTile;
 	local XComWorldData World;
 	local array<Actor> CurrentlyMarkedTargets;
-	local vector ShooterToTarget;
-	local Rotator LineRotator;
 
 	Pres = `PRES;
 	World = `XWORLD;
@@ -252,6 +321,10 @@ function DirectSetTarget(int TargetIndex)
 	//NewTargetLocation = WorldData.GetPositionFromTileCoordinates(TargetTile);
 	NewTargetLocation.Z = WorldData.GetFloorZForPosition(NewTargetLocation, true) + class'XComWorldData'.const.WORLD_HalfFloorHeight;
 
+	if(bOriginateAtTargetLocation && LineLengthTiles > 0) {
+		RemoveOutOfRangeTiles(Tiles, NewTargetLocation);
+	}
+
 	GetTargetedActors(NewTargetLocation, CurrentlyMarkedTargets, Tiles);
 	CheckForFriendlyUnit(CurrentlyMarkedTargets);
 	MarkTargetedActors(CurrentlyMarkedTargets, (!AbilityIsOffensive) ? FiringUnit.GetTeam() : eTeam_None );
@@ -266,19 +339,39 @@ function DirectSetTarget(int TargetIndex)
 				X2Camera_Midpoint(FiringUnit.TargetingCamera).AddFocusPoint(TilePosition, true);
 			}
 		}
-			
 	}
 
+	if(bOriginateAtTargetLocation) {
+		LineActor.SetLocation( GetTargetedActor().Location );
+		LineActorReversed.SetLocation( GetTargetedActor().Location );
+		AimLineAtTargetLocation(NewTargetLocation, true);
+	} else {
+		AimLineAtTargetLocation(NewTargetLocation);
+	}
+	
 	GetTargetedActorsInTiles(Tiles, CurrentlyMarkedTargets, false);
 	CheckForFriendlyUnit(CurrentlyMarkedTargets);
 	MarkTargetedActors(CurrentlyMarkedTargets, (!AbilityIsOffensive) ? FiringUnit.GetTeam() : eTeam_None);
 	DrawAOETiles(Tiles);
 	AOEMeshActor.SetHidden(false);
-	if (LineActor != none)
-	{
-		ShooterToTarget = NewTargetLocation - FiringLocation;
+}
+
+private function AimLineAtTargetLocation(vector TargetLocation, optional bool bReverse = false) {
+	local vector ShooterToTarget;
+	local Rotator LineRotator;
+
+	if (LineActor != none) {
+		ShooterToTarget = TargetLocation - FiringLocation;
 		LineRotator = rotator( ShooterToTarget );
+
 		LineActor.SetRotation( LineRotator );
+	}
+
+	if(LineActorReversed != none && bReverse) {
+		ShooterToTarget = FiringLocation - TargetLocation;
+		LineRotator = rotator( ShooterToTarget );
+
+		LineActorReversed.SetRotation( LineRotator );
 	}
 }
 
@@ -306,6 +399,24 @@ private function GetEffectAOETiles(out array<TTile> TilesToBeDamaged)
 					EffectState.GetX2Effect().GetAOETiles(SourceUnit, TargetUnit, TilesToBeDamaged);
 				}
 			}
+		}
+	}
+}
+
+private function RemoveOutOfRangeTiles(out array<TTile> ValidTiles, Vector Location) {
+	local TTile IteratorTile;
+	local TTile TargetTile;
+	local Vector IteratorTileLocation;
+	local XComWorldData WorldData;
+	local float Dist;
+	local int Tiles;
+
+	WorldData = `XWORLD;
+	foreach ValidTiles(IteratorTile) {
+		Dist = VSize(Location - WorldData.GetPositionFromTileCoordinates(IteratorTile));
+		Tiles = Dist / WorldData.WORLD_StepSize;
+		if(Tiles > (LineLengthTiles / 2)) {
+			ValidTiles.RemoveItem(IteratorTile);
 		}
 	}
 }

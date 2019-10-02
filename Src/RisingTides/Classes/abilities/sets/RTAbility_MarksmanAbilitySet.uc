@@ -64,6 +64,7 @@ class RTAbility_MarksmanAbilitySet extends RTAbility
 	var name KillZoneReserveType;
 	var name TimeStopEffectName;
 	var name TimeStopMasterEffectName;
+	var name DaybreakFlameToggleName;
 
 	var config array<name> AbilityPerksToLoad;
 
@@ -72,7 +73,7 @@ class RTAbility_MarksmanAbilitySet extends RTAbility
 //---------------------------------------------------------------------------------------
 static function array<X2DataTemplate> CreateTemplates()
 {
-	local array<X2DataTemplate> Templates;
+	local array<X2AbilityTemplate> Templates;
 
 	Templates.AddItem(ScopedAndDropped());
 	Templates.AddItem(RTStandardSniperShot());
@@ -93,6 +94,7 @@ static function array<X2DataTemplate> CreateTemplates()
 	Templates.AddItem(SlowIsSmoothEffect());
 	Templates.AddItem(Sovereign());
 	Templates.AddItem(SovereignEffect());
+	CreateAbilityToggle(Templates, 'DaybreakFlameToggle', default.DaybreakFlameToggleName, "img:///RisingTidesContentPackage.PerkIcons.rt_daybreaker");
 	Templates.AddItem(DaybreakFlame());										// animation
 	Templates.AddItem(DaybreakFlameIcon());
 	Templates.AddItem(YourHandsMyEyes());
@@ -102,7 +104,7 @@ static function array<X2DataTemplate> CreateTemplates()
 	Templates.AddItem(TwitchReaction());
 	Templates.AddItem(TwitchReactionShot());
 	Templates.AddItem(LinkedIntelligence());
-	Templates.AddItem(PsionicSurge());								   	// animation
+	Templates.AddItem(PsionicSurge());										// animation
 	Templates.AddItem(EyeInTheSky());
 	Templates.AddItem(HeatChannel());										// animation
 	Templates.AddItem(HeatChannelIcon());
@@ -131,6 +133,7 @@ static function X2AbilityTemplate ScopedAndDropped()
 	local X2AbilityTemplate						Template;
 	local RTEffect_ScopedAndDropped				ScopedEffect;
 	local RTEffect_Squadsight					SSEffect;
+	local name IteratorName;
 
 	// Icon Properties
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'ScopedAndDropped');
@@ -183,11 +186,13 @@ static function X2AbilityTemplate ScopedAndDropped()
 	local X2AbilityTemplate					Template;
 	local X2AbilityCost_ActionPoints		ActionPointCost;
 	local X2AbilityCost_Ammo				AmmoCost;
-	local X2AbilityToHitCalc_StandardAim    ToHitCalc;
-	//local X2Condition_Visibility            TargetVisibilityCondition;
-	local RTCondition_VisibleToPlayer	VisibleToPlayerCondition;
-	local array<name>                       SkipExclusions;
+	local X2AbilityToHitCalc_StandardAim	ToHitCalc;
+	local X2Condition_Visibility			TargetVisibilityCondition;
+	local RTCondition_VisibleToPlayer		VisibleToPlayerCondition;
+	local array<name>						SkipExclusions;
 	local X2Effect_Knockback				KnockbackEffect;
+
+	local X2Condition_UnitEffects			DaybreakFlameActiveCondition;
 
 	//Macro to do localisation and stuffs
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'RTStandardSniperShot');
@@ -220,6 +225,12 @@ static function X2AbilityTemplate ScopedAndDropped()
 	Template.AbilityTargetConditions.AddItem(default.LivingHostileTargetProperty);
 	// Can't shoot while dead
 	Template.AbilityShooterConditions.AddItem(default.LivingShooterProperty);
+
+	// Toggle
+	DaybreakFlameActiveCondition = new class'X2Condition_UnitEffects';
+	DaybreakFlameActiveCondition.AddExcludeEffect(default.DaybreakFlameToggleName, 'AA_UnitIsNotImpaired');
+	Template.AbilityShooterConditions.AddItem(DaybreakFlameActiveCondition);
+
 	// Only at single targets that are in range.
 	Template.AbilityTargetStyle = default.SimpleSingleTarget;
 
@@ -1129,21 +1140,22 @@ static function X2AbilityTemplate SovereignEffect()
 //---------------------------------------------------------------------------------------
  static function X2AbilityTemplate DaybreakFlame()
 {
-	local X2AbilityTemplate						Template;
+	local RTAbilityTemplate						Template;
 	local X2AbilityCost_ActionPoints			ActionPointCost;
 	local X2AbilityCost_Ammo					AmmoCost;
 	local X2AbilityToHitCalc_StandardAim		ToHitCalc;
 	local X2Condition_Visibility				TargetVisibilityCondition;
 	local array<name>							SkipExclusions;
 	local X2Effect_Knockback					KnockbackEffect;
-	local X2Effect_ApplyWeaponDamage			WeaponDamageEffect; //invokes the ability to add weapon damage
-	local X2Effect_ApplyFireToWorld				FireToWorldEffect;  //allows ability to set shit on fire
-	local X2Effect_ApplyDirectionalWorldDamage  WorldDamage;  //allows destruction of environment
-	local X2Effect_Burning						BurningEffect;      //Allows Burning
+	local X2Effect_ApplyWeaponDamage			WeaponDamageEffect;			//invokes the ability to add weapon damage
+	local X2Effect_ApplyFireToWorld				FireToWorldEffect;			//allows ability to set shit on fire
+	local X2Effect_ApplyDirectionalWorldDamage  WorldDamage;				//allows destruction of environment
+	local X2Effect_Burning						BurningEffect;				//Allows Burning
 	local RTAbilityMultiTarget_TargetedLine		LineMultiTarget;
 	local X2AbilityTarget_Single				SingleTarget;
 
 	local RTCondition_VisibleToPlayer			PlayerVisibilityCondition;
+	local X2Condition_UnitEffects				DaybreakFlameActiveCondition;
 
 
 	//Macro to do localisation and stuffs
@@ -1184,6 +1196,11 @@ static function X2AbilityTemplate SovereignEffect()
 	// Can't shoot while dead
 	Template.AbilityShooterConditions.AddItem(default.LivingShooterProperty);
 
+	// Toggle
+	DaybreakFlameActiveCondition = new class'X2Condition_UnitEffects';
+	DaybreakFlameActiveCondition.AddRequireEffect(default.DaybreakFlameToggleName, 'AA_UnitIsNotImpaired');
+	Template.AbilityShooterConditions.AddItem(DaybreakFlameActiveCondition);
+
 	// Single targets that are in range.
 	SingleTarget = new class'X2AbilityTarget_Single';
 	SingleTarget.bAllowDestructibleObjects = true;
@@ -1191,12 +1208,17 @@ static function X2AbilityTemplate SovereignEffect()
 	Template.AbilityTargetStyle = SingleTarget;
 
 	// Targeting Method
+	//Template.LineLengthTiles = 8;
+	//Template.bOriginateAtTargetLocation = true;
 	Template.TargetingMethod = class'RTTargetingMethod_AimedLineSkillshot';
 	Template.bUsesFiringCamera = true;
 	Template.CinescriptCameraType = "StandardGunFiring";
 
 	// Line skillshot
 	LineMultiTarget = new class'RTAbilityMultiTarget_TargetedLine';
+	//LineMultiTarget.bOriginateAtTargetLocation = true;
+	//LineMultiTarget.LineLengthTiles = 8;
+
 	LineMultiTarget.bSightRangeLimited = false;
 	Template.AbilityMultiTargetStyle = LineMultiTarget;
 	Template.bRecordValidTiles = true;
@@ -1263,27 +1285,18 @@ static function X2AbilityTemplate SovereignEffect()
 	WorldDamage.ApplyChance = 100;
 	Template.AddMultiTargetEffect(WorldDamage);		//May be redundant
 
-	FireToWorldEffect = new class'X2Effect_ApplyFireToWorld';	//This took a while to find
-	FireToWorldEffect.bUseFireChanceLevel = true;
-	FireToWorldEffect.bDamageFragileOnly = false;
+	FireToWorldEffect = new class'X2Effect_ApplyFireToWorld';
+	FireToWorldEffect.bDamageFragileOnly = true;
 	FireToWorldEffect.bCheckForLOSFromTargetLocation = false;
-	FireToWorldEffect.FireChance_Level1 = 0.95f;				//%chance of fire to catch
-	FireToWorldEffect.FireChance_Level2 = 0.95f;
-	FireToWorldEffect.FireChance_Level3 = 0.95f;
 	Template.AddTargetEffect(FireToWorldEffect);
 	Template.AddMultiTargetEffect(FireToWorldEffect);			//this is required to add the fire effect
 
-	Template.OverrideAbilities.AddItem('SniperStandardFire');
-	Template.OverrideAbilities.AddItem('RTStandardSniperShot');
-
 	// MAKE IT LIVE!
 	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
-
-	// TODO: VISUALIZATION
 	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
 	Template.BuildInterruptGameStateFn = TypicalAbility_BuildInterruptGameState;
 
-	class'X2StrategyElement_XpackDarkEvents'.static.AddStilettoRoundsEffect(Template);
+	`RTEB.AddStilettoRoundsEffect(Template);
 	// add it to multitargets as well
 	Template.AddMultiTargetEffect(Template.AbilityTargetEffects[Template.AbilityTargetEffects.Length - 1]);
 
@@ -1326,7 +1339,9 @@ static function X2AbilityTemplate DaybreakFlameIcon()
 	Template.AddTargetEffect(IconEffect);
 
 	Template.AdditionalAbilities.AddItem('DaybreakFlame');
-	Template.AdditionalAbilities.AddItem('DaybreakFlameToggle');
+	Template.AdditionalAbilities.AddItem('DaybreakFlameToggle_master');
+	//Template.AdditionalAbilities.AddItem('DaybreakFlameToggle_on');
+	//Template.AdditionalAbilities.AddItem('DaybreakFlameToggle_off');
 	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
 	// Note: no visualization on purpose!
 
@@ -2831,6 +2846,7 @@ defaultproperties
 	KillZoneReserveType = "KillZone"
 	TimeStopEffectName = "TimeStopEffect"
 	TimeStopMasterEffectName = "TimeStopMasterEffect"
+	DaybreakFlameToggleName = "DaybreakFlameDisabled";
 }
 
 static function bool AbilityTagExpandHandler(string InString, out string OutString)

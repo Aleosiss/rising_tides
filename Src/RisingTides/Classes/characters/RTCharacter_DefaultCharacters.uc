@@ -37,6 +37,7 @@ static function X2CharacterTemplate CreateWhisperTemplate()
 	CharTemplate.bHasFullDefaultAppearance = true;
 	CharTemplate.bAppearanceDefinesPawn = true;
 
+	CharTemplate.DefaultAppearance.nmPawn = 'XCom_Soldier_M';
 	CharTemplate.DefaultAppearance.nmHead = 'ReaperMale_A';
 	CharTemplate.DefaultAppearance.iGender = 1;
 	CharTemplate.DefaultAppearance.iRace = 0;
@@ -55,7 +56,6 @@ static function X2CharacterTemplate CreateWhisperTemplate()
 	CharTemplate.DefaultAppearance.iWeaponTint = 70;
 	CharTemplate.DefaultAppearance.iTattooTint = 55;
 	CharTemplate.DefaultAppearance.nmWeaponPattern = 'Hex';
-	CharTemplate.DefaultAppearance.nmPawn = 'XCom_Soldier_M';
 	CharTemplate.DefaultAppearance.nmTorso = 'RT_MamaMEA_Pathfinder_Und_Secondary_Torso_M';
 	//CharTemplate.DefaultAppearance.nmArms = None;
 	CharTemplate.DefaultAppearance.nmLegs = 'RT_MamaMEA_Pathfinder_Und_Legs_M';
@@ -102,6 +102,7 @@ static function X2CharacterTemplate CreateQueenTemplate()
 	CharTemplate.bHasFullDefaultAppearance = true;
 	CharTemplate.bAppearanceDefinesPawn = true;
 
+	CharTemplate.DefaultAppearance.nmPawn = 'XCom_Soldier_F';
 	CharTemplate.DefaultAppearance.nmHead = 'CaucFem_D';
 	CharTemplate.DefaultAppearance.iGender = 2;
 	CharTemplate.DefaultAppearance.iRace = 0;
@@ -120,7 +121,6 @@ static function X2CharacterTemplate CreateQueenTemplate()
 	CharTemplate.DefaultAppearance.iWeaponTint = 7;
 	CharTemplate.DefaultAppearance.iTattooTint = 10;
 	CharTemplate.DefaultAppearance.nmWeaponPattern = 'Hex';
-	CharTemplate.DefaultAppearance.nmPawn = 'XCom_Soldier_F';
 	CharTemplate.DefaultAppearance.nmTorso = 'RT_MamaMEA_Pathfinder_Und_Secondary_Torso_F';
 	CharTemplate.DefaultAppearance.nmArms = 'PwrLgt_Std_A_F';
 	CharTemplate.DefaultAppearance.nmLegs = 'RT_MamaMEA_Pathfinder_Und_Legs_F';
@@ -167,6 +167,7 @@ static function X2CharacterTemplate CreateNovaTemplate()
 	CharTemplate.bHasFullDefaultAppearance = true;
 	CharTemplate.bAppearanceDefinesPawn = true;
 
+	CharTemplate.DefaultAppearance.nmPawn = 'XCom_Soldier_F';
 	CharTemplate.DefaultAppearance.nmHead = 'CaucFem_B';
 	CharTemplate.DefaultAppearance.iGender = 2;
 	CharTemplate.DefaultAppearance.iRace = 0;
@@ -185,7 +186,6 @@ static function X2CharacterTemplate CreateNovaTemplate()
 	CharTemplate.DefaultAppearance.iWeaponTint = 7;
 	CharTemplate.DefaultAppearance.iTattooTint = 16;
 	CharTemplate.DefaultAppearance.nmWeaponPattern = 'Hex';
-	CharTemplate.DefaultAppearance.nmPawn = 'XCom_Soldier_F';
 	CharTemplate.DefaultAppearance.nmTorso = 'RT_MamaMEA_Pathfinder_Und_Torso_F';
 	CharTemplate.DefaultAppearance.nmArms = 'PwrLgt_Std_A_F';
 	CharTemplate.DefaultAppearance.nmLegs = 'RT_MamaMEA_Pathfinder_Und_Legs_F';
@@ -232,6 +232,7 @@ static function X2CharacterTemplate CreateKagaTemplate()
 	CharTemplate.bHasFullDefaultAppearance = true;
 	CharTemplate.bAppearanceDefinesPawn = true;
 
+	CharTemplate.DefaultAppearance.nmPawn = 'XCom_Soldier_F';
 	// She looks the same as Nova, too lazy to make her Asian... fuck
 	CharTemplate.DefaultAppearance.nmHead = 'CaucFem_D';
 	CharTemplate.DefaultAppearance.iGender = 2;
@@ -251,7 +252,6 @@ static function X2CharacterTemplate CreateKagaTemplate()
 	CharTemplate.DefaultAppearance.iWeaponTint = 7;
 	CharTemplate.DefaultAppearance.iTattooTint = 10;
 	CharTemplate.DefaultAppearance.nmWeaponPattern = 'Hex';
-	CharTemplate.DefaultAppearance.nmPawn = 'XCom_Soldier_F';
 	CharTemplate.DefaultAppearance.nmTorso = 'RT_MamaMEA_Pathfinder_Und_Secondary_Torso_F';
 	CharTemplate.DefaultAppearance.nmArms = 'PwrLgt_Std_A_F';
 	CharTemplate.DefaultAppearance.nmLegs = 'RT_MamaMEA_Pathfinder_Und_Legs_F';

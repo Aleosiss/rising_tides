@@ -227,3 +227,17 @@ static function X2Effect_RangerStealth CreateConcealmentEffect() {
 	
 	return Effect;
 }
+
+static function AddStilettoRoundsEffect(out RTAbilityTemplate AbilityTemplate)
+{
+	local X2Effect_Persistent BleedingEffect;
+	local X2Condition_UnitEffectsOnSource StilettoRoundsEffect;
+	BleedingEffect = class'X2StatusEffects'.static.CreateBleedingStatusEffect(class'X2StrategyElement_XpackDarkEvents'.default.STILETTO_BLEEDING_NUM_TURNS, class'X2StrategyElement_XpackDarkEvents'.default.STILETTO_BLEEDING_TICK_DMG);
+
+	// Only add the bleeding effect if the shooter has the stiletto rounds effect
+	StilettoRoundsEffect = new class'X2Condition_UnitEffectsOnSource';
+	StilettoRoundsEffect.AddRequireEffect('AdventStilettoRoundsEffect', 'AA_MissingRequiredEffect');
+	BleedingEffect.TargetConditions.AddItem(StilettoRoundsEffect);
+	
+	AbilityTemplate.AddTargetEffect(BleedingEffect);
+}

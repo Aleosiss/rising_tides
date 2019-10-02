@@ -167,6 +167,18 @@ LocHelpText="Pyrokinetically-enhanced rounds punch through cover, shredding armo
 LocFlyOverText="Daybreak Flame"
 LocPromotionPopupText="<Bullet/>Pyrokinetically-enhanced rounds punch through cover, shredding armor, and ignoring line of sight.<br/><Bullet/>This ability only augments standard sniper shots and does not add additional effects to other shots.<br/>"
 
+[DaybreakFlameToggle_on X2AbilityTemplate]
+LocFriendlyName="Activate Daybreak Flame"
+LocFlyOverText="Daybreak Flame"
+LocHelpText="Activate Daybreak Flame."
+
+[DaybreakFlameToggle_off X2AbilityTemplate]
+LocFriendlyName="Deactivate Daybreak Flame"
+LocFlyOverText="Daybreak Flame"
+LocHelpText="Deactivate Daybreak Flame."
+
+; QuoteText=""
+
 [YourHandsMyEyes X2AbilityTemplate]
 LocFriendlyName="Your Hands, My Eyes"
 LocLongDescription="Mind Meld shares the owner's hacking stat in addition to the normal will bonuses."

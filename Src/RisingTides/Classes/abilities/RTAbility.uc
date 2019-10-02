@@ -200,6 +200,147 @@ static function Passive(X2AbilityTemplate Template) {
 	Template.AbilityTriggers.AddItem(default.UnitPostBeginPlayTrigger);
 }
 
+static function CreateAbilityToggle(out array<X2AbilityTemplate> Templates, name TemplateName, name UnitValName, string IconImage) {
+	local name TemplateNameMaster, TemplateNameOn, TemplateNameOff;
+	
+	TemplateNameMaster = `RTS.ConcatName(TemplateName, '_master');
+	TemplateNameOn = `RTS.ConcatName(TemplateName, '_on');
+	TemplateNameOff = `RTS.ConcatName(TemplateName, '_off');
+	
+	Templates.AddItem(CreateAbilityToggleMaster(TemplateNameMaster, UnitValName, IconImage, TemplateNameOn, TemplateNameOff));
+	Templates.AddItem(CreateAbilityToggleOn(TemplateNameOn, UnitValName, IconImage));
+	Templates.AddItem(CreateAbilityToggleOff(TemplateNameOff, UnitValName, IconImage));
+}
+
+private static function X2AbilityTemplate CreateAbilityToggleMaster(name TemplateName, name EffectName, string IconImage, name TemplateNameOn, name TemplateNameOff) {
+	local X2AbilityTemplate Template;
+
+	`CREATE_X2ABILITY_TEMPLATE(Template, TemplateName);
+	Template.AbilitySourceName = 'eAbilitySource_Perk';
+	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_NeverShow;
+	Template.Hostility = eHostility_Neutral;
+	Template.ConcealmentRule = eConceal_Always;
+	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
+	Template.IconImage = IconImage;
+
+	Template.AbilityTargetStyle = default.SelfTarget;
+	Template.AbilityTriggers.AddItem(new class'X2AbilityTrigger_Placeholder');
+
+	Template.AdditionalAbilities.AddItem(TemplateNameOn);
+	Template.AdditionalAbilities.AddItem(TemplateNameOff);
+
+	return Template;
+}
+
+private static function X2AbilityTemplate CreateAbilityToggleOn(name TemplateName, name EffectName, string IconImage) {
+	local X2AbilityTemplate Template;
+	local X2Condition_UnitEffects UnitEffectCondition;
+	local X2Effect_Persistent MarkerEffect;
+	local X2AbilityTrigger_PlayerInput InputTrigger;
+
+	`CREATE_X2ABILITY_TEMPLATE(Template, TemplateName);
+	Template.IconImage = IconImage;
+	Template.AbilitySourceName = 'eAbilitySource_Perk';
+	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_ShowIfAvailable;
+	Template.Hostility = eHostility_Neutral;
+	Template.ConcealmentRule = eConceal_Always;
+
+	Template.AbilityToHitCalc = default.DeadEye;
+	Template.AbilityTargetStyle = default.SelfTarget;
+	Template.AbilityCosts.AddItem(default.FreeActionCost);
+
+	InputTrigger = new class'X2AbilityTrigger_PlayerInput';
+	Template.AbilityTriggers.AddItem(InputTrigger);
+
+	Template.AddShooterEffectExclusions();
+
+	UnitEffectCondition = new class'X2Condition_UnitEffects';
+	UnitEffectCondition.AddExcludeEffect(EffectName, 'AA_UnitIsNotImpaired');
+	Template.AbilityTargetConditions.AddItem(UnitEffectCondition);
+
+	MarkerEffect = new class'X2Effect_Persistent';
+	MarkerEffect.EffectName = EffectName;
+	Template.AddTargetEffect(MarkerEffect);
+
+	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
+	Template.BuildVisualizationFn = ToggleAbility_BuildVisualization;
+	Template.ActivationSpeech = 'Reloading';
+
+	return Template;
+}
+
+private static function X2AbilityTemplate CreateAbilityToggleOff(name TemplateName, name EffectName, string IconImage) {
+	local X2AbilityTemplate Template;
+	local X2Condition_UnitEffects UnitEffectCondition;
+	local X2Effect_RemoveEffects RemoveEffectsEffect;
+	local X2AbilityTrigger_PlayerInput InputTrigger;
+
+	`CREATE_X2ABILITY_TEMPLATE(Template, TemplateName);
+	Template.IconImage = IconImage;
+	Template.AbilitySourceName = 'eAbilitySource_Perk';
+	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_ShowIfAvailable;
+	Template.Hostility = eHostility_Neutral;
+	Template.ConcealmentRule = eConceal_Always;
+
+	Template.AbilityToHitCalc = default.DeadEye;
+	Template.AbilityTargetStyle = default.SelfTarget;
+	Template.AbilityCosts.AddItem(default.FreeActionCost);
+
+	InputTrigger = new class'X2AbilityTrigger_PlayerInput';
+	Template.AbilityTriggers.AddItem(InputTrigger);
+
+	Template.AddShooterEffectExclusions();
+
+	UnitEffectCondition = new class'X2Condition_UnitEffects';
+	UnitEffectCondition.AddRequireEffect(EffectName, 'AA_UnitIsNotImpaired');
+	Template.AbilityTargetConditions.AddItem(UnitEffectCondition);
+
+	RemoveEffectsEffect = new class'X2Effect_RemoveEffects';
+	RemoveEffectsEffect.EffectNamesToRemove.AddItem(EffectName);
+	Template.AddTargetEffect(RemoveEffectsEffect);
+
+	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
+	Template.BuildVisualizationFn = ToggleAbility_BuildVisualization;
+	Template.ActivationSpeech = 'Reloading';
+
+	return Template;
+}
+
+simulated function ToggleAbility_BuildVisualization(XComGameState VisualizeGameState)
+{
+	local XComGameStateHistory History;
+	local XComGameStateContext_Ability  Context;
+	local StateObjectReference          ShootingUnitRef;	
+	local X2Action_PlayAnimation		PlayAnimation;
+
+	local VisualizationActionMetadata        EmptyTrack;
+	local VisualizationActionMetadata        ActionMetadata;
+
+	local XComGameState_Ability Ability;
+	local X2Action_PlaySoundAndFlyOver SoundAndFlyover;
+
+	History = `XCOMHISTORY;
+
+	Context = XComGameStateContext_Ability(VisualizeGameState.GetContext());
+	ShootingUnitRef = Context.InputContext.SourceObject;
+
+	//Configure the visualization track for the shooter
+	//****************************************************************************************
+	ActionMetadata = EmptyTrack;
+	ActionMetadata.StateObject_OldState = History.GetGameStateForObjectID(ShootingUnitRef.ObjectID, eReturnType_Reference, VisualizeGameState.HistoryIndex - 1);
+	ActionMetadata.StateObject_NewState = VisualizeGameState.GetGameStateForObjectID(ShootingUnitRef.ObjectID);
+	ActionMetadata.VisualizeActor = History.GetVisualizer(ShootingUnitRef.ObjectID);
+					
+	PlayAnimation = X2Action_PlayAnimation(class'X2Action_PlayAnimation'.static.AddToVisualizationTree(ActionMetadata, Context, false, ActionMetadata.LastActionAdded));
+	PlayAnimation.Params.AnimName = 'HL_Reload';
+
+	Ability = XComGameState_Ability(History.GetGameStateForObjectID(Context.InputContext.AbilityRef.ObjectID));
+	SoundAndFlyOver = X2Action_PlaySoundAndFlyOver(class'X2Action_PlaySoundAndFlyOver'.static.AddToVisualizationTree(ActionMetadata, Context, false, ActionMetadata.LastActionAdded));
+	SoundAndFlyOver.SetSoundAndFlyOverParameters(None, Ability.GetMyTemplate().LocFriendlyName, Ability.GetMyTemplate().ActivationSpeech, eColor_Good);
+
+		//****************************************************************************************
+}
+
 static function bool AbilityTagExpandHandler(string InString, out string OutString)
 {
 //	local name Tag;
@@ -213,7 +354,7 @@ static function TestAbilitySetValues() {
 	
 }
 
-static function AddSpectrePsionicSuite(X2AbilityTemplate Template) {
+static function AddSpectrePsionicSuite(out X2AbilityTemplate Template) {
 	Template.AdditionalAbilities.AddItem('GhostPsiSuite');
 	Template.AdditionalAbilities.AddItem('JoinMeld');
 	Template.AdditionalAbilities.AddItem('LeaveMeld');
@@ -226,7 +367,7 @@ static function AddSpectrePsionicSuite(X2AbilityTemplate Template) {
 	Template.AdditionalAbilities.AddItem('RTProgramEvacuationPartTwo');
 }
 
-static function AddMeldedAbilityHelpers(X2AbilityTemplate Template) {
+static function AddMeldedAbilityHelpers(out X2AbilityTemplate Template) {
 	Template.AdditionalAbilities.AddItem('LIOverwatchShot');
 	Template.AdditionalAbilities.AddItem('RTUnstableConduitBurst');
 	Template.AdditionalAbilities.AddItem('PsionicActivate');
