@@ -8,7 +8,8 @@
 //---------------------------------------------------------------------------------------
 class RTEffect_KnockThemDown extends X2Effect_Persistent config(RisingTides);
 
-	var int DAMAGE_INCREMENT;
+var int DAMAGE_INCREMENT;
+var float CRITDMG_INCREMENT;
 
 function int GetAttackingDamageModifier(XComGameState_Effect EffectState, XComGameState_Unit Attacker, Damageable TargetDamageable, XComGameState_Ability AbilityState, const out EffectAppliedData AppliedData, const int CurrentDamage, optional XComGameState NewGameState) {
 	local float ExtraDamage, CritModifier;
@@ -23,7 +24,7 @@ function int GetAttackingDamageModifier(XComGameState_Effect EffectState, XComGa
 	CritDamageIncrement = 1;
 
 	if (AppliedData.AbilityResultContext.HitResult == eHit_Crit) {
-		CritModifier = UnitVal.fValue * float(CritDamageIncrement / 10);
+		CritModifier = UnitVal.fValue * CRITDMG_INCREMENT;
 		ExtraDamage = (CurrentDamage + ExtraDamage) * (1 + CritModifier);
 		ExtraDamage -= CurrentDamage;
 	}

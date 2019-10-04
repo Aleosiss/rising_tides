@@ -72,10 +72,10 @@ LocPromotionPopupText=""
 
 [KnockThemDown X2AbilityTemplate]
 LocFriendlyName="Knock Them Down"
-LocLongDescription="Gain +2 Damage and +10% critical hit damage for each consecutive shot this unit takes."
-LocHelpText="Gain +2 Damage and +10% critical hit damage for each consecutive shot this unit takes."
+LocLongDescription="Gain +<Ability:KNOCK_THEM_DOWN_DAMAGE_GAIN> Damage and +<Ability:KNOCK_THEM_DOWN_CRITDMG_GAIN>% critical hit damage for each consecutive shot this unit takes."
+LocHelpText="Gain +<Ability:KNOCK_THEM_DOWN_DAMAGE_GAIN> Damage and +<Ability:KNOCK_THEM_DOWN_CRITDMG_GAIN>% critical hit damage for each consecutive shot this unit takes."
 LocFlyOverText="Knock Them Down"
-LocPromotionPopupText="<Bullet/> Gain +2 Damage and +10% critical hit damage for each consecutive shot this unit takes.<br/><Bullet/> Certain passive actions will not break a Knock Them Down chain, such as Fade's activation or Overflow Barrier's proc.<br/>"
+LocPromotionPopupText="<Bullet/> Gain +<Ability:KNOCK_THEM_DOWN_DAMAGE_GAIN> Damage and +<Ability:KNOCK_THEM_DOWN_CRITDMG_GAIN>% critical hit damage for each consecutive shot this unit takes.<br/><Bullet/> Certain passive actions will not break a Knock Them Down chain, such as Fade's activation or Overflow Barrier's proc.<br/>"
 
 [RTDisablingShot X2AbilityTemplate]
 LocFriendlyName="Disabling Shot"

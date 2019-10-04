@@ -22,6 +22,7 @@ class RTAbility_MarksmanAbilitySet extends RTAbility
 	var config int SNAPSHOT_AIM_BONUS;
 	var config int DISABLESHOT_AIM_BONUS, DISABLESHOT_COOLDOWN;
 	var config int KNOCKTHEMDOWN_DAMAGE_INCREMENT;
+	var config float KNOCKTHEMDOWN_CRITDMG_INCREMENT;
 	var config float SIXOCLOCK_WILL_BONUS;
 	var config float SIXOCLOCK_PSI_BONUS;
 	var config float SIXOCLOCK_DEFENSE_BONUS;
@@ -627,6 +628,7 @@ static function X2AbilityTemplate KnockThemDown()
 
 	KnockEffect = new class'RTEffect_KnockThemDown';
 	KnockEffect.DAMAGE_INCREMENT = default.KNOCKTHEMDOWN_DAMAGE_INCREMENT;
+	KnockEffect.CRITDMG_INCREMENT = default.KNOCKTHEMDOWN_CRITDMG_INCREMENT;
 	KnockEffect.BuildPersistentEffect(1, true, true, true);
 	KnockEffect.SetDisplayInfo(ePerkBuff_Passive, Template.LocFriendlyName, Template.LocLongDescription, Template.IconImage, true,,Template.AbilitySourceName);
 	Template.AddTargetEffect(KnockEffect);
@@ -2877,6 +2879,12 @@ static function bool AbilityTagExpandHandler(string InString, out string OutStri
 			return true;
 		case 'AGGRESSION_MAX_CRIT':
 			OutString = string(default.AGGRESSION_UNITS_FOR_MAX_BONUS * default.AGGRESSION_CRIT_PER_UNIT);
+			return true;
+		case 'KNOCK_THEM_DOWN_DAMAGE_GAIN':
+			OutString = string(default.KNOCKTHEMDOWN_DAMAGE_INCREMENT);
+			return true;
+		case 'KNOCK_THEM_DOWN_CRITDMG_GAIN':
+			OutString = string(default.KNOCKTHEMDOWN_CRITDMG_INCREMENT);
 			return true;
 	}
 
