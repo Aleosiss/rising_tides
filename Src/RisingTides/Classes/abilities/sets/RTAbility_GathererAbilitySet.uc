@@ -1907,8 +1907,8 @@ simulated function DimensionalRiftStage1_BuildVisualization(XComGameState Visual
 			class'X2Action'.static.AddInterruptMarkerPair(AvatarBuildData, Context, ExitCoverAction);
 		}
 
-		//class'X2Action_Fire'.static.AddToVisualizationTree(AvatarBuildData, VisualizeGameState.GetContext(), false, AvatarBuildData.LastActionAdded);
-		class'X2Action_Fire_OpenUnfinishedAnim'.static.AddToVisualizationTree(AvatarBuildData, Context);
+		class'X2Action_Fire'.static.AddToVisualizationTree(AvatarBuildData, VisualizeGameState.GetContext(), false, AvatarBuildData.LastActionAdded);
+		//class'X2Action_Fire_OpenUnfinishedAnim'.static.AddToVisualizationTree(AvatarBuildData, Context);
 
 		// Wait to time the start of the warning FX
 		WaitAction = X2Action_TimedWait(class'X2Action_TimedWait'.static.AddToVisualizationTree(AvatarBuildData, VisualizeGameState.GetContext(), false, AvatarBuildData.LastActionAdded));
@@ -1920,8 +1920,8 @@ simulated function DimensionalRiftStage1_BuildVisualization(XComGameState Visual
 		TargetTile = World.GetTileCoordinatesFromPosition(TargetLocation);
 		EffectAction.EffectLocation = World.GetPositionFromTileCoordinates(TargetTile);
 
-		//WaitAction = X2Action_TimedWait(class'X2Action_TimedWait'.static.AddToVisualizationTree(AvatarBuildData, VisualizeGameState.GetContext(), false, AvatarBuildData.LastActionAdded));
-		//WaitAction.DelayTimeSec = 1.5;
+		WaitAction = X2Action_TimedWait(class'X2Action_TimedWait'.static.AddToVisualizationTree(AvatarBuildData, VisualizeGameState.GetContext(), false, AvatarBuildData.LastActionAdded));
+		WaitAction.DelayTimeSec = 1.5;
 
 		// Display the Warning FX (covert to tile and back to vector because stage 2 is at the GetPositionFromTileCoordinates coord
 		EffectAction = X2Action_PlayEffect(class'X2Action_PlayEffect'.static.AddToVisualizationTree(AvatarBuildData, VisualizeGameState.GetContext(), false, AvatarBuildData.LastActionAdded));
@@ -1943,8 +1943,8 @@ simulated function DimensionalRiftStage1_BuildVisualization(XComGameState Visual
 			SoundCueAction.SetSoundAndFlyOverParameters(SoundCue'SoundX2AvatarFX.Avatar_Ability_Dimensional_Rift_Target_Activate_Cue', "", '', eColor_Good);
 		}
 
-		CloseFireAction = X2Action_Fire_CloseUnfinishedAnim(class'X2Action_Fire_CloseUnfinishedAnim'.static.AddToVisualizationTree(AvatarBuildData, Context));
-		CloseFireAction.bNotifyTargets = true;
+		//CloseFireAction = X2Action_Fire_CloseUnfinishedAnim(class'X2Action_Fire_CloseUnfinishedAnim'.static.AddToVisualizationTree(AvatarBuildData, Context));
+		//CloseFireAction.bNotifyTargets = true;
 
 		Visualizer = X2VisualizerInterface(AvatarBuildData.VisualizeActor);
 		if( Visualizer != none )
@@ -1955,8 +1955,8 @@ simulated function DimensionalRiftStage1_BuildVisualization(XComGameState Visual
 		class'X2Action_EnterCover'.static.AddToVisualizationTree(AvatarBuildData, VisualizeGameState.GetContext(), false, AvatarBuildData.LastActionAdded);
 
 		// Wait to time the damage
-		WaitAction = X2Action_TimedWait(class'X2Action_TimedWait'.static.AddToVisualizationTree(AvatarBuildData, Context, false, WaitAction));
-		WaitAction.DelayTimeSec = 4;
+		//WaitAction = X2Action_TimedWait(class'X2Action_TimedWait'.static.AddToVisualizationTree(AvatarBuildData, Context, false, WaitAction));
+		//WaitAction.DelayTimeSec = 4;
 	}
 	//****************************************************************************************
 
