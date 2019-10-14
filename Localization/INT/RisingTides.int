@@ -175,7 +175,7 @@ m_strTemplarQuestlineCompleteHeader="TEMPLARS ELIMINATED"
 m_strTemplarQuestlineCompleteTitle="The Templars are no more."
 m_strTemplarQuestlineCompleteBody="Without Geist to guide them nor their Archives to recover their secrets, the Templars remnants will scatter and fade out. In return for our efforts, the Program has pledged their full support in eliminating the Alien threat. New Covert Actions are available in the Resistance Ring and new blueprints have been made available for construction in Engineering."
 m_strHighCovenAssaultAvailableBody="This is it."
-m_strHighCovenAssaultAvailableImage=""
+m_strHighCovenAssaultAvailableImage="img:///UILibrary_StrategyImages.X2StrategyMap.POI_WorldsOfFun"
 
 
 [RTUIMission_TemplarAmbush]

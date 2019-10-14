@@ -52,6 +52,8 @@ defaultproperties
 	FailedColor = "bf1e2e"
 	DefaultImagePath = ""
 	RewardImagePath = ""
+	LockedImagePath = "img:///RisingTidesContentPackage.UIImages.program_faction_screen_lock_rect_1-2_512_stretched"
+	//LockedImagePath = "img:///RisingTidesContentPackage.UIImages.program_faction_screen_lock_rect_1-2_512"
 }
 
 simulated function InitText(String _defaultTitle, String _defaultDescription, String _rewardTitle, String _rewardDescription) {
@@ -93,12 +95,14 @@ simulated function RTUIInfoBox InitInfoBox(name PanelName, float newWidth, float
 	OutlinePanel.SetOutline(true, "0x" $ PrimaryColor);
 
 	InfoBoxImage = Spawn(class'UIImage', self);
-	InfoBoxImage.InitImage('infoImage', DefaultImagePath).SetSize(BackgroundPanel.Height - 24, BackgroundPanel.Height - 24);
-	imageY = ((BackgroundPanel.Height - InfoBoxImage.Height) / 2);
+	//imageY = BackgroundPanel.Height - 28;
+	imageY = 128;
+	InfoBoxImage.InitImage('infoImage', DefaultImagePath).SetSize(imageY, imageY);
+	imageY = ((BackgroundPanel.Height - InfoBoxImage.Height) / 2) - 2;
 	InfoBoxImage.SetPosition(8, imageY);
 
 	ImageOutline = Spawn(class'UIBGBox', self);
-	ImageOutline.InitBG('imageOutline', InfoBoxImage.X, InfoBoxImage.Y, InfoBoxImage.Width - 4, InfoBoxImage.Height - 4);
+	ImageOutline.InitBG('imageOutline', InfoBoxImage.X, InfoBoxImage.Y, InfoBoxImage.Width - 0, InfoBoxImage.Height - 0);
 	ImageOutline.SetOutline(true, "0x" $ PrimaryColor);
 
 	InfoBoxHeader = Spawn(class'UIX2PanelHeader', self);
@@ -111,7 +115,7 @@ simulated function RTUIInfoBox InitInfoBox(name PanelName, float newWidth, float
 	InfoBoxDescription = Spawn(class'UITextContainer', self);
 	InfoBoxDescription.InitTextContainer(textContainerName, "");
 	InfoBoxDescription.SetPosition(InfoBoxHeader.X, InfoBoxHeader.Y + 40);
-	InfoBoxDescription.SetSize(BackgroundPanel.Width - InfoBoxImage.Width - 40, InfoBoxImage.Height - 30);
+	InfoBoxDescription.SetSize(BackgroundPanel.Width - ImageOutline.Width - 40, ImageOutline.Height - 30);
 	InfoBoxDescription.bAutoScroll = false;
 	
 	Button = Spawn(class'UIButton', self);
@@ -187,7 +191,9 @@ simulated function RTUIInfoBox ShowRewards() {
 	InfoBoxHeader.SetText(RewardTitle);
 	InfoBoxHeader.MC.FunctionVoid("realize");
 	InfoBoxDescription.SetText(RewardDescription);
-	InfoBoxImage.LoadImage(RewardImagePath);
+	if(RewardImagePath != "") {
+		InfoBoxImage.LoadImage(RewardImagePath);
+	}
 	SetTextColors(2);
 
 	Button.SetText(`RTS.AddFontColor(m_strSwapFromRewards, CompletedColor));
@@ -198,7 +204,9 @@ simulated function RTUIInfoBox HideRewards() {
 	InfoBoxHeader.SetText(DefaultTitle);
 	InfoBoxHeader.MC.FunctionVoid("realize");
 	InfoBoxDescription.SetText(DefaultDescription);
-	InfoBoxImage.LoadImage(DefaultImagePath);
+	if(RewardImagePath != "") {
+		InfoBoxImage.LoadImage(DefaultImagePath);
+	}
 	SetTextColors(1);
 
 	Button.SetText(`RTS.AddFontColor(m_strSwapToRewards, PrimaryColor));

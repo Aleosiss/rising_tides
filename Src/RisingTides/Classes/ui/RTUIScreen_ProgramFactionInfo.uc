@@ -19,24 +19,32 @@ var localized String m_strStageOneTitle;
 var localized String m_strStageOneDescription;
 var localized String m_strStageOneRewardTitle;
 var localized String m_strStageOneRewardDescription;
+var config String m_strStageOneImage;
+var config String m_strStageOneRewardImage;
 
 var RTUIInfoBox StageTwo;
 var localized String m_strStageTwoTitle;
 var localized String m_strStageTwoDescription;
 var localized String m_strStageTwoRewardTitle;
 var localized String m_strStageTwoRewardDescription;
+var config String m_strStageTwoImage;
+var config String m_strStageTwoRewardImage;
 
 var RTUIInfoBox StageThree;
 var localized String m_strStageThreeTitle;
 var localized String m_strStageThreeDescription;
 var localized String m_strStageThreeRewardTitle;
 var localized String m_strStageThreeRewardDescription;
+var config String m_strStageThreeImage;
+var config String m_strStageThreeRewardImage;
 
 var RTUIInfoBox StageFour;
 var localized String m_strStageFourTitle;
 var localized String m_strStageFourDescription;
 var localized String m_strStageFourRewardTitle;
 var localized String m_strStageFourRewardDescription;
+var config String m_strStageFourImage;
+var config String m_strStageFourRewardImage;
 
 var int iStatIconSize;
 var int horizontalMargin;
@@ -173,7 +181,7 @@ simulated function InitScreen(XComPlayerController InitController, UIMovie InitM
 	StageOne = Spawn(class'RTUIInfoBox', Container);
 	StageOne.InitColors(PrimaryColor, TextColor, HeaderColor, SecondaryColor);
 	StageOne.InitText(m_strStageOneTitle, m_strStageOneDescription, m_strStageOneRewardTitle, m_strStageOneRewardDescription);
-	StageOne.InitImages("", "");
+	StageOne.InitImages(m_strStageOneImage, m_strStageOneRewardImage);
 	StageOne.InitInfoBox('RT_ProgramInfoScreenStageOne', 700, 160, 1);
 	StageOne.SetPosition(QuestlineTrackerBarSectionLine3.X + 4 + QuestlineTrackerBar.Width, QuestlineTrackerBarSectionLine3.Y + 11);
 	StageOne.SetLocked();
@@ -181,7 +189,7 @@ simulated function InitScreen(XComPlayerController InitController, UIMovie InitM
 	StageTwo = Spawn(class'RTUIInfoBox', Container);
 	StageTwo.InitColors(PrimaryColor, TextColor, HeaderColor, SecondaryColor);
 	StageTwo.InitText(m_strStageTwoTitle, m_strStageTwoDescription, m_strStageTwoRewardTitle, m_strStageTwoRewardDescription);
-	StageTwo.InitImages("", "");
+	StageTwo.InitImages(m_strStageTwoImage, m_strStageTwoRewardImage);
 	StageTwo.InitInfoBox('RT_ProgramInfoScreenStageTwo', 700, 160, 2);
 	StageTwo.SetPosition(QuestlineTrackerBarSectionLine2.X + 4 + QuestlineTrackerBar.Width, QuestlineTrackerBarSectionLine2.Y + 11);
 	StageTwo.SetLocked();
@@ -189,7 +197,7 @@ simulated function InitScreen(XComPlayerController InitController, UIMovie InitM
 	StageThree = Spawn(class'RTUIInfoBox', Container);
 	StageThree.InitColors(PrimaryColor, TextColor, HeaderColor, SecondaryColor);
 	StageThree.InitText(m_strStageThreeTitle, m_strStageThreeDescription, m_strStageThreeRewardTitle, m_strStageThreeRewardDescription);
-	StageThree.InitImages("", "");
+	StageThree.InitImages(m_strStageThreeImage, m_strStageThreeRewardImage);
 	StageThree.InitInfoBox('RT_ProgramInfoScreenStageThree', 700, 160, 3);
 	StageThree.SetPosition(QuestlineTrackerBarSectionLine1.X + 4 + QuestlineTrackerBar.Width, QuestlineTrackerBarSectionLine1.Y + 11);
 	StageThree.SetLocked();
@@ -197,7 +205,7 @@ simulated function InitScreen(XComPlayerController InitController, UIMovie InitM
 	StageFour = Spawn(class'RTUIInfoBox', Container);
 	StageFour.InitColors(PrimaryColor, TextColor, HeaderColor, SecondaryColor);
 	StageFour.InitText(m_strStageFourTitle, m_strStageFourDescription, m_strStageFourRewardTitle, m_strStageFourRewardDescription);
-	StageFour.InitImages("", "");
+	StageFour.InitImages(m_strStageFourImage, m_strStageFourRewardImage);
 	StageFour.InitInfoBox('RT_ProgramInfoScreenStageFour', 700, 160, 4);
 	StageFour.SetPosition(QuestlineTrackerBarSectionLine1.X + 4 + QuestlineTrackerBar.Width, QuestlineTrackerBarSectionLine1.Y - 158);
 	StageFour.SetLocked();

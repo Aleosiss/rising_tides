@@ -1198,7 +1198,7 @@ ActionPostNarrative="I've worked out the details with your men, Commander. We'll
 DisplayName="Templar Ambush"
 Briefing="Eliminate Templar Coven Investigators"
 PostMissionType="Kill all hostiles"
-BriefingImage="img:///UILibrary_StrategyImages.X2StrategyMap.Alert_Advent_Facility"
+BriefingImage="img:///UILibrary_StrategyImages.X2StrategyMap.DarkEvent_Traitor"
 ObjectiveTextPools[0]="Neutralize all enemy targets"
 
 [RTNarrative_TemplarAmbush X2MissionNarrativeTemplate]
@@ -1211,7 +1211,7 @@ ObjectiveTextPools[3]="Extract all XCOM operatives"
 DisplayName="Destroy the Templar High Coven"
 Briefing="Eliminate Geist. Destroy the Archives. End this conflict, once and for all."
 PostMissionType="Kill all hostiles"
-BriefingImage="img:///UILibrary_StrategyImages.X2StrategyMap.Alert_Advent_Facility"
+BriefingImage="img:///UILibrary_StrategyImages.X2StrategyMap.POI_WorldsOfFun"
 ObjectiveTextPools[0]="Destroy the Templar High Coven Compound"
 
 [RTNarrative_TemplarHighCovenAssault X2MissionNarrativeTemplate]
