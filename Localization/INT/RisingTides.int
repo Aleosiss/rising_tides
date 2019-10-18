@@ -396,3 +396,7 @@ m_strProgramFactionButton="Program Status Briefing"
 
 [SeqAct_TemplarBetrayalReaction]
 m_strTemplarBetraylReactionBanner="Templar Betrayal"
+
+[RTUIScreenListener_MOTD]
+m_strTitle=""
+m_strText=""

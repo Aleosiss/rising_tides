@@ -7,6 +7,11 @@
     - New mission (Assault Templar High Coven)
         - Attack the heart of Templar activities and kill Geist once and for all
         - The Program will grant excellent rewards for completing this action, but be warned: your Templar soldiers WILL NOT BE HAPPY with your decision... (they will desert)
+    - Program Favor Rework
+        - No longer gain a favor for free every month
+        - One Small Favor Resistance Order still required to call in favor
+        - Favors are now granted by completing steps of the Templar Questline, or as a reward from a special Covert Action
+- New Covert Action: Earn a Program Favor
 - New perks. If you want them in an ongoing campaign, regenerate your Program operatives with the command 'RT_RegenerateProgramOperatives'.
     - Repositioning: Replaces Damn Good Ground on the Infiltrator's perk tree.
         - If your last (3) shots were taken from (9) tiles away, retain concealment on your next shot.
@@ -18,8 +23,7 @@
   - General
     - Program operative HP nerfed by 5.
     - Program operative aim decreased by 10.
-    - Program operative weaponry now scales with XCOM's (still 1 tier above at all times).
-    - Program operative armor now scales with XCOM's.
+    - Program operative weaponry and armor now scales with XCOM's (still 1 tier above at all times).
     - Program Berserker:
         - Queen of Blades: Negates mobility penalty instead of reversing it.
     - Program Infiltrator:
@@ -131,3 +135,12 @@
 - removed X2MeleePathingPawn override (should be fully compatible with Gotcha)
 - let Ghosts (Gatherer and Berserker) Headshot The Lost (Infiltrator already does this by default)
 - removed accidentally-included debugging loadouts (this is why they started with endgame armor/weapons)
+
+1.1.0
+- Update to War of the Chosen!
+- Integrate Long War Perks (Close Combat Specialist, Kubikuri)
+- Fix bug where directly confirming Shadow Strike from the UI (i.e. not selecting the desired tile via the cursor) would send an invalid (-1,-1,-1) vector to the Teleport method, sending units to a corner of the map
+- Fix issue where the melee indicator for Shadow Strike was not attached to the targeted unit
+- Fix missing localization for The Six Paths of Pain passive icon
+- Fix missing icons for Unwilling Conduits and Echoed Agony (now properly displaying swordslash placeholder ecks dee)
+- Extinction Event now renders the soldier who used it unconcious.

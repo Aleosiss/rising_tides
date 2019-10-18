@@ -464,6 +464,6 @@ static function HandleDroneRecovery() {
 defaultproperties
 {
 	MajorVer = 2
-	MinorVer = 0
-	PatchVer = 12
+	MinorVer = 1
+	PatchVer = 0
 }
