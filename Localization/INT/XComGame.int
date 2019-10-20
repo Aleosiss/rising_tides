@@ -1155,7 +1155,7 @@ ActionObjective="Hunt the Templars"
 
 [CovertActionNarrative_HuntTemplarsP1_Program X2CovertActionNarrativeTemplate]
 ActionName="Find Their Home"
-ActionPreNarrative="As you might recall, Commander, six days after the Temple Ship crash-landed, I initiated Operation: New World. Unfortunately, there was a lone survivor. Staff Sergeant Lanner was left a mangled wreck, his mind in shambles from my operative's psionic assault, but he managed to limp away during the chaos of the beginning of Operation: Ashes and Temples, Act III. Only recently have we managed to pinpoint his general location, but we need your manpower to figure out where he's hiding. - Dr. Hadley"
+ActionPreNarrative="Six days after the Temple Ship crash-landed, the Program initiated Operation: New World Sanctity. Unfortunately, there was a lone survivor. Staff Sergeant Lanner was left a mangled wreck, his mind in shambles from my operative's psionic assault, but he managed to limp away during the chaos of the beginning of Operation: Ashes and Temples: Act III. Only recently have we managed to pinpoint his general location, but we need your manpower to figure out where he's hiding. - Dr. Hadley"
 ActionPostNarrative="Excellent. You should be proud of your soldiers, Commander. Keeping up with my operatives is not an easy task. - Dr. Hadley"
 
 [CovertAction_HuntTemplarsP2Template X2CovertActionTemplate]
@@ -1171,7 +1171,7 @@ ActionObjective="Hunt the Templars"
 
 [CovertActionNarrative_HuntTemplarsP3_Program X2CovertActionNarrativeTemplate]
 ActionName="Lure Them Out"
-ActionPreNarrative="Lanner, or Geist, as he is now known, is extremely paranoid, and revealing a vulnerablity remains a challenge. Instead of attacking the compound directly, MILADVISE is giving 98.2 percent odds that leaking the location of the First Contact site will prompt Geist to send his best to investigate. In order to make it convincing, I'll need some of your soldiers to join mine for one final operation. - Dr. Hadley"
+ActionPreNarrative="Lanner, or Geist, as he is now known, is extremely paranoid, and revealing a vulnerability remains a challenge. Instead of attacking the compound directly, MILADVISE is giving 98.2 percent odds that leaking the location of the First Contact site will prompt Geist to send his best to investigate. In order to make it convincing, I'll need some of your soldiers to join mine for one final operation. - Dr. Hadley"
 ActionPostNarrative="The Honor Guard is out and away, leaving the compound exposed for only a brief window. Get in, kill the High Council, and destroy the High Coven Archives. Only then is our society safe. - Dr. Hadley"
 
 [CovertAction_GrantFavorTemplate X2CovertActionTemplate]
@@ -1187,7 +1187,7 @@ ActionObjective="Call In Program Favor"
 
 [CovertActionNarrative_CallInFavor_Program X2CovertActionNarrativeTemplate]
 ActionName="Call in a Favor"
-ActionPreNarrative="Our field teams have much less to do without the Templars creating problems. If you can lend a liason for a short while, we can work out another mission assignment for this month."
+ActionPreNarrative="Our field teams have much less to do without the Templars creating problems. If you can lend a liaison for a short while, we can work out another mission assignment for this month."
 ActionPostNarrative="I've worked out the details with your men, Commander. We'll be in touch soon. - Dr. Hadley"
 ;///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ;//---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------

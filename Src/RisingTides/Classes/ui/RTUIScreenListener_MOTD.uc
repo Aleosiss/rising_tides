@@ -7,22 +7,22 @@ var localized string m_strTitle;
 var localized string m_strText;
 
 event OnInit(UIScreen Screen) {
-	if(UIScreen(Screen) != INDEX_NONE) {
-		TryShowPopup();
+	if(UIShell(Screen) != none/* && UIShell(Screen).DebugMenuContainer == none*/) {
+		TryShowPopup(Screen);
 	}
 }
 
-simulated function TryShowPopup() {
-	// if we've updated
+simulated function TryShowPopup(UIScreen Screen) {
+	// if we've updated 
 	if(`DLCINFO.GetVersionInt() > LastVersion) {
 			bHasDismissedLatest = false;
 			self.SaveConfig();
 
-			ShowPopup();
+			Screen.SetTimer(2.0f, false, nameof(ShowPopup), self);
 	// the normal loaded case
 	} else if(`DLCINFO.GetVersionInt() == LastVersion) {
 		if(!bHasDismissedLatest) {
-			ShowPopup();
+			Screen.SetTimer(2.0f, false, nameof(ShowPopup), self);
 		}
 	// what the f--!
 	} else {

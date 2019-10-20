@@ -27,7 +27,6 @@
     - Program Berserker:
         - Queen of Blades: Negates mobility penalty instead of reversing it.
     - Program Infiltrator:
-        - Daybreak Flame: AoE reduced. Now only affects X tiles before the target and X tiles behind the target.
         - Daybreak Flame: Now is a toggled ability. Activate the toggle to begin using Daybreak Flame.
         - Daybreak Flame no longer auto procs Scoped and Dropped.
         Explanation:
@@ -35,6 +34,7 @@
 - Changes
   - Time Stands Still now takes place over a single turn. Instead of three turns with 2 AP each, the unit now receives 6 AP immediately and no action is turn-ending.
   - Program operatives now evacuate the combat zone when greviously wounded.
+  - Added config option to show/hide Program operative helmets.
 
 2.0.12:
 - Made JPT actually use the value set in config

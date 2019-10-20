@@ -34,7 +34,7 @@
       ✔ Add Templar Ambush UIAlert @done(18-12-16 02:10)
       ✔ Add Templar Ambush UIMission @done(18-12-16 02:10)
   ✔ Add Hunt_Templars narratives @done(19-05-26 14:01)
-  ☐ Add Hunt_Templars images
+  ✔ Add Hunt_Templars images @done(19-10-15 22:24)
   ✔ Add Hunt_Templars rewards @done(19-05-26 14:01)
   ✔ Add system to manage Hunt_Templars covert actions @done(18-12-09 16:55)
   ✔ Add Assault Templar Leadership mission @done(19-09-22 21:39)
@@ -59,8 +59,7 @@
       ✔ Create Localization @done(19-04-09 23:28)
       ✔ Create Tutorial @done(19-04-09 23:28)
       ✔ Create UIScreenListener @done(19-03-10 17:33)
-  ☐ Remove -debug flag from build script before releasing
-  ☐ Fix Psionic Storm visualizaton (its broken)
+  ✔ Fix Psionic Storm visualizaton (its broken) @done(19-10-15 22:24)
   ✔ Add Call in One Small Favor covert action (hard) -> available if program questline completed @done(19-09-21 09:09)
   ✔ Add +1 Program Favors covert action (medium) -> available if program favors < 1 @done(19-09-21 09:09)
   ☐ Stretch: Add Templar High Coven Special Abilities

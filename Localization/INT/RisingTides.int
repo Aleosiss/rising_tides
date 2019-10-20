@@ -195,7 +195,7 @@ m_strFlavorText="With the High Coven exposed and only a fraction of the Honor Gu
 FactionTitle="The Program"
 FactionHQDisplayName="PROGRAM"
 LeaderQuote="\"We fight against the subtle threats. Including you, Commander.\" - Dr. Hadley"
-InfluenceMediumQuote="\"It is good to work with you again, Commander. Reminds me of the good old days, when the threat fell from the stars and did not rise up all around us.\" - Dr. Hadley"
+InfluenceMediumQuote="\"It is good to work with you again, Commander. Reminds me of the good ol' days, when the threat fell from the stars and did not rise up all around us.\" - Dr. Hadley"
 #InfluenceHighQuote="\"With the Templars gone, there will be only one lasting threat to the stability of our society. Commander. You know what must be done.\" - Dr. Hadley"
 InfluenceHighQuote="\"Soon, there will be only one lasting threat to the stability of our society. Commander. You know what must be done.\" - Dr. Hadley"
 GroupNames[0]="SPECTRE"
@@ -398,5 +398,5 @@ m_strProgramFactionButton="Program Status Briefing"
 m_strTemplarBetraylReactionBanner="Templar Betrayal"
 
 [RTUIScreenListener_MOTD]
-m_strTitle=""
-m_strText=""
+m_strTitle="Rising Tides Update Notice"
+m_strText="Rising Tides: The Program has been updated!\nHighlights of this patch are: \n- Add new covert action line to the Program to eliminate the Templars!\n    - 3 New Covert Actions - locate, inflitrate, and lure the Templars out from their HQ.\n    - New mission (Assault Templar High Coven)\n        - Attack the heart of Templar activities and kill Geist once and for all\n        - The Program will grant excellent rewards for completing this action, but be warned: your Templar soldiers WILL NOT BE HAPPY with your decision...\n    - Program Favor Rework\n        - No longer gain a favor for free every month\n        - One Small Favor Resistance Order still required to call in favor\n        - Favors are now granted by completing steps of the Templar Questline, or as a reward from a special Covert Action\n- Balance Changes\n  - General\n    - Program operative weaponry and armor now scales with XCOM's (still 1 tier above at all times).\n    - Program Berserker:\n        - Queen of Blades: Negates mobility penalty instead of reversing it.\n    - Program Infiltrator:\n        - Daybreak Flame: Now is a toggled ability. Activate the toggle to begin using Daybreak Flame.\n        - Daybreak Flame no longer auto procs Scoped and Dropped.\n        Explanation:\n            Daybreak Flame was probably too strong and had multiple pain points: too much cover destruction, and the risk of shooting out your own floor. These changes hit both.\n\nPlease check the mod page for further details, I do not show this notification unless there has been a major change in the mod."
