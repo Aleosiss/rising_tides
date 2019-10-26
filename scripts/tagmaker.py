@@ -71,8 +71,8 @@ previous_version_string = str(previous_tag.name)
 # strip invalid characters
 if previous_version_string.startswith('v'):
     previous_version_string = previous_version_string[1:]
-if previous_version_string.endswith('rc'):
-    previous_version_string = previous_version_string[:-2]
+if 'rc' in previous_version_string:
+    previous_version_string = previous_version_string.rsplit('rc', 1)[0]
 previous_version = StrictVersion(previous_version_string)
 
 # new version
