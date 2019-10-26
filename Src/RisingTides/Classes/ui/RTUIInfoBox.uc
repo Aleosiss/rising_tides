@@ -173,6 +173,8 @@ simulated function RTUIInfoBox SetAvailable() {
 	HideRewards();
 	SetPanelColors(1);
 
+	InfoBoxImage.LoadImage(DefaultImagePath);
+
 	Button.DisableButton(m_strLockedDescription);
 	Button.SetText(m_strLockedTitle);
 	return self;
@@ -181,6 +183,8 @@ simulated function RTUIInfoBox SetAvailable() {
 simulated function RTUIInfoBox SetCompleted() {
 	HideRewards();
 	SetPanelColors(2);
+
+	InfoBoxImage.LoadImage(DefaultImagePath);
 
 	Button.EnableButton();
 	Button.SetText(`RTS.AddFontColor(m_strSwapToRewards, "0x" $ PrimaryColor));

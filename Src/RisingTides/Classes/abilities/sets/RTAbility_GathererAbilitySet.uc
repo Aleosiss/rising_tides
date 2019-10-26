@@ -849,7 +849,7 @@ static function RTEffect_SimpleHeal CreateGuardianAngelHealEffect() {
 		Effect.HEAL_AMOUNT = default.GUARDIAN_ANGEL_HEAL_VALUE;
 		Effect.bUseWeaponDamage = false;
 		Effect.nAbilitySourceName = default.GuardianAngelHealText;
-		Effect.DuplicateResponse = eDupe_Allow;
+		Effect.DuplicateResponse = eDupe_Ignore;
 		Effect.EffectName = 'RTGuardianAngelSimpleHeal';
 
 		AbilityProperty = new class'X2Condition_AbilityProperty';
