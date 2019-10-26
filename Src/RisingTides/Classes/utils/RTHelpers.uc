@@ -14,6 +14,13 @@ defaultproperties
 	DebugEffectName = "DebugEffectName"
 }
 
+struct RTModVersion
+{
+	var int Major;
+	var int Minor;
+	var int Patch;
+};
+
 enum ERTChecklist {
 	eChecklist_StandardShots,
 	eChecklist_SniperShots,

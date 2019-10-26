@@ -1,7 +1,7 @@
 class RTUIScreenListener_MOTD extends UIScreenListener config(RTNullConfig);
 
 var config bool bHasDismissedLatest;
-var config int LastVersion;
+var config RTModVersion LastVersion;
 
 var localized string m_strTitle;
 var localized string m_strText;
@@ -13,21 +13,28 @@ event OnInit(UIScreen Screen) {
 }
 
 simulated function TryShowPopup(UIScreen Screen) {
-	// if we've updated 
-	if(`DLCINFO.GetVersionInt() > LastVersion) {
-			bHasDismissedLatest = false;
-			self.SaveConfig();
+	local RTModVersion CurrentVersion;
 
-			Screen.SetTimer(2.0f, false, nameof(ShowPopup), self);
-	// the normal loaded case
-	} else if(`DLCINFO.GetVersionInt() == LastVersion) {
+	CurrentVersion = `DLCINFO.GetModVersion();
+	
+	if(CurrentVersion.Major > LastVersion.Major
+	|| CurrentVersion.Minor > LastVersion.Minor
+	) {
+		// if we've updated
+		bHasDismissedLatest = false;
+		self.SaveConfig();
+
+		Screen.SetTimer(2.0f, false, nameof(ShowPopup), self);
+	} else if(CurrentVersion.Major == LastVersion.Major
+			&& CurrentVersion.Minor == LastVersion.Minor
+	) {
+		// same version
 		if(!bHasDismissedLatest) {
 			Screen.SetTimer(2.0f, false, nameof(ShowPopup), self);
 		}
-	// what the f--!
 	} else {
+		// out-of-bounds
 		`RTLOG("The local version is higher than the loaded version?!!", true, false);
-		return;
 	}
 }
 
@@ -56,7 +63,7 @@ simulated function PopupAcknowledgedCB(Name eAction)
 {
 	`PRESBASE.PlayUISound(eSUISound_MenuSelect);
 
-	LastVersion = `DLCINFO.GetVersionInt();
+	LastVersion = `DLCINFO.GetModVersion();
 	bHasDismissedLatest = true;
 
 	self.SaveConfig();

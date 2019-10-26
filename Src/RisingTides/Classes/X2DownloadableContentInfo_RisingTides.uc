@@ -11,9 +11,8 @@
 class X2DownloadableContentInfo_RisingTides extends X2DownloadableContentInfo config(RisingTides);
 
 var config bool bDebuggingEnabled;
-var int MajorVer;
-var int MinorVer;
-var int PatchVer;
+
+var RTModVersion Version;
 var config bool bShouldRemoveHelmets;
 var config array<name> TemplarUnitNames;
 
@@ -310,13 +309,24 @@ static function String GetDLCIdentifier() {
 static function String GetVersionString() {
 	local string s;
 	
-	s = string(default.MajorVer) $ "." $ string(default.MinorVer) $ "." $ string(default.PatchVer);
+	s = string(default.Version.Major) $ "." $ string(default.Version.Minor) $ "." $ string(default.Version.Patch);
 
 	return s;
 }
 
-static function int GetVersionInt() {
-	return (default.MajorVer * 1000000) + (default.MinorVer * 1000) + (default.PatchVer);
+static function int GetVersionInt(optional bool bIgnorePatches) {
+	local int _MajorVer, _MinorVer, _PatchVer;
+
+	_MajorVer = default.Version.Major;
+	_MinorVer = default.Version.Minor;
+	_PatchVer = default.Version.Patch;
+
+
+	return (_MajorVer * 1000000) + (_MinorVer * 1000) + (_PatchVer);
+}
+
+static function RTModVersion GetModVersion() {
+	return default.Version;
 }
 
 static function bool AbilityTagExpandHandler(string InString, out string OutString)
@@ -463,7 +473,5 @@ static function HandleDroneRecovery() {
 
 defaultproperties
 {
-	MajorVer = 2
-	MinorVer = 1
-	PatchVer = 0
+	Version=(Major=2, Minor=1, Patch=0)
 }
