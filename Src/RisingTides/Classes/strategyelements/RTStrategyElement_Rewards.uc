@@ -654,7 +654,7 @@ static function GiveTemplarCovenAssaultReward(XComGameState NewGameState, XComGa
 	}
 	
 	// reset the flag
-	ProgramFaction.SetTemplarMissionSucceededFlag(false);
+	ProgramFaction.SetTemplarMissionSucceededFlag(true);
 }
 
 static function GiveTemplarQuestlineFailedReward(XComGameState NewGameState, XComGameState_Reward RewardState, optional StateObjectReference AuxRef, optional bool bOrder = false, optional int OrderHours = -1)
@@ -763,7 +763,7 @@ static function GiveHuntTemplarAmbushReward(XComGameState NewGameState, XComGame
 	}
 
 	// reset the flag
-	ProgramFaction.SetTemplarMissionSucceededFlag(false);
+	ProgramFaction.SetTemplarMissionSucceededFlag(true);
 }
 
 static function EliminateFaction(XComGameState NewGameState, XComGameState_ResistanceFaction FactionState, optional bool bShouldFactionSoldiersDesert = true) {
@@ -844,10 +844,19 @@ static function EliminateFaction(XComGameState NewGameState, XComGameState_Resis
 		foreach XComHQ.Crew(IteratorRef)
 		{
 			UnitState = XComGameState_Unit(History.GetGameStateForObjectID(IteratorRef.ObjectID));
-			if(UnitState != none && UnitState.FactionRef == FactionState.GetReference())
-			{
-				FireUnit(NewGameState, IteratorRef);
+			if(UnitState == none) {
+				continue;
 			}
+
+			if(UnitState.FactionRef.ObjectID <= 0) {
+				continue;
+			}
+
+			if(UnitState.FactionRef != FactionState.GetReference()) {
+				continue;
+			}
+
+			FireUnit(NewGameState, IteratorRef);
 		}
 	}
 
@@ -910,8 +919,17 @@ static function FireUnit(XComGameState NewGameState, StateObjectReference UnitRe
 	local XComGameState_Unit UnitState;
 	local StateObjectReference EmptyRef;
 	local int idx;
+	local String debugMsg;
 
 	History = `XCOMHISTORY;
+
+	UnitState = XComGameState_Unit(History.GetGameStateForObjectID(UnitReference.ObjectID));
+	debugMsg = "Removing Unit: " $ UnitState.GetFullName() $ " from XComHQ!";
+	if(UnitState.IsSoldier()) {
+		debugMsg = debugMsg @ "Was a soldier, class name was " $ UnitState.GetSoldierClassTemplateName();
+	}
+	`RTLOG(debugMsg);
+
 	XComHQ = XComGameState_HeadquartersXCom(History.GetSingleGameStateObjectForClass(class'XComGameState_HeadquartersXCom'));
 	XComHQ = XComGameState_HeadquartersXCom(NewGameState.ModifyStateObject(class'XComGameState_HeadquartersXCom', XComHQ.ObjectID));
 	XComHQ.RemoveFromCrew(UnitReference);

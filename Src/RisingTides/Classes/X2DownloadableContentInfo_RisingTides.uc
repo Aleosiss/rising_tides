@@ -19,6 +19,11 @@ var config array<name> TemplarUnitNames;
 // weak ref to the screen (I just copied this from RJ and don't know if it's really necessary)
 var config String screen_path;
 
+defaultproperties
+{
+	Version=(Major=2, Minor=1, Patch=2)
+}
+
 /// <summary>
 /// This method is run if the player loads a saved game that was created prior to this DLC / Mod being installed, and allows the
 /// DLC / Mod to perform custom processing in response. This will only be called once the first time a player loads a save that was
@@ -48,6 +53,7 @@ private static function HandleModUpdate() {
 	`RTLOG("New version of the mod found: \nOld Version: " $ ProgramState.GetCurrentVersion() $ "\nNew Version: " $ GetVersionInt());
 	NewGameState = `CreateChangeState("Mod version updated, sending popup!");
 	ProgramState = `RTS.GetNewProgramState(NewGameState);
+	ProgramState.SetTemplarMissionSucceededFlag(true);
 	ProgramState.CompareVersion(GetVersionInt());
 
 	`GAMERULES.SubmitGameState(NewGameState);
@@ -469,9 +475,4 @@ static function HandleDroneRecovery() {
 
 
 */
-	}
-
-defaultproperties
-{
-	Version=(Major=2, Minor=1, Patch=0)
 }
