@@ -840,24 +840,41 @@ static function EliminateFaction(XComGameState NewGameState, XComGameState_Resis
 
 	// remove faction solders
 	if(bShouldFactionSoldiersDesert) {
-		XComHQ = XComGameState_HeadquartersXCom(NewGameState.ModifyStateObject(class'XComGameState_HeadquartersXCom', XComHQ.GetReference().ObjectID));
+		if(FactionState.GetChampionClassName() != '') {
+			`RTLOG("Target Champion Class is " $ FactionState.GetChampionClassName());
+		}
+
 		foreach XComHQ.Crew(IteratorRef)
 		{
 			UnitState = XComGameState_Unit(History.GetGameStateForObjectID(IteratorRef.ObjectID));
+			`RTLOG("-------------------------------------------------------------------------------------------");
+			`RTLOG("Trying to remove " $ IteratorRef.ObjectID $ " from the game!");
 			if(UnitState == none) {
+				`RTLOG("UnitState was none, continuing!");
+				continue;
+			}
+
+			`RTLOG("Unit's name is " $ UnitState.GetFullName());
+
+			// first let's check the champion class
+			if(FactionState.GetChampionClassName() != '' && FactionState.GetChampionClassName() == UnitState.GetSoldierClassTemplateName()) {
+				FireUnit(NewGameState, IteratorRef);
 				continue;
 			}
 
 			if(UnitState.FactionRef.ObjectID <= 0) {
+				`RTLOG("Unit doesn't have a faction, continuing!");
 				continue;
 			}
 
 			if(UnitState.FactionRef != FactionState.GetReference()) {
+				`RTLOG("Unit doesn't match the eliminated faction, continuing!");
 				continue;
 			}
 
 			FireUnit(NewGameState, IteratorRef);
 		}
+		`RTLOG("-------------------------------------------------------------------------------------------");
 	}
 
 	// rip

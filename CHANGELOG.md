@@ -1,7 +1,10 @@
-2.1.2
+2.1.3:
+- More work on the removal of Templar soldiers from the game :scream:
+
+2.1.2:
 - Skipped 2.1.1 due to build issues
 - Fix issue where CA's were failing by default
-- Add additional logging and checks to old remove Templars from the game... I can't replicate this issue but it's serious enough to take additional precautions.
+- Add additional logging and checks to old method of removing Templar soldiers from the game... I can't replicate this issue but it's serious enough to take additional precautions.
 
 2.1.0:
 - Add new covert action line to the Program to eliminate the Templars!
