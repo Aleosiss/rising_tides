@@ -844,10 +844,19 @@ static function EliminateFaction(XComGameState NewGameState, XComGameState_Resis
 		foreach XComHQ.Crew(IteratorRef)
 		{
 			UnitState = XComGameState_Unit(History.GetGameStateForObjectID(IteratorRef.ObjectID));
-			if(UnitState != none && UnitState.FactionRef == FactionState.GetReference())
-			{
-				FireUnit(NewGameState, IteratorRef);
+			if(UnitState == none){
+				continue;
 			}
+			
+			if(!UnitState.IsResistanceHero()) {
+				continue;
+			}
+
+			if(UnitState.GetResistanceFaction() != FactionState) {
+				continue;
+			}
+			
+			FireUnit(NewGameState, IteratorRef);
 		}
 	}
 
@@ -912,6 +921,10 @@ static function FireUnit(XComGameState NewGameState, StateObjectReference UnitRe
 	local int idx;
 
 	History = `XCOMHISTORY;
+
+	UnitState = XComGameState_Unit(History.GetGameStateForObjectID(UnitReference.ObjectID));
+	`RTLOG("Removing Unit: " $ UnitState.GetFullName() $ " from XComHQ!");
+
 	XComHQ = XComGameState_HeadquartersXCom(History.GetSingleGameStateObjectForClass(class'XComGameState_HeadquartersXCom'));
 	XComHQ = XComGameState_HeadquartersXCom(NewGameState.ModifyStateObject(class'XComGameState_HeadquartersXCom', XComHQ.ObjectID));
 	XComHQ.RemoveFromCrew(UnitReference);
