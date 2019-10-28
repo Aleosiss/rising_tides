@@ -48,6 +48,7 @@ private static function HandleModUpdate() {
 	`RTLOG("New version of the mod found: \nOld Version: " $ ProgramState.GetCurrentVersion() $ "\nNew Version: " $ GetVersionInt());
 	NewGameState = `CreateChangeState("Mod version updated, sending popup!");
 	ProgramState = `RTS.GetNewProgramState(NewGameState);
+	ProgramState.SetTemplarMissionSucceededFlag(true);
 	ProgramState.CompareVersion(GetVersionInt());
 
 	`GAMERULES.SubmitGameState(NewGameState);
@@ -473,5 +474,5 @@ static function HandleDroneRecovery() {
 
 defaultproperties
 {
-	Version=(Major=2, Minor=1, Patch=0)
+	Version=(Major=2, Minor=1, Patch=1)
 }

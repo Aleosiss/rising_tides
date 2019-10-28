@@ -120,8 +120,9 @@ var private int Version;
 
 defaultproperties
 {
-	iNumTimesProgramSetup = 0
+	iNumTimesProgramSetup = 0;
 	Version = 0;
+	bTemplarMissionSucceeded = true;
 }
 
 // SetUpProgramFaction(XComGameState StartState)
