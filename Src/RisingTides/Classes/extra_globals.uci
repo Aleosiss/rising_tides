@@ -5,4 +5,4 @@
 `define DLCINFO class'X2DownloadableContentInfo_RisingTides'.static
 `define RTEB class'RTEffectBuilder'.static
 `define CreateChangeState(msg, setVisFence, visFenceTimeout) class'XComGameStateContext_ChangeContainer'.static.CreateChangeState(`msg, `setVisFence, `visFenceTimeout)
-`define ConsoleCommand(command) class'WorldInfo'.static.GetWorldInfo().GetALocalPlayerController().ConsoleCommand(command)
+`define ConsoleCommand(command) class'WorldInfo'.static.GetWorldInfo().GetALocalPlayerController().ConsoleCommand(`command)

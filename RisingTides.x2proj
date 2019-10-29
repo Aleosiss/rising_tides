@@ -37,6 +37,7 @@
     <Folder Include="Src\RisingTides\Classes\templates\" />
     <Folder Include="Src\RisingTides\Classes\abilities\tohitcalc\" />
     <Folder Include="Config\Armor\DLC_2\" />
+    <Folder Include="Src\RisingTides\Classes\analytics\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Config\XComClassData.ini">
@@ -429,6 +430,8 @@
     <Content Include="Content\Armor\01_MEA_Armors_Shared.upk" />
     <Content Include="Content\Armor\MEA_Remnant_Armor_Assets.upk" />
     <Content Include="Src\RisingTides\Classes\ui\RTUIScreenListener_MOTD.uc" />
+    <Content Include="Src\RisingTides\Classes\analytics\AnalyticsSender.uc" />
+    <Content Include="Src\RisingTides\Classes\analytics\TcpLinkClient.uc" />
   </ItemGroup>
   <Import Project="$(MSBuildLocalExtensionPath)\XCOM2.targets" />
 </Project>

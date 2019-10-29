@@ -1371,3 +1371,23 @@ exec function RT_DebugUnitByObjectID(int ObjectID) {
 	UnitState = XComGameState_Unit(History.GetGameStateForObjectID(ObjectID));
 	`RTLOG(UnitState.ToString(true), false, true);
 }
+
+exec function ttac() {
+	`ConsoleCommand("open x2_obstaclecourse");
+}
+
+exec function testAnalytics() {
+	local AnalyticsSender analytics;
+	local PlayerController player;
+	local IpAddr addr;
+
+	player = class'WorldInfo'.static.GetWorldInfo().GetALocalPlayerController();
+	
+	analytics = player.Spawn(class'AnalyticsSender', player);
+	analytics.TargetHost = "www.bing.com";
+	analytics.TargetPort = 80;
+
+	analytics.start();
+
+	//analytics.Destroy();
+}
