@@ -11,6 +11,10 @@ class TcpLinkClient extends TcpLink;
 var string TargetHost;
 var int TargetPort;
 
+var string RequestType;
+var string EndpointPath;
+var string ProtocolVersion;
+
 event PostBeginPlay()
 {
 	super.PostBeginPlay();
