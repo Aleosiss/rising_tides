@@ -64,7 +64,9 @@ simulated function RTUICounter InitCounter(name PanelName, String TitleText, Str
 	CountText.SetSize(300, 300);
 	CountText.SetPosition(105, 130);
 
-	strTextTemp = class'UIUtilities_Text'.static.AddFontInfo("-1", false, false, false, CountSize);
+	Count = -1;
+
+	strTextTemp = class'UIUtilities_Text'.static.AddFontInfo("" $ Count, false, false, false, CountSize);
 	strTextTemp = class'UIUtilities_Text'.static.AlignCenter(strTextTemp);
 	strTextTemp = ColorText(strTextTemp, PrimaryColor);
 	CountText.SetHtmlText(strTextTemp);

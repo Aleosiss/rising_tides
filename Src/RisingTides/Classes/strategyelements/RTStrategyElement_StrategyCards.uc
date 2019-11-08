@@ -36,7 +36,7 @@ static function ActivateOneSmallFavor(XComGameState NewGameState, StateObjectRef
 
 	Program = `RTS.GetNewProgramState(NewGameState);
 	if(!Program.bOSF_FirstTimeDisplayed) { // start with three favors
-		Program.IncrementNumFavorsAvailable(3);
+		Program.ModifyAvailableProgramFavors(3);
 	}
 	Program.MakeOneSmallFavorAvailable();
 	Program.bShouldResetOSFMonthly = true;

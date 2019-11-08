@@ -50,6 +50,20 @@ exec function RT_PrintProgramFactionInformation(optional bool bShouldPrintFullIn
 
 }
 
+exec function RT_CheatModifyProgramFavors(int diff) {
+	local XComGameStateHistory History;
+	local RTGameState_ProgramFaction ProgramState;
+	local XComGameState NewGameState;
+
+	History = `XCOMHISTORY;
+	NewGameState = `CreateChangeState("CHEAT - Modify Program Favor Count");
+	ProgramState = `RTS.GetNewProgramState(NewGameState);
+
+	ProgramState.ModifyAvailableProgramFavors(diff);
+
+	`GAMERULES.SubmitGameState(NewGameState);
+}
+
 exec function RT_TriggerEvent(name EventID) {
 	local XComGameState NewGameState;
 

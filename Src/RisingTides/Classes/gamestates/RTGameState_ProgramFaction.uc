@@ -501,10 +501,8 @@ function int GetNumFavorsAvailable() {
 	return iNumberOfFavorsAvailable;
 }
 
-function IncrementNumFavorsAvailable(int NumFavors) {
-	if(NumFavors > 0) {
-		iNumberOfFavorsAvailable += NumFavors;
-	}
+function ModifyAvailableProgramFavors(int NumFavors) {
+	iNumberOfFavorsAvailable += NumFavors;
 }
 
 function bool IsOneSmallFavorAvailable() {
@@ -530,11 +528,11 @@ function bool MakeOneSmallFavorAvailable() {
 }
 
 function MakeOneSmallFavorUnavailable() {
-	bOneSmallFavorAvailable = false;
-
 	if(bOneSmallFavorAvailable) { // we had a favor teed up, refund it
 		iNumberOfFavorsAvailable++;
 	}
+
+	bOneSmallFavorAvailable = false;
 }
 
 function HandleOSFTutorial(optional bool bOverrideFirstTime = false) {
