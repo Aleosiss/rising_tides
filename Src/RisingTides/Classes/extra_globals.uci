@@ -3,6 +3,7 @@
 `define RTD `RT.default
 `define RTLOG(msg, showredscreen, showconsole) `RTS.RTLog(`msg, `showredscreen, `showconsole)
 `define DLCINFO class'X2DownloadableContentInfo_RisingTides'.static
+`define CONFIG class'X2DownloadableContentInfo_RisingTides'.default
 `define RTEB class'RTEffectBuilder'.static
 `define CreateChangeState(msg, setVisFence, visFenceTimeout) class'XComGameStateContext_ChangeContainer'.static.CreateChangeState(`msg, `setVisFence, `visFenceTimeout)
 `define ConsoleCommand(command) class'WorldInfo'.static.GetWorldInfo().GetALocalPlayerController().ConsoleCommand(`command)

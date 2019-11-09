@@ -15,13 +15,14 @@ var config bool bDebuggingEnabled;
 var RTModVersion Version;
 var config bool bShouldRemoveHelmets;
 var config array<name> TemplarUnitNames;
+var config bool MindWrackKillsRulers;
 
 // weak ref to the screen (I just copied this from RJ and don't know if it's really necessary)
 var config String screen_path;
 
 defaultproperties
 {
-	Version=(Major=2, Minor=1, Patch=4)
+	Version=(Major=2, Minor=1, Patch=5)
 }
 
 /// <summary>

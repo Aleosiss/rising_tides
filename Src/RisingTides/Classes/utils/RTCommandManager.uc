@@ -1433,3 +1433,7 @@ exec function RT_DebugFYOW() {
 
 	`RTLOG("Tuple returned: " $ Tuple.Data[0].b, false, true);
 }
+
+exec function rtdb() {
+	`ConsoleCommand("open x2_obstaclecourse");
+}

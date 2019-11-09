@@ -13,6 +13,7 @@ class RTAbility extends X2Ability config(RisingTides);
 	var protected RTCondition_PsionicTarget						PsionicTargetingProperty;
 	var protected RTCondition_UnitSize							StandardSizeProperty;
 	var protected EffectReason									TagReason;
+	var protected WeaponDamageValue								DefaultPsionicDamageType;
 
 	var name UnitUsedPsionicAbilityEvent;
 	var name ForcePsionicAbilityEvent;
@@ -395,6 +396,7 @@ defaultproperties
 	RTTechnopathyTemplateName = "RTTechnopathy"
 	RTMindControlEffectName = "MindControl"
 	RTMindControlTemplateName = "RTMindControl"
+	DefaultPsionicDamageType = (Damage=0, Spread=0, Rupture=0, DamageType="Psi")
 	
 
 

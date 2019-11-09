@@ -17,7 +17,8 @@ pipeline {
 
   stages {
     // couldn't figure out how to modify the built-in checkout, so just do it again
-    stage('Checkout') {
+    stage('Checkout LFS') {
+      when { branch 'master' } // only need to do this for final releases
       steps {
         checkout([
           $class: 'GitSCM',
