@@ -50,6 +50,20 @@ exec function RT_PrintProgramFactionInformation(optional bool bShouldPrintFullIn
 
 }
 
+exec function RT_CheatModifyProgramFavors(int diff) {
+	local XComGameStateHistory History;
+	local RTGameState_ProgramFaction ProgramState;
+	local XComGameState NewGameState;
+
+	History = `XCOMHISTORY;
+	NewGameState = `CreateChangeState("CHEAT - Modify Program Favor Count");
+	ProgramState = `RTS.GetNewProgramState(NewGameState);
+
+	ProgramState.ModifyAvailableProgramFavors(diff);
+
+	`GAMERULES.SubmitGameState(NewGameState);
+}
+
 exec function RT_TriggerEvent(name EventID) {
 	local XComGameState NewGameState;
 
@@ -1370,4 +1384,52 @@ exec function RT_DebugUnitByObjectID(int ObjectID) {
 
 	UnitState = XComGameState_Unit(History.GetGameStateForObjectID(ObjectID));
 	`RTLOG(UnitState.ToString(true), false, true);
+}
+
+exec function RT_PrepDebugFYOW() {
+	`ConsoleCommand("GiveTech ResistanceCommunications");
+	`ConsoleCommand("GiveTech ResistanceRadio");
+	`ConsoleCommand("RT_GenerateProgramCards");
+}
+
+exec function RT_DebugFYOW() {
+	local RTGameState_ProgramFaction ProgramState;
+	local XComLWTuple Tuple;
+	local X2StrategyElementTemplateManager Manager;
+	local X2StrategyElementTemplate HighlanderVersionGeneric;
+	local CHXComGameVersionTemplate HighlanderVersion;
+	local bool bFoundHighlander;
+
+	Manager = class'X2StrategyElementTemplateManager'.static.GetStrategyElementTemplateManager();
+
+	`RTLOG("Debugging FYOW!", false, true);
+
+	HighlanderVersionGeneric = Manager.FindStrategyElementTemplate('CHWOTCVersion');
+	if(HighlanderVersionGeneric != none) {
+		HighlanderVersion = CHXComGameVersionTemplate(HighlanderVersionGeneric);
+		if(HighlanderVersion != none) {
+			`RTLOG("X2WOTCCommunityHighlander version = " $ HighlanderVersion.GetVersionString(), false, true);
+			bFoundHighlander = true;
+		}
+	}
+
+	if(!bFoundHighlander) {
+		`RTLOG("X2WOTCCommunityHighlander version = unknown! Couldn't find the version template!", false, true);
+	}
+
+	ProgramState = `RTS.GetProgramState();
+	`RTLOG("Rising Tides: The Program version = " $ `DLCINFO.GetVersionString(), false, true);
+	`RTLOG("ProgramState ObjectID = " $ ProgramState.ObjectID, false, true);
+
+	Tuple = new class'XComLWTuple';
+	Tuple.Id = 'RegionOutpostBuildStart';
+	Tuple.Data.Add(1);
+	Tuple.Data[0].kind = XComLWTVBool;
+	Tuple.Data[0].b = false;
+
+	`RTLOG("Sending RegionOutpostBuildStart event!", false, true);
+
+	`XEVENTMGR.TriggerEvent('RegionOutpostBuildStart', Tuple, none, none);
+
+	`RTLOG("Tuple returned: " $ Tuple.Data[0].b, false, true);
 }

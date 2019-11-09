@@ -269,7 +269,7 @@ static function X2DataTemplate CreateGrantFavorTemplate() {
 	Template.ChooseLocationFn = ChooseRandomRegion;
 	Template.OverworldMeshPath = "UI_3D.Overwold_Final.CovertAction";
 
-	Template.RequiredFactionInfluence = eFactionInfluence_Influential;
+	Template.RequiredFactionInfluence = eFactionInfluence_Respected;
 
 	Template.Narratives.AddItem('CovertActionNarrative_GrantFavor_Program');
 
