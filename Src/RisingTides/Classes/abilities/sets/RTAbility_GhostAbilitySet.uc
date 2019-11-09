@@ -338,7 +338,7 @@ static function X2AbilityTemplate PsiOverload()
 {
 	local X2AbilityTemplate									Template;
 	local X2AbilityCooldown									Cooldown;
-	local X2Effect_KillUnit									KillUnitEffect;
+	local RTEffect_KillUnitWithExceptions					KillUnitEffect;
 	local X2AbilityCost_ActionPoints						ActionPointCost;
 	local X2Condition_UnitProperty							TargetUnitPropertyCondition;
 
@@ -376,7 +376,9 @@ static function X2AbilityTemplate PsiOverload()
 	Template.AbilityToHitCalc = default.DeadEye;
 	Template.AbilityTargetStyle = default.SimpleSingleTarget;
 
-	KillUnitEffect = new class 'X2Effect_KillUnit';
+	KillUnitEffect = new class'RTEffect_KillUnitWithExceptions';
+	KillUnitEffect.Exceptions.AddItem(class'RTEffect_KillUnitWithExceptions'.static.AlienRulerExceptionHandler);
+	KillUnitEffect.EffectDamageValue = default.DefaultPsionicDamageType;
 	Template.AddTargetEffect(KillUnitEffect);
 
 	Template.PostActivationEvents.AddItem('RTFeedback');
