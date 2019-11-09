@@ -1503,21 +1503,22 @@ function ForceIncreaseInfluence() {
 	Influence = EFactionInfluence(iInfluence);
 }
 
-// Listen for AvengerLandedScanRegion, recieves a NewGameState
-// can pull an XComGameState_ScanningSite from XComHQ.CurrentLocation attached to the NewGameState
-// check to see if the resistance is building an outpost
-// set ScanHoursRemaining, and TotalScanHours to 1
-
 // List for Override Event, recieves a LWTuple
 // Event Data is the Tuple, the Event Source is the RegionState
 // Tuple should have one bool, set it to true
 static function EventListenerReturn FortyYearsOfWarEventListener(Object EventData, Object EventSource, XComGameState GameState, Name EventID, Object CallbackData) {
-	//local XComGameState NewGameState;
-	//local XComGameState_WorldRegion RegionState;
-	//local XComGameState_HeadquartersXCom XComHQ;
 	local XComLWTuple Tuple;
+	local RTGameState_ProgramFaction ProgramState;
 
-	`RTLOG("Forty Years of War Triggered!");
+	ProgramState = RTGameState_ProgramFaction(CallbackData);
+	if(ProgramState == none) {
+		`RTLOG("Forty Years of War triggered by ProgramState with an unknown ObjectID. This means FYOW was activated on an old version of RT:TP. Unequip and reequip the resistance order to get more accurate debug info.", false, true);
+	} else {
+		`RTLOG("Forty Years of War triggered under a ProgramState with ObjectID " $ ProgramState.ObjectID, false, true);
+	}
+
+
+	
 	Tuple = XComLWTuple(EventData);
 	if(Tuple == none) {
 		`RTLOG("FYOW did not recieve a LWTuple, ending...", true);

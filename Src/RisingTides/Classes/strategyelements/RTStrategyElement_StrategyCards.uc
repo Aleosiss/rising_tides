@@ -199,7 +199,7 @@ static function ActivateFortyYearsOfWar(XComGameState NewGameState, StateObjectR
 	Obj = Program;
 
 	`RTLOG("Activating Forty Years of War!");
-	`XEVENTMGR.RegisterForEvent(Obj, 'RegionOutpostBuildStart', Program.FortyYearsOfWarEventListener, ELD_Immediate);
+	`XEVENTMGR.RegisterForEvent(Obj, 'RegionOutpostBuildStart', Program.FortyYearsOfWarEventListener, ELD_Immediate, /*Priority*/, /*PreFilterObj*/, /**bPersistent*/, /*CallbackObj*/ Obj);
 
 	// Build outposts in any regions which are currently being scanned
 	foreach `XCOMHISTORY.IterateByClassType(class'XComGameState_WorldRegion', RegionState)
