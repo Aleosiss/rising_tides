@@ -252,7 +252,6 @@ static function X2DataTemplate CreateHuntTemplarsP3Template() {
 	Template.OptionalCosts.AddItem(_CreateOptionalCostSlot('Intel', default.HuntTemplarsIntelCost_P3));
 
 	Template.Risks.AddItem('CovertActionRisk_TemplarAmbush');
-
 	Template.Rewards.AddItem('RTReward_ProgramHuntTemplarsP3');
 
 	return Template;
@@ -279,7 +278,6 @@ static function X2DataTemplate CreateGrantFavorTemplate() {
 	Template.Slots.AddItem(_CreateDefaultSoldierSlot('CovertActionSoldierStaffSlot'));
 
 	Template.Risks.AddItem('CovertActionRisk_SoldierShaken');
-
 	Template.Rewards.AddItem('RTReward_ProgramGrantFavor');
 
 	return Template;

@@ -17,6 +17,10 @@ static function array<X2DataTemplate> CreateTemplates()
 	Rewards.AddItem(CreateProgramHuntTemplarsAmbushReward());
 	Rewards.AddItem(CreateProgramTemplarCovenAssaultReward());
 
+	// Covert Actions
+	Rewards.AddItem(CreateProgramGrantFavorReward());
+	Rewards.AddItem(CreateProgramCallInFavorReward());
+
 	// Misc Rewards
 	Rewards.AddItem(CreateProgramAddCardSlotTemplate());
 	Rewards.AddItem(CreateProgramIncreaseInfluenceTemplate());
@@ -314,13 +318,14 @@ static function bool IsProgramFactionRewardAvailable(optional XComGameState NewG
 	FactionState = GetFactionState(NewGameState, AuxRef);
 	if (FactionState != none) {
 		if ( FactionState.GetMyTemplateName() != 'Faction_Program') {
+			`RTLOG("FactionState.GetMyTemplateName() == " $ FactionState.GetMyTemplateName() $ ", returning FALSE for CreateProgramGrantFavorReward!");
 			return false;
 		}
 
 		return FactionState.bMetXCom;
 	}
 
-	return false;
+	return true;
 }
 
 static function bool IsHuntTemplarsP1Available(optional XComGameState NewGameState, optional StateObjectReference AuxRef) {
