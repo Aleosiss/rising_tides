@@ -61,7 +61,6 @@ function SelectSquad()
 
 	MissionSiteState = RTGameState_MissionSiteTemplarAmbush(NewGameState.ModifyStateObject(class'RTGameState_MissionSiteTemplarAmbush', ObjectID));
 	MissionSiteState.GeneratedMission.Mission.SpecialSoldiers.AddItem(ProgramState.GetOperative(ProgramOperativeTemplateName).GetMyTemplateName());
-	//MissionSiteState.GeneratedMission.Mission.SpecialSoldiers.AddItem(ProgramState.GetOperative("Kaga").GetMyTemplateName());
 	
 	MissionSoldiers.AddItem(AddProgramOperative(NewGameState, ProgramOperativeTemplateName));
 

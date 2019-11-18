@@ -22,8 +22,6 @@ function EventListenerReturn OnTacticalGameEnd(Object EventData, Object EventSou
 	local Object ListenerObj;
 	local XComGameState NewGameState;
 
-	//`RTLOG("'TacticalGameEnd' event listener delegate invoked.");
-
 	EventManager = `XEVENTMGR;
 
 	// Unregister our callbacks
@@ -35,8 +33,6 @@ function EventListenerReturn OnTacticalGameEnd(Object EventData, Object EventSou
 	NewGameState.RemoveStateObject(ObjectID);
 	`GAMERULES.SubmitGameState(NewGameState);
 
-	//`LOG("RisingTides: RTGameState_Effect of type " @ self.class @" passive effect unregistered from events.");
-
 	return ELR_NoInterrupt;
 }
 
@@ -46,7 +42,7 @@ protected function ActivateAbility(XComGameState_Ability AbilityState, StateObje
 	local XComGameState					NewGameState;
 
 	if(AbilityState.CanActivateAbilityForObserverEvent(XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(TargetRef.ObjectID))) != 'AA_Success') {
-		`RTLOG("Couldn't Activate "@ AbilityState.GetMyTemplateName() @ " for observer event.");
+		`RTLOG("Couldn't Activate " @ AbilityState.GetMyTemplateName() @ " for observer event.");
 	} else {
 		NewGameState = `CreateChangeState("Activating Ability " $ AbilityState.GetMyTemplateName());
 		AbilityState = XComGameState_Ability(NewGameState.CreateStateObject(AbilityState.Class, AbilityState.ObjectID));

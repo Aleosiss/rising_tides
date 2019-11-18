@@ -81,7 +81,12 @@ static event OnPostTemplatesCreated()
 	AddProgramFactionCovertActions();
 	AddProgramAttachmentTemplates();
 	PatchTemplarCharacterTemplatesForAI();
+	PatchTemplarFocusVisualization();
 	//PrintAbilityTemplates();
+}
+
+static function PatchTemplarFocusVisualization() {
+	class'RTAbility_TemplarAbilitySet'.static.PatchTemplarFocusVisualization();
 }
 
 static function PrintAbilityTemplates() {

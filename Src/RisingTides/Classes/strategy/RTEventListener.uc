@@ -6,6 +6,7 @@ static function array<X2DataTemplate> CreateTemplates()
 	local array<X2DataTemplate> Templates;
 
 	Templates.AddItem(RTContinueFactionHQReveal());
+	Templates.AddItem(EnableHostileTemplarFocusUI());
 
 	return Templates;
 }
@@ -28,3 +29,49 @@ static protected function EventListenerReturn ResumeFactionHQReveal(Object Event
 	return ELR_NoInterrupt;
 }
 
+static function X2EventListenerTemplate EnableHostileTemplarFocusUI()
+{
+	local CHEventListenerTemplate Template;
+
+	`CREATE_X2TEMPLATE(class'CHEventListenerTemplate', Template, 'RT_EnableHostileTemplarFocusUI');
+
+	Template.RegisterInTactical = true;
+	Template.AddCHEvent('OverrideUnitFocusUI', OnOverrideFocus, ELD_Immediate);
+
+	return Template;
+}
+
+/**
+ * Tuple Data:
+ * Index 0 = IsVisible
+ * Index 1 = CurrentValue
+ * Index 2 = MaximumValue
+ * Index 3 = BarColor
+ * Index 4 = Icon
+ * Index 5 = TooltipLong
+ * Index 6 = TooltipShort
+ */
+
+static function EventListenerReturn OnOverrideFocus(Object EventData, Object EventSource, XComGameState GameState, Name Event, Object CallbackData)
+{
+	local XComGameState_Unit UnitState;
+	local XComLWTuple Tuple;
+	local XComGamestate_Effect_TemplarFocus FocusState;
+
+	Tuple = XComLWTuple(EventData);
+	UnitState = XComGameState_Unit(EventSource);
+	FocusState = UnitState.GetTemplarFocusEffectState();
+
+	if (UnitState.HasSoldierAbility('TemplarFocus') && FocusState != none)
+	{
+		Tuple.Data[0].b = true;
+		Tuple.Data[1].i = FocusState.FocusLevel;
+		Tuple.Data[2].i = FocusState.GetMaxFocus(UnitState);
+		Tuple.Data[3].s = "0x" $ class'UIUtilities_Colors'.const.PSIONIC_HTML_COLOR;
+		Tuple.Data[4].s = "";
+		Tuple.Data[5].s = `XEXPAND.ExpandString(class'UITacticalHUD_SoldierInfo'.default.FocusLevelDescriptions[FocusState.FocusLevel]);
+		Tuple.Data[6].s = class'UITacticalHUD_SoldierInfo'.default.FocusLevelLabel;
+	}
+
+	return ELR_NoInterrupt;
+}

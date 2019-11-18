@@ -1,3 +1,15 @@
+2.1.6:
+- Fixed issue where new Covert Actions (Grant Favor, Call in Favor) were not being created properly.
+- Increased maximum possible chance of getting a Templar Ambush risk to 100% from 50%. 
+
+2.1.5:
+- Add MindWrackKillsRulers flag in RisingTides.ini. It defaults to True. If disabled, Mind Wrack will deal 1/4 of the Ruler's maximum HP instead of killing it outright.
+
+2.1.4:
+- Fix issue where the Program Info Screen incorrectly displayed 0 favors available as -1 favors available. This was visual only- the player never went below 0 favors available.
+- Add RT_DebugFYOW command to attempt to identify why players continously report FYOW not working even though I cannot actually get it to BREAK in testing.
+	- Simply type the command on the geoscape while FYOW is activated and post the results in the Bug Reports thread if you're having problems.
+
 2.1.3:
 - More work on the removal of Templar soldiers from the game :scream:
 
@@ -8,37 +20,37 @@
 
 2.1.0:
 - Add new covert action line to the Program to eliminate the Templars!
-    - 3 New Covert Actions - locate, inflitrate, and lure the Templars out from their HQ.
-        - New mission (Templar Ambush Retaliation)
-            - A local Templar cult has stumbled upon your plans.
-            - You can escape, but if word gets back to Geist, your efforts will have been for nothing!
-    - New mission (Assault Templar High Coven)
-        - Attack the heart of Templar activities and kill Geist once and for all
-        - The Program will grant excellent rewards for completing this action, but be warned: your Templar soldiers WILL NOT BE HAPPY with your decision... (they will desert)
-    - Program Favor Rework
-        - No longer gain a favor for free every month
-        - One Small Favor Resistance Order still required to call in favor
-        - Favors are now granted by completing steps of the Templar Questline, or as a reward from a special Covert Action
+	- 3 New Covert Actions - locate, inflitrate, and lure the Templars out from their HQ.
+		- New mission (Templar Ambush Retaliation)
+			- A local Templar cult has stumbled upon your plans.
+			- You can escape, but if word gets back to Geist, your efforts will have been for nothing!
+	- New mission (Assault Templar High Coven)
+		- Attack the heart of Templar activities and kill Geist once and for all
+		- The Program will grant excellent rewards for completing this action, but be warned: your Templar soldiers WILL NOT BE HAPPY with your decision... (they will desert)
+	- Program Favor Rework
+		- No longer gain a favor for free every month
+		- One Small Favor Resistance Order still required to call in favor
+		- Favors are now granted by completing steps of the Templar Questline, or as a reward from a special Covert Action
 - New Covert Action: Earn a Program Favor
 - New perks. If you want them in an ongoing campaign, regenerate your Program operatives with the command 'RT_RegenerateProgramOperatives'.
-    - Repositioning: Replaces Damn Good Ground on the Infiltrator's perk tree.
-        - If your last (3) shots were taken from (9) tiles away, retain concealment on your next shot.
-    Explanation: I felt that the DGG was a boring perk on a list of boring perks.
-    - Unfurl The Veil: Replaces Meld Induction on the Gatherer's perk tree.
-        - If all active enemies are affected by Over the Shoulder, gain concealment. (6) turn cooldown.
-    Explanation: Meld Induction was probably overpowered, probably buggy, and definitely a little confusing. Unfurl the Veil allows the Gatherer to regain concealment, similar to the others.
+	- Repositioning: Replaces Damn Good Ground on the Infiltrator's perk tree.
+		- If your last (3) shots were taken from (9) tiles away, retain concealment on your next shot.
+	Explanation: I felt that the DGG was a boring perk on a list of boring perks.
+	- Unfurl The Veil: Replaces Meld Induction on the Gatherer's perk tree.
+		- If all active enemies are affected by Over the Shoulder, gain concealment. (6) turn cooldown.
+	Explanation: Meld Induction was probably overpowered, probably buggy, and definitely a little confusing. Unfurl the Veil allows the Gatherer to regain concealment, similar to the others.
 - Balance Changes
   - General
-    - Program operative HP nerfed by 5.
-    - Program operative aim decreased by 10.
-    - Program operative weaponry and armor now scales with XCOM's (still 1 tier above at all times).
-    - Program Berserker:
-        - Queen of Blades: Negates mobility penalty instead of reversing it.
-    - Program Infiltrator:
-        - Daybreak Flame: Now is a toggled ability. Activate the toggle to begin using Daybreak Flame.
-        - Daybreak Flame no longer auto procs Scoped and Dropped.
-        Explanation:
-            Daybreak Flame was probably too strong and had multiple pain points: too much cover destruction, and the risk of shooting out your own floor. These changes hit both.
+	- Program operative HP nerfed by 5.
+	- Program operative aim decreased by 10.
+	- Program operative weaponry and armor now scales with XCOM's (still 1 tier above at all times).
+	- Program Berserker:
+		- Queen of Blades: Negates mobility penalty instead of reversing it.
+	- Program Infiltrator:
+		- Daybreak Flame: Now is a toggled ability. Activate the toggle to begin using Daybreak Flame.
+		- Daybreak Flame no longer auto procs Scoped and Dropped.
+		Explanation:
+			Daybreak Flame was probably too strong and had multiple pain points: too much cover destruction, and the risk of shooting out your own floor. These changes hit both.
 - Changes
   - Time Stands Still now takes place over a single turn. Instead of three turns with 2 AP each, the unit now receives 6 AP immediately and no action is turn-ending.
   - Program operatives now evacuate the combat zone when greviously wounded.
@@ -99,27 +111,27 @@
 
 2.0.0
 - Added new Faction: The Program
-    - Added new Strategy Cards:
-        - One Small Favor: once per month, send a Program squad on a mission in place of an XCOM squad. Can't send on story missions. Guaranteed to be the first card unlocked.
-            - Gain influence with the Program every 3 missions.
-            - Program operatives level up after every mission, and cannot be killed or captured.
-        - Just Passing Through: There is a small chance for a Program operative to join XCOM on a non-story mission.
-        - Wideband Psionic Jamming: Reduce the will of enemy units by 20.
-        - Old World Training: Increase the detection modifier of XCom by 20%.
-        - Forty Years of War: Instantly construct Resistance Outposts.
-        - Direct Neural Manipulation: Bonded Soldiers recieve bonus experience if they survive a mission together.
-        - Resistance Sabotage: Other Resistance Factions gain an additional Card Slot.
-    - Added new equipment (only for Program operatives)
-        - Program Assault Rifle (8-10 dmg)
-        - Program Sniper Rifle (10-12 dmg)
-        - Program Shotgun (10-12 dmg)
-        - Program Shadowkeeper (4-6 dmg, no Shadowfall)
-        - Cosmetic Silencer (for those who like the look of the suppressors but don't like recheaters)
-    - Added Encyclopedia entries for the Program
+	- Added new Strategy Cards:
+		- One Small Favor: once per month, send a Program squad on a mission in place of an XCOM squad. Can't send on story missions. Guaranteed to be the first card unlocked.
+			- Gain influence with the Program every 3 missions.
+			- Program operatives level up after every mission, and cannot be killed or captured.
+		- Just Passing Through: There is a small chance for a Program operative to join XCOM on a non-story mission.
+		- Wideband Psionic Jamming: Reduce the will of enemy units by 20.
+		- Old World Training: Increase the detection modifier of XCom by 20%.
+		- Forty Years of War: Instantly construct Resistance Outposts.
+		- Direct Neural Manipulation: Bonded Soldiers recieve bonus experience if they survive a mission together.
+		- Resistance Sabotage: Other Resistance Factions gain an additional Card Slot.
+	- Added new equipment (only for Program operatives)
+		- Program Assault Rifle (8-10 dmg)
+		- Program Sniper Rifle (10-12 dmg)
+		- Program Shotgun (10-12 dmg)
+		- Program Shadowkeeper (4-6 dmg, no Shadowfall)
+		- Cosmetic Silencer (for those who like the look of the suppressors but don't like recheaters)
+	- Added Encyclopedia entries for the Program
 - Removed Rising Tides classes from the class decks (cannot be gained normally)
 - Removed Extinction Event from Gatherer Ability Tree
-    - Moved Unwilling Conduits up as replacement
-    - Added Psionic Lance to fill Unwilling Conduits' spot
+	- Moved Unwilling Conduits up as replacement
+	- Added Psionic Lance to fill Unwilling Conduits' spot
 - Fixed several bugs related to abilities still being able to be cast after death (Psionic Storm, Six Paths of Pain)
 - Swapped the position of Six Paths of Pain and Knowledge of Power on Gatherer Ability Tree
 - Scoped And Dropped now triggers off of kills made by pistols and Kubikuri
