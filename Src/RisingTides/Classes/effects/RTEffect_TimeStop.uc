@@ -21,7 +21,6 @@ simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffe
 	UnitState = XComGameState_Unit(kNewTargetState);
 	TimeStopEffectState = RTGameState_TimeStopEffect(NewEffectState);
 	TimeStopEffectState.PreventedDamageValues.Length = 0;
-	TimeStopEffectState.iShouldRecordCounter = 0;
 	bWasPreviouslyImmobilized = false;
 	m_aStatChanges.Length = 0;
 
@@ -157,56 +156,25 @@ simulated function OnEffectRemoved(const out EffectAppliedData ApplyEffectParame
 
 }
 
-function bool TimeStopTicked(X2Effect_Persistent PersistentEffect, const out EffectAppliedData ApplyEffectParameters, XComGameState_Effect kNewEffectState, XComGameState NewGameState, bool FirstApplication)
-{
-	/*
-	local XComGameState_Unit UnitState;
+/*function bool ChangeHitResultForTarget(	XComGameState_Effect EffectState, XComGameState_Unit Attacker, XComGameState_Unit TargetUnit, 
+										XComGameState_Ability AbilityState, bool bIsPrimaryTarget, const EAbilityHitResult CurrentResult, out EAbilityHitResult NewHitResult) {
+	local X2AbilityToHitCalc_StandardAim AttackToHit;
+	local RTGameState_TimeStopEffect TimeStopEffectState;
+	local RTEffect_TimeStopDamage TimeStopDamageEffect;
 
-	UnitState = XComGameState_Unit(NewGameState.GetGameStateForObjectID(ApplyEffectParameters.TargetStateObjectRef.ObjectID));
-	if (UnitState == none)
-		UnitState = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(ApplyEffectParameters.TargetStateObjectRef.ObjectID));
-
-	if (UnitState != none)
-	{
-		//The unit remains stunned if they still have more action points to spend being stunned.
-		//The unit also remains "stunned" through one more turn, if the turn's action points have been consumed entirely by the stun.
-		//In the latter case, the effect will be removed at the beginning of the next turn, just before the unit is able to act.
-		//(This prevents one-turn stuns from looking like they "did nothing", when in fact they consumed exactly one turn of actions.)
-		//-btopp 2015-09-21
-
-		if(IsTickEveryAction(UnitState))
-		{
-			UnitState = XComGameState_Unit(NewGameState.CreateStateObject(UnitState.Class, UnitState.ObjectID));
-			UnitState.StunnedActionPoints--;
-
-			if(UnitState.StunnedActionPoints == 0)
-			{
-				// give them an action point back so they can move immediately
-				UnitState.StunnedThisTurn = 0;
-				UnitState.ActionPoints.AddItem(class'X2CharacterTemplateManager'.default.StandardActionPoint);
-			}
-			NewGameState.AddStateObject(UnitState);
-		}
-
-		if (UnitState.StunnedActionPoints > 0)
-		{
-			return false;
-		}
-		else if (UnitState.StunnedActionPoints == 0
-			&& UnitState.NumAllActionPoints() == 0
-			&& !UnitState.GetMyTemplate().bCanTickEffectsEveryAction) // allow the stun to complete anytime if it is ticking per-action
-		{
-			return false;
-		}
+	TimeStopEffectState = RTGameState_TimeStopEffect(EffectState);
+	if(TimeStopEffectState == none) {
+		`RTLOG("TimeStopEffectState not found for ChangeHitResultForTarget!");
+		return false;
 	}
 
-	*/
+	if(TimeStopEffectState.bCrit) {
+		NewHitResult = eHit_Crit;
+		return true;
+	}
+
 	return false;
-
-
-}
-
-
+}*/
 
 function int GetDefendingDamageModifier(XComGameState_Effect EffectState, XComGameState_Unit Attacker, Damageable TargetDamageable, XComGameState_Ability AbilityState, 
 							const out EffectAppliedData AppliedData, const int CurrentDamage, X2Effect_ApplyWeaponDamage WeaponDamageEffect, optional XComGameState NewGameState) {
@@ -246,37 +214,37 @@ function int GetDefendingDamageModifier(XComGameState_Effect EffectState, XComGa
 		return -(CurrentDamage);
 
 	// record WeaponDamageValues
-	if(TimeStopEffectState.bShouldRecordDamageValue){
+	if(NewGameState != none) {
 		`RTLOG("Recording Weapon Damage Value");
 
 		TotalWeaponDamageValue = SetTotalWeaponDamageValue(CurrentDamage, WeaponDamageEffect.EffectDamageValue);
 		TimeStopEffectState.PreventedDamageValues.AddItem(TotalWeaponDamageValue);
 
-		`RTLOG("Logging,");
-		`LOG("PreventedDamageValues.Length = " @ TimeStopEffectState.PreventedDamageValues.Length);
+		`RTLOG("Logging...");
+		`RTLOG("PreventedDamageValues.Length = " @ TimeStopEffectState.PreventedDamageValues.Length);
 		for(i = 0; i < TimeStopEffectState.PreventedDamageValues.Length; i++) {
-			`LOG("TimeStopEffectState.PreventedDamageValues["@i@"].DamageType = " @ TimeStopEffectState.PreventedDamageValues[i].DamageType);
+			`LOG("TimeStopEffectState.PreventedDamageValues["@i@"] = " @ `RTS.DamageToString(TimeStopEffectState.PreventedDamageValues[i]));
 		}
 		`RTLOG("Time Stop has negated " @ TimeStopEffectState.GetFinalDamageValue().Damage @ " damage so far! This time, it was of type " @ TimeStopEffectState.PreventedDamageValues[TimeStopEffectState.PreventedDamageValues.length-1].DamageType @"!");
 
 		// record crit //TODO: figure out how to force crit damage popup
 		if(AppliedData.AbilityResultContext.HitResult == eHit_Crit)
 			TimeStopEffectState.bCrit = true;
-		TimeStopEffectState.bShouldRecordDamageValue = false;
+	
+		return -(CurrentDamage);
 	} else {
 		`RTLOG("TimeStopEffectState.GetDefendingDamageModifier was told not to record a damage value.");
 		return 0;
 	}
-	return -(CurrentDamage);
 }
 
 simulated function WeaponDamageValue SetTotalWeaponDamageValue(int CurrentDamage, WeaponDamageValue WeaponDamageValue) {
 	local WeaponDamageValue TotalWeaponDamageValue;
 
-	TotalWeaponDamageValue.Damage = CurrentDamage + WeaponDamageValue.Damage;
+	TotalWeaponDamageValue.Damage = CurrentDamage + WeaponDamageValue.Damage; // why?
 	TotalWeaponDamageValue.Spread = 0;
 	TotalWeaponDamageValue.PlusOne = 0;
-	TotalWeaponDamageValue.Crit = 0;
+	TotalWeaponDamageValue.Crit = WeaponDamageValue.Crit;
 	TotalWeaponDamageValue.Pierce =  WeaponDamageValue.Pierce;
 	TotalWeaponDamageValue.Rupture = WeaponDamageValue.Rupture;
 	TotalWeaponDamageValue.Shred = WeaponDamageValue.Shred;

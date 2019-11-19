@@ -31,10 +31,13 @@ defaultproperties
 /// create without the content installed. Subsequent saves will record that the content was installed.
 /// </summary>
 static event OnLoadedSavedGame() {
+	`RTLOG("OnLoadedSavedGame");
 	class'RTGameState_ProgramFaction'.static.InitFaction();
 }
 
 static event OnLoadedSavedGameToStrategy() {
+	`RTLOG("OnLoadedSavedGameToStrategy");
+	class'RTGameState_ProgramFaction'.static.InitFaction();
 	HandleModUpdate();
 }
 

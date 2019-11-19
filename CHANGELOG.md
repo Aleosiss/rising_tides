@@ -1,3 +1,9 @@
+2.1.7:
+- Fixed Unwavering Resolve visualizing in FOW
+- Clean up Time Stop code
+- Fix regression where adding the mod to an in-progress campaign would not activate the Program
+- Add command 'RT_ForceInitFaction' to handle old cases.
+
 2.1.6:
 - Fixed issue where new Covert Actions (Grant Favor, Call in Favor) were not being created properly.
 - Increased maximum possible chance of getting a Templar Ambush risk to 100% from 50%. 
