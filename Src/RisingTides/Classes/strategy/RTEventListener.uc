@@ -62,6 +62,10 @@ static function EventListenerReturn OnOverrideFocus(Object EventData, Object Eve
 	UnitState = XComGameState_Unit(EventSource);
 	FocusState = UnitState.GetTemplarFocusEffectState();
 
+	if(!`CONFIG.HostileTemplarFocusUIEnabled) {
+		return ELR_NoInterrupt;
+	}
+
 	if (UnitState.HasSoldierAbility('TemplarFocus') && FocusState != none)
 	{
 		Tuple.Data[0].b = true;
