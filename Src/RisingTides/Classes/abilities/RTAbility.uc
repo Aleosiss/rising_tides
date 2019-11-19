@@ -397,8 +397,6 @@ defaultproperties
 	RTMindControlEffectName = "MindControl"
 	RTMindControlTemplateName = "RTMindControl"
 	DefaultPsionicDamageType = (Damage=0, Spread=0, Rupture=0, DamageType="Psi")
-	
-
 
 	Begin Object Class=X2Condition_UnitProperty Name=DefaultLivingFriendlyUnitOnlyProperty
 		ExcludeAlive=false

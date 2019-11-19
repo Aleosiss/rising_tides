@@ -8,8 +8,7 @@
 class RTGameState_TimeStopEffect extends RTGameState_Effect;
 
 var array<WeaponDamageValue> PreventedDamageValues;
-var int iShouldRecordCounter;
-var bool bExplosive, bCrit, bShouldRecordDamageValue;
+var bool bExplosive, bCrit;
 
 
 simulated function WeaponDamageValue GetFinalDamageValue() {
@@ -17,11 +16,7 @@ simulated function WeaponDamageValue GetFinalDamageValue() {
 	local WeaponDamageValue FinalDamageValue, IteratorDamageValue;
 
 	if(PreventedDamageValues.Length == 0) {
-	return FinalDamageValue;
-	}
-	if(PreventedDamageValues.Length == 1) {
-	PreventedDamageValues[0].Tag = 'TimeStopDamageEffect';
-	return PreventedDamageValues[0];
+		return FinalDamageValue;
 	}
 
 	foreach PreventedDamageValues(IteratorDamageValue) {
@@ -30,6 +25,7 @@ simulated function WeaponDamageValue GetFinalDamageValue() {
 		FinalDamageValue.Pierce += IteratorDamageValue.Pierce;
 		FinalDamageValue.Rupture += IteratorDamageValue.Rupture;
 		FinalDamageValue.Shred += IteratorDamageValue.Shred;
+		FinalDamageValue.Crit += IteratorDamageValue.Crit;
 
 	}
 
@@ -41,5 +37,5 @@ simulated function WeaponDamageValue GetFinalDamageValue() {
 
 DefaultProperties
 {
-	iShouldRecordCounter = 0
+
 }

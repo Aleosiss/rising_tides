@@ -31,10 +31,13 @@ defaultproperties
 /// create without the content installed. Subsequent saves will record that the content was installed.
 /// </summary>
 static event OnLoadedSavedGame() {
+	`RTLOG("OnLoadedSavedGame");
 	class'RTGameState_ProgramFaction'.static.InitFaction();
 }
 
 static event OnLoadedSavedGameToStrategy() {
+	`RTLOG("OnLoadedSavedGameToStrategy");
+	class'RTGameState_ProgramFaction'.static.InitFaction();
 	HandleModUpdate();
 }
 
@@ -81,7 +84,12 @@ static event OnPostTemplatesCreated()
 	AddProgramFactionCovertActions();
 	AddProgramAttachmentTemplates();
 	PatchTemplarCharacterTemplatesForAI();
+	PatchTemplarFocusVisualization();
 	//PrintAbilityTemplates();
+}
+
+static function PatchTemplarFocusVisualization() {
+	class'RTAbility_TemplarAbilitySet'.static.PatchTemplarFocusVisualization();
 }
 
 static function PrintAbilityTemplates() {

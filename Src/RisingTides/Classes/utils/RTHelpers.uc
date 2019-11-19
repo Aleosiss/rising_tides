@@ -420,3 +420,11 @@ static function name getSuffixForTier(int iTier) {
 static function name concatName(name a, name b) {
 	return name(string(a) $ string(b));
 }
+
+static function String DamageToString(WeaponDamageValue damageValue) {
+	local String p1, p2;
+	p1 = "(Damage = " $ damageValue.Damage $ ", Spread = " $ damageValue.Spread $ ", PlusOne = " $ damageValue.PlusOne $ ", Crit = " $ damageValue.Crit $ ", Pierce = " $ damageValue.Pierce $ ", ";
+	p2 = "Rupture = " $ damageValue.Rupture $ ", Shred = " $ damageValue.Shred $ ", Tag = " $ damageValue.Tag $ ", DamageType = " $ damageValue.DamageType $ ")";
+
+	return p1 $ p2;
+}

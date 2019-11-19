@@ -50,7 +50,7 @@ static function X2AbilityTemplate RTUnwaveringResolve()
 	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
 	Template.BuildVisualizationFn = UnwaveringResolve_BuildVisualization;
 	Template.MergeVisualizationFn = DesiredVisualizationBlock_MergeVisualization;
-	Template.bShowActivation = true;
+	Template.bShowActivation = false;
 	Template.bFrameEvenWhenUnitIsHidden = false;
 	
 	Template.AdditionalAbilities.AddItem('RTUnwaveringResolveIcon');
@@ -61,9 +61,15 @@ static function X2AbilityTemplate RTUnwaveringResolve()
 simulated function UnwaveringResolve_BuildVisualization(XComGameState VisualizeGameState)
 {
 	local XComGameStateHistory History;
-	local XComGameStateContext_Ability  Context;
+	local XComGameStateContext_Ability Context;
 	local StateObjectReference InteractingUnitRef;
-	local XComGameState_Unit	UnitState;
+	local XComGameState_Unit UnitState;
+	local XComGameState_Ability Ability;
+	local X2AbilityTemplate AbilityTemplate;
+
+	local VisualizationActionMetadata ActionMetadata, EmptyTrack;
+
+	local X2Action_PlaySoundAndFlyOver SoundAndFlyOver;
 
 	History = `XCOMHISTORY;
 
@@ -71,14 +77,29 @@ simulated function UnwaveringResolve_BuildVisualization(XComGameState VisualizeG
 	InteractingUnitRef = Context.InputContext.SourceObject;
 	UnitState = XComGameState_Unit(History.GetGameStateForObjectID(InteractingUnitRef.ObjectID, eReturnType_Reference, VisualizeGameState.HistoryIndex - 1));
 
-	if(UnitState.GetTeam() == eTeam_Alien) {
+	Ability = XComGameState_Ability(History.GetGameStateForObjectID(Context.InputContext.AbilityRef.ObjectID));
+	AbilityTemplate = Ability.GetMyTemplate();
+
+	//Configure the visualization track for the shooter
+	//****************************************************************************************
+	ActionMetadata = EmptyTrack;
+	ActionMetadata.StateObject_OldState = History.GetGameStateForObjectID(Context.InputContext.SourceObject.ObjectID, eReturnType_Reference, VisualizeGameState.HistoryIndex - 1);
+	ActionMetadata.StateObject_NewState = VisualizeGameState.GetGameStateForObjectID(Context.InputContext.SourceObject.ObjectID);
+	ActionMetadata.VisualizeActor = History.GetVisualizer(Context.InputContext.SourceObject.ObjectID);
+
+
+	if(UnitState.GetTeam() != eTeam_XCom) {
 		if(class'RTCondition_VisibleToPlayer'.static.IsTargetVisibleToLocalPlayer(UnitState.GetReference())) {
-			TypicalAbility_BuildVisualization(VisualizeGameState);
+			`RTLOG("Unwavering Resolve: Visualizing, unit is visible!");
+			SoundAndFlyOver = X2Action_PlaySoundAndFlyOver(class'X2Action_PlaySoundAndFlyOver'.static.AddToVisualizationTree(ActionMetadata, Context, false, ActionMetadata.LastActionAdded));
+			SoundAndFlyOver.SetSoundAndFlyOverParameters(None, AbilityTemplate.LocFlyOverText, '', eColor_Bad);
 		} else {
 			`RTLOG("Unwavering Resolve: Not visualizing, unit is not visible!");
 		}
 	} else {
-		TypicalAbility_BuildVisualization(VisualizeGameState);
+		`RTLOG("Unwavering Resolve: Visualizing, unit on XCOM!");
+		SoundAndFlyOver = X2Action_PlaySoundAndFlyOver(class'X2Action_PlaySoundAndFlyOver'.static.AddToVisualizationTree(ActionMetadata, Context, false, ActionMetadata.LastActionAdded));
+		SoundAndFlyOver.SetSoundAndFlyOverParameters(None, AbilityTemplate.LocFlyOverText, '', eColor_Good);
 	}
 }
 
@@ -477,4 +498,61 @@ function int TemplarExtraOrdnance_BonusWeaponAmmo(XComGameState_Unit UnitState, 
 		return default.TEMPLAR_PEON_EXTRA_GRENADES;
 
 	return 0;
+}
+
+static function PatchTemplarFocusVisualization() {
+	local name AbilityTemplateName;
+	local X2AbilityTemplate AbilityTemplate;
+	local array<X2AbilityTemplate> AbilityTemplates;
+	local X2AbilityTemplateManager AbilityTemplateMgr;
+	local array<name> AbilityTemplateNames;
+
+	local X2Effect_TemplarFocus	FocusEffect;
+	local X2Effect EffectTemplate;
+
+	`RTLOG("Patching Templar Focus X2AbiliyTemplate - changing visualization!");
+	AbilityTemplateMgr = class'X2AbilityTemplateManager'.static.GetAbilityTemplateManager();
+	AbilityTemplateMgr.GetTemplateNames(AbilityTemplateNames);
+	foreach AbilityTemplateNames(AbilityTemplateName) {
+		AbilityTemplates.Length = 0;
+		AbilityTemplateMgr.FindAbilityTemplateAllDifficulties(AbilityTemplateName, AbilityTemplates);
+
+		foreach AbilityTemplates(AbilityTemplate) {
+
+			if(AbilityTemplate.DataName != 'TemplarFocus')
+				continue;
+
+			foreach AbilityTemplate.AbilityTargetEffects(EffectTemplate) {
+				FocusEffect = X2Effect_TemplarFocus(EffectTemplate);
+				if(FocusEffect == none) {
+					continue;
+				}
+
+				FocusEffect.EffectSyncVisualizationFn = PatchedFocusEffectVisualization;
+				FocusEffect.VisualizationFn = PatchedFocusEffectVisualization;
+			}
+			
+		}
+	}
+}
+
+static function PatchedFocusEffectVisualization(XComGameState VisualizeGameState, out VisualizationActionMetadata ActionMetadata, const name EffectApplyResult)
+{
+	local XComGameState_Unit UnitState;
+	local XComGameState_Effect_TemplarFocus FocusState;
+
+	`RTLOG("Patched Focus Effect Visualization invoked!");
+
+	UnitState = XComGameState_Unit(ActionMetadata.StateObject_NewState);
+	if( UnitState != None )
+	{
+		FocusState = UnitState.GetTemplarFocusEffectState();
+		if( FocusState != None )
+		{
+			if(class'RTCondition_VisibleToPlayer'.static.IsTargetVisibleToLocalPlayer(UnitState.GetReference())) {
+				class'X2Ability_TemplarAbilitySet'.static.PlayFocusFX(VisualizeGameState, ActionMetadata, "ADD_StartFocus", FocusState.FocusLevel);
+			}
+			class'X2Ability_TemplarAbilitySet'.static.UpdateFocusUI(VisualizeGameState, ActionMetadata);
+		}
+	}
 }
