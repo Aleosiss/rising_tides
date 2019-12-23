@@ -360,7 +360,10 @@ function EventListenerReturn OnUpdateAuraCheck(Object EventData, Object EventSou
 	local XComGameState NewGameState;
 
 	UpdatedUnitState = XComGameState_Unit(EventData);
-	`assert(UpdatedUnitState != none);
+	if(UpdatedUnitState == none) {
+		`RTLOG("OnUpdateAuraCheck received invalid EventData, expected XComGameState_Unit, received " $ EventData.class.Name $ ", returning ELR_NoInterrupt", true, false);
+		return ELR_NoInterrupt;
+	}
 
 	if (ApplyEffectParameters.TargetStateObjectRef.ObjectID == UpdatedUnitState.ObjectID)
 	{
