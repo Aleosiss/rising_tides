@@ -1439,5 +1439,164 @@ exec function RT_ForceInitFaction() {
 }
 
 exec function rtdb() {
+	local XComGameState StartState;
+	local XComGameStateHistory History;
+
+	History = `XCOMHISTORY;
+	PurgeGameState();
+
+	StartState = History.GetStartState();
+	AddDefaultProgramOperativesToStartState(StartState);
+
 	`ConsoleCommand("open x2_obstaclecourse");
+}
+
+// Purge the GameState of any XComGameState_Unit or XComGameState_Item objects
+private static function PurgeGameState()
+{
+	local int i;
+	local array<int> arrObjectIDs;
+	local XComGameState_Unit Unit;
+	local XComGameState_Item Item;
+	local XComGameStateHistory LocalHistory;
+	local XComGameState StartState;
+
+	LocalHistory = `XCOMHISTORY;
+	StartState = LocalHistory.GetStartState();
+	if(StartState == none) {
+		return;
+	}
+
+	// Enumerate objects
+	foreach StartState.IterateByClassType(class'XComGameState_Unit', Unit)
+	{
+		arrObjectIDs.AddItem(Unit.ObjectID);
+	}
+	foreach StartState.IterateByClassType(class'XComGameState_Item', Item)
+	{
+		arrObjectIDs.AddItem(Item.ObjectID);
+	}
+	
+	// Purge objects
+	for(i = 0 ; i < arrObjectIDs.Length; ++i)
+	{
+		LocalHistory.PurgeObjectIDFromStartState(arrObjectIDs[i], false);
+	}
+
+	LocalHistory.UpdateStateObjectCache( );
+}
+
+/// <summary>
+/// AddDefaultSoldiersToStartState fills a given XComGameState with a set of soldiers intended to serve
+/// as default settings for the tactical game.
+/// </summary>
+/// <param name="StartState">The state that will be filled with default soldiers. Should be empty of other soldiers</param>
+static function AddDefaultProgramOperativesToStartState(XComGameState StartState, optional ETeam ePlayerTeam=eTeam_XCom)
+{
+	local XComGameState_Unit BuildUnit;
+	local XComGameState_Player TeamXComPlayer;
+	local int SoldierIndex;
+	local array<Name> GhostTemplateNames;
+	
+	if(StartState == none) {
+		`RTLOG("Warning: Start State was none. Returning early.", false, true);
+		return;
+	}
+
+	//Find the player associated with the player's team
+	foreach StartState.IterateByClassType(class'XComGameState_Player', TeamXComPlayer, eReturnType_Reference)
+	{
+		if( TeamXComPlayer != None && TeamXComPlayer.TeamFlag == ePlayerTeam )
+		{
+			break;
+		}
+	}
+	
+	GhostTemplateNames.AddItem('RTGhostBerserker');
+	GhostTemplateNames.AddItem('RTGhostMarksman');
+	GhostTemplateNames.AddItem('RTGhostGatherer');
+
+	for (SoldierIndex = 0; SoldierIndex < GhostTemplateNames.Length; ++SoldierIndex) {
+		BuildUnit = CreateRTOperative(GhostTemplateNames[SoldierIndex], StartState);
+		if( TeamXComPlayer != None )
+			BuildUnit.SetControllingPlayer( TeamXComPlayer.GetReference() );
+	}
+}
+
+private static function RTGameState_Unit CreateRTOperative(name GhostTemplateName, XComGameState StartState) {
+	local RTGameState_Unit UnitState;
+	local X2CharacterTemplate TempTemplate;
+	local RTCharacterTemplate CharTemplate;
+	//local X2DataTemplate IteratorTemplate;
+	local XComGameState_Item WeaponState;
+	//local name WeaponUpgradeName;
+	local X2CharacterTemplateManager CharMgr;
+
+	CharMgr = class'X2CharacterTemplateManager'.static.GetCharacterTemplateManager();
+	TempTemplate = CharMgr.FindCharacterTemplate(GhostTemplateName);
+	CharTemplate = RTCharacterTemplate(TempTemplate);
+	UnitState = RTGameState_Unit(CharTemplate.CreateInstanceFromTemplate(StartState));
+
+	UnitState.SetCountry(CharTemplate.DefaultAppearance.nmFlag);
+	UnitState.RankUpSoldier(StartState, CharTemplate.DefaultSoldierClass);
+	UnitState.ApplyInventoryLoadout(StartState, `RTS.concatName(CharTemplate.DefaultLoadout, `RTS.getSuffixForTier(3)));
+	UnitState.StartingRank = 1;
+	UnitState.SetUnitName(CharTemplate.strForcedFirstName, CharTemplate.strForcedLastName, CharTemplate.strForcedNickName);
+	UnitState.SetBackground(UnitState.GetMyTemplate().strCharacterBackgroundMale[0]); // the first background is the classified one, the second one is the unclassified one
+
+	WeaponState = UnitState.GetItemInSlot(eInvSlot_PrimaryWeapon);
+	WeaponState = XComGameState_Item(StartState.ModifyStateObject(class'XComGameState_Item', WeaponState.ObjectID));
+	ApplyWeaponUpgrades(GhostTemplateName, WeaponState);
+
+	`RTLOG(	"Creating Program Operative " $ UnitState.GetName(eNameType_Nick) $ 
+									", with ObjectID " $ UnitState.GetReference().ObjectID $
+									", and CharacterTemplateName " $ UnitState.GetMyTemplateName()
+						);
+
+	return UnitState;
+}
+
+private static function ApplyWeaponUpgrades(name GhostTemplateName, XComGameState_Item NewWeaponState) {
+	local X2WeaponUpgradeTemplate UpgradeTemplate;
+	local X2ItemTemplateManager ItemTemplateMgr;
+	local int idx;
+
+	ItemTemplateMgr = class'X2ItemTemplateManager'.static.GetItemTemplateManager();
+	NewWeaponState.WipeUpgradeTemplates();
+	switch(GhostTemplateName) {
+		case 'RTGhostBerserker':
+			for(idx = 0; idx < class'RTGameState_ProgramFaction'.default.BerserkerWeaponUpgrades.Length; idx++) {
+				UpgradeTemplate = X2WeaponUpgradeTemplate(ItemTemplateMgr.FindItemTemplate(class'RTGameState_ProgramFaction'.default.BerserkerWeaponUpgrades[idx]));
+				if (UpgradeTemplate != none) {
+					NewWeaponState.ApplyWeaponUpgradeTemplate(UpgradeTemplate, idx);
+				}
+			}
+			break;
+		case 'RTGhostMarksman':
+			NewWeaponState.Nickname = class'RTGameState_ProgramFaction'.default.WhisperWepName;
+			for(idx = 0; idx < class'RTGameState_ProgramFaction'.default.MarksmanWeaponUpgrades.Length; idx++) {
+				UpgradeTemplate = X2WeaponUpgradeTemplate(ItemTemplateMgr.FindItemTemplate(class'RTGameState_ProgramFaction'.default.MarksmanWeaponUpgrades[idx]));
+				if (UpgradeTemplate != none) {
+					NewWeaponState.ApplyWeaponUpgradeTemplate(UpgradeTemplate, idx);
+				}
+			}
+			break;
+		case 'RTGhostGatherer':
+			for(idx = 0; idx < class'RTGameState_ProgramFaction'.default.GathererWeaponUpgrades.Length; idx++) {
+				UpgradeTemplate = X2WeaponUpgradeTemplate(ItemTemplateMgr.FindItemTemplate(class'RTGameState_ProgramFaction'.default.GathererWeaponUpgrades[idx]));
+				if (UpgradeTemplate != none) {
+					NewWeaponState.ApplyWeaponUpgradeTemplate(UpgradeTemplate, idx);
+				}
+			}
+			break;
+		case 'RTGhostOperator': // operator uses gatherer equipment, although it might be more accurate in reverse...
+			for(idx = 0; idx < class'RTGameState_ProgramFaction'.default.GathererWeaponUpgrades.Length; idx++) {
+				UpgradeTemplate = X2WeaponUpgradeTemplate(ItemTemplateMgr.FindItemTemplate(class'RTGameState_ProgramFaction'.default.GathererWeaponUpgrades[idx]));
+				if (UpgradeTemplate != none) {
+					NewWeaponState.ApplyWeaponUpgradeTemplate(UpgradeTemplate, idx);
+				}
+			}
+			break;
+
+	}
 }

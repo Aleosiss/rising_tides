@@ -24,7 +24,7 @@ var config String screen_path;
 
 defaultproperties
 {
-	Version=(Major=2, Minor=1, Patch=7)
+	Version=(Major=2, Minor=1, Patch=9)
 }
 
 /// <summary>
@@ -89,6 +89,7 @@ static event OnPostTemplatesCreated()
 	if(default.TemplarFocusVisualizationPatchEnabled) {
 		PatchTemplarFocusVisualization();
 	}
+
 	//PrintAbilityTemplates();
 }
 
@@ -99,11 +100,8 @@ static function PatchTemplarFocusVisualization() {
 static function PrintAbilityTemplates() {
 	local array<name> AbilityTemplateNames;
 	local name AbilityTemplateName;
-	local X2AbilityTemplate AbilityTemplate;
-	local array<X2AbilityTemplate> AbilityTemplates;
 	local X2AbilityTemplateManager AbilityTemplateMgr;
 	local X2AbilityCost Cost;
-	local X2AbilityCost_ActionPoints ActionPointCost;
 
 	`RTLOG("PrintAbilityTemplates");
 	AbilityTemplateMgr = class'X2AbilityTemplateManager'.static.GetAbilityTemplateManager();
