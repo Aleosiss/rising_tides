@@ -1442,6 +1442,8 @@ exec function rtdb() {
 	local XComGameState StartState;
 	local XComGameStateHistory History;
 
+	InitHistory();
+
 	History = `XCOMHISTORY;
 	PurgeGameState();
 
@@ -1449,6 +1451,28 @@ exec function rtdb() {
 	AddDefaultProgramOperativesToStartState(StartState);
 
 	`ConsoleCommand("open x2_obstaclecourse");
+}
+
+private static function InitHistory()
+{
+	local XComOnlineProfileSettings Profile;
+	local XComGameStateContext_TacticalGameRule TacticalStartContext;
+	local XComGameState TacticalStartState;
+	local XComGameStateHistory History;
+
+	Profile = `XPROFILESETTINGS;
+
+	History = `XCOMHISTORY;
+	History.ResetHistory(, false);
+
+	// Grab the start state from the profile
+	TacticalStartContext = XComGameStateContext_TacticalGameRule(class'XComGameStateContext_TacticalGameRule'.static.CreateXComGameStateContext());
+	TacticalStartContext.GameRuleType = eGameRule_TacticalGameStart;
+	TacticalStartState = History.CreateNewGameState(false, TacticalStartContext);
+
+	Profile.ReadTacticalGameStartState(TacticalStartState);
+
+	History.AddGameStateToHistory(TacticalStartState);
 }
 
 // Purge the GameState of any XComGameState_Unit or XComGameState_Item objects
@@ -1599,4 +1623,9 @@ private static function ApplyWeaponUpgrades(name GhostTemplateName, XComGameStat
 			break;
 
 	}
+}
+
+exec function RT_Patch219() {
+	`DLCINFO.AddProgramTechs();
+	`DLCINFO.ReshowProgramDroneRewardPopup();
 }

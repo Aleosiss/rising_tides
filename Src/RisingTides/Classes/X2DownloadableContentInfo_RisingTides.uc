@@ -18,6 +18,7 @@ var config array<name> TemplarUnitNames;
 var config bool MindWrackKillsRulers;
 var config bool HostileTemplarFocusUIEnabled;
 var config bool TemplarFocusVisualizationPatchEnabled;
+var config array<name> ProgramTechs;
 
 // weak ref to the screen (I just copied this from RJ and don't know if it's really necessary)
 var config String screen_path;
@@ -41,6 +42,9 @@ static event OnLoadedSavedGameToStrategy() {
 	`RTLOG("OnLoadedSavedGameToStrategy");
 	class'RTGameState_ProgramFaction'.static.InitFaction();
 	HandleModUpdate();
+	if(AddProgramTechs()) {
+		ReshowProgramDroneRewardPopup();
+	}
 }
 
 private static function HandleModUpdate() {
@@ -345,6 +349,75 @@ static function int GetVersionInt(optional bool bIgnorePatches) {
 static function RTModVersion GetModVersion() {
 	return default.Version;
 }
+
+static function bool AddProgramTechs() {
+	local XComGameStateHistory History;
+	local XComGameState_Tech TechState;
+	local XComGameState NewGameState;
+	local X2StrategyElementTemplateManager TechMgr;
+	local X2TechTemplate TechTemplate;
+	local array<name> TemplatesToAdd;
+	local name TemplateName;
+	local int idx;
+
+	History = `XCOMHISTORY;
+	TechMgr = class'X2StrategyElementTemplateManager'.static.GetStrategyElementTemplateManager();
+
+	TemplatesToAdd = default.ProgramTechs;
+	foreach History.IterateByClassType(class'XComGameState_Tech', TechState) {
+		if(TemplatesToAdd.Find(TechState.GetMyTemplateName()) != INDEX_NONE) {
+			TemplatesToAdd.RemoveItem(TechState.GetMyTemplateName());
+		}
+	}
+
+	if(TemplatesToAdd.Length > 0) {
+		NewGameState = `CreateChangeState("Adding Program Techs to in-progress campaign!");
+		foreach TemplatesToAdd(TemplateName) {
+			`RTLOG(TemplateName $ " was missing from the campaign. Adding it...");
+			TechTemplate = X2TechTemplate(TechMgr.FindStrategyElementTemplate(TemplateName));
+			if (TechTemplate.RewardDeck != '') {
+				class'XComGameState_Tech'.static.SetUpTechRewardDeck(TechTemplate);
+			}
+			NewGameState.CreateNewStateObject(class'XComGameState_Tech', TechTemplate);
+			
+		}
+
+		`XCOMGAME.GameRuleset.SubmitGameState(NewGameState);
+		return true;
+	}
+	return false;
+}
+
+static function ReshowProgramDroneRewardPopup() {
+	local DynamicPropertySet PropertySet;
+	local XComGameState_Tech TechState;
+	local XComGameStateHistory History;
+	local RTGameState_ProgramFaction ProgramState;
+	local XComGameState NewGameState;
+
+	History = `XCOMHISTORY;
+
+	ProgramState = `RTS.GetProgramState();
+	if(!ProgramState.TemplarQuestlineSucceeded()) {
+		`RTLOG("Templar Questline has not finished successfully. Not showing popup. Stage was " $ ProgramState.getTemplarQuestlineStage() $ ", and failure flag was set to " $ ProgramState.hasFailedTemplarQuestline(), false, true);
+		return;
+	}
+
+	`RTLOG("ReshowProgramDroneRewardPopup called and passed validation. You should see a popup in Strategy.");
+
+	foreach History.IterateByClassType(class'XComGameState_Tech', TechState) {
+		if(TechState.GetMyTemplateName() == 'RTBuildProgramDrone') {
+			break;
+		}
+	}
+
+	// Program Drone Blueprints | eAlert_ProvingGroundProjectAvailable
+	class'X2StrategyGameRulesetDataStructures'.static.BuildDynamicPropertySet(PropertySet, 'UIAlert', 'eAlert_ProvingGroundProjectAvailable', none, false, true, true, true);
+	class'X2StrategyGameRulesetDataStructures'.static.AddDynamicStringProperty(PropertySet, 'SoundToPlay', "Geoscape_CrewMemberLevelledUp");
+	class'X2StrategyGameRulesetDataStructures'.static.AddDynamicIntProperty(PropertySet, 'TechRef', TechState.ObjectID);
+	`HQPRES.QueueDynamicPopup(PropertySet);
+}
+
 
 static function bool AbilityTagExpandHandler(string InString, out string OutString)
 {
