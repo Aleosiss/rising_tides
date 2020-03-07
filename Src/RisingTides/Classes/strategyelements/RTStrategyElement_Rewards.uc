@@ -691,6 +691,11 @@ static function GiveTemplarQuestlineCompleteReward(XComGameState NewGameState, X
 	ProgramState = `RTS.GetNewProgramState(NewGameState);
 	ProgramState.ModifyAvailableProgramFavors(30);
 	ProgramState.IncrementTemplarQuestlineStage(); // should be 4 now
+	if(ProgramState.getTemplarQuestlineStage() != 4) {
+		`RTLOG("Something is very wrong, the questline stage was NOT four when giving the questline reward?");
+		ProgramState.SetTemplarQuestlineStage(4);
+	}
+
 	
 	TemplarState = `RTS.GetTemplarFactionState();
 	EliminateFaction(NewGameState, TemplarState);

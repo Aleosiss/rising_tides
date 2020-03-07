@@ -1216,6 +1216,10 @@ function IncrementTemplarQuestlineStage() {
 	iTemplarQuestlineStage++;
 }
 
+function SetTemplarQuestlineStage(int value) {
+	iTemplarQuestlineStage = value;
+}
+
 function int getTemplarQuestlineStage() {
 	return iTemplarQuestlineStage;
 }
