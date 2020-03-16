@@ -30,6 +30,12 @@ function HandleSrcSubdirectories([string] $srcDir) {
     return $files
 }
 
+function GetOriginalFilePaths([string] $srcDir) {
+    $files = Get-ChildItem -Path $srcDir -Recurse -Filter "*.uc"
+
+    return $files.FullName
+}
+
 function CheckErrorCode([string] $message) {
     if ($LASTEXITCODE -ne 0) {
         $stopwatch.stop();
@@ -63,7 +69,7 @@ function SuccessMessage($message)
 # to the copies. If you try to jump to these files (e.g. by tying this output to the build commands in your editor)
 # you'll be editting the copies, which will then be overwritten the next time you build with the sources in your mod folder
 # that haven't been changed.
-function Invoke-Make([string] $makeCmd, [string] $makeFlags, [string] $sdkPath, [string] $modSrcRoot) {
+function Invoke-Make([string] $makeCmd, [string] $makeFlags, [string] $sdkPath, [string] $modSrcRoot, [string[]] $originalFilePaths)  {
     # Create a ProcessStartInfo object to hold the details of the make command, its arguments, and set up
     # stdout/stderr redirection.
     $pinfo = New-Object System.Diagnostics.ProcessStartInfo
@@ -81,6 +87,7 @@ function Invoke-Make([string] $makeCmd, [string] $makeFlags, [string] $sdkPath, 
     $messageData = New-Object psobject -property @{
         developmentDirectory = $developmentDirectory;
         modSrcRoot = $modSrcRoot
+        originalFilePaths = $originalFilePaths
     }
 
     # We need another object for the Exited event to set a flag we can monitor from this function.
@@ -93,14 +100,15 @@ function Invoke-Make([string] $makeCmd, [string] $makeFlags, [string] $sdkPath, 
         # Match warning/error lines
         $messagePattern = "^(.*)\(([0-9]*)\) : (.*)$"
         if (($outTxt -Match "Error|Warning") -And ($outTxt -Match $messagePattern)) {
-            # And just do a regex replace on the sdk Development directory with the mod src directory.
-            # The pattern needs escaping to avoid backslashes in the path being interpreted as regex escapes, etc.
-            $pattern = [regex]::Escape($event.MessageData.developmentDirectory)
-            # n.b. -Replace is case insensitive
-            $replacementTxt = $outtxt -Replace $pattern, $event.MessageData.modSrcRoot
+            $pattern = [regex]::Escape($outTxt.split("(")[0])
+
+            [string]$searchTxt = $outTxt.split("(")[0]
+            [string]$searchTxt = [System.IO.Path]::GetFileName($searchTxt)
+            $filePath = ($event.MessageData.originalFilePaths | Where-Object { $_ -match $searchTxt})
+            $replacementTxt = $outtxt -Replace $pattern, "$filePath"
             $outTxt = $replacementTxt -Replace $messagePattern, '$1:$2 : $3'
         }
-
+ 
         $summPattern = "^(Success|Failure) - ([0-9]+) error\(s\), ([0-9]+) warning\(s\) \(([0-9]+) Unique Errors, ([0-9]+) Unique Warnings\)"
         if (-Not ($outTxt -Match "Warning/Error Summary") -And $outTxt -Match "Warning|Error") {
             if ($outTxt -Match $summPattern) {
@@ -394,6 +402,7 @@ StageDirectory "Localization" $modSrcRoot $stagingPath
 StageDirectory "Src" $modSrcRoot $stagingPath
 
 $stagingClassPath = "{0}/Src/{1}/Classes" -f $stagingPath, $modNameCanonical
+$originalFilePaths = GetOriginalFilePaths $modSrcRoot
 $rootLevelFiles = HandleSrcSubdirectories $stagingClassPath
 New-Item "$stagingPath/Script" -ItemType Directory
 
@@ -456,7 +465,7 @@ CheckErrorCode "Failed to compile the base game scripts. This probably isn't a p
 
 # build the mod's scripts
 Write-Host "Compiling mod scripts..."
-Invoke-Make "$sdkPath/binaries/Win64/XComGame.com" "make -nopause -debug -mods $modNameCanonical $stagingPath" $sdkPath $modSrcRoot
+Invoke-Make "$sdkPath/binaries/Win64/XComGame.com" "make -nopause -debug -mods $modNameCanonical $stagingPath" $sdkPath $modSrcRoot $originalFilePaths
 CheckErrorCode "Failed to compile mod scripts."
 Write-Host "Compiled."
 
