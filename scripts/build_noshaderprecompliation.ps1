@@ -63,7 +63,7 @@ function SuccessMessage($message)
 # to the copies. If you try to jump to these files (e.g. by tying this output to the build commands in your editor)
 # you'll be editting the copies, which will then be overwritten the next time you build with the sources in your mod folder
 # that haven't been changed.
-function Invoke-Make([string] $makeCmd, [string] $makeFlags, [string] $sdkPath, [string] $modSrcRoot) {
+function Invoke-Make([string] $makeCmd, [string] $makeFlags, [string] $sdkPath, [string] $modSrcRoot, [string[]] $rootLevelFiles) {
     # Create a ProcessStartInfo object to hold the details of the make command, its arguments, and set up
     # stdout/stderr redirection.
     $pinfo = New-Object System.Diagnostics.ProcessStartInfo
@@ -81,6 +81,7 @@ function Invoke-Make([string] $makeCmd, [string] $makeFlags, [string] $sdkPath, 
     $messageData = New-Object psobject -property @{
         developmentDirectory = $developmentDirectory;
         modSrcRoot = $modSrcRoot
+        rootLevelFiles = $rootLevelFiles
     }
 
     # We need another object for the Exited event to set a flag we can monitor from this function.
@@ -97,8 +98,10 @@ function Invoke-Make([string] $makeCmd, [string] $makeFlags, [string] $sdkPath, 
             # The pattern needs escaping to avoid backslashes in the path being interpreted as regex escapes, etc.
             $pattern = [regex]::Escape($event.MessageData.developmentDirectory)
             # n.b. -Replace is case insensitive
-            $replacementTxt = $outtxt -Replace $pattern, $event.MessageData.modSrcRoot
-            $outTxt = $replacementTxt -Replace $messagePattern, '$1:$2 : $3'
+            $searchTxt = $outtxt -Replace $pattern, ""
+            if($event.MessageData.rootLevelFiles.contains($searchTxt)) {
+                $outTxt = $event.MessageData.rootLevelFiles($event.MessageData.rootLevelFiles.indexOf($searchTxt))
+            }
         }
 
         $summPattern = "^(Success|Failure) - ([0-9]+) error\(s\), ([0-9]+) warning\(s\) \(([0-9]+) Unique Errors, ([0-9]+) Unique Warnings\)"
@@ -456,7 +459,7 @@ CheckErrorCode "Failed to compile the base game scripts. This probably isn't a p
 
 # build the mod's scripts
 Write-Host "Compiling mod scripts..."
-Invoke-Make "$sdkPath/binaries/Win64/XComGame.com" "make -nopause -debug -mods $modNameCanonical $stagingPath" $sdkPath $modSrcRoot
+Invoke-Make "$sdkPath/binaries/Win64/XComGame.com" "make -nopause -debug -mods $modNameCanonical $stagingPath" $sdkPath $modSrcRoot $rootLevelFiles
 CheckErrorCode "Failed to compile mod scripts."
 Write-Host "Compiled."
 
