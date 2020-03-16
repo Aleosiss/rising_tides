@@ -24,7 +24,6 @@ var protected X2Actor_LineTarget LineActorReversed;
 function Init(AvailableAction InAction, int NewTargetIndex)
 {
 	local X2AbilityTemplate AbilityTemplate;
-	local float TileLength;
 
 	super.Init(InAction, NewTargetIndex);
 
@@ -405,16 +404,16 @@ private function GetEffectAOETiles(out array<TTile> TilesToBeDamaged)
 
 private function RemoveOutOfRangeTiles(out array<TTile> ValidTiles, Vector Location) {
 	local TTile IteratorTile;
-	local TTile TargetTile;
-	local Vector IteratorTileLocation;
-	local XComWorldData WorldData;
+//	local TTile TargetTile;
+//	local Vector IteratorTileLocation;
+	local XComWorldData LocalWorldData;
 	local float Dist;
 	local int Tiles;
 
-	WorldData = `XWORLD;
+	LocalWorldData = `XWORLD;
 	foreach ValidTiles(IteratorTile) {
-		Dist = VSize(Location - WorldData.GetPositionFromTileCoordinates(IteratorTile));
-		Tiles = Dist / WorldData.WORLD_StepSize;
+		Dist = VSize(Location - LocalWorldData.GetPositionFromTileCoordinates(IteratorTile));
+		Tiles = Dist / LocalWorldData.WORLD_StepSize;
 		if(Tiles > (LineLengthTiles / 2)) {
 			ValidTiles.RemoveItem(IteratorTile);
 		}

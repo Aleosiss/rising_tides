@@ -10,7 +10,6 @@ simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffe
 	local XComGameState_Unit TargetUnit;
 	local delegate<KillUnitExceptionFn> Exception;
 	local int KillAmount;
-	local int i;
 
 	TargetUnit = XComGameState_Unit(kNewTargetState);
 	KillAmount = 0; 

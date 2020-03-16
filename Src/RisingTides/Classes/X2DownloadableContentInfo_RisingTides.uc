@@ -105,7 +105,6 @@ static function PrintAbilityTemplates() {
 	local array<name> AbilityTemplateNames;
 	local name AbilityTemplateName;
 	local X2AbilityTemplateManager AbilityTemplateMgr;
-	local X2AbilityCost Cost;
 
 	`RTLOG("PrintAbilityTemplates");
 	AbilityTemplateMgr = class'X2AbilityTemplateManager'.static.GetAbilityTemplateManager();
@@ -358,7 +357,6 @@ static function bool AddProgramTechs() {
 	local X2TechTemplate TechTemplate;
 	local array<name> TemplatesToAdd;
 	local name TemplateName;
-	local int idx;
 
 	History = `XCOMHISTORY;
 	TechMgr = class'X2StrategyElementTemplateManager'.static.GetStrategyElementTemplateManager();
@@ -393,7 +391,6 @@ static function ReshowProgramDroneRewardPopup() {
 	local XComGameState_Tech TechState;
 	local XComGameStateHistory History;
 	local RTGameState_ProgramFaction ProgramState;
-	local XComGameState NewGameState;
 
 	History = `XCOMHISTORY;
 

@@ -1871,7 +1871,6 @@ simulated function DimensionalRiftStage1_BuildVisualization(XComGameState Visual
 	local X2Action_ExitCover ExitCoverAction;
 	local XComGameState_BaseObject Placeholder_old, Placeholder_new;
 	local XComGameState_Ability Ability;
-	local X2Action_Fire_CloseUnfinishedAnim CloseFireAction;
 
 	History = `XCOMHISTORY;
 
