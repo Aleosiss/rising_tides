@@ -840,30 +840,6 @@ ShortNames=[0]=""
 
 ;----------------------------------------------------------------------------------------------------------------------------
 
-; +AbilityAvailabilityCodes="AA_UnitNotMelded"
-AbilityAvailabilityStrings[89]="The Unit is not in the meld."
-
-; +AbilityAvailabilityCodes="AA_MeldEffect_Active"
-AbilityAvailabilityStrings[90]="The Unit is already melded."
-
-; +AbilityAvailabilityCodes="AA_UnitMustBeGhost"
-AbilityAvailabilityStrings[91]="The Unit is not a Program operative."
-
-; +AbilityAvailabilityCodes="AA_UnitAlreadyUsedAbility"
-AbilityAvailabilityStrings[92]="The Unit has already used that ability."
-
-; +AbilityAvailabilityCodes="AA_NotStackableEffect"
-AbilityAvailabilityStrings[93]="The effect is not stackable, see Mod Author"
-
-; +AbilityAvailabilityCodes="AA_NotEnoughStacks"
-AbilityAvailabilityStrings[94]="The ability needs more stacks to function."
-
-; +AbilityAvailabilityCodes="AA_TooManyStacks"
-AbilityAvailabilityStrings[95]="There are too many stacks for the ability to function."
-
-; +AbilityAvailabilityCodes="AA_EffectNotFound"
-AbilityAvailabilityStrings[96]="The effect was not found."
-
 ;----------------------------------------------------------------------------------------------------------------------------
 [RTUnwaveringResolve X2AbilityTemplate]
 LocFriendlyName="Unwavering Resolve"

@@ -1,4 +1,21 @@
 ;This is a text file.
+[X2DownloadableContentInfo_RisingTides]
+; +AbilityAvailabilityCodes="AA_UnitNotMelded"
+NewAbilityAvailabilityStrings="The Unit is not in the meld."
+; +AbilityAvailabilityCodes="AA_MeldEffect_Active"
+NewAbilityAvailabilityStrings="The Unit is already melded."
+; +AbilityAvailabilityCodes="AA_UnitMustBeGhost"
+NewAbilityAvailabilityStrings="The Unit is not a Program operative."
+; +AbilityAvailabilityCodes="AA_UnitAlreadyUsedAbility"
+NewAbilityAvailabilityStrings="The Unit has already used that ability."
+; +AbilityAvailabilityCodes="AA_NotStackableEffect"
+NewAbilityAvailabilityStrings="The effect is not stackable, see Mod Author"
+; +AbilityAvailabilityCodes="AA_NotEnoughStacks"
+NewAbilityAvailabilityStrings="The ability needs more stacks to function."
+; +AbilityAvailabilityCodes="AA_TooManyStacks"
+NewAbilityAvailabilityStrings="There are too many stacks for the ability to function."
+; +AbilityAvailabilityCodes="AA_EffectNotFound"
+NewAbilityAvailabilityStrings="The effect was not found."
 
 [RTEffect_ScopedAndDropped]
 RTFriendlyName="Scoped and Dropped"
