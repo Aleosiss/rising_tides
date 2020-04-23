@@ -211,6 +211,32 @@ simulated function InitScreen(XComPlayerController InitController, UIMovie InitM
 	StageFour.SetLocked();
 }
 
+private static function float CalculateQuestlineTrackerBarPercent(RTGameState_ProgramFaction ProgramState) {
+	local float percent;
+	local float barPercentPerStage, barPercentPerFavor;
+	local int iInfluence, iNumberOfFavorsCalledIn, iTotalQuestlineStages, iTotalFavorsRequired, iMaxFavorsForVis;
+
+	if(ProgramState.TemplarQuestlineSucceeded()) {
+		return 1;
+	} else {
+		iInfluence = Int(ProgramState.GetInfluence());
+		iTotalQuestlineStages = 4; // magic number
+		barPercentPerStage = 100 / iTotalQuestlineStages;
+
+		iNumberOfFavorsCalledIn = ProgramState.iNumberOfFavorsCalledIn;
+		iMaxFavorsForVis = class'RTGameState_ProgramFaction'.default.iNumberOfFavorsRequiredToIncreaseInfluence;
+		if(iNumberOfFavorsCalledIn > iMaxFavorsForVis) {
+			iNumberOfFavorsCalledIn = iMaxFavorsForVis;
+		}
+
+		iTotalFavorsRequired = iTotalQuestlineStages * class'RTGameState_ProgramFaction'.default.iNumberOfFavorsRequiredToIncreaseInfluence;
+		barPercentPerFavor = 100 / iTotalFavorsRequired;
+
+		percent = float(min((iInfluence * barPercentPerStage) + (iNumberOfFavorsCalledIn * barPercentPerFavor), 100)) * 0.01;
+		return percent;
+	}
+}
+
 simulated function PopulateData()
 {
 	local RTGameState_ProgramFaction ProgramState;
@@ -223,16 +249,15 @@ simulated function PopulateData()
 		return;
 	}
 
-	iQuestlineStage = ProgramState.getTemplarQuestlineStage();
-	bFailed = ProgramState.hasFailedTemplarQuestline();
-	
 	TitleHeader.SetText(m_strProgramFactionInfoHeaderText, m_strProgramFactionInfoDescriptionText);
 	TitleHeader.MC.FunctionVoid("realize");
 
-	// 0 = not started, 1-3 for CAs, 4 for Coven Assault Completed
-	QuestlineTrackerBar.SetPercent(min(iQuestlineStage * 25, 100) * 0.01);
+	QuestlineTrackerBar.SetPercent(CalculateQuestlineTrackerBarPercent(ProgramState));
 
+	iQuestlineStage = ProgramState.getTemplarQuestlineStage();
+	bFailed = ProgramState.hasFailedTemplarQuestline();
 	iTotalFavors = ProgramState.GetNumFavorsAvailable();
+	
 	if(ProgramState.IsOneSmallFavorAvailable()) {
 		iTotalFavors++; // this checks for the active favor waiting to be called in, which can only be set once per month via the card.
 		FavorCounter.SetAvailable();
