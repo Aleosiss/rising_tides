@@ -642,14 +642,14 @@ simulated function XComUnitPawn GetPawnArchetype( string strArchetype="", option
 {
 	local Object kPawn;
 	
-	`RTLOG("GetPawnArchetype for " $ self.GetName(eNameType_Nick) $ " ");
+	//`RTLOG("GetPawnArchetype for " $ self.GetName(eNameType_Nick) $ " ");
 
 	if(strArchetype == "")
 	{
 		strArchetype = GetMyTemplate().GetPawnArchetypeString(self, ReanimatedFromUnit);
 	}
 
-	`RTLOG("CP1: " $ strArchetype);
+	//`RTLOG("CP1: " $ strArchetype);
 
 	// backup plan
 	if(strArchetype == "") {
@@ -664,7 +664,7 @@ simulated function XComUnitPawn GetPawnArchetype( string strArchetype="", option
 				`RTLOG("Gender was not male or female, something is seriously wrong!", true);
 		}
 	}
-	`RTLOG("CP2: " $ strArchetype);
+	//`RTLOG("CP2: " $ strArchetype);
 
 	kPawn = `CONTENT.RequestGameArchetype(strArchetype);
 	if (kPawn != none && kPawn.IsA('XComUnitPawn'))

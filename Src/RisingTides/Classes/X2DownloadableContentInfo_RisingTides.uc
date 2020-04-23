@@ -568,7 +568,10 @@ static function UpdateAbilityAvailabilityStrings()
     local X2AbilityTemplateManager    AbilityTemplateManager;
 	local int                        i, idx;
 	
-	assert(default.NewAbilityAvailabilityCodes.length == default.NewAbilityAvailabilityStrings.length);
+	if(default.NewAbilityAvailabilityCodes.length != default.NewAbilityAvailabilityStrings.length) {
+		`RTLOG("Misconfiguration, mismatch between NewAbilityAvailabilityCodes and NewAbilityAvailabilityStrings! Can't add AvailabilityCodes!", false, true);
+		return;
+	}
 
     AbilityTemplateManager = X2AbilityTemplateManager(class'Engine'.static.FindClassDefaultObject("XComGame.X2AbilityTemplateManager"));
 

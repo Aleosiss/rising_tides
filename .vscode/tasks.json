@@ -29,7 +29,7 @@
         {
             "label": "publish",
             "type": "shell",
-            "command": "-file \"${workspaceRoot}/scripts/publish.ps1\" -amlPath \"${config:mod.amlpath}\"",
+            "command": "-file \"${workspaceRoot}/scripts/publish.ps1\" -amuPath \"${config:mod.amlpath}\"",
             "options": {
                 "shell": {
                     "executable": "powershell.exe",
@@ -57,6 +57,12 @@
                     "executable": "powershell.exe",
                 },
             },
+            "problemMatcher": []
+        },
+        {
+            "label": "launchAML",
+            "type": "process",
+            "command": "",
             "problemMatcher": []
         }
     ]
