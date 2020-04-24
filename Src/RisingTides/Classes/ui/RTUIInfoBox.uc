@@ -30,6 +30,7 @@ var string FailedColor;
 var string LockedColor;
 
 var String LockedImagePath;
+var localized String m_strRewardButtonLockedTitle;
 var localized String m_strLockedTitle;
 var localized String m_strLockedDescription;
 
@@ -149,7 +150,7 @@ simulated function RTUIInfoBox SetLocked() {
 	SetTextColors(0);
 
 	Button.DisableButton(m_strLockedDescription);
-	Button.SetText(m_strLockedTitle);
+	Button.SetText(m_strRewardButtonLockedTitle);
 	return self;
 }
 
@@ -165,7 +166,7 @@ simulated function RTUIInfoBox SetFailed() {
 	SetTextColors(3);
 
 	Button.DisableButton(m_strLockedDescription);
-	Button.SetText(m_strLockedTitle);
+	Button.SetText(m_strRewardButtonLockedTitle);
 	return self;
 }
 
@@ -176,7 +177,7 @@ simulated function RTUIInfoBox SetAvailable() {
 	InfoBoxImage.LoadImage(DefaultImagePath);
 
 	Button.DisableButton(m_strLockedDescription);
-	Button.SetText(m_strLockedTitle);
+	Button.SetText(m_strRewardButtonLockedTitle);
 	return self;
 }
 
