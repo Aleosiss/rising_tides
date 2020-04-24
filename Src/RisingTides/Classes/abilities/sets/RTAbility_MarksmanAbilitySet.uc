@@ -134,7 +134,6 @@ static function X2AbilityTemplate ScopedAndDropped()
 	local X2AbilityTemplate						Template;
 	local RTEffect_ScopedAndDropped				ScopedEffect;
 	local RTEffect_Squadsight					SSEffect;
-	local name IteratorName;
 
 	// Icon Properties
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'ScopedAndDropped');
@@ -188,7 +187,6 @@ static function X2AbilityTemplate ScopedAndDropped()
 	local X2AbilityCost_ActionPoints		ActionPointCost;
 	local X2AbilityCost_Ammo				AmmoCost;
 	local X2AbilityToHitCalc_StandardAim	ToHitCalc;
-	local X2Condition_Visibility			TargetVisibilityCondition;
 	local RTCondition_VisibleToPlayer		VisibleToPlayerCondition;
 	local array<name>						SkipExclusions;
 	local X2Effect_Knockback				KnockbackEffect;

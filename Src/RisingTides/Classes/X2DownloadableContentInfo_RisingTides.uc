@@ -20,12 +20,15 @@ var config bool HostileTemplarFocusUIEnabled;
 var config bool TemplarFocusVisualizationPatchEnabled;
 var config array<name> ProgramTechs;
 
+var config array<name> NewAbilityAvailabilityCodes;
+var localized array<String> NewAbilityAvailabilityStrings;
+
 // weak ref to the screen (I just copied this from RJ and don't know if it's really necessary)
 var config String screen_path;
 
 defaultproperties
 {
-	Version=(Major=2, Minor=1, Patch=9)
+	Version=(Major=2, Minor=1, Patch=10)
 }
 
 /// <summary>
@@ -90,6 +93,7 @@ static event OnPostTemplatesCreated()
 	AddProgramFactionCovertActions();
 	AddProgramAttachmentTemplates();
 	PatchTemplarCharacterTemplatesForAI();
+	UpdateAbilityAvailabilityStrings();
 	if(default.TemplarFocusVisualizationPatchEnabled) {
 		PatchTemplarFocusVisualization();
 	}
@@ -105,7 +109,6 @@ static function PrintAbilityTemplates() {
 	local array<name> AbilityTemplateNames;
 	local name AbilityTemplateName;
 	local X2AbilityTemplateManager AbilityTemplateMgr;
-	local X2AbilityCost Cost;
 
 	`RTLOG("PrintAbilityTemplates");
 	AbilityTemplateMgr = class'X2AbilityTemplateManager'.static.GetAbilityTemplateManager();
@@ -189,7 +192,7 @@ static event OnExitPostMissionSequence()
 		BattleData = XComGameState_BattleData(`XCOMHISTORY.GetSingleGameStateObjectForClass(class'XComGameState_BattleData'));
 		if(BattleData.bLocalPlayerWon) {
 			// This method creates and submits two new xcgs's
-			ProgramState.TryIncreaseInfluence();
+			NewProgramState.TryIncreaseInfluence();
 		}
 		*/
 
@@ -358,7 +361,6 @@ static function bool AddProgramTechs() {
 	local X2TechTemplate TechTemplate;
 	local array<name> TemplatesToAdd;
 	local name TemplateName;
-	local int idx;
 
 	History = `XCOMHISTORY;
 	TechMgr = class'X2StrategyElementTemplateManager'.static.GetStrategyElementTemplateManager();
@@ -393,7 +395,6 @@ static function ReshowProgramDroneRewardPopup() {
 	local XComGameState_Tech TechState;
 	local XComGameStateHistory History;
 	local RTGameState_ProgramFaction ProgramState;
-	local XComGameState NewGameState;
 
 	History = `XCOMHISTORY;
 
@@ -559,4 +560,42 @@ static function HandleDroneRecovery() {
 
 
 */
+}
+
+// Setup Display Strings for new AbilityAvailabilityCodes (the localized strings that tell you why an ability fails a condition)
+static function UpdateAbilityAvailabilityStrings()
+{
+    local X2AbilityTemplateManager    AbilityTemplateManager;
+	local int                        i, idx;
+	
+	if(default.NewAbilityAvailabilityCodes.length != default.NewAbilityAvailabilityStrings.length) {
+		`RTLOG("Misconfiguration, mismatch between NewAbilityAvailabilityCodes and NewAbilityAvailabilityStrings! Can't add AvailabilityCodes!", false, true);
+		return;
+	}
+
+    AbilityTemplateManager = X2AbilityTemplateManager(class'Engine'.static.FindClassDefaultObject("XComGame.X2AbilityTemplateManager"));
+
+    i = AbilityTemplateManager.AbilityAvailabilityCodes.Length - AbilityTemplateManager.AbilityAvailabilityStrings.Length;
+
+    // If there are more codes than strings, insert blank strings to bring them to equal before adding our new codes
+    if (i > 0)
+    {
+        for (idx = 0; idx < i; idx++)
+        {
+            AbilityTemplateManager.AbilityAvailabilityStrings.AddItem("");
+        }
+    }
+
+    // If there are more strings than codes, cut off the excess before adding our new codes
+    if (i < 0)
+    {
+        AbilityTemplateManager.AbilityAvailabilityStrings.Length = AbilityTemplateManager.AbilityAvailabilityCodes.Length;
+    }
+
+    // Append new codes and strings to the arrays
+    for (idx = 0; idx < default.NewAbilityAvailabilityCodes.Length; idx++)
+    {
+        AbilityTemplateManager.AbilityAvailabilityCodes.AddItem(default.NewAbilityAvailabilityCodes[idx]);
+        AbilityTemplateManager.AbilityAvailabilityStrings.AddItem(default.NewAbilityAvailabilityStrings[idx]);
+    }
 }

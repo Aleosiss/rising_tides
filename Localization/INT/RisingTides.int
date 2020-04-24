@@ -1,4 +1,21 @@
 ;This is a text file.
+[X2DownloadableContentInfo_RisingTides]
+; +AbilityAvailabilityCodes="AA_UnitNotMelded"
++NewAbilityAvailabilityStrings="The Unit is not in the meld."
+; +AbilityAvailabilityCodes="AA_MeldEffect_Active"
++NewAbilityAvailabilityStrings="The Unit is already melded."
+; +AbilityAvailabilityCodes="AA_UnitMustBeGhost"
++NewAbilityAvailabilityStrings="The Unit is not a Program operative."
+; +AbilityAvailabilityCodes="AA_UnitAlreadyUsedAbility"
++NewAbilityAvailabilityStrings="The Unit has already used that ability."
+; +AbilityAvailabilityCodes="AA_NotStackableEffect"
++NewAbilityAvailabilityStrings="The effect is not stackable, see Mod Author"
+; +AbilityAvailabilityCodes="AA_NotEnoughStacks"
++NewAbilityAvailabilityStrings="The ability needs more stacks to function."
+; +AbilityAvailabilityCodes="AA_TooManyStacks"
++NewAbilityAvailabilityStrings="There are too many stacks for the ability to function."
+; +AbilityAvailabilityCodes="AA_EffectNotFound"
++NewAbilityAvailabilityStrings="The effect was not found."
 
 [RTEffect_ScopedAndDropped]
 RTFriendlyName="Scoped and Dropped"
@@ -381,10 +398,11 @@ m_strStageThreeRewardDescription="+3 Program Favors. 'Templar High Coven Assault
 m_strStageFourTitle="End It"
 m_strStageFourDescription="Assault the Templar High Coven."
 m_strStageFourRewardTitle="Rewards"
-m_strStageFourRewardDescription="+30 Program Favors. Program Stealth Drone blueprint."
+m_strStageFourRewardDescription="+30 Program Favors. Program Stealth Drone blueprint. Warp Grenade blueprint. The Program will offer additional support through the Resistance Ring."
 
 [RTUIInfoBox]
-m_strLockedTitle="LOCKED"
+m_strLockedTitle="LOCKED"`
+m_strRewardButtonLockedTitle="REWARDS"
 m_strLockedDescription="Locked"
 m_strSwapToRewards="Show Rewards"
 m_strSwapFromRewards="Hide Rewards"

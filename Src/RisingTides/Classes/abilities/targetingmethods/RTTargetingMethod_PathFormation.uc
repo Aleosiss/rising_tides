@@ -2,14 +2,14 @@ class RTTargetingMethod_PathFormation extends X2TargetingMethod_PathTarget;
 
 function Init(AvailableAction InAction, int NewTargetIndex)
 {
-	local XComPresentationLayer Pres;
+	//local XComPresentationLayer Pres;
 
 	super.Init(InAction, NewTargetIndex);
-
-	//Pres = `PRES;
-	//Cursor = `CURSOR;
-	
 	/*
+	Pres = `PRES;
+	Cursor = `CURSOR;
+	
+	
 	PathingPawn = Cursor.Spawn(class'X2PathTargetPathingPawn', Cursor);
 	PathingPawn.SetVisible(true);
 	PathingPawn.SetActive(FiringUnit);
@@ -42,12 +42,12 @@ function Committed()
 }
 
 function Update(float DeltaTime)
-{
+{/*
 	local array<Actor> CurrentlyMarkedTargets;
 	local vector NewTargetLocation;
 	local array<TTile> Tiles;
 
-	/*
+	
 	IconManager.UpdateCursorLocation();
 	LevelBorderManager.UpdateCursorLocation(Cursor.Location);
 

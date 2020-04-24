@@ -400,7 +400,6 @@ defaultproperties
 {
 	bIsImpairing=false
 	EffectName="Freeze"
-	EffectTickedFn=TimeStopTicked
 	EffectTickedVisualizationFn=TimeStopVisualizationTicked
 	ModifyTracksFn=ModifyTracksVisualization
 	bAllowReorder=true

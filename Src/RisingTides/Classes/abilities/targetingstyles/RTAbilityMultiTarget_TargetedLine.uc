@@ -23,11 +23,12 @@ simulated function GetMultiTargetOptions(const XComGameState_Ability Ability, ou
 {
 	local int								i;
 	local vector							TargetUnitLocation;
-	local XComGameState_Unit				TargetUnit, IteratorTargetUnit;
+	local XComGameState_Unit				TargetUnit;
+	//local XComGameState_Unit				IteratorTargetUnit;
 	local AvailableTarget					Target;
 	local XComWorldData						World;
 	local XComGameStateHistory				History;
-	local StateObjectReference				IteratorTargetRef;
+	//local StateObjectReference			IteratorTargetRef;
 
 	World = `XWORLD;
 	History = `XCOMHISTORY;
@@ -74,13 +75,13 @@ function AddAbilityBonusWidth(name AbilityName, int BonusWidth)
 
 simulated function GetValidTilesForLocation(const XComGameState_Ability Ability, const vector Location, out array<TTile> ValidTiles)
 {
-	local TTile IteratorTile;
+/*	local TTile IteratorTile;
 	local TTile TargetTile;
 	local Vector IteratorTileLocation;
 	local XComWorldData WorldData;
 	local float Dist;
 	local int Tiles;
-
+*/
 	super.GetValidTilesForLocation(Ability, Location, ValidTiles);
 /*
 	WorldData = `XWORLD;
