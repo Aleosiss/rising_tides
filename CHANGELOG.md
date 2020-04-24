@@ -1,3 +1,16 @@
+2.1.10:
+- Improvements to the Program Briefing screen. The progress bar will now track your progress towards the next stage of influence, rather than the questline. Since they are pretty closely tied together, this should give you a better understanding of when the next stage will be available.
+- Fix support for custom AvailabilityCodes. I took this from the discord, but I don't remember who exactly from, apologies.
+- Fix issue where the Program would increase faction influence by two instead of one.
+- Minor code cleanup (compiler warnings, debug logging)
+
+2.1.9:
+- Add support for the 2020 WOTC Target Icons mod. If you use it, hostile Templars will have spiffy new target icons.
+- Add check for missing technologies. This occured when continuing a campaign from before the 2.1.0 patch. If you completed the questline, you can run the 'RT_Patch219' command to see what you missed.
+
+2.1.8:
+- Fix issue where Over the Shoulder would throw an assert when receiving invalid input from an event
+
 2.1.7:
 - Fixed Focus gains visualizing in FOW. This is done by patching the Focus visualization itself. You can disable this in RisingTides.ini if it breaks something.
 - Add support for visualization of Hostile Templar Focus. You can disable this in RisingTides.ini if it breaks something. 

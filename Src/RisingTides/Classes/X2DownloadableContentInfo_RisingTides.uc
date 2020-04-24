@@ -192,7 +192,7 @@ static event OnExitPostMissionSequence()
 		BattleData = XComGameState_BattleData(`XCOMHISTORY.GetSingleGameStateObjectForClass(class'XComGameState_BattleData'));
 		if(BattleData.bLocalPlayerWon) {
 			// This method creates and submits two new xcgs's
-			ProgramState.TryIncreaseInfluence();
+			NewProgramState.TryIncreaseInfluence();
 		}
 		*/
 
