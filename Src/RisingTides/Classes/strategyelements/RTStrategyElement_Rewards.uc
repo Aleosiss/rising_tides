@@ -477,11 +477,12 @@ static function GiveProgramFactionInfluenceReward(XComGameState NewGameState, XC
 	local XComGameState_ResistanceFaction FactionState;
 	
 	FactionState = XComGameState_ResistanceFaction(NewGameState.ModifyStateObject(class'XComGameState_ResistanceFaction', RewardState.RewardObjectReference.ObjectID));
-	FactionState.IncreaseInfluenceLevel(NewGameState);
-	if(FactionState.GetInfluence() < eFactionInfluence_Influential) {
+	if(FactionState.GetInfluence() == eFactionInfluence_Influential) {
 		if(RTGameState_ProgramFaction(FactionState) != none) {
 			RTGameState_ProgramFaction(FactionState).ForceIncreaseInfluence();
 		}
+	} else {
+		FactionState.IncreaseInfluenceLevel(NewGameState);
 	}
 }
 

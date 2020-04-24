@@ -79,11 +79,11 @@ var config int															iNumberOfFavorsRequiredToIncreaseInfluence;
 var array<X2DataTemplate>												OperativeTemplates;
 
 // TEMPLAR QUESTLINE VARIABLES
-var private bool																bTemplarsDestroyed;
-var private bool																bTemplarQuestFailed;
-var private int																	iTemplarQuestlineStage;
-var private array<StateObjectReference>											TemplarQuestActions;
-var private bool 																bTemplarMissionSucceeded;
+var private bool														bTemplarsDestroyed;
+var private bool														bTemplarQuestFailed;
+var private int															iTemplarQuestlineStage;
+var private array<StateObjectReference>									TemplarQuestActions;
+var private bool 														bTemplarMissionSucceeded;
 
 // ONE SMALL FAVOR HANDLING VARIABLES
 var private int															iPreviousMaxSoldiersForMission;		// cache of the number of soldiers on a mission before OSF modfied it

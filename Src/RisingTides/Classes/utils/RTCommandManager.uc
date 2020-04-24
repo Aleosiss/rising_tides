@@ -62,6 +62,18 @@ exec function RT_CheatModifyProgramFavors(int diff) {
 	`GAMERULES.SubmitGameState(NewGameState);
 }
 
+exec function RT_CheatModifyProgramFavorTracker(int diff) {
+	local RTGameState_ProgramFaction ProgramState;
+	local XComGameState NewGameState;
+
+	NewGameState = `CreateChangeState("CHEAT - Modify Program Favors Called In Count");
+	ProgramState = `RTS.GetNewProgramState(NewGameState);
+
+	ProgramState.iNumberOfFavorsCalledIn += diff;
+
+	`GAMERULES.SubmitGameState(NewGameState);
+}
+
 exec function RT_TriggerEvent(name EventID) {
 	local XComGameState NewGameState;
 

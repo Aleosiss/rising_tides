@@ -398,10 +398,11 @@ m_strStageThreeRewardDescription="+3 Program Favors. 'Templar High Coven Assault
 m_strStageFourTitle="End It"
 m_strStageFourDescription="Assault the Templar High Coven."
 m_strStageFourRewardTitle="Rewards"
-m_strStageFourRewardDescription="+30 Program Favors. Program Stealth Drone blueprint."
+m_strStageFourRewardDescription="+30 Program Favors. Program Stealth Drone blueprint. Warp Grenade blueprint. The Program will offer additional support through the Resistance Ring."
 
 [RTUIInfoBox]
-m_strLockedTitle="LOCKED"
+m_strLockedTitle="LOCKED"`
+m_strRewardButtonLockedTitle="REWARDS"
 m_strLockedDescription="Locked"
 m_strSwapToRewards="Show Rewards"
 m_strSwapFromRewards="Hide Rewards"

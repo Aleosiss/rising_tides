@@ -12,7 +12,7 @@ var RTUICounter FavorCounter;
 
 var UIVerticalProgressBar QuestlineTrackerBar;
 var UIBGBox QuestlineTrackerOutline;
-var UIBGBox QuestlineTrackerBarSectionLine1, QuestlineTrackerBarSectionLine2, QuestlineTrackerBarSectionLine3;
+var UIBGBox QuestlineTrackerBarSectionLine1, QuestlineTrackerBarSectionLine2, QuestlineTrackerBarSectionLine3, QuestlineTrackerBarSectionLine4;
 
 var RTUIInfoBox StageOne;
 var localized String m_strStageOneTitle;
@@ -142,6 +142,7 @@ simulated function InitScreen(XComPlayerController InitController, UIMovie InitM
 	QuestlineTrackerBarSectionLine1 = Spawn(class'UIBGBox', Container);
 	QuestlineTrackerBarSectionLine2 = Spawn(class'UIBGBox', Container);
 	QuestlineTrackerBarSectionLine3 = Spawn(class'UIBGBox', Container);
+	QuestlineTrackerBarSectionLine4 = Spawn(class'UIBGBox', Container);
 
 	QuestlineTrackerBar = Spawn(class'UIVerticalProgressBar', Container);
 	// InitProgressBar(InitName, InitX, InitY, InitWidth, InitHeight, InitPercentFilled, InitFillColorState )
@@ -168,9 +169,13 @@ simulated function InitScreen(XComPlayerController InitController, UIMovie InitM
 	QuestlineTrackerBarSectionLine3.InitBG('RT_QuestlineTrackerBarSection3', questlineTrackerBarSectionLineX, topMarginY + (170 * 3), questlineTrackerBarSectionWidth, 8);
 	QuestlineTrackerBarSectionLine3.SetColor("0x" $ SecondaryColor);
 
+	QuestlineTrackerBarSectionLine4.InitBG('RT_QuestlineTrackerBarSection4', questlineTrackerBarSectionLineX, topMarginY + (170 * 0) + (3 * 1), questlineTrackerBarSectionWidth, 8);
+	QuestlineTrackerBarSectionLine4.SetColor("0x" $ SecondaryColor);
+
 	QuestlineTrackerBarSectionLine1.MoveToHighestDepth();
 	QuestlineTrackerBarSectionLine2.MoveToHighestDepth();
 	QuestlineTrackerBarSectionLine3.MoveToHighestDepth();
+	QuestlineTrackerBarSectionLine4.MoveToHighestDepth();
 
 	FavorCounter = Spawn(class'RTUICounter', Container);
 	FavorCounter.InitColors(PrimaryColor, TextColor, HeaderColor, SecondaryColor);
@@ -211,6 +216,38 @@ simulated function InitScreen(XComPlayerController InitController, UIMovie InitM
 	StageFour.SetLocked();
 }
 
+private static function float CalculateQuestlineTrackerBarPercent(RTGameState_ProgramFaction ProgramState) {
+	local float percent;
+	local float barPercentPerStage, barPercentPerFavor;
+	local int iInfluence, iNumberOfFavorsCalledIn, iTotalQuestlineStages, iTotalFavorsRequired, iMaxFavorsForVis;
+
+	if(ProgramState.TemplarQuestlineSucceeded()) {
+		return 1;
+	} else {
+		iInfluence = Int(ProgramState.GetInfluence());
+		iTotalQuestlineStages = 4; // magic number
+		barPercentPerStage = 100 / iTotalQuestlineStages;
+
+		iNumberOfFavorsCalledIn = ProgramState.iNumberOfFavorsCalledIn;
+		iMaxFavorsForVis = class'RTGameState_ProgramFaction'.default.iNumberOfFavorsRequiredToIncreaseInfluence;
+		if(iNumberOfFavorsCalledIn > iMaxFavorsForVis) {
+			iNumberOfFavorsCalledIn = iMaxFavorsForVis;
+		}
+
+		`RTLOG("Number of Favors called in: " $ ProgramState.iNumberOfFavorsCalledIn);
+		`RTLOG("Actual number of favors being displayed: " $ iNumberOfFavorsCalledIn);
+		`RTLOG("Program Influence (1-1 with bars filled): " $ iInfluence);
+		`RTLOG("Program Influence (1-1 with bars filled): " $ ProgramState.GetInfluence());
+
+		iTotalFavorsRequired = iTotalQuestlineStages * class'RTGameState_ProgramFaction'.default.iNumberOfFavorsRequiredToIncreaseInfluence;
+		barPercentPerFavor = 100 / iTotalFavorsRequired;
+
+		percent = float(min((iInfluence * barPercentPerStage) + (iNumberOfFavorsCalledIn * barPercentPerFavor), 100)) * 0.01;
+		`RTLOG("Total Influence Bar progress: " $ percent);
+		return percent;
+	}
+}
+
 simulated function PopulateData()
 {
 	local RTGameState_ProgramFaction ProgramState;
@@ -223,16 +260,15 @@ simulated function PopulateData()
 		return;
 	}
 
-	iQuestlineStage = ProgramState.getTemplarQuestlineStage();
-	bFailed = ProgramState.hasFailedTemplarQuestline();
-	
 	TitleHeader.SetText(m_strProgramFactionInfoHeaderText, m_strProgramFactionInfoDescriptionText);
 	TitleHeader.MC.FunctionVoid("realize");
 
-	// 0 = not started, 1-3 for CAs, 4 for Coven Assault Completed
-	QuestlineTrackerBar.SetPercent(min(iQuestlineStage * 25, 100) * 0.01);
+	QuestlineTrackerBar.SetPercent(CalculateQuestlineTrackerBarPercent(ProgramState));
 
+	iQuestlineStage = ProgramState.getTemplarQuestlineStage();
+	bFailed = ProgramState.hasFailedTemplarQuestline();
 	iTotalFavors = ProgramState.GetNumFavorsAvailable();
+	
 	if(ProgramState.IsOneSmallFavorAvailable()) {
 		iTotalFavors++; // this checks for the active favor waiting to be called in, which can only be set once per month via the card.
 		FavorCounter.SetAvailable();
