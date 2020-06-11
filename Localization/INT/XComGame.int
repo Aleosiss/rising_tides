@@ -1174,7 +1174,7 @@ ActionPostNarrative="I've worked out the details with your men, Commander. We'll
 DisplayName="Templar Ambush"
 Briefing="Eliminate Templar Coven Investigators"
 PostMissionType="Kill all hostiles"
-BriefingImage="img:///UILibrary_StrategyImages.X2StrategyMap.DarkEvent_Traitor"
+BriefingImage="img:///RisingTidesContentPackage.UIImages.Missions.CANarrative_TemplarQuestline_TemplarDiscoveryAmbush"
 ObjectiveTextPools[0]="Neutralize all enemy targets"
 
 [RTNarrative_TemplarAmbush X2MissionNarrativeTemplate]
@@ -1183,11 +1183,16 @@ ObjectiveTextPools[1]="Kill the Templar Coven Leader"
 ObjectiveTextPools[2]="Neutralize all enemy targets"
 ObjectiveTextPools[3]="Extract all XCOM operatives"
 
+[RTMissionSource_TemplarAmbush X2MissionSourceTemplate]
+MissionPinLabel="Templar Discovery Ambush"
+MissionFlavorText="The local Templar Coven has discovered the plans of our Covert Operatives. We have to take the fight to them before they report back to High Coven leadership... and Geist."
+BattleOpName="Operation: Dwindling Light"
+
 [RT_TemplarHighCovenAssault X2MissionTemplate]
 DisplayName="Destroy the Templar High Coven"
 Briefing="Eliminate Geist. Destroy the Archives. End this conflict, once and for all."
 PostMissionType="Kill all hostiles"
-BriefingImage="img:///UILibrary_StrategyImages.X2StrategyMap.POI_WorldsOfFun"
+BriefingImage="img:///RisingTidesContentPackage.UIImages.Missions.CANarrative_TemplarQuestline_HighCovenAssault"
 ObjectiveTextPools[0]="Destroy the Templar High Coven Compound"
 
 [RTNarrative_TemplarHighCovenAssault X2MissionNarrativeTemplate]

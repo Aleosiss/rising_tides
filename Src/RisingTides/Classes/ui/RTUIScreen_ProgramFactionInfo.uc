@@ -189,7 +189,6 @@ simulated function InitScreen(XComPlayerController InitController, UIMovie InitM
 	StageOne.InitImages(m_strStageOneImage, m_strStageOneRewardImage);
 	StageOne.InitInfoBox('RT_ProgramInfoScreenStageOne', 700, 160, 1);
 	StageOne.SetPosition(QuestlineTrackerBarSectionLine3.X + 4 + QuestlineTrackerBar.Width, QuestlineTrackerBarSectionLine3.Y + 11);
-	StageOne.SetLocked();
 	
 	StageTwo = Spawn(class'RTUIInfoBox', Container);
 	StageTwo.InitColors(PrimaryColor, TextColor, HeaderColor, SecondaryColor);
@@ -197,7 +196,6 @@ simulated function InitScreen(XComPlayerController InitController, UIMovie InitM
 	StageTwo.InitImages(m_strStageTwoImage, m_strStageTwoRewardImage);
 	StageTwo.InitInfoBox('RT_ProgramInfoScreenStageTwo', 700, 160, 2);
 	StageTwo.SetPosition(QuestlineTrackerBarSectionLine2.X + 4 + QuestlineTrackerBar.Width, QuestlineTrackerBarSectionLine2.Y + 11);
-	StageTwo.SetLocked();
 	
 	StageThree = Spawn(class'RTUIInfoBox', Container);
 	StageThree.InitColors(PrimaryColor, TextColor, HeaderColor, SecondaryColor);
@@ -205,7 +203,6 @@ simulated function InitScreen(XComPlayerController InitController, UIMovie InitM
 	StageThree.InitImages(m_strStageThreeImage, m_strStageThreeRewardImage);
 	StageThree.InitInfoBox('RT_ProgramInfoScreenStageThree', 700, 160, 3);
 	StageThree.SetPosition(QuestlineTrackerBarSectionLine1.X + 4 + QuestlineTrackerBar.Width, QuestlineTrackerBarSectionLine1.Y + 11);
-	StageThree.SetLocked();
 
 	StageFour = Spawn(class'RTUIInfoBox', Container);
 	StageFour.InitColors(PrimaryColor, TextColor, HeaderColor, SecondaryColor);
@@ -213,7 +210,6 @@ simulated function InitScreen(XComPlayerController InitController, UIMovie InitM
 	StageFour.InitImages(m_strStageFourImage, m_strStageFourRewardImage);
 	StageFour.InitInfoBox('RT_ProgramInfoScreenStageFour', 700, 160, 4);
 	StageFour.SetPosition(QuestlineTrackerBarSectionLine1.X + 4 + QuestlineTrackerBar.Width, QuestlineTrackerBarSectionLine1.Y - 158);
-	StageFour.SetLocked();
 }
 
 private static function float CalculateQuestlineTrackerBarPercent(RTGameState_ProgramFaction ProgramState) {

@@ -28,7 +28,7 @@ var config String screen_path;
 
 defaultproperties
 {
-	Version=(Major=2, Minor=1, Patch=10)
+	Version=(Major=2, Minor=1, Patch=11)
 }
 
 /// <summary>
@@ -59,15 +59,15 @@ private static function HandleModUpdate() {
 		return;
 	}
 	
-	if(!ProgramState.CompareVersion(GetVersionInt(), true)) {
+	if(!ProgramState.CompareVersion(GetVersionInt())) {
 		return;
 	}
 
 	`RTLOG("New version of the mod found: \nOld Version: " $ ProgramState.GetCurrentVersion() $ "\nNew Version: " $ GetVersionInt());
-	NewGameState = `CreateChangeState("Mod version updated, sending popup!");
+	NewGameState = `CreateChangeState("Mod version updated!");
 	ProgramState = `RTS.GetNewProgramState(NewGameState);
 	ProgramState.SetTemplarMissionSucceededFlag(true);
-	ProgramState.CompareVersion(GetVersionInt());
+	ProgramState.UpdateVersion(GetVersionInt());
 
 	`GAMERULES.SubmitGameState(NewGameState);
 }
@@ -309,18 +309,10 @@ simulated static function MakePsiAbilitiesInterruptable() {
 /// Called from XComGameState_Unit:GatherUnitAbilitiesForInit after the game has built what it believes is the full list of
 /// abilities for the unit based on character, class, equipment, et cetera. You can add or remove abilities in SetupData.
 /// </summary>
-static function FinalizeUnitAbilitiesForInit(XComGameState_Unit UnitState, out array<AbilitySetupData> SetupData, optional XComGameState StartState, optional XComGameState_Player PlayerState, optional bool bMultiplayerDisplay)
-{
-	/*local AbilitySetupData IteratorData;
-
-	if(default.TemplarUnitNames.Find(UnitState.GetMyTemplateName()) != INDEX_NONE)
-	{
-		`RTLOG("Initializing a Templar, printing their AbiltySetupData for debugging!");
-		foreach SetupData(IteratorData) {
-			`RTLOG("" $ IteratorData.TemplateName);
-		}
-	}*/
-}
+//static function FinalizeUnitAbilitiesForInit(XComGameState_Unit UnitState, out array<AbilitySetupData> SetupData, optional XComGameState StartState, optional XComGameState_Player PlayerState, optional bool bMultiplayerDisplay)
+//{
+//
+//}
 
 static function bool DebuggingEnabled() {
 	return default.bDebuggingEnabled;
@@ -439,127 +431,6 @@ static function bool AbilityTagExpandHandler(string InString, out string OutStri
 	}
 
 	return false;
-}
-
-static function HandleDroneRecovery() {
-/*
-	local XComGameStateHistory History;
-	local XComGameState NewGameState;
-	local XComGameState_HeadquartersXCom XComHQ;
-	local XComGameState_Unit UnitState;
-	local RTGameState_HeadquartersProjectHealProgramDrone HealProjectState;
-	local XComGameState_FacilityXCom EngineeringState;
-	local XComGameState_StaffSlot SlotState;
-	local XComGameState_SparkManager SparkMgr;
-	local XComGameState_PointOfInterest POIState;
-	local StaffUnitInfo UnitInfo;
-	local array<StateObjectReference> SoldiersToTransfer;
-	local int idx, SlotIndex, NewBlocksRemaining, NewProjectPointsRemaining;
-	local bool bHealProjectFound;
-
-
-	if(!`RTS.GetProgramState().TemplarQuestlineSucceeded()) {
-		return;
-	}
-
-	// If the unit is in the squad or was spawned from the avenger on the mission, add them to the SoldiersToTransfer array
-	SoldiersToTransfer = XComHQ.Squad;
-	for (idx = 0; idx < XComHQ.Crew.Length; idx++)
-	{
-		if (XComHQ.Crew[idx].ObjectID != 0)
-		{
-			UnitState = XComGameState_Unit(History.GetGameStateForObjectID(XComHQ.Crew[idx].ObjectID));
-			if (UnitState.bSpawnedFromAvenger)
-			{
-				SoldiersToTransfer.AddItem(XComHQ.Crew[idx]);
-			}
-		}
-	}
-
-	for (idx = 0; idx < SoldiersToTransfer.Length; idx++)
-		{
-			if (SoldiersToTransfer[idx].ObjectID != 0)
-			{
-				UnitState = XComGameState_Unit(History.GetGameStateForObjectID(SoldiersToTransfer[idx].ObjectID));
-				if (UnitState.GetMyTemplateName() == 'ProgramDrone')
-				{
-					// Update Spark healing projects and restart them if a Engineering repair slot is available
-					if (!UnitState.IsDead() && !UnitState.bCaptured && (UnitState.IsInjured() || UnitState.GetStatus() == eStatus_Healing))
-					{
-						UnitState = XComGameState_Unit(NewGameState.ModifyStateObject(class'XComGameState_Unit', SoldiersToTransfer[idx].ObjectID));
-						UnitState.SetStatus(eStatus_Healing);
-
-						// If the spark already had a healing project active, update it for their current health
-						bHealProjectFound = false;
-						foreach History.IterateByClassType(class'RTGameState_HeadquartersProjectHealProgramDrone', HealProjectState)
-						{
-							if (HealProjectState.ProjectFocus == UnitState.GetReference())
-							{
-								bHealProjectFound = true;
-								NewBlocksRemaining = UnitState.GetBaseStat(eStat_HP) - UnitState.GetCurrentStat(eStat_HP);
-								if (NewBlocksRemaining > HealProjectState.BlocksRemaining) // The unit was injured again, so update the time to heal
-								{
-									HealProjectState = RTGameState_HeadquartersProjectHealProgramDrone(NewGameState.ModifyStateObject(class'RTGameState_HeadquartersProjectHealProgramDrone', HealProjectState.ObjectID));
-
-									do // Calculate new wound length again, but ensure it is greater than the previous time, since the unit is more injured
-									{
-										NewProjectPointsRemaining = HealProjectState.GetWoundPoints(UnitState);
-									} until(NewProjectPointsRemaining > HealProjectState.ProjectPointsRemaining);
-
-									HealProjectState.ProjectPointsRemaining = NewProjectPointsRemaining;
-									HealProjectState.BlocksRemaining = NewBlocksRemaining;
-									HealProjectState.PointsPerBlock = Round(float(NewProjectPointsRemaining) / float(NewBlocksRemaining));
-									HealProjectState.BlockPointsRemaining = HealProjectState.PointsPerBlock;
-									HealProjectState.UpdateWorkPerHour();
-									HealProjectState.StartDateTime = `STRATEGYRULES.GameTime;
-									HealProjectState.SetProjectedCompletionDateTime(HealProjectState.StartDateTime);
-								}
-
-								break;
-							}
-						}
-
-						if (!bHealProjectFound) // An existing heal project was not found, so start one for this unit
-						{
-							HealProjectState = RTGameState_HeadquartersProjectHealProgramDrone(NewGameState.CreateNewStateObject(class'RTGameState_HeadquartersProjectHealProgramDrone'));
-							HealProjectState.SetProjectFocus(UnitState.GetReference(), NewGameState);
-							XComHQ.Projects.AddItem(HealProjectState.GetReference());
-							HealProjectState.bForcePaused = true;
-						}
-
-						// Get the Engineering facility and staff the unit in it if there is an open slot
-						EngineeringState = XComHQ.GetFacilityByName('Storage'); // Only one Engineering exists, so safe to do this
-						if (EngineeringState != none)
-						{
-							for (SlotIndex = 0; SlotIndex < EngineeringState.StaffSlots.Length; ++SlotIndex)
-							{
-								//If this slot has not already been modified (filled) in this tactical transfer, check to see if it's valid
-								SlotState = XComGameState_StaffSlot(NewGameState.GetGameStateForObjectID(EngineeringState.StaffSlots[SlotIndex].ObjectID));
-								if (SlotState == None)
-								{
-									SlotState = EngineeringState.GetStaffSlot(SlotIndex);
-
-									// If this is a valid soldier slot in Engineering, restaff the Spark to restart their healing project
-									if (!SlotState.IsLocked() && SlotState.IsSlotEmpty() && SlotState.IsSoldierSlot())
-									{
-										UnitInfo.UnitRef = UnitState.GetReference();
-										SlotState.FillSlot(UnitInfo, NewGameState);
-										break;
-									}
-								}
-							}
-						}
-
-						HealProjectState.OnPowerStateOrStaffingChange();
-					}
-				}
-			}
-		}
-
-		`XCOMGAME.GameRuleset.SubmitGameState(NewGameState);
-
-
-*/
 }
 
 // Setup Display Strings for new AbilityAvailabilityCodes (the localized strings that tell you why an ability fails a condition)

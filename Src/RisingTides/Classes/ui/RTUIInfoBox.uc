@@ -98,7 +98,7 @@ simulated function RTUIInfoBox InitInfoBox(name PanelName, float newWidth, float
 	InfoBoxImage = Spawn(class'UIImage', self);
 	//imageY = BackgroundPanel.Height - 28;
 	imageY = 128;
-	InfoBoxImage.InitImage('infoImage', DefaultImagePath).SetSize(imageY, imageY);
+	InfoBoxImage.InitImage('infoImage').SetSize(imageY, imageY);
 	imageY = ((BackgroundPanel.Height - InfoBoxImage.Height) / 2) - 2;
 	InfoBoxImage.SetPosition(8, imageY);
 

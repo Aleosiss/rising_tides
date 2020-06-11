@@ -182,6 +182,7 @@ strTemplarAmbushStr2="Field Team: HIGHLANDER"
 strTemplarAmbushStr3="Operator: 'Kaga'"
 strTemplarAmbushHeader="TEMPLAR DISCOVERY"
 strTemplarAmbushBegin="Begin Operation"
+strTemplarAmbushImagePath="img:///RisingTidesContentPackage.UIImages.Missions.MissionNarrative_TemplarQuestline_TemplarDiscoveryAmbush"
 m_strTemplarQuestlineFailedTitle="TEMPLAR BETRAYAL EXPOSED"
 m_strTemplarQuestlineFailedHeader="The Templars have withdrawn from the alliance."
 m_strTemplarQuestlineFailedDescription="With our plans exposed, the Templars have withdrawn from their alliance with XCOM and have gone into hiding. Your Templar operatives have deserted, taking with them their equipment and knowledge of our tactics..."
@@ -192,7 +193,7 @@ m_strTemplarQuestlineCompleteHeader="TEMPLARS ELIMINATED"
 m_strTemplarQuestlineCompleteTitle="The Templars are no more."
 m_strTemplarQuestlineCompleteBody="Without Geist to guide them nor their Archives to recover their secrets, the Templars remnants will scatter and fade out. In return for our efforts, the Program has pledged their full support in eliminating the Alien threat. New Covert Actions are available in the Resistance Ring and new blueprints have been made available for construction in Engineering."
 m_strHighCovenAssaultAvailableBody="This is it."
-m_strHighCovenAssaultAvailableImage="img:///UILibrary_StrategyImages.X2StrategyMap.POI_WorldsOfFun"
+m_strHighCovenAssaultAvailableImage="img:///RisingTidesContentPackage.UIImages.Missions.CANarrative_TemplarQuestline_HighCovenAssault"
 
 
 [RTUIMission_TemplarAmbush]
