@@ -1,3 +1,7 @@
+2.1.11:
+- Added new Strategy UI images courtesy of Steam user ne|V|esis.
+- Increased the power of Echoed Agony. Feedback should have a higher chance to proc.
+
 2.1.10:
 - Improvements to the Program Briefing screen. The progress bar will now track your progress towards the next stage of influence, rather than the questline. Since they are pretty closely tied together, this should give you a better understanding of when the next stage will be available.
 - Fix support for custom AvailabilityCodes. I took this from the discord, but I don't remember who exactly from, apologies.

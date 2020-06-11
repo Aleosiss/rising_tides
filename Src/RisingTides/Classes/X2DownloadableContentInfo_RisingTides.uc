@@ -28,7 +28,7 @@ var config String screen_path;
 
 defaultproperties
 {
-	Version=(Major=2, Minor=1, Patch=10)
+	Version=(Major=2, Minor=1, Patch=11)
 }
 
 /// <summary>
