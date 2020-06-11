@@ -8,6 +8,7 @@
 
 class RTAbility extends X2Ability config(RisingTides);
 	var protected X2Condition_UnitProperty						LivingFriendlyUnitOnlyProperty;
+	var protected X2Condition_UnitProperty						LivingFriendlyUnitAndCivilianProperty;
 	var protected X2Condition_UnitEffectsWithAbilitySource		OverTheShoulderProperty;
 	var protected X2Condition_UnitProperty						LivingHostileUnitOnlyNonRoboticProperty;
 	var protected RTCondition_PsionicTarget						PsionicTargetingProperty;
@@ -408,6 +409,17 @@ defaultproperties
 		ExcludeCivilian=true
 	End Object
 	LivingFriendlyUnitOnlyProperty = DefaultLivingFriendlyUnitOnlyProperty
+
+	Begin Object Class=X2Condition_UnitProperty Name=DefaultLivingFriendlyUnitAndCivilianProperty
+		ExcludeAlive=false
+		ExcludeDead=true
+		ExcludeFriendlyToSource=false
+		ExcludeHostileToSource=true
+		TreatMindControlledSquadmateAsHostile=false
+		FailOnNonUnits=true
+		ExcludeCivilian=false
+	End Object
+	LivingFriendlyUnitAndCivilianProperty = DefaultLivingFriendlyUnitAndCivilianProperty
 
 	Begin Object Class=X2Condition_UnitProperty Name=DefaultLivingHostileUnitOnlyNonRoboticProperty
 		ExcludeAlive=false

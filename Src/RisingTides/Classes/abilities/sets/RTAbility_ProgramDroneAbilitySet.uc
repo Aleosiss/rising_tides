@@ -79,7 +79,7 @@ static function X2AbilityTemplate RTProgramDroneCloakingProtocolOn() {
 	Template.AbilityMultiTargetStyle = Radius;
 
 	CloakingEffect = `RTEB.CreateStealthEffect(1, true);
-	CloakingEffect.TargetConditions.AddItem(default.LivingFriendlyUnitOnlyProperty);
+	CloakingEffect.TargetConditions.AddItem(default.LivingFriendlyUnitAndCivilianProperty);
 
 	Template.AddMultiTargetEffect(CloakingEffect);
 	Template.AddMultiTargetEffect(class'X2Effect_Spotted'.static.CreateUnspottedEffect());
