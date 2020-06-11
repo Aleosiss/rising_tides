@@ -1645,17 +1645,15 @@ public function int GetCurrentVersion() {
 	return Version;
 }
 
-public function bool CompareVersion(int newVersion, // the version to compare against
-									optional bool bShouldNotUpdateVersion = false // if this is set, do not update the version to the newerVersion
-) {
+public function bool CompareVersion(int newVersion) { // the version to compare agains
 	if(newVersion > GetCurrentVersion()) {
-		// the new version is newer
-		if(!bShouldNotUpdateVersion) {
-			Version = newVersion;
-		}
 		return true;
 	} else {
 		// the new version is either equal or older
 		return false;
 	}
+}
+
+public function UpdateVersion(int newVersion) {
+	self.Version = newVersion;
 }

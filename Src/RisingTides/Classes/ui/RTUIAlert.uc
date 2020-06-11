@@ -6,6 +6,7 @@ var localized string strTemplarAmbushStr2;
 var localized string strTemplarAmbushStr3;
 var localized string strTemplarAmbushHeader;
 var localized string strTemplarAmbushBegin;
+var localized string strTemplarAmbushImagePath;
 
 var localized string m_strTemplarQuestlineFailedHeader;
 var localized string m_strTemplarQuestlineFailedTitle;
@@ -115,7 +116,7 @@ simulated function BuildTemplarAmbushAlert() {
 		strTemplarAmbushStr2,																								// chosen name line
 		strTemplarAmbushStr3,																								// chosen nick line
 		class'UIUtilities_Text'.static.GetColoredText(strTemplarAmbushDescription, eUIState_Header),						// body of the message
-		m_strChosenAmbushImage,																								// the picture
+		strTemplarAmbushImagePath,																							// the picture
 		strTemplarAmbushBegin,																								// confirm string
 		"");																												// cancel string
 
