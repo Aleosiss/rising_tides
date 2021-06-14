@@ -1,3 +1,6 @@
+2.1.12:
+- Disallow Spectre clones from using Program Sustain, thereby fixing issues where Program Operatives would not be properly revived after the death of their shadowbound clone.
+
 2.1.11:
 - Added new Strategy UI images courtesy of Steam user ne|V|esis.
 - Increased the power of Echoed Agony. Feedback should have a higher chance to proc.
