@@ -192,12 +192,7 @@ function RTGameState_Unit CreateRTOperative(name GhostTemplateName, XComGameStat
 function ApplyWeaponUpgrades(name GhostTemplateName, XComGameState_Item NewWeaponState) {
 	local X2WeaponUpgradeTemplate UpgradeTemplate;
 	local X2ItemTemplateManager ItemTemplateMgr;
-	//local name WeaponUpgradeName;
 	local int idx;
-
-	//local name DebugIteratorName;
-	//local array<name> DebuggingNames;
-
 
 	ItemTemplateMgr = class'X2ItemTemplateManager'.static.GetItemTemplateManager();
 	NewWeaponState.WipeUpgradeTemplates();
