@@ -168,11 +168,12 @@ static function X2AbilityTemplate CreateOverTheShoulderAbility(X2AbilityTemplate
 	local X2AbilityMultiTarget_Radius			Radius;
 	local array<name>							SkipExclusions;
 
-	local RTEffect_AuraSource				OTSEffect;			// I'm unsure of how this works... but it appears that
+	local RTEffect_AuraSource					OTSEffect;		// I'm unsure of how this works... but it appears that
 																// this will control the application and removal of aura effects within its range
 
 	// Over The Shoulder
 	local RTEffect_MobileSquadViewer			VisionEffect;	// this lifts a small amount of the FOW around the unit	and gives vision of it
+	local RTEffect_OverTheShoulder				TargetDefinitionEffect;	// this applies a MTIV similar to TargetDefinition
 	local X2Effect_IncrementUnitValue			TagEffect;		// this tags the unit so certain OTS effects can only proc once per turn
 
 	// Unsettling Voices
@@ -217,19 +218,32 @@ static function X2AbilityTemplate CreateOverTheShoulderAbility(X2AbilityTemplate
 	// begin enemy aura effects	---------------------------------------
 
 	// The Default "Can see through walls" Vision Effect
-	VisionEffect = new class'RTEffect_MobileSquadViewer';
-	VisionEffect.BuildPersistentEffect(1, false, true, false, eGameRule_PlayerTurnEnd);
-	VisionEffect.SetDisplayInfo(ePerkBuff_Penalty, default.OTS_TITLE, default.OTS_DESC_ENEMY, Template.IconImage, true,,Template.AbilitySourceName);
-	VisionEffect.TargetConditions.AddItem(default.PsionicTargetingProperty);
-	VisionEffect.DuplicateResponse = eDupe_Refresh;
-	VisionEffect.bUseTargetSightRadius = false;
-	VisionEffect.bUseTargetSizeRadius = false;
-	VisionEffect.iCustomTileRadius = 3;
-	VisionEffect.bRemoveWhenTargetDies = true;
-	VisionEffect.bRemoveWhenSourceDies = true;
-	VisionEffect.EffectName = default.OverTheShoulderEffectName;
-	VisionEffect.IconImage = Template.IconImage;
-	Template.AddMultiTargetEffect(VisionEffect);
+	if(`CONFIG.UseOldOTSGFX) {
+		VisionEffect = new class'RTEffect_MobileSquadViewer';
+		VisionEffect.BuildPersistentEffect(1, false, true, false, eGameRule_PlayerTurnEnd);
+		VisionEffect.SetDisplayInfo(ePerkBuff_Penalty, default.OTS_TITLE, default.OTS_DESC_ENEMY, Template.IconImage, true,,Template.AbilitySourceName);
+		VisionEffect.TargetConditions.AddItem(default.PsionicTargetingProperty);
+		VisionEffect.DuplicateResponse = eDupe_Refresh;
+		VisionEffect.bUseTargetSightRadius = false;
+		VisionEffect.bUseTargetSizeRadius = false;
+		VisionEffect.iCustomTileRadius = 3;
+		VisionEffect.bRemoveWhenTargetDies = true;
+		VisionEffect.bRemoveWhenSourceDies = true;
+		VisionEffect.EffectName = default.OverTheShoulderEffectName;
+		VisionEffect.IconImage = Template.IconImage;
+		Template.AddMultiTargetEffect(VisionEffect);
+	} else {
+		TargetDefinitionEffect = new class'RTEffect_OverTheShoulder';
+		TargetDefinitionEffect.BuildPersistentEffect(1, false, true, false, eGameRule_PlayerTurnEnd);
+		TargetDefinitionEffect.SetDisplayInfo(ePerkBuff_Penalty, default.OTS_TITLE, default.OTS_DESC_ENEMY, Template.IconImage, true,,Template.AbilitySourceName);
+		TargetDefinitionEffect.TargetConditions.AddItem(default.PsionicTargetingProperty);
+		TargetDefinitionEffect.DuplicateResponse = eDupe_Refresh;
+		TargetDefinitionEffect.bRemoveWhenTargetDies = true;
+		TargetDefinitionEffect.bRemoveWhenSourceDies = true;
+		TargetDefinitionEffect.EffectName = default.OverTheShoulderEffectName;
+		TargetDefinitionEffect.IconImage = Template.IconImage;
+		Template.AddMultiTargetEffect(TargetDefinitionEffect);
+	}
 
 	// Unsettling Voices
 	VoiceEffect = new class'RTEffect_UnsettlingVoices';

@@ -1356,16 +1356,14 @@ private function XComGameState_Unit GetSelectedUnitInArmory()
 	return UnitState;
 }
 
-exec function RT_PrintEffectsAndMITVsForClosestUnitToCursor(bool bShouldRemove = false) {
+exec function RT_PrintEffectsAndMICTVsForClosestUnitToCursor(bool bShouldRemove = false) {
 	local XComGameState_Unit UnitState;
 	local XComTacticalCheatManager CheatsManager;
 
 	CheatsManager = `CHEATMGR;
 
 	UnitState = CheatsManager.GetClosestUnitToCursor();
-
-	`RTLOG("Printing all particle effects and MITVs for " $ UnitState.GetFullName(), false, true);
-	`RTS.PrintEffectsAndMITVsForUnitState(UnitState, bShouldRemove);
+	`RTS.PrintEffectsAndMICTVsForUnitState(UnitState, bShouldRemove);
 }
 
 exec function RT_DebugSpeakerTemplate(name CharTemplateName)

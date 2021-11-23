@@ -18,6 +18,7 @@ var config array<name> TemplarUnitNames;
 var config bool MindWrackKillsRulers;
 var config bool HostileTemplarFocusUIEnabled;
 var config bool TemplarFocusVisualizationPatchEnabled;
+var config bool UseOldOTSGFX;
 var config array<name> ProgramTechs;
 
 var config array<name> NewAbilityAvailabilityCodes;
@@ -26,9 +27,12 @@ var localized array<String> NewAbilityAvailabilityStrings;
 // weak ref to the screen (I just copied this from RJ and don't know if it's really necessary)
 var config String screen_path;
 
+var String BuildTimestamp;
+
 defaultproperties
 {
 	Version=(Major=2, Minor=1, Patch=11)
+	BuildTimestamp="1633630150"
 }
 
 /// <summary>
@@ -87,6 +91,7 @@ static event OnPostTemplatesCreated()
 	`endif
 
 	`RTLOG("Script package loaded. Version: " $ GetVersionString());
+	`RTLOG("Build Timestamp: [" $ default.BuildTimestamp $ "]");
 
 	MakePsiAbilitiesInterruptable();
 	MakeAbilitiesNotTurnEndingForTimeStandsStill();

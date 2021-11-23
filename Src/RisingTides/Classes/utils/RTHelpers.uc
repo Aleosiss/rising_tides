@@ -14,6 +14,12 @@ defaultproperties
 	DebugEffectName = "DebugEffectName"
 }
 
+enum ERTMatType {
+	eMatType_MITV,
+	eMatType_MIC
+};
+
+
 struct RTModVersion
 {
 	var int Major;
@@ -337,20 +343,22 @@ static function CheckpointDebug(out int checkpointNum, optional bool bShouldRedS
 	`RTLOG("Checkpoint " $ checkpointNum, bShouldRedScreenToo, bShouldOutputToConsoleToo);
 }
 
-static function PrintEffectsAndMITVsForUnitState(XComGameState_Unit UnitState, bool bShouldRemove) {
+static function PrintEffectsAndMICTVsForUnitState(XComGameState_Unit UnitState, bool bShouldRemove) {
 	local XGUnit UnitVisualizer;
 	local XComUnitPawn UnitPawn;
 
 	UnitVisualizer = XGUnit(UnitState.GetVisualizer());
 	UnitPawn = UnitVisualizer.GetPawn();
 
-	PrintEffectsAndMITVsForUnitPawn(UnitPawn, bShouldRemove);
+	`RTLOG("Printing all particle effects, MICs, and MITVs for " $ UnitState.GetFullName(), false, true);
+	PrintEffectsAndMICTVsForUnitPawn(UnitPawn, bShouldRemove);
 }
 
-static function PrintEffectsAndMITVsForUnitPawn(XComUnitPawn UnitPawn, bool bShouldRemove) {
+static function PrintEffectsAndMICTVsForUnitPawn(XComUnitPawn UnitPawn, bool bShouldRemove) {
 	local ParticleSystemComponent PSComponent, TestPSComponent;
 	local MeshComponent MeshComp;
 	local MaterialInstanceTimeVarying MITV;
+	local MaterialInstanceConstant MIC;
 	local int i;
 
 	foreach UnitPawn.Mesh.AttachedComponents( class'ParticleSystemComponent', TestPSComponent )
@@ -377,25 +385,39 @@ static function PrintEffectsAndMITVsForUnitPawn(XComUnitPawn UnitPawn, bool bSho
 	{
 		`RTLOG("--------------------------------------------------------------------", false, true);
 		`RTLOG("Found MeshComponent: " $ PathName(MeshComp), false, true);
+		`RTLOG(PathName(MeshComp) $ " has " $ MeshComp.Materials.Length $ " materials.", false, true);
 		for (i = 0; i < MeshComp.Materials.Length; i++)
 		{
 			if (MeshComp.GetMaterial(i).IsA('MaterialInstanceTimeVarying'))
 			{
 				MITV = MaterialInstanceTimeVarying(MeshComp.GetMaterial(i));
-				`RTLOG("Found PrimaryMaterial: " $ PathName(MITV), false, true);
+				`RTLOG("Found MITV PrimaryMaterial: " $ PathName(MITV), false, true);
 				if(bShouldRemove) 
 					MeshComp.PopMaterial(i, eMatPriority_AnimNotify);
+			} else if(MeshComp.GetMaterial(i).IsA('MaterialInstanceConstant')) {
+				MIC = MaterialInstanceConstant(MeshComp.GetMaterial(i));
+				`RTLOG("Found MIC PrimaryMaterial: " $ PathName(MIC), false, true);
+				if(bShouldRemove) {
+					`RTLOG("Not removing MIC. That would be odd.", false, true);
+				}
 			}
 		}
 
+		`RTLOG(PathName(MeshComp) $ " has " $ MeshComp.AuxMaterials.Length $ " aux materials.", false, true);
 		for (i = 0; i < MeshComp.AuxMaterials.Length; i++)
 		{
 			if (MeshComp.GetMaterial(i).IsA('MaterialInstanceTimeVarying'))
 			{
 				MITV = MaterialInstanceTimeVarying(MeshComp.GetMaterial(i));
-				`RTLOG("Found AuxMaterial: " $ PathName(MITV), false, true);
+				`RTLOG("Found MITV AuxMaterial: " $ PathName(MITV), false, true);
 				if(bShouldRemove)
 					MeshComp.PopMaterial(i, eMatPriority_AnimNotify);
+			} else if(MeshComp.GetMaterial(i).IsA('MaterialInstanceConstant')) {
+				MIC = MaterialInstanceConstant(MeshComp.GetMaterial(i));
+				`RTLOG("Found MIC AuxMaterial: " $ PathName(MIC), false, true);
+				if(bShouldRemove) {
+					`RTLOG("Not removing MIC. That would be odd.", false, true);
+				}
 			}
 		}
 	}

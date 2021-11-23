@@ -100,7 +100,8 @@ static function X2AbilityTemplate GhostPsiSuite()
 
 	AnimSetEffect = new class'X2Effect_AdditionalAnimSets';
 	//AnimSetEffect.AddAnimSetWithPath("RisingTidesContentPackage.Anims.AS_Psi_X2");
-	AnimSetEffect.AddAnimSetWithPath("RisingTidesContentPackage.Anims.AS_Psi_WOTC");
+	//AnimSetEffect.AddAnimSetWithPath("RisingTidesContentPackage.Anims.AS_Psi_WOTC");
+	AnimSetEffect.AddAnimSetWithPath("RisingTidesContentPackage.Anims.AS_Psi_NoAmp");
 	Template.AddTargetEffect(AnimSetEffect);
 
 	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;

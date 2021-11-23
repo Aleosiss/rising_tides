@@ -1,4 +1,8 @@
-class RTAction_RemoveMITV extends X2Action;
+class RTAction_RemoveMITV extends RTAction;
+
+var name MITVName;
+var EMatPriority eMaterialPriority;
+var ERTMatType eMaterialType;
 
 event bool BlocksAbilityActivation()
 {
@@ -12,7 +16,7 @@ function Init()
 	//`RTS.PrintEffectsAndMITVsForUnitPawn(UnitPawn, false);
 	//`RTLOG("-----------------------------RTAction_RemoveMITV BEFORE--------------------------------", false, true);
 	//`RTLOG("Cleaning up MITVs!", false, true);
-	UnitPawn.CleanUpMITV();
+	CleanUpMITV();
 	//`RTLOG("-----------------------------RTAction_RemoveMITV AFTER--------------------------------", false, true);
 	//`RTS.PrintEffectsAndMITVsForUnitPawn(UnitPawn, false);
 	//`RTLOG("-----------------------------RTAction_RemoveMITV AFTER--------------------------------", false, true);
@@ -34,20 +38,28 @@ simulated function CleanUpMITV()
 	{
 		for (i = 0; i < MeshComp.Materials.Length; i++)
 		{
-			if (MeshComp.GetMaterial(i).IsA('MaterialInstanceTimeVarying'))
+
+			if (CheckMaterial(eMaterialType, eMaterialPriority, MITVName, MeshComp.GetMaterial(i)))
 			{
-				MeshComp.PopMaterial(i, eMatPriority_AnimNotify);
+				MeshComp.PopMaterial(i, eMaterialPriority);
 			}
 		}
 
 		for (i = 0; i < MeshComp.AuxMaterials.Length; i++)
 		{
-			if (MeshComp.GetMaterial(i).IsA('MaterialInstanceTimeVarying'))
+			if (CheckMaterial(eMaterialType, eMaterialPriority, MITVName, MeshComp.GetMaterial(i)))
 			{
-				MeshComp.PopMaterial(i, eMatPriority_AnimNotify);
+				MeshComp.PopMaterial(i, eMaterialPriority);
 			}
 		}
 	}
 
 	UnitPawn.UpdateAllMeshMaterials();
+}
+
+defaultproperties
+{
+	eMaterialType=eMatType_MITV
+	eMaterialPriority=eMatPriority_AnimNotify
+	MITVName=""
 }
