@@ -240,10 +240,8 @@ protected function bool ChooseSpawnLocation(out Vector ChosenSpawnLocation) {
 		if(ChosenSpawnLocation == EmptyVector) {
 			PositionIndex = `SYNC_RAND_STATIC(FloorPoints.Length);
 			ChosenSpawnLocation = FloorPoints[PositionIndex];
-			return true;
-		} else {
-			return true;
 		}
+		return true;
 	}
 }
 

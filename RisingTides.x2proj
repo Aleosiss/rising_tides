@@ -432,7 +432,6 @@
     <Content Include="Src\RisingTides\Classes\effects\RTEffect_KillUnitWithExceptions.uc" />
     <Content Include="Config\XComNew2020Icons.ini" />
     <Content Include="Src\RisingTides\Classes\effects\RTEffect_OverTheShoulder.uc" />
-    <Content Include="Src\RisingTides\Classes\actions\RTAction_Outline" />
     <Content Include="Src\RisingTides\Classes\actions\RTAction.uc" />
     <Content Include="Src\RisingTides\Classes\ui\RTUIScreenListener_Version.uc" />
   </ItemGroup>

@@ -8,7 +8,7 @@ var name VersionTextName;
 
 defaultProperties
 {
-    VersionTextName = 'rtVersionText'
+    VersionTextName = "rtVersionText"
 	ScreenClass = none
 }
 
