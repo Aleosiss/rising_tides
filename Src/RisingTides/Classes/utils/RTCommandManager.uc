@@ -1632,6 +1632,10 @@ private static function ApplyWeaponUpgrades(name GhostTemplateName, XComGameStat
 	}
 }
 
+exec function RT_DebugItemUpgrades() {
+	class'X2DownloadableContentInfo_RisingTides'.static.PrintProgramItemUpgradeTemplates();
+}
+
 exec function RT_Patch219() {
 	`DLCINFO.AddProgramTechs();
 	`DLCINFO.ReshowProgramDroneRewardPopup();

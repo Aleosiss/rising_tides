@@ -36,23 +36,6 @@ function Init()
 	ApplyMaterial(UnitPawn, Material, eMaterialPriority, eMaterialType);
 	`RTS.PrintEffectsAndMICTVsForUnitState(UnitState, false);
 }
-/*
-enum EMatPriority {
-	eMatPriority_Original,	
-	eMatPriority_LootSparkles,
-	eMatPriority_Objective,
-	eMatPriority_AnimNotify,
-	eMatPriority_ScanningProtocol,
-	eMatPriority_TargetDefinition,
-	eMatPriority_AOEDamage,
-};
-
-enum ERTMatType {
-	eMatType_MITV,
-	eMatType_MIC
-};
-
- */
 
 static function ApplyMaterial(XComUnitPawn StaticUnitPawn, MaterialInterface material, EMatPriority MaterialPriority, ERTMatType staticMaterialType)
 {

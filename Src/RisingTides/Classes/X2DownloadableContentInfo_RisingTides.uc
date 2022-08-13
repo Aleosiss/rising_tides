@@ -32,7 +32,7 @@ var String BuildTimestamp;
 defaultproperties
 {
 	Version=(Major=2, Minor=1, Patch=11)
-	BuildTimestamp="1637679780"
+	BuildTimestamp="1660336537"
 }
 
 /// <summary>
@@ -103,11 +103,38 @@ static event OnPostTemplatesCreated()
 		PatchTemplarFocusVisualization();
 	}
 
+	//PrintProgramItemUpgradeTemplates();
 	//PrintAbilityTemplates();
 }
 
 static function PatchTemplarFocusVisualization() {
 	class'RTAbility_TemplarAbilitySet'.static.PatchTemplarFocusVisualization();
+}
+
+static function PrintProgramItemUpgradeTemplates() {
+	local X2WeaponUpgradeTemplate Template;
+	local X2ItemTemplateManager ItemMgr;
+	local array<X2WeaponUpgradeTemplate> Templates;
+	local name IteratorName;
+	local WeaponAttachment Attachment;
+
+	// ClipSizeUpgrade_Sup
+	// CritUpgrade_Sup
+
+	ItemMgr = class'X2ItemTemplateManager'.static.GetItemTemplateManager();
+	Templates = ItemMgr.GetAllUpgradeTemplates();
+
+	foreach Templates(Template) {
+		switch(Template.DataName) {
+			case 'RTCosmetic_Suppressor':
+				`RTLOG("Printing all attachable weapons for cosmetic silencer");
+				foreach Template.UpgradeAttachments(Attachment) {
+					`RTLOG("" $ Attachment.ApplyToWeaponTemplate);
+				}
+				`RTLOG("-------------------------------------------------------");
+				break;
+		}
+	}
 }
 
 static function PrintAbilityTemplates() {
