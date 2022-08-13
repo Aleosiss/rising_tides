@@ -14,6 +14,13 @@ defaultproperties
 	DebugEffectName = "DebugEffectName"
 }
 
+enum ERTProgramFavorAvailablity {
+	eAvailable,
+	eUnavailable_NoFavors,
+	eUnavailable_NoAvailableSquads,
+	eUnavailable_NoFavorsRemainingThisMonth
+};
+
 enum ERTMatType {
 	eMatType_MITV,
 	eMatType_MIC

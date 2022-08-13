@@ -532,7 +532,7 @@ static function GiveHighCovenAssaultMission(XComGameState NewGameState, XComGame
 
 	ProgramState = `RTS.GetNewProgramState(NewGameState);
 	ProgramState.IncrementTemplarQuestlineStage();
-	ProgramState.ModifyAvailableProgramFavors(3);
+	ProgramState.ModifyProgramFavors(3);
 
 	MissionState = CreateTemplarHighCovenAssaultMission(NewGameState);
 
@@ -690,7 +690,7 @@ static function GiveTemplarQuestlineCompleteReward(XComGameState NewGameState, X
 	local RTGameState_ProgramFaction ProgramState;
 
 	ProgramState = `RTS.GetNewProgramState(NewGameState);
-	ProgramState.ModifyAvailableProgramFavors(30);
+	ProgramState.ModifyProgramFavors(30);
 	ProgramState.IncrementTemplarQuestlineStage(); // should be 4 now
 	if(ProgramState.getTemplarQuestlineStage() != 4) {
 		`RTLOG("Something is very wrong, the questline stage was NOT four when giving the questline reward?");
@@ -896,14 +896,14 @@ static function GiveProgramGrantFavorReward(XComGameState NewGameState, XComGame
 	local RTGameState_ProgramFaction ProgramState;
 
 	ProgramState = `RTS.GetNewProgramState(NewGameState);
-	ProgramState.ModifyAvailableProgramFavors(1);
+	ProgramState.ModifyProgramFavors(1);
 }
 
 static function GiveProgramCallInFavorReward(XComGameState NewGameState, XComGameState_Reward RewardState, optional StateObjectReference AuxRef, optional bool bOrder = false, optional int OrderHours = -1) {
 	local RTGameState_ProgramFaction ProgramState;
 
 	ProgramState = `RTS.GetNewProgramState(NewGameState);
-	ProgramState.MakeOneSmallFavorAvailable();
+	ProgramState.iFavorsRemainingThisMonth++;
 }
 
 
@@ -932,7 +932,7 @@ static function GiveProgramAdvanceQuestlineReward(XComGameState NewGameState, XC
 	}
 
 	ProgramState.IncrementTemplarQuestlineStage();
-	ProgramState.ModifyAvailableProgramFavors(3);
+	ProgramState.ModifyProgramFavors(3);
 
 	// notification
 	class'X2StrategyGameRulesetDataStructures'.static.BuildDynamicPropertySet(PropertySet, 'RTUIAlert', 'RTAlert_TemplarQuestlineAdvanced', none, true, true, true, false);

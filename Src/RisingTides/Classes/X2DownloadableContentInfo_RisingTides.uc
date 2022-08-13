@@ -181,30 +181,32 @@ static event OnExitPostMissionSequence()
 	local XComGameState NewGameState;
 	local RTGameState_ProgramFaction NewProgramState, ProgramState;
 	local bool bShouldTryToIncreaseInfluence;
-	//local XComGameState_BattleData BattleData;
+	local XComGameState_BattleData BattleData;
+	local XComGameState_MissionSite MissionState;
+	local XComGameStateHistory History;
 
 	ProgramState = `RTS.GetProgramState();
-	bShouldTryToIncreaseInfluence = ProgramState.isOneSmallFavorActivated();
 	if(ProgramState.bShouldPerformPostMissionCleanup) {
+		`RTLOG("Performing post-mission cleanup!");
 		NewGameState = `CreateChangeState("Cleanup Program Operatives from XCOMHQ!");
 		NewProgramState = `RTS.GetNewProgramState(NewGameState);
 		NewProgramState.PerformPostMissionCleanup(NewGameState);
 
 		`GAMERULES.SubmitGameState(NewGameState);
 
-		// Might be useful later, but for now disabled because losing one mission would make it impossible to gain more favors
-		/*
-		BattleData = XComGameState_BattleData(`XCOMHISTORY.GetSingleGameStateObjectForClass(class'XComGameState_BattleData'));
-		if(BattleData.bLocalPlayerWon) {
-			// This method creates and submits two new xcgs's
-			NewProgramState.TryIncreaseInfluence();
-		}
-		*/
-
+		History = `XCOMHISTORY;
+		BattleData = XComGameState_BattleData(History.GetSingleGameStateObjectForClass(class'XComGameState_BattleData'));
+		MissionState = XComGameState_MissionSite(History.GetGameStateForObjectID(BattleData.m_iMissionID));
 		// Try to increase influence
-		if(bShouldTryToIncreaseInfluence) {
+		if(class'RTGameState_ProgramFaction'.static.IsOSFMission(MissionState)) {
+			`RTLOG("This was an OSF mission, trying to increase influence");
+			// this method creates and submits NewGameStates, so we don't need to submit again
 			NewProgramState.TryIncreaseInfluence();
+		} else {
+			`RTLOG("This was NOT an OSF mission, not trying to increase influence");
 		}
+	} else {
+		`RTLOG("No need to perform post-mission cleanup.");
 	}
 }
 

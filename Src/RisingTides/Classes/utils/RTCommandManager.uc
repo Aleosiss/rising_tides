@@ -31,7 +31,7 @@ exec function RT_PrintProgramFactionInformation(optional bool bShouldPrintFullIn
 	Faction = `RTS.GetProgramState();
 
 	if(bShouldPrintFullInfo) {
-		`RTLOG(Faction.ToString(bShouldPrintAllFields), , true);
+		`RTLOG(Faction.ToString(bShouldPrintAllFields), false, true);
 		return;
 	}
 
@@ -57,7 +57,7 @@ exec function RT_CheatModifyProgramFavors(int diff) {
 	NewGameState = `CreateChangeState("CHEAT - Modify Program Favor Count");
 	ProgramState = `RTS.GetNewProgramState(NewGameState);
 
-	ProgramState.ModifyAvailableProgramFavors(diff);
+	ProgramState.ModifyProgramFavors(diff);
 
 	`GAMERULES.SubmitGameState(NewGameState);
 }
@@ -69,7 +69,7 @@ exec function RT_CheatModifyProgramFavorTracker(int diff) {
 	NewGameState = `CreateChangeState("CHEAT - Modify Program Favors Called In Count");
 	ProgramState = `RTS.GetNewProgramState(NewGameState);
 
-	ProgramState.iNumberOfFavorsCalledIn += diff;
+	ProgramState.iFavorsUntilNextInfluenceGain -= diff;
 
 	`GAMERULES.SubmitGameState(NewGameState);
 }
@@ -193,7 +193,7 @@ exec function RT_ActivateOneSmallFavor() {
 	NewGameState = `CreateChangeState("CHEAT: Force One Small Favor!");
 	ProgramState = `RTS.GetNewProgramState(NewGameState);
 
-	ProgramState.MakeOneSmallFavorAvailable();
+	ProgramState.iFavorsRemainingThisMonth++;
 	
 	`GAMERULES.SubmitGameState(NewGameState);
 }
@@ -306,7 +306,6 @@ exec function RT_RegenerateProgramOperatives() {
 	ProgramState.Master.Length = 0;
 	ProgramState.Active.Length = 0;
 	ProgramState.Captured.Length = 0;
-	ProgramState.Deployed = none;
 
 	`XCOMGAME.GameRuleset.SubmitGameState(NewGameState);
 

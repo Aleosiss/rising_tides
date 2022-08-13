@@ -1,6 +1,7 @@
 `define RT class'RTHelpers'
 `define RTS `RT.static
 `define RTD `RT.default
+`define RTPS class'RTGameState_ProgramFaction'.static
 `define RTLOG(msg, showredscreen, showconsole) `RTS.RTLog(`msg, `showredscreen, `showconsole)
 `define DLCINFO class'X2DownloadableContentInfo_RisingTides'.static
 `define CONFIG class'X2DownloadableContentInfo_RisingTides'.default

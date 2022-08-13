@@ -6,20 +6,25 @@ var array<StateObjectReference> 			CapturedOperatives;
 var private string							SquadName;
 var private string							SquadBackground;
 var private int								SquadID;
-var bool									bIsDeployed;
 var private name							AssociatedSitRepTemplateName;
-var private bool							bCanBeDeployed;
+var private bool							bIsDeployable;
+var StateObjectReference					DeployedMissionRef;
+var int										DeployedMissionPreviousMaxSoldiers; // how many soldiers were originally allowed on this mission - used to properly reset if we decide NOT to deploy
 
 function CreateSquad(int ID, String LocName, String LocBackground, name LocSitRepTemplateName, bool LocCanBeDeployed) {
 	SquadID = ID;
 	SquadName = LocName;
 	SquadBackground = LocBackground;
 	AssociatedSitRepTemplateName = LocSitRepTemplateName;
-	bCanBeDeployed = LocCanBeDeployed;
+	bIsDeployable = LocCanBeDeployed;
 }
 
-function bool CanBeDeployed() {
-	return bCanBeDeployed;
+function bool isDeployable() {
+	return bIsDeployable;
+}
+
+function bool IsDeployed() {
+	return DeployedMissionRef.ObjectID != 0;
 }
 
 function bool IsFullStrength() {
