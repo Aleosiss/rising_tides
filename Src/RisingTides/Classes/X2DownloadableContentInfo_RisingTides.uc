@@ -29,10 +29,13 @@ var config String screen_path;
 
 var String BuildTimestamp;
 
+var array<int> MutuallyExclusiveProgramOperativeRanks;
+
 defaultproperties
 {
 	Version=(Major=2, Minor=1, Patch=11)
-	BuildTimestamp="1660336537"
+	BuildTimestamp="1660677164"
+	MutuallyExclusiveProgramOperativeRanks=(6,7)
 }
 
 /// <summary>
@@ -93,6 +96,7 @@ static event OnPostTemplatesCreated()
 	`RTLOG("Script package loaded. Version: " $ GetVersionString());
 	`RTLOG("Build Timestamp: [" $ default.BuildTimestamp $ "]");
 
+	MakeProgramOperativeAbilitiesMutuallyExclusive();
 	MakePsiAbilitiesInterruptable();
 	MakeAbilitiesNotTurnEndingForTimeStandsStill();
 	AddProgramFactionCovertActions();
@@ -102,9 +106,56 @@ static event OnPostTemplatesCreated()
 	if(default.TemplarFocusVisualizationPatchEnabled) {
 		PatchTemplarFocusVisualization();
 	}
-
+	
 	//PrintProgramItemUpgradeTemplates();
 	//PrintAbilityTemplates();
+}
+
+static function MakeProgramOperativeAbilitiesMutuallyExclusive() {
+	local X2SoldierClassTemplateManager ClassManager;
+	local X2AbilityTemplateManager AbilityManager;
+	local X2AbilityTemplate AbilityTemplate;
+	local array<X2SoldierClassTemplate> Templates;
+	local X2SoldierClassTemplate Template;
+	local array<SoldierClassAbilitySlot> Slots;
+	local SoldierClassAbilitySlot Slot;
+	local array<name> Perks;
+	local name Perk, Perk2, NotName;
+	local int i;
+
+
+	ClassManager = class'X2SoldierClassTemplateManager'.static.GetSoldierClassTemplateManager();
+	AbilityManager = class'X2AbilityTemplateManager'.static.GetAbilityTemplateManager();
+	Templates = ClassManager.GetAllSoldierClassTemplates();
+	foreach Templates(Template) {
+		if(InStr(Template.DataName, "RT_") == INDEX_NONE) {
+			continue;
+		}
+
+		foreach default.MutuallyExclusiveProgramOperativeRanks(i) {
+			Perks.Length = 0;
+			Slots = Template.SoldierRanks[i].AbilitySlots;
+			foreach Slots(Slot) {
+				Perks.AddItem(Slot.AbilityType.AbilityName);
+			}
+
+			foreach Perks(Perk) {
+				AbilityTemplate = AbilityManager.FindAbilityTemplate(Perk);
+				foreach Perks(Perk2) {
+					if(Perk == Perk2) {
+						continue;
+					}
+					NotName = `RTS.ConcatName('NOT_', Perk2);
+					if(AbilityTemplate.PrerequisiteAbilities.Find(NotName) == INDEX_NONE) {
+						`RTLOG("Making " $ Perk $ " mutually exclusive with " $ Perk2);
+						AbilityTemplate.PrerequisiteAbilities.AddItem(NotName);
+					} else {
+						`RTLOG(Perk $ " is already mutually exclusive with " $ Perk2);
+					}
+				}
+			}
+		}
+	}
 }
 
 static function PatchTemplarFocusVisualization() {
@@ -502,5 +553,18 @@ static function UpdateAbilityAvailabilityStrings()
     {
         AbilityTemplateManager.AbilityAvailabilityCodes.AddItem(default.NewAbilityAvailabilityCodes[idx]);
         AbilityTemplateManager.AbilityAvailabilityStrings.AddItem(default.NewAbilityAvailabilityStrings[idx]);
+    }
+}
+
+static function bool IsModLoaded(name DLCName)
+{
+    local int i;
+    local XComOnlineEventMgr Mgr;
+
+    Mgr = `ONLINEEVENTMGR;
+    for (i = Mgr.GetNumDLC() - 1; i >= 0; i--) {
+        if(Mgr.GetDLCNames(i) == DLCName) {
+            return true;
+        }
     }
 }
