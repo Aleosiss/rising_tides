@@ -676,7 +676,7 @@ function PromoteAllOperatives(XComGameState NewGameState) {
 	foreach Active(UnitIteratorObjRef) {
 		UnitState = XComGameState_Unit(History.GetGameStateForObjectID(UnitIteratorObjRef.ObjectID));
 		UnitState = XComGameState_Unit(NewGameState.ModifyStateObject(class'XComGameState_Unit', UnitState.ObjectID));
-		if(UnitState.GetMyTemplateName() == 'RTGhostOperator') { // don't have Kaga level up normally
+		if(!RTCharacterTemplate(UnitState.GetMyTemplate()).ReceivesProgramRankups) {
 			continue;
 		}
 
