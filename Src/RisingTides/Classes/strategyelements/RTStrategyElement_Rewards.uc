@@ -786,9 +786,6 @@ static function EliminateFaction(XComGameState NewGameState, XComGameState_Resis
 	local XComGameState_Unit UnitState;
 	local XComGameState_StrategyCard CardState;
 	local name FactionTemplateName;
-	//local XComGameState_WorldRegion RegionState;
-	//local StateObjectReference EmptyRef;
-	//local int i;
 	local RTGameState_DestroyedHaven HavenRuinState;
 
 	History = `XCOMHISTORY;
@@ -813,8 +810,7 @@ static function EliminateFaction(XComGameState NewGameState, XComGameState_Resis
 	ResistHQ = XComGameState_HeadquartersResistance(NewGameState.ModifyStateObject(class'XComGameState_HeadquartersResistance', ResistHQ.GetReference().ObjectID));
 	ResistHQ.Factions.RemoveItem(FactionState.GetReference());
 
-	// remove covert actions
-	FactionState.CleanUpFactionCovertActions(NewGameState);
+	CleanUpFactionCovertActions(NewGameState, FactionState);
 	FactionState.CovertActions.Length = 0;
 
 	// remove resistance orders
@@ -890,6 +886,30 @@ static function EliminateFaction(XComGameState NewGameState, XComGameState_Resis
 
 	// rip
 	NewGameState.RemoveStateObject(FactionState.ObjectID);
+}
+
+private static function CleanUpFactionCovertActions(XComGameState NewGameState, XComGameState_ResistanceFaction FactionState) {
+	local XComGameStateHistory History;
+	local XComGameState_CovertAction ActionState;
+	local int idx;
+
+	History = `XCOMHISTORY;
+	for(idx = 0; idx < FactionState.CovertActions.Length; idx++) {
+		// Clean up any non-started actions created for the facility.
+		ActionState = XComGameState_CovertAction(History.GetGameStateForObjectID(FactionState.CovertActions[idx].ObjectID));
+		if (ActionState == none) {
+			continue;	
+		}
+		
+		ActionState = XComGameState_CovertAction(NewGameState.ModifyStateObject(class'XComGameState_CovertAction', ActionState.ObjectID));
+	
+		if(!ActionState.bStarted) {	
+			ActionState.RemoveEntity(NewGameState);
+		} else {
+			`RTS.GetProgramState().BlockedCovertActions.AddItem(ActionState.GetReference());
+			ActionState.CompleteCovertAction(NewGameState);
+		}
+	}
 }
 
 static function GiveProgramGrantFavorReward(XComGameState NewGameState, XComGameState_Reward RewardState, optional StateObjectReference AuxRef, optional bool bOrder = false, optional int OrderHours = -1) {

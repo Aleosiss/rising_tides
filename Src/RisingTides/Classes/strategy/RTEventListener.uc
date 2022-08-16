@@ -7,6 +7,7 @@ static function array<X2DataTemplate> CreateTemplates()
 
 	Templates.AddItem(RTContinueFactionHQReveal());
 	Templates.AddItem(EnableHostileTemplarFocusUI());
+	Templates.AddItem(RTBlockCovertActions());
 
 	return Templates;
 }
@@ -75,6 +76,50 @@ static function EventListenerReturn OnOverrideFocus(Object EventData, Object Eve
 		Tuple.Data[4].s = "";
 		Tuple.Data[5].s = `XEXPAND.ExpandString(class'UITacticalHUD_SoldierInfo'.default.FocusLevelDescriptions[FocusState.FocusLevel]);
 		Tuple.Data[6].s = class'UITacticalHUD_SoldierInfo'.default.FocusLevelLabel;
+	}
+
+	return ELR_NoInterrupt;
+}
+
+static function X2EventListenerTemplate RTBlockCovertActions()
+{
+	local CHEventListenerTemplate Template;
+
+	`CREATE_X2TEMPLATE(class'CHEventListenerTemplate', Template, 'RT_BlockCovertActions');
+
+	Template.RegisterInStrategy = true;
+	Template.AddCHEvent('CovertAction_PreventGiveRewards', OnPreventGiveRewards, ELD_Immediate);
+
+	return Template;
+}
+
+/**
+ * Tuple Data:
+ * Index 0 = false
+ */
+static function EventListenerReturn OnPreventGiveRewards(Object EventData, Object EventSource, XComGameState GameState, Name Event, Object CallbackData)
+{
+	local XComGameState_CovertAction ActionState;
+	local XComLWTuple Tuple;
+	local StateObjectReference ActionRef;
+	local RTGameState_ProgramFaction ProgramState;
+
+	Tuple = XComLWTuple(EventData);
+	ActionState = XComGameState_CovertAction(EventSource);
+	ActionRef = ActionState.GetReference();
+	
+	ProgramState = `RTS.GetProgramState();
+	if(ProgramState == none) {
+		return ELR_NoInterrupt;
+	}
+
+	if(ProgramState.BlockedCovertActions.Length == 0) {
+		return ELR_NoInterrupt;
+	}
+
+	if(ProgramState.BlockedCovertActions.Find('ObjectID', ActionState.ObjectID) != INDEX_NONE) {
+		ProgramState.BlockedCovertActions.RemoveItem(ActionRef);
+		Tuple.Data[0].b = true;
 	}
 
 	return ELR_NoInterrupt;

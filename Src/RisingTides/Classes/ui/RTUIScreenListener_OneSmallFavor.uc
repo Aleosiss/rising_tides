@@ -13,6 +13,13 @@ var config float 					OSFCheckboxDistortOnClickDuration;
 
 delegate OldOnClickedDelegate(UIButton Button);
 
+defaultproperties
+{
+	// Leaving this assigned to none will cause every screen to trigger its signals on this class
+	ScreenClass = none;
+}
+
+
 event OnInit(UIScreen Screen)
 {
 	local RTGameState_ProgramFaction Program;
@@ -367,10 +374,4 @@ protected function bool OnUnrealCommand(int cmd, int arg)
 		return true;
 	}
 	return false;
-}
-
-defaultproperties
-{
-	// Leaving this assigned to none will cause every screen to trigger its signals on this class
-	ScreenClass = none;
 }

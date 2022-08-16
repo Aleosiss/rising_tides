@@ -83,6 +83,7 @@ var private bool														bTemplarQuestFailed;
 var private int															iTemplarQuestlineStage;
 var private array<StateObjectReference>									TemplarQuestActions;
 var private bool 														bTemplarMissionSucceeded;
+var array<StateObjectReference> 										BlockedCovertActions;				// used to cull in-progress Templar Covert Actions 
 
 // ONE SMALL FAVOR HANDLING VARIABLES
 var bool																bShouldResetOSFMonthly;
@@ -1381,7 +1382,7 @@ function PerformPostMissionCleanup(XComGameState NewGameState) {
 
 protected function int GetXComGearTier() {
 	local array<Name> CompletedTechs;
-	return 1;
+
 	CompletedTechs = `RTS.GetCompletedXCOMTechNames();
 	if(CompletedTechs.Find('PlasmaRifle') != INDEX_NONE) {
 		return 3;
