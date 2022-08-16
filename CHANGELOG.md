@@ -1,3 +1,18 @@
+2.2.0:
+- Majorly improvve how One Small Favor is handled behind-the-scenes.
+	- No behavior changes, but it may screw with a save game. 
+		- If you have no favors, use RT_CheatModifyProgramFavors 1 to add one
+		- If you have none remaining this month (no timeslots), use RT_CheatModifyProgramFavorTracker 1 to add one
+		- If you have no squads, use RT_RegenerateProgramOperatives to rebuild them
+- The Program Info Screen will now inform you why you cannot call in a Favor (none left, no squads available to take the mission, no timeslots left that month)
+- Fix missing upgrade visuals on Program weapons
+- Modify Over the Shoulder visualization
+	- set the 'UseOldOTSGFX' config property to bring back the old VFX
+- Fix soldiers getting stuck in a Covert Action if it was in-progress when the Templars were destroyed
+- Fix Chosen showing up on Templar Missions
+- Later perks in the Program Operative trees are now mutually exclusive
+- Many minor code refactoring changes
+
 2.1.12:
 - Disallow Spectre clones from using Program Sustain, thereby fixing issues where Program Operatives would not be properly revived after the death of their shadowbound clone.
 

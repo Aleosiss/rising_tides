@@ -127,12 +127,12 @@ simulated function SetAvailable() {
 	AvailabilityText.SetHtmlText(strTextTemp);
 }
 
-simulated function SetUnavailable() {
+simulated function SetUnavailable(ERTProgramFavorAvailablity reason) {
 	local String strTextTemp;
 
 	OutlinePanel.SetOutline(true, "0x" $ FailedColor);
 
-	strTextTemp = class'UIUtilities_Text'.static.AddFontInfo(m_strProgramFavorUnavailable, false);
+	strTextTemp = class'UIUtilities_Text'.static.AddFontInfo(`RTPS.GetLocalizationForAvailability(reason), false);
 	strTextTemp = class'UIUtilities_Text'.static.AlignCenter(strTextTemp);
 	strTextTemp = ColorText(strTextTemp, FailedColor);
 	AvailabilityText.SetHtmlText(strTextTemp);

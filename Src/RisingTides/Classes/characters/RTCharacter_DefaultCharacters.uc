@@ -85,6 +85,8 @@ static function X2CharacterTemplate CreateWhisperTemplate()
 	CharTemplate.DefaultAppearance.nmTorsoDeco = 'RT_MamaMEA_Remnant_Hvy_Torso_M';
 	CharTemplate.DefaultAppearance.bGhostPawn = False;
 
+	CharTemplate.ReceivesProgramRankups = true;
+
 	`RTLOG("Adding Whisper's character template!");
 	return CharTemplate;
 }
@@ -150,6 +152,8 @@ static function X2CharacterTemplate CreateQueenTemplate()
 	CharTemplate.DefaultAppearance.nmTorsoDeco = 'RT_MamaMEA_Remnant_Hvy_Torso_F';
 	CharTemplate.DefaultAppearance.bGhostPawn = False;
 
+	CharTemplate.ReceivesProgramRankups = true;
+
 	`RTLOG("Adding Queen's character template!");
 	return CharTemplate;
 }
@@ -214,6 +218,8 @@ static function X2CharacterTemplate CreateNovaTemplate()
 	CharTemplate.DefaultAppearance.nmShins = 'RT_MamaMEA_Remnant_Hvy_Legs_F';
 	CharTemplate.DefaultAppearance.nmTorsoDeco = 'RT_MamaMEA_Remnant_Hvy_Torso_F';
 	CharTemplate.DefaultAppearance.bGhostPawn = False;
+
+	CharTemplate.ReceivesProgramRankups = true;
 
 	`RTLOG("Adding Nova's character template!");
 	return CharTemplate;
@@ -286,6 +292,8 @@ static function X2CharacterTemplate CreateKagaTemplate()
 	CharTemplate.Abilities.AddItem('RTPsionicLash');
 	CharTemplate.Abilities.AddItem('RTUnfurlTheVeil');
 	CharTemplate.Abilities.AddItem('Fade');
+
+	CharTemplate.ReceivesProgramRankups = false;
 
 	`RTLOG("Adding Kaga's character template!");
 	return CharTemplate;
