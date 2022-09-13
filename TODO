@@ -64,3 +64,21 @@
   ✔ Add +1 Program Favors covert action (medium) -> available if program favors < 1 @done(19-09-21 09:09)
   ☐ Stretch: Add Templar High Coven Special Abilities
   ☐ Stretch: Add Program Requests System
+2.2.0 Strategy Overhaul Compatibility Patch TODOS:
+  ✔ Improve behind-the-scenes handling of Program Favors @done(22-09-12 02:40)
+  ✔ Improve behind-the-scenes handling of Program Squads @done(22-09-12 02:40)
+  ✔ Add localizations for all covert actions and activity chains from Covert Infiltration @done(22-09-13 00:32)
+  ✔ Adjust One Small Favor checkbox position for UICovertActionsGeoscape @done(22-09-13 00:16)
+  ✔ Make One Small Favor checkbox reappear after returning to the UICovertActionsGeoscape page @done(22-09-13 00:16)
+  ✔ Make One Small Favor work for Infiltrations @done(22-09-12 02:40)
+  ✔ Reiterate on OTS visualization @done(22-09-12 02:40)
+  ✔ Show reasoning for why Program squad is unavailable on PIS @done(22-09-12 02:40)
+  ✔ Fix Chosen showing up on Templar missions @done(22-09-12 02:42)
+  ✔ Make higher-tier Program Operative perks mutually exclusive @done(22-09-12 02:42)
+  ✔ Fix soldiers getting stuck in a Covert Action if they were in-progress when the Templars were destroyed @done(22-09-12 02:42)
+  ✔ Fix how Stealth effects are applied so that if multiple exist, losing one does not remove all of them and their VFX @done(22-09-12 18:22)
+  ☐ Make One Small Favor work for Covert Actions
+  ☐ Add Infiltration Modifiers for Program Operative perks, characters, classes, and equipment
+  ☐ Add button for PIS to UIStrategyMap
+  ☐ Fix Psistorm Casting Visualization
+  ☐ Disable debugging and versioning information for release

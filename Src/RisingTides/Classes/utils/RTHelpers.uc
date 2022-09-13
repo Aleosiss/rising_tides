@@ -206,19 +206,20 @@ static function RTGameState_ProgramFaction GetNewProgramState(XComGameState NewG
 static function RTLog(string message, optional bool bShouldRedScreenToo = false, optional bool bShouldOutputToConsoleToo = false) {
 	local bool b;
 	local name mod;
+	local string tsString;
 
 	b = `DLCINFO.DebuggingEnabled();
 	if(!b) {
 		return;
 	}
 	mod = 'RisingTides';
-
-	`LOG(message, b, mod);
+	tsString = " [" $ `CONFIG.BuildTimestamp $ "]: ";
+	`LOG(tsString $ message, b, mod);
 	if(bShouldRedScreenToo) {
-		`RedScreen(mod $ ": " $ message);
+		`RedScreen(mod $ tsString $ message);
 	}
 	if(bShouldOutputToConsoleToo) {
-		class'Helpers'.static.OutputMsg(mod $ ": " $ message);
+		class'Helpers'.static.OutputMsg(mod $ tsString $ ": " $ message);
 	}
 }
 
@@ -294,8 +295,8 @@ static function XComGameState_ResistanceFaction GetTemplarFactionState()
 	return TemplarState;
 }
 
-simulated static function bool IsInvalidMission(X2MissionSourceTemplate Template) {
-	return class'RTGameState_ProgramFaction'.default.InvalidMissionSources.Find(Template.DataName) != INDEX_NONE;
+simulated static function bool IsInvalidMission(name TemplateName) {
+	return class'RTGameState_ProgramFaction'.default.InvalidMissionSources.Find(TemplateName) != INDEX_NONE;
 }
 
 static function String GetProgramColor(optional ERTColor colorEnum) {

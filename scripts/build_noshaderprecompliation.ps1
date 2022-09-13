@@ -448,9 +448,9 @@ Copy-Item "$stagingPath/Src/*" "$sdkPath/Development/Src/" -Force -Recurse -Warn
 Write-Host "Copied."
 
 # append extra_globals.uci to globals.uci
-if (Test-Path "$sdkPath/Development/Src/$modNameCanonical/Classes/extra_globals.uci") {
+if (Test-Path "$sdkPath/Development/Src/extra_globals.uci") {
     Write-Host "Appending macros..."
-    Get-Content "$sdkPath/Development/Src/$modNameCanonical/Classes/extra_globals.uci" | Add-Content "$sdkPath/Development/Src/Core/Globals.uci"
+    Get-Content "$sdkPath/Development/Src/extra_globals.uci" | Add-Content "$sdkPath/Development/Src/Core/Globals.uci"
     Write-Host "Appended."
 } else {
     Write-Host "Couldn't find an extra_globals.uci to append extra macros..."

@@ -93,7 +93,7 @@ static function JustPassingThroughModifyTacStartState(XComGameState StartState) 
 		return;
 	}
 	MissionState = XComGameState_MissionSite(`XCOMHISTORY.GetGameStateForObjectID(XComHQ.MissionRef.ObjectID));
-	if(`RTS.IsInvalidMission(MissionState.GetMissionSource())) {
+	if(`RTS.IsInvalidMission(MissionState.GetMissionSource().DataName)) {
 		//`RTLOG("Invalid Mission Type for JPT!");
 		return;
 	}

@@ -44,7 +44,7 @@ function DisplayVersionText(UIShell ShellScreen)
 		VersionText = ShellScreen.Spawn(class'UIText', ShellScreen);
 		VersionText.InitText(VersionTextName);
 		// This code aligns the version text to the Main Menu Ticker
-		VersionText.AnchorBottomCenter();
+		VersionText.AnchorBottomLeft();
 		VersionText.SetY(-ShellScreen.TickerHeight + 10);
 	}
 

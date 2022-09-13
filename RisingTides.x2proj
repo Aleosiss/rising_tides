@@ -231,9 +231,6 @@
     <Content Include="Config\XComEngine.ini" />
     <Content Include="Config\XComGame.ini" />
     <Content Include="Localization\INT\XComGame.int" />
-    <Content Include="Src\RisingTides\Classes\extra_globals.uci">
-      <SubType>Content</SubType>
-    </Content>
     <Content Include="Src\RisingTides\Classes\X2DownloadableContentInfo_RisingTides.uc">
       <SubType>Content</SubType>
     </Content>
@@ -434,6 +431,11 @@
     <Content Include="Src\RisingTides\Classes\effects\RTEffect_OverTheShoulder.uc" />
     <Content Include="Src\RisingTides\Classes\actions\RTAction.uc" />
     <Content Include="Src\RisingTides\Classes\ui\RTUIScreenListener_Version.uc" />
+    <Content Include="Src\extra_globals.uci" />
+    <Content Include="Src\RisingTides\Classes\utils\RTDataStructures.uc" />
+    <Content Include="Src\RisingTides\Classes\ui\RTUIScreenListener_ProgramInfoScreenButton.uc" />
+    <Content Include="Src\RisingTides\Classes\ui\RTUIUtilities.uc" />
+    <Content Include="Src\RisingTides\Classes\ui\RTUIImageButton.uc" />
   </ItemGroup>
   <Import Project="$(MSBuildLocalExtensionPath)\XCOM2.targets" />
 </Project>

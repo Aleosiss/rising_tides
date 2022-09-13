@@ -49,6 +49,7 @@ simulated function OnEffectRemoved(const out EffectAppliedData ApplyEffectParame
 	//local bool bWasPreviouslyConcealed;
 	//local UnitValue PreviousValue;
 	local RTGameState_Effect StealthEffectState;
+	local bool isStillStealthed;
 
 	super.OnEffectRemoved(ApplyEffectParameters, NewGameState, bCleansed, RemovedEffectState);
 
@@ -60,11 +61,15 @@ simulated function OnEffectRemoved(const out EffectAppliedData ApplyEffectParame
 
 	NewUnitState = XComGameState_Unit(NewGameState.ModifyStateObject(class'XComGameState_Unit', OldUnitState.ObjectID));
 
-	`XEVENTMGR.TriggerEvent('UnitBreakRTSTealth', NewUnitState, NewUnitState, NewGameState);
 
-	// Stealth can wear off naturally and not break concealment
-	if (NewUnitState != none && !StealthEffectState.bWasPreviouslyConcealed && OldUnitState.IsConcealed()) {
-		`XEVENTMGR.TriggerEvent('EffectBreakUnitConcealment', NewUnitState, NewUnitState, NewGameState);
+	isStillStealthed = NewUnitState.IsUnitAffectedByEffectName(EffectName);
+	if(!isStillStealthed) {
+		`XEVENTMGR.TriggerEvent('UnitBreakRTSTealth', NewUnitState, NewUnitState, NewGameState);
+		
+		// Stealth can wear off naturally and not break concealment
+		if (NewUnitState != none && !StealthEffectState.bWasPreviouslyConcealed && OldUnitState.IsConcealed()) {
+			`XEVENTMGR.TriggerEvent('EffectBreakUnitConcealment', NewUnitState, NewUnitState, NewGameState);
+		}
 	}
 }
 
@@ -92,15 +97,21 @@ simulated function AddX2ActionsForVisualization_Removed(XComGameState VisualizeG
 {
 	local X2Action_Delay					DelayAction;
 	local RTAction_RemoveMITV				RemoveMITVAction;
+	local XComGameState_Unit				UnitState;
 
 	super.AddX2ActionsForVisualization_Removed(VisualizeGameState, ActionMetadata, EffectApplyResult, RemovedEffect);
 
-	RemoveMITVAction = RTAction_RemoveMITV(class'RTAction_RemoveMITV'.static.AddToVisualizationTree(ActionMetadata, VisualizeGameState.GetContext(), false, ActionMetadata.LastActionAdded));
-	RemoveMITVAction.MITVName = 'M_Wraith_Armor_Overlay_On_MITV';
 
-	DelayAction = X2Action_Delay(class'X2Action_Delay'.static.AddToVisualizationTree(ActionMetadata, VisualizeGameState.GetContext(), false, ActionMetadata.LastActionAdded));
-	DelayAction.Duration = 0.33f;
-	DelayAction.bIgnoreZipMode = true;
+	UnitState = XComGameState_Unit(ActionMetadata.StateObject_NewState);
+	// don't remove from Mimic Beacons - this will cause them to revert to a normal (non-mimic) look
+	if(UnitState.GetMyTemplateName() != 'MimicBeacon') {
+		RemoveMITVAction = RTAction_RemoveMITV(class'RTAction_RemoveMITV'.static.AddToVisualizationTree(ActionMetadata, VisualizeGameState.GetContext(), false, ActionMetadata.LastActionAdded));
+		RemoveMITVAction.MITVName = 'M_Wraith_Armor_Overlay_On_MITV';
+		
+		DelayAction = X2Action_Delay(class'X2Action_Delay'.static.AddToVisualizationTree(ActionMetadata, VisualizeGameState.GetContext(), false, ActionMetadata.LastActionAdded));
+		DelayAction.Duration = 0.33f;
+		DelayAction.bIgnoreZipMode = true;
+	}
 }
 
 

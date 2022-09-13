@@ -41,19 +41,28 @@ simulated function OnEffectRemoved(const out EffectAppliedData ApplyEffectParame
 
 simulated function AddX2ActionsForVisualization(XComGameState VisualizeGameState, out VisualizationActionMetadata BuildTrack, name EffectApplyResult)
 {
+	local X2Action_TargetDefinition OutlineAction;
 	local X2Action_ForceUnitVisiblity ForceVisiblityAction;
-	local RTAction_ApplyMITV ApplyMITVAction;
+	//local RTAction_ApplyMITV ApplyMITVAction;
 
 	super.AddX2ActionsForVisualization(VisualizeGameState, BuildTrack, EffectApplyResult);
 
-	ForceVisiblityAction = X2Action_ForceUnitVisiblity(class'X2Action_ForceUnitVisiblity'.static.AddToVisualizationTree(BuildTrack, VisualizeGameState.GetContext()));
-	ForceVisiblityAction.ForcedVisible = eForceVisible;
+	if (EffectApplyResult == 'AA_Success' && XComGameState_Unit(BuildTrack.StateObject_NewState) != none)
+	{
+		OutlineAction = X2Action_TargetDefinition(class'X2Action_TargetDefinition'.static.AddToVisualizationTree(BuildTrack, VisualizeGameState.GetContext(), false, BuildTrack.LastActionAdded));
+		OutlineAction.bEnableOutline = true;
 
-	ApplyMITVAction = RTAction_ApplyMITV(class'RTAction_ApplyMITV'.static.AddToVisualizationTree(BuildTrack, VisualizeGameState.GetContext()));
-	ApplyMITVAction.MITVPath = overlayMaterialPath;
-	ApplyMITVAction.MITVName = overlayMaterialName;
-	ApplyMITVAction.eMaterialType = eMatType_MIC;
-	ApplyMITVAction.eMaterialPriority = overlayMaterialPriority;
+		ForceVisiblityAction = X2Action_ForceUnitVisiblity(class'X2Action_ForceUnitVisiblity'.static.AddToVisualizationTree(BuildTrack, VisualizeGameState.GetContext()));
+		ForceVisiblityAction.ForcedVisible = eForceVisible;
+
+		/*
+		ApplyMITVAction = RTAction_ApplyMITV(class'RTAction_ApplyMITV'.static.AddToVisualizationTree(BuildTrack, VisualizeGameState.GetContext()));
+		ApplyMITVAction.MITVPath = overlayMaterialPath;
+		ApplyMITVAction.MITVName = overlayMaterialName;
+		ApplyMITVAction.eMaterialType = eMatType_MIC;
+		ApplyMITVAction.eMaterialPriority = overlayMaterialPriority;
+		*/
+	}
 }
 
 protected function OnAddX2ActionsForVisualization_Removed(XComGameState VisualizeGameState, out VisualizationActionMetadata BuildTrack, const name EffectApplyResult, XComGameState_Effect RemovedEffect)
@@ -68,14 +77,17 @@ protected function OnAddX2ActionsForVisualization_Removed(XComGameState Visualiz
 
 		super.AddX2ActionsForVisualization_Removed(VisualizeGameState, BuildTrack, EffectApplyResult, RemovedEffect);
 
+		class'X2Action_TargetDefinition'.static.AddToVisualizationTree(BuildTrack, VisualizeGameState.GetContext(), false, BuildTrack.LastActionAdded);
+		
 		ForceVisiblityAction = X2Action_ForceUnitVisiblity(class'X2Action_ForceUnitVisiblity'.static.AddToVisualizationTree(BuildTrack, VisualizeGameState.GetContext()));
 		ForceVisiblityAction.ForcedVisible = eForceNone;
 		ForceVisiblityAction.bMatchToGameStateLoc = true;
-
+/*
 		RemoveMITVAction = RTAction_RemoveMITV(class'RTAction_RemoveMITV'.static.AddToVisualizationTree(BuildTrack, VisualizeGameState.GetContext()));
 		RemoveMITVAction.eMaterialPriority = overlayMaterialPriority;
 		RemoveMITVAction.eMaterialType = eMatType_MIC;
 		RemoveMITVAction.MITVName = overlayMaterialName;
+ */
 	}
 }
 	
@@ -87,6 +99,11 @@ simulated function AddX2ActionsForVisualization_Removed(XComGameState VisualizeG
 simulated function AddX2ActionsForVisualization_Sync(XComGameState VisualizeGameState, out VisualizationActionMetadata ActionMetadata)
 {
 	local X2Action_ForceUnitVisiblity ForceVisiblityAction;
+
+	local X2Action_TargetDefinition OutlineAction;
+
+	OutlineAction = X2Action_TargetDefinition(class'X2Action_TargetDefinition'.static.AddToVisualizationTree(ActionMetadata, VisualizeGameState.GetContext(), false, ActionMetadata.LastActionAdded));
+	OutlineAction.bEnableOutline = true;
 
 	ForceVisiblityAction = X2Action_ForceUnitVisiblity(class'X2Action_ForceUnitVisiblity'.static.AddToVisualizationTree(ActionMetadata, VisualizeGameState.GetContext()));
 	ForceVisiblityAction.ForcedVisible = eForceVisible;
@@ -100,6 +117,6 @@ DefaultProperties
 	OverTheShoulderAppliedEventName = "OverTheShoulderApplied"
 	overlayMaterialPath = "RisingTidesContentPackage.Materials"
 	overlayMaterialName = "Gatherer_OverTheShoulder_TargetDefinition"
-	//overlayMaterialPriority = eMatPriority_TargetDefinition
-	overlayMaterialPriority = eMatPriority_AnimNotify
+	overlayMaterialPriority = eMatPriority_TargetDefinition
+	//overlayMaterialPriority = eMatPriority_AnimNotify
 }

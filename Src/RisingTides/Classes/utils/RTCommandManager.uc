@@ -313,8 +313,8 @@ exec function RT_RegenerateProgramOperatives() {
 	NewGameState = `CreateChangeState("Rising Tides: CHEAT: Regenerate Program Operatives, Part 2");
 	ProgramState = `RTS.GetNewProgramState(NewGameState);
 
-	ProgramState.CreateRTOperatives(NewGameState);
-	ProgramState.CreateRTSquads(NewGameState);
+	ProgramState.CreateProgramOperatives(NewGameState);
+	ProgramState.CreateProgramSquads(NewGameState);
 
 	`XCOMGAME.GameRuleset.SubmitGameState(NewGameState);
 

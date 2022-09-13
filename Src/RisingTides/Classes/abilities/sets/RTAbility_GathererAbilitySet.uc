@@ -971,9 +971,6 @@ static function X2Effect_DamageImmunity CreateGuardianAngelImmunitiesEffect(bool
 		Effect.TargetConditions.AddItem(default.LivingFriendlyUnitOnlyProperty);
 		Effect.TargetConditions.AddItem(CreateOverTheShoulderProperty());
 
-		//Effect.EffectAddedFn = DebugEffectAdded;
-		//Effect.ApplyChanceFn = DebugApplyChanceCheck;
-
 		return Effect;
 }
 //---------------------------------------------------------------------------------------

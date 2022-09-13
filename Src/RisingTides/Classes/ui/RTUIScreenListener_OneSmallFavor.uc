@@ -62,7 +62,10 @@ event OnRemoved(UIScreen Screen) {
 		ss = UISquadSelect(Screen);
 		// If the mission was launched, we don't want to clean up the XCGS_MissionSite
 		if(!ss.bLaunched) {
-			RemoveOneSmallFavorSitrep(XComGameState_MissionSite(`XCOMHISTORY.GetGameStateForObjectID(mr.ObjectID)));
+			if(mr.ObjectID != 0) {
+				`RTLOG("Attempting to remove OSF");
+				RemoveOneSmallFavorSitrep(XComGameState_MissionSite(`XCOMHISTORY.GetGameStateForObjectID(mr.ObjectID)));
+			}
 			mr = EmptyRef;
 		}
 		ManualGC();
@@ -152,7 +155,7 @@ function OnConfirmButtonInited(UIPanel Panel) {
 	// the checkbox shouldn't be clickable if the favor isn't available
 	bReadOnly = !(Program.IsOneSmallFavorAvailable() == eAvailable);
 	if(!bReadOnly) {
-		bReadOnly = `RTS.IsInvalidMission(MissionScreen.GetMission().GetMissionSource());
+		bReadOnly = `RTS.IsInvalidMission(MissionScreen.GetMission().GetMissionSource().DataName);
 		if(bReadOnly) {
 			`RTLOG("This MissionSource is invalid!", false, false);
 			return; // don't even make the checkbox in this case...
@@ -231,8 +234,8 @@ simulated function bool AddOneSmallFavorSitrep(XComGameState_MissionSite Mission
 		return false;
 	}
 	
-	if(`RTS.IsInvalidMission(MissionState.GetMissionSource())) {
-		`RTLOG("This map is invalid!", true);
+	if(`RTS.IsInvalidMission(MissionState.GetMissionSource().DataName)) {
+		`RTLOG("This mission is invalid!", true);
 		return false;
 	}
 
@@ -247,9 +250,12 @@ simulated function bool AddOneSmallFavorSitrep(XComGameState_MissionSite Mission
 	MissionState = XComGameState_MissionSite(NewGameState.ModifyStateObject(class'XComGameState_MissionSite', MissionState.ObjectID));
 
 	MissionState.TacticalGameplayTags.AddItem('RTOneSmallFavor');
-	Program.CashOneSmallFavor(NewGameState, MissionState); // we're doing it boys
-	ModifyOneSmallFavorSitrepForGeneratedMission(Program, MissionState, true);
-	ModifyMissionData(XComHQ, MissionState);
+	if(Program.CashOneSmallFavorForMission(NewGameState, MissionState)) { // we're doing it boys
+		ModifyOneSmallFavorSitrepForGeneratedMission(Program, MissionState, true);
+		ModifyMissionData(XComHQ, MissionState);
+	} else {
+		return false;
+	}
 
 	if (NewGameState.GetNumGameStateObjects() > 0) {
 		`XCOMGAME.GameRuleset.SubmitGameState(NewGameState);
@@ -270,8 +276,11 @@ simulated function bool RemoveOneSmallFavorSitrep(XComGameState_MissionSite Miss
 	History = `XCOMHISTORY;
 
 	if(MissionState.GeneratedMission.SitReps.Find('RTOneSmallFavor') != INDEX_NONE
-		|| MissionState.TacticalGameplayTags.Find('RTOneSmallFavor') != INDEX_NONE
-	) return false;
+		&& MissionState.TacticalGameplayTags.Find('RTOneSmallFavor') != INDEX_NONE
+	) {
+		`RTLOG("Could not remove One Small Favor, the mission did not have the required tags!");
+		return false;
+	}
 	
 	Program = RTGameState_ProgramFaction(History.GetSingleGameStateObjectForClass(class'RTGameState_ProgramFaction'));
 
@@ -284,7 +293,7 @@ simulated function bool RemoveOneSmallFavorSitrep(XComGameState_MissionSite Miss
 	XComHQ = XComGameState_HeadquartersXCom(NewGameState.ModifyStateObject(XComHQ.class, XComHQ.ObjectID));
 	MissionState = XComGameState_MissionSite(NewGameState.ModifyStateObject(class'XComGameState_MissionSite', MissionState.ObjectID));
 
-	Program.UncashOneSmallFavor(NewGameState, MissionState);
+	Program.UncashOneSmallFavorForMission(NewGameState, MissionState);
 	ModifyOneSmallFavorSitrepForGeneratedMission(Program, MissionState, false);
 	ModifyMissionData(XComHQ, MissionState);
 
