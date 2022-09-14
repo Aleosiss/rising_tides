@@ -48,6 +48,10 @@ event OnInit(UIScreen Screen)
 		return;
 	}
 
+	if(Screen.IsA('UIMission_Infiltrated')) {
+		return;
+	}
+
 	bDebugging = false;
 
 	ms = UIMission(Screen);
@@ -178,7 +182,7 @@ function OnConfirmButtonInited(UIPanel Panel) {
 		.SetPosition(PosX, PosY)
 		.SetColor(class'UIUtilities_Colors'.static.ColorToFlashHex(Program.GetMyTemplate().FactionColor))
 		.SetTooltipText(strCheckboxDesc, , , 10, , , true, 0.0f);
-	`RTLOG("Created a checkbox at position " $ PosX $ " x and " $ PosY $ " y.");
+	`RTLOG("Created a checkbox at position " $ PosX $ " x and " $ PosY $ " y for ScreenClass " $ MissionScreen.Class);
 	HandleInput(true);
 
 	// Modify the OnLaunchButtonClicked Delegate

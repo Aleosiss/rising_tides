@@ -8,3 +8,5 @@
 `define RTEB class'RTEffectBuilder'.static
 `define CreateChangeState(msg, setVisFence, visFenceTimeout) class'XComGameStateContext_ChangeContainer'.static.CreateChangeState(`msg, `setVisFence, `visFenceTimeout)
 `define ConsoleCommand(command) class'WorldInfo'.static.GetWorldInfo().GetALocalPlayerController().ConsoleCommand(`command)
+`define CDO(class) `class(class'XComEngine'.static.GetClassDefaultObject(class'`class'))
+`define GLOBAL X2DownloadableContentInfo_RisingTides(class'XComEngine'.static.GetClassDefaultObject(class'X2DownloadableContentInfo_RisingTides'))

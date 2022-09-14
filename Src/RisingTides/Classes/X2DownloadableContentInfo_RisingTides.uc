@@ -31,10 +31,12 @@ var String BuildTimestamp;
 
 var array<int> MutuallyExclusiveProgramOperativeRanks;
 
+var array<name> NEGATED_ENV_DAMAGE_ABILITIES;
+
 defaultproperties
 {
 	Version=(Major=2, Minor=1, Patch=11)
-	BuildTimestamp="1663098733"
+	BuildTimestamp="1663117185"
 	MutuallyExclusiveProgramOperativeRanks=(6,7)
 }
 

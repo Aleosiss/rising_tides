@@ -8,6 +8,7 @@ static function array<X2DataTemplate> CreateTemplates()
 	Templates.AddItem(RTContinueFactionHQReveal());
 	Templates.AddItem(EnableHostileTemplarFocusUI());
 	Templates.AddItem(RTBlockCovertActions());
+	Templates.AddItem(RTNegateEnvironmentalDamage());
 
 	return Templates;
 }
@@ -120,6 +121,48 @@ static function EventListenerReturn OnPreventGiveRewards(Object EventData, Objec
 	if(ProgramState.BlockedCovertActions.Find('ObjectID', ActionState.ObjectID) != INDEX_NONE) {
 		ProgramState.BlockedCovertActions.RemoveItem(ActionRef);
 		Tuple.Data[0].b = true;
+	}
+
+	return ELR_NoInterrupt;
+}
+
+static function X2EventListenerTemplate RTNegateEnvironmentalDamage()
+{
+	local X2EventListenerTemplate Template;
+
+	`CREATE_X2TEMPLATE(class'X2EventListenerTemplate', Template, 'RT_ModifyEnvironmentDamage');
+	Template.RegisterInTactical = true;
+	Template.AddEvent('ModifyEnvironmentDamage', NegateEnvironmentalDamage);
+
+	return Template;
+}
+/*
+	ModifyEnvironmentDamageTuple = new class'XComLWTuple';
+	ModifyEnvironmentDamageTuple.Id = 'ModifyEnvironmentDamage';
+	ModifyEnvironmentDamageTuple.Data.Add(3);
+	ModifyEnvironmentDamageTuple.Data[0].kind = XComLWTVBool;
+	ModifyEnvironmentDamageTuple.Data[0].b = false;  // override? (true) or add? (false)
+	ModifyEnvironmentDamageTuple.Data[1].kind = XComLWTVInt;
+	ModifyEnvironmentDamageTuple.Data[1].i = 0;  // override/bonus environment damage
+	ModifyEnvironmentDamageTuple.Data[2].kind = XComLWTVObject;
+	ModifyEnvironmentDamageTuple.Data[2].o = AbilityStateObject;  // ability being used
+	`XEVENTMGR.TriggerEvent('ModifyEnvironmentDamage', ModifyEnvironmentDamageTuple, self, NewGameState);
+
+	EventData = LWTuple
+	EventSource = X2Effect_ApplyWeaponDamage
+*/
+static function EventListenerReturn NegateEnvironmentalDamage(Object EventData, Object EventSource, XComGameState GameState, Name Event, Object CallbackData) {
+	local XComLWTuple Tuple;
+	local X2Effect_ApplyWeaponDamage Effect;
+	local XComGameState_Ability AbilityState;
+
+	AbilityState = XComGameState_Ability(Tuple.Data[2].o);
+
+	if(`GLOBAL.NEGATED_ENV_DAMAGE_ABILITIES.Find(AbilityState.GetMyTemplateName()) != INDEX_NONE) {
+
+		`RTLOG("Negating environmental damage for " $ AbilityState.GetMyTemplateName());
+		Tuple.Data[0].b = true;
+		Tuple.Data[1].i = 0;
 	}
 
 	return ELR_NoInterrupt;

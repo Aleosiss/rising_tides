@@ -1041,12 +1041,17 @@ static function X2AbilityTemplate RTRudimentaryCreaturesEvent() {
 	DamageEffect.bIgnoreArmor = true;
 	DamageEffect.bBypassSustainEffects = true;
 	DamageEffect.DamageTypes.AddItem('Psi');
+	DamageEffect.bApplyToWorldOnHit = false;
+	DamageEffect.bApplyToWorldOnMiss = false;
+	DamageEffect.EnvironmentalDamageAmount = 0;
 	Template.AddTargetEffect(DamageEffect);
 
 	Template.AddTargetEffect(class'X2StatusEffects'.static.CreateStunnedStatusEffect(3, 100, true));
 
 	Template.CustomFireAnim = 'HL_Psi_SelfCast';
 	Template.bShowActivation = true;
+
+	`GLOBAL.NEGATED_ENV_DAMAGE_ABILITIES.AddItem(Template.DataName);
 
 	return Template;
 }
@@ -1827,11 +1832,18 @@ static function X2AbilityTemplate RTPsionicStorm() {
 	ImmediateDamageEffect.bIgnoreBaseDamage = true;
 	ImmediateDamageEffect.bIgnoreArmor = true;
 	ImmediateDamageEffect.EffectDamageValue = default.PSISTORM_DMG;
+	ImmediateDamageEffect.bApplyToWorldOnHit = false;
+	ImmediateDamageEffect.bApplyToWorldOnMiss = false;
+	ImmediateDamageEffect.EnvironmentalDamageAmount = 0;
+	ImmediateDamageEffect.DamageTypes.AddItem('Psi');
+
+	`GLOBAL.NEGATED_ENV_DAMAGE_ABILITIES.AddItem(Template.DataName);
 
 	//  Do not shoot targets that were already hit by this unit this turn with this ability
 	MarkCondition = new class'X2Condition_UnitEffectsWithAbilitySource';
 	MarkCondition.AddExcludeEffect(default.PsistormMarkedEffectName, 'AA_UnitIsImmune');
 	ImmediateDamageEffect.TargetConditions.AddItem(MarkCondition);
+	ImmediateDamageEffect.TargetConditions.AddItem(default.LivingTargetOnlyProperty);
 
 	Template.AddMultiTargetEffect(ImmediateDamageEffect);
 
@@ -1882,6 +1894,8 @@ simulated function DimensionalRiftStage1_BuildVisualization(XComGameState Visual
 	local X2Action_ExitCover ExitCoverAction;
 	local XComGameState_BaseObject Placeholder_old, Placeholder_new;
 	local XComGameState_Ability Ability;
+	local X2Action_Fire FireAction;
+	local X2Action_Fire_CloseUnfinishedAnim CloseFireAction;
 
 	History = `XCOMHISTORY;
 
@@ -1921,8 +1935,8 @@ simulated function DimensionalRiftStage1_BuildVisualization(XComGameState Visual
 		//class'X2Action_Fire_OpenUnfinishedAnim'.static.AddToVisualizationTree(AvatarBuildData, Context);
 
 		// Wait to time the start of the warning FX
-		WaitAction = X2Action_TimedWait(class'X2Action_TimedWait'.static.AddToVisualizationTree(AvatarBuildData, VisualizeGameState.GetContext(), false, AvatarBuildData.LastActionAdded));
-		WaitAction.DelayTimeSec = 3.5;
+		//WaitAction = X2Action_TimedWait(class'X2Action_TimedWait'.static.AddToVisualizationTree(AvatarBuildData, VisualizeGameState.GetContext(), false, AvatarBuildData.LastActionAdded));
+		//WaitAction.DelayTimeSec = 3.5;
 
 		EffectAction = X2Action_PlayEffect(class'X2Action_PlayEffect'.static.AddToVisualizationTree(AvatarBuildData, VisualizeGameState.GetContext(), false, AvatarBuildData.LastActionAdded));
 		EffectAction.EffectName = "FX_Psi_Void_Rift.P_Psi_Void_Rift_Activation";
@@ -1931,7 +1945,7 @@ simulated function DimensionalRiftStage1_BuildVisualization(XComGameState Visual
 		EffectAction.EffectLocation = World.GetPositionFromTileCoordinates(TargetTile);
 
 		WaitAction = X2Action_TimedWait(class'X2Action_TimedWait'.static.AddToVisualizationTree(AvatarBuildData, VisualizeGameState.GetContext(), false, AvatarBuildData.LastActionAdded));
-		WaitAction.DelayTimeSec = 1.5;
+		WaitAction.DelayTimeSec = 0.5;
 
 		// Display the Warning FX (covert to tile and back to vector because stage 2 is at the GetPositionFromTileCoordinates coord
 		EffectAction = X2Action_PlayEffect(class'X2Action_PlayEffect'.static.AddToVisualizationTree(AvatarBuildData, VisualizeGameState.GetContext(), false, AvatarBuildData.LastActionAdded));
@@ -2106,11 +2120,18 @@ static function X2AbilityTemplate RTPsionicStormSustained() {
 	ImmediateDamageEffect.bIgnoreBaseDamage = true;
 	ImmediateDamageEffect.bIgnoreArmor = true;
 	ImmediateDamageEffect.EffectDamageValue = default.PSISTORM_DMG;
+	ImmediateDamageEffect.bApplyToWorldOnHit = false;
+	ImmediateDamageEffect.bApplyToWorldOnMiss = false;
+	ImmediateDamageEffect.EnvironmentalDamageAmount = 0;
+	ImmediateDamageEffect.DamageTypes.AddItem('Psi');
+
+	`GLOBAL.NEGATED_ENV_DAMAGE_ABILITIES.AddItem(Template.DataName);
 
 	//  Do not shoot targets that were already hit by this unit this turn with this ability
 	MarkCondition = new class'X2Condition_UnitEffectsWithAbilitySource';
 	MarkCondition.AddExcludeEffect(default.PsistormMarkedEffectName, 'AA_UnitIsImmune');
 	ImmediateDamageEffect.TargetConditions.AddItem(MarkCondition);
+	ImmediateDamageEffect.TargetConditions.AddItem(default.LivingTargetOnlyProperty);
 
 	Template.AddMultiTargetEffect(ImmediateDamageEffect);
 

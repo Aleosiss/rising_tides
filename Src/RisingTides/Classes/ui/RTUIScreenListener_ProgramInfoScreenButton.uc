@@ -1,8 +1,5 @@
 class RTUIScreenListener_ProgramInfoScreenButton extends UIScreenListener;
 
-var RTUIImageButton Button;
-
-
 /////////////////////
 /// Adding button ///
 /////////////////////
@@ -12,12 +9,12 @@ event OnInit(UIScreen Screen)
 	local UIStrategyMap StrategyMap;
     local RTGameState_ProgramFaction ProgramState;
 
-    ProgramState = `RTS.GetProgramState();
-    if (ProgramState == none || !ProgramState.bMetXCom) return;
-
-    `RTLOG("Trying to Spawn a Program Info Screen Button!");
 	StrategyMap = UIStrategyMap(Screen);
 	if (StrategyMap == none) return;
+
+    `RTLOG("Trying to Spawn a Program Info Screen Button!");
+    ProgramState = `RTS.GetProgramState();
+    if (ProgramState == none || !ProgramState.bMetXCom) return;
 
     `RTLOG("Found Correct Screen Type, adding!");
 	AddProgramInfoScreenButton(StrategyMap);
@@ -81,14 +78,9 @@ static protected function bool OnUnrealCommand(int cmd, int arg)
 	return false;
 }
 
-simulated function ManualGC() {
-    if(Button != none) {
-        Button.Remove();
-        Button = none;
-    }
-}
-
 simulated function AddProgramInfoScreenButton(UIStrategyMap Screen) {
+	local RTUIImageButton Button;
+
 	Button = Screen.Spawn(class'RTUIImageButton', Screen.StrategyMapHUD);
 	Button.InitImageButton('RT_UIStrategyMap_ProgramInfoScreenButton', "img:///RisingTidesContentPackage.UIImages.vhs_program_icon_v2_border_grey", OnButtonClicked);
 	Button.SetPosition(0, 0);

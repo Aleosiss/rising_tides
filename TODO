@@ -78,7 +78,11 @@
   ✔ Fix soldiers getting stuck in a Covert Action if they were in-progress when the Templars were destroyed @done(22-09-12 02:42)
   ✔ Fix how Stealth effects are applied so that if multiple exist, losing one does not remove all of them and their VFX @done(22-09-12 18:22)
   ☐ Make One Small Favor work for Covert Actions
-  ☐ Add Infiltration Modifiers for Program Operative perks, characters, classes, and equipment
-  ☐ Add button for PIS to UIStrategyMap
-  ☐ Fix Psistorm Casting Visualization
+  ✔ Add Infiltration Modifiers for Program Operative perks, characters, classes, and equipment @done(22-09-14 00:49)
+  ✔ Add button for PIS to UIStrategyMap @done(22-09-13 19:56)
+  ✔ Speed up Psistorm Casting Visualization @done(22-09-13 21:58)
   ☐ Disable debugging and versioning information for release
+  ✔ Fix Misplaced Checkbox on Infiltration mission launches @done(22-09-14 01:07)
+2.3.0 Program Requests Patch TODOS:
+  ☐ Add Covert Actions that grant Program Favors
+  ☐ Create randomly generated narratives/costs
