@@ -50,6 +50,18 @@ exec function RT_PrintProgramFactionInformation(optional bool bShouldPrintFullIn
 
 }
 
+exec function RT_CheatModifyProgramFavorTimeSlots(int diff) {
+	local RTGameState_ProgramFaction ProgramState;
+	local XComGameState NewGameState;
+
+	NewGameState = `CreateChangeState("CHEAT - Modify Program Times Called This Month Count");
+	ProgramState = `RTS.GetNewProgramState(NewGameState);
+
+	ProgramState.iFavorsRemainingThisMonth += diff;
+
+	`GAMERULES.SubmitGameState(NewGameState);
+}
+
 exec function RT_CheatModifyProgramFavors(int diff) {
 	local RTGameState_ProgramFaction ProgramState;
 	local XComGameState NewGameState;

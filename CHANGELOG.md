@@ -4,7 +4,7 @@
 	- Infiltrations can be undertaken by 'SPECTRE'
 	- SPECTRE continues to be able to do normal missions
 	- Bridge mod is required and a notification will be shown if it is not present
-- Majorly improvve how One Small Favor is handled behind-the-scenes.
+- Majorly improve how One Small Favor is handled behind-the-scenes.
 	- No behavior changes, but it may screw with a save game. 
 		- If you have no favors, use RT_CheatModifyProgramFavors 1 to add one
 		- If you have none remaining this month (no timeslots), use RT_CheatModifyProgramFavorTracker 1 to add one
@@ -19,7 +19,6 @@
 - Later perks in the Program Operative trees are now mutually exclusive
 - Modify Drone VFX attachment point
 - Many minor code refactoring changes
-- Meld Rework?
 
 2.1.12:
 - Disallow Spectre clones from using Program Sustain, thereby fixing issues where Program Operatives would not be properly revived after the death of their shadowbound clone.

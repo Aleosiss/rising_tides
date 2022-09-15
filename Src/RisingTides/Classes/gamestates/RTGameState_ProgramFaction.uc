@@ -1026,11 +1026,8 @@ simulated function bool CashOneSmallFavorForMission(XComGameState NewGameState, 
 }
 
 simulated function bool AddProgramSquadToMissionSite(XComGameState NewGameState, RTGameState_PersistentGhostSquad SquadState, XComGameState_MissionSite MissionSiteState) {
-	local XComGameStateHistory History;
 	local name OperativeTemplateName;
 	local array<name> OperativeTemplateNames;
-
-	History = `XCOMHISTORY;
 
 	SquadState = RTGameState_PersistentGhostSquad(NewGameState.ModifyStateObject(SquadState.class, SquadState.ObjectID));
 	SquadState.DeploymentRef = MissionSiteState.GetReference();
@@ -1049,9 +1046,6 @@ simulated function bool AddProgramSquadToMissionSite(XComGameState NewGameState,
 }
 
 private simulated function bool UncashOneSmallFavor(XComGameState NewGameState, StateObjectReference DeploymentRef) {
-	local StateObjectReference GhostRef, EmptyRef;
-	local name GhostTemplateName;
-
 	ModifyProgramFavors(1);
 	iFavorsRemainingThisMonth++;
 
@@ -1097,11 +1091,8 @@ simulated function bool UncashOneSmallFavorForMission(XComGameState NewGameState
 
 simulated function bool RemoveProgramSquadFromMissionSite(XComGameState NewGameState, RTGameState_PersistentGhostSquad SquadState, XComGameState_MissionSite MissionSiteState) {
 	local StateObjectReference EmptyRef;
-	local XComGameStateHistory History;
 	local name OperativeTemplateName;
 	local array<name> OperativeTemplateNames;
-
-	History = `XCOMHISTORY;
 
 	SquadState = RTGameState_PersistentGhostSquad(NewGameState.ModifyStateObject(SquadState.class, SquadState.ObjectID));
 	MissionSiteState = XComGameState_MissionSite(NewGameState.ModifyStateObject(MissionSiteState.class, MissionSiteState.ObjectID));

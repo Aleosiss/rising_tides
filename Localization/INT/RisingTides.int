@@ -422,4 +422,55 @@ m_strTemplarBetraylReactionBanner="Templar Betrayal"
 
 [RTUIScreenListener_MOTD]
 m_strTitle="Rising Tides Update Notice"
-m_strText="Rising Tides: The Program has been updated!\nHighlights of this patch are: \n- Add new covert action line to the Program to eliminate the Templars!\n    - 3 New Covert Actions - locate, inflitrate, and lure the Templars out from their HQ.\n    - New mission (Assault Templar High Coven)\n        - Attack the heart of Templar activities and kill Geist once and for all\n        - The Program will grant excellent rewards for completing this action, but be warned: your Templar soldiers WILL NOT BE HAPPY with your decision...\n    - Program Favor Rework\n        - No longer gain a favor for free every month\n        - One Small Favor Resistance Order still required to call in favor\n        - Favors are now granted by completing steps of the Templar Questline, or as a reward from a special Covert Action\n- Balance Changes\n  - General\n    - Program operative weaponry and armor now scales with XCOM's (still 1 tier above at all times).\n    - Program Berserker:\n        - Queen of Blades: Negates mobility penalty instead of reversing it.\n    - Program Infiltrator:\n        - Daybreak Flame: Now is a toggled ability. Activate the toggle to begin using Daybreak Flame.\n        - Daybreak Flame no longer auto procs Scoped and Dropped.\n        Explanation:\n            Daybreak Flame was probably too strong and had multiple pain points: too much cover destruction, and the risk of shooting out your own floor. These changes hit both.\n\nPlease check the mod page for further details, I do not show this notification unless there has been a major change in the mod."
+m_strText="Rising Tides: The Program has been updated!\nHighlights of this patch are:\n  - Covert Infiltration Compatibility\n      - Covert Actions can be undertaken by Program squad 'HIGHLANDER'\n      - Infiltrations can be undertaken by Program squad 'SPECTRE'\n      - 'SPECTRE' continues to be able to do normal missions\n      - Bridge mod is required and a notification will be shown if it is not present\n  - Major improvements to how One Small Favor is handled behind-the-scenes.\n      - No behavior changes, but it may screw with a save game. Use the following commands to fix the issue: \n		    - If you have no favors, use RT_CheatModifyProgramFavors 1 to add one\n		    - If you have none remaining this month (no timeslots), use RT_CheatModifyProgramFavorTimeSlots 1 to add one\n		    - If you have no squads, use RT_RegenerateProgramOperatives to rebuild them\n  - The Program Info Screen will now inform you why you cannot call in a Favor (none left, no squads available to take the mission, no timeslots left that month)\n  - The Program Info Screen now has a dedicated button in the top-left corner of the Geoscape that is Controller-accessible.\n  - Over the Shoulder now reveals units via Target Definition.\n      - This should be tremendously more performant than before\n      - If you prefer the old viz, you can set the UseOldOTSGFX config property to revert the behavior\n  - Program Operatives will now use better animations when performing psionic abilties\n  - High-ranked Program Operative abilities are now mutually exclusive. Don't need to make them even more broken then I originally intended.\n  - Fix soldiers getting stuck in a Covert Action if it was in-progress when the Templars were destroyed"
+
+; 2.0.0 Message
+; "Rising Tides: The Program has been updated!
+; Highlights of this patch are: 
+; - Add new covert action line to the Program to eliminate the Templars!
+;     - 3 New Covert Actions - locate, inflitrate, and lure the Templars out from their HQ.
+;     - New mission (Assault Templar High Coven)
+;         - Attack the heart of Templar activities and kill Geist once and for all
+;         - The Program will grant excellent rewards for completing this action, but be warned: your Templar soldiers WILL NOT BE HAPPY with your decision...
+;     - Program Favor Rework
+;         - No longer gain a favor for free every month
+;         - One Small Favor Resistance Order still required to call in favor
+;         - Favors are now granted by completing steps of the Templar Questline, or as a reward from a special Covert Action
+; - Balance Changes
+;   - General
+;     - Program operative weaponry and armor now scales with XCOM's (still 1 tier above at all times).
+;     - Program Berserker:
+;         - Queen of Blades: Negates mobility penalty instead of reversing it.
+;     - Program Infiltrator:
+;         - Daybreak Flame: Now is a toggled ability. Activate the toggle to begin using Daybreak Flame.
+;         - Daybreak Flame no longer auto procs Scoped and Dropped.
+;         Explanation:
+;             Daybreak Flame was probably too strong and had multiple pain points: too much cover destruction, and the risk of shooting out your own floor. These changes hit both.
+
+; Please check the mod page for further details, I do not show this notification unless there has been a major change in the mod."
+
+; 2.2.0 Message
+; "Rising Tides: The Program has been updated!
+; Highlights of this patch are:
+;   - Covert Infiltration Compatibility
+;       - Covert Actions can be undertaken by Program squad 'HIGHLANDER'
+;       - Infiltrations can be undertaken by Program squad 'SPECTRE'
+;       - 'SPECTRE' continues to be able to do normal missions
+;       - Bridge mod is required and a notification will be shown if it is not present
+;   - Major improvements to how One Small Favor is handled behind-the-scenes.
+;       - No behavior changes, but it may screw with a save game. Use the following commands to fix the issue: 
+;		    - If you have no favors, use RT_CheatModifyProgramFavors 1 to add one
+;		    - If you have none remaining this month (no timeslots), use RT_CheatModifyProgramFavorTimeSlots 1 to add one
+;		    - If you have no squads, use RT_RegenerateProgramOperatives to rebuild them
+;   - The Program Info Screen will now inform you why you cannot call in a Favor (none left, no squads available to take the mission, no timeslots left that month)
+;   - The Program Info Screen now has a dedicated button in the top-left corner of the Geoscape that is Controller-accessible.
+;   - Over the Shoulder now reveals units via Target Definition.
+;       - This should be tremendously more performant than before
+;       - If you prefer the old viz, you can set the UseOldOTSGFX config property to revert the behavior
+;   - Program Operatives will now use better animations when performing psionic abilties
+;   - High-ranked Program Operative abilities are now mutually exclusive. Don't need to make them even more broken then I originally intended.
+;   - Fix soldiers getting stuck in a Covert Action if it was in-progress when the Templars were destroyed"
+
+[RTUIScreenListener_ModCompatibiltyDetection]
+m_strTitle_CI="Warning - Missing Bridge Mod for Covert Infiltration"
+m_strText_CI="Rising Tides: The Program has an integration mod for Covert Infiltration, but it was not detected. Please install it for the best experience!"

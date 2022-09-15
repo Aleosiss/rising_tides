@@ -436,6 +436,7 @@
     <Content Include="Src\RisingTides\Classes\ui\RTUIScreenListener_ProgramInfoScreenButton.uc" />
     <Content Include="Src\RisingTides\Classes\ui\RTUIUtilities.uc" />
     <Content Include="Src\RisingTides\Classes\ui\RTUIImageButton.uc" />
+    <Content Include="Src\RisingTides\Classes\ui\RTUIScreenListener_ModCompatibiltyDetection.uc" />
   </ItemGroup>
   <Import Project="$(MSBuildLocalExtensionPath)\XCOM2.targets" />
 </Project>

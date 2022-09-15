@@ -200,7 +200,7 @@ protected static function array<RTGameState_Unit> GetOperatives(name LocalSquadN
 
 // chooses a location for the unit to spawn in the spawn zone
 protected function bool ChooseSpawnLocation(out Vector ChosenSpawnLocation) {
-	local XComGroupSpawn SoldierSpawn, IteratorSoldierSpawn, EmptySpawn;
+	local XComGroupSpawn SoldierSpawn, IteratorSoldierSpawn;
 	local array<Vector> FloorPoints;
 	local Vector EmptyVector;
 	local float ClosestDistanceSquared, DistanceSquared;

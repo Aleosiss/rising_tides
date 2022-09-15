@@ -69,7 +69,7 @@ protected function OnAddX2ActionsForVisualization_Removed(XComGameState Visualiz
 {
 	local X2Action_ForceUnitVisiblity ForceVisiblityAction;
 	local XComGameState_Unit TestUnit;
-	local RTAction_RemoveMITV RemoveMITVAction;
+//	local RTAction_RemoveMITV RemoveMITVAction;
 
 	TestUnit = XComGameState_Unit(BuildTrack.StateObject_NewState);
 	if( !(TestUnit.bRemovedFromPlay) )

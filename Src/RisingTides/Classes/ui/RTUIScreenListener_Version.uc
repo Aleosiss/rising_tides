@@ -33,7 +33,6 @@ event OnReceiveFocus(UIScreen Screen)
 function DisplayVersionText(UIShell ShellScreen)
 {
 	local string VersionString;
-	local int i;
 	local UIText VersionText;
 
 	VersionString = "";

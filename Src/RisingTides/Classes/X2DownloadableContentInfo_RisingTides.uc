@@ -35,8 +35,8 @@ var array<name> NEGATED_ENV_DAMAGE_ABILITIES;
 
 defaultproperties
 {
-	Version=(Major=2, Minor=1, Patch=11)
-	BuildTimestamp="1663204300"
+	Version=(Major=2, Minor=2, Patch=0)
+	BuildTimestamp="1663264815"
 	MutuallyExclusiveProgramOperativeRanks=(6,7)
 }
 
@@ -168,7 +168,6 @@ static function PrintProgramItemUpgradeTemplates() {
 	local X2WeaponUpgradeTemplate Template;
 	local X2ItemTemplateManager ItemMgr;
 	local array<X2WeaponUpgradeTemplate> Templates;
-	local name IteratorName;
 	local WeaponAttachment Attachment;
 
 	// ClipSizeUpgrade_Sup
@@ -260,7 +259,6 @@ static event OnExitPostMissionSequence()
 {
 	local XComGameState NewGameState;
 	local RTGameState_ProgramFaction NewProgramState, ProgramState;
-	local bool bShouldTryToIncreaseInfluence;
 	local XComGameState_BattleData BattleData;
 	local XComGameState_MissionSite MissionState;
 	local XComGameStateHistory History;

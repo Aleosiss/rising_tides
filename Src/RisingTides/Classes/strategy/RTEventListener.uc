@@ -156,6 +156,9 @@ static function EventListenerReturn NegateEnvironmentalDamage(Object EventData, 
 	local X2Effect_ApplyWeaponDamage Effect;
 	local XComGameState_Ability AbilityState;
 
+	Tuple = XComLWTuple(EventData);
+	Effect = X2Effect_ApplyWeaponDamage(EventSource);
+
 	AbilityState = XComGameState_Ability(Tuple.Data[2].o);
 
 	if(`GLOBAL.NEGATED_ENV_DAMAGE_ABILITIES.Find(AbilityState.GetMyTemplateName()) != INDEX_NONE) {
