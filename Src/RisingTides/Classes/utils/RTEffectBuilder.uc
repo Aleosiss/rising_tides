@@ -163,6 +163,8 @@ static function RTEffect_Panicked CreateFeedbackEffect(int _EffectDuration, name
 	PanickedEffect.EffectHierarchyValue = class'X2StatusEffects'.default.PANICKED_HIERARCHY_VALUE;
 	PanickedEffect.EffectAppliedEventName = 'PanickedEffectApplied';
 	PanickedEffect.SetDisplayInfo(ePerkBuff_Penalty, _EffectDisplayTitle, _EffectDisplayDesc, _IconImage);
+	PanickedEffect.DamageTypes.Length = 0;
+	PanickedEffect.DamageTypes.AddItem('Panic');
 	return PanickedEffect;
 }
 

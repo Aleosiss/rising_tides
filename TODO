@@ -81,9 +81,9 @@
   ✔ Add Infiltration Modifiers for Program Operative perks, characters, classes, and equipment @done(22-09-14 00:49)
   ✔ Add button for PIS to UIStrategyMap @done(22-09-13 19:56)
   ✔ Speed up Psistorm Casting Visualization @done(22-09-13 21:58)
-  ☐ Disable debugging and versioning information for release
+  ✔ Disable debugging and versioning information for release @done(22-09-15 02:02)
   ✔ Fix Misplaced Checkbox on Infiltration mission launches @done(22-09-14 01:07)
-  ☐ Make Program Operatives immune to daze and mind control
+  ✔ Make Program Operatives immune to daze and mind control @done(22-09-15 02:01)
 2.3.0 Program Requests Patch TODOS:
   ☐ Add Covert Actions that grant Program Favors
   ☐ Create randomly generated narratives/costs

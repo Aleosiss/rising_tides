@@ -385,6 +385,8 @@ static function RTCharacterTemplate CreateProgramSoldierTemplate(optional name T
 	CharTemplate.strAutoRunNonAIBT = "SoldierAutoRunTree";
 	CharTemplate.CharacterGeneratorClass = class'XGCharacterGenerator';
 
+	CharTemplate.ImmuneTypes.AddItem('Mental');
+
 	return CharTemplate;
 }
 
