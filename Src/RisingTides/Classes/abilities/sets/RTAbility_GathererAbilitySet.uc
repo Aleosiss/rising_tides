@@ -168,11 +168,12 @@ static function X2AbilityTemplate CreateOverTheShoulderAbility(X2AbilityTemplate
 	local X2AbilityMultiTarget_Radius			Radius;
 	local array<name>							SkipExclusions;
 
-	local RTEffect_AuraSource				OTSEffect;			// I'm unsure of how this works... but it appears that
+	local RTEffect_AuraSource					OTSEffect;		// I'm unsure of how this works... but it appears that
 																// this will control the application and removal of aura effects within its range
 
 	// Over The Shoulder
 	local RTEffect_MobileSquadViewer			VisionEffect;	// this lifts a small amount of the FOW around the unit	and gives vision of it
+	local RTEffect_OverTheShoulder				TargetDefinitionEffect;	// this applies a MTIV similar to TargetDefinition
 	local X2Effect_IncrementUnitValue			TagEffect;		// this tags the unit so certain OTS effects can only proc once per turn
 
 	// Unsettling Voices
@@ -217,19 +218,32 @@ static function X2AbilityTemplate CreateOverTheShoulderAbility(X2AbilityTemplate
 	// begin enemy aura effects	---------------------------------------
 
 	// The Default "Can see through walls" Vision Effect
-	VisionEffect = new class'RTEffect_MobileSquadViewer';
-	VisionEffect.BuildPersistentEffect(1, false, true, false, eGameRule_PlayerTurnEnd);
-	VisionEffect.SetDisplayInfo(ePerkBuff_Penalty, default.OTS_TITLE, default.OTS_DESC_ENEMY, Template.IconImage, true,,Template.AbilitySourceName);
-	VisionEffect.TargetConditions.AddItem(default.PsionicTargetingProperty);
-	VisionEffect.DuplicateResponse = eDupe_Refresh;
-	VisionEffect.bUseTargetSightRadius = false;
-	VisionEffect.bUseTargetSizeRadius = false;
-	VisionEffect.iCustomTileRadius = 3;
-	VisionEffect.bRemoveWhenTargetDies = true;
-	VisionEffect.bRemoveWhenSourceDies = true;
-	VisionEffect.EffectName = default.OverTheShoulderEffectName;
-	VisionEffect.IconImage = Template.IconImage;
-	Template.AddMultiTargetEffect(VisionEffect);
+	if(`CONFIG.UseOldOTSGFX) {
+		VisionEffect = new class'RTEffect_MobileSquadViewer';
+		VisionEffect.BuildPersistentEffect(1, false, true, false, eGameRule_PlayerTurnEnd);
+		VisionEffect.SetDisplayInfo(ePerkBuff_Penalty, default.OTS_TITLE, default.OTS_DESC_ENEMY, Template.IconImage, true,,Template.AbilitySourceName);
+		VisionEffect.TargetConditions.AddItem(default.PsionicTargetingProperty);
+		VisionEffect.DuplicateResponse = eDupe_Refresh;
+		VisionEffect.bUseTargetSightRadius = false;
+		VisionEffect.bUseTargetSizeRadius = false;
+		VisionEffect.iCustomTileRadius = 3;
+		VisionEffect.bRemoveWhenTargetDies = true;
+		VisionEffect.bRemoveWhenSourceDies = true;
+		VisionEffect.EffectName = default.OverTheShoulderEffectName;
+		VisionEffect.IconImage = Template.IconImage;
+		Template.AddMultiTargetEffect(VisionEffect);
+	} else {
+		TargetDefinitionEffect = new class'RTEffect_OverTheShoulder';
+		TargetDefinitionEffect.BuildPersistentEffect(1, false, true, false, eGameRule_PlayerTurnEnd);
+		TargetDefinitionEffect.SetDisplayInfo(ePerkBuff_Penalty, default.OTS_TITLE, default.OTS_DESC_ENEMY, Template.IconImage, true,,Template.AbilitySourceName);
+		TargetDefinitionEffect.TargetConditions.AddItem(default.PsionicTargetingProperty);
+		TargetDefinitionEffect.DuplicateResponse = eDupe_Refresh;
+		TargetDefinitionEffect.bRemoveWhenTargetDies = true;
+		TargetDefinitionEffect.bRemoveWhenSourceDies = true;
+		TargetDefinitionEffect.EffectName = default.OverTheShoulderEffectName;
+		TargetDefinitionEffect.IconImage = Template.IconImage;
+		Template.AddMultiTargetEffect(TargetDefinitionEffect);
+	}
 
 	// Unsettling Voices
 	VoiceEffect = new class'RTEffect_UnsettlingVoices';
@@ -957,9 +971,6 @@ static function X2Effect_DamageImmunity CreateGuardianAngelImmunitiesEffect(bool
 		Effect.TargetConditions.AddItem(default.LivingFriendlyUnitOnlyProperty);
 		Effect.TargetConditions.AddItem(CreateOverTheShoulderProperty());
 
-		//Effect.EffectAddedFn = DebugEffectAdded;
-		//Effect.ApplyChanceFn = DebugApplyChanceCheck;
-
 		return Effect;
 }
 //---------------------------------------------------------------------------------------
@@ -1030,12 +1041,17 @@ static function X2AbilityTemplate RTRudimentaryCreaturesEvent() {
 	DamageEffect.bIgnoreArmor = true;
 	DamageEffect.bBypassSustainEffects = true;
 	DamageEffect.DamageTypes.AddItem('Psi');
+	DamageEffect.bApplyToWorldOnHit = false;
+	DamageEffect.bApplyToWorldOnMiss = false;
+	DamageEffect.EnvironmentalDamageAmount = 0;
 	Template.AddTargetEffect(DamageEffect);
 
 	Template.AddTargetEffect(class'X2StatusEffects'.static.CreateStunnedStatusEffect(3, 100, true));
 
 	Template.CustomFireAnim = 'HL_Psi_SelfCast';
 	Template.bShowActivation = true;
+
+	`GLOBAL.NEGATED_ENV_DAMAGE_ABILITIES.AddItem(Template.DataName);
 
 	return Template;
 }
@@ -1816,11 +1832,18 @@ static function X2AbilityTemplate RTPsionicStorm() {
 	ImmediateDamageEffect.bIgnoreBaseDamage = true;
 	ImmediateDamageEffect.bIgnoreArmor = true;
 	ImmediateDamageEffect.EffectDamageValue = default.PSISTORM_DMG;
+	ImmediateDamageEffect.bApplyToWorldOnHit = false;
+	ImmediateDamageEffect.bApplyToWorldOnMiss = false;
+	ImmediateDamageEffect.EnvironmentalDamageAmount = 0;
+	ImmediateDamageEffect.DamageTypes.AddItem('Psi');
+
+	`GLOBAL.NEGATED_ENV_DAMAGE_ABILITIES.AddItem(Template.DataName);
 
 	//  Do not shoot targets that were already hit by this unit this turn with this ability
 	MarkCondition = new class'X2Condition_UnitEffectsWithAbilitySource';
 	MarkCondition.AddExcludeEffect(default.PsistormMarkedEffectName, 'AA_UnitIsImmune');
 	ImmediateDamageEffect.TargetConditions.AddItem(MarkCondition);
+	ImmediateDamageEffect.TargetConditions.AddItem(default.LivingTargetOnlyProperty);
 
 	Template.AddMultiTargetEffect(ImmediateDamageEffect);
 
@@ -1871,6 +1894,8 @@ simulated function DimensionalRiftStage1_BuildVisualization(XComGameState Visual
 	local X2Action_ExitCover ExitCoverAction;
 	local XComGameState_BaseObject Placeholder_old, Placeholder_new;
 	local XComGameState_Ability Ability;
+	local X2Action_Fire FireAction;
+	local X2Action_Fire_CloseUnfinishedAnim CloseFireAction;
 
 	History = `XCOMHISTORY;
 
@@ -1910,8 +1935,8 @@ simulated function DimensionalRiftStage1_BuildVisualization(XComGameState Visual
 		//class'X2Action_Fire_OpenUnfinishedAnim'.static.AddToVisualizationTree(AvatarBuildData, Context);
 
 		// Wait to time the start of the warning FX
-		WaitAction = X2Action_TimedWait(class'X2Action_TimedWait'.static.AddToVisualizationTree(AvatarBuildData, VisualizeGameState.GetContext(), false, AvatarBuildData.LastActionAdded));
-		WaitAction.DelayTimeSec = 3.5;
+		//WaitAction = X2Action_TimedWait(class'X2Action_TimedWait'.static.AddToVisualizationTree(AvatarBuildData, VisualizeGameState.GetContext(), false, AvatarBuildData.LastActionAdded));
+		//WaitAction.DelayTimeSec = 3.5;
 
 		EffectAction = X2Action_PlayEffect(class'X2Action_PlayEffect'.static.AddToVisualizationTree(AvatarBuildData, VisualizeGameState.GetContext(), false, AvatarBuildData.LastActionAdded));
 		EffectAction.EffectName = "FX_Psi_Void_Rift.P_Psi_Void_Rift_Activation";
@@ -1920,7 +1945,7 @@ simulated function DimensionalRiftStage1_BuildVisualization(XComGameState Visual
 		EffectAction.EffectLocation = World.GetPositionFromTileCoordinates(TargetTile);
 
 		WaitAction = X2Action_TimedWait(class'X2Action_TimedWait'.static.AddToVisualizationTree(AvatarBuildData, VisualizeGameState.GetContext(), false, AvatarBuildData.LastActionAdded));
-		WaitAction.DelayTimeSec = 1.5;
+		WaitAction.DelayTimeSec = 0.5;
 
 		// Display the Warning FX (covert to tile and back to vector because stage 2 is at the GetPositionFromTileCoordinates coord
 		EffectAction = X2Action_PlayEffect(class'X2Action_PlayEffect'.static.AddToVisualizationTree(AvatarBuildData, VisualizeGameState.GetContext(), false, AvatarBuildData.LastActionAdded));
@@ -2095,11 +2120,18 @@ static function X2AbilityTemplate RTPsionicStormSustained() {
 	ImmediateDamageEffect.bIgnoreBaseDamage = true;
 	ImmediateDamageEffect.bIgnoreArmor = true;
 	ImmediateDamageEffect.EffectDamageValue = default.PSISTORM_DMG;
+	ImmediateDamageEffect.bApplyToWorldOnHit = false;
+	ImmediateDamageEffect.bApplyToWorldOnMiss = false;
+	ImmediateDamageEffect.EnvironmentalDamageAmount = 0;
+	ImmediateDamageEffect.DamageTypes.AddItem('Psi');
+
+	`GLOBAL.NEGATED_ENV_DAMAGE_ABILITIES.AddItem(Template.DataName);
 
 	//  Do not shoot targets that were already hit by this unit this turn with this ability
 	MarkCondition = new class'X2Condition_UnitEffectsWithAbilitySource';
 	MarkCondition.AddExcludeEffect(default.PsistormMarkedEffectName, 'AA_UnitIsImmune');
 	ImmediateDamageEffect.TargetConditions.AddItem(MarkCondition);
+	ImmediateDamageEffect.TargetConditions.AddItem(default.LivingTargetOnlyProperty);
 
 	Template.AddMultiTargetEffect(ImmediateDamageEffect);
 

@@ -169,6 +169,10 @@ OSFFirstTime_Title = "One Small Favor"
 OSFFirstTime_Text = "The Program fields small squads of elite operatives. As a result of their alliance with XCOM, you may ask them to run a mission for you.\n\nCall in One Small Favor by toggling the white checkbox now shown on Mission Launch screens.\n\nNOTE: this favor can only be called in once per month, and is refreshed after the supply drop."
 PISFirstTime_Title = "Program Briefing Screen"
 PISFirstTime_Text = "The Program makes a special briefing available at their outpost.\n\n Here, you can view the number of favors available to call in, check the status of the Eliminate Templars questline, and view your earned rewards."
+strProgramFavorAvailablityStatus_Available = "Available"
+strProgramFavorAvailablityStatus_Unavailable_NoFavors = "No Favors"
+strProgramFavorAvailablityStatus_Unavailable_NoAvailableSquads = "No Available Squads"
+strProgramFavorAvailablityStatus_Unavailable_NoFavorsRemainingThisMonth = "No time slots available for Program deployment"
 ;# ...by sacrificing the rook, I can attack the king...
 WhisperWepName = "'<font color='#a51515'><b>Heartspan</b></font>'"
 
@@ -272,7 +276,7 @@ strForcedNickName="Nova"
 ; the spread of the knowledge of psionics. Under Dr. Hadley's order, she quickly rose through the ranks of XCOM with her impeccable aim and uncanny ability to
 ; read the battlefield—but as XCOM fell, she made her way, first to the Psi-lab, and then to barracks, with deadly purpose. The only survivor was Staff
 ; Sergeant Matthew Lanner, who, mind left in badly fragmented pieces from Nova’s overwhelming psionic assault, crawled from the ruins of the XCOM base with a
-; singular word remaining—Geist.
+; singular word remaining in his brain—Geist.
 
 [RTGhostOperator RTCharacterTemplate]
 strCharacterName="Program Operative"
@@ -287,7 +291,7 @@ strCharacterName="Program Drone"
 strCharacterHealingPaused="Repairs Required"
 ;strAcquiredText="Drones do not heal like other soldiers. Staff the Drone in Engineering to perform repairs."
 ; These retrofitted ADVENT drones have had their armor and weaponry removed in exchange for additional agility in the air and a cloaking field generator. 
-; Because of its standard-issue chassis, ADVENT will have a difficult time detecting whether or not the drone is friendly.
+; Because of its standard-issue chassis and IFF, ADVENT will have a difficult time detecting whether or not the drone is friendly.
 
 [ProgramNovaStrategy X2CharacterTemplate]
 strCharacterName="'Nova'"

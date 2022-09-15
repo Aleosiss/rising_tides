@@ -27,7 +27,6 @@ function SelectSquad()
 		1. Add civilians to the squad
 		2. Add Kaga to the squad
 	*/
-	
 
 	History = `XCOMHISTORY;
 	XComHQ = XComGameState_HeadquartersXCom(History.GetSingleGameStateObjectForClass(class'XComGameState_HeadquartersXCom'));

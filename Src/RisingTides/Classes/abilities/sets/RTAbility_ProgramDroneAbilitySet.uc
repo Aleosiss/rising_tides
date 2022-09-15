@@ -1,12 +1,22 @@
 class RTAbility_ProgramDroneAbilitySet extends RTAbility
 	config(ProgramFaction);
 
-	var name 				CloakingProtocolEffectName;
-	var config float		CLOAKING_PROTOCOL_RADIUS_METERS;
 	var localized string	CloakingProtocolTitle;
 	var localized string	CloakingProtocolSelfDescription;
 	var localized string	CloakingProtocolMobilityMalusTitle;
 	var localized string	CloakingProtocolMobilityMalusDescription;
+
+	var config float		CLOAKING_PROTOCOL_RADIUS_METERS;
+	
+	var name 				CloakingProtocolEffectName;
+	var name				CloakingProtocolAlreadyConcealedUnitValueTag;
+
+defaultproperties
+{
+	CloakingProtocolEffectName = "RTProgramDroneCloakingProtocolAura"
+	CloakingProtocolAlreadyConcealedUnitValueTag = "RTProgramCloakingDroneConcealmentAlreadyGrantedTag"
+}
+
 
 static function array<X2DataTemplate> CreateTemplates()
 {
@@ -43,6 +53,10 @@ static function X2AbilityTemplate RTProgramDroneCloakingProtocolOn() {
 	local X2Condition_UnitEffects UnitEffectCondition;
 	local X2Effect_PersistentStatChange MobilityDebuffEffect;
 	local RTEffect_Stealth CloakingEffect;
+	local X2Effect_RangerStealth ConcealmentEffect;
+	local X2Condition_UnitValue AlreadyConcealedThisMissionCondition;
+	local X2Effect_IncrementUnitValue AlreadyConcealedUnitValueEffect;
+;
 
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'RTProgramDroneCloakingProtocolOn');
 
@@ -78,7 +92,7 @@ static function X2AbilityTemplate RTProgramDroneCloakingProtocolOn() {
 	Radius.fTargetRadius =	default.CLOAKING_PROTOCOL_RADIUS_METERS * class'XComWorldData'.const.WORLD_StepSize * class'XComWorldData'.const.WORLD_UNITS_TO_METERS_MULTIPLIER;
 	Template.AbilityMultiTargetStyle = Radius;
 
-	CloakingEffect = `RTEB.CreateStealthEffect(1, true);
+	CloakingEffect = `RTEB.CreateStealthEffect(1, true,,,,eDupe_Allow);
 	CloakingEffect.TargetConditions.AddItem(default.LivingFriendlyUnitAndCivilianProperty);
 
 	Template.AddMultiTargetEffect(CloakingEffect);
@@ -89,6 +103,8 @@ static function X2AbilityTemplate RTProgramDroneCloakingProtocolOn() {
 	AuraEffect.BuildPersistentEffect(1, true,,, eGameRule_PlayerTurnBegin);
 	AuraEffect.SetDisplayInfo(ePerkBuff_Bonus, default.CloakingProtocolTitle, default.CloakingProtocolSelfDescription, Template.IconImage, true,,Template.AbilitySourceName);
 	AuraEffect.DuplicateResponse = eDupe_Refresh;
+	AuraEffect.VFXSocket = 'AimOrigin';
+	AuraEffect.VFXSocketsArrayName = 'None';
 	AuraEffect.EffectName = default.CloakingProtocolEffectName;
 	AuraEffect.fRadiusMeters = default.CLOAKING_PROTOCOL_RADIUS_METERS;
 	AuraEffect.bReapplyOnTick = true;
@@ -100,9 +116,22 @@ static function X2AbilityTemplate RTProgramDroneCloakingProtocolOn() {
 	MobilityDebuffEffect.AddPersistentStatChange(eStat_Mobility, 0.5, MODOP_PostMultiplication);
 	MobilityDebuffEffect.EffectName = 'CloakingProtocolMobilityMalus';
 
+	AlreadyConcealedThisMissionCondition = new class'X2Condition_UnitValue';
+	AlreadyConcealedThisMissionCondition.AddCheckValue(default.CloakingProtocolAlreadyConcealedUnitValueTag, 1, eCheck_LessThan);
+
+	ConcealmentEffect = `RTEB.CreateConcealmentEffect();
+	ConcealmentEffect.TargetConditions.AddItem(AlreadyConcealedThisMissionCondition);
+	Template.AddTargetEffect(ConcealmentEffect);
+
 	Template.AddTargetEffect(MobilityDebuffEffect);
-	Template.AddTargetEffect(`RTEB.CreateConcealmentEffect());
 	Template.AddTargetEffect(class'X2Effect_Spotted'.static.CreateUnspottedEffect());
+
+	AlreadyConcealedUnitValueEffect = new class'X2Effect_IncrementUnitValue';
+	AlreadyConcealedUnitValueEffect.UnitName = default.CloakingProtocolAlreadyConcealedUnitValueTag;
+	AlreadyConcealedUnitValueEffect.NewValueToSet = 1;
+	AlreadyConcealedUnitValueEffect.CleanupType = eCleanup_BeginTactical;
+	AlreadyConcealedUnitValueEffect.SetupEffectOnShotContextResult(true, true);
+	Template.AddTargetEffect(AlreadyConcealedUnitValueEffect);
 
 	Template.CustomFireAnim = 'NO_CloakingProtocol';
 
@@ -233,9 +262,4 @@ static function bool AbilityTagExpandHandler(string InString, out string OutStri
 	}
 
 	return false;
-}
-
-defaultproperties
-{
-	CloakingProtocolEffectName = "RTProgramDroneCloakingProtocolAura"
 }

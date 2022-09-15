@@ -182,7 +182,7 @@ simulated function InitScreen(XComPlayerController InitController, UIMovie InitM
 	FavorCounter.InitStrings(m_strProgramFavorAvailable, m_strProgramFavorUnavailable);
 	FavorCounter.InitCounter('RT_OSFCounter', m_strProgramFactionInfoCounterTitle, m_strProgramFactionInfoCounterDescriptionText, 516, 410);
 	FavorCounter.SetPosition(10, topRunningY);
-
+	
 	StageOne = Spawn(class'RTUIInfoBox', Container);
 	StageOne.InitColors(PrimaryColor, TextColor, HeaderColor, SecondaryColor);
 	StageOne.InitText(m_strStageOneTitle, m_strStageOneDescription, m_strStageOneRewardTitle, m_strStageOneRewardDescription);
@@ -215,7 +215,7 @@ simulated function InitScreen(XComPlayerController InitController, UIMovie InitM
 private static function float CalculateQuestlineTrackerBarPercent(RTGameState_ProgramFaction ProgramState) {
 	local float percent;
 	local float barPercentPerStage, barPercentPerFavor;
-	local int iInfluence, iNumberOfFavorsCalledIn, iTotalQuestlineStages, iTotalFavorsRequired, iMaxFavorsForVis;
+	local int iInfluence, FavorsCalledIn, iTotalQuestlineStages, iTotalFavorsRequired, iMaxFavorsForVis;
 
 	if(ProgramState.TemplarQuestlineSucceeded()) {
 		return 1;
@@ -224,24 +224,28 @@ private static function float CalculateQuestlineTrackerBarPercent(RTGameState_Pr
 		iTotalQuestlineStages = 4; // magic number
 		barPercentPerStage = 100 / iTotalQuestlineStages;
 
-		iNumberOfFavorsCalledIn = ProgramState.iNumberOfFavorsCalledIn;
+		FavorsCalledIn = class'RTGameState_ProgramFaction'.default.iNumberOfFavorsRequiredToIncreaseInfluence - ProgramState.iFavorsUntilNextInfluenceGain;
 		iMaxFavorsForVis = class'RTGameState_ProgramFaction'.default.iNumberOfFavorsRequiredToIncreaseInfluence;
-		if(iNumberOfFavorsCalledIn > iMaxFavorsForVis) {
-			iNumberOfFavorsCalledIn = iMaxFavorsForVis;
+		if(FavorsCalledIn > iMaxFavorsForVis) {
+			FavorsCalledIn = iMaxFavorsForVis;
 		}
 
-		`RTLOG("Number of Favors called in: " $ ProgramState.iNumberOfFavorsCalledIn);
-		`RTLOG("Actual number of favors being displayed: " $ iNumberOfFavorsCalledIn);
+		`RTLOG("Number of Favors until next Influence Gain: " $ ProgramState.iFavorsUntilNextInfluenceGain);
+		`RTLOG("Actual number of favors being displayed: " $ FavorsCalledIn);
 		`RTLOG("Program Influence (1-1 with bars filled): " $ iInfluence);
 		`RTLOG("Program Influence (1-1 with bars filled): " $ ProgramState.GetInfluence());
 
 		iTotalFavorsRequired = iTotalQuestlineStages * class'RTGameState_ProgramFaction'.default.iNumberOfFavorsRequiredToIncreaseInfluence;
 		barPercentPerFavor = 100 / iTotalFavorsRequired;
 
-		percent = float(min((iInfluence * barPercentPerStage) + (iNumberOfFavorsCalledIn * barPercentPerFavor), 100)) * 0.01;
+		percent = float(min((iInfluence * barPercentPerStage) + (FavorsCalledIn * barPercentPerFavor), 100)) * 0.01;
 		`RTLOG("Total Influence Bar progress: " $ percent);
 		return percent;
 	}
+}
+
+private function bool isAvailable(ERTProgramFavorAvailablity ProgramFavorAvailablityStatus) {
+	return (ProgramFavorAvailablityStatus == eAvailable);
 }
 
 simulated function PopulateData()
@@ -249,6 +253,7 @@ simulated function PopulateData()
 	local RTGameState_ProgramFaction ProgramState;
 	local int iQuestlineStage, iTotalFavors;
 	local bool bFailed;
+	local ERTProgramFavorAvailablity ProgramFavorAvailablityStatus;
 
 	ProgramState = `RTS.GetProgramState();
 	if(ProgramState == none) {
@@ -264,12 +269,13 @@ simulated function PopulateData()
 	iQuestlineStage = ProgramState.getTemplarQuestlineStage();
 	bFailed = ProgramState.hasFailedTemplarQuestline();
 	iTotalFavors = ProgramState.GetNumFavorsAvailable();
-	
-	if(ProgramState.IsOneSmallFavorAvailable()) {
-		iTotalFavors++; // this checks for the active favor waiting to be called in, which can only be set once per month via the card.
+
+	ProgramFavorAvailablityStatus = ProgramState.IsOneSmallFavorAvailable();
+	if(isAvailable(ProgramFavorAvailablityStatus)) {
+		//iTotalFavors++; // this checks for the active favor waiting to be called in, which can only be set once per month via the card.
 		FavorCounter.SetAvailable();
 	} else {
-		FavorCounter.SetUnavailable();
+		FavorCounter.SetUnavailable(ProgramFavorAvailablityStatus);
 	}
 
 	FavorCounter.SetCounter(iTotalFavors);

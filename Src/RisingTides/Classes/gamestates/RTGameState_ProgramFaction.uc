@@ -59,7 +59,6 @@ var config array<name> SquadTwoMembers;
 
 var() array<StateObjectReference>								Master; 			// master list of operatives
 var() array<StateObjectReference> 								Active;				// operatives active
-var() RTGameState_PersistentGhostSquad							Deployed; 			// operatives that will be on the next mission
 var() array<StateObjectReference>								Captured;			// operatives not available
 var() array<StateObjectReference>								Squads;				// list of ghost teams (only one for now)
 var() int 														iOperativeLevel;	// all operatives get level ups after a mission, even if they weren't on it. lorewise, they're constantly running missions; the player only sees a fraction of them
@@ -72,8 +71,11 @@ var bool														bSetupComplete;		// if we should rebuild the operative arr
 var bool																bShouldPerformPostMissionCleanup;	// should cleanup the program's roster after a mission-- set during OSF and JPT missions
 var bool																bDirectNeuralManipulation;
 var bool																bResistanceSabotageActivated;
-var config array<name>													InvalidMissionSources;				// list of mission types ineligible for Program support, usually story missions
-var config array<name>													UnavailableCovertActions;			// list of covert actions that the program cannot carry out
+var config array<name>													InvalidMissionSources;							// list of mission types ineligible for Program support, usually story missions
+var config array<name>													InvalidCovertActions;							// list of covert actions ineligible for Program support, usually story missions
+var config array<name>													DefaultDeployableCovertActionMissionSources;	// list of covert mission types eligible for Program support
+var config array<name>													DefaultDeployableMissionSources;				// list of mission types eligible for Program support
+var config array<name>													UnavailableCovertActions;						// list of covert actions that the program cannot carry out
 var config array<name>													ExcludedGoldenPathCovertActions;				// list of golden path covert actions the program cannot carry out (yet)
 var config int															iNumberOfFavorsRequiredToIncreaseInfluence;
 var array<X2DataTemplate>												OperativeTemplates;
@@ -84,15 +86,13 @@ var private bool														bTemplarQuestFailed;
 var private int															iTemplarQuestlineStage;
 var private array<StateObjectReference>									TemplarQuestActions;
 var private bool 														bTemplarMissionSucceeded;
+var array<StateObjectReference> 										BlockedCovertActions;				// used to cull in-progress Templar Covert Actions 
 
 // ONE SMALL FAVOR HANDLING VARIABLES
-var private int															iPreviousMaxSoldiersForMission;		// cache of the number of soldiers on a mission before OSF modfied it
-var private StateObjectReference										SelectedMissionRef;					// cache of the mission one small favor is going to go against
 var bool																bShouldResetOSFMonthly;
-var private bool														bOneSmallFavorAvailable;			// can send squad on a mission, replacing XCOM
-var private bool														bOneSmallFavorActivated;			// actively sending a squad on the next mission
-var private int															iNumberOfFavorsAvailable;			// number of Favors banked
-var int																	iNumberOfFavorsCalledIn;			// number of Favors remaining towards next influence gain
+var private int															iFavors;							// number of Favors banked
+var int																	iFavorsUntilNextInfluenceGain;		// number of Favors remaining towards next influence gain
+var int																	iFavorsRemainingThisMonth;			// number of Favors remaining this month
 var bool																bOSF_FirstTimeDisplayed;
 var bool																bPIS_FirstTimeDisplayed;
 var protected int														iCurrentProgramGearTier;			// Current Tier of Program gear (used to match XCOM gear progression)
@@ -108,7 +108,10 @@ var config string OSFFirstTime_ImagePath;
 var localized string PISFirstTime_Title;
 var localized string PISFirstTime_Text;
 var config string PISFirstTime_ImagePath;
-
+var localized string strProgramFavorAvailablityStatus_Available;
+var localized string strProgramFavorAvailablityStatus_Unavailable_NoFavors;
+var localized string strProgramFavorAvailablityStatus_Unavailable_NoAvailableSquads;
+var localized string strProgramFavorAvailablityStatus_Unavailable_NoFavorsRemainingThisMonth;
 
 // not a bool, want to see how many times this is called
 var private int iNumTimesProgramSetup;
@@ -137,10 +140,11 @@ function SetUpProgramFaction(XComGameState StartState)
 	class'RTGameState_StrategyCard'.static.SetUpStrategyCards(StartState);
 	OperativeTemplates = class'RTCharacter_DefaultCharacters'.static.CreateTemplates();
 	Version = `DLCINFO.GetVersionInt();
+	iFavorsUntilNextInfluenceGain = default.iNumberOfFavorsRequiredToIncreaseInfluence;
 }
 
-// CreateRTOperatives(XComGameState NewGameState)
-function CreateRTOperatives(XComGameState StartState) {
+// CreateProgramOperatives(XComGameState NewGameState)
+function CreateProgramOperatives(XComGameState StartState) {
 	AddRTOperativeToProgram('RTGhostBerserker', StartState);
 	AddRTOperativeToProgram('RTGhostMarksman', StartState);
 	AddRTOperativeToProgram('RTGhostGatherer', StartState);
@@ -236,9 +240,10 @@ function ApplyWeaponUpgrades(name GhostTemplateName, XComGameState_Item NewWeapo
 //---------------------------------------------------------------------------------------
 //---Create Program Squads---------------------------------------------------------------
 //---------------------------------------------------------------------------------------
-function CreateRTSquads(XComGameState StartState) {
+function CreateProgramSquads(XComGameState StartState) {
 
 	local RTGameState_PersistentGhostSquad one, two;
+	local ProgramDeploymentAvailablityInfo infoOne, infoTwo;
 	local StateObjectReference OperativeRef;
 	local XComGameStateHistory History;
 	local XComGameState_Unit UnitState;
@@ -246,11 +251,17 @@ function CreateRTSquads(XComGameState StartState) {
 	History = `XCOMHISTORY;
 
 	one = RTGameState_PersistentGhostSquad(StartState.CreateNewStateObject(class'RTGameState_PersistentGhostSquad'));
-	one.CreateSquad(1, default.SquadOneName, default.SquadOneBackground, default.SquadOneSitRepName, true);
+
+	infoOne.bIsDeployable = true;
+	infoOne.deployableMissionSources = default.DefaultDeployableMissionSources;
+
+	one.CreateSquad(1, default.SquadOneName, default.SquadOneBackground, default.SquadOneSitRepName, infoOne);
 	Squads.AddItem(one.GetReference());
 
 	two = RTGameState_PersistentGhostSquad(StartState.CreateNewStateObject(class'RTGameState_PersistentGhostSquad'));
-	two.CreateSquad(2, default.SquadTwoName, default.SquadTwoBackground, '', false);
+	infoTwo.bIsDeployable = true;
+	infoTwo.deployableMissionSources = default.DefaultDeployableCovertActionMissionSources;
+	two.CreateSquad(2, default.SquadTwoName, default.SquadTwoBackground, '', infoTwo);
 	Squads.AddItem(two.GetReference());
 
 	foreach Master(OperativeRef) {
@@ -266,9 +277,6 @@ function CreateRTSquads(XComGameState StartState) {
 			two.initOperatives.AddItem(OperativeRef);
 		}
 	}
-
-	Deployed = one;
-	one.bIsDeployed = true;
 }
 
 // UpdateNumDeaths(name CharacterTemplateName, StateObjectReference UnitRef)
@@ -384,8 +392,8 @@ function InitListeners() {
 	EventMgr = `XEVENTMGR;
 	EventMgr.UnregisterFromAllEvents(ThisObj); // clear all old listeners to clear out old stuff before re-registering
 
-	EventMgr.RegisterForEvent(ThisObj, 'KillMail', OnKillMail, ELD_OnStateSubmitted,,,);
-	EventMgr.RegisterForEvent(ThisObj, 'UnitAttacked', OnUnitAttacked, ELD_OnStateSubmitted,,,);
+//	EventMgr.RegisterForEvent(ThisObj, 'KillMail', OnKillMail, ELD_OnStateSubmitted,,,);
+//	EventMgr.RegisterForEvent(ThisObj, 'UnitAttacked', OnUnitAttacked, ELD_OnStateSubmitted,,,);
 }
 
 // EventData = DeadUnitState
@@ -481,55 +489,55 @@ function OnEndTacticalPlay(XComGameState NewGameState)
 //---------------------------------------------------------------------------------------
 //---IsOSFMission------------------------------------------------------------------------
 //---------------------------------------------------------------------------------------
-protected static function bool IsOSFMission(XComGameState_MissionSite MissionState) {
+static function bool IsOSFMission(XComGameState_MissionSite MissionState) {
 	if(MissionState.TacticalGameplayTags.Find('RTOneSmallFavor') != INDEX_NONE) {
 		return true;
 	}
 	return false;
 }
 
-function bool CanMakeOneSmallFavorAvailable() {
-	return iNumberOfFavorsAvailable > 0;
-}
-
 function int GetNumFavorsAvailable() {
-	return iNumberOfFavorsAvailable;
+	return iFavors;
 }
 
-function ModifyAvailableProgramFavors(int NumFavors) {
-	iNumberOfFavorsAvailable += NumFavors;
+function ModifyProgramFavors(int NumFavors) {
+	iFavors += NumFavors;
 }
 
-function bool IsOneSmallFavorAvailable() {
-	return bOneSmallFavorAvailable;
-}
-
-function bool MakeOneSmallFavorAvailable() {
-	if(Deployed == none) {
-		RotateRandomSquadToDeploy();
-	}
-
-	if(bOneSmallFavorAvailable) {
-		return true;
-	}
-
-	if(CanMakeOneSmallFavorAvailable()) {
-		iNumberOfFavorsAvailable--;
-		bOneSmallFavorAvailable = true;
-		return true;
-	} else {
-		return false;
+static function string GetLocalizationForAvailability(ERTProgramFavorAvailablity reason) {
+	switch(reason) {
+		case eAvailable:
+			return default.strProgramFavorAvailablityStatus_Available;
+		case eUnavailable_NoFavors:
+			return default.strProgramFavorAvailablityStatus_Unavailable_NoFavors;
+		case eUnavailable_NoAvailableSquads:
+			return default.strProgramFavorAvailablityStatus_Unavailable_NoAvailableSquads;
+		case eUnavailable_NoFavorsRemainingThisMonth:
+			return default.strProgramFavorAvailablityStatus_Unavailable_NoFavorsRemainingThisMonth;
+		default:
+			return "";
 	}
 }
 
-function MakeOneSmallFavorUnavailable() {
-	if(bOneSmallFavorAvailable) { // we had a favor teed up, refund it
-		iNumberOfFavorsAvailable++;
+function ERTProgramFavorAvailablity IsOneSmallFavorAvailable() {
+	if(iFavorsRemainingThisMonth < 1) {
+		return eUnavailable_NoFavorsRemainingThisMonth;
 	}
 
-	bOneSmallFavorAvailable = false;
+	if(iFavors < 1) {
+		return eUnavailable_NoFavors;
+	}
+
+	if(!IsThereAnAvailableSquad()) {
+		return eUnavailable_NoAvailableSquads;
+	}
+
+	return eAvailable;
 }
 
+//---------------------------------------------------------------------------------------
+//---Tutorials---------------------------------------------------------------------------
+//---------------------------------------------------------------------------------------
 function HandleOSFTutorial(optional bool bOverrideFirstTime = false) {
 	local DynamicPropertySet PropertySet;
 	local XComGameState NewGameState;
@@ -682,7 +690,7 @@ function PromoteAllOperatives(XComGameState NewGameState) {
 	foreach Active(UnitIteratorObjRef) {
 		UnitState = XComGameState_Unit(History.GetGameStateForObjectID(UnitIteratorObjRef.ObjectID));
 		UnitState = XComGameState_Unit(NewGameState.ModifyStateObject(class'XComGameState_Unit', UnitState.ObjectID));
-		if(UnitState.GetMyTemplateName() == 'RTGhostOperator') { // don't have Kaga level up normally
+		if(!RTCharacterTemplate(UnitState.GetMyTemplate()).ReceivesProgramRankups) {
 			continue;
 		}
 
@@ -699,22 +707,22 @@ function PromoteAllOperatives(XComGameState NewGameState) {
 //---------------------------------------------------------------------------------------
 protected function AddDNMExperience(XComGameState NewGameState) {
 	local XComGameState_Unit UnitState, BondMateState;
-	local array<XComGameState_Unit> ActiveSquadUnitStates;
+	local array<XComGameState_Unit> XComSquadUnitStates;
 	local StateObjectReference BondMateRef, EmptyRef;
 
 	foreach NewGameState.IterateByClassType(class'XComGameState_Unit', UnitState) {
 		if(UnitState.GetTeam() == eTeam_XCom && !UnitState.isDead() && !UnitState.bCaptured) {
-			ActiveSquadUnitStates.AddItem(UnitState);
+			XComSquadUnitStates.AddItem(UnitState);
 		}
 	}
 
-	if(ActiveSquadUnitStates.Length == 0) {
+	if(XComSquadUnitStates.Length == 0) {
 		`RTLOG("Didn't find any active XCOM units on the GameState!", true);
 		return;
 	}
 
-	foreach ActiveSquadUnitStates(UnitState) {
-		foreach ActiveSquadUnitStates(BondMateState) {
+	foreach XComSquadUnitStates(UnitState) {
+		foreach XComSquadUnitStates(BondMateState) {
 			BondMateRef = EmptyRef;
 			UnitState.HasSoldierBond(BondMateRef);
 			if(BondMateRef == EmptyRef) {
@@ -724,7 +732,7 @@ protected function AddDNMExperience(XComGameState NewGameState) {
 
 			if(BondMateRef.ObjectID == BondMateState.ObjectID) {
 				// don't want to double dip on the sweet gainz bro
-				ActiveSquadUnitStates.RemoveItem(BondMateState);
+				XComSquadUnitStates.RemoveItem(BondMateState);
 				
 				UnitState = XComGameState_Unit(NewGameState.ModifyStateObject(class'XComGameState_Unit', UnitState.ObjectID));
 				BondMateState = XComGameState_Unit(NewGameState.ModifyStateObject(class'XComGameState_Unit', BondMateState.ObjectID));
@@ -799,7 +807,6 @@ simulated function ReloadOperativeArmaments(XComGameState NewGameState) {
 		WeaponState = NewUnitState.GetPrimaryWeapon();
 		WeaponState = XComGameState_Item(NewGameState.ModifyStateObject(class'XComGameState_Item', WeaponState.ObjectID));
 		ApplyWeaponUpgrades(UnitState.GetMyTemplateName(), WeaponState);
-
 	}
 }
 
@@ -849,95 +856,267 @@ function bool IsExtraFactionSoldierRewardAllowed(XComGameState NewGameState)
 	return false;
 }
 
-private function AddRisingTidesTacticalTags(XComGameState_HeadquartersXCom XComHQ) {// mark missions as being invalid for One Small Favor or Just Passing Through, usually story, (golden path or otherwise) 
+function RTGameState_PersistentGhostSquad GetSquadForMission(StateObjectReference MissionRef) {
+	local XComGameStateHistory History;
+	local RTGameState_PersistentGhostSquad Squad;
+	local bool bIsOnMissionAlready;
+	local StateObjectReference SquadRef;
+	local XComGameState_MissionSite MissionState;
 
-}
+	History = `XCOMHISTORY;
 
-simulated function bool CashOneSmallFavor(XComGameState NewGameState, XComGameState_MissionSite MissionSite) {
-	local StateObjectReference GhostRef;
-	local name GhostTemplateName;
-
-	bOneSmallFavorActivated = true;
-	
-	if(Deployed == none) {
-		RotateRandomSquadToDeploy();
-	}
-
-	if(Deployed == none) {
-		`RTLOG("The Program has no squads?", true);
-		return false; // we... have no squads?
-	}
-
-	MissionSite = XComGameState_MissionSite(NewGameState.ModifyStateObject(MissionSite.class, MissionSite.ObjectID));
-	
-	foreach Deployed.Operatives(GhostRef) {
-		GhostTemplateName = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(GhostRef.ObjectID)).GetMyTemplateName();
-		`RTLOG("Adding a " $ GhostTemplateName $ " to the SpecialSoldiers for Mission " $ MissionSite.GeneratedMission.Mission.MissionName);
-		MissionSite.GeneratedMission.Mission.SpecialSoldiers.AddItem(GhostTemplateName);
-	}
-
-	HandleOperativeHelmets(NewGameState);
-	AdjustProgramGearLevel(NewGameState);
-	
-	iPreviousMaxSoldiersForMission = MissionSite.GeneratedMission.Mission.MaxSoldiers;
-	MissionSite.GeneratedMission.Mission.MaxSoldiers = Deployed.Operatives.Length;
-	SelectedMissionRef = MissionSite.GetReference();
-
-	return true;
-}
-
-simulated function bool UncashOneSmallFavor(XComGameState NewGameState, XComGameState_MissionSite MissionSite) {
-	local StateObjectReference GhostRef, EmptyRef;
-	local name GhostTemplateName;
-
-	bOneSmallFavorActivated = false;
-	
-	if(MissionSite.GetReference().ObjectID != SelectedMissionRef.ObjectID) {
-		`RTLOG("MissionSite ObjectID is not the same as the SelectedMissionRef! Removing OSF from the SelectedMissionRef instead of the given one!");
-		MissionSite = XComGameState_MissionSite(`XCOMHISTORY.GetGameStateForObjectID(SelectedMissionRef.ObjectID));
-	}
-
-	if(Deployed == none) {
-		`RTLOG("The Program has no squads?", true);
-		return false; // we... have no squads?
-	}
-
-	MissionSite = XComGameState_MissionSite(NewGameState.ModifyStateObject(MissionSite.class, MissionSite.ObjectID));
-	foreach Deployed.Operatives(GhostRef) {
-		GhostTemplateName = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(GhostRef.ObjectID)).GetMyTemplateName();
-		`RTLOG("Removing a " $ GhostTemplateName $ " from the SpecialSoldiers for Mission " $ MissionSite.GeneratedMission.Mission.MissionName);
-		MissionSite.GeneratedMission.Mission.SpecialSoldiers.RemoveItem(GhostTemplateName);
+	// find the squad already deployed on this mission
+	if(MissionRef.ObjectID != 0) {
+		foreach Squads(SquadRef) {
+			Squad = RTGameState_PersistentGhostSquad(History.GetGameStateForObjectID(SquadRef.ObjectID));
+			bIsOnMissionAlready = Squad.IsDeployed() && MissionRef.ObjectID == Squad.DeploymentRef.ObjectID;
+			if(bIsOnMissionAlready) {
+				return Squad;
+			}
+		}
 	}
 	
-	SelectedMissionRef = EmptyRef;
-	MissionSite.GeneratedMission.Mission.MaxSoldiers = iPreviousMaxSoldiersForMission;
+	// if ref is none, get any deployable squad
+	MissionState = XComGameState_MissionSite(History.GetGameStateForObjectID(MissionRef.ObjectID));
+	foreach Squads(SquadRef) {
+		Squad = RTGameState_PersistentGhostSquad(History.GetGameStateForObjectID(SquadRef.ObjectID));
+		if(!Squad.isDeployable(MissionState.GetMissionSource().DataName)) {
+			continue;
+		}
 
-	return true;
-}
-	
-protected function RotateRandomSquadToDeploy() {
-	local bool bFoundSquad;
-	local int i;
-	if(Squads.Length == 0)
-		return;
-	
-	if(Deployed != none) {
-		Deployed.bIsDeployed = false;
-		Deployed = none;
-	}
-	
-	while(!bFoundSquad) {
-		Deployed = RTGameState_PersistentGhostSquad(`XCOMHISTORY.GetGameStateForObjectID(Squads[`SYNC_RAND(Squads.Length)].ObjectID));
-		bFoundSquad = Deployed.CanBeDeployed();
-		i++;
-		if(i > 20) {
-			`RTLOG("Can't find a deployable squad?!", true, false);
-			return;
+		if(!Squad.IsDeployed()) {
+			return Squad;
 		}
 	}
 
-	Deployed.bIsDeployed = true;
-	return;
+	return none;
+}
+
+function RTGameState_PersistentGhostSquad GetSquadForCovertAction(StateObjectReference ActionRef) {
+	local XComGameStateHistory History;
+	local RTGameState_PersistentGhostSquad Squad;
+	local bool bIsOnMissionAlready;
+	local StateObjectReference SquadRef;
+	local XComGameState_CovertAction ActionState;
+
+	History = `XCOMHISTORY;
+
+	// find the squad already deployed on this mission
+	if(ActionRef.ObjectID != 0) {
+		foreach Squads(SquadRef) {
+			Squad = RTGameState_PersistentGhostSquad(History.GetGameStateForObjectID(SquadRef.ObjectID));
+			bIsOnMissionAlready = Squad.IsDeployed() && ActionRef.ObjectID == Squad.DeploymentRef.ObjectID;
+			if(bIsOnMissionAlready) {
+				return Squad;
+			}
+		}
+	}
+	
+	// if ref is none, get any deployable squad
+	ActionState = XComGameState_CovertAction(History.GetGameStateForObjectID(ActionRef.ObjectID));
+	foreach Squads(SquadRef) {
+		Squad = RTGameState_PersistentGhostSquad(History.GetGameStateForObjectID(SquadRef.ObjectID));
+		if(!Squad.isDeployable(default.DefaultDeployableCovertActionMissionSources[0])) { // we hackin
+			continue;
+		}
+
+		if(!Squad.IsDeployed()) {
+			return Squad;
+		}
+	}
+
+	return none;
+}
+
+// This is used for the Program Info Screen and does not guarentee that a squad will be available for any mission in particular
+function bool IsThereAnAvailableSquad() {
+	local XComGameStateHistory History;
+	local RTGameState_PersistentGhostSquad Squad;
+	local StateObjectReference SquadRef;
+
+	History = `XCOMHISTORY;
+
+	foreach Squads(SquadRef) {
+		Squad = RTGameState_PersistentGhostSquad(History.GetGameStateForObjectID(SquadRef.ObjectID));
+		if(Squad.isDeployable('MissionSource_GuerillaOp') && !Squad.IsDeployed() ) {
+			return true;
+		}
+	}
+	return false;
+}
+
+function bool IsThereAnAvailableSquadForMission(XComGameState_MissionSite MissionSite) {
+	local XComGameStateHistory History;
+	local RTGameState_PersistentGhostSquad Squad;
+	local StateObjectReference SquadRef;
+
+	History = `XCOMHISTORY;
+
+	foreach Squads(SquadRef) {
+		Squad = RTGameState_PersistentGhostSquad(History.GetGameStateForObjectID(SquadRef.ObjectID));
+		if(Squad.isDeployable(MissionSite.Source) && !Squad.IsDeployed() ) {
+			return true;
+		}
+	}
+	return false;
+}
+
+function bool IsThereAnAvailableSquadForCovertAction(XComGameState_CovertAction ActionState) {
+	local XComGameStateHistory History;
+	local RTGameState_PersistentGhostSquad Squad;
+	local StateObjectReference SquadRef;
+
+	History = `XCOMHISTORY;
+
+	foreach Squads(SquadRef) {
+		Squad = RTGameState_PersistentGhostSquad(History.GetGameStateForObjectID(SquadRef.ObjectID));
+		// cheat a bit - if a squad is available for ambushes they are available for covert actions
+		// i don't see the need to make squads be able do certain types of CAs at this point
+		if(Squad.isDeployable('MissionSource_ChosenAmbush') && !Squad.IsDeployed() ) {
+			return true;
+		}
+	}
+	return false;
+}
+
+private simulated function bool CashOneSmallFavor(XComGameState NewGameState, StateObjectReference DeploymentRef) {
+	ModifyProgramFavors(-1);
+	iFavorsRemainingThisMonth--;
+
+	HandleOperativeHelmets(NewGameState);
+	AdjustProgramGearLevel(NewGameState);
+
+	return true;
+}
+
+simulated function bool CashOneSmallFavorForCovertAction(XComGameState NewGameState, XComGameState_CovertAction ActionState) {
+	local bool status;
+	local RTGameState_PersistentGhostSquad SquadState;
+
+	SquadState = GetSquadForCovertAction(ActionState.GetReference());
+	status = true;
+	if(SquadState == none) {
+		`RTLOG("No available squad?");
+		status = false;
+	}
+
+	status = status && CashOneSmallFavor(NewGameState, ActionState.GetReference());
+
+	SquadState = RTGameState_PersistentGhostSquad(NewGameState.ModifyStateObject(SquadState.class, SquadState.ObjectID));
+	SquadState.DeploymentRef = ActionState.GetReference();
+
+	return status;
+}
+
+simulated function bool CashOneSmallFavorForMission(XComGameState NewGameState, XComGameState_MissionSite MissionSiteState) {
+	local bool status;
+	local RTGameState_PersistentGhostSquad SquadState;
+
+	SquadState = GetSquadForMission(MissionSiteState.GetReference());
+	status = true;
+	if(SquadState == none) {
+		`RTLOG("No available squad?");
+		status = false;
+	}
+
+	status = status && CashOneSmallFavor(NewGameState, MissionSiteState.GetReference());
+	status = status && AddProgramSquadToMissionSite(NewGameState, SquadState, MissionSiteState);
+
+	return status;
+}
+
+simulated function bool AddProgramSquadToMissionSite(XComGameState NewGameState, RTGameState_PersistentGhostSquad SquadState, XComGameState_MissionSite MissionSiteState) {
+	local XComGameStateHistory History;
+	local name OperativeTemplateName;
+	local array<name> OperativeTemplateNames;
+
+	History = `XCOMHISTORY;
+
+	SquadState = RTGameState_PersistentGhostSquad(NewGameState.ModifyStateObject(SquadState.class, SquadState.ObjectID));
+	SquadState.DeploymentRef = MissionSiteState.GetReference();
+	// save the original number of deployable soldiers on this mission in case we redecide the deployment
+	SquadState.DeployedMissionPreviousMaxSoldiers = MissionSiteState.GeneratedMission.Mission.MaxSoldiers;
+	
+	MissionSiteState = XComGameState_MissionSite(NewGameState.ModifyStateObject(MissionSiteState.class, MissionSiteState.ObjectID));
+	MissionSiteState.GeneratedMission.Mission.MaxSoldiers = SquadState.Operatives.Length;
+	OperativeTemplateNames = SquadState.GetSoldiersAsSpecial();
+	foreach OperativeTemplateNames(OperativeTemplateName) {
+		`RTLOG("AddProgramSquadToMissionSite: Adding a " $ OperativeTemplateName $ " to the SpecialSoldiers for Mission " $ MissionSiteState.GeneratedMission.Mission.MissionName);
+		MissionSiteState.GeneratedMission.Mission.SpecialSoldiers.AddItem(OperativeTemplateName);
+	}
+
+	return true;
+}
+
+private simulated function bool UncashOneSmallFavor(XComGameState NewGameState, StateObjectReference DeploymentRef) {
+	local StateObjectReference GhostRef, EmptyRef;
+	local name GhostTemplateName;
+
+	ModifyProgramFavors(1);
+	iFavorsRemainingThisMonth++;
+
+	return true;
+}
+
+simulated function bool UncashOneSmallFavorForCovertAction(XComGameState NewGameState, XComGameState_CovertAction ActionState) {
+	local bool status;
+	local RTGameState_PersistentGhostSquad SquadState;
+	local StateObjectReference EmptyRef;
+
+	SquadState = GetSquadForCovertAction(ActionState.GetReference());
+	status = true;
+	if(SquadState == none) {
+		`RTLOG("No available squad?");
+		status = false;
+	}
+
+	status = status && UncashOneSmallFavor(NewGameState, ActionState.GetReference());
+
+	SquadState = RTGameState_PersistentGhostSquad(NewGameState.ModifyStateObject(SquadState.class, SquadState.ObjectID));
+	SquadState.DeploymentRef = EmptyRef;
+
+	return status;
+}
+
+simulated function bool UncashOneSmallFavorForMission(XComGameState NewGameState, XComGameState_MissionSite MissionSiteState) {
+	local bool status;
+	local RTGameState_PersistentGhostSquad SquadState;
+
+	SquadState = GetSquadForMission(MissionSiteState.GetReference());
+	status = true;
+	if(SquadState == none) {
+		`RTLOG("Didn't deploy a squad for this mission!");
+		status = false;
+	}
+
+	status = status && UncashOneSmallFavor(NewGameState, MissionSiteState.GetReference());
+	status = status && RemoveProgramSquadFromMissionSite(NewGameState, SquadState, MissionSiteState);
+
+	return status;
+}
+
+simulated function bool RemoveProgramSquadFromMissionSite(XComGameState NewGameState, RTGameState_PersistentGhostSquad SquadState, XComGameState_MissionSite MissionSiteState) {
+	local StateObjectReference EmptyRef;
+	local XComGameStateHistory History;
+	local name OperativeTemplateName;
+	local array<name> OperativeTemplateNames;
+
+	History = `XCOMHISTORY;
+
+	SquadState = RTGameState_PersistentGhostSquad(NewGameState.ModifyStateObject(SquadState.class, SquadState.ObjectID));
+	MissionSiteState = XComGameState_MissionSite(NewGameState.ModifyStateObject(MissionSiteState.class, MissionSiteState.ObjectID));
+	
+	MissionSiteState.GeneratedMission.Mission.MaxSoldiers = SquadState.DeployedMissionPreviousMaxSoldiers;
+	OperativeTemplateNames = SquadState.GetSoldiersAsSpecial();
+	foreach OperativeTemplateNames(OperativeTemplateName) {
+		`RTLOG("RemoveProgramSquadFromMissionSite: Removing a " $ OperativeTemplateName $ " from the SpecialSoldiers for Mission " $ MissionSiteState.GeneratedMission.Mission.MissionName);
+		MissionSiteState.GeneratedMission.Mission.SpecialSoldiers.RemoveItem(OperativeTemplateName);
+	}
+
+	SquadState.DeploymentRef = EmptyRef;
+	SquadState.DeployedMissionPreviousMaxSoldiers = 0;
+
+	return true;
 }
 
 function HandleOperativeHelmets(XComGameState NewGameState) {
@@ -1180,8 +1359,6 @@ function HandleTemplarQuestActions(XComGameState NewGameState) {
 	}
 }
 
-
-
 // clean up the Templar Quest Actions too
 function CleanUpFactionCovertActions(XComGameState NewGameState)
 {
@@ -1242,7 +1419,7 @@ function OnEndOfMonth(XComGameState NewGameState, out array<Name> ActionExclusio
 	HandleTemplarQuestActions(NewGameState);
 
 	if(bShouldResetOSFMonthly) {
-		MakeOneSmallFavorAvailable();
+		iFavorsRemainingThisMonth = 1;
 	}
 }
 
@@ -1290,8 +1467,8 @@ function MeetXCom(XComGameState NewGameState)
 	HandleTemplarQuestActions(NewGameState);
 	
 	iCurrentProgramGearTier = 1;
-	CreateRTOperatives(NewGameState);
-	CreateRTSquads(NewGameState);
+	CreateProgramOperatives(NewGameState);
+	CreateProgramSquads(NewGameState);
 	//CreateRTDeathRecord(StartState);
 	bSetupComplete = true;	
 	
@@ -1362,7 +1539,7 @@ function AddOneSmallFavorCard(XComGameState NewGameState) {
 }
 
 function PreMissionUpdate(XComGameState NewGameState, XComGameState_MissionSite MissionSiteState) {
-	if(bOneSmallFavorActivated) {
+	if(IsOSFMission(MissionSiteState)) {
 		bShouldPerformPostMissionCleanup = true;
 	}
 
@@ -1371,13 +1548,17 @@ function PreMissionUpdate(XComGameState NewGameState, XComGameState_MissionSite 
 	}
 }
 
-function bool isOneSmallFavorActivated() {
-	return bOneSmallFavorActivated;
+function PerformPostMissionCleanup(XComGameState NewGameState) {
+	bShouldPerformPostMissionCleanup = false;
+
+	RecalculateActiveOperativesAndSquads(NewGameState);
+	RetrieveRescuedProgramOperatives(NewGameState);
+	ReloadOperativeArmaments(NewGameState);
 }
 
 protected function int GetXComGearTier() {
 	local array<Name> CompletedTechs;
-	return 1;
+
 	CompletedTechs = `RTS.GetCompletedXCOMTechNames();
 	if(CompletedTechs.Find('PlasmaRifle') != INDEX_NONE) {
 		return 3;
@@ -1437,31 +1618,18 @@ public function AdjustProgramGearLevel(XComGameState NewGameState) {
 	}
 }
 
-function PerformPostMissionCleanup(XComGameState NewGameState) {
-	bShouldPerformPostMissionCleanup = false;
-
-	RecalculateActiveOperativesAndSquads(NewGameState);
-	RetrieveRescuedProgramOperatives(NewGameState);
-	ReloadOperativeArmaments(NewGameState);
-
-	if(bOneSmallFavorActivated) {
-		bOneSmallFavorAvailable = false;
-		bOneSmallFavorActivated = false;
-	}
-}
-
 function TryIncreaseInfluence() {
 	local X2RewardTemplate RewardTemplate;
 	local X2StrategyElementTemplateManager StratMgr;
 	local XComGameState_Reward RewardState;
 	local XComGameState NewGameState;
 	local RTGameState_ProgramFaction Program;
-	local int iGuarenteedCorrectValue; // too lazy to see what the correct value should be XDDD
+	local int iGuarenteedCorrectValue; // too lazy to see what the correct value should be
 
-	iNumberOfFavorsCalledIn++;
-	iGuarenteedCorrectValue = iNumberOfFavorsCalledIn;
+	iFavorsUntilNextInfluenceGain--;
+	iGuarenteedCorrectValue = iFavorsUntilNextInfluenceGain;
 
-	if(iNumberOfFavorsCalledIn >= default.iNumberOfFavorsRequiredToIncreaseInfluence) {
+	if(iFavorsUntilNextInfluenceGain < 1) {
 		// Award influence increase
 		`RTLOG("Enough Favors have been called in. Increasing influence.", false, true);
 		NewGameState = `CreateChangeState("RisingTides: Increasing Influence");
@@ -1471,11 +1639,11 @@ function TryIncreaseInfluence() {
 		RewardTemplate = X2RewardTemplate(StratMgr.FindStrategyElementTemplate('Reward_RTProgram_IncreaseFactionInfluence'));
 		
 		RewardState = RewardTemplate.CreateInstanceFromTemplate(NewGameState);
-		RewardState.GetMyTemplate().GenerateRewardFn(RewardState, NewGameState,,GetReference()); 
+		RewardState.GetMyTemplate().GenerateRewardFn(RewardState, NewGameState,, GetReference()); 
 		RewardState.GiveReward(NewGameState, GetReference());
 		
 		// Reset number of favors
-		Program.iNumberOfFavorsCalledIn = 0;
+		Program.iFavorsUntilNextInfluenceGain = default.iNumberOfFavorsRequiredToIncreaseInfluence;
 		`XCOMGAME.GameRuleset.SubmitGameState(NewGameState);
 
 		// This method creates and submits another new game state
@@ -1484,7 +1652,7 @@ function TryIncreaseInfluence() {
 		`RTLOG("Not enough Favors have been called in. Not increasing influence.", false, true);
 		NewGameState = `CreateChangeState("RisingTides: Increasing Influence");
 		Program = RTGameState_ProgramFaction(NewGameState.ModifyStateObject(class'RTGameState_ProgramFaction', self.ObjectID));
-		Program.iNumberOfFavorsCalledIn = iGuarenteedCorrectValue;
+		Program.iFavorsUntilNextInfluenceGain = iGuarenteedCorrectValue;
 		`XCOMGAME.GameRuleset.SubmitGameState(NewGameState);
 	}
 }
@@ -1630,10 +1798,12 @@ static function DisplayPISFirstTimePopup() {
 }
 
 function PrintDebuggingInfo() {
-	`RTLOG("Is Favor Available");
-	`RTLOG("" $ bOneSmallFavorAvailable);
-	`RTLOG("Number of Favors remaining");
-	`RTLOG("" $ iNumberOfFavorsAvailable);
+	`RTLOG("Number of Favors remaining", false, true);
+	`RTLOG("" $ iFavors, false, true);
+	`RTLOG("Number of Favors remaining THIS MONTH", false, true);
+	`RTLOG("" $ iFavorsRemainingThisMonth, false, true);
+	`RTLOG("Number of Favors til next Influence Gain", false, true);
+	`RTLOG("" $ iNumberOfFavorsRequiredToIncreaseInfluence, false, true);
 }
 
 public function int GetCurrentVersion() {

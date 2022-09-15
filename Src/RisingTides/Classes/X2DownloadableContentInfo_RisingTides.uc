@@ -18,6 +18,7 @@ var config array<name> TemplarUnitNames;
 var config bool MindWrackKillsRulers;
 var config bool HostileTemplarFocusUIEnabled;
 var config bool TemplarFocusVisualizationPatchEnabled;
+var config bool UseOldOTSGFX;
 var config array<name> ProgramTechs;
 
 var config array<name> NewAbilityAvailabilityCodes;
@@ -26,9 +27,17 @@ var localized array<String> NewAbilityAvailabilityStrings;
 // weak ref to the screen (I just copied this from RJ and don't know if it's really necessary)
 var config String screen_path;
 
+var String BuildTimestamp;
+
+var array<int> MutuallyExclusiveProgramOperativeRanks;
+
+var array<name> NEGATED_ENV_DAMAGE_ABILITIES;
+
 defaultproperties
 {
 	Version=(Major=2, Minor=1, Patch=11)
+	BuildTimestamp="1663204300"
+	MutuallyExclusiveProgramOperativeRanks=(6,7)
 }
 
 /// <summary>
@@ -87,7 +96,9 @@ static event OnPostTemplatesCreated()
 	`endif
 
 	`RTLOG("Script package loaded. Version: " $ GetVersionString());
+	`RTLOG("Build Timestamp: [" $ default.BuildTimestamp $ "]");
 
+	MakeProgramOperativeAbilitiesMutuallyExclusive();
 	MakePsiAbilitiesInterruptable();
 	MakeAbilitiesNotTurnEndingForTimeStandsStill();
 	AddProgramFactionCovertActions();
@@ -97,12 +108,86 @@ static event OnPostTemplatesCreated()
 	if(default.TemplarFocusVisualizationPatchEnabled) {
 		PatchTemplarFocusVisualization();
 	}
-
+	
+	//PrintProgramItemUpgradeTemplates();
 	//PrintAbilityTemplates();
+}
+
+static function MakeProgramOperativeAbilitiesMutuallyExclusive() {
+	local X2SoldierClassTemplateManager ClassManager;
+	local X2AbilityTemplateManager AbilityManager;
+	local X2AbilityTemplate AbilityTemplate;
+	local array<X2SoldierClassTemplate> Templates;
+	local X2SoldierClassTemplate Template;
+	local array<SoldierClassAbilitySlot> Slots;
+	local SoldierClassAbilitySlot Slot;
+	local array<name> Perks;
+	local name Perk, Perk2, NotName;
+	local int i;
+
+
+	ClassManager = class'X2SoldierClassTemplateManager'.static.GetSoldierClassTemplateManager();
+	AbilityManager = class'X2AbilityTemplateManager'.static.GetAbilityTemplateManager();
+	Templates = ClassManager.GetAllSoldierClassTemplates();
+	foreach Templates(Template) {
+		if(InStr(Template.DataName, "RT_") == INDEX_NONE) {
+			continue;
+		}
+
+		foreach default.MutuallyExclusiveProgramOperativeRanks(i) {
+			Perks.Length = 0;
+			Slots = Template.SoldierRanks[i].AbilitySlots;
+			foreach Slots(Slot) {
+				Perks.AddItem(Slot.AbilityType.AbilityName);
+			}
+
+			foreach Perks(Perk) {
+				AbilityTemplate = AbilityManager.FindAbilityTemplate(Perk);
+				foreach Perks(Perk2) {
+					if(Perk == Perk2) {
+						continue;
+					}
+					NotName = `RTS.ConcatName('NOT_', Perk2);
+					if(AbilityTemplate.PrerequisiteAbilities.Find(NotName) == INDEX_NONE) {
+						`RTLOG("Making " $ Perk $ " mutually exclusive with " $ Perk2);
+						AbilityTemplate.PrerequisiteAbilities.AddItem(NotName);
+					} else {
+						`RTLOG(Perk $ " is already mutually exclusive with " $ Perk2);
+					}
+				}
+			}
+		}
+	}
 }
 
 static function PatchTemplarFocusVisualization() {
 	class'RTAbility_TemplarAbilitySet'.static.PatchTemplarFocusVisualization();
+}
+
+static function PrintProgramItemUpgradeTemplates() {
+	local X2WeaponUpgradeTemplate Template;
+	local X2ItemTemplateManager ItemMgr;
+	local array<X2WeaponUpgradeTemplate> Templates;
+	local name IteratorName;
+	local WeaponAttachment Attachment;
+
+	// ClipSizeUpgrade_Sup
+	// CritUpgrade_Sup
+
+	ItemMgr = class'X2ItemTemplateManager'.static.GetItemTemplateManager();
+	Templates = ItemMgr.GetAllUpgradeTemplates();
+
+	foreach Templates(Template) {
+		switch(Template.DataName) {
+			case 'RTCosmetic_Suppressor':
+				`RTLOG("Printing all attachable weapons for cosmetic silencer");
+				foreach Template.UpgradeAttachments(Attachment) {
+					`RTLOG("" $ Attachment.ApplyToWeaponTemplate);
+				}
+				`RTLOG("-------------------------------------------------------");
+				break;
+		}
+	}
 }
 
 static function PrintAbilityTemplates() {
@@ -176,30 +261,32 @@ static event OnExitPostMissionSequence()
 	local XComGameState NewGameState;
 	local RTGameState_ProgramFaction NewProgramState, ProgramState;
 	local bool bShouldTryToIncreaseInfluence;
-	//local XComGameState_BattleData BattleData;
+	local XComGameState_BattleData BattleData;
+	local XComGameState_MissionSite MissionState;
+	local XComGameStateHistory History;
 
 	ProgramState = `RTS.GetProgramState();
-	bShouldTryToIncreaseInfluence = ProgramState.isOneSmallFavorActivated();
 	if(ProgramState.bShouldPerformPostMissionCleanup) {
+		`RTLOG("Performing post-mission cleanup!");
 		NewGameState = `CreateChangeState("Cleanup Program Operatives from XCOMHQ!");
 		NewProgramState = `RTS.GetNewProgramState(NewGameState);
 		NewProgramState.PerformPostMissionCleanup(NewGameState);
 
 		`GAMERULES.SubmitGameState(NewGameState);
 
-		// Might be useful later, but for now disabled because losing one mission would make it impossible to gain more favors
-		/*
-		BattleData = XComGameState_BattleData(`XCOMHISTORY.GetSingleGameStateObjectForClass(class'XComGameState_BattleData'));
-		if(BattleData.bLocalPlayerWon) {
-			// This method creates and submits two new xcgs's
-			NewProgramState.TryIncreaseInfluence();
-		}
-		*/
-
+		History = `XCOMHISTORY;
+		BattleData = XComGameState_BattleData(History.GetSingleGameStateObjectForClass(class'XComGameState_BattleData'));
+		MissionState = XComGameState_MissionSite(History.GetGameStateForObjectID(BattleData.m_iMissionID));
 		// Try to increase influence
-		if(bShouldTryToIncreaseInfluence) {
+		if(class'RTGameState_ProgramFaction'.static.IsOSFMission(MissionState)) {
+			`RTLOG("This was an OSF mission, trying to increase influence");
+			// this method creates and submits NewGameStates, so we don't need to submit again
 			NewProgramState.TryIncreaseInfluence();
+		} else {
+			`RTLOG("This was NOT an OSF mission, not trying to increase influence");
 		}
+	} else {
+		`RTLOG("No need to perform post-mission cleanup.");
 	}
 }
 
@@ -468,5 +555,18 @@ static function UpdateAbilityAvailabilityStrings()
     {
         AbilityTemplateManager.AbilityAvailabilityCodes.AddItem(default.NewAbilityAvailabilityCodes[idx]);
         AbilityTemplateManager.AbilityAvailabilityStrings.AddItem(default.NewAbilityAvailabilityStrings[idx]);
+    }
+}
+
+static function bool IsModLoaded(name DLCName)
+{
+    local int i;
+    local XComOnlineEventMgr Mgr;
+
+    Mgr = `ONLINEEVENTMGR;
+    for (i = Mgr.GetNumDLC() - 1; i >= 0; i--) {
+        if(Mgr.GetDLCNames(i) == DLCName) {
+            return true;
+        }
     }
 }

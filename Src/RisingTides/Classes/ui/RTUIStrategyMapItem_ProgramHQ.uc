@@ -103,24 +103,5 @@ simulated function OnButtonClicked()
 		return;
 	}
 	
-	TempScreen = GetProgramFactionInfoScreen();
-	ScreenStack.Push(TempScreen, Pres.Get2DMovie());
-	RTUIScreen_ProgramFactionInfo(TempScreen).PopulateData();
-}
-
-static function RTUIScreen_ProgramFactionInfo GetProgramFactionInfoScreen()
-{
-	local RTUIScreen_ProgramFactionInfo TempScreen;
-	local XComPresentationLayerBase Pres;
-
-	Pres = `PRESBASE;
-	TempScreen = RTUIScreen_ProgramFactionInfo(FindObject(class'X2DownloadableContentInfo_RisingTides'.default.screen_path, class'RTUIScreen_ProgramFactionInfo'));
-	if (Pres != none && TempScreen == none)
-	{
-		TempScreen = Pres.Spawn(class'RTUIScreen_ProgramFactionInfo', Pres);
-		TempScreen.InitScreen(XComPlayerController(Pres.Owner), Pres.Get2DMovie());
-		TempScreen.Movie.LoadScreen(TempScreen);
-		class'X2DownloadableContentInfo_RisingTides'.default.screen_path = PathName(TempScreen);
-	}
-	return TempScreen;
+	class'RTUIUtilities'.static.ProgramInfoScreen();
 }

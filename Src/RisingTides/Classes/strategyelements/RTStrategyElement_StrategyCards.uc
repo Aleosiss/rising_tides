@@ -36,9 +36,9 @@ static function ActivateOneSmallFavor(XComGameState NewGameState, StateObjectRef
 
 	Program = `RTS.GetNewProgramState(NewGameState);
 	if(!Program.bOSF_FirstTimeDisplayed) { // start with three favors
-		Program.ModifyAvailableProgramFavors(3);
+		Program.ModifyProgramFavors(3);
 	}
-	Program.MakeOneSmallFavorAvailable();
+	Program.iFavorsRemainingThisMonth = 1;
 	Program.bShouldResetOSFMonthly = true;
 }
 
@@ -46,7 +46,7 @@ static function DeactivateOneSmallFavor(XComGameState NewGameState, StateObjectR
 	local RTGameState_ProgramFaction Program;
 
 	Program = `RTS.GetNewProgramState(NewGameState);
-	Program.MakeOneSmallFavorUnavailable();
+	Program.iFavorsRemainingThisMonth = 0;
 	Program.bShouldResetOSFMonthly = false;
 }
 
@@ -93,7 +93,7 @@ static function JustPassingThroughModifyTacStartState(XComGameState StartState) 
 		return;
 	}
 	MissionState = XComGameState_MissionSite(`XCOMHISTORY.GetGameStateForObjectID(XComHQ.MissionRef.ObjectID));
-	if(`RTS.IsInvalidMission(MissionState.GetMissionSource())) {
+	if(`RTS.IsInvalidMission(MissionState.GetMissionSource().DataName)) {
 		//`RTLOG("Invalid Mission Type for JPT!");
 		return;
 	}

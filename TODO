@@ -62,5 +62,28 @@
   ✔ Fix Psionic Storm visualizaton (its broken) @done(19-10-15 22:24)
   ✔ Add Call in One Small Favor covert action (hard) -> available if program questline completed @done(19-09-21 09:09)
   ✔ Add +1 Program Favors covert action (medium) -> available if program favors < 1 @done(19-09-21 09:09)
-  ☐ Stretch: Add Templar High Coven Special Abilities
-  ☐ Stretch: Add Program Requests System
+  ✘ Stretch: Add Templar High Coven Special Abilities @cancelled(22-09-14 01:15)
+  ✘ Stretch: Add Program Requests System @cancelled(22-09-14 01:15)
+2.2.0 Strategy Overhaul Compatibility Patch TODOS:
+  ✔ Improve behind-the-scenes handling of Program Favors @done(22-09-12 02:40)
+  ✔ Improve behind-the-scenes handling of Program Squads @done(22-09-12 02:40)
+  ✔ Add localizations for all covert actions and activity chains from Covert Infiltration @done(22-09-13 00:32)
+  ✔ Adjust One Small Favor checkbox position for UICovertActionsGeoscape @done(22-09-13 00:16)
+  ✔ Make One Small Favor checkbox reappear after returning to the UICovertActionsGeoscape page @done(22-09-13 00:16)
+  ✔ Make One Small Favor work for Infiltrations @done(22-09-12 02:40)
+  ✔ Reiterate on OTS visualization @done(22-09-12 02:40)
+  ✔ Show reasoning for why Program squad is unavailable on PIS @done(22-09-12 02:40)
+  ✔ Fix Chosen showing up on Templar missions @done(22-09-12 02:42)
+  ✔ Make higher-tier Program Operative perks mutually exclusive @done(22-09-12 02:42)
+  ✔ Fix soldiers getting stuck in a Covert Action if they were in-progress when the Templars were destroyed @done(22-09-12 02:42)
+  ✔ Fix how Stealth effects are applied so that if multiple exist, losing one does not remove all of them and their VFX @done(22-09-12 18:22)
+  ✔ Make One Small Favor work for Covert Actions @done(22-09-14 23:31)
+  ✔ Add Infiltration Modifiers for Program Operative perks, characters, classes, and equipment @done(22-09-14 00:49)
+  ✔ Add button for PIS to UIStrategyMap @done(22-09-13 19:56)
+  ✔ Speed up Psistorm Casting Visualization @done(22-09-13 21:58)
+  ✔ Disable debugging and versioning information for release @done(22-09-15 02:02)
+  ✔ Fix Misplaced Checkbox on Infiltration mission launches @done(22-09-14 01:07)
+  ✔ Make Program Operatives immune to daze and mind control @done(22-09-15 02:01)
+2.3.0 Program Requests Patch TODOS:
+  ☐ Add Covert Actions that grant Program Favors
+  ☐ Create randomly generated narratives/costs
