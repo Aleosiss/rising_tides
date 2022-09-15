@@ -47,9 +47,9 @@ simulated function InitImageButton(name ButtonName, string ImagePath, delegate<O
 	{
 		ControllerIcon = Spawn(class'UIImage', self);
 		ControllerIcon.InitImage('ControllerIcon', "img:///gfxGamepadIcons." $ class'UIUtilities_Input'.static.GetGamepadIconPrefix() $ ControllerButtonIconPath);
-		ControllerIcon.AnchorBottomRight();
+		ControllerIcon.AnchorTopLeft();
 		ControllerIcon.SetSize(40, 40);
-		ControllerIcon.SetX(BG.X + 10);
+		ControllerIcon.SetPosition(64, 64);
 	}
 }
 

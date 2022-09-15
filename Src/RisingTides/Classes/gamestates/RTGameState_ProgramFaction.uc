@@ -71,10 +71,11 @@ var bool														bSetupComplete;		// if we should rebuild the operative arr
 var bool																bShouldPerformPostMissionCleanup;	// should cleanup the program's roster after a mission-- set during OSF and JPT missions
 var bool																bDirectNeuralManipulation;
 var bool																bResistanceSabotageActivated;
-var config array<name>													InvalidMissionSources;				// list of mission types ineligible for Program support, usually story missions
+var config array<name>													InvalidMissionSources;							// list of mission types ineligible for Program support, usually story missions
+var config array<name>													InvalidCovertActions;							// list of covert actions ineligible for Program support, usually story missions
 var config array<name>													DefaultDeployableCovertActionMissionSources;	// list of covert mission types eligible for Program support
-var config array<name>													DefaultDeployableMissionSources;	// list of mission types eligible for Program support
-var config array<name>													UnavailableCovertActions;			// list of covert actions that the program cannot carry out
+var config array<name>													DefaultDeployableMissionSources;				// list of mission types eligible for Program support
+var config array<name>													UnavailableCovertActions;						// list of covert actions that the program cannot carry out
 var config array<name>													ExcludedGoldenPathCovertActions;				// list of golden path covert actions the program cannot carry out (yet)
 var config int															iNumberOfFavorsRequiredToIncreaseInfluence;
 var array<X2DataTemplate>												OperativeTemplates;
@@ -806,7 +807,6 @@ simulated function ReloadOperativeArmaments(XComGameState NewGameState) {
 		WeaponState = NewUnitState.GetPrimaryWeapon();
 		WeaponState = XComGameState_Item(NewGameState.ModifyStateObject(class'XComGameState_Item', WeaponState.ObjectID));
 		ApplyWeaponUpgrades(UnitState.GetMyTemplateName(), WeaponState);
-
 	}
 }
 
@@ -945,7 +945,41 @@ function bool IsThereAnAvailableSquad() {
 	return false;
 }
 
-simulated function bool CashOneSmallFavor(XComGameState NewGameState, StateObjectReference DeploymentRef) {
+function bool IsThereAnAvailableSquadForMission(XComGameState_MissionSite MissionSite) {
+	local XComGameStateHistory History;
+	local RTGameState_PersistentGhostSquad Squad;
+	local StateObjectReference SquadRef;
+
+	History = `XCOMHISTORY;
+
+	foreach Squads(SquadRef) {
+		Squad = RTGameState_PersistentGhostSquad(History.GetGameStateForObjectID(SquadRef.ObjectID));
+		if(Squad.isDeployable(MissionSite.Source) && !Squad.IsDeployed() ) {
+			return true;
+		}
+	}
+	return false;
+}
+
+function bool IsThereAnAvailableSquadForCovertAction(XComGameState_CovertAction ActionState) {
+	local XComGameStateHistory History;
+	local RTGameState_PersistentGhostSquad Squad;
+	local StateObjectReference SquadRef;
+
+	History = `XCOMHISTORY;
+
+	foreach Squads(SquadRef) {
+		Squad = RTGameState_PersistentGhostSquad(History.GetGameStateForObjectID(SquadRef.ObjectID));
+		// cheat a bit - if a squad is available for ambushes they are available for covert actions
+		// i don't see the need to make squads be able do certain types of CAs at this point
+		if(Squad.isDeployable('MissionSource_ChosenAmbush') && !Squad.IsDeployed() ) {
+			return true;
+		}
+	}
+	return false;
+}
+
+private simulated function bool CashOneSmallFavor(XComGameState NewGameState, StateObjectReference DeploymentRef) {
 	ModifyProgramFavors(-1);
 	iFavorsRemainingThisMonth--;
 
@@ -953,6 +987,25 @@ simulated function bool CashOneSmallFavor(XComGameState NewGameState, StateObjec
 	AdjustProgramGearLevel(NewGameState);
 
 	return true;
+}
+
+simulated function bool CashOneSmallFavorForCovertAction(XComGameState NewGameState, XComGameState_CovertAction ActionState) {
+	local bool status;
+	local RTGameState_PersistentGhostSquad SquadState;
+
+	SquadState = GetSquadForCovertAction(ActionState.GetReference());
+	status = true;
+	if(SquadState == none) {
+		`RTLOG("No available squad?");
+		status = false;
+	}
+
+	status = status && CashOneSmallFavor(NewGameState, ActionState.GetReference());
+
+	SquadState = RTGameState_PersistentGhostSquad(NewGameState.ModifyStateObject(SquadState.class, SquadState.ObjectID));
+	SquadState.DeploymentRef = ActionState.GetReference();
+
+	return status;
 }
 
 simulated function bool CashOneSmallFavorForMission(XComGameState NewGameState, XComGameState_MissionSite MissionSiteState) {
@@ -995,7 +1048,7 @@ simulated function bool AddProgramSquadToMissionSite(XComGameState NewGameState,
 	return true;
 }
 
-simulated function bool UncashOneSmallFavor(XComGameState NewGameState, StateObjectReference DeploymentRef) {
+private simulated function bool UncashOneSmallFavor(XComGameState NewGameState, StateObjectReference DeploymentRef) {
 	local StateObjectReference GhostRef, EmptyRef;
 	local name GhostTemplateName;
 
@@ -1003,6 +1056,26 @@ simulated function bool UncashOneSmallFavor(XComGameState NewGameState, StateObj
 	iFavorsRemainingThisMonth++;
 
 	return true;
+}
+
+simulated function bool UncashOneSmallFavorForCovertAction(XComGameState NewGameState, XComGameState_CovertAction ActionState) {
+	local bool status;
+	local RTGameState_PersistentGhostSquad SquadState;
+	local StateObjectReference EmptyRef;
+
+	SquadState = GetSquadForCovertAction(ActionState.GetReference());
+	status = true;
+	if(SquadState == none) {
+		`RTLOG("No available squad?");
+		status = false;
+	}
+
+	status = status && UncashOneSmallFavor(NewGameState, ActionState.GetReference());
+
+	SquadState = RTGameState_PersistentGhostSquad(NewGameState.ModifyStateObject(SquadState.class, SquadState.ObjectID));
+	SquadState.DeploymentRef = EmptyRef;
+
+	return status;
 }
 
 simulated function bool UncashOneSmallFavorForMission(XComGameState NewGameState, XComGameState_MissionSite MissionSiteState) {

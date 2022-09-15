@@ -232,7 +232,7 @@ static function X2CharacterTemplate CreateKagaTemplate()
 	CharTemplate = CreateProgramSoldierTemplate('RTGhostOperator');
 	
 	CharTemplate.DefaultSoldierClass = 'RT_Gatherer';
-	CharTemplate.DefaultLoadout = 'RT_Gatherer';
+	CharTemplate.DefaultLoadout = 'RT_Operator';
 	CharTemplate.bIsPsionic = true;
 	
 	CharTemplate.bHasFullDefaultAppearance = true;

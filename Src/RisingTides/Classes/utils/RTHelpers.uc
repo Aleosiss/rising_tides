@@ -213,13 +213,13 @@ static function RTLog(string message, optional bool bShouldRedScreenToo = false,
 		return;
 	}
 	mod = 'RisingTides';
-	tsString = " [" $ `CONFIG.BuildTimestamp $ "]: ";
+	tsString = " [" $ `DLCINFO.GetVersionString() $ " - " $ `CONFIG.BuildTimestamp $ "]: ";
 	`LOG(tsString $ message, b, mod);
 	if(bShouldRedScreenToo) {
 		`RedScreen(mod $ tsString $ message);
 	}
 	if(bShouldOutputToConsoleToo) {
-		class'Helpers'.static.OutputMsg(mod $ tsString $ ": " $ message);
+		class'Helpers'.static.OutputMsg(mod $ tsString $ message);
 	}
 }
 
