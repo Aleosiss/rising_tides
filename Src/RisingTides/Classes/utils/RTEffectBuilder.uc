@@ -84,14 +84,15 @@ static function RTEffect_Stealth CreateStealthEffect(	int iDuration = 1,
 														optional bool bInfinite = false,
 														optional float fModifier = 1.0f,
 														optional GameRuleStateChange WatchRule = eGameRule_PlayerTurnBegin,
-														optional name AbilitySourceName = 'eAbilitySource_Psionic'
+														optional name AbilitySourceName = 'eAbilitySource_Psionic',
+														optional EDuplicateEffect DuplicateResponse = eDupe_Refresh
 ) {
 	local RTEffect_Stealth Effect;
 
 	Effect = new class'RTEffect_Stealth';
 	Effect.EffectName = default.StealthEffectName;
 	Effect.fStealthModifier = fModifier;
-	Effect.DuplicateResponse = eDupe_Refresh;
+	Effect.DuplicateResponse = DuplicateResponse;
 	Effect.BuildPersistentEffect(iDuration, bInfinite, true, false, WatchRule);
 	Effect.SetDisplayInfo(ePerkBuff_Bonus, default.StealthFriendlyName, default.StealthFriendlyDesc, default.StealthIconPath, true,, AbilitySourceName);
 	Effect.VisualizationFn = StealthVisualization;
@@ -162,6 +163,8 @@ static function RTEffect_Panicked CreateFeedbackEffect(int _EffectDuration, name
 	PanickedEffect.EffectHierarchyValue = class'X2StatusEffects'.default.PANICKED_HIERARCHY_VALUE;
 	PanickedEffect.EffectAppliedEventName = 'PanickedEffectApplied';
 	PanickedEffect.SetDisplayInfo(ePerkBuff_Penalty, _EffectDisplayTitle, _EffectDisplayDesc, _IconImage);
+	PanickedEffect.DamageTypes.Length = 0;
+	PanickedEffect.DamageTypes.AddItem('Panic');
 	return PanickedEffect;
 }
 

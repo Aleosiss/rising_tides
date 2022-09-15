@@ -1238,7 +1238,7 @@ RewardDetails="An I-owe-you from Dr. Hadley herself. Worth a life or two."
 
 [RTReward_ProgramCallInFavor X2RewardTemplate]
 DisplayName="Program Mission Scheduling Data"
-RewardDetails="Allow the Program to pick up a second mission this month. Does not stack with the Resistance Order."
+RewardDetails="Allow the Program to pick up a another mission this month."
 
 [ResistanceMode_PsiTraining X2ResistanceModeTemplate]
 DisplayName="Scanning Bonus: Psionic Expertise"

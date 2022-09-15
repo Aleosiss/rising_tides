@@ -2,7 +2,7 @@
 class RTMeleePathingPawn extends X2MeleePathingPawn;
 
 // overridden to always just show the slash UI, regardless of cursor location or other considerations
-simulated protected function UpdatePuckVisuals(XComGameState_Unit ActiveUnitState,
+simulated function UpdatePuckVisuals(XComGameState_Unit ActiveUnitState,
 												const out TTile PathDestination,
 												Actor TargetActor,
 												X2AbilityTemplate MeleeAbilityTemplate)
@@ -80,7 +80,7 @@ simulated protected function UpdatePuckVisuals(XComGameState_Unit ActiveUnitStat
 // if you need to add some other information (markers, tiles, etc) that needs to be updated when the path does, you should add a
 // call to that update function to this function.
 
-simulated protected function RebuildPathingInformation(TTile PathDestination, Actor TargetActor, X2AbilityTemplate MeleeAbilityTemplate, TTile CursorTile)
+simulated function RebuildPathingInformation(TTile PathDestination, Actor TargetActor, X2AbilityTemplate MeleeAbilityTemplate, TTile CursorTile)
 {
 	super.RebuildPathingInformation(PathDestination, TargetActor, MeleeAbilityTemplate, CursorTile);
 	RenderablePath.SetHidden(true);

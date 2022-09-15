@@ -85,6 +85,8 @@ static function X2CharacterTemplate CreateWhisperTemplate()
 	CharTemplate.DefaultAppearance.nmTorsoDeco = 'RT_MamaMEA_Remnant_Hvy_Torso_M';
 	CharTemplate.DefaultAppearance.bGhostPawn = False;
 
+	CharTemplate.ReceivesProgramRankups = true;
+
 	`RTLOG("Adding Whisper's character template!");
 	return CharTemplate;
 }
@@ -149,6 +151,8 @@ static function X2CharacterTemplate CreateQueenTemplate()
 	CharTemplate.DefaultAppearance.nmShins = 'RT_MamaMEA_Remnant_Hvy_Legs_F';
 	CharTemplate.DefaultAppearance.nmTorsoDeco = 'RT_MamaMEA_Remnant_Hvy_Torso_F';
 	CharTemplate.DefaultAppearance.bGhostPawn = False;
+
+	CharTemplate.ReceivesProgramRankups = true;
 
 	`RTLOG("Adding Queen's character template!");
 	return CharTemplate;
@@ -215,6 +219,8 @@ static function X2CharacterTemplate CreateNovaTemplate()
 	CharTemplate.DefaultAppearance.nmTorsoDeco = 'RT_MamaMEA_Remnant_Hvy_Torso_F';
 	CharTemplate.DefaultAppearance.bGhostPawn = False;
 
+	CharTemplate.ReceivesProgramRankups = true;
+
 	`RTLOG("Adding Nova's character template!");
 	return CharTemplate;
 }
@@ -226,7 +232,7 @@ static function X2CharacterTemplate CreateKagaTemplate()
 	CharTemplate = CreateProgramSoldierTemplate('RTGhostOperator');
 	
 	CharTemplate.DefaultSoldierClass = 'RT_Gatherer';
-	CharTemplate.DefaultLoadout = 'RT_Gatherer';
+	CharTemplate.DefaultLoadout = 'RT_Operator';
 	CharTemplate.bIsPsionic = true;
 	
 	CharTemplate.bHasFullDefaultAppearance = true;
@@ -286,6 +292,8 @@ static function X2CharacterTemplate CreateKagaTemplate()
 	CharTemplate.Abilities.AddItem('RTPsionicLash');
 	CharTemplate.Abilities.AddItem('RTUnfurlTheVeil');
 	CharTemplate.Abilities.AddItem('Fade');
+
+	CharTemplate.ReceivesProgramRankups = false;
 
 	`RTLOG("Adding Kaga's character template!");
 	return CharTemplate;
@@ -376,6 +384,8 @@ static function RTCharacterTemplate CreateProgramSoldierTemplate(optional name T
 	CharTemplate.strTargetIconImage = class'UIUtilities_Image'.const.TargetIcon_XCom;
 	CharTemplate.strAutoRunNonAIBT = "SoldierAutoRunTree";
 	CharTemplate.CharacterGeneratorClass = class'XGCharacterGenerator';
+
+	CharTemplate.ImmuneTypes.AddItem('Mental');
 
 	return CharTemplate;
 }

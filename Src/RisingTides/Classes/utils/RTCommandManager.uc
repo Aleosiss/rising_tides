@@ -31,7 +31,7 @@ exec function RT_PrintProgramFactionInformation(optional bool bShouldPrintFullIn
 	Faction = `RTS.GetProgramState();
 
 	if(bShouldPrintFullInfo) {
-		`RTLOG(Faction.ToString(bShouldPrintAllFields), , true);
+		`RTLOG(Faction.ToString(bShouldPrintAllFields), false, true);
 		return;
 	}
 
@@ -50,6 +50,18 @@ exec function RT_PrintProgramFactionInformation(optional bool bShouldPrintFullIn
 
 }
 
+exec function RT_CheatModifyProgramFavorTimeSlots(int diff) {
+	local RTGameState_ProgramFaction ProgramState;
+	local XComGameState NewGameState;
+
+	NewGameState = `CreateChangeState("CHEAT - Modify Program Times Called This Month Count");
+	ProgramState = `RTS.GetNewProgramState(NewGameState);
+
+	ProgramState.iFavorsRemainingThisMonth += diff;
+
+	`GAMERULES.SubmitGameState(NewGameState);
+}
+
 exec function RT_CheatModifyProgramFavors(int diff) {
 	local RTGameState_ProgramFaction ProgramState;
 	local XComGameState NewGameState;
@@ -57,7 +69,7 @@ exec function RT_CheatModifyProgramFavors(int diff) {
 	NewGameState = `CreateChangeState("CHEAT - Modify Program Favor Count");
 	ProgramState = `RTS.GetNewProgramState(NewGameState);
 
-	ProgramState.ModifyAvailableProgramFavors(diff);
+	ProgramState.ModifyProgramFavors(diff);
 
 	`GAMERULES.SubmitGameState(NewGameState);
 }
@@ -69,7 +81,7 @@ exec function RT_CheatModifyProgramFavorTracker(int diff) {
 	NewGameState = `CreateChangeState("CHEAT - Modify Program Favors Called In Count");
 	ProgramState = `RTS.GetNewProgramState(NewGameState);
 
-	ProgramState.iNumberOfFavorsCalledIn += diff;
+	ProgramState.iFavorsUntilNextInfluenceGain -= diff;
 
 	`GAMERULES.SubmitGameState(NewGameState);
 }
@@ -193,7 +205,7 @@ exec function RT_ActivateOneSmallFavor() {
 	NewGameState = `CreateChangeState("CHEAT: Force One Small Favor!");
 	ProgramState = `RTS.GetNewProgramState(NewGameState);
 
-	ProgramState.MakeOneSmallFavorAvailable();
+	ProgramState.iFavorsRemainingThisMonth++;
 	
 	`GAMERULES.SubmitGameState(NewGameState);
 }
@@ -306,7 +318,6 @@ exec function RT_RegenerateProgramOperatives() {
 	ProgramState.Master.Length = 0;
 	ProgramState.Active.Length = 0;
 	ProgramState.Captured.Length = 0;
-	ProgramState.Deployed = none;
 
 	`XCOMGAME.GameRuleset.SubmitGameState(NewGameState);
 
@@ -314,8 +325,8 @@ exec function RT_RegenerateProgramOperatives() {
 	NewGameState = `CreateChangeState("Rising Tides: CHEAT: Regenerate Program Operatives, Part 2");
 	ProgramState = `RTS.GetNewProgramState(NewGameState);
 
-	ProgramState.CreateRTOperatives(NewGameState);
-	ProgramState.CreateRTSquads(NewGameState);
+	ProgramState.CreateProgramOperatives(NewGameState);
+	ProgramState.CreateProgramSquads(NewGameState);
 
 	`XCOMGAME.GameRuleset.SubmitGameState(NewGameState);
 
@@ -1356,16 +1367,14 @@ private function XComGameState_Unit GetSelectedUnitInArmory()
 	return UnitState;
 }
 
-exec function RT_PrintEffectsAndMITVsForClosestUnitToCursor(bool bShouldRemove = false) {
+exec function RT_PrintEffectsAndMICTVsForClosestUnitToCursor(bool bShouldRemove = false) {
 	local XComGameState_Unit UnitState;
 	local XComTacticalCheatManager CheatsManager;
 
 	CheatsManager = `CHEATMGR;
 
 	UnitState = CheatsManager.GetClosestUnitToCursor();
-
-	`RTLOG("Printing all particle effects and MITVs for " $ UnitState.GetFullName(), false, true);
-	`RTS.PrintEffectsAndMITVsForUnitState(UnitState, bShouldRemove);
+	`RTS.PrintEffectsAndMICTVsForUnitState(UnitState, bShouldRemove);
 }
 
 exec function RT_DebugSpeakerTemplate(name CharTemplateName)
@@ -1633,6 +1642,10 @@ private static function ApplyWeaponUpgrades(name GhostTemplateName, XComGameStat
 			break;
 
 	}
+}
+
+exec function RT_DebugItemUpgrades() {
+	class'X2DownloadableContentInfo_RisingTides'.static.PrintProgramItemUpgradeTemplates();
 }
 
 exec function RT_Patch219() {

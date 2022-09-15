@@ -78,12 +78,7 @@ static function X2DataTemplate CreateFindProgramFarAwayFactionTemplate() {
 }
 
 static function AddFactionToGeneratedTemplates() {
-	//local array<name> CovertActionNames;
 	local X2StrategyElementTemplateManager Manager;
-	//local array<X2CovertActionTemplate> CovertActionTemplates;
-	//local array<X2DataTemplate>			DataTemplates;
-	//local X2DataTemplate				IteratorTemplate;
-	//local X2CovertActionTemplate		TestTemplate;
 	local array<X2StrategyElementTemplate> AllActionTemplates;
 	local X2StrategyElementTemplate DataTemplate;
 	local X2CovertActionTemplate ActionTemplate;

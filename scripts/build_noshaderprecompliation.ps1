@@ -23,9 +23,9 @@ function StageDirectory ([string]$directoryName, [string]$srcDirectory, [string]
 }
 
 function HandleSrcSubdirectories([string] $srcDir) {
-    $files = Get-ChildItem -Path $srcDir -Filter "*.uc"
+    $files = Get-ChildItem  -Filter "*.uc"
 
-    Get-ChildItem -Path $srcDir -Recurse -Filter "*.uc" | Get-ChildItem | Copy-Item -Destination {$srcDir} -Force -WarningAction SilentlyContinue
+    Get-ChildItem -Path $srcDir -Recurse -Filter "*.uc" | Get-ChildItem | Copy-Item -Destination {$srcDir} -Force -WarningAction SilentlyContinue -ErrorAction SilentlyContinue
 
     return $files
 }
@@ -37,14 +37,26 @@ function GetOriginalFilePaths([string] $srcDir) {
 }
 
 function CheckErrorCode([string] $message) {
-    if ($LASTEXITCODE -ne 0) {
+    if (($LASTEXITCODE -ne 0)) {
         $stopwatch.stop();
         $ts = $stopwatch.Elapsed.TotalSeconds;
 
         Write-Host "Build failed in $ts seconds.";
         FailureMessage  $message;
-        
     }
+}
+
+function InsertBuildTimestamp([string] $srcDir) {
+    $ts = [int][double]::Parse((Get-Date -UFormat %s))
+    $x2dlcReference = "X2DownloadableContentInfo_RisingTides.uc"
+    Write-Host "Timestamp is $ts"
+    $file = Get-ChildItem -Path $srcDir/$x2dlcReference
+
+
+    $regex = '(?<=BuildTimestamp=")[^"]*'
+    (Get-Content $file) -replace $regex, $ts | Set-Content $file
+
+    CheckErrorCode("Could not insert build timestamp!")
 }
 
 #!!!!!!!!!!!! NOTE THESE MAY SOUND THE SAME IF NOT CONFIGURED !!!!!!!!!!!!!!!#
@@ -328,6 +340,7 @@ function HaveDirectoryContentsChanged ([string] $srcDirPath, [string] $destDirPa
 }
 
 # Let's see how long this takes...
+$global:LASTEXITCODE = 0
 $stopwatch = New-Object System.Diagnostics.Stopwatch
 $stopwatch.Start()
 
@@ -336,6 +349,10 @@ $modNameCanonical = $mod
 # we're going to ask that people specify the folder that has their .XCOM_sln in it as the -srcDirectory argument, but a lot of the time all we care about is
 # the folder below that that contains Config, Localization, Src, etc...
 $modSrcRoot = "$srcDirectory"
+
+# Change the build timestamp
+$modSrcClassPath = "{0}/Src/{1}/Classes" -f $modSrcRoot, $modNameCanonical
+InsertBuildTimestamp $modSrcClassPath
 
 # check that all files in the mod folder are present in the .x2proj file
 ValidateProjectFile $modSrcRoot $modNameCanonical
@@ -431,9 +448,9 @@ Copy-Item "$stagingPath/Src/*" "$sdkPath/Development/Src/" -Force -Recurse -Warn
 Write-Host "Copied."
 
 # append extra_globals.uci to globals.uci
-if (Test-Path "$sdkPath/Development/Src/$modNameCanonical/Classes/extra_globals.uci") {
+if (Test-Path "$sdkPath/Development/Src/extra_globals.uci") {
     Write-Host "Appending macros..."
-    Get-Content "$sdkPath/Development/Src/$modNameCanonical/Classes/extra_globals.uci" | Add-Content "$sdkPath/Development/Src/Core/Globals.uci"
+    Get-Content "$sdkPath/Development/Src/extra_globals.uci" | Add-Content "$sdkPath/Development/Src/Core/Globals.uci"
     Write-Host "Appended."
 } else {
     Write-Host "Couldn't find an extra_globals.uci to append extra macros..."
