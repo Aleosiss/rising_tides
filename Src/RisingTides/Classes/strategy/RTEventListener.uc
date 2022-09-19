@@ -153,11 +153,11 @@ static function X2EventListenerTemplate RTNegateEnvironmentalDamage()
 */
 static function EventListenerReturn NegateEnvironmentalDamage(Object EventData, Object EventSource, XComGameState GameState, Name Event, Object CallbackData) {
 	local XComLWTuple Tuple;
-	local X2Effect_ApplyWeaponDamage Effect;
+	//local X2Effect_ApplyWeaponDamage Effect;
 	local XComGameState_Ability AbilityState;
 
 	Tuple = XComLWTuple(EventData);
-	Effect = X2Effect_ApplyWeaponDamage(EventSource);
+	//Effect = X2Effect_ApplyWeaponDamage(EventSource);
 
 	AbilityState = XComGameState_Ability(Tuple.Data[2].o);
 

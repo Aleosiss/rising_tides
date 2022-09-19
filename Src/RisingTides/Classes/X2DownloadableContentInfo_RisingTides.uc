@@ -36,7 +36,7 @@ var array<name> NEGATED_ENV_DAMAGE_ABILITIES;
 defaultproperties
 {
 	Version=(Major=2, Minor=2, Patch=0)
-	BuildTimestamp="1663264815"
+	BuildTimestamp="1663606286"
 	MutuallyExclusiveProgramOperativeRanks=(6,7)
 }
 
@@ -85,6 +85,7 @@ private static function HandleModUpdate() {
 /// Called when the player starts a new campaign while this DLC / Mod is installed
 /// </summary>
 static event InstallNewCampaign(XComGameState StartState) {
+	`RTLOG("InstallNewCampaign");
 	class'RTGameState_ProgramFaction'.static.InitFaction(StartState);
 }
 
@@ -129,6 +130,9 @@ static function MakeProgramOperativeAbilitiesMutuallyExclusive() {
 	ClassManager = class'X2SoldierClassTemplateManager'.static.GetSoldierClassTemplateManager();
 	AbilityManager = class'X2AbilityTemplateManager'.static.GetAbilityTemplateManager();
 	Templates = ClassManager.GetAllSoldierClassTemplates();
+
+	`RTLOG("Making program operative abilities mutually exclusive...");
+
 	foreach Templates(Template) {
 		if(InStr(Template.DataName, "RT_") == INDEX_NONE) {
 			continue;
@@ -152,12 +156,14 @@ static function MakeProgramOperativeAbilitiesMutuallyExclusive() {
 						`RTLOG("Making " $ Perk $ " mutually exclusive with " $ Perk2);
 						AbilityTemplate.PrerequisiteAbilities.AddItem(NotName);
 					} else {
-						`RTLOG(Perk $ " is already mutually exclusive with " $ Perk2);
+						//`RTLOG(Perk $ " is already mutually exclusive with " $ Perk2);
 					}
 				}
 			}
 		}
 	}
+
+	`RTLOG("Done.");
 }
 
 static function PatchTemplarFocusVisualization() {
@@ -567,4 +573,6 @@ static function bool IsModLoaded(name DLCName)
             return true;
         }
     }
+
+	return false;
 }
