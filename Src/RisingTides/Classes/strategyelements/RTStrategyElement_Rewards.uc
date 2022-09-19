@@ -318,7 +318,7 @@ static function bool IsProgramFactionRewardAvailable(optional XComGameState NewG
 	FactionState = GetFactionState(NewGameState, AuxRef);
 	if (FactionState != none) {
 		if ( FactionState.GetMyTemplateName() != 'Faction_Program') {
-			`RTLOG("FactionState.GetMyTemplateName() == " $ FactionState.GetMyTemplateName() $ ", returning FALSE for CreateProgramGrantFavorReward!");
+			`RTLOG("FactionState.GetMyTemplateName() == " $ FactionState.GetMyTemplateName() $ ", returning false for CreateProgramGrantFavorReward!");
 			return false;
 		}
 
@@ -336,7 +336,7 @@ static function bool IsHuntTemplarsP1Available(optional XComGameState NewGameSta
 	FactionState = GetFactionState(NewGameState, AuxRef);
 	if (FactionState != none) {
 		if ( FactionState.GetMyTemplateName() != 'Faction_Program') {
-			`RTLOG("FactionState.GetMyTemplateName() == " $ FactionState.GetMyTemplateName() $ ", returning FALSE!");
+			//`RTLOG("FactionState.GetMyTemplateName() == " $ FactionState.GetMyTemplateName() $ ", returning false for IsHuntTemplarsP1Available!");
 			return false;
 		}
 	}
@@ -353,12 +353,12 @@ static function bool IsHuntTemplarsP1Available(optional XComGameState NewGameSta
 	foreach `XCOMHISTORY.IterateByClassType(class'XComGameState_ResistanceFaction', FactionState) {
 		if(FactionState.GetMyTemplateName() == 'Faction_Templars') {
 			if(FactionState.bMetXCom) {
-				`RTLOG("The Templars have been met, returning TRUE!");
+				`RTLOG("The Templars have been met, returning true for IsHuntTemplarsP1Available!");
 				return true;
 			}
 		}
 	}
-	`RTLOG("The Templars haven't been met, returning FALSE!");
+	`RTLOG("The Templars haven't been met, returning false for IsHuntTemplarsP1Available!");
 	return false;
 }
 
@@ -370,7 +370,7 @@ static function bool IsHuntTemplarsP2Available(optional XComGameState NewGameSta
 	FactionState = GetFactionState(NewGameState, AuxRef);
 	if (FactionState != none) {
 		if ( FactionState.GetMyTemplateName() != 'Faction_Program') {
-			`RTLOG("FactionState.GetMyTemplateName() == " $ FactionState.GetMyTemplateName() $ ", returning FALSE!");
+			//`RTLOG("FactionState.GetMyTemplateName() == " $ FactionState.GetMyTemplateName() $ ", returning false for IsHuntTemplarsP2Available!");
 			return false;
 		}
 	}
@@ -385,11 +385,11 @@ static function bool IsHuntTemplarsP2Available(optional XComGameState NewGameSta
 	}
 
 	if(ProgramState.getTemplarQuestlineStage() == 1) {
-		`RTLOG("The questline stage has been met, returning TRUE!");
+		`RTLOG("The questline stage has been met, returning true for IsHuntTemplarsP2Available!");
 		return true;
 	}
 
-	`RTLOG("The questline stage hasn't been met, returning FALSE!");
+	`RTLOG("The questline stage hasn't been met, returning false for IsHuntTemplarsP2Available!");
 	return false;
 }
 
@@ -401,7 +401,7 @@ static function bool IsHuntTemplarsP3Available(optional XComGameState NewGameSta
 	FactionState = GetFactionState(NewGameState, AuxRef);
 	if (FactionState != none) {
 		if ( FactionState.GetMyTemplateName() != 'Faction_Program') {
-			`RTLOG("FactionState.GetMyTemplateName() == " $ FactionState.GetMyTemplateName() $ ", returning FALSE!");
+			//`RTLOG("FactionState.GetMyTemplateName() == " $ FactionState.GetMyTemplateName() $ ", returning false for IsHuntTemplarsP3Available!");
 			return false;
 		}
 	}
@@ -416,11 +416,11 @@ static function bool IsHuntTemplarsP3Available(optional XComGameState NewGameSta
 	}
 
 	if(ProgramState.getTemplarQuestlineStage() == 2) {
-		`RTLOG("The questline stage has been met, returning TRUE!");
+		`RTLOG("The questline stage has been met, returning true for IsHuntTemplarsP3Available!");
 		return true;
 	}
 
-	`RTLOG("The questline stage hasn't been met, returning FALSE!");
+	`RTLOG("The questline stage hasn't been met, returning false for IsHuntTemplarsP3Available!");
 	return false;
 }
 

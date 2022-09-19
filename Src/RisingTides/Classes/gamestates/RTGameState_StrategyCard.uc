@@ -36,7 +36,7 @@ static function SetUpStrategyCards(XComGameState StartState)
 	{
 		CardTemplate = RTProgramStrategyCardTemplate(AllCardTemplates[idx]);
 		if(AllCardTemplateNames.Find(CardTemplate.DataName) != INDEX_NONE) {
-			`RTLOG("Found duplicate card template, continuing...");
+			//`RTLOG("Found duplicate card template, continuing...");
 			continue;
 		}
 

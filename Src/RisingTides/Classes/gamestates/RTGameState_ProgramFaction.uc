@@ -897,7 +897,7 @@ function RTGameState_PersistentGhostSquad GetSquadForCovertAction(StateObjectRef
 	local RTGameState_PersistentGhostSquad Squad;
 	local bool bIsOnMissionAlready;
 	local StateObjectReference SquadRef;
-	local XComGameState_CovertAction ActionState;
+	//local XComGameState_CovertAction ActionState;
 
 	History = `XCOMHISTORY;
 
@@ -913,7 +913,7 @@ function RTGameState_PersistentGhostSquad GetSquadForCovertAction(StateObjectRef
 	}
 	
 	// if ref is none, get any deployable squad
-	ActionState = XComGameState_CovertAction(History.GetGameStateForObjectID(ActionRef.ObjectID));
+	//ActionState = XComGameState_CovertAction(History.GetGameStateForObjectID(ActionRef.ObjectID));
 	foreach Squads(SquadRef) {
 		Squad = RTGameState_PersistentGhostSquad(History.GetGameStateForObjectID(SquadRef.ObjectID));
 		if(!Squad.isDeployable(default.DefaultDeployableCovertActionMissionSources[0])) { // we hackin
@@ -1711,9 +1711,16 @@ static function InitFaction(optional XComGameState StartState) {
 	local StateObjectReference RegionRef;
 
 	`RTLOG("Trying to add the Program as a Faction...");
+	`RTLOG("Callstack was:");
+	`RTLOG(GetScriptTrace());
 
 	History = class'XComGameStateHistory'.static.GetGameStateHistory();
 	ResHQ = XComGameState_HeadquartersResistance(History.GetSingleGameStateObjectForClass(class'XComGameState_HeadquartersResistance'));
+	if(ResHQ == none) {
+		`RTLOG("No HeaderquartersResistance...?");
+		return;
+	}
+	
 	StratMgr = class'X2StrategyElementTemplateManager'.static.GetStrategyElementTemplateManager();
 	if(StartState == none) {
 		NewGameState = `CreateChangeState("Adding the Program Faction Object...");
@@ -1721,56 +1728,59 @@ static function InitFaction(optional XComGameState StartState) {
 		NewGameState = StartState;
 	}
 
-	if(ResHQ.GetFactionByTemplateName('Faction_Program') == none) { // no faction, add it ourselves 
-		`RTLOG("Didn't find it, adding the Program to the campaign!");
-		ResHQ = XComGameState_HeadquartersResistance(NewGameState.ModifyStateObject(class'XComGameState_HeadquartersResistance', ResHQ.ObjectID)); 
-		DataTemplate = StratMgr.FindStrategyElementTemplate('Faction_Program');
-		if(DataTemplate != none)
-		{
-			FactionTemplate = RTProgramFactionTemplate(DataTemplate);
-			FactionState = RTGameState_ProgramFaction(FactionTemplate.CreateInstanceFromTemplate(NewGameState));
-			ResHQ.Factions.AddItem(FactionState.GetReference());
-
-			FactionState.FactionName = FactionTemplate.GenerateFactionName();
-			FactionState.FactionIconData = FactionTemplate.GenerateFactionIcon();
-		}
-
-		foreach History.IterateByClassType(class'XComGameState_Haven', IteratorHavenState)
-		{
-			if(!IteratorHavenState.IsFactionHQ())
-				AllHavens.AddItem(IteratorHavenState.GetReference());
-		}
-		IteratorHavenState = XComGameState_Haven(History.GetGameStateForObjectID(AllHavens[`SYNC_RAND_STATIC(AllHavens.Length)].ObjectID));
-		RegionRef = IteratorHavenState.Region;
-
-		RegionState = XComGameState_WorldRegion(History.GetGameStateForObjectID(RegionRef.ObjectID));
-		RegionState = XComGameState_WorldRegion(NewGameState.ModifyStateObject(class'XComGameState_WorldRegion', RegionRef.ObjectID));
-
-		FactionState.HomeRegion = RegionRef;
-		FactionState.Region = RegionRef;
-		FactionState.Continent = RegionState.Continent;
-
-		HavenState = RTGameState_Haven(NewGameState.CreateNewStateObject(class'RTGameState_Haven'));
-		HavenState.Region = RegionRef;
-		HavenState.Continent = IteratorHavenState.Continent;
-		HavenState.FactionRef = FactionState.GetReference();
-		HavenState.SetScanHoursRemaining(`ScaleStrategyArrayInt(HavenState.MinScanDays), `ScaleStrategyArrayInt(HavenState.MaxScanDays));
-		HavenState.MakeScanRepeatable();
-		HavenState.Location = IteratorHavenState.Location;
-		HavenState.Rotation = IteratorHavenState.Rotation;
-		HavenState.bNeedsLocationUpdate = true;
-
-		RegionState.RemoveHaven(NewGameState);
-		RegionState.Haven = HavenState.GetReference();
-	
-		FactionState.FactionHQ = HavenState.GetReference();
-		FactionState.SetUpProgramFaction(NewGameState);
-		FactionState.CreateGoldenPathActions(NewGameState);
-		FactionState.InitTemplarQuestActions(NewGameState);
-	}
-	else {
+	if(ResHQ.GetFactionByTemplateName('Faction_Program') != none){
 		`RTLOG("The Program was already present.");
+		return;
 	}
+
+	// no faction, add it ourselves 
+	`RTLOG("Didn't find it, adding the Program to the campaign!");
+
+	ResHQ = XComGameState_HeadquartersResistance(NewGameState.ModifyStateObject(class'XComGameState_HeadquartersResistance', ResHQ.ObjectID)); 
+	DataTemplate = StratMgr.FindStrategyElementTemplate('Faction_Program');
+	if(DataTemplate != none)
+	{
+		FactionTemplate = RTProgramFactionTemplate(DataTemplate);
+		FactionState = RTGameState_ProgramFaction(FactionTemplate.CreateInstanceFromTemplate(NewGameState));
+		ResHQ.Factions.AddItem(FactionState.GetReference());
+
+		FactionState.FactionName = FactionTemplate.GenerateFactionName();
+		FactionState.FactionIconData = FactionTemplate.GenerateFactionIcon();
+	}
+
+	foreach History.IterateByClassType(class'XComGameState_Haven', IteratorHavenState)
+	{
+		if(!IteratorHavenState.IsFactionHQ()) {
+			AllHavens.AddItem(IteratorHavenState.GetReference());
+		}
+	}
+	IteratorHavenState = XComGameState_Haven(History.GetGameStateForObjectID(AllHavens[`SYNC_RAND_STATIC(AllHavens.Length)].ObjectID));
+	RegionRef = IteratorHavenState.Region;
+
+	RegionState = XComGameState_WorldRegion(History.GetGameStateForObjectID(RegionRef.ObjectID));
+	RegionState = XComGameState_WorldRegion(NewGameState.ModifyStateObject(class'XComGameState_WorldRegion', RegionRef.ObjectID));
+
+	FactionState.HomeRegion = RegionRef;
+	FactionState.Region = RegionRef;
+	FactionState.Continent = RegionState.Continent;
+
+	HavenState = RTGameState_Haven(NewGameState.CreateNewStateObject(class'RTGameState_Haven'));
+	HavenState.Region = RegionRef;
+	HavenState.Continent = IteratorHavenState.Continent;
+	HavenState.FactionRef = FactionState.GetReference();
+	HavenState.SetScanHoursRemaining(`ScaleStrategyArrayInt(HavenState.MinScanDays), `ScaleStrategyArrayInt(HavenState.MaxScanDays));
+	HavenState.MakeScanRepeatable();
+	HavenState.Location = IteratorHavenState.Location;
+	HavenState.Rotation = IteratorHavenState.Rotation;
+	HavenState.bNeedsLocationUpdate = true;
+
+	RegionState.RemoveHaven(NewGameState);
+	RegionState.Haven = HavenState.GetReference();
+	
+	FactionState.FactionHQ = HavenState.GetReference();
+	FactionState.SetUpProgramFaction(NewGameState);
+	FactionState.CreateGoldenPathActions(NewGameState);
+	FactionState.InitTemplarQuestActions(NewGameState);
 
 	if(NewGameState.GetNumGameStateObjects() > 0) {
 		`XCOMGAME.GameRuleset.SubmitGameState(NewGameState);
@@ -1778,6 +1788,8 @@ static function InitFaction(optional XComGameState StartState) {
 	else {
 		History.CleanupPendingGameState(NewGameState);
 	}
+
+	`RTLOG("Done adding faction to game.");
 }
 
 static function DisplayOSFFirstTimePopup() {
