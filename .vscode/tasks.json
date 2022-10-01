@@ -4,12 +4,7 @@
         {
             "label": "build",
             "type": "shell",
-            "command": "-file \"${workspaceRoot}/scripts/build_noshaderprecompliation.ps1\" -mod \"RisingTides\" -srcDirectory \"${workspaceRoot}\" -sdkPath \"${config:mod.sdkpath}\" -gamePath \"${config:mod.gamepath}\"",
-            "options": {
-                "shell": {
-                    "executable": "powershell.exe",
-                },
-            },
+            "command": "powershell.exe –NonInteractive –ExecutionPolicy Unrestricted -file '${workspaceRoot}\\.scripts\\build.ps1' -srcDirectory '${workspaceRoot}' -sdkPath '${config:xcom.highlander.sdkroot}' -gamePath '${config:xcom.highlander.gameroot}' -workshopDirectory '${config:mod.steamworkshoppath}' -config 'debug'",
             "group": {
                 "kind": "build",
                 "isDefault": true
@@ -64,6 +59,13 @@
             "type": "process",
             "command": "${config:mod.amlpath}",
             "problemMatcher": []
-        }
+        },
+        {
+            "label": "Clean",
+            "type": "shell",
+            "command": "powershell.exe –NonInteractive –ExecutionPolicy Unrestricted -file '${workspaceRoot}\\.scripts\\X2ModBuildCommon\\clean.ps1' -modName 'SOCIBridgeTheProgram' -srcDirectory '${workspaceRoot}' -sdkPath '${config:xcom.highlander.sdkroot}' -gamePath '${config:xcom.highlander.gameroot}' -workshopDirectory '${config:mod.steamworkshoppath}'",
+            "group": "build",
+            "problemMatcher": []
+        },
     ]
 }

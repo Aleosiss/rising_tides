@@ -181,6 +181,9 @@ function RTGameState_Unit CreateRTOperative(name GhostTemplateName, XComGameStat
 	UnitState.SetUnitName(CharTemplate.strForcedFirstName, CharTemplate.strForcedLastName, CharTemplate.strForcedNickName);
 	UnitState.SetBackground(UnitState.GetMyTemplate().strCharacterBackgroundMale[0]); // the first background is the classified one, the second one is the unclassified one
 
+	UnitState.FactionRef = GetReference();
+	UnitState.ComInt = eComInt_Savant;
+
 	WeaponState = UnitState.GetItemInSlot(eInvSlot_PrimaryWeapon);
 	WeaponState = XComGameState_Item(StartState.ModifyStateObject(class'XComGameState_Item', WeaponState.ObjectID));
 	ApplyWeaponUpgrades(GhostTemplateName, WeaponState);

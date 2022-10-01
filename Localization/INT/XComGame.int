@@ -10,12 +10,6 @@
 ;----------------------------------------------------------------------------------------------------------------------------
 ; RISING TIDES CLASSES
 ;----------------------------------------------------------------------------------------------------------------------------
-
-[StandardGhostShot X2AbilityTemplate]
-LocFriendlyName="Fire Weapon"
-LocHelpText="Fire a shot at a target. <Ability:CANNOTBEDODGED/>"
-LocLongDescription="<Bullet/>Firing the primary weapon always ends a unit's turn."
-
 [RT_Marksman X2SoldierClassTemplate]
 DisplayName="Program Infiltrator"
 ClassSummary="Whisper is the unit's designated marksman and tech expert."
@@ -25,6 +19,85 @@ AbilityTreeTitles[0]="Fire Support"
 AbilityTreeTitles[1]="Psionics"
 AbilityTreeTitles[2]="Watcher"
 RandomNickNames[0]="Whisper"
+RankNames[0]="Operative"
+RankNames[1]="Operative I"
+RankNames[2]="Operative II"
+RankNames[3]="Operative III"
+RankNames[4]="Operative IV"
+RankNames[5]="Operative V"
+RankNames[6]="Operative VI"
+RankNames[7]="Operative VII"
+RankNames[8]="Operative VIII"
+ShortNames[0]="O0"
+ShortNames[1]="O1"
+ShortNames[2]="O2"
+ShortNames[3]="O3"
+ShortNames[4]="O4"
+ShortNames[5]="O5"
+ShortNames[6]="O6"
+ShortNames[7]="O7"
+ShortNames[8]="O8"
+
+[RT_Berserker X2SoldierClassTemplate]
+DisplayName="Program Berserker"
+ClassSummary="Queen is the unit's leader and close-combat specialist."
+LeftAbilityTreeTitle="Rampager"
+RightAbilityTreeTitle="Operator"
+AbilityTreeTitles[0]="Rampager"
+AbilityTreeTitles[1]="Psionics"
+AbilityTreeTitles[2]="Operator"
+RandomNickNames[0]="Queen"
+RankNames[0]="Operative"
+RankNames[1]="Operative I"
+RankNames[2]="Operative II"
+RankNames[3]="Operative III"
+RankNames[4]="Operative IV"
+RankNames[5]="Operative V"
+RankNames[6]="Operative VI"
+RankNames[7]="Operative VII"
+RankNames[8]="Operative VIII"
+ShortNames[0]="O0"
+ShortNames[1]="O1"
+ShortNames[2]="O2"
+ShortNames[3]="O3"
+ShortNames[4]="O4"
+ShortNames[5]="O5"
+ShortNames[6]="O6"
+ShortNames[7]="O7"
+ShortNames[8]="O8"
+
+[RT_Gatherer X2SoldierClassTemplate]
+DisplayName="Program Gatherer"
+ClassSummary="Nova is the team's HUMINT expert and primary psionic support."
+AbilityTreeTitles[0]="Clairvoyant"
+AbilityTreeTitles[1]="Telepath"
+AbilityTreeTitles[2]="Psionics"
+RandomNickNames[0]="Nova"
+RankNames[0]="Operative"
+RankNames[1]="Operative I"
+RankNames[2]="Operative II"
+RankNames[3]="Operative III"
+RankNames[4]="Operative IV"
+RankNames[5]="Operative V"
+RankNames[6]="Operative VI"
+RankNames[7]="Operative VII"
+RankNames[8]="Operative VIII"
+ShortNames[0]="O0"
+ShortNames[1]="O1"
+ShortNames[2]="O2"
+ShortNames[3]="O3"
+ShortNames[4]="O4"
+ShortNames[5]="O5"
+ShortNames[6]="O6"
+ShortNames[7]="O7"
+ShortNames[8]="O8"
+
+[StandardGhostShot X2AbilityTemplate]
+LocFriendlyName="Fire Weapon"
+LocHelpText="Fire a shot at a target. <Ability:CANNOTBEDODGED/>"
+LocLongDescription="<Bullet/>Firing the primary weapon always ends a unit's turn."
+
+; PROGRAM INFILTRATOR
 
 [ScopedAndDropped X2AbilityTemplate]
 LocFriendlyName="Scoped And Dropped"
@@ -356,16 +429,7 @@ LocFlyOverText="Every Moment Matters"
 LocPromotionPopupText="<Bullet/> Bonus damage is equal to 35% of the target's missing HP.<br/><Bullet/> Shooting the last bullet additionally grants a movement-only action point.<br/>"
 
 ; <Bullet/><br/>
-
-[RT_Berserker X2SoldierClassTemplate]
-DisplayName="Program Berserker"
-ClassSummary="Queen is the unit's leader and close-combat specialist."
-LeftAbilityTreeTitle="Rampager"
-RightAbilityTreeTitle="Operator"
-AbilityTreeTitles[0]="Rampager"
-AbilityTreeTitles[1]="Psionics"
-AbilityTreeTitles[2]="Operator"
-RandomNickNames[0]="Queen"
+; PROGRAM BERSERKER
 
 [BumpInTheNight X2AbilityTemplate]
 LocFriendlyName="Bump In The Night"
@@ -591,14 +655,7 @@ LocPromotionPopupText="<Bullet/> Will not trigger if soldier is concealed.<br/><
 
 
 ; <Bullet/><br/>
-
-[RT_Gatherer X2SoldierClassTemplate]
-DisplayName="Program Gatherer"
-ClassSummary="Nova is the team's HUMINT expert and primary psionic support."
-AbilityTreeTitles[0]="Clairvoyant"
-AbilityTreeTitles[1]="Telepath"
-AbilityTreeTitles[2]="Psionics"
-RandomNickNames[0]="Nova"
+; PROGRAM GATHERER
 
 [OverTheShoulder X2AbilityTemplate]
 LocFriendlyName="Over The Shoulder"
@@ -953,7 +1010,11 @@ TacticalText="<Bullet/> A placeholder that allows Rising Tides classes to use ba
 ;[FactionProgramFavors X2EncyclopediaTemplate]
 ;ListTitle=""
 ;DescriptionTitle=""
-;DescriptionEntry=""
+;DescriptionEntry="
+
+
+[Header_PROGRAM X2EncyclopediaTemplate]
+ListTitle="PROGRAM BRIEFING"
 
 [PersonnelHadley X2EncyclopediaTemplate]
 ListTitle="Personnel Dossier: Dr. Elizabeth Hadley"
@@ -997,23 +1058,60 @@ DescriptionEntry="The Program can spare enough time to send one of their squads 
 ; the favor. Note that favors cannot be called in on narrative missions."
 
 [ProgramTimeline X2EncyclopediaTemplate]
-ListTitle="Program Archives: The Fall"
-DescriptionTitle="Program Archives: The Fall"
-DescriptionEntry="Although the world at large was made aware of the Alien threat in early Feburary 2015, the Program was aware that a possible Alien invasion event was likely to occur due to a botched operation two months prior. Operation: Reclaimer was successful in its mission to contain the Ethereal known as Alaru, but was unable to prevent it from releasing a massive burst of psionic energy. Dr. Fitzgerald speculated that it was a cry for aid, and so the Program began preparations to operate at increased capacity, both domestically via standard operations and internationally by planting members at key positions within XCOM proper, as well as support groups such as NATO and arms manufacturers. Within two months, the Alien threat emerged, although such a gap between incidents left many within the Program wondering if the two were truly related. In any case, domestic operations were successful at minimizing panic for some time, although civil unrest due to damaged global infrastructure eventually made any progress on this front from insignificant. Similarly, XCOM was successful at fighting the Alien threat. With the Temple Ship exposed and the Skyranger on the way in December of 2017, the Aliens launched battleships towards every major population center. Although the XCOM forces were successful in their mission, with the Temple Ship crash-landing somewhere in the Pacific (coordinates attached), humanity fell. Two days later, the embedded Program operative executed Operation: New World Order, corresponding with a third and final Alien attack on XCOM headquarters."`
+ListTitle="The Fall"
+DescriptionTitle="The Fall"
+DescriptionEntry="Although the world at large was made aware of the Alien threat in early Feburary 2015, the Program was aware that a possible Alien invasion event was likely to occur due to a botched operation two months prior. Operation: Sky Reclaimer was successful in its mission to contain the Ethereal known as Alaru, but was unable to prevent it from releasing a massive burst of psionic energy. Dr. Fitzgerald speculated that it was a cry for aid, and so the Program began preparations to  operate at increased capacity, both domestically via standard operations and internationally by planting members at key positions within XCOM proper, as well as support groups such as NATO and arms manufacturers. Within two months, the Alien threat emerged, although such a short gap between incidents left many within the Program wondering if the two were truly related.\n\nIn any case, domestic operations were successful at minimizing panic for some time, although civil unrest due to damaged global infrastructure eventually made any progress on this front insignificant. Similarly, XCOM was successful at fighting the Alien threat. With the Temple Ship exposed and the Skyranger on the way in December of 2017, the Aliens launched battleships towards every major population center. Although the XCOM forces were successful in their mission, with the Temple Ship crash-landing somewhere in the Pacific (coordinates attached), humanity fell. Two days later, the Program operative embedded within XCOM executed Operation: Old World Order,  with the stated goal of destroying any progress into the research and development of human psionics that XCOM possessed, along with any  psionic operatives that XCOM had cultivated. Unfortunately, mid-operation, the Aliens began their final assault on the XCOM headquarters, allowing a single psi-operative to escape the operative's search - the man who would become Geist."
 ; "Although the world at large was made aware of the Alien threat in early Feburary 2015, the Program was aware that a
-; possible Alien invasion event was likely to occur due to a botched operation two months prior. Operation: Reclaimer
+; possible Alien invasion event was likely to occur due to a botched operation two months prior. Operation: Sky Reclaimer
 ; was successful in its mission to contain the Ethereal known as Alaru, but was unable to prevent it from releasing a
 ; massive burst of psionic energy. Dr. Fitzgerald speculated that it was a cry for aid, and so the Program began preparations to 
 ; operate at increased capacity, both domestically via standard operations and internationally by planting members at key
 ; positions within XCOM proper, as well as support groups such as NATO and arms manufacturers. Within two months, the Alien threat emerged,
-; although such a gap between incidents left many within the Program wondering if the two were truly related.
+; although such a short gap between incidents left many within the Program wondering if the two were truly related.
+;
 ; In any case, domestic operations were successful at minimizing panic for some time, although civil unrest due to damaged
 ; global infrastructure eventually made any progress on this front insignificant. Similarly, XCOM was successful at fighting the Alien threat.
 ; With the Temple Ship exposed and the Skyranger on the way in December of 2017, the Aliens launched battleships towards every major
 ; population center. Although the XCOM forces were successful in their mission, with the Temple Ship crash-landing somewhere in the Pacific
-; (coordinates attached), humanity fell. Two days later, the embedded Program operative executed Operation: New World Order, corresponding with
-; a third and final Alien attack on XCOM headquarters.
+; (coordinates attached), humanity fell. Two days later, the Program operative embedded within XCOM attack the base as a part of Operation: Old World Order, 
+; with the stated goal of destroying any progress into the research and development of human psionics that XCOM possessed, along with any 
+; psionic operatives that XCOM had cultivated. Unfortunately, mid-operation, the Aliens began their final assault on the XCOM headquarters,
+; allowing a single psi-operative to escape the operative's search - the man who would become Geist.
 
+[ProgramOperationNewWorldOrder X2EncyclopediaTemplate]
+ListTitle="Operation Old World Order"
+DescriptionTitle="Operation Old World Order"
+DescriptionEntry="Operation Old World Order describes the first-ever operation undertaken by the Program that became a collaboration between partner entities. The operation was started in 1982 with the certification of the first program operative, enabling the Program to start conducting field operations for the first time.\n\nThe strategic goals are the following:\n <Bullet>Elimination of static data concerning the existance of and creation of human psionics<br>\n <Bullet>Elimination of personnel who possess knowledge of the creation of human psionics without sufficent clearance<br>\n <Bullet>Elimination of personnel who possess unauthorized psionic capability<br>\n\nWith Alien goals being clearly in full violation of all three objectives, XCOM leadership was read in and became fully-onboard with stated objectives, although the only ones that are still present are John Bradford, [REDACTED], and [REDACTED]. The assault on the XCOM base would not be possible without this buy-in. Although it is often used to describe this mission, undertaken on December 17th against XCOM, Old World Order continues to this day. This is actually unexpected; if the Aliens had not invaded in 2015, Program leadership expected the operational objectives of the operation to be completed by the mid-twenty-twenties. With ADVENT continuously attempting to open blacksites with the express intention of exploring psionics in humans, the Program has their work cut out for them. But with only a single notable failure in the ADVENT era, Program leadership remains  confident in its ability to preserve the Old World Order."
+; Operation Old World Order describes the first-ever operation undertaken by the Program that became a collaboration between partner entities.
+; The operation was started in 1982 with the certification of the first program operative, enabling the Program to start conducting field operations for the first time.\n\n
+; The strategic goals are the following:\n
+; <Bullet>Elimination of static data concerning the existance of and creation of human psionics<br>\n
+; <Bullet>Elimination of personnel who possess knowledge of the creation of human psionics without sufficent clearance<br>\n
+; <Bullet>Elimination of personnel who possess unauthorized psionic capability<br>\n\n
+; With Alien goals being clearly in full violation of all three objectives, XCOM leadership was read in and became fully-onboard with stated objectives,
+; although the only ones that are still present are John Bradford, [REDACTED], and [REDACTED]. The assault on the XCOM base would not be possible without this buy-in.
+; Although it is often used to describe this mission, undertaken on December 17th against XCOM, Old World Order continues to this day.
+; This is actually unexpected; if the Aliens had not invaded in 2015, Program leadership expected the operational objectives of the operation to
+; be completed by the mid-twenty-twenties. With ADVENT continuously attempting to open blacksites with the express intention of exploring psionics
+; in humans, the Program has their work cut out for them. But with only a single notable failure in the ADVENT era, Program leadership remains 
+; confident in its ability to preserve the Old World Order.
+
+[ProgramMotivation X2EncyclopediaTemplate]
+ListTitle="The 'Templars'"
+DescriptionTitle="The 'Templars'"
+DescriptionEntry="The Templars represent the Program's penultimate nightmare - a pre-psionic society, playing with toys it does not understand. Templars inject elerium in a brutish way, similar to drug addicts sharing dirty needles. The result is powerful, but with severe side effects. One need only listen to a Templar speak momentarily to understand the havoc this wreaks upon the human brain. However, the Templars themselves are not what frightens Program leadership.  Rather, it is their children, or at least, their latent possibilty.\n\nChilden exposed to elerium in-utero develop psionics differently, perhaps even naturally, when compared to crafted-psionics. Their powers vary in strength, but the common thread is telepathy. Reading thoughts, overloading thoughts. Imagine a psionic society - one where privacy ceases to exist, one where any one could possibly murder the other with no trace, with little more effort than a snap of the fingers. \n\nIf necessary, do not imagine. Know the powers of the Program's own operatives.\n\nImagine apocalypse. Imagine collapse.\n\nImagine the end."
+; The Templars represent the Program's penultimate nightmare - a pre-psionic society, playing with toys it does not understand.
+; Templars inject elerium in a brutish way, similar to drug addicts sharing dirty needles. The result is powerful, but with severe side effects. One need only listen
+; to a Templar speak momentarily to understand the havoc this wreaks upon the human brain. However, the Templars themselves are not what frightens Program leadership. 
+; Rather, it is their children, or at least, their latent possibilty.\n\n
+; Childen exposed to elerium in-utero develop psionics differently, perhaps even naturally, when compared to crafted-psionics. Their powers vary in strength, but the common
+; thread is telepathy. Reading thoughts, overloading thoughts. Imagine a psionic society - one where privacy ceases to exist, one where any one could possibly murder the
+; other with no trace with little more effort than a snap of the fingers. \n\n
+; If necessary, do not imagine. Know the powers of the Program's own operatives.\n\n
+; Imagine apocalypse. Imagine collapse.\n\n
+; Imagine the end.
+
+[
 ;///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ;//---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 ;//---Covert Actions----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -1131,7 +1229,7 @@ ActionObjective="Hunt the Templars"
 
 [CovertActionNarrative_HuntTemplarsP1_Program X2CovertActionNarrativeTemplate]
 ActionName="Find Their Home"
-ActionPreNarrative="Six days after the Temple Ship crash-landed, the Program initiated Operation: New World Sanctity. Unfortunately, there was a lone survivor. Staff Sergeant Lanner was left a mangled wreck, his mind in shambles from my operative's psionic assault, but he managed to limp away during the chaos of the beginning of Operation: Ashes and Temples: Act III. Only recently have we managed to pinpoint his general location, but we need your manpower to figure out where he's hiding. - Dr. Hadley"
+ActionPreNarrative="Six days after the Temple Ship crash-landed, the Program executed a strike on the XCOM base as a part of Operation Old World Order. Unfortunately, there was a lone survivor. Staff Sergeant Lanner was left a mangled wreck, his mind in shambles from my operative's psionic assault, but he managed to limp away during the chaos of the beginning of Operation Ashes and Temples, Act III. Only recently have we managed to pinpoint his general location, but we need your manpower to figure out where he's hiding. - Dr. Hadley"
 ActionPostNarrative="Excellent. You should be proud of your soldiers, Commander. Keeping up with my operatives is not an easy task. - Dr. Hadley"
 
 [CovertAction_HuntTemplarsP2Template X2CovertActionTemplate]
