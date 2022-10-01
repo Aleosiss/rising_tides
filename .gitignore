@@ -44,3 +44,5 @@ tmp/
 Src/XComGame/*
 
 PublishedFileId\.ID
+
+BuildCache/
