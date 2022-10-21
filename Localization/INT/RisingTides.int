@@ -471,6 +471,8 @@ m_strText="Rising Tides: The Program has been updated!\nHighlights of this patch
 ;   - High-ranked Program Operative abilities are now mutually exclusive. Don't need to make them even more broken then I originally intended.
 ;   - Fix soldiers getting stuck in a Covert Action if it was in-progress when the Templars were destroyed"
 
+; Please check the mod page for further details, I do not show this notification unless there has been a major change in the mod."
+
 [RTUIScreenListener_ModCompatibiltyDetection]
 m_strTitle_CI="Warning - Missing Bridge Mod for Covert Infiltration"
 m_strText_CI="Rising Tides: The Program has an integration mod for Covert Infiltration, but it was not detected. Please install it for the best experience!"

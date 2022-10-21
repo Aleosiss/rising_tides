@@ -337,6 +337,27 @@ exec function RT_RegenerateProgramOperatives() {
 		ProgramState.PromoteAllOperatives(NewGameState);
 	}
 
+	`XCOMGAME.GameRuleset.SubmitGameState(NewGameState);	
+}
+
+exec function RT_CheatRankUpProgramOperatives() {
+	local XComGameStateHistory History;
+	local XComGameState NewGameState;
+	local XComGameState_Unit UnitState;
+	local RTGameState_ProgramFaction ProgramState;
+	local StateObjectReference SquadRef;
+	local RTGameState_PersistentGhostSquad SquadState;
+	local int i;
+
+	History = `XCOMHISTORY;
+
+	NewGameState = `CreateChangeState("Rising Tides: CHEAT: Regenerate Program Operatives, Part 3");
+	ProgramState = `RTS.GetNewProgramState(NewGameState);
+
+	ProgramState.iOperativeLevel++;
+	ProgramState.PromoteAllOperatives(NewGameState);
+
+	`XCOMGAME.GameRuleset.SubmitGameState(NewGameState);	
 }
 
 exec function RT_PrintCrew()
@@ -1651,4 +1672,40 @@ exec function RT_DebugItemUpgrades() {
 exec function RT_Patch219() {
 	`DLCINFO.AddProgramTechs();
 	`DLCINFO.ReshowProgramDroneRewardPopup();
+}
+
+exec function RT_DebugSquadDeployment() {
+	local RTGameState_ProgramFaction Program;
+	local XComGameStateHistory History;
+	local StateObjectReference SquadRef;
+	local RTGameState_PersistentGhostSquad Squad;
+	local string msg;
+	local XComGameState_MissionSite MissionState;
+	local XComGameState_CovertAction ActionState;
+
+	Program = `RTS.GetProgramState();
+	History = `XCOMHISTORY;
+	`RTLOG("Debugging Program squad deployments.", false, true);
+	`RTLOG("", false, true);
+	foreach Program.Squads(SquadRef) {
+		Squad = RTGameState_PersistentGhostSquad(History.GetGameStateForObjectID(SquadRef.ObjectID));
+		msg = "Squad " $ Squad.SquadName $ " is ";
+		
+		if(Squad.IsDeployed()) {
+			msg = msg $ " deployed to " $ Squad.DeploymentRef.ObjectID;
+			MissionState = XComGameState_MissionSite(History.GetGameStateForObjectID(Squad.DeploymentRef.ObjectID));
+			ActionState = XComGameState_CovertAction(History.GetGameStateForObjectID(Squad.DeploymentRef.ObjectID));
+			if(MissionState != none) {
+				msg = msg $ " which is a mission with source" $ MissionState.Source;
+			} else if(ActionState != none) {
+				msg = msg $ " which is a covert action of template " $ ActionState.GetMyTemplateName() $ " and is completed: " $ ActionState.bCompleted;
+			} else {
+				msg = msg $ " which does not exist... this is a bug and should be reported.";
+			}
+		} else {
+			msg = msg $ " not deployed.";
+		}
+
+		`RTLOG(msg, false, true);
+	}
 }

@@ -316,8 +316,8 @@ private function RemoveTag(out array<name> Tags, name TagToRemove) {
 }
 
 simulated function ModifyOneSmallFavorSitrepForGeneratedMission(RTGameState_ProgramFaction Program, XComGameState_MissionSite MissionState, bool bAdd = true) {
-	if(bAdd) { MissionState.GeneratedMission.SitReps.AddItem(Program.GetSquadForMission(MissionState.GetReference()).GetAssociatedSitRepTemplateName()); }
-	else { MissionState.GeneratedMission.SitReps.RemoveItem(Program.GetSquadForMission(MissionState.GetReference()).GetAssociatedSitRepTemplateName()); }
+	if(bAdd) { MissionState.GeneratedMission.SitReps.AddItem(Program.GetSquadForMission(MissionState.GetReference(), false).GetAssociatedSitRepTemplateName()); }
+	else { MissionState.GeneratedMission.SitReps.RemoveItem(Program.GetSquadForMission(MissionState.GetReference(), false).GetAssociatedSitRepTemplateName()); }
 }
 
 //---------------------------------------------------------------------------------------
