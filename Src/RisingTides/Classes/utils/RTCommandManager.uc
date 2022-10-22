@@ -1692,11 +1692,11 @@ exec function RT_DebugSquadDeployment() {
 		msg = "Squad " $ Squad.SquadName $ " is ";
 		
 		if(Squad.IsDeployed()) {
-			msg = msg $ " deployed to " $ Squad.DeploymentRef.ObjectID;
+			msg = msg $ "deployed to " $ Squad.DeploymentRef.ObjectID;
 			MissionState = XComGameState_MissionSite(History.GetGameStateForObjectID(Squad.DeploymentRef.ObjectID));
 			ActionState = XComGameState_CovertAction(History.GetGameStateForObjectID(Squad.DeploymentRef.ObjectID));
 			if(MissionState != none) {
-				msg = msg $ " which is a mission with source" $ MissionState.Source;
+				msg = msg $ " which is a mission with source " $ MissionState.Source;
 			} else if(ActionState != none) {
 				msg = msg $ " which is a covert action of template " $ ActionState.GetMyTemplateName() $ " and is completed: " $ ActionState.bCompleted;
 			} else {
