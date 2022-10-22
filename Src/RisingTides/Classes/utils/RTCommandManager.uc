@@ -21,7 +21,7 @@ exec function RT_PrintResistanceFactionNames() {
 	}
 }
 
-exec function RT_PrintProgramFactionInformation(optional bool bShouldPrintFullInfo = false, optional bool bShouldPrintAllFields = false) {
+exec function RT_DebugProgramFaction(optional bool bShouldPrintFullInfo = false, optional bool bShouldPrintAllFields = false) {
 	local XComGameStateHistory 				History;
 	local RTGameState_ProgramFaction 		Faction;
 
@@ -46,8 +46,6 @@ exec function RT_PrintProgramFactionInformation(optional bool bShouldPrintFullIn
 
 	`RTLOG("Printing Misc Information for the Program...");
 	Faction.PrintDebuggingInfo();
-
-
 }
 
 exec function RT_CheatModifyProgramFavorTimeSlots(int diff) {

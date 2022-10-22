@@ -67,5 +67,9 @@
             "group": "build",
             "problemMatcher": []
         },
+        {
+            "label": "rebuild",
+            "dependsOn": ["Clean", "build"]
+        }
     ]
 }
