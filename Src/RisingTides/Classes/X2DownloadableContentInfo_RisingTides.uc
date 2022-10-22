@@ -35,7 +35,7 @@ var array<name> NEGATED_ENV_DAMAGE_ABILITIES;
 
 defaultproperties
 {
-	Version=(Major=2, Minor=2, Patch=0)
+	Version=(Major=2, Minor=2, Patch=1)
 	BuildTimestamp="1664561928"
 	MutuallyExclusiveProgramOperativeRanks=(6,7)
 }
