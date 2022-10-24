@@ -1,3 +1,12 @@
+2.2.1:
+- Fix several bugs
+  - fix issues where program operatives would not get recovered after a deployment ('undeployed')
+  - fix issue where a codex clone would not properly be interrupted by Sovereign, leading to a bad interaction
+  - fix issue where rebuilding program operatives via RT_RegenerateProgramOperatives would fail to apply rank ups
+  - fix issue where clicking the loadout button would cause a stack overflow :clown:
+  - fix issue where completing a covert action via OSF would not increase influence with the Program
+  - fix issue where aborting a covert action would not properly execute with OSF
+
 2.2.0:
 - Add CovertInfiltration support
 	- Covert Actions can be undertaken by 'HIGHLANDER'

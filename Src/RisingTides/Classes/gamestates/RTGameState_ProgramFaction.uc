@@ -599,7 +599,7 @@ protected function BlastOperativeLoadouts(XComGameState NewGameState) {
 //---------------------------------------------------------------------------------------
 //---Recalculate Active Operatives and Squads--------------------------------------------
 //---------------------------------------------------------------------------------------
-protected function RecalculateActiveOperativesAndSquads(XComGameState NewGameState) {
+protected function RecalculateActiveOperativesAndSquads(XComGameState NewGameState, StateObjectReference DeploymentRef) {
 	// Have to tell all of the RTGameState_PersistentSquads about what members of theirs were captured/rescued
 	local RTGameState_PersistentGhostSquad pgs;
 	local StateObjectReference SquadIteratorObjRef, UnitIteratorObjRef;
@@ -619,6 +619,13 @@ protected function RecalculateActiveOperativesAndSquads(XComGameState NewGameSta
 		pgs = RTGameState_PersistentGhostSquad(History.GetGameStateForObjectID(SquadIteratorObjRef.ObjectID));
 		pgs = RTGameState_PersistentGhostSquad(NewGameState.ModifyStateObject(class'RTGameState_PersistentGhostSquad', pgs.ObjectID));
 		if(pgs != none) {
+			// reset our deployment if it matches
+			if(DeploymentRef != EmptyRef) {
+				if(pgs.DeploymentRef.ObjectID == DeploymentRef.ObjectID) {
+					pgs.DeploymentRef.ObjectID = 0;
+				}
+			}
+
 			foreach pgs.InitOperatives(UnitIteratorObjRef) {
 				UnitState = XComGameState_Unit(History.GetGameStateForObjectID(UnitIteratorObjRef.ObjectID));
 				if(UnitState == none) {
@@ -859,7 +866,7 @@ function bool IsExtraFactionSoldierRewardAllowed(XComGameState NewGameState)
 	return false;
 }
 
-function RTGameState_PersistentGhostSquad GetSquadForMission(StateObjectReference MissionRef) {
+function RTGameState_PersistentGhostSquad GetSquadForMission(StateObjectReference MissionRef, bool bOnlyGetDeployed) {
 	local XComGameStateHistory History;
 	local RTGameState_PersistentGhostSquad Squad;
 	local bool bIsOnMissionAlready;
@@ -879,6 +886,10 @@ function RTGameState_PersistentGhostSquad GetSquadForMission(StateObjectReferenc
 		}
 	}
 	
+	if(bOnlyGetDeployed) {
+		return none;
+	}
+	
 	// if ref is none, get any deployable squad
 	MissionState = XComGameState_MissionSite(History.GetGameStateForObjectID(MissionRef.ObjectID));
 	foreach Squads(SquadRef) {
@@ -895,7 +906,7 @@ function RTGameState_PersistentGhostSquad GetSquadForMission(StateObjectReferenc
 	return none;
 }
 
-function RTGameState_PersistentGhostSquad GetSquadForCovertAction(StateObjectReference ActionRef) {
+function RTGameState_PersistentGhostSquad GetSquadForCovertAction(StateObjectReference ActionRef, bool bOnlyGetDeployed) {
 	local XComGameStateHistory History;
 	local RTGameState_PersistentGhostSquad Squad;
 	local bool bIsOnMissionAlready;
@@ -913,6 +924,10 @@ function RTGameState_PersistentGhostSquad GetSquadForCovertAction(StateObjectRef
 				return Squad;
 			}
 		}
+	}
+
+	if(bOnlyGetDeployed) {
+		return none;
 	}
 	
 	// if ref is none, get any deployable squad
@@ -996,7 +1011,7 @@ simulated function bool CashOneSmallFavorForCovertAction(XComGameState NewGameSt
 	local bool status;
 	local RTGameState_PersistentGhostSquad SquadState;
 
-	SquadState = GetSquadForCovertAction(ActionState.GetReference());
+	SquadState = GetSquadForCovertAction(ActionState.GetReference(), false);
 	status = true;
 	if(SquadState == none) {
 		`RTLOG("No available squad?");
@@ -1015,7 +1030,7 @@ simulated function bool CashOneSmallFavorForMission(XComGameState NewGameState, 
 	local bool status;
 	local RTGameState_PersistentGhostSquad SquadState;
 
-	SquadState = GetSquadForMission(MissionSiteState.GetReference());
+	SquadState = GetSquadForMission(MissionSiteState.GetReference(), false);
 	status = true;
 	if(SquadState == none) {
 		`RTLOG("No available squad?");
@@ -1060,10 +1075,10 @@ simulated function bool UncashOneSmallFavorForCovertAction(XComGameState NewGame
 	local RTGameState_PersistentGhostSquad SquadState;
 	local StateObjectReference EmptyRef;
 
-	SquadState = GetSquadForCovertAction(ActionState.GetReference());
+	SquadState = GetSquadForCovertAction(ActionState.GetReference(), true);
 	status = true;
 	if(SquadState == none) {
-		`RTLOG("No available squad?");
+		`RTLOG("No available squad? This is a bug, and should be reported.");
 		status = false;
 	}
 
@@ -1079,10 +1094,10 @@ simulated function bool UncashOneSmallFavorForMission(XComGameState NewGameState
 	local bool status;
 	local RTGameState_PersistentGhostSquad SquadState;
 
-	SquadState = GetSquadForMission(MissionSiteState.GetReference());
+	SquadState = GetSquadForMission(MissionSiteState.GetReference(), true);
 	status = true;
 	if(SquadState == none) {
-		`RTLOG("Didn't deploy a squad for this mission!");
+		`RTLOG("Didn't deploy a squad for this mission! This is a bug and should be reported!");
 		status = false;
 	}
 
@@ -1542,10 +1557,10 @@ function PreMissionUpdate(XComGameState NewGameState, XComGameState_MissionSite 
 	}
 }
 
-function PerformPostMissionCleanup(XComGameState NewGameState) {
+function PerformPostMissionCleanup(XComGameState NewGameState, StateObjectReference MissionRef) {
 	bShouldPerformPostMissionCleanup = false;
 
-	RecalculateActiveOperativesAndSquads(NewGameState);
+	RecalculateActiveOperativesAndSquads(NewGameState, MissionRef);
 	RetrieveRescuedProgramOperatives(NewGameState);
 	ReloadOperativeArmaments(NewGameState);
 }

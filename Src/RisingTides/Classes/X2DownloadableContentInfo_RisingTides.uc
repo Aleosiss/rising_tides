@@ -35,7 +35,7 @@ var array<name> NEGATED_ENV_DAMAGE_ABILITIES;
 
 defaultproperties
 {
-	Version=(Major=2, Minor=2, Patch=0)
+	Version=(Major=2, Minor=2, Patch=1)
 	BuildTimestamp="1664561928"
 	MutuallyExclusiveProgramOperativeRanks=(6,7)
 }
@@ -272,15 +272,16 @@ static event OnExitPostMissionSequence()
 	ProgramState = `RTS.GetProgramState();
 	if(ProgramState.bShouldPerformPostMissionCleanup) {
 		`RTLOG("Performing post-mission cleanup!");
-		NewGameState = `CreateChangeState("Cleanup Program Operatives from XCOMHQ!");
-		NewProgramState = `RTS.GetNewProgramState(NewGameState);
-		NewProgramState.PerformPostMissionCleanup(NewGameState);
-
-		`GAMERULES.SubmitGameState(NewGameState);
-
 		History = `XCOMHISTORY;
 		BattleData = XComGameState_BattleData(History.GetSingleGameStateObjectForClass(class'XComGameState_BattleData'));
 		MissionState = XComGameState_MissionSite(History.GetGameStateForObjectID(BattleData.m_iMissionID));
+
+		NewGameState = `CreateChangeState("Cleanup Program Operatives from XCOMHQ!");
+		NewProgramState = `RTS.GetNewProgramState(NewGameState);
+		NewProgramState.PerformPostMissionCleanup(NewGameState, MissionState.GetReference());
+
+		`GAMERULES.SubmitGameState(NewGameState);
+
 		// Try to increase influence
 		if(class'RTGameState_ProgramFaction'.static.IsOSFMission(MissionState)) {
 			`RTLOG("This was an OSF mission, trying to increase influence");

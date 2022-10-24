@@ -3,10 +3,10 @@ class RTGameState_PersistentGhostSquad extends XComGameState_BaseObject;
 var array<StateObjectReference> 			InitOperatives;
 var array<StateObjectReference> 			Operatives;
 var array<StateObjectReference> 			CapturedOperatives;
-var private string							SquadName;
-var private string							SquadBackground;
-var private int								SquadID;
-var private name							AssociatedSitRepTemplateName;
+var string									SquadName;
+var string									SquadBackground;
+var int										SquadID;
+var name									AssociatedSitRepTemplateName;
 var StateObjectReference					DeploymentRef;
 var int										DeployedMissionPreviousMaxSoldiers; // how many soldiers were originally allowed on this mission - used to properly reset if we decide NOT to deploy
 var ProgramDeploymentAvailablityInfo		AvailablityInfo;
