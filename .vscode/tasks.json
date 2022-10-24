@@ -9,17 +9,21 @@
                 "kind": "build",
                 "isDefault": true
             },
-            "problemMatcher": [{
-                "owner": "unrealscript",
-                "fileLocation": ["absolute"],
-                "pattern": {
-                    "regexp": "^(.*):([0-9]*) : (Warning|Error), ([^\n]*)",
-                    "file": 1,
-                    "line": 2,
-                    "severity": 3,
-                    "message": 4
+            "problemMatcher": [
+                {
+                    "owner": "unrealscript",
+                    "fileLocation": [
+                        "absolute"
+                    ],
+                    "pattern": {
+                        "regexp": "^(.*):([0-9]*) : (Warning|Error), ([^\n]*)",
+                        "file": 1,
+                        "line": 2,
+                        "severity": 3,
+                        "message": 4
+                    }
                 }
-            }]
+            ]
         },
         {
             "label": "publish",
@@ -27,8 +31,8 @@
             "command": "-file \"${workspaceRoot}/scripts/publish.ps1\" -amuPath \"${config:mod.amupath}\"",
             "options": {
                 "shell": {
-                    "executable": "powershell.exe",
-                },
+                    "executable": "powershell.exe"
+                }
             },
             "problemMatcher": []
         },
@@ -38,8 +42,8 @@
             "command": "-file \"${workspaceRoot}/scripts/run.ps1\" -gamePath \"${config:mod.gamepath}\"",
             "options": {
                 "shell": {
-                    "executable": "powershell.exe",
-                },
+                    "executable": "powershell.exe"
+                }
             },
             "problemMatcher": []
         },
@@ -49,8 +53,8 @@
             "command": "-file \"${workspaceRoot}/scripts/runUnrealEditor.ps1\" -sdkPath \"${config:mod.sdkpath}\"",
             "options": {
                 "shell": {
-                    "executable": "powershell.exe",
-                },
+                    "executable": "powershell.exe"
+                }
             },
             "problemMatcher": []
         },
@@ -69,7 +73,11 @@
         },
         {
             "label": "rebuild",
-            "dependsOn": ["Clean", "build"]
+            "dependsOn": [
+                "Clean",
+                "build"
+            ],
+            "problemMatcher": []
         }
     ]
 }
