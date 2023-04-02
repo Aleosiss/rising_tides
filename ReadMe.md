@@ -1,5 +1,7 @@
 # risingtides
 
+![preview](./ModPreview.jpg)
+
 [![Build Status](https://jenkins.aleosiss.io/job/Rising%20Tides/job/develop/badge/icon)](https://jenkins.aleosiss.io/job/Rising%20Tides/job/develop/)
 
 > Rising Tides is an XCOM 2 WOTC Faction mod. It adds the Program, an illusive organization that has aided XCOM in the past, to the game.
