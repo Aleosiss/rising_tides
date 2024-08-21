@@ -339,15 +339,8 @@ exec function RT_RegenerateProgramOperatives() {
 }
 
 exec function RT_CheatRankUpProgramOperatives() {
-	local XComGameStateHistory History;
 	local XComGameState NewGameState;
-	local XComGameState_Unit UnitState;
 	local RTGameState_ProgramFaction ProgramState;
-	local StateObjectReference SquadRef;
-	local RTGameState_PersistentGhostSquad SquadState;
-	local int i;
-
-	History = `XCOMHISTORY;
 
 	NewGameState = `CreateChangeState("Rising Tides: CHEAT: Regenerate Program Operatives, Part 3");
 	ProgramState = `RTS.GetNewProgramState(NewGameState);
@@ -1281,7 +1274,6 @@ exec function RT_TestRisk(name RiskTemplateName) {
 	local array<StateObjectReference> ExclusionList;
 	local X2StrategyElementTemplateManager StrategyElementManager;
 	local XComGameState NewGameState;
-
 
 	StrategyElementManager = class'X2StrategyElementTemplateManager'.static.GetStrategyElementTemplateManager();
 

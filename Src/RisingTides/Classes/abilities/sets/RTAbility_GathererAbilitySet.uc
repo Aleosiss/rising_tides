@@ -2869,17 +2869,3 @@ defaultproperties
 
 	PSIONICSTORM_RADIUS = 7.5
 }
-
-static function bool AbilityTagExpandHandler(string InString, out string OutString)
-{
-	local name Tag;
-
-	Tag = name(InString);
-
-	switch(Tag)
-	{
-
-	}
-
-	return false;
-}

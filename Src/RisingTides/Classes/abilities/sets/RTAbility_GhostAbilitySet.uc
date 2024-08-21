@@ -1128,12 +1128,3 @@ simulated function ProgramOperativeDefeatedEscape_BuildVisualization(XComGameSta
 		}
 	}
 }
-
-static function bool AbilityTagExpandHandler(string InString, out string OutString)
-{
-//	local name Tag;
-
-//	Tag = name(InString);
-
-	return false;
-}

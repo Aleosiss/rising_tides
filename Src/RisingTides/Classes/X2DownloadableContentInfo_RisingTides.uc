@@ -506,20 +506,42 @@ static function ReshowProgramDroneRewardPopup() {
 
 static function bool AbilityTagExpandHandler(string InString, out string OutString)
 {
-	local array<Object>				AbilitySetArray;
-	local Object					AbilitySetObject;
-	local RTAbility					AbilitySet;
+	local name Tag;
 
+	Tag = name(InString);
 
-	AbilitySetArray = class'XComEngine'.static.GetClassDefaultObjects(class'RTAbility');
-	foreach AbilitySetArray(AbilitySetObject)
+	switch(Tag)
 	{
-		AbilitySet = RTAbility(AbilitySetObject);
-		if(AbilitySet.static.AbilityTagExpandHandler(InString, OutString)) {
+		case 'CLOAKING_GENERATOR_RADIUS':
+			OutString = string(class'RTAbility_ProgramDroneAbilitySet'.default.CLOAKING_PROTOCOL_RADIUS_METERS);
 			return true;
-		} else {
-			continue;
-		}
+		case 'RTREPOSITIONING_MAX_POSITIONS_SAVED':
+			OutString = string(class'RTAbility_MarksmanAbilitySet'.default.REPOSITIONING_MAX_POSITIONS_SAVED);
+			return true;
+		case 'RTREPOSITIONING_TILE_DISTANCE':
+			OutString = string(class'RTAbility_MarksmanAbilitySet'.default.REPOSITIONING_TILES_MOVED_REQUIREMENT);
+			return true;
+		case 'RTPRECISION_SHOT_CRIT_CHANCE':
+			OutString = string(class'RTAbility_MarksmanAbilitySet'.default.HEADSHOT_CRIT_BONUS);
+			return true;
+		case 'RTPRECISION_SHOT_CRIT_DAMAGE':
+			OutString = string(class'RTAbility_MarksmanAbilitySet'.default.HEADSHOT_CRITDMG_BONUS);
+			return true;
+		case 'RTPRECISION_SHOT_AIM_PENALITY':
+			OutString = string(class'RTAbility_MarksmanAbilitySet'.default.HEADSHOT_AIM_MULTIPLIER);
+			return true;
+		case 'AGGRESSION_CRIT_PER_UNIT':
+			OutString = string(class'RTAbility_MarksmanAbilitySet'.default.AGGRESSION_CRIT_PER_UNIT);
+			return true;
+		case 'AGGRESSION_MAX_CRIT':
+			OutString = string(class'RTAbility_MarksmanAbilitySet'.default.AGGRESSION_UNITS_FOR_MAX_BONUS * class'RTAbility_MarksmanAbilitySet'.default.AGGRESSION_CRIT_PER_UNIT);
+			return true;
+		case 'KNOCK_THEM_DOWN_DAMAGE_GAIN':
+			OutString = string(class'RTAbility_MarksmanAbilitySet'.default.KNOCKTHEMDOWN_DAMAGE_INCREMENT);
+			return true;
+		case 'KNOCK_THEM_DOWN_CRITDMG_GAIN':
+			OutString = string(class'RTAbility_MarksmanAbilitySet'.default.KNOCKTHEMDOWN_CRITDMG_INCREMENT);
+			return true;
 	}
 
 	return false;
