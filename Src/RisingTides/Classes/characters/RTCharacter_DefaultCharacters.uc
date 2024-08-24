@@ -17,8 +17,8 @@ static function array<X2DataTemplate> CreateTemplates()
 	Templates.AddItem(CreateProgramDroneTemplate('ProgramDrone'));
 
 	// Talking Heads
-	Templates.AddItem(CreateSpeakerTemplate('ProgramNovaStrategy', "'Nova'", "img:///RisingTidesContentPackage.UIImages.vhs_program_icon_filled_256x256"));
-	Templates.AddItem(CreateSpeakerTemplate('ProgramHadleyStrategy', "Dr. Hadley", "img:///RisingTidesContentPackage.UIImages.program_portrait_hadley_talkinghead"));
+	Templates.AddItem(CreateSpeakerTemplate('ProgramNovaStrategy', "'Nova'", "img:///RisingTidesImagesPackage.vhs_program_icon_filled_256x256"));
+	Templates.AddItem(CreateSpeakerTemplate('ProgramHadleyStrategy', "Dr. Hadley", "img:///RisingTidesImagesPackage.program_portrait_hadley_talkinghead"));
 
 	return Templates;
 }

@@ -102,6 +102,7 @@ class BuildProject {
 			$this._ConfirmPaths()
 			$this._SetupUtils()
 			$this._LoadContentOptions()
+			$this._InsertBuildTimestamp()
 
 			if ($this._HasScriptPackages()) {
 				$this._PerformStep({ ($_)._CleanAdditional() }, "Cleaning", "Cleaned", "additional mods")
@@ -342,20 +343,32 @@ class BuildProject {
 
 	[void]_CopyModToSdk() {
 		$xf = @("*.x2proj")
+		$xd = @("ContentForCook")
 
 		if (![string]::IsNullOrEmpty($this.contentOptionsJsonFilename)) {
 			$xf += $this.contentOptionsJsonFilename
 		}
+
+		$xd += ".*"
+		$xd += "hooks"
+		$xd += "lfs"
+		$xd += "scripts"
+		$xd += "steam_workshop"
+
+		$xf += ".*"
+		$xf += "TODO"
 		
 		Write-Host "Copying mod project to staging..."
-		Robocopy.exe "$($this.modSrcRoot)" "$($this.stagingPath)" *.* $global:def_robocopy_args /XF @xf /XD "ContentForCook"
+		Write-Host "Excluding: $($xf -join ', ')"
+		Write-Host "Excluding: $xf"
+		Robocopy.exe "$($this.modSrcRoot)" "$($this.stagingPath)" *.* $global:def_robocopy_args /XF @xf /XD @xd
 		Write-Host "Copied project to staging."
 
 		if ($this._HasScriptPackages()) {
 			New-Item "$($this.stagingPath)/Script" -ItemType Directory
 		}
 
-		# read mod metadata from the x2proj file
+		# read mod metadata from the x2proj file@
 		Write-Host "Reading mod metadata from $($this.modX2ProjPath)"
 		[xml]$x2projXml = Get-Content -Path "$($this.modX2ProjPath)"
 		$xmlPropertyGroup = $x2projXml.Project.PropertyGroup
@@ -445,6 +458,16 @@ class BuildProject {
 	[void]_HandleSrcSubdirectories([string]$srcDir) {
 		Write-Host "Handling Source Subdirectories for $srcDir"
 		Get-ChildItem -Path $srcDir -Recurse -Filter "*.uc" | Get-ChildItem | Copy-Item -Destination {$srcDir} -Force -WarningAction SilentlyContinue -ErrorAction SilentlyContinue
+	}
+
+	[void]_InsertBuildTimestamp() {
+		$ts = [int][double]::Parse((Get-Date -UFormat %s))
+		$x2dlcReference = "X2DownloadableContentInfo_RisingTides.uc"
+		Write-Host "Timestamp is $ts"
+		$file = Get-ChildItem -Path "$($this.modSrcRoot)\Src\$($this.modNameFull)\Classes\${x2dlcReference}"
+
+		$regex = '(?<=BuildTimestamp=")[^"]*'
+		(Get-Content $file) -replace $regex, $ts | Set-Content $file
 	}
 
 	[void]_ApplyMacroFile([string]$file) {

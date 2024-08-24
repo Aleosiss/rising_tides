@@ -43,7 +43,7 @@ static function X2DataTemplate CreateBuildDroneTemplate()
 	`CREATE_X2TEMPLATE(class'X2TechTemplate', Template, 'RTBuildProgramDrone');
 	Template.PointsToComplete = StafferXDays(1, default.DRONE_DAYS_TO_BUILD);
 	Template.SortingTier = 1;
-	Template.strImage = "img:///RisingTidesContentPackage.UIImages.AutopsyDrone";
+	Template.strImage = "img:///RisingTidesImagesPackage.AutopsyDrone";
 
 	Template.bProvingGround = true;
 	Template.bRepeatable = true;

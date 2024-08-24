@@ -225,7 +225,7 @@ static function X2AbilityTemplate RTProgramDroneAppearance() {
 
 	//Icon Properties
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'RTProgramDroneAppearance');
-	Template.IconImage = "img:///RisingTidesContentPackage.PerkIcons.rt_aggression";
+	Template.IconImage = "img:///RisingTidesImagesPackage.rt_aggression";
 
 	Template.AbilitySourceName = 'eAbilitySource_Perk';
 	Template.eAbilityIconBehaviorHUD = EAbilityIconBehavior_NeverShow;

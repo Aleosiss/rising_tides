@@ -53,8 +53,8 @@ defaultproperties
 	FailedColor = "bf1e2e"
 	DefaultImagePath = ""
 	RewardImagePath = ""
-	LockedImagePath = "img:///RisingTidesContentPackage.UIImages.program_faction_screen_lock_rect_1-2_512_stretched"
-	//LockedImagePath = "img:///RisingTidesContentPackage.UIImages.program_faction_screen_lock_rect_1-2_512"
+	LockedImagePath = "img:///RisingTidesImagesPackage.program_faction_screen_lock_rect_1-2_512_stretched"
+	//LockedImagePath = "img:///RisingTidesImagesPackage.program_faction_screen_lock_rect_1-2_512"
 }
 
 simulated function InitText(String _defaultTitle, String _defaultDescription, String _rewardTitle, String _rewardDescription) {

@@ -61,10 +61,10 @@ static function array<X2DataTemplate> CreateTemplates()
 	Templates.AddItem(BumpInTheNightBloodlustListener());
 	Templates.AddItem(BumpInTheNightStealthListener());
 	Templates.AddItem(RTBerserkerKnifeAttack());																					// icon
-	Templates.AddItem(PurePassive('RTAcidicBlade', "img:///RisingTidesContentPackage.PerkIcons.UIPerk_stim_knife", false, 'eAbilitySource_Perk'));
-	Templates.AddItem(PurePassive('RTPsionicBlade', "img:///RisingTidesContentPackage.PerkIcons.UIPerk_psi_knife", false, 'eAbilitySource_Psionic'));
-	Templates.AddItem(PurePassive('RTHiddenBlade', "img:///RisingTidesContentPackage.PerkIcons.UIPerk_stealth_knife", false, 'eAbilitySource_Perk'));
-	Templates.AddItem(PurePassive('RTSiphon', "img:///RisingTidesContentPackage.PerkIcons.UIPerk_medkit_knife_siphon", false, 'eAbilitySource_Psionic'));			// icon
+	Templates.AddItem(PurePassive('RTAcidicBlade', "img:///RisingTidesImagesPackage.UIPerk_stim_knife", false, 'eAbilitySource_Perk'));
+	Templates.AddItem(PurePassive('RTPsionicBlade', "img:///RisingTidesImagesPackage.UIPerk_psi_knife", false, 'eAbilitySource_Psionic'));
+	Templates.AddItem(PurePassive('RTHiddenBlade', "img:///RisingTidesImagesPackage.UIPerk_stealth_knife", false, 'eAbilitySource_Perk'));
+	Templates.AddItem(PurePassive('RTSiphon', "img:///RisingTidesImagesPackage.UIPerk_medkit_knife_siphon", false, 'eAbilitySource_Psionic'));			// icon
 	Templates.AddItem(RTBurst());																									// icon		// animation
 	Templates.AddItem(RTBlur());																									// icon
 	Templates.AddItem(RTPurge());																									// icon		// animation
@@ -104,7 +104,7 @@ static function X2AbilityTemplate BumpInTheNight()
 
 	// Icon Properties
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'BumpInTheNight');
-	Template.IconImage = "img:///RisingTidesContentPackage.PerkIcons.UIPerk_knife_blossom_bitn";
+	Template.IconImage = "img:///RisingTidesImagesPackage.UIPerk_knife_blossom_bitn";
 	Template.AbilitySourceName = 'eAbilitySource_Psionic';
 	Template.eAbilityIconBehaviorHUD = EAbilityIconBehavior_NeverShow;
 	Template.Hostility = eHostility_Neutral;
@@ -157,7 +157,7 @@ static function X2AbilityTemplate BumpInTheNightBloodlustListener()
 	local X2AbilityTrigger_EventListener	Trigger;
 
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'BumpInTheNightBloodlustListener');
-	Template.IconImage = "img:///RisingTidesContentPackage.PerkIcons.UIPerk_knife_adrenaline_bloodlust";
+	Template.IconImage = "img:///RisingTidesImagesPackage.UIPerk_knife_adrenaline_bloodlust";
 	Template.AbilitySourceName = 'eAbilitySource_Psionic';
 	Template.eAbilityIconBehaviorHUD = EAbilityIconBehavior_NeverShow;
 	Template.Hostility = eHostility_Neutral;
@@ -205,7 +205,7 @@ static function X2AbilityTemplate BumpInTheNightStealthListener()
 	local X2AbilityTrigger_EventListener	Trigger;
 
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'BumpInTheNightStealthListener');
-	Template.IconImage = "img:///RisingTidesContentPackage.PerkIcons.UIPerk_knife_adrenaline_bloodlust";
+	Template.IconImage = "img:///RisingTidesImagesPackage.UIPerk_knife_adrenaline_bloodlust";
 	Template.AbilitySourceName = 'eAbilitySource_Psionic';
 	Template.eAbilityIconBehaviorHUD = EAbilityIconBehavior_NeverShow;
 	Template.Hostility = eHostility_Neutral;
@@ -346,7 +346,7 @@ static function X2AbilityTemplate RTBurst() {
 	// local X2Effect_Persistent						Effect;
 
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'RTBurst');
-	Template.IconImage = "img:///RisingTidesContentPackage.PerkIcons.rt_burst";
+	Template.IconImage = "img:///RisingTidesImagesPackage.rt_burst";
 	Template.AbilitySourceName = 'eAbilitySource_Psionic';
 	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_AlwaysShow;
 	Template.AbilityConfirmSound = "TacticalUI_ActivateAbility";
@@ -615,7 +615,7 @@ static function X2AbilityTemplate RTBlur() {
 	local X2Effect_PersistentStatChange BlurEffect;
 
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'RTBlur');
-	Template.IconImage = "img:///RisingTidesContentPackage.PerkIcons.rt_blur";
+	Template.IconImage = "img:///RisingTidesImagesPackage.rt_blur";
 
 	Template.AbilitySourceName = 'eAbilitySource_Psionic';
 	Template.eAbilityIconBehaviorHUD = EAbilityIconBehavior_NeverShow;
@@ -651,7 +651,7 @@ static function X2AbilityTemplate RTPurge() {
 	local X2Effect_Persistent 								VFXEffect;
 
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'RTPurge');
-	Template.IconImage = "img:///RisingTidesContentPackage.PerkIcons.rt_purge";
+	Template.IconImage = "img:///RisingTidesImagesPackage.rt_purge";
 
 	Template.AbilitySourceName = 'eAbilitySource_Psionic';
 	Template.eAbilityIconBehaviorHUD = EAbilityIconBehavior_AlwaysShow;
@@ -710,7 +710,7 @@ static function X2AbilityTemplate RTMentor() {
 	local X2Effect_RemoveEffects			RemoveEffect;
 
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'RTMentor');
-	Template.IconImage = "img:///RisingTidesContentPackage.PerkIcons.rt_mentor";
+	Template.IconImage = "img:///RisingTidesImagesPackage.rt_mentor";
 	Template.AbilitySourceName = 'eAbilitySource_Psionic';
 	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_AlwaysShow;
 	Template.AbilityConfirmSound = "TacticalUI_ActivateAbility";
@@ -845,7 +845,7 @@ static function X2AbilityTemplate RTReprobateWaltz()
 	Template.ShotHUDPriority = class'UIUtilities_Tactical'.const.CLASS_COLONEL_PRIORITY;
 	Template.AbilitySourceName = 'eAbilitySource_Psionic';
 	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_NeverShow;
-	Template.IconImage = "img:///RisingTidesContentPackage.PerkIcons.rt_reprobatewaltz";
+	Template.IconImage = "img:///RisingTidesImagesPackage.rt_reprobatewaltz";
 
 	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
 	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
@@ -863,7 +863,7 @@ static function X2AbilityTemplate RTReprobateWaltzIcon()
 	local RTEffect_ReprobateWaltz	Effect;
 
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'RTReprobateWaltzIcon');
-	Template.IconImage = "img:///RisingTidesContentPackage.PerkIcons.rt_reprobatewaltz";
+	Template.IconImage = "img:///RisingTidesImagesPackage.rt_reprobatewaltz";
 	Template.AbilitySourceName = 'eAbilitySource_Psionic';
 	Template.eAbilityIconBehaviorHUD = EAbilityIconBehavior_NeverShow;
 	Template.Hostility = eHostility_Neutral;
@@ -896,7 +896,7 @@ static function X2AbilityTemplate RTPyroclasticFlow()
 	local X2Effect_Persistent					SOVEffect;
 
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'RTPyroclasticFlow');
-	Template.IconImage = "img:///RisingTidesContentPackage.PerkIcons.rt_pyroclasticflow";
+	Template.IconImage = "img:///RisingTidesImagesPackage.rt_pyroclasticflow";
 
 	Template.AbilitySourceName = 'eAbilitySource_Perk';
 	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_NeverShow;
@@ -1146,7 +1146,7 @@ static function X2AbilityTemplate RTContainedFury() {
 		local X2Effect_Persistent	Effect;
 
 		`CREATE_X2ABILITY_TEMPLATE(Template, 'RTContainedFury');
-		Template.IconImage = "img:///RisingTidesContentPackage.PerkIcons.rt_containedfury";
+		Template.IconImage = "img:///RisingTidesImagesPackage.rt_containedfury";
 		Template.AbilitySourceName = 'eAbilitySource_Psionic';
 		Template.eAbilityIconBehaviorHUD = EAbilityIconBehavior_NeverShow;
 		Template.Hostility = eHostility_Neutral;
@@ -1182,7 +1182,7 @@ static function X2AbilityTemplate RTContainedFuryMeldJoin()
 	local RTEffect_Meld					MeldEffect;
 
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'RTContainedFuryMeldJoin');
-	Template.IconImage = "img:///RisingTidesContentPackage.PerkIcons.UIPerk_psi_x2_meld";
+	Template.IconImage = "img:///RisingTidesImagesPackage.UIPerk_psi_x2_meld";
 
 	Template.AbilitySourceName = 'eAbilitySource_Psionic';
 	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_HideSpecificErrors;
@@ -1233,7 +1233,7 @@ static function X2AbilityTemplate RTUnstableConduit()
 	local X2AbilityTrigger_EventListener	Trigger;
 
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'RTUnstableConduit');
-	Template.IconImage = "img:///RisingTidesContentPackage.PerkIcons.rt_unstableconduit";
+	Template.IconImage = "img:///RisingTidesImagesPackage.rt_unstableconduit";
 
 	Template.AbilitySourceName = 'eAbilitySource_Psionic';
 	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_NeverShow;
@@ -1276,7 +1276,7 @@ static function X2AbilityTemplate RTUnstableConduitIcon() {
 		local X2Effect_Persistent	Effect;
 
 		`CREATE_X2ABILITY_TEMPLATE(Template, 'RTUnstableConduitIcon');
-		Template.IconImage = "img:///RisingTidesContentPackage.PerkIcons.rt_unstableconduit";
+		Template.IconImage = "img:///RisingTidesImagesPackage.rt_unstableconduit";
 		Template.AbilitySourceName = 'eAbilitySource_Psionic';
 		Template.eAbilityIconBehaviorHUD = EAbilityIconBehavior_NeverShow;
 		Template.Hostility = eHostility_Neutral;
@@ -1313,7 +1313,7 @@ static function X2AbilityTemplate RTUnstableConduitBurst() {
 	local X2Effect_Persistent							Effect;
 
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'RTUnstableConduitBurst');
-	Template.IconImage = "img:///RisingTidesContentPackage.PerkIcons.rt_burst";
+	Template.IconImage = "img:///RisingTidesImagesPackage.rt_burst";
 	Template.AbilitySourceName = 'eAbilitySource_Psionic';
 	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_NeverShow;
 	Template.AbilityConfirmSound = "TacticalUI_ActivateAbility";
@@ -1395,7 +1395,7 @@ static function X2AbilityTemplate RTPersistingImages()
 	local RTEffect_GenerateAfterimage AfterEffect;
 
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'RTPersistingImages');
-	Template.IconImage = "img:///RisingTidesContentPackage.PerkIcons.rt_persistingimages";
+	Template.IconImage = "img:///RisingTidesImagesPackage.rt_persistingimages";
 	Template.AbilitySourceName = 'eAbilitySource_Psionic';
 	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_NeverShow;
 	Template.Hostility = eHostility_Neutral;
@@ -1492,7 +1492,7 @@ static function X2AbilityTemplate RTPersistingImagesIcon() {
 	local X2Effect_Persistent	Effect;
 
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'RTPersistingImagesIcon');
-	Template.IconImage = "img:///RisingTidesContentPackage.PerkIcons.UIPerk_stealth_circle_pi";
+	Template.IconImage = "img:///RisingTidesImagesPackage.UIPerk_stealth_circle_pi";
 	Template.AbilitySourceName = 'eAbilitySource_Psionic';
 	Template.eAbilityIconBehaviorHUD = EAbilityIconBehavior_NeverShow;
 	Template.Hostility = eHostility_Neutral;
@@ -1525,7 +1525,7 @@ static function X2AbilityTemplate RTGhostInTheShell()
 	//local X2Effect_StayConcealed			PhantomEffect;
 
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'RTGhostInTheShell');
-	Template.IconImage = "img:///RisingTidesContentPackage.PerkIcons.rt_ghostintheshell";
+	Template.IconImage = "img:///RisingTidesImagesPackage.rt_ghostintheshell";
 	Template.AbilitySourceName = 'eAbilitySource_Psionic';
 	Template.eAbilityIconBehaviorHUD = EAbilityIconBehavior_NeverShow;
 	Template.Hostility = eHostility_Neutral;
@@ -1561,7 +1561,7 @@ static function X2AbilityTemplate RTGhostInTheShellEffect()
 	local X2Effect_RangerStealth ConcealEffect;
 
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'RTGhostInTheShellEffect');
-	Template.IconImage = "img:///RisingTidesContentPackage.PerkIcons.rt_ghostintheshell";
+	Template.IconImage = "img:///RisingTidesImagesPackage.rt_ghostintheshell";
 	Template.AbilitySourceName = 'eAbilitySource_Psionic';
 	Template.eAbilityIconBehaviorHUD = EAbilityIconBehavior_NeverShow;
 	Template.Hostility = eHostility_Neutral;
@@ -1599,7 +1599,7 @@ static function X2AbilityTemplate RTQueenOfBlades()
 	local X2Effect_Persistent	Effect;
 
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'RTQueenOfBlades');
-		Template.IconImage = "img:///RisingTidesContentPackage.PerkIcons.rt_queenofblades";
+		Template.IconImage = "img:///RisingTidesImagesPackage.rt_queenofblades";
 		Template.AbilitySourceName = 'eAbilitySource_Psionic';
 		Template.eAbilityIconBehaviorHUD = EAbilityIconBehavior_NeverShow;
 		Template.Hostility = eHostility_Neutral;
@@ -1645,7 +1645,7 @@ static function X2DataTemplate RTShadowStrike()
 
 	Template.AbilitySourceName = 'eAbilitySource_Psionic';
 	Template.eAbilityIconBehaviorHUD = EAbilityIconBehavior_AlwaysShow;
-	Template.IconImage = "img:///RisingTidesContentPackage.PerkIcons.rt_shadowstrike";
+	Template.IconImage = "img:///RisingTidesImagesPackage.rt_shadowstrike";
 
 	ActionPointCost = new class'X2AbilityCost_ActionPoints';
 	ActionPointCost.iNumPoints = 1;
@@ -2543,7 +2543,7 @@ static function X2AbilityTemplate RTCloseCombatSpecialist()
 {
 	local X2AbilityTemplate                 Template;
 
-	Template = PurePassive('RTCloseCombatSpecialist', "img:///RisingTidesContentPackage.PerkIcons.LW_AbilityCloseCombatSpecialist", false, 'eAbilitySource_Perk');
+	Template = PurePassive('RTCloseCombatSpecialist', "img:///RisingTidesImagesPackage.LW_AbilityCloseCombatSpecialist", false, 'eAbilitySource_Perk');
 	Template.AdditionalAbilities.AddItem('RTCloseCombatSpecialistAttack');
 	return Template;
 }
@@ -2567,7 +2567,7 @@ static function X2AbilityTemplate RTCloseCombatSpecialistAttack()
 
 	Template.AbilitySourceName = 'eAbilitySource_Perk';
 	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_NeverShow;
-	Template.IconImage = "img:///RisingTidesContentPackage.PerkIcons.LW_AbilityCloseCombatSpecialist";
+	Template.IconImage = "img:///RisingTidesImagesPackage.LW_AbilityCloseCombatSpecialist";
 	Template.ShotHUDPriority = class'UIUtilities_Tactical'.const.CLASS_CAPTAIN_PRIORITY;
 	Template.Hostility = eHostility_Defensive;
 	Template.bCrossClassEligible = false;

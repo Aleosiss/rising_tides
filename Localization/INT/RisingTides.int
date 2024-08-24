@@ -186,7 +186,7 @@ strTemplarAmbushStr2="Field Team: HIGHLANDER"
 strTemplarAmbushStr3="Operator: 'Kaga'"
 strTemplarAmbushHeader="TEMPLAR DISCOVERY"
 strTemplarAmbushBegin="Begin Operation"
-strTemplarAmbushImagePath="img:///RisingTidesContentPackage.UIImages.Missions.MissionNarrative_TemplarQuestline_TemplarDiscoveryAmbush"
+strTemplarAmbushImagePath="img:///RisingTidesImagesPackage.MissionNarrative_TemplarQuestline_TemplarDiscoveryAmbush"
 m_strTemplarQuestlineFailedTitle="TEMPLAR BETRAYAL EXPOSED"
 m_strTemplarQuestlineFailedHeader="The Templars have withdrawn from the alliance."
 m_strTemplarQuestlineFailedDescription="With our plans exposed, the Templars have withdrawn from their alliance with XCOM and have gone into hiding. Your Templar operatives have deserted, taking with them their equipment and knowledge of our tactics..."
@@ -197,7 +197,7 @@ m_strTemplarQuestlineCompleteHeader="TEMPLARS ELIMINATED"
 m_strTemplarQuestlineCompleteTitle="The Templars are no more."
 m_strTemplarQuestlineCompleteBody="Without Geist to guide them nor their Archives to recover their secrets, the Templars remnants will scatter and fade out. In return for our efforts, the Program has pledged their full support in eliminating the Alien threat. New Covert Actions are available in the Resistance Ring and new blueprints have been made available for construction in Engineering."
 m_strHighCovenAssaultAvailableBody="This is it."
-m_strHighCovenAssaultAvailableImage="img:///RisingTidesContentPackage.UIImages.Missions.CANarrative_TemplarQuestline_HighCovenAssault"
+m_strHighCovenAssaultAvailableImage="img:///RisingTidesImagesPackage.CANarrative_TemplarQuestline_HighCovenAssault"
 
 
 [RTUIMission_TemplarAmbush]
@@ -254,7 +254,13 @@ strCharacterBackgroundMale[0]="[REDACTED] \nC.O. Bradford Note: Don't pry."
 strCharacterBackgroundMale[1]="\<not writen\>"
 strForcedFirstName="[REDACTED]"
 strForcedLastName="[REDACTED]"
-strForcedNickName="Queen" 
+strForcedNickName="Queen"
+; Although not the Program's first operative or even first contact with natural-born psionics, 'Queen' the Program's first contact with a Psionic that made
+; Program leadership seriously reconsider their mission. A small child merely six years old, [REDACTED] killed her mother and left her father in a vegetative state
+; as she touched their minds in first curiosity, and then panic. Although first contact was painless, this was only because she was incapacitated from hunger. Immediately upon
+; revitalization, she accidently killed an additional nurse. The Program immediately created the Hermes procotol, a means to communicate and provide for a person too dangerous to even
+; be nearby. [REDACTED] would not be allowed near another human being for nearly two years. But the girl was nothing except cooperative, and when the time came, she began training to 
+; prevent the same tragedies she had perpetrated.
 
 [RTGhostMarksman RTCharacterTemplate]
 strCharacterName="Program Operative"
@@ -263,6 +269,10 @@ strCharacterBackgroundMale[1]="\<not writen\>"
 strForcedFirstName="[REDACTED]"
 strForcedLastName="[REDACTED]"
 strForcedNickName="Whisper" 
+; The first powerful psionic of the 21st century. With the overall trend of psionic development in newborns falling drastically as time since [REDACTED] carried on,
+; [REDACTED]'s appearance rang alarm bells in Program leadership. But luckily, that is the most interesting thing about him. His recovery was casuality-free, and he is a stable,
+; loyal, and competant member of the Program. Perhaps his biggest defining trait is that, when compared to the colorful cast surrounding him, he is too boring. 
+; But that is a blessing, in the end.
 
 [RTGhostGatherer RTCharacterTemplate]
 strCharacterName="Program Operative"

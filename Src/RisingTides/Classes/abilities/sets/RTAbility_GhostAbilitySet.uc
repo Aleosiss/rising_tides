@@ -79,7 +79,7 @@ static function X2AbilityTemplate GhostPsiSuite()
 	local X2Effect_StayConcealed				PhantomEffect;
 
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'GhostPsiSuite');
-	Template.IconImage = "img:///RisingTidesContentPackage.PerkIcons.rt_program_shield";
+	Template.IconImage = "img:///RisingTidesImagesPackage.rt_program_shield";
 
 	Template.AbilitySourceName = 'eAbilitySource_Psionic';
 	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_NeverShow;
@@ -238,7 +238,7 @@ static function X2AbilityTemplate JoinMeld()
 	local RTEffect_Meld						MeldEffect;
 
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'JoinMeld');
-	Template.IconImage = "img:///RisingTidesContentPackage.PerkIcons.UIPerk_psi_x2_meld";
+	Template.IconImage = "img:///RisingTidesImagesPackage.UIPerk_psi_x2_meld";
 
 	Template.AbilitySourceName = 'eAbilitySource_Psionic';
 	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_HideSpecificErrors;
@@ -295,7 +295,7 @@ static function X2AbilityTemplate LeaveMeld()
 	local X2Effect_RemoveEffects			MeldRemovedEffect;
 
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'LeaveMeld');
-	Template.IconImage = "img:///RisingTidesContentPackage.PerkIcons.UIPerk_psi_move";
+	Template.IconImage = "img:///RisingTidesImagesPackage.UIPerk_psi_move";
 
 	Template.AbilitySourceName = 'eAbilitySource_Psionic';
 	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_HideIfOtherAvailable;
@@ -460,7 +460,7 @@ static function X2AbilityTemplate Fade()
 	local X2Effect_Persistent		CooldownTrackerEffect;
 
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'Fade');
-	Template.IconImage = "img:///RisingTidesContentPackage.PerkIcons.rt_fade";
+	Template.IconImage = "img:///RisingTidesImagesPackage.rt_fade";
 
 	Template.AbilitySourceName = 'eAbilitySource_Psionic';
 	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_NeverShow;
@@ -515,7 +515,7 @@ static function X2AbilityTemplate Teek() {
 	local X2Effect_PersistentStatChange BlurEffect;
 
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'Teek');
-	Template.IconImage = "img:///RisingTidesContentPackage.PerkIcons.rt_teek";
+	Template.IconImage = "img:///RisingTidesImagesPackage.rt_teek";
 
 	Template.AbilitySourceName = 'eAbilitySource_Psionic';
 	Template.eAbilityIconBehaviorHUD = EAbilityIconBehavior_NeverShow;
@@ -829,9 +829,8 @@ static function X2DataTemplate RTMindControl()
 	Template.AbilityTargetConditions.AddItem(EffectCondition);
 
 	// MindControl effect for 1 or more unblocked psi hit
-	MindControlEffect = class'X2StatusEffects'.static.CreateMindControlStatusEffect(default.MIND_CONTROL_AI_TURNS_DURATION, false, false, -1.5f);
+	MindControlEffect = class'X2StatusEffects'.static.CreateMindControlStatusEffect(default.MIND_CONTROL_AI_TURNS_DURATION);
 	MindControlEffect.MinStatContestResult = 1;
-	MindControlEffect.iNumTurnsForAI = default.MIND_CONTROL_AI_TURNS_DURATION;
 	MindControlEffect.EffectName = default.RTMindControlEffectName;
 	Template.AddTargetEffect(MindControlEffect);
 

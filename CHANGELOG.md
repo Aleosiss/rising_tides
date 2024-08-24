@@ -1,3 +1,9 @@
+2.2.2:
+- Cook mod assets and clean the build; mod file size significantly reduced
+- Fix performance issue in AbilityTagExpandHandler
+- Fix a bug causing Mind Control to last much longer than desired 
+- Remove obnoxious debug logging
+
 2.2.1:
 - Fix several bugs
   - fix issues where program operatives would not get recovered after a deployment ('undeployed')
