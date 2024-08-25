@@ -551,8 +551,8 @@ static function PatchedFocusEffectVisualization(XComGameState VisualizeGameState
 		{
 			if(class'RTCondition_VisibleToPlayer'.static.IsTargetVisibleToLocalPlayer(UnitState.GetReference())) {
 				class'X2Ability_TemplarAbilitySet'.static.PlayFocusFX(VisualizeGameState, ActionMetadata, "ADD_StartFocus", FocusState.FocusLevel);
+				class'X2Ability_TemplarAbilitySet'.static.UpdateFocusUI(VisualizeGameState, ActionMetadata);
 			}
-			class'X2Ability_TemplarAbilitySet'.static.UpdateFocusUI(VisualizeGameState, ActionMetadata);
 		}
 	}
 }

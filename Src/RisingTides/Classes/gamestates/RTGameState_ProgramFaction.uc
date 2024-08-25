@@ -1727,7 +1727,6 @@ static function InitFaction(optional XComGameState StartState) {
 	local XComGameState_HeadquartersResistance ResHQ;
 	local XComGameState_WorldRegion RegionState;
 	local StateObjectReference RegionRef;
-	local X2StrategyGameRuleset StrategyRuleset;
 	local bool isInstallNewCampaign;
 
 

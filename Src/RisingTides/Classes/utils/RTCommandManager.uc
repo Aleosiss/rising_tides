@@ -1329,6 +1329,23 @@ exec function RT_PrintItemsForClosestUnitToCursor() {
 	}
 }
 
+exec function RT_DebugClosestUnitToCursor() {
+	local XComGameState_Unit UnitState;
+	local XComTacticalCheatManager CheatsManager;
+	local XComGameStateHistory History;
+	local StateObjectReference Ref;
+	local X2CharacterTemplate CharTemplate;
+
+	CheatsManager = `CHEATMGR;
+	History = `XCOMHISTORY;
+
+	UnitState = CheatsManager.GetClosestUnitToCursor();
+	`RTLOG(UnitState.ToString(true), false, true);
+	CharTemplate = UnitState.GetMyTemplate();
+	`RTLOG(" " $ CharTemplate.CharacterGroupName, false, true);
+	`RTLOG(" " $ CharTemplate.strBehaviorTree, false, true);
+}
+
 // shamelessly copied from RPGO by Musashi
 private function XComGameState_Unit GetSelectedUnitInArmory()
 {
