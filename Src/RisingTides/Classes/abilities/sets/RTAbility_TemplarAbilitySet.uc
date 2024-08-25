@@ -510,7 +510,7 @@ static function PatchTemplarFocusVisualization() {
 	local X2Effect_TemplarFocus	FocusEffect;
 	local X2Effect EffectTemplate;
 
-	`RTLOG("Patching Templar Focus X2AbiliyTemplate - changing visualization!");
+	//`RTLOG("Patching Templar Focus X2AbiliyTemplate - changing visualization!");
 	AbilityTemplateMgr = class'X2AbilityTemplateManager'.static.GetAbilityTemplateManager();
 	AbilityTemplateMgr.GetTemplateNames(AbilityTemplateNames);
 	foreach AbilityTemplateNames(AbilityTemplateName) {

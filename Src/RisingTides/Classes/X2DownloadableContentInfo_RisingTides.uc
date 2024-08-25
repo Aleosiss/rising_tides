@@ -36,7 +36,7 @@ var array<name> NEGATED_ENV_DAMAGE_ABILITIES;
 defaultproperties
 {
 	Version=(Major=2, Minor=2, Patch=2)
-	BuildTimestamp="1724471126"
+	BuildTimestamp="1724542252"
 	MutuallyExclusiveProgramOperativeRanks=(6,7)
 }
 
@@ -46,12 +46,10 @@ defaultproperties
 /// create without the content installed. Subsequent saves will record that the content was installed.
 /// </summary>
 static event OnLoadedSavedGame() {
-	`RTLOG("OnLoadedSavedGame");
 	class'RTGameState_ProgramFaction'.static.InitFaction();
 }
 
 static event OnLoadedSavedGameToStrategy() {
-	`RTLOG("OnLoadedSavedGameToStrategy");
 	class'RTGameState_ProgramFaction'.static.InitFaction();
 	HandleModUpdate();
 	if(AddProgramTechs()) {
@@ -85,13 +83,13 @@ private static function HandleModUpdate() {
 /// Called when the player starts a new campaign while this DLC / Mod is installed
 /// </summary>
 static event InstallNewCampaign(XComGameState StartState) {
-	`RTLOG("InstallNewCampaign");
 	class'RTGameState_ProgramFaction'.static.InitFaction(StartState);
 }
 
 
 static event OnPostTemplatesCreated()
 {
+	`RTLOG("OnPostTemplatesCreated");
 	`if (`notdefined(FINAL_RELEASE)) 
 		`RTLOG("This is not a final release!");
 	`endif
@@ -131,8 +129,6 @@ static function MakeProgramOperativeAbilitiesMutuallyExclusive() {
 	AbilityManager = class'X2AbilityTemplateManager'.static.GetAbilityTemplateManager();
 	Templates = ClassManager.GetAllSoldierClassTemplates();
 
-	`RTLOG("Making program operative abilities mutually exclusive...");
-
 	foreach Templates(Template) {
 		if(InStr(Template.DataName, "RT_") == INDEX_NONE) {
 			continue;
@@ -153,7 +149,7 @@ static function MakeProgramOperativeAbilitiesMutuallyExclusive() {
 					}
 					NotName = `RTS.ConcatName('NOT_', Perk2);
 					if(AbilityTemplate.PrerequisiteAbilities.Find(NotName) == INDEX_NONE) {
-						`RTLOG("Making " $ Perk $ " mutually exclusive with " $ Perk2);
+						//`RTLOG("Making " $ Perk $ " mutually exclusive with " $ Perk2);
 						AbilityTemplate.PrerequisiteAbilities.AddItem(NotName);
 					} else {
 						//`RTLOG(Perk $ " is already mutually exclusive with " $ Perk2);
@@ -163,7 +159,6 @@ static function MakeProgramOperativeAbilitiesMutuallyExclusive() {
 		}
 	}
 
-	`RTLOG("Done.");
 }
 
 static function PatchTemplarFocusVisualization() {
@@ -284,14 +279,14 @@ static event OnExitPostMissionSequence()
 
 		// Try to increase influence
 		if(class'RTGameState_ProgramFaction'.static.IsOSFMission(MissionState)) {
-			`RTLOG("This was an OSF mission, trying to increase influence");
+			//`RTLOG("This was an OSF mission, trying to increase influence");
 			// this method creates and submits NewGameStates, so we don't need to submit again
 			NewProgramState.TryIncreaseInfluence();
 		} else {
-			`RTLOG("This was NOT an OSF mission, not trying to increase influence");
+			//`RTLOG("This was NOT an OSF mission, not trying to increase influence");
 		}
 	} else {
-		`RTLOG("No need to perform post-mission cleanup.");
+		//`RTLOG("No need to perform post-mission cleanup.");
 	}
 }
 
@@ -368,8 +363,8 @@ simulated static function MakePsiAbilitiesInterruptable() {
 	local X2AbilityTemplateManager AbilityTemplateMgr;
 	local int i;
 
-	`RTLOG("Patching Psionic Abilities...");
-	for(i = 0; i < `RTD.PsionicAbilities.Length; ++i) {
+	//`RTLOG("Patching Psionic Abilities...");
+for(i = 0; i < `RTD.PsionicAbilities.Length; ++i) {
 		PsionicTemplateNames.AddItem(`RTD.PsionicAbilities[i]);
 	}
 

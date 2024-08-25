@@ -728,27 +728,6 @@ exec function RT_DebugClosestUnitToCursorAvailableAbilties(bool bPrintFullInfo =
 	`RTLOG("Finished gathering and displaying ability availablity for " $ UnitState.GetFullName(), false, true);
 }
 
-exec function RT_CheatLadderPoints(int Points) {
-	local XComGameState NewGameState;
-	local XComGameState_LadderProgress LadderData;
-	local XComGameState_ChallengeScore ChallengeScore;
-
-	// CMPT_KilledEnemy
-	NewGameState = class'XComGameStateContext_ChallengeScore'.static.CreateChangeState( );
-
-	ChallengeScore = XComGameState_ChallengeScore( NewGameState.CreateStateObject( class'XComGameState_ChallengeScore' ) );
-	ChallengeScore.ScoringType = CMPT_KilledEnemy;
-	ChallengeScore.AddedPoints = Points;
-
-	LadderData = XComGameState_LadderProgress( `XCOMHISTORY.GetSingleGameStateObjectForClass(class'XComGameState_LadderProgress', true));
-	LadderData = XComGameState_LadderProgress( NewGameState.ModifyStateObject( class'XComGameState_LadderProgress', LadderData.ObjectID ) );
-	LadderData.CumulativeScore += Points;
-
-	`XCOMGAME.GameRuleset.SubmitGameState( NewGameState );
-
-	return;
-}
-
 exec function TestScreen() {
 	/*local XComPresentationLayerBase pres;
 	local UISCreenStack	ScreenStack;

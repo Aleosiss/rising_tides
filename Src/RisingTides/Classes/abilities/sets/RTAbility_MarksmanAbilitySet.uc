@@ -1690,7 +1690,7 @@ static function MakeAbilitiesNotTurnEndingForTimeStandsStill() {
 	local X2AbilityCost Cost;
 	local X2AbilityCost_ActionPoints ActionPointCost;
 
-	`RTLOG("Patching All Abilities for TimeStandsStill");
+	//`RTLOG("Patching All Abilities for TimeStandsStill");
 	AbilityTemplateMgr = class'X2AbilityTemplateManager'.static.GetAbilityTemplateManager();
 	AbilityTemplateMgr.GetTemplateNames(AbilityTemplateNames);
 	foreach AbilityTemplateNames(AbilityTemplateName) {

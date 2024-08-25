@@ -26,11 +26,11 @@ static function array<X2DataTemplate> CreateTemplates()
 	Templates.AddItem(CreateTemplate_HighCovenPriest());
 	Templates.AddItem(CreateTemplate_RTGeist());
 
-	`RTLOG("Created Templars:");
-	foreach Templates(template) {
-		`RTLOG("" $ template.DataName);
-	}
-	`RTLOG("Done.");
+	//`RTLOG("Created Templars:");
+	//foreach Templates(template) {
+	//	`RTLOG("" $ template.DataName);
+	//}
+	//`RTLOG("Done.");
 
 	return Templates;
 }

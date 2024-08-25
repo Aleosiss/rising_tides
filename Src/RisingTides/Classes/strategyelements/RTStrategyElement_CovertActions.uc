@@ -186,7 +186,7 @@ static function X2DataTemplate CreateHuntTemplarsP1Template() {
 	Template.Slots.AddItem(_CreateDefaultSoldierSlot(class'RTStrategyElement_ProgramStaffSlots'.default.StaffSlotTemplateName, 1));
 	Template.Slots.AddItem(_CreateDefaultStaffSlot('CovertActionScientistStaffSlot'));
 	Template.Slots.AddItem(_CreateDefaultStaffSlot('CovertActionEngineerStaffSlot'));
-	`RTLOG("Creating CovertAction_HuntTemplarsP1Template with intel cost " $ default.HuntTemplarsIntelCost_P1);
+	//`RTLOG("Creating CovertAction_HuntTemplarsP1Template with intel cost " $ default.HuntTemplarsIntelCost_P1);
 	Template.OptionalCosts.AddItem(_CreateOptionalCostSlot('Intel', default.HuntTemplarsIntelCost_P1));
 
 	Template.Risks.AddItem('CovertActionRisk_TemplarAmbush');
@@ -216,7 +216,7 @@ static function X2DataTemplate CreateHuntTemplarsP2Template() {
 	Template.Slots.AddItem(_CreateDefaultSoldierSlot(class'RTStrategyElement_ProgramStaffSlots'.default.StaffSlotTemplateName, 3));
 	Template.Slots.AddItem(_CreateDefaultSoldierSlot(class'RTStrategyElement_ProgramStaffSlots'.default.StaffSlotTemplateName, 3));
 	Template.Slots.AddItem(_CreateDefaultStaffSlot('CovertActionEngineerStaffSlot'));
-	`RTLOG("Creating CovertAction_HuntTemplarsP2Template with intel cost " $ default.HuntTemplarsIntelCost_P2);
+	//`RTLOG("Creating CovertAction_HuntTemplarsP2Template with intel cost " $ default.HuntTemplarsIntelCost_P2);
 	Template.OptionalCosts.AddItem(_CreateOptionalCostSlot('Intel', default.HuntTemplarsIntelCost_P2));
 
 	Template.Risks.AddItem('CovertActionRisk_TemplarAmbush');
@@ -246,7 +246,7 @@ static function X2DataTemplate CreateHuntTemplarsP3Template() {
 	Template.Slots.AddItem(_CreateDefaultSoldierSlot(class'RTStrategyElement_ProgramStaffSlots'.default.StaffSlotTemplateName, 5));
 	Template.Slots.AddItem(_CreateDefaultSoldierSlot(class'RTStrategyElement_ProgramStaffSlots'.default.StaffSlotTemplateName, 5));
 	Template.Slots.AddItem(_CreateDefaultSoldierSlot(class'RTStrategyElement_ProgramStaffSlots'.default.StaffSlotTemplateName, 5));
-	`RTLOG("Creating CovertAction_HuntTemplarsP3Template with intel cost " $ default.HuntTemplarsIntelCost_P3);
+	//`RTLOG("Creating CovertAction_HuntTemplarsP3Template with intel cost " $ default.HuntTemplarsIntelCost_P3);
 	Template.OptionalCosts.AddItem(_CreateOptionalCostSlot('Intel', default.HuntTemplarsIntelCost_P3));
 
 	Template.Risks.AddItem('CovertActionRisk_TemplarAmbush');

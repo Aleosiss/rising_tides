@@ -174,12 +174,8 @@
     <Content Include="Content\FX_Wraith_Armor.upk">
       <SubType>Content</SubType>
     </Content>
-    <Content Include="ContentForCook\RisingTidesContentPackage.upk">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="ContentForCook\RisingTidesImagesPackage.upk">
-      <SubType>Content</SubType>
-    </Content>
+    <Content Include="Content\RisingTidesContentPackage.upk" />
+    <Content Include="ContentForCook\RisingTidesImagesPackage.upk" />
     <Content Include="Content\RT_Perk_Harbinger_Lance.upk">
       <SubType>Content</SubType>
     </Content>

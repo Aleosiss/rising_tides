@@ -87,7 +87,7 @@ static function X2CharacterTemplate CreateWhisperTemplate()
 
 	CharTemplate.ReceivesProgramRankups = true;
 
-	`RTLOG("Adding Whisper's character template!");
+	//`RTLOG("Adding Whisper's character template!");
 	return CharTemplate;
 }
 
@@ -154,7 +154,7 @@ static function X2CharacterTemplate CreateQueenTemplate()
 
 	CharTemplate.ReceivesProgramRankups = true;
 
-	`RTLOG("Adding Queen's character template!");
+	//`RTLOG("Adding Queen's character template!");
 	return CharTemplate;
 }
 
@@ -221,7 +221,7 @@ static function X2CharacterTemplate CreateNovaTemplate()
 
 	CharTemplate.ReceivesProgramRankups = true;
 
-	`RTLOG("Adding Nova's character template!");
+	//`RTLOG("Adding Nova's character template!");
 	return CharTemplate;
 }
 
@@ -295,7 +295,7 @@ static function X2CharacterTemplate CreateKagaTemplate()
 
 	CharTemplate.ReceivesProgramRankups = false;
 
-	`RTLOG("Adding Kaga's character template!");
+	//`RTLOG("Adding Kaga's character template!");
 	return CharTemplate;
 }
 

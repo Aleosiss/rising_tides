@@ -2661,7 +2661,7 @@ static function X2AbilityTemplate RTPsionicLash() {
 	Template.AbilityShooterConditions.AddItem(default.LivingShooterProperty);
 	Template.AddShooterEffectExclusions();
 
-	// the target must be a human. I WILL FIND A WAY TO FIX THIS.
+	// the target must be a human. I WILL FIND A WAY TO FIX THIS. EDIT: I won't
 	UnitPropertyCondition = new class'X2Condition_UnitProperty';
 	UnitPropertyCondition.ExcludeDead = true;
 	UnitPropertyCondition.FailOnNonUnits = true;

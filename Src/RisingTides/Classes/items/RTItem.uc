@@ -90,11 +90,11 @@ static function array<X2DataTemplate> CreateTemplates()
 	local array<X2DataTemplate> Items;
 	local name IteratorName;
 	
-	`RTLOG("Printing UpgradableProgramWeaponTemplateNames");
-	foreach default.UpgradableProgramWeaponTemplateNames(IteratorName) {
-		`RTLOG("" $ IteratorName);
-	}
-	`RTLOG("Done----------------------------------------------");
+	//`RTLOG("Printing UpgradableProgramWeaponTemplateNames");
+	//foreach default.UpgradableProgramWeaponTemplateNames(IteratorName) {
+	//	`RTLOG("" $ IteratorName);
+	//}
+	//`RTLOG("Done----------------------------------------------");
 
 	// Weapons
 	Items.AddItem(CreateTemplate_ProgramPistol(1));
@@ -171,7 +171,7 @@ static function X2DataTemplate CreateTemplate_ProgramPistol(int iTier)
 
 	Template.ItemCat = 'weapon';
 	Template.WeaponCat = 'pistol';
-	Template.WeaponTech = 'beam';
+	Template.WeaponTech = 'conventional';
 	Template.strImage = "img:///UILibrary_DLC2Images.BeamShadowKeeper";
 	Template.EquipSound = "Secondary_Weapon_Equip_Beam";
 	Template.Tier = iTier + 1;
@@ -243,7 +243,7 @@ static function X2DataTemplate CreateTemplate_ProgramSniperRifle(int iTier)
 
 	Template.ItemCat = 'weapon';
 	Template.WeaponCat = 'sniper_rifle';
-	Template.WeaponTech = 'beam';
+	Template.WeaponTech = 'conventional';
 	Template.strImage = "img:///UILibrary_Common.UI_BeamSniper.BeamSniper_Base";
 	Template.EquipSound = "Beam_Weapon_Equip";
 	Template.Tier = iTier + 1;
@@ -315,7 +315,7 @@ static function X2DataTemplate CreateTemplate_ProgramShotgun(int iTier)
 
 	Template.ItemCat = 'weapon';
 	Template.WeaponCat = 'shotgun';
-	Template.WeaponTech = 'beam';
+	Template.WeaponTech = 'conventional';
 	Template.strImage = "img:///UILibrary_Common.UI_BeamShotgun.BeamShotgun_Base";
 	Template.EquipSound = "Beam_Weapon_Equip";
 	Template.Tier = iTier + 1;
@@ -389,7 +389,7 @@ static function X2DataTemplate CreateTemplate_ProgramAssaultRifle(int iTier)
 	Template.WeaponPanelImage = "_BeamRifle";                       // used by the UI. Probably determines iconview of the weapon.
 
 	Template.WeaponCat = 'rifle';
-	Template.WeaponTech = 'beam';
+	Template.WeaponTech = 'conventional';
 	Template.ItemCat = 'weapon';
 	Template.strImage = "img:///UILibrary_Common.UI_BeamAssaultRifle.BeamAssaultRifle_Base";
 	Template.EquipSound = "Beam_Weapon_Equip";
@@ -460,7 +460,7 @@ static function X2DataTemplate CreateTemplate_ProgramBlade(int iTier)
 
 	Template.ItemCat = 'weapon';
 	Template.WeaponCat = 'sword';
-	Template.WeaponTech = 'beam';
+	Template.WeaponTech = 'conventional';
 	Template.strImage = "img:///UILibrary_Common.BeamSecondaryWeapons.BeamSword";
 	Template.EquipSound = "Sword_Equip_Beam";
 	Template.InventorySlot = eInvSlot_SecondaryWeapon;

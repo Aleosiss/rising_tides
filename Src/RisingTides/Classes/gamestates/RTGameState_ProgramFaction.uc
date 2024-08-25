@@ -135,7 +135,7 @@ function SetUpProgramFaction(XComGameState StartState)
 	if(iNumTimesProgramSetup > 1) {
 		return;
 	}
-	`RTLOG("Running Program-specific setup...");
+	//`RTLOG("Running Program-specific setup...");
 	InitListeners();
 	class'RTGameState_StrategyCard'.static.SetUpStrategyCards(StartState);
 	OperativeTemplates = class'RTCharacter_DefaultCharacters'.static.CreateTemplates();
@@ -1727,32 +1727,29 @@ static function InitFaction(optional XComGameState StartState) {
 	local XComGameState_HeadquartersResistance ResHQ;
 	local XComGameState_WorldRegion RegionState;
 	local StateObjectReference RegionRef;
+	local X2StrategyGameRuleset StrategyRuleset;
+	local bool isInstallNewCampaign;
 
-	`RTLOG("Trying to add the Program as a Faction...");
-	`RTLOG("Callstack was:");
-	`RTLOG(GetScriptTrace());
 
 	History = class'XComGameStateHistory'.static.GetGameStateHistory();
 	ResHQ = XComGameState_HeadquartersResistance(History.GetSingleGameStateObjectForClass(class'XComGameState_HeadquartersResistance'));
 	if(ResHQ == none) {
-		`RTLOG("No HeaderquartersResistance...?");
+		`RTLOG("No HeadquartersResistance...?");
 		return;
 	}
-	
+
+	if(ResHQ.GetFactionByTemplateName('Faction_Program') != none){
+		return;
+	}
+
+	`RTLOG("Adding ProgramStateObject to campaign...");
+	isInstallNewCampaign = StartState != none;
 	StratMgr = class'X2StrategyElementTemplateManager'.static.GetStrategyElementTemplateManager();
-	if(StartState == none) {
+	if(!isInstallNewCampaign) {
 		NewGameState = `CreateChangeState("Adding the Program Faction Object...");
 	} else {
 		NewGameState = StartState;
 	}
-
-	if(ResHQ.GetFactionByTemplateName('Faction_Program') != none){
-		`RTLOG("The Program was already present.");
-		return;
-	}
-
-	// no faction, add it ourselves 
-	`RTLOG("Didn't find it, adding the Program to the campaign!");
 
 	ResHQ = XComGameState_HeadquartersResistance(NewGameState.ModifyStateObject(class'XComGameState_HeadquartersResistance', ResHQ.ObjectID)); 
 	DataTemplate = StratMgr.FindStrategyElementTemplate('Faction_Program');
@@ -1797,17 +1794,25 @@ static function InitFaction(optional XComGameState StartState) {
 	
 	FactionState.FactionHQ = HavenState.GetReference();
 	FactionState.SetUpProgramFaction(NewGameState);
-	FactionState.CreateGoldenPathActions(NewGameState);
-	FactionState.InitTemplarQuestActions(NewGameState);
 
-	if(NewGameState.GetNumGameStateObjects() > 0) {
-		`XCOMGAME.GameRuleset.SubmitGameState(NewGameState);
-	}
-	else {
-		History.CleanupPendingGameState(NewGameState);
+	// don't add these actions if we're installing a new campaign;
+	// they'll fail, and we'll add them later in MeetXCom anyways
+	if(!isInstallNewCampaign) {
+		FactionState.CreateGoldenPathActions(NewGameState);
+		FactionState.InitTemplarQuestActions(NewGameState);
 	}
 
-	`RTLOG("Done adding faction to game.");
+	// if we're not using a start state, submit the new game state
+	if(!isInstallNewCampaign) {
+		if(NewGameState.GetNumGameStateObjects() > 0) {
+			`XCOMGAME.GameRuleset.SubmitGameState(NewGameState);
+		}
+		else {
+			History.CleanupPendingGameState(NewGameState);
+		}
+	}
+
+	`RTLOG("Done.");
 }
 
 static function DisplayOSFFirstTimePopup() {
