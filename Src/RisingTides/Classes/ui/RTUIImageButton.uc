@@ -38,7 +38,7 @@ simulated function InitImageButton(name ButtonName, string ImagePath, delegate<O
 	BG.SetAlpha(80);
 
 	Button = Screen.Spawn(class'UIImage', self);
-	Button.InitImage('Button', "img:///RisingTidesContentPackage.UIImages.vhs_program_icon_v2_border_grey", OnConfirmButtonInited);
+	Button.InitImage('Button', "img:///RisingTidesImagesPackage.vhs_program_icon_v2_border_grey", OnConfirmButtonInited);
 	Button.SetSize(ButtonWidth, ButtonHeight);
 	Button.SetPosition(10, 10);
     Button.AnchorTopLeft();

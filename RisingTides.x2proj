@@ -174,9 +174,8 @@
     <Content Include="Content\FX_Wraith_Armor.upk">
       <SubType>Content</SubType>
     </Content>
-    <Content Include="Content\RisingTidesContentPackage.upk">
-      <SubType>Content</SubType>
-    </Content>
+    <Content Include="Content\RisingTidesContentPackage.upk" />
+    <Content Include="ContentForCook\RisingTidesImagesPackage.upk" />
     <Content Include="Content\RT_Perk_Harbinger_Lance.upk">
       <SubType>Content</SubType>
     </Content>
@@ -247,14 +246,14 @@
     <Content Include="Content\RT_Perk_Psi_Burst.upk" />
     <Content Include="Content\RT_Perk_Scholar_Ionic_Storm.upk" />
     <Content Include="Content\RT_Scholar_Perk_Volt.upk" />
-    <Content Include="Content\RT_Grenade_Warp.upk" />
+    <Content Include="ContentForCook\RT_Grenade_Warp.upk" />
     <Content Include="Config\XComAI.ini" />
     <Content Include="Config\XComSchedules.ini" />
     <Content Include="Config\XComMissionDefs.ini" />
     <Content Include="Config\XComPCPs.ini" />
     <Content Include="Config\XComPlots.ini" />
     <Content Include="Config\XComParcels.ini" />
-    <Content Include="Content\ProgramDrone.upk" />
+    <Content Include="ContentForCook\ProgramDrone.upk" />
     <Content Include="Content\RTDroneWeapon.upk" />
     <Content Include="Content\RT_Perk_DroneSelfDestruction.upk" />
     <Content Include="Content\RT_Perk_Drone_CloakingProtocol.upk" />
@@ -423,8 +422,8 @@
     <Content Include="Src\RisingTides\Classes\templates\RTCharacterTemplate.uc" />
     <Content Include="Src\RisingTides\Classes\sequences\SeqAct_TemplarBetrayalReaction.uc" />
     <Content Include="Content\RisingTidesArmorPackage.upk" />
-    <Content Include="Content\Armor\01_MEA_Armors_Shared.upk" />
-    <Content Include="Content\Armor\MEA_Remnant_Armor_Assets.upk" />
+    <Content Include="ContentForCook\01_MEA_Armors_Shared.upk" />
+    <Content Include="ContentForCook\MEA_Remnant_Armor_Assets.upk" />
     <Content Include="Src\RisingTides\Classes\ui\RTUIScreenListener_MOTD.uc" />
     <Content Include="Src\RisingTides\Classes\effects\RTEffect_KillUnitWithExceptions.uc" />
     <Content Include="Config\XComNew2020Icons.ini" />
@@ -438,5 +437,10 @@
     <Content Include="Src\RisingTides\Classes\ui\RTUIImageButton.uc" />
     <Content Include="Src\RisingTides\Classes\ui\RTUIScreenListener_ModCompatibiltyDetection.uc" />
   </ItemGroup>
-  <Import Project="$(MSBuildLocalExtensionPath)\XCOM2.targets" />
+  <PropertyGroup>
+    <SolutionRoot>$(MSBuildProjectDirectory)\..\</SolutionRoot>
+    <ScriptsDir>$(SolutionRoot).scripts\</ScriptsDir>
+    <BuildCommonRoot>$(ScriptsDir)X2ModBuildCommon\</BuildCommonRoot>
+  </PropertyGroup>
+  <Import Project="$(BuildCommonRoot)XCOM2.targets" />
 </Project>

@@ -35,8 +35,8 @@ var array<name> NEGATED_ENV_DAMAGE_ABILITIES;
 
 defaultproperties
 {
-	Version=(Major=2, Minor=2, Patch=1)
-	BuildTimestamp="1664561928"
+	Version=(Major=2, Minor=2, Patch=2)
+	BuildTimestamp="1724886875"
 	MutuallyExclusiveProgramOperativeRanks=(6,7)
 }
 
@@ -46,12 +46,10 @@ defaultproperties
 /// create without the content installed. Subsequent saves will record that the content was installed.
 /// </summary>
 static event OnLoadedSavedGame() {
-	`RTLOG("OnLoadedSavedGame");
 	class'RTGameState_ProgramFaction'.static.InitFaction();
 }
 
 static event OnLoadedSavedGameToStrategy() {
-	`RTLOG("OnLoadedSavedGameToStrategy");
 	class'RTGameState_ProgramFaction'.static.InitFaction();
 	HandleModUpdate();
 	if(AddProgramTechs()) {
@@ -85,13 +83,13 @@ private static function HandleModUpdate() {
 /// Called when the player starts a new campaign while this DLC / Mod is installed
 /// </summary>
 static event InstallNewCampaign(XComGameState StartState) {
-	`RTLOG("InstallNewCampaign");
 	class'RTGameState_ProgramFaction'.static.InitFaction(StartState);
 }
 
 
 static event OnPostTemplatesCreated()
 {
+	`RTLOG("OnPostTemplatesCreated");
 	`if (`notdefined(FINAL_RELEASE)) 
 		`RTLOG("This is not a final release!");
 	`endif
@@ -131,8 +129,6 @@ static function MakeProgramOperativeAbilitiesMutuallyExclusive() {
 	AbilityManager = class'X2AbilityTemplateManager'.static.GetAbilityTemplateManager();
 	Templates = ClassManager.GetAllSoldierClassTemplates();
 
-	`RTLOG("Making program operative abilities mutually exclusive...");
-
 	foreach Templates(Template) {
 		if(InStr(Template.DataName, "RT_") == INDEX_NONE) {
 			continue;
@@ -153,7 +149,7 @@ static function MakeProgramOperativeAbilitiesMutuallyExclusive() {
 					}
 					NotName = `RTS.ConcatName('NOT_', Perk2);
 					if(AbilityTemplate.PrerequisiteAbilities.Find(NotName) == INDEX_NONE) {
-						`RTLOG("Making " $ Perk $ " mutually exclusive with " $ Perk2);
+						//`RTLOG("Making " $ Perk $ " mutually exclusive with " $ Perk2);
 						AbilityTemplate.PrerequisiteAbilities.AddItem(NotName);
 					} else {
 						//`RTLOG(Perk $ " is already mutually exclusive with " $ Perk2);
@@ -163,7 +159,6 @@ static function MakeProgramOperativeAbilitiesMutuallyExclusive() {
 		}
 	}
 
-	`RTLOG("Done.");
 }
 
 static function PatchTemplarFocusVisualization() {
@@ -284,14 +279,14 @@ static event OnExitPostMissionSequence()
 
 		// Try to increase influence
 		if(class'RTGameState_ProgramFaction'.static.IsOSFMission(MissionState)) {
-			`RTLOG("This was an OSF mission, trying to increase influence");
+			//`RTLOG("This was an OSF mission, trying to increase influence");
 			// this method creates and submits NewGameStates, so we don't need to submit again
 			NewProgramState.TryIncreaseInfluence();
 		} else {
-			`RTLOG("This was NOT an OSF mission, not trying to increase influence");
+			//`RTLOG("This was NOT an OSF mission, not trying to increase influence");
 		}
 	} else {
-		`RTLOG("No need to perform post-mission cleanup.");
+		//`RTLOG("No need to perform post-mission cleanup.");
 	}
 }
 
@@ -368,8 +363,8 @@ simulated static function MakePsiAbilitiesInterruptable() {
 	local X2AbilityTemplateManager AbilityTemplateMgr;
 	local int i;
 
-	`RTLOG("Patching Psionic Abilities...");
-	for(i = 0; i < `RTD.PsionicAbilities.Length; ++i) {
+	//`RTLOG("Patching Psionic Abilities...");
+for(i = 0; i < `RTD.PsionicAbilities.Length; ++i) {
 		PsionicTemplateNames.AddItem(`RTD.PsionicAbilities[i]);
 	}
 
@@ -401,10 +396,46 @@ simulated static function MakePsiAbilitiesInterruptable() {
 /// Called from XComGameState_Unit:GatherUnitAbilitiesForInit after the game has built what it believes is the full list of
 /// abilities for the unit based on character, class, equipment, et cetera. You can add or remove abilities in SetupData.
 /// </summary>
-//static function FinalizeUnitAbilitiesForInit(XComGameState_Unit UnitState, out array<AbilitySetupData> SetupData, optional XComGameState StartState, optional XComGameState_Player PlayerState, optional bool bMultiplayerDisplay)
-//{
-//
-//}
+static function FinalizeUnitAbilitiesForInit(XComGameState_Unit UnitState, out array<AbilitySetupData> SetupData, optional XComGameState StartState, optional XComGameState_Player PlayerState, optional bool bMultiplayerDisplay)
+{
+	PrepTemplarUnitForBetrayal(UnitState, SetupData, StartState, PlayerState);
+}
+
+
+private static function PrepTemplarUnitForBetrayal(
+	XComGameState_Unit UnitState, out array<AbilitySetupData> SetupData, optional XComGameState StartState, optional XComGameState_Player PlayerState) 
+{
+	local X2AbilityTemplate AbilityTemplate;
+	local X2AbilityTemplateManager AbilityTemplateManager;
+	local name AbilityName;
+	local AbilitySetupData Data, EmptyData;
+	local X2CharacterTemplate CharTemplate;
+
+	if(UnitState.GetMyTemplateName() != 'TemplarSoldier') {
+		return;
+	}
+
+	if(`TACTICALMISSIONMGR.ActiveMission.MissionName != 'RT_TemplarHighCovenAssault') {
+		return;
+	}
+	
+	AbilityTemplateManager = class'X2AbilityTemplateManager'.static.GetAbilityTemplateManager();
+	foreach class'X2Ability_AlertMechanics'.default.AlertAbilitySet(AbilityName) {
+		AbilityTemplate = AbilityTemplateManager.FindAbilityTemplate(AbilityName);
+		if( AbilityTemplate != none 
+			&&	(!AbilityTemplate.bUniqueSource || SetupData.Find('TemplateName', AbilityTemplate.DataName) == INDEX_NONE) 
+			&& AbilityTemplate.ConditionsEverValidForUnit(UnitState, false) ) 
+		{
+			Data = EmptyData;
+			Data.TemplateName = AbilityName;
+			Data.Template = AbilityTemplate;
+			SetupData.AddItem(Data);
+		}
+		else if (AbilityTemplate == none) {
+			`RedScreen("AlertAbilitySet array specifies unknown ability:" @ AbilityName);
+		}
+	}
+}
 
 static function bool DebuggingEnabled() {
 	return default.bDebuggingEnabled;
@@ -506,20 +537,42 @@ static function ReshowProgramDroneRewardPopup() {
 
 static function bool AbilityTagExpandHandler(string InString, out string OutString)
 {
-	local array<Object>				AbilitySetArray;
-	local Object					AbilitySetObject;
-	local RTAbility					AbilitySet;
+	local name Tag;
 
+	Tag = name(InString);
 
-	AbilitySetArray = class'XComEngine'.static.GetClassDefaultObjects(class'RTAbility');
-	foreach AbilitySetArray(AbilitySetObject)
+	switch(Tag)
 	{
-		AbilitySet = RTAbility(AbilitySetObject);
-		if(AbilitySet.static.AbilityTagExpandHandler(InString, OutString)) {
+		case 'CLOAKING_GENERATOR_RADIUS':
+			OutString = string(class'RTAbility_ProgramDroneAbilitySet'.default.CLOAKING_PROTOCOL_RADIUS_METERS);
 			return true;
-		} else {
-			continue;
-		}
+		case 'RTREPOSITIONING_MAX_POSITIONS_SAVED':
+			OutString = string(class'RTAbility_MarksmanAbilitySet'.default.REPOSITIONING_MAX_POSITIONS_SAVED);
+			return true;
+		case 'RTREPOSITIONING_TILE_DISTANCE':
+			OutString = string(class'RTAbility_MarksmanAbilitySet'.default.REPOSITIONING_TILES_MOVED_REQUIREMENT);
+			return true;
+		case 'RTPRECISION_SHOT_CRIT_CHANCE':
+			OutString = string(class'RTAbility_MarksmanAbilitySet'.default.HEADSHOT_CRIT_BONUS);
+			return true;
+		case 'RTPRECISION_SHOT_CRIT_DAMAGE':
+			OutString = string(class'RTAbility_MarksmanAbilitySet'.default.HEADSHOT_CRITDMG_BONUS);
+			return true;
+		case 'RTPRECISION_SHOT_AIM_PENALITY':
+			OutString = string(class'RTAbility_MarksmanAbilitySet'.default.HEADSHOT_AIM_MULTIPLIER);
+			return true;
+		case 'AGGRESSION_CRIT_PER_UNIT':
+			OutString = string(class'RTAbility_MarksmanAbilitySet'.default.AGGRESSION_CRIT_PER_UNIT);
+			return true;
+		case 'AGGRESSION_MAX_CRIT':
+			OutString = string(class'RTAbility_MarksmanAbilitySet'.default.AGGRESSION_UNITS_FOR_MAX_BONUS * class'RTAbility_MarksmanAbilitySet'.default.AGGRESSION_CRIT_PER_UNIT);
+			return true;
+		case 'KNOCK_THEM_DOWN_DAMAGE_GAIN':
+			OutString = string(class'RTAbility_MarksmanAbilitySet'.default.KNOCKTHEMDOWN_DAMAGE_INCREMENT);
+			return true;
+		case 'KNOCK_THEM_DOWN_CRITDMG_GAIN':
+			OutString = string(class'RTAbility_MarksmanAbilitySet'.default.KNOCKTHEMDOWN_CRITDMG_INCREMENT);
+			return true;
 	}
 
 	return false;

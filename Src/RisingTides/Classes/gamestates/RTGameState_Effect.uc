@@ -1327,14 +1327,11 @@ function EventListenerReturn TwitchFireCheck (Object EventData, Object EventSour
 	}
 
 	EmptyRef.ObjectID = 0;
-
-	`RTLOG("Twitch Fire Check startup.");
 	History = `XCOMHISTORY;
 	AbilityContext = XComGameStateContext_Ability(GameState.GetContext());
 	if (AbilityContext == none) {
 		return ELR_NoInterrupt;
 	}
-	`RTLOG("Twitch Fire Check Stage 1");
 	// The AttackingUnit should be the unit that is currently attacking
 	AttackingUnit = class'X2TacticalGameRulesetDataStructures'.static.GetAttackingUnitState(GameState);
 
@@ -1351,21 +1348,16 @@ function EventListenerReturn TwitchFireCheck (Object EventData, Object EventSour
 	if(!TwitchLinkedUnit.IsUnitAffectedByEffectName('RTEffect_Meld')|| !TwitchAttackingUnit.IsUnitAffectedByEffectName('RTEffect_Meld')) {
 		return ELR_NoInterrupt;
 	}
-	`RTLOG("Twitch Fire Check Stage 2");
 	// Don't reveal ourselves
 	if(TwitchAttackingUnit.IsConcealed()) {
 		return ELR_NoInterrupt;
 	}
-	`RTLOG("Twitch Fire Check Stage 3");
 
 
 	// The parent template of this RTGameState_TwitchEffect
 	TwitchEffect = RTEffect_TwitchReaction(GetX2Effect());
 
 	// do standard checks here
-	//STUFF
-	//STUFF
-	//STUFF
 
 	// Get the AbilityToActivate (TwitchReactionShot)
 	AbilityRef = TwitchAttackingUnit.FindAbility(TwitchEffect.AbilityToActivate, EmptyRef);
@@ -1396,7 +1388,6 @@ function EventListenerReturn TwitchFireCheck (Object EventData, Object EventSour
 					TwitchAttackingUnit = XComGameState_Unit(NewGameState.CreateStateObject(TwitchAttackingUnit.Class, TwitchAttackingUnit.ObjectID));
 					TwitchAttackingUnit.ReserveActionPoints.AddItem(TwitchEffect.GrantActionPoint);
 					NewGameState.AddStateObject(TwitchAttackingUnit);
-					`RTLOG("Twitch Fire Check Stage 8");
 					// check if we can shoot. if we can't, clean up the gamestate from history
 					if (AbilityState.CanActivateAbilityForObserverEvent(AttackingUnit, TwitchAttackingUnit) != 'AA_Success')
 					{
@@ -1405,7 +1396,6 @@ function EventListenerReturn TwitchFireCheck (Object EventData, Object EventSour
 					}
 					else
 					{
-						`RTLOG("Twitch Fire Check Stage 9");
 						bCanTrigger = false;
 						AbilityState = XComGameState_Ability(NewGameState.CreateStateObject(AbilityState.Class, AbilityState.ObjectID));
 						NewGameState.AddStateObject(AbilityState);
@@ -1421,9 +1411,7 @@ function EventListenerReturn TwitchFireCheck (Object EventData, Object EventSour
 							AbilityContext = class'XComGameStateContext_Ability'.static.BuildContextFromAbility(AbilityState, AttackingUnit.ObjectID);
 							if( AbilityContext.Validate() )
 							{
-								`RTLOG("Twitch Fire Check Stage 11");
 								`TACTICALRULES.SubmitGameStateContext(AbilityContext);
-								`RTLOG("Twitch Fire Check Stage 12");
 							}
 						}
 						bCanTrigger = true;

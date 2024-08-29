@@ -15,7 +15,7 @@ function Init()
 {
 	local MaterialInstance						Material;
 	local string								MaterialFullPath;
-	local XComGameState_Unit					UnitState;
+	//local XComGameState_Unit					UnitState;
 
 	super.Init();
 
@@ -31,10 +31,10 @@ function Init()
 		default:
 	}
 
-	UnitState = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(UnitPawn.m_kGameUnit.ObjectID));
-	`RTLOG("Applying material: " $ Material $ " with priority" $ eMaterialPriority $ " to " $ UnitState.GetFullName(), false, true);
+	//UnitState = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(UnitPawn.m_kGameUnit.ObjectID));
+	//`RTLOG("Applying material: " $ Material $ " with priority" $ eMaterialPriority $ " to " $ UnitState.GetFullName(), false, true);
 	ApplyMaterial(UnitPawn, Material, eMaterialPriority, eMaterialType);
-	`RTS.PrintEffectsAndMICTVsForUnitState(UnitState, false);
+	//`RTS.PrintEffectsAndMICTVsForUnitState(UnitState, false);
 }
 
 static function ApplyMaterial(XComUnitPawn StaticUnitPawn, MaterialInterface material, EMatPriority MaterialPriority, ERTMatType staticMaterialType)

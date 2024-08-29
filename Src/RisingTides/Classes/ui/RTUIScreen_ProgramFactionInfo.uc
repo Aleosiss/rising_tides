@@ -126,7 +126,7 @@ simulated function InitScreen(XComPlayerController InitController, UIMovie InitM
 	topRunningY += TitleHeader.Height;
 
 	HadleyImage = Spawn(class'UIImage', Container).InitImage();
-	HadleyImage.LoadImage("img:///RisingTidesContentPackage.UIImages.program_portrait_hadley_rectangle");
+	HadleyImage.LoadImage("img:///RisingTidesImagesPackage.program_portrait_hadley_rectangle");
 	HadleyImage.SetSize(512, 256);
 	HadleyImage.SetPosition(10, topRunningY - 10);
 

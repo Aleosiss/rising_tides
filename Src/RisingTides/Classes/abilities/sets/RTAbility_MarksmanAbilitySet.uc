@@ -95,7 +95,7 @@ static function array<X2DataTemplate> CreateTemplates()
 	Templates.AddItem(SlowIsSmoothEffect());
 	Templates.AddItem(Sovereign());
 	Templates.AddItem(SovereignEffect());
-	CreateAbilityToggle(Templates, 'DaybreakFlameToggle', default.DaybreakFlameToggleName, "img:///RisingTidesContentPackage.PerkIcons.rt_daybreaker");
+	CreateAbilityToggle(Templates, 'DaybreakFlameToggle', default.DaybreakFlameToggleName, "img:///RisingTidesImagesPackage.rt_daybreaker");
 	Templates.AddItem(DaybreakFlame());										// animation
 	Templates.AddItem(DaybreakFlameIcon());
 	Templates.AddItem(YourHandsMyEyes());
@@ -137,7 +137,7 @@ static function X2AbilityTemplate ScopedAndDropped()
 
 	// Icon Properties
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'ScopedAndDropped');
-	Template.IconImage = "img:///RisingTidesContentPackage.PerkIcons.UIPerk_stealth_crit2_snd";
+	Template.IconImage = "img:///RisingTidesImagesPackage.UIPerk_stealth_crit2_snd";
 	Template.AbilitySourceName = 'eAbilitySource_Perk';
 	Template.eAbilityIconBehaviorHUD = EAbilityIconBehavior_NeverShow;
 	Template.Hostility = eHostility_Neutral;
@@ -579,7 +579,7 @@ static function X2AbilityTemplate RTAggression()
 
 	//Icon Properties
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'RTAggression');
-	Template.IconImage = "img:///RisingTidesContentPackage.PerkIcons.rt_aggression";
+	Template.IconImage = "img:///RisingTidesImagesPackage.rt_aggression";
 
 	Template.AbilitySourceName = 'eAbilitySource_Psionic';
 	Template.eAbilityIconBehaviorHUD = EAbilityIconBehavior_NeverShow;
@@ -613,7 +613,7 @@ static function X2AbilityTemplate KnockThemDown()
 
 	// Icon Properties
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'KnockThemDown');
-	Template.IconImage = "img:///RisingTidesContentPackage.PerkIcons.UIPerk_sniper_bullet_x3";
+	Template.IconImage = "img:///RisingTidesImagesPackage.UIPerk_sniper_bullet_x3";
 
 	Template.AbilitySourceName = 'eAbilitySource_Psionic';
 	Template.eAbilityIconBehaviorHUD = EAbilityIconBehavior_NeverShow;
@@ -793,7 +793,7 @@ static function X2AbilityTemplate SixOClock()
 	local RTEffect_SixOClock            PersistentEffect;
 
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'SixOClock');
-	Template.IconImage = "img:///RisingTidesContentPackage.PerkIcons.rt_sixoclock";
+	Template.IconImage = "img:///RisingTidesImagesPackage.rt_sixoclock";
 
 	Template.AbilitySourceName = 'eAbilitySource_Psionic';
 	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_NeverShow;
@@ -968,7 +968,7 @@ static function X2AbilityTemplate SlowIsSmooth()
 	local X2Effect_Persistent					Effect;
 
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'SlowIsSmooth');
-	Template.IconImage = "img:///RisingTidesContentPackage.PerkIcons.UIPerk_stealth_cycle_sis";
+	Template.IconImage = "img:///RisingTidesImagesPackage.UIPerk_stealth_cycle_sis";
 
 	Template.AbilitySourceName = 'eAbilitySource_Perk';
 	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_NeverShow;
@@ -1323,7 +1323,7 @@ static function X2AbilityTemplate DaybreakFlameIcon()
 	local X2Effect_Persistent					IconEffect;
 
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'DaybreakFlameIcon');
-	Template.IconImage = "img:///RisingTidesContentPackage.PerkIcons.rt_daybreaker";
+	Template.IconImage = "img:///RisingTidesImagesPackage.rt_daybreaker";
 
 	Template.AbilitySourceName = 'eAbilitySource_Psionic';
 	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_NeverShow;
@@ -1361,7 +1361,7 @@ static function X2AbilityTemplate DaybreakFlameToggle(name ToggleName)
 	local X2Condition_UnitEffects				ToggleCondition;
 
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'DaybreakFlameToggle');
-	Template.IconImage = "img:///RisingTidesContentPackage.PerkIcons.rt_daybreaker";
+	Template.IconImage = "img:///RisingTidesImagesPackage.rt_daybreaker";
 
 	Template.AbilitySourceName = 'eAbilitySource_Psionic';
 	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_AlwaysShow;
@@ -1415,7 +1415,7 @@ static function X2AbilityTemplate YourHandsMyEyes()
 	local RTEffect_YourHandsMyEyes				RTEffect;
 
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'YourHandsMyEyes');
-	Template.IconImage = "img:///RisingTidesContentPackage.PerkIcons.UIPerk_psi_box_yhme";
+	Template.IconImage = "img:///RisingTidesImagesPackage.UIPerk_psi_box_yhme";
 
 	Template.AbilitySourceName = 'eAbilitySource_Psionic';
 	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_NeverShow;
@@ -1454,7 +1454,7 @@ static function X2AbilityTemplate TimeStandsStill()
 	local RTEffect_TimeStopTag					TagEffect;
 
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'TimeStandsStill');
-	Template.IconImage = "img:///RisingTidesContentPackage.PerkIcons.rt_horoarma";
+	Template.IconImage = "img:///RisingTidesImagesPackage.rt_horoarma";
 
 	Template.AbilitySourceName = 'eAbilitySource_Psionic';
 	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_AlwaysShow;
@@ -1566,7 +1566,7 @@ static function X2AbilityTemplate TimeStandsStill()
 	local X2AbilityTrigger_Placeholder			Trigger;
 
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'TimeStandsStillInterruptListener');
-	Template.IconImage = "img:///RisingTidesContentPackage.PerkIcons.rt_horoarma";
+	Template.IconImage = "img:///RisingTidesImagesPackage.rt_horoarma";
 
 	Template.AbilitySourceName = 'eAbilitySource_Psionic';
 	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_NeverShow;
@@ -1690,7 +1690,7 @@ static function MakeAbilitiesNotTurnEndingForTimeStandsStill() {
 	local X2AbilityCost Cost;
 	local X2AbilityCost_ActionPoints ActionPointCost;
 
-	`RTLOG("Patching All Abilities for TimeStandsStill");
+	//`RTLOG("Patching All Abilities for TimeStandsStill");
 	AbilityTemplateMgr = class'X2AbilityTemplateManager'.static.GetAbilityTemplateManager();
 	AbilityTemplateMgr.GetTemplateNames(AbilityTemplateNames);
 	foreach AbilityTemplateNames(AbilityTemplateName) {
@@ -1723,7 +1723,7 @@ static function X2AbilityTemplate LinkedIntelligence()
 	local X2Condition_UnitEffectsWithAbilityTarget	UnitCondition;
 
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'LinkedIntelligence');
-	Template.IconImage = "img:///RisingTidesContentPackage.PerkIcons.UIPerk_mind_psi_chevron_x3_networkedoi";
+	Template.IconImage = "img:///RisingTidesImagesPackage.UIPerk_mind_psi_chevron_x3_networkedoi";
 
 	Template.AbilitySourceName = 'eAbilitySource_Psionic';
 	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_NeverShow;
@@ -1905,7 +1905,7 @@ static function X2AbilityTemplate PsionicSurge()
 	local X2Effect_Persistent				Effect;
 
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'PsionicSurge');
-	Template.IconImage = "img:///RisingTidesContentPackage.PerkIcons.UIPerk_psi_shot_2_psisurge";
+	Template.IconImage = "img:///RisingTidesImagesPackage.UIPerk_psi_shot_2_psisurge";
 
 	Template.AbilitySourceName = 'eAbilitySource_Psionic';
 	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_AlwaysShow;
@@ -1972,7 +1972,7 @@ static function X2AbilityTemplate HeatChannel()
 	local X2Effect_SetUnitValue				UnitValEffect;
 
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'HeatChannel');
-	Template.IconImage = "img:///RisingTidesContentPackage.PerkIcons.UIPerk_reload_psi_heatchannel";
+	Template.IconImage = "img:///RisingTidesImagesPackage.UIPerk_reload_psi_heatchannel";
 
 	Template.AbilitySourceName = 'eAbilitySource_Psionic';
 	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_NeverShow;
@@ -2031,7 +2031,7 @@ static function X2AbilityTemplate HeatChannelIcon()
 	local X2AbilityTemplate Template;
 
 	Template = CreateRTCooldownCleanse('HeatChannelIcon', 'HeatChannelCooldownTrackerEffect', 'HeatChannelCooldownComplete');
-	Template.IconImage = "img:///RisingTidesContentPackage.PerkIcons.UIPerk_reload_psi_heatchannel";
+	Template.IconImage = "img:///RisingTidesImagesPackage.UIPerk_reload_psi_heatchannel";
 
 	return Template;
 }
@@ -2047,7 +2047,7 @@ static function X2AbilityTemplate HeatChannelCooldown()
 	local X2Effect_Persistent				AgroEffect;
 
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'HeatChannelCooldown');
-	Template.IconImage = "img:///RisingTidesContentPackage.PerkIcons.UIPerk_reload_psi_heatchannel";
+	Template.IconImage = "img:///RisingTidesImagesPackage.UIPerk_reload_psi_heatchannel";
 
 	Template.AbilitySourceName = 'eAbilitySource_Psionic';
 	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_NeverShow;
@@ -2095,7 +2095,7 @@ static function X2AbilityTemplate EyeInTheSky()
 
 	//Icon Properties
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'EyeInTheSky');
-	Template.IconImage = "img:///RisingTidesContentPackage.PerkIcons.rt_eyeinthesky";
+	Template.IconImage = "img:///RisingTidesImagesPackage.rt_eyeinthesky";
 
 	Template.AbilitySourceName = 'eAbilitySource_Perk';
 	Template.eAbilityIconBehaviorHUD = EAbilityIconBehavior_NeverShow;
@@ -2229,7 +2229,7 @@ static function X2AbilityTemplate Harbinger()
 	local X2Condition_UnitProperty	TargetCondition;
 
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'Harbinger');
-	Template.IconImage = "img:///RisingTidesContentPackage.PerkIcons.rt_assumingdirectcontrol";
+	Template.IconImage = "img:///RisingTidesImagesPackage.rt_assumingdirectcontrol";
 	
 	Template.AbilitySourceName = 'eAbilitySource_Psionic';
 	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_ShowIfAvailable;
@@ -2552,7 +2552,7 @@ static function X2AbilityTemplate RTEveryMomentMatters()
 	local RTEffect_EveryMomentMatters			RTEffect;
 
 	 `CREATE_X2ABILITY_TEMPLATE(Template, 'RTEveryMomentMatters');
-	Template.IconImage = "img:///RisingTidesContentPackage.PerkIcons.UIPerk_shot_bullet_everymomentmatters";
+	Template.IconImage = "img:///RisingTidesImagesPackage.UIPerk_shot_bullet_everymomentmatters";
 
 	Template.AbilitySourceName = 'eAbilitySource_Perk';
 	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_NeverShow;
@@ -2587,7 +2587,7 @@ static function X2AbilityTemplate RTOverflowBarrier()
 	local X2AbilityMultiTarget_Radius	MultiTarget;
 
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'RTOverflowBarrier');
-	Template.IconImage = "img:///RisingTidesContentPackage.PerkIcons.UIPerk_shield_psi_overflowbarrier";
+	Template.IconImage = "img:///RisingTidesImagesPackage.UIPerk_shield_psi_overflowbarrier";
 
 	Template.AbilitySourceName = 'eAbilitySource_Psionic';
 	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_NeverShow;
@@ -2722,7 +2722,7 @@ static function X2AbilityTemplate RTKubikuri()
 	local X2Condition_UnitEffects			SuppressedCondition;
 
 	`CREATE_X2ABILITY_TEMPLATE (Template, 'RTKubikuri');
-	Template.IconImage = "img:///RisingTidesContentPackage.PerkIcons.LW_AbilityKubikuri";
+	Template.IconImage = "img:///RisingTidesImagesPackage.LW_AbilityKubikuri";
 	Template.AbilitySourceName = 'eAbilitySource_Perk';
 	Template.ShotHUDPriority = class'UIUtilities_Tactical'.const.CLASS_CAPTAIN_PRIORITY;
 	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_AlwaysShow;
@@ -2795,7 +2795,7 @@ static function X2AbilityTemplate RTKubikuriDamage()
 	local X2AbilityTemplate					Template;
 
 	`CREATE_X2ABILITY_TEMPLATE (Template, 'RTKubikuriDamage');
-	Template.IconImage = "img:///RisingTidesContentPackage.PerkIcons.LW_AbilityKubikuri";
+	Template.IconImage = "img:///RisingTidesImagesPackage.LW_AbilityKubikuri";
 	Template.AbilitySourceName = 'eAbilitySource_Perk';
 	Template.eAbilityIconBehaviorHUD = 2;
 	Template.Hostility = 2;
@@ -2819,7 +2819,7 @@ static function X2AbilityTemplate RTRepositioning() {
 
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'RTRepositioning');
 
-	Template.IconImage = "img:///RisingTidesContentPackage.PerkIcons.rt_repositioning";
+	Template.IconImage = "img:///RisingTidesImagesPackage.rt_repositioning";
 	Template.AbilitySourceName = 'eAbilitySource_Perk';
 	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_NeverShow;
 	Template.Hostility = eHostility_Neutral;
@@ -2847,44 +2847,4 @@ defaultproperties
 	TimeStopEffectName = "TimeStopEffect"
 	TimeStopMasterEffectName = "TimeStopMasterEffect"
 	DaybreakFlameToggleName = "DaybreakFlameDisabled";
-}
-
-static function bool AbilityTagExpandHandler(string InString, out string OutString)
-{
-	local name Tag;
-
-	Tag = name(InString);
-
-	switch(Tag)
-	{
-		case 'RTREPOSITIONING_MAX_POSITIONS_SAVED':
-			OutString = string(default.REPOSITIONING_MAX_POSITIONS_SAVED);
-			return true;
-		case 'RTREPOSITIONING_TILE_DISTANCE':
-			OutString = string(default.REPOSITIONING_TILES_MOVED_REQUIREMENT);
-			return true;
-		case 'RTPRECISION_SHOT_CRIT_CHANCE':
-			OutString = string(default.HEADSHOT_CRIT_BONUS);
-			return true;
-		case 'RTPRECISION_SHOT_CRIT_DAMAGE':
-			OutString = string(default.HEADSHOT_CRITDMG_BONUS);
-			return true;
-		case 'RTPRECISION_SHOT_AIM_PENALITY':
-			OutString = string(default.HEADSHOT_AIM_MULTIPLIER);
-			return true;
-		case 'AGGRESSION_CRIT_PER_UNIT':
-			OutString = string(default.AGGRESSION_CRIT_PER_UNIT);
-			return true;
-		case 'AGGRESSION_MAX_CRIT':
-			OutString = string(default.AGGRESSION_UNITS_FOR_MAX_BONUS * default.AGGRESSION_CRIT_PER_UNIT);
-			return true;
-		case 'KNOCK_THEM_DOWN_DAMAGE_GAIN':
-			OutString = string(default.KNOCKTHEMDOWN_DAMAGE_INCREMENT);
-			return true;
-		case 'KNOCK_THEM_DOWN_CRITDMG_GAIN':
-			OutString = string(default.KNOCKTHEMDOWN_CRITDMG_INCREMENT);
-			return true;
-	}
-
-	return false;
 }

@@ -111,8 +111,7 @@ protected function AddOperativesToTactical(array<RTGameState_Unit> UnitStates) {
 			ItemState.CreateCosmeticItemUnit(NewGameState);
 		}
 
-		// Give them a single action point ala scamper
-		UnitState.ActionPoints.AddItem(class'X2CharacterTemplateManager'.default.StandardActionPoint);
+		UnitState.GiveStandardActionPoints();
 	}
 
 	// submit it
@@ -325,22 +324,19 @@ simulated function ProgramReinforcements_BuildVisualization(XComGameState Visual
 			if( UnitState != FreshlySpawnedUnitStates[0] )
 			{
 				RandomDelay = X2Action_Delay(class'X2Action_Delay'.static.AddToVisualizationTree(NewUnitActionMetadata, Context, false, SyncAction));
-				OffsetVisDuration += 0.5f + `SYNC_FRAND(1) * 0.5f;
+				OffsetVisDuration += 0.75f;
 				RandomDelay.Duration = OffsetVisDuration;
 			}
 			
-			X2Action_ShowSpawnedUnit(class'X2Action_ShowSpawnedUnit'.static.AddToVisualizationTree(NewUnitActionMetadata, Context, false, ActionMetadata.LastActionAdded));
+			X2Action_ShowSpawnedUnit(class'X2Action_ShowSpawnedUnit'.static.AddToVisualizationTree(NewUnitActionMetadata, Context, false, RandomDelay));
 
 			UnitState.GetKeystoneVisibilityLocation(SpawnedUnitTile);
 
-			SpawnEffectAction = X2Action_PlayEffect(class'X2Action_PlayEffect'.static.AddToVisualizationTree(NewUnitActionMetadata, Context, false, ActionMetadata.LastActionAdded));
+			SpawnEffectAction = X2Action_PlayEffect(class'X2Action_PlayEffect'.static.AddToVisualizationTree(NewUnitActionMetadata, Context, false, RandomDelay));
 			SpawnEffectAction.EffectName = ContentManager.ChosenReinforcementsEffectPathName;
 			SpawnEffectAction.EffectLocation = WorldData.GetPositionFromTileCoordinates(SpawnedUnitTile);
 			SpawnEffectAction.bStopEffect = false;
 		}
-
-		RandomDelay = X2Action_Delay(class'X2Action_Delay'.static.AddToVisualizationTree(NewUnitActionMetadata, Context, false, ActionMetadata.LastActionAdded));
-		RandomDelay.Duration = 4.0f;
 
 		VisualizationMgr.GetAllLeafNodes(VisualizationMgr.BuildVisTree, LeafNodes);
 

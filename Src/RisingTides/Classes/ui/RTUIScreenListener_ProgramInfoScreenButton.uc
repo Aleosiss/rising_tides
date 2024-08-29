@@ -82,7 +82,7 @@ simulated function AddProgramInfoScreenButton(UIStrategyMap Screen) {
 	local RTUIImageButton Button;
 
 	Button = Screen.Spawn(class'RTUIImageButton', Screen.StrategyMapHUD);
-	Button.InitImageButton('RT_UIStrategyMap_ProgramInfoScreenButton', "img:///RisingTidesContentPackage.UIImages.vhs_program_icon_v2_border_grey", OnButtonClicked);
+	Button.InitImageButton('RT_UIStrategyMap_ProgramInfoScreenButton', "img:///RisingTidesImagesPackage.vhs_program_icon_v2_border_grey", OnButtonClicked);
 	Button.SetPosition(0, 0);
     Button.AnchorTopLeft();
 }

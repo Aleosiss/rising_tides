@@ -9,8 +9,52 @@ static function array<X2DataTemplate> CreateTemplates()
 	Templates.AddItem(EnableHostileTemplarFocusUI());
 	Templates.AddItem(RTBlockCovertActions());
 	Templates.AddItem(RTNegateEnvironmentalDamage());
+	Templates.AddItem(PreloadProgramUnits());
 
 	return Templates;
+}
+
+static function CHEventListenerTemplate PreloadProgramUnits()
+{
+	local CHEventListenerTemplate Template;
+
+	`CREATE_X2TEMPLATE(class'CHEventListenerTemplate', Template, 'RT_PreloadProgramUnits');
+	Template.RegisterInTactical = true;
+	Template.AddCHEvent('PlayerTurnBegun', PreloadProgramUnitsEvent, ELD_OnStateSubmitted);
+
+	return Template;
+}
+
+// Preload assets if deployment is ready.
+static private function EventListenerReturn PreloadProgramUnitsEvent(Object EventData, Object EventSource, XComGameState GameState, Name EventID, Object CallbackData)
+{
+	local XComGameState_Player				PlayerState;
+	local RTGameState_ProgramFaction		ProgramState;
+	local XComGameState_BattleData			BattleData;
+	local XComGameState_MissionSite			MissionState;
+
+	PlayerState = XComGameState_Player(EventSource);
+	if (PlayerState == none || PlayerState.GetTeam() != eTeam_XCom)
+		return ELR_NoInterrupt;
+
+	// if the mission is the high coven assault, or if we have successfully completed the coven assault and there is a favor available
+	BattleData = XComGameState_BattleData(`XCOMHISTORY.GetSingleGameStateObjectForClass(class'XComGameState_BattleData'));
+	MissionState = XComGameState_MissionSite(`XCOMHISTORY.GetGameStateForObjectID(BattleData.m_iMissionID));
+	ProgramState = `RTS.GetProgramState();
+		
+	if (MissionState != none && MissionState.Source == 'RTMissionSource_TemplarHighCovenAssault') {
+		`RTLOG("Preloading program units");
+		ProgramState.PreloadSquad("SPECTRE");
+		return ELR_NoInterrupt;
+	}
+/*
+	if (ProgramState != none && ProgramState.IsOneSmallFavorAvailable() == eAvailable && ProgramState.IsTemplarQuestlineComplete()) {
+		`RTLOG("Preloading program units");
+		ProgramState.PreloadSquad("SPECTRE");
+		return ELR_NoInterrupt;
+	}
+*/
+	return ELR_NoInterrupt;
 }
 
 static function X2EventListenerTemplate RTContinueFactionHQReveal()

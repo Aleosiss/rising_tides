@@ -339,15 +339,8 @@ exec function RT_RegenerateProgramOperatives() {
 }
 
 exec function RT_CheatRankUpProgramOperatives() {
-	local XComGameStateHistory History;
 	local XComGameState NewGameState;
-	local XComGameState_Unit UnitState;
 	local RTGameState_ProgramFaction ProgramState;
-	local StateObjectReference SquadRef;
-	local RTGameState_PersistentGhostSquad SquadState;
-	local int i;
-
-	History = `XCOMHISTORY;
 
 	NewGameState = `CreateChangeState("Rising Tides: CHEAT: Regenerate Program Operatives, Part 3");
 	ProgramState = `RTS.GetNewProgramState(NewGameState);
@@ -735,27 +728,6 @@ exec function RT_DebugClosestUnitToCursorAvailableAbilties(bool bPrintFullInfo =
 	`RTLOG("Finished gathering and displaying ability availablity for " $ UnitState.GetFullName(), false, true);
 }
 
-exec function RT_CheatLadderPoints(int Points) {
-	local XComGameState NewGameState;
-	local XComGameState_LadderProgress LadderData;
-	local XComGameState_ChallengeScore ChallengeScore;
-
-	// CMPT_KilledEnemy
-	NewGameState = class'XComGameStateContext_ChallengeScore'.static.CreateChangeState( );
-
-	ChallengeScore = XComGameState_ChallengeScore( NewGameState.CreateStateObject( class'XComGameState_ChallengeScore' ) );
-	ChallengeScore.ScoringType = CMPT_KilledEnemy;
-	ChallengeScore.AddedPoints = Points;
-
-	LadderData = XComGameState_LadderProgress( `XCOMHISTORY.GetSingleGameStateObjectForClass(class'XComGameState_LadderProgress', true));
-	LadderData = XComGameState_LadderProgress( NewGameState.ModifyStateObject( class'XComGameState_LadderProgress', LadderData.ObjectID ) );
-	LadderData.CumulativeScore += Points;
-
-	`XCOMGAME.GameRuleset.SubmitGameState( NewGameState );
-
-	return;
-}
-
 exec function TestScreen() {
 	/*local XComPresentationLayerBase pres;
 	local UISCreenStack	ScreenStack;
@@ -1050,17 +1022,6 @@ exec function RT_SetStrategyForceLevel(int iNewForceLevel) {
 	`XCOMGAME.GameRuleset.SubmitGameState(NewGameState);
 }
 
-exec function RT_DebugAIBehavior() {
-	/*local XComGameState_Unit UnitState;
-	local StateObjectReference AbilityRef;
-	local XComGameState_Ability AbilityState;
-	local XComGameStateHistory History;
-	local AvailableAction Action;
-	
-	UnitState = `CHEATMGR.GetClosestUnitToCursor();
-	*/
-}
-
 exec function RT_ListAllStrategyCards() {
 	local XComGameStateHistory History;
 	local XComGameState_StrategyCard CardState;
@@ -1282,7 +1243,6 @@ exec function RT_TestRisk(name RiskTemplateName) {
 	local X2StrategyElementTemplateManager StrategyElementManager;
 	local XComGameState NewGameState;
 
-
 	StrategyElementManager = class'X2StrategyElementTemplateManager'.static.GetStrategyElementTemplateManager();
 
 	Template = X2CovertActionRiskTemplate(StrategyElementManager.FindStrategyElementTemplate(RiskTemplateName));
@@ -1356,6 +1316,23 @@ exec function RT_PrintItemsForClosestUnitToCursor() {
 		`RTLOG(ItemState.ToString(true));
 		`RTLOG(" ");
 	}
+}
+
+exec function RT_DebugClosestUnitToCursor() {
+	local XComGameState_Unit UnitState;
+	local XComTacticalCheatManager CheatsManager;
+	local XComGameStateHistory History;
+	local StateObjectReference Ref;
+	local X2CharacterTemplate CharTemplate;
+
+	CheatsManager = `CHEATMGR;
+	History = `XCOMHISTORY;
+
+	UnitState = CheatsManager.GetClosestUnitToCursor();
+	`RTLOG(UnitState.ToString(true), false, true);
+	CharTemplate = UnitState.GetMyTemplate();
+	`RTLOG(" " $ CharTemplate.CharacterGroupName, false, true);
+	`RTLOG(" " $ CharTemplate.strBehaviorTree, false, true);
 }
 
 // shamelessly copied from RPGO by Musashi

@@ -54,3 +54,51 @@ simulated function XComUnitPawn GetPawnArchetype( string strArchetype="", option
 		return XComUnitPawn(kPawn);
 	return none;
 }
+
+simulated function PreloadAssets() {
+	class'RTGameState_Unit'.static.PreloadAssetsForUnit(ObjectID);
+}
+
+// author: Iridar
+static function PreloadAssetsForUnit(const int UnitObjectID)
+{
+	local XComGameState_Unit			SpawnUnit;
+	local array<string>					Resources;
+	local string						Resource;
+	local XComContentManager			Content;
+	local StateObjectReference			ItemReference;
+	local XComGameState_Item			ItemState;
+	local XComGameStateHistory			History;
+	local X2CharacterTemplate			CharTemplate;
+	local string						MapName;
+
+	History = `XCOMHISTORY;
+	SpawnUnit = XComGameState_Unit(History.GetGameStateForObjectID(UnitObjectID));
+	if (SpawnUnit == none) {
+		return;
+	}
+
+	Content = `CONTENT;
+
+	SpawnUnit.RequestResources(Resources);
+	foreach Resources(Resource)	{
+		Content.RequestGameArchetype(Resource,,, true); // Async requests
+	}
+
+	foreach SpawnUnit.InventoryItems(ItemReference) {
+		ItemState = XComGameState_Item(History.GetGameStateForObjectID(ItemReference.ObjectID));
+		ItemState.RequestResources(Resources);
+
+		foreach Resources(Resource)
+		{
+			Content.RequestGameArchetype(Resource,,, true);
+		}
+	}
+
+	CharTemplate = SpawnUnit.GetMyTemplate();
+	if (CharTemplate != none) {
+		foreach CharTemplate.strMatineePackages(MapName) {
+			`MAPS.AddStreamingMap(MapName).bForceNoDupe = true;
+		}
+	}	
+}

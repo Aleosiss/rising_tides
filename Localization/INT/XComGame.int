@@ -1272,7 +1272,7 @@ ActionPostNarrative="I've worked out the details with your men, Commander. We'll
 DisplayName="Templar Ambush"
 Briefing="Eliminate Templar Coven Investigators"
 PostMissionType="Kill all hostiles"
-BriefingImage="img:///RisingTidesContentPackage.UIImages.Missions.CANarrative_TemplarQuestline_TemplarDiscoveryAmbush"
+BriefingImage="img:///RisingTidesImagesPackage.CANarrative_TemplarQuestline_TemplarDiscoveryAmbush"
 ObjectiveTextPools[0]="Neutralize all enemy targets"
 
 [RTNarrative_TemplarAmbush X2MissionNarrativeTemplate]
@@ -1290,7 +1290,7 @@ BattleOpName="Operation: Dwindling Light"
 DisplayName="Destroy the Templar High Coven"
 Briefing="Eliminate Geist. Destroy the Archives. End this conflict, once and for all."
 PostMissionType="Kill all hostiles"
-BriefingImage="img:///RisingTidesContentPackage.UIImages.Missions.CANarrative_TemplarQuestline_HighCovenAssault"
+BriefingImage="img:///RisingTidesImagesPackage.CANarrative_TemplarQuestline_HighCovenAssault"
 ObjectiveTextPools[0]="Destroy the Templar High Coven Compound"
 
 [RTNarrative_TemplarHighCovenAssault X2MissionNarrativeTemplate]

@@ -342,16 +342,6 @@ simulated function ToggleAbility_BuildVisualization(XComGameState VisualizeGameS
 
 		//****************************************************************************************
 }
-
-static function bool AbilityTagExpandHandler(string InString, out string OutString)
-{
-//	local name Tag;
-
-//	Tag = name(InString);
-
-	return false;
-}
-
 static function TestAbilitySetValues() {
 	
 }

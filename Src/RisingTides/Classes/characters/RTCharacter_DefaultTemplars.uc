@@ -3,7 +3,6 @@ class RTCharacter_DefaultTemplars extends X2Character_DefaultCharacters config(R
 static function array<X2DataTemplate> CreateTemplates()
 {
 	local array<X2DataTemplate> Templates;
-	local X2DataTemplate template;
 	
 	Templates.AddItem(CreateTemplate_TemplarWarrior('RTTemplarWarrior_M1'));
 	Templates.AddItem(CreateTemplate_TemplarWarrior('RTTemplarWarrior_M2'));
@@ -26,11 +25,11 @@ static function array<X2DataTemplate> CreateTemplates()
 	Templates.AddItem(CreateTemplate_HighCovenPriest());
 	Templates.AddItem(CreateTemplate_RTGeist());
 
-	`RTLOG("Created Templars:");
-	foreach Templates(template) {
-		`RTLOG("" $ template.DataName);
-	}
-	`RTLOG("Done.");
+	//`RTLOG("Created Templars:");
+	//foreach Templates(template) {
+	//	`RTLOG("" $ template.DataName);
+	//}
+	//`RTLOG("Done.");
 
 	return Templates;
 }

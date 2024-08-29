@@ -29,4 +29,5 @@ $builder.AddToClean("SquadSelectAtAnyTime")
 $builder.AddToClean("LW_Tuple")
 $builder.AddToClean("CovertInfiltration")
 
+$builder.SetContentOptionsJsonFilename("ContentOptions.json")
 $builder.InvokeBuild()

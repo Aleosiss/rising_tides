@@ -15,7 +15,7 @@ static function SetUpStrategyCards(XComGameState StartState)
 	local XComGameStateHistory History;
 	
 	StratMgr = class'X2StrategyElementTemplateManager'.static.GetStrategyElementTemplateManager();
-	`RTLOG("Creating Strategy Cards!");
+	//`RTLOG("Creating Strategy Cards!");
 	AllCardTemplates = StratMgr.GetAllTemplatesOfClass(class'RTProgramStrategyCardTemplate');
 
 	History = `XCOMHISTORY;

@@ -225,7 +225,7 @@ static function X2AbilityTemplate RTProgramDroneAppearance() {
 
 	//Icon Properties
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'RTProgramDroneAppearance');
-	Template.IconImage = "img:///RisingTidesContentPackage.PerkIcons.rt_aggression";
+	Template.IconImage = "img:///RisingTidesImagesPackage.rt_aggression";
 
 	Template.AbilitySourceName = 'eAbilitySource_Perk';
 	Template.eAbilityIconBehaviorHUD = EAbilityIconBehavior_NeverShow;
@@ -246,20 +246,4 @@ static function X2AbilityTemplate RTProgramDroneAppearance() {
 	//  NOTE: No visualization on purpose!
 
 	return Template;
-}
-
-static function bool AbilityTagExpandHandler(string InString, out string OutString)
-{
-	local name Tag;
-
-	Tag = name(InString);
-
-	switch(Tag)
-	{
-		case 'CLOAKING_GENERATOR_RADIUS':
-			OutString = string(default.CLOAKING_PROTOCOL_RADIUS_METERS);
-			return true;
-	}
-
-	return false;
 }

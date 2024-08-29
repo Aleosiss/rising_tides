@@ -87,17 +87,16 @@ simulated function UnwaveringResolve_BuildVisualization(XComGameState VisualizeG
 	ActionMetadata.StateObject_NewState = VisualizeGameState.GetGameStateForObjectID(Context.InputContext.SourceObject.ObjectID);
 	ActionMetadata.VisualizeActor = History.GetVisualizer(Context.InputContext.SourceObject.ObjectID);
 
-
 	if(UnitState.GetTeam() != eTeam_XCom) {
 		if(class'RTCondition_VisibleToPlayer'.static.IsTargetVisibleToLocalPlayer(UnitState.GetReference())) {
-			`RTLOG("Unwavering Resolve: Visualizing, unit is visible!");
+			//`RTLOG("Unwavering Resolve: Visualizing, unit is visible!");
 			SoundAndFlyOver = X2Action_PlaySoundAndFlyOver(class'X2Action_PlaySoundAndFlyOver'.static.AddToVisualizationTree(ActionMetadata, Context, false, ActionMetadata.LastActionAdded));
 			SoundAndFlyOver.SetSoundAndFlyOverParameters(None, AbilityTemplate.LocFlyOverText, '', eColor_Bad);
 		} else {
-			`RTLOG("Unwavering Resolve: Not visualizing, unit is not visible!");
+			//`RTLOG("Unwavering Resolve: Not visualizing, unit is not visible!");
 		}
 	} else {
-		`RTLOG("Unwavering Resolve: Visualizing, unit on XCOM!");
+		//`RTLOG("Unwavering Resolve: Visualizing, unit on XCOM!");
 		SoundAndFlyOver = X2Action_PlaySoundAndFlyOver(class'X2Action_PlaySoundAndFlyOver'.static.AddToVisualizationTree(ActionMetadata, Context, false, ActionMetadata.LastActionAdded));
 		SoundAndFlyOver.SetSoundAndFlyOverParameters(None, AbilityTemplate.LocFlyOverText, '', eColor_Good);
 	}
@@ -510,7 +509,7 @@ static function PatchTemplarFocusVisualization() {
 	local X2Effect_TemplarFocus	FocusEffect;
 	local X2Effect EffectTemplate;
 
-	`RTLOG("Patching Templar Focus X2AbiliyTemplate - changing visualization!");
+	//`RTLOG("Patching Templar Focus X2AbiliyTemplate - changing visualization!");
 	AbilityTemplateMgr = class'X2AbilityTemplateManager'.static.GetAbilityTemplateManager();
 	AbilityTemplateMgr.GetTemplateNames(AbilityTemplateNames);
 	foreach AbilityTemplateNames(AbilityTemplateName) {
@@ -541,7 +540,7 @@ static function PatchedFocusEffectVisualization(XComGameState VisualizeGameState
 	local XComGameState_Unit UnitState;
 	local XComGameState_Effect_TemplarFocus FocusState;
 
-	`RTLOG("Patched Focus Effect Visualization invoked!");
+	//`RTLOG("Patched Focus Effect Visualization invoked!");
 
 	UnitState = XComGameState_Unit(ActionMetadata.StateObject_NewState);
 	if( UnitState != None )
@@ -551,8 +550,8 @@ static function PatchedFocusEffectVisualization(XComGameState VisualizeGameState
 		{
 			if(class'RTCondition_VisibleToPlayer'.static.IsTargetVisibleToLocalPlayer(UnitState.GetReference())) {
 				class'X2Ability_TemplarAbilitySet'.static.PlayFocusFX(VisualizeGameState, ActionMetadata, "ADD_StartFocus", FocusState.FocusLevel);
+				class'X2Ability_TemplarAbilitySet'.static.UpdateFocusUI(VisualizeGameState, ActionMetadata);
 			}
-			class'X2Ability_TemplarAbilitySet'.static.UpdateFocusUI(VisualizeGameState, ActionMetadata);
 		}
 	}
 }

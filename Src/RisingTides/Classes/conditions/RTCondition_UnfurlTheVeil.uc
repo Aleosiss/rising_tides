@@ -29,7 +29,6 @@ private function bool CheckTarget(XComGameState_BaseObject kTarget, optional XCo
 
 	TargetUnitState = XComGameState_Unit(kTarget);
 	if(TargetUnitState == none) {
-		`RTLOG("What the fuck is going on here? (RTC_UnfurlTheVeil)", true, false);
 		return false;
 	}
 
