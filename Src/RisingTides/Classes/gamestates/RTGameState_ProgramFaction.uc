@@ -1847,3 +1847,32 @@ public function bool CompareVersion(int newVersion) { // the version to compare 
 public function UpdateVersion(int newVersion) {
 	self.Version = newVersion;
 }
+
+public function PreloadSquad(string SquadName) {
+	local StateObjectReference SquadRef, OperativeRef;
+	local XComGameStateHistory History;
+	local RTGameState_PersistentGhostSquad SquadState;
+
+	History = `XCOMHISTORY;
+	`RTLOG("Preloading Squad " $ SquadName);
+
+	if(Squads.Length == 0) {
+		`RTLOG("Squad is None, skipping...");
+		return;
+	}
+
+	foreach Squads(SquadRef) {
+		`RTLOG("Checking Squad " $ SquadRef.ObjectID);
+		SquadState = RTGameState_PersistentGhostSquad(History.GetGameStateForObjectID(SquadRef.ObjectID));
+		`RTLOG("name = " $ SquadState.SquadName);
+		if(SquadState.SquadName != SquadName) {
+			continue;
+		}
+
+		foreach SquadState.Operatives(OperativeRef) {
+			`RTLOG("Preloading Operative " $ OperativeRef.ObjectID);
+			class'RTGameState_Unit'.static.PreloadAssetsForUnit(OperativeRef.ObjectID);
+		}
+		break;
+	}
+}
