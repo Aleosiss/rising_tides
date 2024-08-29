@@ -36,7 +36,7 @@ var array<name> NEGATED_ENV_DAMAGE_ABILITIES;
 defaultproperties
 {
 	Version=(Major=2, Minor=2, Patch=2)
-	BuildTimestamp="1724595759"
+	BuildTimestamp="1724886092"
 	MutuallyExclusiveProgramOperativeRanks=(6,7)
 }
 
@@ -396,10 +396,46 @@ for(i = 0; i < `RTD.PsionicAbilities.Length; ++i) {
 /// Called from XComGameState_Unit:GatherUnitAbilitiesForInit after the game has built what it believes is the full list of
 /// abilities for the unit based on character, class, equipment, et cetera. You can add or remove abilities in SetupData.
 /// </summary>
-//static function FinalizeUnitAbilitiesForInit(XComGameState_Unit UnitState, out array<AbilitySetupData> SetupData, optional XComGameState StartState, optional XComGameState_Player PlayerState, optional bool bMultiplayerDisplay)
-//{
-//
-//}
+static function FinalizeUnitAbilitiesForInit(XComGameState_Unit UnitState, out array<AbilitySetupData> SetupData, optional XComGameState StartState, optional XComGameState_Player PlayerState, optional bool bMultiplayerDisplay)
+{
+	PrepTemplarUnitForBetrayal(UnitState, SetupData, StartState, PlayerState);
+}
+
+
+private static function PrepTemplarUnitForBetrayal(
+	XComGameState_Unit UnitState, out array<AbilitySetupData> SetupData, optional XComGameState StartState, optional XComGameState_Player PlayerState) 
+{
+	local X2AbilityTemplate AbilityTemplate;
+	local X2AbilityTemplateManager AbilityTemplateManager;
+	local name AbilityName;
+	local AbilitySetupData Data, EmptyData;
+	local X2CharacterTemplate CharTemplate;
+
+	if(UnitState.GetMyTemplateName() != 'TemplarSoldier') {
+		return;
+	}
+
+	if(`TACTICALMISSIONMGR.ActiveMission.MissionName != 'RT_TemplarHighCovenAssault') {
+		return;
+	}
+	
+	AbilityTemplateManager = class'X2AbilityTemplateManager'.static.GetAbilityTemplateManager();
+	foreach class'X2Ability_AlertMechanics'.default.AlertAbilitySet(AbilityName) {
+		AbilityTemplate = AbilityTemplateManager.FindAbilityTemplate(AbilityName);
+		if( AbilityTemplate != none 
+			&&	(!AbilityTemplate.bUniqueSource || SetupData.Find('TemplateName', AbilityTemplate.DataName) == INDEX_NONE) 
+			&& AbilityTemplate.ConditionsEverValidForUnit(UnitState, false) ) 
+		{
+			Data = EmptyData;
+			Data.TemplateName = AbilityName;
+			Data.Template = AbilityTemplate;
+			SetupData.AddItem(Data);
+		}
+		else if (AbilityTemplate == none) {
+			`RedScreen("AlertAbilitySet array specifies unknown ability:" @ AbilityName);
+		}
+	}
+}
 
 static function bool DebuggingEnabled() {
 	return default.bDebuggingEnabled;
