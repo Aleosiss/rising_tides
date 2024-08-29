@@ -1,6 +1,9 @@
 2.2.2:
 - Cook mod assets and clean the build; mod file size significantly reduced
 - Fix performance issue in AbilityTagExpandHandler
+- Fix issue where Templars brought to the final Templar questline mission did not properly... react
+- Fix issue in final Templar questline mission where reinforcement visualization did not delay in between each teleport
+- Fix enemy Templars visualizing their abilities through FOW 
 - Fix a bug causing Mind Control to last much longer than desired 
 - Remove obnoxious debug logging
 
