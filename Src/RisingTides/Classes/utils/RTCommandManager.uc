@@ -1022,17 +1022,6 @@ exec function RT_SetStrategyForceLevel(int iNewForceLevel) {
 	`XCOMGAME.GameRuleset.SubmitGameState(NewGameState);
 }
 
-exec function RT_DebugAIBehavior() {
-	/*local XComGameState_Unit UnitState;
-	local StateObjectReference AbilityRef;
-	local XComGameState_Ability AbilityState;
-	local XComGameStateHistory History;
-	local AvailableAction Action;
-	
-	UnitState = `CHEATMGR.GetClosestUnitToCursor();
-	*/
-}
-
 exec function RT_ListAllStrategyCards() {
 	local XComGameStateHistory History;
 	local XComGameState_StrategyCard CardState;
