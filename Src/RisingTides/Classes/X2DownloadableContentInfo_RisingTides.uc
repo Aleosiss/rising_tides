@@ -35,8 +35,8 @@ var array<name> NEGATED_ENV_DAMAGE_ABILITIES;
 
 defaultproperties
 {
-	Version=(Major=2, Minor=2, Patch=2)
-	BuildTimestamp="1724886875"
+	Version=(Major=2, Minor=2, Patch=3)
+	BuildTimestamp="1724979164"
 	MutuallyExclusiveProgramOperativeRanks=(6,7)
 }
 
@@ -73,10 +73,20 @@ private static function HandleModUpdate() {
 	`RTLOG("New version of the mod found: \nOld Version: " $ ProgramState.GetCurrentVersion() $ "\nNew Version: " $ GetVersionInt());
 	NewGameState = `CreateChangeState("Mod version updated!");
 	ProgramState = `RTS.GetNewProgramState(NewGameState);
-	ProgramState.SetTemplarMissionSucceededFlag(true);
+	RegenerateProgramIconIfNecessary(ProgramState);
 	ProgramState.UpdateVersion(GetVersionInt());
 
 	`GAMERULES.SubmitGameState(NewGameState);
+}
+
+private function static RegenerateProgramIconIfNecessary(out RTGameState_ProgramFaction NewProgramState) {
+	local StackedUIIconData IconData, EmptyIconData;
+
+	IconData = NewProgramState.GetFactionIcon();
+	if(IconData.Images[0] != NewProgramState.GetMyTemplate().FactionIconInformation_Layer0[0]) {
+		NewProgramState.FactionIconData = NewProgramState.GetMyTemplate().GenerateFactionIcon();
+		return;
+	}
 }
 
 /// <summary>

@@ -354,6 +354,7 @@ class BuildProject {
 		$xd += "lfs"
 		$xd += "scripts"
 		$xd += "steam_workshop"
+		$xd += "BuildCache"
 
 		$xf += ".*"
 		$xf += "TODO"

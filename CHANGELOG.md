@@ -1,3 +1,6 @@
+2.2.3:
+- Fix bad icon after 2.2.2 update on pre-existing campaigns
+
 2.2.2:
 - Cook mod assets and clean the build; mod file size significantly reduced
 - Fix performance issue in AbilityTagExpandHandler
