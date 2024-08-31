@@ -432,7 +432,7 @@ m_strTemplarBetraylReactionBanner="Templar Betrayal"
 
 [RTUIScreenListener_MOTD]
 m_strTitle="Rising Tides Update Notice"
-m_strText="Rising Tides: The Program has been updated!\nHighlights of this patch are:\n  - Covert Infiltration Compatibility\n      - Covert Actions can be undertaken by Program squad 'HIGHLANDER'\n      - Infiltrations can be undertaken by Program squad 'SPECTRE'\n      - 'SPECTRE' continues to be able to do normal missions\n      - Bridge mod is required and a notification will be shown if it is not present\n  - Major improvements to how One Small Favor is handled behind-the-scenes.\n      - No behavior changes, but it may screw with a save game. Use the following commands to fix the issue: \n		    - If you have no favors, use RT_CheatModifyProgramFavors 1 to add one\n		    - If you have none remaining this month (no timeslots), use RT_CheatModifyProgramFavorTimeSlots 1 to add one\n		    - If you have no squads, use RT_RegenerateProgramOperatives to rebuild them\n  - The Program Info Screen will now inform you why you cannot call in a Favor (none left, no squads available to take the mission, no timeslots left that month)\n  - The Program Info Screen now has a dedicated button in the top-left corner of the Geoscape that is Controller-accessible.\n  - Over the Shoulder now reveals units via Target Definition.\n      - This should be tremendously more performant than before\n      - If you prefer the old viz, you can set the UseOldOTSGFX config property to revert the behavior\n  - Program Operatives will now use better animations when performing psionic abilties\n  - High-ranked Program Operative abilities are now mutually exclusive. Don't need to make them even more broken then I originally intended.\n  - Fix soldiers getting stuck in a Covert Action if it was in-progress when the Templars were destroyed"
+m_strText=""
 
 ; 2.0.0 Message
 ; "Rising Tides: The Program has been updated!
@@ -482,6 +482,16 @@ m_strText="Rising Tides: The Program has been updated!\nHighlights of this patch
 ;   - Fix soldiers getting stuck in a Covert Action if it was in-progress when the Templars were destroyed"
 
 ; Please check the mod page for further details, I do not show this notification unless there has been a major change in the mod."
+
+
+; 2.3.0 Message
+; "Rising Tides: The Program has been updated!
+; Highlights of this patch are:
+;   - Long War of the Chosen Compatibility
+;       - Bridge mod is required and a notification will be shown if it is not present
+;   
+; Please check the mod page for further details, I do not show this notification unless there has been a major change in the mod."
+
 
 [RTUIScreenListener_ModCompatibiltyDetection]
 m_strTitle_CI="Warning - Missing Bridge Mod for Covert Infiltration"
