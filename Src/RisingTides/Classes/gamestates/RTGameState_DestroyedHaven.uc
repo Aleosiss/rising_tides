@@ -3,7 +3,7 @@ class RTGameState_DestroyedHaven extends XComGameState_Haven;
 var name ChampionClassName;
 /**
 
-This class is nesscessary when destroying base game factions. If it is not present, the UIStrategyMap faction wheel
+This class is necessary when destroying base game factions. If it is not present, the UIStrategyMap faction wheel
 will not get properly filled, resulting in all further scanning sites being misaligned.
 
 */

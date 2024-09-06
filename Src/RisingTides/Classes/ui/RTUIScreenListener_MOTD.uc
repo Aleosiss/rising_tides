@@ -8,7 +8,9 @@ var localized string m_strText;
 
 event OnInit(UIScreen Screen) {
 	if(UIShell(Screen) != none/* && UIShell(Screen).DebugMenuContainer == none*/) {
-		TryShowPopup(Screen);
+		if(m_strText != "") {
+			TryShowPopup(Screen);
+		}
 	}
 }
 

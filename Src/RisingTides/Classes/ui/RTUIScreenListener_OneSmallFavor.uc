@@ -1,9 +1,9 @@
 // This is an Unreal Script
 class RTUIScreenListener_OneSmallFavor extends UIScreenListener config(ProgramFaction);
 
-var UICheckbox						cb;
-var UIMission						ms;
-var StateObjectReference			mr;
+var private string 					CheckboxWeakRef;
+var private string 					MissionWeakRef;
+var int								MissionId;
 var bool							bDebugging;
 var bool							bHasSeenOSFTutorial;
 var bool							bHasSeenProgramScreenTutorial;
@@ -11,12 +11,13 @@ var bool							bHasSeenProgramScreenTutorial;
 var config array<name> 				FatLaunchButtonMissionTypes;
 var config float 					OSFCheckboxDistortOnClickDuration;
 
-delegate OldOnClickedDelegate(UIButton Button);
+var private name 					DelegateHolderName;
 
 defaultproperties
 {
 	// Leaving this assigned to none will cause every screen to trigger its signals on this class
 	ScreenClass = none;
+	DelegateHolderName = '';
 }
 
 
@@ -53,52 +54,52 @@ event OnInit(UIScreen Screen)
 	}
 
 	bDebugging = false;
-
-	ms = UIMission(Screen);
-	AddOneSmallFavorSelectionCheckBox(UIMission(Screen));
+	AddOneSmallFavorSelectionCheckBox(SetMissionScreen(UIMission(Screen)));
 }
 
 event OnRemoved(UIScreen Screen) {
 	local UISquadSelect ss;
-	local StateObjectReference EmptyRef;
+
+	`RTLOG("Screen removed: " $ Screen.Class);
 
 	if(UISquadSelect(Screen) != none) {
+		`RTLOG("UISquadSelect detected, cleaning up!");
 		ss = UISquadSelect(Screen);
 		// If the mission was launched, we don't want to clean up the XCGS_MissionSite
 		if(!ss.bLaunched) {
-			if(mr.ObjectID != 0) {
+			if(MissionId != 0) {
 				`RTLOG("Attempting to remove OSF");
-				RemoveOneSmallFavorSitrep(XComGameState_MissionSite(`XCOMHISTORY.GetGameStateForObjectID(mr.ObjectID)));
+				RemoveOneSmallFavorSitrep(XComGameState_MissionSite(`XCOMHISTORY.GetGameStateForObjectID(MissionId)));
 			}
-			mr = EmptyRef;
+			MissionId = 0;
 		}
 		ManualGC();
 	}
 
 	if(UIStrategyMap(Screen) != none) {
 		// Just avoiding a RedScreen here, not necessarily a useful check
-		if(mr.ObjectID != 0) {
-			RemoveOneSmallFavorSitrep(XComGameState_MissionSite(`XCOMHISTORY.GetGameStateForObjectID(mr.ObjectID)));	
+		`RTLOG("UIStrategyMap detected, cleaning up!");
+		if(MissionId != 0) {
+			RemoveOneSmallFavorSitrep(XComGameState_MissionSite(`XCOMHISTORY.GetGameStateForObjectID(MissionId)));	
 		}
 
-		mr = EmptyRef;
+		MissionId = 0;
 		ManualGC();
 	}
 }	
 
 simulated function ManualGC() {
-	OldOnClickedDelegate = none;
-	ms = none;
+	`RTLOG("ManualGC called!");
 	HandleInput(false);
-	cb.Remove();
-	cb = none;
+	MissionWeakRef = "";
+	CheckboxWeakRef = "";
 }
 
 simulated function AddOneSmallFavorSelectionCheckBox(UIScreen Screen) {
 	local UIMission MissionScreen;
 	local RTGameState_ProgramFaction Program;
 
-	MissionScreen = UIMission(Screen);
+	MissionScreen = GetMissionScreen();
 	if(MissionScreen == none) {
 		return;
 	}
@@ -141,10 +142,12 @@ function OnConfirmButtonInited(UIPanel Panel) {
 	local bool bReadOnly;
 	local RTGameState_ProgramFaction Program;
 	local UIButton Button;
+	local UICheckbox Checkbox;
 	local float PosX, PosY;
 	local string strCheckboxDesc;
+	local UIDelegateHolder DelegateHolder;
 
-	MissionScreen = ms;
+	MissionScreen = GetMissionScreen();
 	if(MissionScreen == none) {
 		`RedScreen("Error, parent is not of class 'UIMission'");
 		return;
@@ -166,7 +169,6 @@ function OnConfirmButtonInited(UIPanel Panel) {
 		}
 	}
 
-
 	if(bReadOnly) {
 		strCheckboxDesc = class'RTGameState_ProgramFaction'.default.OSFCheckboxUnavailable;
 	} else {
@@ -175,8 +177,8 @@ function OnConfirmButtonInited(UIPanel Panel) {
 
 	GetPositionByMissionType(MissionScreen.GetMission().GetMissionSource().DataName, PosX, PosY);
 
-	cb = MissionScreen.Spawn(class'UICheckbox', MissionScreen.ButtonGroup);	
-	cb.InitCheckbox('OSFActivateCheckbox', , false, OnCheckboxChange, bReadOnly)
+	Checkbox = CreateCheckbox();
+	Checkbox.InitCheckbox('OSFActivateCheckbox', , false, OnCheckboxChange, bReadOnly)
 		.SetSize(Button.Height, Button.Height)
 		.OriginTopLeft()
 		.SetPosition(PosX, PosY)
@@ -187,7 +189,14 @@ function OnConfirmButtonInited(UIPanel Panel) {
 
 	// Modify the OnLaunchButtonClicked Delegate
 	if(Button != none) {
-		OldOnClickedDelegate = Button.OnClickedDelegate;
+		DelegateHolder = Button.Spawn(class'UIDelegateHolder', Button);
+		DelegateHolder.InitPanel(DelegateHolderName);
+		DelegateHolder.Hide();
+		DelegateHolder.SetPosition(-100, -100);
+
+		`RTLOG("Replacing:" @ string(Button.OnClickedDelegate) @ "with" @ string(DelegateHolder.OriginalOnClickedDelegate));
+
+		DelegateHolder.OriginalDelegate = Button.OnClickedDelegate;
 		Button.OnClickedDelegate = ModifiedLaunchButtonClicked;
 	} else {
 		`RTLOG("Panel was not a button?", true);
@@ -195,14 +204,26 @@ function OnConfirmButtonInited(UIPanel Panel) {
 }
 
 function ModifiedLaunchButtonClicked(UIButton Button) {
-	mr = ms.GetMission().GetReference();
-	AddOneSmallFavorSitrep(XComGameState_MissionSite(`XCOMHISTORY.GetGameStateForObjectID(mr.ObjectID)));
-	OldOnClickedDelegate(Button);
+	local UIDelegateHolder DelegateHolder;
+
+	DelegateHolder = UIDelegateHolder(Button.GetChild(DelegateHolderName));
+	if(DelegateHolder == none) {
+			`RTLOG("ERROR: Modified OSF Launch Button had no original button delegate", true, true);
+
+		return;
+	}
+
+	MissionId = GetMissionScreen().GetMission().GetReference().ObjectID;
+	if(MissionId == 0) {
+		`RTLOG("ERROR: Modified OSF Launch Button had no Mission GameState", true, true);
+	}
+	AddOneSmallFavorSitrep(XComGameState_MissionSite(`XCOMHISTORY.GetGameStateForObjectID(MissionId)));
+	DelegateHolder.CallDelegate(Button);
 }
 
 simulated function OnCheckboxChange(UICheckbox checkboxControl)
 {
-	ms.Movie.Pres.StartDistortUI(default.OSFCheckboxDistortOnClickDuration);
+	GetMissionScreen().Movie.Pres.StartDistortUI(default.OSFCheckboxDistortOnClickDuration);
 }
 
 simulated function bool AddOneSmallFavorSitrep(XComGameState_MissionSite MissionState) {
@@ -222,7 +243,7 @@ simulated function bool AddOneSmallFavorSitrep(XComGameState_MissionSite Mission
 			return false;
 		}
 	
-		if(!cb.bChecked) {
+		if(!GetCheckbox().bChecked) {
 			return false;
 		}
 
@@ -372,19 +393,72 @@ function HandleInput(bool bIsSubscribing)
 
 protected function bool OnUnrealCommand(int cmd, int arg)
 {
+	local UICheckbox Checkbox;
+
 	if (cmd == class'UIUtilities_Input'.const.FXS_BUTTON_X && arg == class'UIUtilities_Input'.const.FXS_ACTION_RELEASE)
 	{
 		// Cannot open screen during flight
 		if (class'XComEngine'.static.GetHQPres().StrategyMap2D.m_eUIState != eSMS_Flight)
 		{
 			// flip the checkbox
-			if(cb != none)
+			Checkbox = GetCheckbox();
+			if(Checkbox != none)
 			{
-				cb.bChecked = !cb.bChecked;
+				Checkbox.bChecked = !Checkbox.bChecked;
 			}
 			
 		}
 		return true;
 	}
 	return false;
+}
+
+private function UICheckbox CreateCheckbox()
+{   
+    local UICheckbox Checkbox;
+	local UIMission MissionScreen;
+
+	MissionScreen = GetMissionScreen();
+    Checkbox = MissionScreen.Spawn(class'UICheckbox', MissionScreen.ButtonGroup);
+    CheckboxWeakRef = PathName(Checkbox);
+    return Checkbox;
+}
+
+private function UICheckbox GetCheckbox()
+{   
+    local UICheckbox Checkbox;
+
+    if (CheckboxWeakRef != "")
+    {
+        Checkbox = UICheckbox(FindObject(CheckboxWeakRef, class'UICheckbox'));
+        if (Checkbox != none)
+        {
+            return Checkbox;
+        }
+    }
+
+	return none;
+}
+
+
+private function UIMission GetMissionScreen()
+{   
+    local UIMission MissionScreen;
+
+    if (MissionWeakRef != "")
+    {
+        MissionScreen = UIMission(FindObject(MissionWeakRef, class'UIMission'));
+        if (MissionScreen != none)
+        {
+            return MissionScreen;
+        }
+    }
+
+	return none;
+}
+
+private function UIMission SetMissionScreen(UIMission Screen)
+{
+	MissionWeakRef = PathName(Screen);
+	return Screen;
 }
