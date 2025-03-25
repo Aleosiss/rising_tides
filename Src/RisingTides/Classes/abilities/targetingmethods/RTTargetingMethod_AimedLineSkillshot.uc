@@ -30,7 +30,6 @@ function Init(AvailableAction InAction, int NewTargetIndex)
 	// Make sure we have targets of some kind.
 	`assert(Action.AvailableTargets.Length > 0);
 
-
 	LastTarget = NewTargetIndex;
 	LastTarget = LastTarget % Action.AvailableTargets.Length;
 	if (LastTarget < 0) {
@@ -53,7 +52,6 @@ function Init(AvailableAction InAction, int NewTargetIndex)
 	WorldData = `XWORLD;
 	FiringTile = UnitState.TileLocation;
 	FiringLocation = WorldData.GetPositionFromTileCoordinates(UnitState.TileLocation);
-
 	// shoot at their midpoint for now...
 	FiringLocation.Z += class'XComWorldData'.const.WORLD_HalfFloorHeight;
 
@@ -214,8 +212,6 @@ private function RemoveTargetingCamera()
 function Canceled()
 {
 	super.Canceled();
-
-	ClearTargetedActors();
 	RemoveTargetingCamera();
 
 	FiringUnit.IdleStateMachine.bTargeting = false;
@@ -268,7 +264,8 @@ function DirectSetTarget(int TargetIndex)
 	local UITacticalHUD TacticalHud;
 	local Actor NewTargetActor;
 	local bool ShouldUseMidpointCamera;
-	local array<TTile> Tiles;
+	local array<TTile> Tiles, TargetTiles;
+	local TTile IteratorTile;
 	local XComDestructibleActor Destructible;
 	local Vector TilePosition;
 	local TTile CurrentTile;
@@ -302,14 +299,15 @@ function DirectSetTarget(int TargetIndex)
 
 	NotifyTargetTargeted(true);
 
+	// aoe of target (car, enemy with homing mine)
 	Destructible = XComDestructibleActor(NewTargetActor);
 	if( Destructible != None )
 	{
-		Destructible.GetRadialDamageTiles(Tiles);
+		Destructible.GetRadialDamageTiles(TargetTiles);
 	}
 	else
 	{
-		GetEffectAOETiles(Tiles);
+		GetEffectAOETiles(TargetTiles);
 	}
 
 	//	reset these values when changing targets
@@ -320,13 +318,18 @@ function DirectSetTarget(int TargetIndex)
 	//NewTargetLocation = WorldData.GetPositionFromTileCoordinates(TargetTile);
 	NewTargetLocation.Z = WorldData.GetFloorZForPosition(NewTargetLocation, true) + class'XComWorldData'.const.WORLD_HalfFloorHeight;
 
-	if(bOriginateAtTargetLocation && LineLengthTiles > 0) {
-		RemoveOutOfRangeTiles(Tiles, NewTargetLocation);
-	}
-
 	GetTargetedActors(NewTargetLocation, CurrentlyMarkedTargets, Tiles);
-	CheckForFriendlyUnit(CurrentlyMarkedTargets);
-	MarkTargetedActors(CurrentlyMarkedTargets, (!AbilityIsOffensive) ? FiringUnit.GetTeam() : eTeam_None );
+	`RTLOG("Tiles.Length " $ Tiles.Length);
+	if(bOriginateAtTargetLocation && LineLengthTiles > 0) {
+		RemoveOutOfRange(Tiles, CurrentlyMarkedTargets, NewTargetLocation);
+	}
+	`RTLOG("Tiles.Length after culling: " $ Tiles.Length $ "; Should be equal to 2 * " $ LineLengthTiles $ " + 1");
+
+
+	// add in the target tiles now; they aren't affect by our range culling
+	foreach TargetTiles(IteratorTile) {
+		Tiles.AddItem(IteratorTile);
+	}
 	
 	if( ShouldUseMidpointCamera )
 	{
@@ -351,6 +354,7 @@ function DirectSetTarget(int TargetIndex)
 	GetTargetedActorsInTiles(Tiles, CurrentlyMarkedTargets, false);
 	CheckForFriendlyUnit(CurrentlyMarkedTargets);
 	MarkTargetedActors(CurrentlyMarkedTargets, (!AbilityIsOffensive) ? FiringUnit.GetTeam() : eTeam_None);
+	`RTLOG("CurrentlyMarkedTargets.Length " $ CurrentlyMarkedTargets.Length);
 	DrawAOETiles(Tiles);
 	AOEMeshActor.SetHidden(false);
 }
@@ -402,22 +406,36 @@ private function GetEffectAOETiles(out array<TTile> TilesToBeDamaged)
 	}
 }
 
-private function RemoveOutOfRangeTiles(out array<TTile> ValidTiles, Vector Location) {
+private function RemoveOutOfRange(out array<TTile> ValidTiles, out array<Actor> CurrentlyMarkedTargets, Vector Location) {
 	local TTile IteratorTile;
-//	local TTile TargetTile;
-//	local Vector IteratorTileLocation;
 	local XComWorldData LocalWorldData;
 	local float Dist;
-	local int Tiles;
+	local int TileDist;
+	local Actor IteratorActor;
+	local array<TTile> FilteredTiles;
+	local array<Actor> FilteredTargets;
 
 	LocalWorldData = `XWORLD;
+	
+	// Filter tiles
 	foreach ValidTiles(IteratorTile) {
 		Dist = VSize(Location - LocalWorldData.GetPositionFromTileCoordinates(IteratorTile));
-		Tiles = Dist / LocalWorldData.WORLD_StepSize;
-		if(Tiles > (LineLengthTiles / 2)) {
-			ValidTiles.RemoveItem(IteratorTile);
+		TileDist = Dist / LocalWorldData.WORLD_StepSize;
+		if(TileDist <= (LineLengthTiles / 2)) {
+			FilteredTiles.AddItem(IteratorTile);
 		}
 	}
+	ValidTiles = FilteredTiles;
+
+	// Filter actors
+	foreach CurrentlyMarkedTargets(IteratorActor) {
+		Dist = VSize(Location - IteratorActor.Location);
+		TileDist = Dist / LocalWorldData.WORLD_StepSize;
+		if(TileDist <= (LineLengthTiles / 2)) {
+			FilteredTargets.AddItem(IteratorActor);
+		}
+	}
+	CurrentlyMarkedTargets = FilteredTargets;
 }
 
 private function NotifyTargetTargeted(bool Targeted)

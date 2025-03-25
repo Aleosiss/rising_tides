@@ -1156,6 +1156,7 @@ static function X2AbilityTemplate SovereignEffect()
 
 	local RTCondition_VisibleToPlayer			PlayerVisibilityCondition;
 	local X2Condition_UnitEffects				DaybreakFlameActiveCondition;
+	local int									ProjectileLength;
 
 
 	//Macro to do localisation and stuffs
@@ -1180,13 +1181,6 @@ static function X2AbilityTemplate SovereignEffect()
 	Template.AddShooterEffectExclusions(SkipExclusions);
 
 	// *** TARGETING PARAMETERS *** //
-	// Can only shoot visible enemies
-	TargetVisibilityCondition = new class'X2Condition_Visibility';
-	TargetVisibilityCondition.bAllowSquadsight = true;
-	TargetVisibilityCondition.bVisibleToAnyAlly = true;
-	//TargetVisibilityCondition.RequireGameplayVisibleTags.AddItem('OverTheShoulder');
-	//Template.AbilityTargetConditions.AddItem(TargetVisibilityCondition);
-
 	// can only shoot visible (to the player) enemies, LOS NOT required
 	PlayerVisibilityCondition = new class'RTCondition_VisibleToPlayer';
 	Template.AbilityTargetConditions.AddItem(PlayerVisibilityCondition);
@@ -1207,17 +1201,18 @@ static function X2AbilityTemplate SovereignEffect()
 	SingleTarget.bShowAOE = true;
 	Template.AbilityTargetStyle = SingleTarget;
 
+	ProjectileLength = 8;
 	// Targeting Method
-	//Template.LineLengthTiles = 8;
-	//Template.bOriginateAtTargetLocation = true;
 	Template.TargetingMethod = class'RTTargetingMethod_AimedLineSkillshot';
+	Template.bOriginateAtTargetLocation = true;
+	Template.LineLengthTiles = ProjectileLength;
 	Template.bUsesFiringCamera = true;
 	Template.CinescriptCameraType = "StandardGunFiring";
 
 	// Line skillshot
 	LineMultiTarget = new class'RTAbilityMultiTarget_TargetedLine';
-	//LineMultiTarget.bOriginateAtTargetLocation = true;
-	//LineMultiTarget.LineLengthTiles = 8;
+	LineMultiTarget.bOriginateAtTargetLocation = true;
+	LineMultiTarget.LineLengthTiles = ProjectileLength;
 
 	LineMultiTarget.bSightRangeLimited = false;
 	Template.AbilityMultiTargetStyle = LineMultiTarget;
@@ -1283,22 +1278,20 @@ static function X2AbilityTemplate SovereignEffect()
 	WorldDamage.bHitTargetTile = true;								//Makes sure that everthing that is targetted is hit
 	WorldDamage.bHitSourceTile = false;
 	WorldDamage.ApplyChance = 100;
-	Template.AddMultiTargetEffect(WorldDamage);		//May be redundant
+	Template.AddMultiTargetEffect(WorldDamage);		
 
 	FireToWorldEffect = new class'X2Effect_ApplyFireToWorld';
 	FireToWorldEffect.bDamageFragileOnly = true;
 	FireToWorldEffect.bCheckForLOSFromTargetLocation = false;
 	Template.AddTargetEffect(FireToWorldEffect);
-	Template.AddMultiTargetEffect(FireToWorldEffect);			//this is required to add the fire effect
+	Template.AddMultiTargetEffect(FireToWorldEffect);			
 
 	// MAKE IT LIVE!
 	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
 	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
 	Template.BuildInterruptGameStateFn = TypicalAbility_BuildInterruptGameState;
 
-	`RTEB.AddStilettoRoundsEffect(Template);
-	// add it to multitargets as well
-	Template.AddMultiTargetEffect(Template.AbilityTargetEffects[Template.AbilityTargetEffects.Length - 1]);
+	`RTEB.AddStilettoRoundsEffect(Template, true);
 
 	KnockbackEffect = new class'X2Effect_Knockback';
 	KnockbackEffect.KnockbackDistance = 2;

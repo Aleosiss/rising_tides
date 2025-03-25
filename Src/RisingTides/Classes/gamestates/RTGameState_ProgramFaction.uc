@@ -1272,7 +1272,7 @@ function InitTemplarQuestActions(XComGameState NewGameState) {
 	local array<name>	TemplarQuestCovertActionTemplateNames;
 
 	if(TemplarQuestActions.Length != 0) {
-		`RTLOG("Not creating more Templar Quest Covert Actions...");
+		//`RTLOG("Not creating more Templar Quest Covert Actions...");
 		return;
 	}
 
@@ -1338,22 +1338,22 @@ function HandleTemplarQuestActions(XComGameState NewGameState) {
 		case 0:
 			if(!IsTemplarFactionMet()) { return; } // don't print the action if we haven't met the Templars yet
 			QuestTemplateName = 'CovertAction_HuntTemplarsP1Template';
-			`RTLOG("Adding CovertAction_HuntTemplarsP1Template");
+			//`RTLOG("Adding CovertAction_HuntTemplarsP1Template");
 			break;
 		case 1:
 			QuestTemplateName = 'CovertAction_HuntTemplarsP2Template';
-			`RTLOG("Adding CovertAction_HuntTemplarsP2Template");
+			//`RTLOG("Adding CovertAction_HuntTemplarsP2Template");
 			break;
 		case 2:
 			QuestTemplateName = 'CovertAction_HuntTemplarsP3Template';
-			`RTLOG("Adding CovertAction_HuntTemplarsP3Template");
+			//`RTLOG("Adding CovertAction_HuntTemplarsP3Template");
 			break;
 		case 3:
-			`RTLOG("Adding Templar Coven Assault Mission!");
+			//`RTLOG("Adding Templar Coven Assault Mission!");
 		case 4:
-			`RTLOG("Templar Questline Completed!");
+			//`RTLOG("Templar Questline Completed!");
 			QuestTemplateName = 'CovertAction_CallInFavorTemplate';
-			`RTLOG("Adding CovertAction_CallInFavorTemplate");
+			//`RTLOG("Adding CovertAction_CallInFavorTemplate");
 		default:
 			`RTLOG("iTemplarQuestStage is out-of-bounds! Ending early...");
 			return;
