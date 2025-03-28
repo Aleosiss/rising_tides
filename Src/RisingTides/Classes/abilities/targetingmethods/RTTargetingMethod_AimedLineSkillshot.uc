@@ -321,7 +321,7 @@ function DirectSetTarget(int TargetIndex)
 	GetTargetedActors(NewTargetLocation, CurrentlyMarkedTargets, Tiles);
 	`RTLOG("Tiles.Length " $ Tiles.Length);
 	if(bOriginateAtTargetLocation && LineLengthTiles > 0) {
-		RemoveOutOfRange(Tiles, CurrentlyMarkedTargets, NewTargetLocation);
+		FilterByRange(Tiles, CurrentlyMarkedTargets, NewTargetLocation);
 	}
 	`RTLOG("Tiles.Length after culling: " $ Tiles.Length $ "; Should be equal to 2 * " $ LineLengthTiles $ " + 1");
 
@@ -406,7 +406,7 @@ private function GetEffectAOETiles(out array<TTile> TilesToBeDamaged)
 	}
 }
 
-private function RemoveOutOfRange(out array<TTile> ValidTiles, out array<Actor> CurrentlyMarkedTargets, Vector Location) {
+private function FilterByRange(out array<TTile> ValidTiles, out array<Actor> CurrentlyMarkedTargets, Vector Location) {
 	local TTile IteratorTile;
 	local XComWorldData LocalWorldData;
 	local float Dist;

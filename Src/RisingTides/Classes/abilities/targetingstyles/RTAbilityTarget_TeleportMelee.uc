@@ -61,5 +61,9 @@ simulated static function bool SelectAttackTile(XComGameState_Unit UnitState,
 // and walls. You still need to check if the melee ability is valid at all by validating its conditions.
 // hilariously enough, Firaxis added a TileCache of all reachable tiles in WOTC, but not having that is the whole point of this class!
 simulated static function bool IsValidAttackTile(XComGameState_Unit UnitState, const out TTile SourceTile, const out TTile TargetTile, X2ReachableTilesCache TileCache) {
-	return !`XWORLD.IsAdjacentTileBlocked(SourceTile, TargetTile) && (`XWORLD.IsFloorTile(SourceTile) || `XWORLD.IsGroundTile(SourceTile));
+	local XComWorldData World;
+
+	World = `XWORLD;
+
+	return !World.IsAdjacentTileBlocked(SourceTile, TargetTile) && (World.IsFloorTile(SourceTile) || World.IsGroundTile(SourceTile));
 }
