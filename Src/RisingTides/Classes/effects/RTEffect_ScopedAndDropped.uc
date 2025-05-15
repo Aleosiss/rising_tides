@@ -167,7 +167,7 @@ private function CheckScopedAndDropped(XComGameState_Unit TargetUnit, XComGameSt
 	local bool ShouldTrigger;
 
 	TacRules = `TACTICALRULES;
-	CheckAndLogAlertLevel(TargetUnit);
+	//CheckAndLogAlertLevel(TargetUnit);
 
 	if (TacRules.VisibilityMgr.GetVisibilityInfo(Attacker.ObjectID, TargetUnit.ObjectID, VisInfo)) {
 		// Only care if there is no cover between this unit and the target unless they were concealed/aware or have Daybreak Flame

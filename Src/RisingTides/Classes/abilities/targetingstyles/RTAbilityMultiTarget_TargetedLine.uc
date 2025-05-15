@@ -29,7 +29,7 @@ simulated function GetMultiTargetOptions(const XComGameState_Ability Ability, ou
 	local XComWorldData						World;
 	local XComGameStateHistory				History;
 	local StateObjectReference				IteratorTargetRef;
-	local array<StateObjectReference>       FilteredAdditionalTargets;
+	local array<StateObjectReference>		FilteredAdditionalTargets;
 
 	World = `XWORLD;
 	History = `XCOMHISTORY;
