@@ -123,7 +123,16 @@
         ☐ General balancing to enemy Templar gear and abilities
     ☐ Change Program Squad secondaries so their pistols actually go in the correct slot
     ☐ Change how the Drone schematic works to work with LW (although it's already a one-at-a-time so I'm not sure how much has to change)
-
+  ☐ Non-LWOTC related
+    ✔ Change RT Items to be `HideInInventory = true`
+    ✔ Change Daybreak Flame to be of fixed length of 9. This should prevent most issues with self cover destruction.
+    ✔ Fix Scoped and Dropped versus concealed and Daybreak Flame targets
+    ☐ Shock and Awe Changes:
+      ☐ Rework Perk entirely
+      ☐ Add VFX (notification or GFX)
+    ☐ Sovereign Changes:
+      ☐ Rework Perk entirely
+      ☐ Add VFX (notification or GFX)
 2.4.0 Program Requests Patch TODOS:
   ☐ Add Program Requests System
     ☐ Add Covert Actions that grant Program Favors

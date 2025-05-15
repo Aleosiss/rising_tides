@@ -60,15 +60,11 @@ event OnInit(UIScreen Screen)
 event OnRemoved(UIScreen Screen) {
 	local UISquadSelect ss;
 
-	`RTLOG("Screen removed: " $ Screen.Class);
-
 	if(UISquadSelect(Screen) != none) {
-		`RTLOG("UISquadSelect detected, cleaning up!");
 		ss = UISquadSelect(Screen);
 		// If the mission was launched, we don't want to clean up the XCGS_MissionSite
 		if(!ss.bLaunched) {
 			if(MissionId != 0) {
-				`RTLOG("Attempting to remove OSF");
 				RemoveOneSmallFavorSitrep(XComGameState_MissionSite(`XCOMHISTORY.GetGameStateForObjectID(MissionId)));
 			}
 			MissionId = 0;
@@ -77,8 +73,6 @@ event OnRemoved(UIScreen Screen) {
 	}
 
 	if(UIStrategyMap(Screen) != none) {
-		// Just avoiding a RedScreen here, not necessarily a useful check
-		`RTLOG("UIStrategyMap detected, cleaning up!");
 		if(MissionId != 0) {
 			RemoveOneSmallFavorSitrep(XComGameState_MissionSite(`XCOMHISTORY.GetGameStateForObjectID(MissionId)));	
 		}
@@ -89,7 +83,6 @@ event OnRemoved(UIScreen Screen) {
 }	
 
 simulated function ManualGC() {
-	`RTLOG("ManualGC called!");
 	HandleInput(false);
 	MissionWeakRef = "";
 	CheckboxWeakRef = "";
@@ -133,7 +126,7 @@ simulated function AddOneSmallFavorSelectionCheckBox(UIScreen Screen) {
 	}
 	
 	else {
-		`RTLOG("Could not find a confirm button for the mission!", true);
+		`RTLOG("Could not find a confirm button for mission! " $ MissionScreen.Name, true);
 	}
 }
 
@@ -149,7 +142,7 @@ function OnConfirmButtonInited(UIPanel Panel) {
 
 	MissionScreen = GetMissionScreen();
 	if(MissionScreen == none) {
-		`RedScreen("Error, parent is not of class 'UIMission'");
+		`RTLOG("Error, parent is not of class 'UIMission'");
 		return;
 	}
 
@@ -165,7 +158,7 @@ function OnConfirmButtonInited(UIPanel Panel) {
 		bReadOnly = `RTS.IsInvalidMission(MissionScreen.GetMission().GetMissionSource().DataName);
 		if(bReadOnly) {
 			`RTLOG("This MissionSource is invalid!", false, false);
-			return; // don't even make the checkbox in this case...
+			return; // don't make a checkbox
 		}
 	}
 
@@ -208,8 +201,7 @@ function ModifiedLaunchButtonClicked(UIButton Button) {
 
 	DelegateHolder = UIDelegateHolder(Button.GetChild(DelegateHolderName));
 	if(DelegateHolder == none) {
-			`RTLOG("ERROR: Modified OSF Launch Button had no original button delegate", true, true);
-
+		`RTLOG("ERROR: Modified OSF Launch Button had no original button delegate", true, true);
 		return;
 	}
 
@@ -242,11 +234,9 @@ simulated function bool AddOneSmallFavorSitrep(XComGameState_MissionSite Mission
 		if(Program.IsOneSmallFavorAvailable() != eAvailable) {
 			return false;
 		}
-	
 		if(!GetCheckbox().bChecked) {
 			return false;
 		}
-
 		`RTLOG("Adding One Small Favor due to it being available and the checkbox activated!");
 	} else {
 		`RTLOG("Adding One Small Favor via debug override!"); 

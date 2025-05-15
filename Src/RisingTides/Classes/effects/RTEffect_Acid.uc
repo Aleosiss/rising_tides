@@ -8,9 +8,6 @@
 
 class RTEffect_Acid extends X2Effect_Persistent;
 
-// var int iStackCount;
-
-
 // trying out a new method of increasing damage per stack
 function bool IsThisEffectBetterThanExistingEffect(const out XComGameState_Effect ExistingEffect)
 {
@@ -62,7 +59,7 @@ static function RTEffect_Acid CreateAcidBurningStatusEffect(name AcidName, int D
 	BurningEffect.EffectRemovedVisualizationFn = class'X2StatusEffects'.static.AcidBurningVisualizationRemoved;
 	BurningEffect.bRemoveWhenTargetDies = true;
 	BurningEffect.DuplicateResponse = eDupe_Refresh;
-	BurningEffect.bCanTickEveryAction = false; // this would probably be really broken if enabled @aleosiss
+	BurningEffect.bCanTickEveryAction = false;
 
 	if (class'X2StatusEffects'.default.AcidEnteredParticle_Name != "")
 	{
@@ -82,8 +79,7 @@ DefaultProperties
 {
 	DamageTypes(0)="Acid"
 	DuplicateResponse=eDupe_Refresh
-	bCanTickEveryAction= false // would probably be op
-	// iStackCount = 1
+	bCanTickEveryAction= false
 
 	Begin Object Class=X2Effect_ApplyWeaponDamage Name=AcidDamage
 	End Object
