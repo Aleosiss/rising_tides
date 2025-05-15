@@ -8,8 +8,7 @@
 //	Whisper's perks.
 //---------------------------------------------------------------------------------------
 
-class RTAbility_MarksmanAbilitySet extends RTAbility
-	config(RisingTides);
+class RTAbility_MarksmanAbilitySet extends RTAbility config(RisingTides);
 
 	var localized string SOC_TITLE;
 	var localized string SOC_DESC;
@@ -99,7 +98,7 @@ static function array<X2DataTemplate> CreateTemplates()
 	Templates.AddItem(DaybreakFlame());										// animation
 	Templates.AddItem(DaybreakFlameIcon());
 	Templates.AddItem(YourHandsMyEyes());
-	Templates.AddItem(TimeStandsStill());									// animation
+	Templates.AddItem(TimeStandsStill());									
 	Templates.AddItem(TimeStandsStillInterruptListener());
 	Templates.AddItem(TimeStandsStillEndListener());
 	Templates.AddItem(TwitchReaction());
