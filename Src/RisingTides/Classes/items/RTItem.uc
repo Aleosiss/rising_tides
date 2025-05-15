@@ -221,6 +221,7 @@ static function X2DataTemplate CreateTemplate_ProgramPistol(int iTier)
 	Template.StartingItem = false;
 	Template.CanBeBuilt = false;
 	Template.bInfiniteItem = false;
+	Template.HideInInventory = true;
 
 	Template.DamageTypeTemplateName = 'Projectile_BeamXCom';
 
@@ -295,6 +296,7 @@ static function X2DataTemplate CreateTemplate_ProgramSniperRifle(int iTier)
 
 	Template.CanBeBuilt = false;
 	Template.bInfiniteItem = false;
+	Template.HideInInventory = true;
 
 	Template.DamageTypeTemplateName = 'Projectile_BeamXCom';
 
@@ -370,6 +372,7 @@ static function X2DataTemplate CreateTemplate_ProgramShotgun(int iTier)
 
 	Template.CanBeBuilt = false;
 	Template.bInfiniteItem = false;
+	Template.HideInInventory = true;
 
 	Template.DamageTypeTemplateName = 'Projectile_BeamXCom';
 
@@ -440,6 +443,7 @@ static function X2DataTemplate CreateTemplate_ProgramAssaultRifle(int iTier)
 
 	Template.CanBeBuilt = false;
 	Template.bInfiniteItem = false;
+	Template.HideInInventory = true;
 
 	Template.DamageTypeTemplateName = 'Projectile_BeamXCom';
 
@@ -500,6 +504,7 @@ static function X2DataTemplate CreateTemplate_ProgramBlade(int iTier)
 
 	Template.CanBeBuilt = false;
 	Template.bInfiniteItem = false;
+	Template.HideInInventory = true;
 
 	Template.DamageTypeTemplateName = 'Melee';
 
@@ -545,6 +550,8 @@ static function X2DataTemplate CreateTemplate_ProgramArmor(int iTier)
 			Template.SetUIStatMarkup(class'XLocalizedData'.default.HealthLabel, eStat_HP, class'RTAbility_Program'.default.PROGRAM_ARMOR_HEALTH_BONUS_M3, true);
 			Template.SetUIStatMarkup(class'XLocalizedData'.default.ArmorLabel, eStat_ArmorMitigation, class'RTAbility_Program'.default.PROGRAM_ARMOR_MITIGATION_AMOUNT_M3);
 	}
+
+	Template.HideInInventory = true;
 	
 
 	//class'RTHelpers_ItemTemplates'.static.AddFontColor(Template, `RTS.GetProgramColor());
@@ -559,6 +566,7 @@ static function X2DataTemplate CreateTemplate_CosmeticSilencer() {
 
 	SetUpCosmeticSilencerUpgrade(Template);
 
+	Template.HideInInventory = true;
 	Template.strImage = "img:///UILibrary_StrategyImages.X2InventoryIcons.BeamAssaultRifle_SupressorB_inv";
 	
 	return Template;
@@ -656,6 +664,7 @@ static function X2DataTemplate CreateRTTemplarAutopistol(name TemplateName)
 	Template.WeaponPanelImage = "_Pistol";                       // used by the UI. Probably determines iconview of the weapon.
 	Template.ItemCat = 'weapon';
 	Template.WeaponCat = 'sidearm';
+	Template.HideInInventory = true;
 
 	switch(TemplateName) {
 		case 'RTTemplarAutopistol_M1':
@@ -753,6 +762,7 @@ static function X2DataTemplate CreateRTTemplarGauntlet(name TemplateName)
 	Template.CanBeBuilt = false;
 	Template.bInfiniteItem = true;
 	Template.DamageTypeTemplateName = 'Melee';
+	Template.HideInInventory = true;
 
 	Template.Abilities.AddItem('Rend');
 	Template.Abilities.AddItem('TemplarFocus');
@@ -823,6 +833,7 @@ static function X2DataTemplate CreateRTTemplarGauntlet_Left(name TemplateName)
 	Template.CanBeBuilt = false;
 	Template.bInfiniteItem = true;
 	Template.DamageTypeTemplateName = 'Melee';
+	Template.HideInInventory = true;
 
 	switch(TemplateName) {
 		case 'RTTemplarGauntlet_M1_Left':
@@ -865,6 +876,7 @@ static function CreateConventionalGauntlet(X2WeaponTemplate Template, optional b
 	Template.CritChance = class'X2Item_XpackWeapons'.default.SHARDGAUNTLET_CONVENTIONAL_CRITCHANCE;
 	Template.iSoundRange = class'X2Item_XpackWeapons'.default.SHARDGAUNTLET_CONVENTIONAL_ISOUNDRANGE;
 	Template.iEnvironmentDamage = class'X2Item_XpackWeapons'.default.SHARDGAUNTLET_CONVENTIONAL_IENVIRONMENTDAMAGE;
+	Template.HideInInventory = true;
 
 	if(bIsLeft) {
 		Template.GameArchetype = "WP_TemplarGauntlet.WP_TemplarGauntletL";
@@ -885,6 +897,7 @@ static function CreateMagneticGauntlet(X2WeaponTemplate Template, optional bool 
 	Template.CritChance = class'X2Item_XpackWeapons'.default.SHARDGAUNTLET_MAGNETIC_CRITCHANCE;
 	Template.iSoundRange = class'X2Item_XpackWeapons'.default.SHARDGAUNTLET_MAGNETIC_ISOUNDRANGE;
 	Template.iEnvironmentDamage = class'X2Item_XpackWeapons'.default.SHARDGAUNTLET_MAGNETIC_IENVIRONMENTDAMAGE;
+	Template.HideInInventory = true;
 
 	if(bIsLeft) {
 		Template.GameArchetype = "WP_TemplarGauntlet.WP_TemplarGauntletL_MG";
@@ -905,6 +918,7 @@ static function CreateBeamGauntlet(X2WeaponTemplate Template, optional bool bIsL
 	Template.CritChance = class'X2Item_XpackWeapons'.default.SHARDGAUNTLET_BEAM_CRITCHANCE;
 	Template.iSoundRange = class'X2Item_XpackWeapons'.default.SHARDGAUNTLET_BEAM_ISOUNDRANGE;
 	Template.iEnvironmentDamage = class'X2Item_XpackWeapons'.default.SHARDGAUNTLET_BEAM_IENVIRONMENTDAMAGE;
+	Template.HideInInventory = true;
 
 	if(bIsLeft) {
 		Template.GameArchetype = "WP_TemplarGauntlet.WP_TemplarGauntletL_BM";
@@ -1034,6 +1048,7 @@ static function X2DataTemplate CreateRTTemplarPsiAmp(name TemplateName)
 	Template.InventorySlot = eInvSlot_TertiaryWeapon;
 	Template.StowedLocation = eSlot_RightBack;
 	// This all the resources; sounds, animations, models, physics, the works.
+	Template.HideInInventory = true;
 
 	Template.GameArchetype = "WP_AdvPriestPsiAmp.WP_AdvPriestPsiAmp";
 
@@ -1054,7 +1069,7 @@ static function X2DataTemplate CreateRTTemplarPsiAmp(name TemplateName)
 			break;
 		case 'RTTemplarPsiAmp_M3':
 			Template.WeaponTech = 'beam';
-
+		
 			Template.Abilities.AddItem('PriestStasis');
 			Template.Abilities.AddItem('HolyWarriorM3');
 			Template.Abilities.AddItem('Fortress');

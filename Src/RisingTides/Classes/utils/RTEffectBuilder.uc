@@ -231,7 +231,7 @@ static function X2Effect_RangerStealth CreateConcealmentEffect() {
 	return Effect;
 }
 
-static function AddStilettoRoundsEffect(out RTAbilityTemplate AbilityTemplate)
+static function AddStilettoRoundsEffect(out RTAbilityTemplate AbilityTemplate, bool bMultiTarget = false)
 {
 	local X2Effect_Persistent BleedingEffect;
 	local X2Condition_UnitEffectsOnSource StilettoRoundsEffect;
@@ -243,4 +243,7 @@ static function AddStilettoRoundsEffect(out RTAbilityTemplate AbilityTemplate)
 	BleedingEffect.TargetConditions.AddItem(StilettoRoundsEffect);
 	
 	AbilityTemplate.AddTargetEffect(BleedingEffect);
+	if(bMultiTarget) {
+		AbilityTemplate.AddMultiTargetEffect(BleedingEffect);
+	}
 }
